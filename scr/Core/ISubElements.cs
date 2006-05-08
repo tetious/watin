@@ -17,7 +17,7 @@
 
 #endregion Copyright
 
-namespace WatiN
+namespace WatiN.Core
 {
   public interface ISubElements
   {

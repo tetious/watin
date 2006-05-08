@@ -11,14 +11,14 @@
 
 					<Component Id="WatiNCore" Guid="AD5796EA-E86A-4934-B09E-F73CDAAF3EB2">
 						<!-- TODO: Insert your files, registry keys, and other resources here. -->
-						<File Id="WatiNDLL" Name="$(var.WatiN.TargetDosFileName)" src="$(var.WatiN.TargetPath)" Vital="yes" DiskId="1" />
-						<File Id="License" Name="License.txt" src="$(var.WatiN.ProjectDir)\License.txt" Vital="yes" DiskId="1">
+						<File Id="WatiNDLL" Name="$(var.Core.TargetDosFileName)" src="$(var.Core.TargetPath)" Vital="yes" DiskId="1" />
+						<File Id="License" Name="License.txt" src="$(var.Core.ProjectDir)\License.txt" Vital="yes" DiskId="1">
 						    <Shortcut Id="StartmenuLicense" Directory="ProgramMenuDir" Name="License" LongName="WatiN LGPL License" WorkingDirectory="INSTALLLOCATION" Icon="License.txt" IconIndex="0" />
 						</File>
 					</Component>
                     
                     <Component Id="WatiNDocumentation" Guid="0374FAB7-C17A-4dd2-BF22-E64135511224">
-                        <File Id="WatinNDoc" Name="WatiN.doc" src="$(var.WatiN.ProjectDir)\TODO.txt" Vital="yes" DiskId="1">
+                        <File Id="WatinNDoc" Name="WatiN.doc" src="$(var.Core.ProjectDir)\TODO.txt" Vital="yes" DiskId="1">
                             <Shortcut Id="StartmenuDocumentation" Directory="ProgramMenuDir" Name="Doc" LongName="Watin Documentation" WorkingDirectory="INSTALLLOCATION" Icon="WatiN.doc" />
                         </File>
                     </Component>
@@ -41,8 +41,8 @@
 		<UIRef Id="WixUI_Mondo" />
 		<UIRef Id="WixUI_ErrorProgressText" />
 
-		<Icon Id="License.txt" src="$(var.WatiN.ProjectDir)\License.txt" />
-		<Icon Id="WatiN.doc" src="$(var.WatiN.ProjectDir)\TODO.txt" />
+		<Icon Id="License.txt" src="$(var.Core.ProjectDir)\License.txt" />
+		<Icon Id="WatiN.doc" src="$(var.Core.ProjectDir)\TODO.txt" />
 
 	</Product>
 </Wix>

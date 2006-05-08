@@ -2,9 +2,9 @@ using System;
 using System.IO;
 
 using NUnit.Framework;
-using WatiN;
+using WatiN.Core;
 
-namespace WatiN.Tests
+namespace WatiN.UnitTests
 {
   [TestFixture]
   public class FindElementBy

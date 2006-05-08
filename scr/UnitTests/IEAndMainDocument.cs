@@ -4,10 +4,10 @@ using System.IO;
 
 using NUnit.Framework;
 
-using WatiN.Exceptions;
-using WatiN.Logging;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 
-namespace WatiN.Tests
+namespace WatiN.UnitTests
 {
   [TestFixture]
   public class IEAndMainDocument

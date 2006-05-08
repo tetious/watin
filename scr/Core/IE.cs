@@ -25,11 +25,11 @@ using mshtml;
 
 using SHDocVw;
 
-using WatiN;
-using WatiN.Exceptions;
-using WatiN.Logging;
+using WatiN.Core;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class IE : DomContainer, IDisposable
   {

@@ -21,9 +21,9 @@ using System;
 using System.Text;
 using System.Threading;
 
-using WatiN.Exceptions;
+using WatiN.Core.Exceptions;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class PopupWatcher
   {

@@ -22,9 +22,9 @@ using System.Threading;
 
 using mshtml;
 
-using WatiN.Exceptions;
+using WatiN.Core.Exceptions;
 
-namespace WatiN
+namespace WatiN.Core
 {
   /// <summary>
   /// Summary description for SubElements.

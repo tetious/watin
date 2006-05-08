@@ -19,7 +19,7 @@
 
 using mshtml;
 
-namespace WatiN.Utils
+namespace WatiN.Core.Utils
 {
 	/// <summary>
 	/// Summary description for Utils.

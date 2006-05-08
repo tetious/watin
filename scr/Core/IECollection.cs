@@ -21,7 +21,7 @@ using System.Collections;
 
 using SHDocVw;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class IECollection : IEnumerable
   {

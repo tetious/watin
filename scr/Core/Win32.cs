@@ -23,7 +23,7 @@ using System.Text;
 
 using mshtml;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class Win32
   {

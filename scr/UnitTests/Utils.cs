@@ -3,7 +3,7 @@ using System.IO;
 
 using NUnit.Framework;
 
-namespace WatiN.Tests
+namespace WatiN.UnitTests
 {
   [TestFixture]
   public class Utils
@@ -25,7 +25,7 @@ namespace WatiN.Tests
     {
       using (IE ie = new IE(testDataBaseURI + "main.html"))
       {
-        WatiN.Utils.Utils.dumpElements(ie.MainDocument);
+        Core.Utils.Utils.dumpElements(ie.MainDocument);
       }
     }
 
@@ -34,7 +34,7 @@ namespace WatiN.Tests
     {
       using (IE ie = new IE(testDataBaseURI + "Frameset.html"))
       {
-        WatiN.Utils.Utils.dumpElementsElab(ie.MainDocument);
+        Core.Utils.Utils.dumpElementsElab(ie.MainDocument);
       }
     }
   }

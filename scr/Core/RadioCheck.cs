@@ -19,9 +19,9 @@
 
 using mshtml;
 
-using WatiN.Logging;
+using WatiN.Core.Logging;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class RadioCheck : Element
   {

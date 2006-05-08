@@ -21,10 +21,10 @@ using System.Collections.Specialized;
 
 using mshtml;
 
-using WatiN.Exceptions;
-using WatiN.Logging;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class SelectList : Element
   {

@@ -22,9 +22,9 @@ using System.Threading;
 
 using mshtml;
 
-using WatiN.Exceptions;
+using WatiN.Core.Exceptions;
 
-namespace WatiN
+namespace WatiN.Core
 {
   /// <summary>
   /// This class hosts functionality for classes which are an entry point

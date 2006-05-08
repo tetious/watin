@@ -19,7 +19,7 @@
 
 using System;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class AttributeValue
   {

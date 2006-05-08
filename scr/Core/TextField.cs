@@ -19,11 +19,11 @@
 
 using mshtml;
 
-using WatiN.Exceptions;
-using WatiN.Interfaces;
-using WatiN.Logging;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
+using WatiN.Core.Logging;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class TextField : Element
   {

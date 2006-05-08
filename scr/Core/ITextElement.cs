@@ -17,7 +17,7 @@
 
 #endregion Copyright
 
-namespace WatiN.Interfaces
+namespace WatiN.Core.Interfaces
 {
   public interface ITextElement
   {

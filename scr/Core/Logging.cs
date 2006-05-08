@@ -17,7 +17,7 @@
 
 #endregion Copyright
 
-namespace WatiN.Logging
+namespace WatiN.Core.Logging
 {
   public class Logger
   {

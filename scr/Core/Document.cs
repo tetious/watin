@@ -21,7 +21,7 @@ using System;
 
 using mshtml;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class Document : ISubElements
   {
@@ -91,15 +91,15 @@ namespace WatiN
     
     public Frame Frame(NameValue findBy)
     {
-      return WatiN.Frame.Find(Frames, findBy);
+      return Core.Frame.Find(Frames, findBy);
     }
     public Frame Frame(UrlValue findBy)
     {
-      return WatiN.Frame.Find(Frames, findBy);
+      return Core.Frame.Find(Frames, findBy);
     }
     public Frame Frame(IDValue findBy)
     {
-      return WatiN.Frame.Find(Frames, findBy);
+      return Core.Frame.Find(Frames, findBy);
     }
 
     public FrameCollection Frames

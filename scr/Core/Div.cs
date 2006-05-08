@@ -19,7 +19,7 @@
 
 using mshtml;
 
-namespace WatiN
+namespace WatiN.Core
 {
   public class Div : ElementsContainer
   {

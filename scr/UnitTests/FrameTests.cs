@@ -4,10 +4,10 @@ using System.IO;
 
 using NUnit.Framework;
 
-using WatiN.Exceptions;
-using WatiN.Logging;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 
-namespace WatiN.Tests
+namespace WatiN.UnitTests
 {
   [TestFixture]
   public class FrameTests
@@ -104,7 +104,7 @@ namespace WatiN.Tests
     [Test]
     public void ShowFrames()
     {
-      WatiN.Utils.Utils.ShowFrames(ie.MainDocument);
+      Core.Utils.Utils.ShowFrames(ie.MainDocument);
     }
 
     private static void AssertFindFrame(IE ie, AttributeValue findBy, string expectedFrameName)

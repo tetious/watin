@@ -20,7 +20,7 @@
 using System.Collections;
 using mshtml;
 
-namespace WatiN
+namespace WatiN.Core
 {
 	public class DivCollection : IEnumerable
 	{

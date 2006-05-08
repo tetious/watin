@@ -5,9 +5,10 @@ using System.IO;
 
 using NUnit.Framework;
 
-using WatiN.Exceptions;
+using WatiN.Core;
+using WatiN.Core.Exceptions;
 
-namespace WatiN.Tests
+namespace WatiN.UnitTests
 {
   [TestFixture]
   public class Elements

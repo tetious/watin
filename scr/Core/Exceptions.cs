@@ -19,7 +19,7 @@
 
 using System;
 
-namespace WatiN.Exceptions
+namespace WatiN.Core.Exceptions
 {
   public class WatiNException : ApplicationException
   {

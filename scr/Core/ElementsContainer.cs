@@ -19,7 +19,7 @@
 
 using mshtml;
 
-namespace WatiN
+namespace WatiN.Core
 {
 	/// <summary>
 	/// Summary description for ElementsContainer.
