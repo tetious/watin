@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VisualStudioProject>
+    <WindowsInstallerXML
+        ProductVersion="2.0.3309.0"
+        ProjectGuid="{4C7E0933-1936-490A-AE58-093BB6A4569E}"
+        SchemaVersion="1.0"
+    >
+        <BuildSettings
+            OutputName="Project"
+            OutputType="MSI"
+        />
+        <Configurations>
+            <Configuration
+                Name="Debug"
+                RelativeOutputDirectory="bin\Debug"
+            />
+            <Configuration
+                Name="Release"
+                RelativeOutputDirectory="bin\Release"
+            />
+        </Configurations>
+        <WixlibReferences />
+        <Files>
+            <File
+                RelativePath="WatiN.wxs"
+            />
+        </Files>
+    </WindowsInstallerXML>
+</VisualStudioProject>
