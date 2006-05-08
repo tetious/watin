@@ -1,0 +1,21 @@
+<html>
+<!-- <body onload="javascript:window.dialogArguments.parentWindow.hello(document)"> -->
+<title>PopUpTest</title>
+        <script language="javascript">
+
+function fnOpen()
+{
+   window.showModalDialog("popup.html", "", "") 
+} 
+
+        </script>
+
+<body>
+Popup
+<form>
+<input id="name" type="text"/>
+<input id="hello" value="hello" type="button" onclick="javascript:alert('hello')"/>
+<input id="modalid" onclick="fnOpen()" type="button" value="Show modal dialog" name="popupmodalname">
+<input id="dims" value="47" type="hidden"/>
+</form>
+</body>
