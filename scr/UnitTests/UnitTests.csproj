@@ -86,20 +86,19 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "IETest"
+                    Name = "Core"
                     Project = "{217E2D34-F6DF-431B-AC5A-B368F481A530}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Interop.SHDocVw"
-                    AssemblyName = "Interop.SHDocVw"
-                    HintPath = "bin\Debug\Interop.SHDocVw.dll"
-                />
-                <Reference
                     Name = "Microsoft.mshtml"
                     AssemblyName = "Microsoft.mshtml"
-                    HintPath = "..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
-                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                    HintPath = "..\..\lib\Microsoft.mshtml.dll"
+                />
+                <Reference
+                    Name = "Interop.SHDocVw"
+                    AssemblyName = "Interop.SHDocVw"
+                    HintPath = "..\..\lib\Interop.SHDocVw.dll"
                 />
             </References>
         </Build>

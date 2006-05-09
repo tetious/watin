@@ -70,21 +70,6 @@
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "SHDocVw"
-                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
-                    VersionMajor = "1"
-                    VersionMinor = "1"
-                    Lcid = "0"
-                    WrapperTool = "tlbimp"
-                />
-                <Reference
-                    Name = "Microsoft.mshtml"
-                    AssemblyName = "Microsoft.mshtml"
-                    HintPath = "..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
-                    AssemblyFolderKey = "hklm\primary interop assemblies"
-                    Private = "True"
-                />
-                <Reference
                     Name = "System.Windows.Forms"
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
@@ -103,6 +88,16 @@
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Microsoft.mshtml"
+                    AssemblyName = "Microsoft.mshtml"
+                    HintPath = "..\..\lib\Microsoft.mshtml.dll"
+                />
+                <Reference
+                    Name = "Interop.SHDocVw"
+                    AssemblyName = "Interop.SHDocVw"
+                    HintPath = "..\..\lib\Interop.SHDocVw.dll"
                 />
             </References>
         </Build>
