@@ -132,12 +132,24 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Open new Internet Explorer and goto url.
+    /// Use existing InternetExplorer object. The param is of type
+    /// object because otherwise all projects using WatiN should also
+    /// reference the Interop.SHDocVw assembly.
     /// </summary>
-    /// <param name="Ie">The InternetExplorer object to use</param>
-    internal IE(InternetExplorer Ie)
+    /// <param name="SHDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
+    internal IE(object SHDocVwInternetExplorer)
     {
-      InitIEAndStartPopupWatcher(Ie);
+      InternetExplorer ie = null;
+      try
+      {
+        ie = (InternetExplorer) SHDocVwInternetExplorer;
+      }
+      catch(System.InvalidCastException)
+      {
+        throw new ArgumentException("SHDocVwInternetExplorer needs to be of type SHDocVw.InternetExplorer");
+      }
+
+      InitIEAndStartPopupWatcher(ie);
       WaitForComplete();
     }
 
@@ -259,8 +271,21 @@ namespace WatiN.Core
 
     /// <summary>
     /// Use this to gain access to the 'raw' internet explorer object.
+    /// Cast the object to type SHDocVw.InternetExplorer found in the
+    /// assembly Interop.SHDocVw supplied in the WatiN distribution.
     /// </summary>
-    public InternetExplorer Ie
+    public object InternetExplorer
+    {
+      get
+      {
+        return ie;
+      }
+    }
+
+    /// <summary>
+    /// Use this to gain access to the 'raw' internet explorer object.
+    /// </summary>
+    private InternetExplorer Ie
     {
       get
       {
