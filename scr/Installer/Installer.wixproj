@@ -11,6 +11,10 @@
         />
         <Configurations>
             <Configuration
+                Name="AutomatedDebug"
+                RelativeOutputDirectory="bin\Debug"
+            />
+            <Configuration
                 Name="Debug"
                 RelativeOutputDirectory="bin\Debug"
             />
