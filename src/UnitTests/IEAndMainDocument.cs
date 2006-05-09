@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 
 using NUnit.Framework;
@@ -53,9 +52,7 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(googleURI.ToString(), true))
       {
         ie.MainDocument.TextField(Find.ByName("q")).TypeText("WatiN");
-        Debug.WriteLine("Before click");
         ie.MainDocument.Button(Find.ByName("btnG")).Click();
-        Debug.WriteLine("After click");
 
         Assert.IsTrue(ie.MainDocument.ContainsText("WatiN"));
       }
