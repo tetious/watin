@@ -3,6 +3,8 @@ using System.IO;
 
 using NUnit.Framework;
 
+using WatiN.Core;
+
 namespace WatiN.UnitTests
 {
   [TestFixture]

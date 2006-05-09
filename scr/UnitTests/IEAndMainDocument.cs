@@ -4,6 +4,7 @@ using System.IO;
 
 using NUnit.Framework;
 
+using WatiN.Core;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 
