@@ -9,6 +9,15 @@
 	
 	<target name="compile" description="Compiles using the AutomatedDebug Configuration">
 		<solution solutionfile="src\WatiN.sln" configuration="AutomatedDebug" />
+
+    	<property name="unittests.html.dir" value="${build.dir}\testdata" />
+		<mkdir dir="${unittests.html.dir}" unless="${directory::exists(unittests.html.dir)}"/>
+
+		<copy todir="${unittests.html.dir}">
+		    <fileset basedir ="src\UnitTests\testdata">
+                <include name="*.*" />
+		    </fileset>
+		</copy>
 	</target>
 	
 	<target name="test" depends="compile, run-unit-tests" 
@@ -28,9 +37,9 @@
 			<arg value="/w" />
 			<arg value="." />
 			<arg value="/o" />
-			<arg value="..\..\test-reports\Coverage.xml" />
+			<arg value="&quot;..\..\test-reports\Coverage.xml&quot;" />
 			<arg value="/c" />
-			<arg value="&quot;..\..\..\tools\nunit\nunit-console.exe&quot;" />
+			<arg value="&quot;..\..\..\tools\nunit\bin\nunit-console.exe&quot;" />
 			<arg value="&quot;WatiN.UnitTests.dll /xml:..\..\test-reports\UnitTests.xml /nologo&quot;" />
 		</exec>
 <!--
