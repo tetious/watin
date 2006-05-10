@@ -18,6 +18,8 @@
                 <include name="*.*" />
 		    </fileset>
 		</copy>
+
+		<mkdir dir="${build.dir}\buildlogs" />
 	</target>
 	
 	<target name="test" depends="compile, run-unit-tests" 
