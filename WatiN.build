@@ -1,16 +1,21 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="util.ncoverexplorer.exec" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
     <property name="base.dir"                       value="C:\TAdev\WatiN\WatiN\trunk" />
+	<property name="source.dir"                     value="${base.dir}\src" />
 	<property name="build.dir"                      value="${base.dir}\build" />
   	<property name="build.solution.file" 			value="${source.dir}\WatiN.sln" />
-  	<property name="build.configuration" 			value="AutomatedDebug" />
+  	<property name="build.configuration" 			value="AutomatedDebug"  />
+    <property name="reports.output.dir" 			value="${build.dir}\test-reports" />
 	<property name="coverage.xml.file" 				value="${reports.output.dir}\Coverage.xml" />
 	<property name="distribution.dir"               value="${build.dir}\dist" />
+	<echo message="distribution.dir: ${distribution.dir}" />
+
 	<property name="nunit.xml.file" 				value="${reports.output.dir}\UnitTests.xml" />
+	<property name="tools.dir"                      value="${base.dir}\tools" />
 	<property name="path.ncoverexplorer.exe" 		value="${tools.dir}\NCoverExplorer\NCoverExplorer.exe" />
 	<property name="path.ncoverexplorer.console"	value="${tools.dir}\NCoverExplorer\NCoverExplorer.Console.exe" />
 	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
@@ -18,9 +23,6 @@
 	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
 	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\bin\nunit-console.exe" />
     <property name="project.name"                   value="WatiN" />
-    <property name="reports.output.dir" 			value="${build.dir}\test-reports" />
-	<property name="source.dir"                     value="${base.dir}\src" />
-	<property name="tools.dir"                      value="${base.dir}\tools" />
 	<property name="test.assembly" 				    value="${build.dir}\Debug\UnitTests\WatiN.UnitTests.dll" />
     
 
@@ -29,8 +31,8 @@
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
 	</target>
 	
-	<target name="compile" description="Compiles using the ${build.configuration} Configuration">
-		<solution solutionfile="${build.solution.file}" configuration="${build.configuration}"  />
+	<target name="compile" description="Compiles using the Configuration">
+		<solution solutionfile="${build.solution.file}" configuration="${build.configuration}"  verbose="true"/>
 
     	<property name="unittests.html.dir" value="${build.dir}\testdata" />
 		<mkdir dir="${unittests.html.dir}" unless="${directory::exists(unittests.html.dir)}"/>
@@ -71,6 +73,7 @@
 		</exec>
 -->
 
+        <call target="util.ncoverexplorer.exec" />
 	</target>
 
 	<target name="util.ncoverexplorer.exec">
