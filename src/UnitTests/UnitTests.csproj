@@ -145,19 +145,19 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "testdata\Frameset.html"
+                    RelPath = "html\Frameset.html"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "testdata\Index.html"
+                    RelPath = "html\Index.html"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "testdata\main.html"
+                    RelPath = "html\main.html"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "testdata\popup.html"
+                    RelPath = "html\popup.html"
                     BuildAction = "Content"
                 />
             </Include>
