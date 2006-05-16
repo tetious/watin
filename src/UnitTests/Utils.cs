@@ -17,7 +17,7 @@ namespace WatiN.UnitTests
     {
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
-      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\testdata\";
+      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
             
       testDataBaseURI = new Uri(testDataLocation);
     }

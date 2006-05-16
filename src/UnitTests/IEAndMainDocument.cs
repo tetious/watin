@@ -26,7 +26,7 @@ namespace WatiN.UnitTests
 
       Logger.LogWriter = new DebugLogWriter();
 
-      string testDataLocation = string.Format(@"{0}\testdata\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
+      string testDataLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
             
       testDataBaseURI = new Uri(testDataLocation);
       mainURI = new Uri(testDataBaseURI, "main.html");

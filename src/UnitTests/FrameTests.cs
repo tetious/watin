@@ -29,7 +29,7 @@ namespace WatiN.UnitTests
 
       Logger.LogWriter = new DebugLogWriter();
 
-      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\testdata\";
+      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
             
       testDataBaseURI = new Uri(testDataLocation);
       indexURI = new Uri(testDataBaseURI, "Index.html");
