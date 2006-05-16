@@ -13,7 +13,7 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class Elements
   {
-    private static Uri testDataBaseURI ;
+    private static Uri htmlTestBaseURI ;
     private static Uri mainURI;
     private static Uri googleURI;
     private IE ie;
@@ -23,9 +23,9 @@ namespace WatiN.UnitTests
     {
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
-      string testDataLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
-      testDataBaseURI = new Uri(testDataLocation);
-      mainURI = new Uri(testDataBaseURI, "main.html");
+      string htmlLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
+      htmlTestBaseURI = new Uri(htmlLocation);
+      mainURI = new Uri(htmlTestBaseURI, "main.html");
 
       googleURI = new Uri("http://www.google.com");
 

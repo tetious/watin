@@ -13,7 +13,7 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class FrameTests
   {
-    private static Uri testDataBaseURI ;
+    private static Uri htmlTestBaseURI ;
     private static Uri indexURI;
     private static Uri mainURI;
 
@@ -29,13 +29,13 @@ namespace WatiN.UnitTests
 
       Logger.LogWriter = new DebugLogWriter();
 
-      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
+      string htmlLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
             
-      testDataBaseURI = new Uri(testDataLocation);
-      indexURI = new Uri(testDataBaseURI, "Index.html");
-      mainURI = new Uri(testDataBaseURI, "main.html");
+      htmlTestBaseURI = new Uri(htmlLocation);
+      indexURI = new Uri(htmlTestBaseURI, "Index.html");
+      mainURI = new Uri(htmlTestBaseURI, "main.html");
 
-      ie = new IE(testDataBaseURI + "frameset.html", true);
+      ie = new IE(htmlTestBaseURI + "frameset.html", true);
     }
 
     [TestFixtureTearDown]

@@ -158,9 +158,9 @@ namespace WatiN.UnitTests
       value = new ElementUrlPartialValue("google.com");
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
-      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
-      Uri testDataBaseURI = new Uri(testDataLocation);
-      Uri mainURI = new Uri(testDataBaseURI, "main.html");
+      string htmlLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
+      Uri htmlTestBaseURI = new Uri(htmlLocation);
+      Uri mainURI = new Uri(htmlTestBaseURI, "main.html");
       Uri googleURI = new Uri("http://www.google.com");
 
       using (IE ie = new IE(mainURI.ToString()))

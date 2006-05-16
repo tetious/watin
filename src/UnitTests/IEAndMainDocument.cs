@@ -13,7 +13,7 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class IEAndMainDocument
   {
-    private static Uri testDataBaseURI ;
+    private static Uri htmlTestBaseURI ;
     private static Uri mainURI;
     private static Uri indexURI;
     private static Uri popUpURI;
@@ -26,12 +26,12 @@ namespace WatiN.UnitTests
 
       Logger.LogWriter = new DebugLogWriter();
 
-      string testDataLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
+      string htmlLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
             
-      testDataBaseURI = new Uri(testDataLocation);
-      mainURI = new Uri(testDataBaseURI, "main.html");
-      indexURI = new Uri(testDataBaseURI, "Index.html");
-      popUpURI = new Uri(testDataBaseURI, "popup.html");
+      htmlTestBaseURI = new Uri(htmlLocation);
+      mainURI = new Uri(htmlTestBaseURI, "main.html");
+      indexURI = new Uri(htmlTestBaseURI, "Index.html");
+      popUpURI = new Uri(htmlTestBaseURI, "popup.html");
       googleURI = new Uri("http://www.google.com");
     }
 

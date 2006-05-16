@@ -10,22 +10,22 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class Utils
   {
-    private static Uri testDataBaseURI ;
+    private static Uri htmlTestBaseURI ;
 
     [TestFixtureSetUp]
     public void Setup()
     {
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
-      string testDataLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
+      string htmlTestLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
             
-      testDataBaseURI = new Uri(testDataLocation);
+      htmlTestBaseURI = new Uri(htmlTestLocation);
     }
 
     [Test]
     public void DumpElements()
     {
-      using (IE ie = new IE(testDataBaseURI + "main.html"))
+      using (IE ie = new IE(htmlTestBaseURI + "main.html"))
       {
         Core.Utils.Utils.dumpElements(ie.MainDocument);
       }
@@ -34,7 +34,7 @@ namespace WatiN.UnitTests
     [Test]
     public void DumpElementsElab()
     {
-      using (IE ie = new IE(testDataBaseURI + "Frameset.html"))
+      using (IE ie = new IE(htmlTestBaseURI + "Frameset.html"))
       {
         Core.Utils.Utils.dumpElementsElab(ie.MainDocument);
       }
