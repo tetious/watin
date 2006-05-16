@@ -25,7 +25,7 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  public class Win32
+  public class NativeMethods
   {
     internal const int WM_SYSCOMMAND = 0x0112;
     internal const int WM_CLOSE = 0x0010;

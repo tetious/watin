@@ -300,7 +300,7 @@ namespace WatiN.Core
 
     protected static bool IsNullOrEmpty(string name)
     {
-      return name == null || name == string.Empty;
+      return name == null || name.Length == 0;
     }
 
     private IHTMLElement htmlElement

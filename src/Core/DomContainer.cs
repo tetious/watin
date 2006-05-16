@@ -40,9 +40,9 @@ namespace WatiN.Core
     /// <summary>
     /// This method must be overriden by all sub classes
     /// </summary>
-    public virtual IHTMLDocument2 OnGetHTMLDocument()
+    public virtual IHTMLDocument2 OnGetHtmlDocument()
     {
-      throw new NotImplementedException("This method must be overriden by all sub classes");
+      throw new NotImplementedException("This method must be overridden by all sub classes");
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ namespace WatiN.Core
       {
         if (htmlDocument == null)
         {
-          htmlDocument = OnGetHTMLDocument();
+          htmlDocument = OnGetHtmlDocument();
         }
 
         return (HTMLDocument)htmlDocument;
@@ -108,15 +108,15 @@ namespace WatiN.Core
     /// </summary>
     public virtual void WaitForComplete()
     {
-      InitTimeOut();
-      WaitForCompleteTimeOutIsInitialized();
+      InitTimeout();
+      WaitForCompleteTimeoutIsInitialized();
     }
 
     /// <summary>
     /// This method waits till IE is ready
     /// processing or the timeout periode has expired.
     /// </summary>
-    protected internal void WaitForCompleteTimeOutIsInitialized()
+    protected internal void WaitForCompleteTimeoutIsInitialized()
     {
       WaitWhileMainDocumentNotAvailable(this);
       WaitWhileDocumentStateNotComplete((IHTMLDocument2) HtmlDocument);
@@ -136,21 +136,21 @@ namespace WatiN.Core
     /// determining a time out at the current time.
     /// </summary>
     /// <returns></returns>
-    protected internal DateTime InitTimeOut()
+    protected internal DateTime InitTimeout()
     {
       return startWaitForComplete = DateTime.Now;
     }
 
     /// <summary>
     /// This method checks the return value of IsTimedOut. When true, it will
-    /// throw a TimeOutException with the timeOutMessage param as message.
+    /// throw a TimeoutException with the timeoutMessage param as message.
     /// </summary>
-    /// <param name="timeOutMessage">The message to present when the TimeOutException is thrown</param>
-    protected internal void ThrowExceptionWhenTimeOut(string timeOutMessage)
+    /// <param name="timeoutMessage">The message to present when the TimeoutException is thrown</param>
+    protected internal void ThrowExceptionWhenTimeout(string timeoutMessage)
     {
       if (IsTimedOut())
       {
-        throw new TimeOutException(timeOutMessage);
+        throw new TimeoutException(timeoutMessage);
       }
     }
 
@@ -175,7 +175,7 @@ namespace WatiN.Core
     {
       while (((HTMLDocument)htmlDocument).readyState != "complete")
       {
-        ThrowExceptionWhenTimeOut("waiting for document state complete. Last state was '" + ((HTMLDocument)htmlDocument).readyState + "'");
+        ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + ((HTMLDocument)htmlDocument).readyState + "'");
         Thread.Sleep(100);
       }
     }
@@ -186,7 +186,7 @@ namespace WatiN.Core
 
       while(maindocument == null)
       {
-        ThrowExceptionWhenTimeOut("waiting for main document becoming available");
+        ThrowExceptionWhenTimeout("waiting for main document becoming available");
 
         try
         {
@@ -269,7 +269,7 @@ namespace WatiN.Core
 
         if (isTimedout && frame == null)
         {
-          throw new TimeOutException("waiting for frame document becoming available");
+          throw new TimeoutException("waiting for frame document becoming available");
         }
 
 

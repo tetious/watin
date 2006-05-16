@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace WatiN.UnitTests
     [TestFixtureSetUp]
     public void Setup()
     {
-      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
+      Thread.CurrentThread.ApartmentState = ApartmentState.STA;
 
       Logger.LogWriter = new DebugLogWriter();
 
@@ -80,7 +81,7 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(mainURI.ToString(), true))
       {
         ie.MainDocument.Button("popupid").Click();
-        Document dialog = ie.HTMLDialogs[0].MainDocument;
+        Document dialog = ie.HtmlDialogs[0].MainDocument;
 
         Assert.AreEqual("47", dialog.TextField("dims").Value);
       }
@@ -211,7 +212,7 @@ namespace WatiN.UnitTests
 
       ie.MainDocument.Button("modalid").ClickNoWait();
 
-      HTMLDialog htmlDialog = ie.HTMLDialog(Find.ByTitle("PopUpTest"));
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
@@ -232,7 +233,7 @@ namespace WatiN.UnitTests
 
       ie.MainDocument.Button("modalid").ClickNoWait();
 
-      HTMLDialog htmlDialog = ie.HTMLDialog(Find.ByTitle("PopUpTest"));
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
@@ -250,7 +251,7 @@ namespace WatiN.UnitTests
 
       ie.MainDocument.Button("modalid").ClickNoWait();
 
-      HTMLDialog htmlDialog = ie.HTMLDialog(Find.ByUrl(popUpURI.ToString()));
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(popUpURI.ToString()));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
@@ -274,17 +275,23 @@ namespace WatiN.UnitTests
         {
           // Time out after timeoutTime seconds
           startTime = DateTime.Now;
-          ie.HTMLDialog(Find.ByTitle("PopUpTest"), timeoutTime);
+          ie.HtmlDialog(Find.ByTitle("PopUpTest"), timeoutTime);
           Assert.Fail("PopUpTest should not be found");
         }
         catch (Exception e)
         {
-          Assert.IsInstanceOfType(typeof(HTMLDialogNotFoundException), e);
+          Assert.IsInstanceOfType(typeof(HtmlDialogNotFoundException), e);
           // add 1 second to give it some slack.
           Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
           Assert.AreEqual(expectedMessage, e.Message, "Unexpected exception message");
         }
       }
+    }
+    [Test]
+    public void NewUri()
+    {
+      Uri uri = new Uri("about:blank");
+      Assert.AreEqual("about:blank", uri.ToString());
     }
   }
 }

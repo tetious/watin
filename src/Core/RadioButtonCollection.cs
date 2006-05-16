@@ -40,7 +40,7 @@ namespace WatiN.Core
         }
       }
     }
-    public int length { get { return elements.Count; } }
+    public int Length { get { return elements.Count; } }
 
     public RadioButton this[int index] { get { return (RadioButton)elements[index]; } }
 

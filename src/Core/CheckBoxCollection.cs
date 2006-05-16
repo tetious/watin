@@ -40,7 +40,7 @@ namespace WatiN.Core
         }
 			}
 		}
-		public int length { get { return elements.Count; } }
+		public int Length { get { return elements.Count; } }
 
 		public CheckBox this[int index] { get { return (CheckBox)elements[index]; } }
 

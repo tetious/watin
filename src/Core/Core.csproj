@@ -214,7 +214,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "HTMLDialogCollection.cs"
+                    RelPath = "HtmlDialogCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

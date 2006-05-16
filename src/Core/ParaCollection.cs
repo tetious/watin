@@ -38,7 +38,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public int length { get { return elements.Count; } }
+		public int Length { get { return elements.Count; } }
 
 		public Para this[int index] { get { return (Para)elements[index]; } }
 

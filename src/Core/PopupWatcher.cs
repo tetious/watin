@@ -83,8 +83,8 @@ namespace WatiN.Core
         {
           int threadId = t.Id;
 
-          Win32.EnumThreadProc callbackProc = new Win32.EnumThreadProc(MyEnumThreadWindowsProc);
-          Win32.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
+          NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(MyEnumThreadWindowsProc);
+          NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
         }
       }
     }
@@ -98,11 +98,11 @@ namespace WatiN.Core
     {
       if (IsDialog(hwnd))
       {        
-        IntPtr handleToDialogText = Win32.GetDlgItem(hwnd, 0xFFFF);
+        IntPtr handleToDialogText = NativeMethods.GetDlgItem(hwnd, 0xFFFF);
         string alertMessage = GetText(handleToDialogText);
         alertQueue.Enqueue(alertMessage);
 
-        Win32.SendMessage(hwnd, Win32.WM_CLOSE, 0, 0);
+        NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
       }
 
       return true;
@@ -111,16 +111,16 @@ namespace WatiN.Core
     private bool IsDialog( IntPtr wParam )
     {
       StringBuilder className = new StringBuilder(255);
-      Win32.GetClassName(wParam, className, className.Capacity);
+      NativeMethods.GetClassName(wParam, className, className.Capacity);
 
       return (className.ToString() == "#32770");
     }
 
     private static string GetText( IntPtr handle )
     {
-      int length = Win32.GetWindowTextLength(handle) + 1;
+      int length = NativeMethods.GetWindowTextLength(handle) + 1;
       StringBuilder buffer = new StringBuilder(length);
-      Win32.GetWindowText(handle, buffer, length);
+      NativeMethods.GetWindowText(handle, buffer, length);
 			
       return buffer.ToString();
     }

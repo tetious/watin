@@ -28,7 +28,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Summary description for HTMLDialog.
 	/// </summary>
-	public class HTMLDialog : DomContainer
+	public class HtmlDialog : DomContainer
 	{
     private IntPtr hWnd = IntPtr.Zero;
 
@@ -37,7 +37,7 @@ namespace WatiN.Core
       return CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
     }
 
-		public HTMLDialog(IntPtr hWnd)
+		public HtmlDialog(IntPtr hWnd)
 		{
       this.hWnd = hWnd;
     }
@@ -45,7 +45,7 @@ namespace WatiN.Core
     public void Close()
     {
       Dispose();
-      Win32.SendMessage(hWnd, Win32.WM_CLOSE, 0, 0);
+      NativeMethods.SendMessage(hWnd, NativeMethods.WM_CLOSE, 0, 0);
     }
 
     public bool HasFocus()
@@ -54,7 +54,7 @@ namespace WatiN.Core
       return true;
     }
 
-    public override IHTMLDocument2 OnGetHTMLDocument()
+    public override IHTMLDocument2 OnGetHtmlDocument()
     {
       return IEDOMFromhWnd(hWnd);
     }
@@ -72,21 +72,21 @@ namespace WatiN.Core
         if (!IsIEServerWindow(hWnd))
         {
           // Get 1st child IE server window
-          Win32.EnumChildProc childProc = new Win32.EnumChildProc(EnumChildForServerWindow);
-          Win32.EnumChildWindows(hWnd, childProc, ref hWnd);
+          NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(EnumChildForServerWindow);
+          NativeMethods.EnumChildWindows(hWnd, childProc, ref hWnd);
         }
 
         if (IsIEServerWindow(hWnd))
         {
           // Register the message
-          lMsg = Win32.RegisterWindowMessage("WM_HTML_GETOBJECT");
+          lMsg = NativeMethods.RegisterWindowMessage("WM_HTML_GETOBJECT");
           // Get the object
-          Win32.SendMessageTimeout(hWnd, lMsg, 0, 0, Win32.SMTO_ABORTIFHUNG, 1000, ref lRes);
+          NativeMethods.SendMessageTimeout(hWnd, lMsg, 0, 0, NativeMethods.SMTO_ABORTIFHUNG, 1000, ref lRes);
           if (lRes != 0)
           {
             // Get the object from lRes
             IHTMLDocument2 ieDOMFromhWnd = null;
-            hr = Win32.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
+            hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
             if (hr != 0)
             {
               throw new COMException("ObjectFromLresult has thown an exception", hr);
@@ -121,7 +121,7 @@ namespace WatiN.Core
       StringBuilder className = new StringBuilder(100);
 
       // Get the window class name
-      Int32 lRes = Win32.GetClassName(hWnd, className, className.MaxCapacity);
+      Int32 lRes = NativeMethods.GetClassName(hWnd, className, className.MaxCapacity);
       if (lRes == 0)
       {
         return false;

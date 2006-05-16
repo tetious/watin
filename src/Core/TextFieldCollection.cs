@@ -49,7 +49,7 @@ namespace WatiN.Core
       }
     }
 
-		public int length { get { return children.Count; } }
+		public int Length { get { return children.Count; } }
 
 		public TextField this[int index] { get { return (TextField)children[index]; } }
 

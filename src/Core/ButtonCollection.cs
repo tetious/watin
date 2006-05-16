@@ -41,7 +41,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public int length { get { return elements.Count; } }
+		public int Length { get { return elements.Count; } }
 
 		public Button this[int index] { get { return (Button)elements[index]; } }
 

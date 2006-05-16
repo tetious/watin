@@ -171,7 +171,7 @@ namespace WatiN.Core
 
     private bool findEvent(string eventName)
     {
-      return (textElement.OuterHTML.IndexOf(eventName) > 0);
+      return (textElement.OuterHtml.IndexOf(eventName) > 0);
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ namespace WatiN.Core
         get { return htmlTextAreaElement.name; }
       }
 
-      public string OuterHTML
+      public string OuterHtml
       {
         get { return htmlTextAreaElement.outerHTML; }
       }
@@ -260,7 +260,7 @@ namespace WatiN.Core
         get { return inputElement.name; }
       }
 
-      public string OuterHTML
+      public string OuterHtml
       {
         get { return inputElement.outerHTML; }
       }

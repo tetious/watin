@@ -224,7 +224,7 @@ namespace WatiN.Core
 
     private static IHTMLElement FindElementByAttribute(string tagName, string inputType, AttributeValue findBy, IHTMLElementCollection elementsCollection)
     {
-      if (IsInputElement(tagName) && (inputType == null || inputType == string.Empty))
+      if (IsInputElement(tagName) && (inputType == null || inputType.Length == 0))
       {
         throw new ArgumentNullException("inputType", "inputType must be set when tagName is 'input'");
       }
@@ -274,7 +274,7 @@ namespace WatiN.Core
 
     private static string getAttributeValue(AttributeValue findBy, IHTMLElement element)
     {
-      if (findBy is IDValue)
+      if (findBy is IdValue)
       {
         return element.id;        
       }

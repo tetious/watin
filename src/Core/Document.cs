@@ -21,11 +21,13 @@ using System;
 
 using mshtml;
 
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core
 {
   public class Document : ISubElements
   {
-    protected DomContainer ie;
+    protected DomContainer IE;
     private IHTMLDocument2 htmlDocument;
 
     public Document(DomContainer ie, IHTMLDocument2 htmlDocument)
@@ -33,13 +35,13 @@ namespace WatiN.Core
       ArgumentRequired(ie, "ie");
       ArgumentRequired(htmlDocument, "htmlDocument");
 
-      this.ie = ie;
+      this.IE = ie;
       this.htmlDocument = htmlDocument;
     }
 
     internal void Close()
     {
-      ie = null;
+      IE = null;
       htmlDocument = null;
     }
 
@@ -84,9 +86,9 @@ namespace WatiN.Core
       get { return htmlDocument.title; }
     }
 
-    public Frame Frame(string elementID)
+    public Frame Frame(string elementId)
     {
-      return Frame(Find.ByID(elementID));
+      return Frame(Find.ById(elementId));
     }
     
     public Frame Frame(NameValue findBy)
@@ -97,7 +99,7 @@ namespace WatiN.Core
     {
       return Core.Frame.Find(Frames, findBy);
     }
-    public Frame Frame(IDValue findBy)
+    public Frame Frame(IdValue findBy)
     {
       return Core.Frame.Find(Frames, findBy);
     }
@@ -106,145 +108,145 @@ namespace WatiN.Core
     {
       get
       {
-        return new FrameCollection(ie, htmlDocument);
+        return new FrameCollection(IE, htmlDocument);
       }
     }
 
     #region ISubElements
 
-    public Button Button(string elementID)
+    public Button Button(string elementId)
     {
-      return Button(Find.ByID(elementID));
+      return Button(Find.ById(elementId));
     }
 
     public Button Button(AttributeValue findBy)
     {
-      return SubElementsSupport.Button(ie, findBy, elementCollection);
+      return SubElementsSupport.Button(IE, findBy, elementCollection);
     }
 
     public ButtonCollection Buttons
     {
-      get { return SubElementsSupport.Buttons(ie, elementCollection); }
+      get { return SubElementsSupport.Buttons(IE, elementCollection); }
     }
 
-    public CheckBox CheckBox(string elementID)
+    public CheckBox CheckBox(string elementId)
     {
-      return CheckBox(Find.ByID(elementID));
+      return CheckBox(Find.ById(elementId));
     }
 
     public CheckBox CheckBox(AttributeValue findBy)
     {
-      return SubElementsSupport.CheckBox(ie, findBy, elementCollection);
+      return SubElementsSupport.CheckBox(IE, findBy, elementCollection);
     }
 
     public CheckBoxCollection CheckBoxs
     {
-      get { return SubElementsSupport.Checkboxes(ie, elementCollection); }
+      get { return SubElementsSupport.Checkboxes(IE, elementCollection); }
     }
 
-    public Form Form(string elementID)
+    public Form Form(string elementId)
     {
-      return Form(Find.ByID(elementID));
+      return Form(Find.ById(elementId));
     }
 
     public Form Form(AttributeValue findBy)
     {
-      return SubElementsSupport.Form(ie, findBy, elementCollection);
+      return SubElementsSupport.Form(IE, findBy, elementCollection);
     }
 
     public FormCollection Forms
     {
-      get { return SubElementsSupport.Forms(ie, elementCollection); }
+      get { return SubElementsSupport.Forms(IE, elementCollection); }
     }
 
-    public Label Label(string elementID)
+    public Label Label(string elementId)
     {
-      return Label(Find.ByID(elementID));
+      return Label(Find.ById(elementId));
     }
 
     public Label Label(AttributeValue findBy)
     {
-      return SubElementsSupport.Label(ie, findBy, elementCollection);
+      return SubElementsSupport.Label(IE, findBy, elementCollection);
     }
 
     public LabelCollection Labels
     {
-      get { return SubElementsSupport.Labels(ie, elementCollection); }
+      get { return SubElementsSupport.Labels(IE, elementCollection); }
     }
 
-    public Link Link(string elementID)
+    public Link Link(string elementId)
     {
-      return Link(Find.ByID(elementID));
+      return Link(Find.ById(elementId));
     }
 
     public Link Link(AttributeValue findBy)
     {
-      return SubElementsSupport.Link(ie, findBy, elementCollection);
+      return SubElementsSupport.Link(IE, findBy, elementCollection);
     }
 
     public LinkCollection Links
     {
-      get { return SubElementsSupport.Links(ie, elementCollection); }
+      get { return SubElementsSupport.Links(IE, elementCollection); }
     }
 
-    public Para Para(string elementID)
+    public Para Para(string elementId)
     {
-      return Para(Find.ByID(elementID));
+      return Para(Find.ById(elementId));
     }
 
     public Para Para(AttributeValue findBy)
     {
-      return SubElementsSupport.Para(ie, findBy, elementCollection);
+      return SubElementsSupport.Para(IE, findBy, elementCollection);
     }
 
     public ParaCollection Paras
     {
-      get { return SubElementsSupport.Paras(ie, elementCollection); }
+      get { return SubElementsSupport.Paras(IE, elementCollection); }
     }
 
-    public RadioButton RadioButton(string elementID)
+    public RadioButton RadioButton(string elementId)
     {
-      return RadioButton(Find.ByID(elementID));
+      return RadioButton(Find.ById(elementId));
     }
 
     public RadioButton RadioButton(AttributeValue findBy)
     {
-      return SubElementsSupport.RadioButton(ie, findBy, elementCollection);
+      return SubElementsSupport.RadioButton(IE, findBy, elementCollection);
     }
 
     public RadioButtonCollection RadioButtons
     {
-      get { return SubElementsSupport.RadioButtons(ie, elementCollection); }
+      get { return SubElementsSupport.RadioButtons(IE, elementCollection); }
     }
 
-    public SelectList SelectList(string elementID)
+    public SelectList SelectList(string elementId)
     {
-      return SelectList(Find.ByID(elementID));
+      return SelectList(Find.ById(elementId));
     }
 
     public SelectList SelectList(AttributeValue findBy)
     {
-      return SubElementsSupport.SelectList(ie, findBy, elementCollection);
+      return SubElementsSupport.SelectList(IE, findBy, elementCollection);
     }
 
     public SelectListCollection SelectLists
     {
-      get { return SubElementsSupport.SelectLists(ie, elementCollection); }
+      get { return SubElementsSupport.SelectLists(IE, elementCollection); }
     }
 
-    public Table Table(string elementID)
+    public Table Table(string elementId)
     {
-      return Table(Find.ByID(elementID));
+      return Table(Find.ById(elementId));
     }
 
     public Table Table(AttributeValue findBy)
     {
-      return SubElementsSupport.Table(ie, findBy, elementCollection);
+      return SubElementsSupport.Table(IE, findBy, elementCollection);
     }
 
     public TableCollection Tables
     {
-      get { return SubElementsSupport.Tables(ie, elementCollection); }
+      get { return SubElementsSupport.Tables(IE, elementCollection); }
     }
 
     //    public TableSectionCollection TableSections
@@ -252,99 +254,99 @@ namespace WatiN.Core
     //      get { return SubElementsSupport.TableSections(ie, elementCollection); }
     //    }
 
-    public TableCell TableCell(string elementID)
+    public TableCell TableCell(string elementId)
     {
-      return TableCell(Find.ByID(elementID));
+      return TableCell(Find.ById(elementId));
     }
 
     public TableCell TableCell(AttributeValue findBy)
     {
-      return SubElementsSupport.TableCell(ie, findBy, elementCollection);
+      return SubElementsSupport.TableCell(IE, findBy, elementCollection);
     }
 
     public TableCell TableCell(string elementId, int occurence)
     {
-      return SubElementsSupport.TableCell(ie, elementId, occurence, elementCollection);
+      return SubElementsSupport.TableCell(IE, elementId, occurence, elementCollection);
     }
 
     public TableCellCollection TableCells
     {
-      get { return SubElementsSupport.TableCells(ie, elementCollection); }
+      get { return SubElementsSupport.TableCells(IE, elementCollection); }
     }
 
-    public TableRow TableRow(string elementID)
+    public TableRow TableRow(string elementId)
     {
-      return TableRow(Find.ByID(elementID));
+      return TableRow(Find.ById(elementId));
     }
 
     public TableRow TableRow(AttributeValue findBy)
     {
-      return SubElementsSupport.TableRow(ie, findBy, elementCollection);
+      return SubElementsSupport.TableRow(IE, findBy, elementCollection);
     }
 
     public TableRowCollection TableRows
     {
-      get { return SubElementsSupport.TableRows(ie,elementCollection); }
+      get { return SubElementsSupport.TableRows(IE,elementCollection); }
     }
 
-    public TextField TextField(string elementID)
+    public TextField TextField(string elementId)
     {
-      return TextField(Find.ByID(elementID));
+      return TextField(Find.ById(elementId));
     }
 
     public TextField TextField(AttributeValue findBy)
     {
-      return SubElementsSupport.TextField(ie, findBy, elementCollection);
+      return SubElementsSupport.TextField(IE, findBy, elementCollection);
     }
 
     public TextFieldCollection TextFields
     {
-      get { return SubElementsSupport.TextFields(ie, elementCollection); }
+      get { return SubElementsSupport.TextFields(IE, elementCollection); }
     }
 
-    public Span Span(string elementID)
+    public Span Span(string elementId)
     {
-      return Span(Find.ByID(elementID));
+      return Span(Find.ById(elementId));
     }
 
     public Span Span(AttributeValue findBy)
     {
-      return SubElementsSupport.Span(ie, findBy, elementCollection);
+      return SubElementsSupport.Span(IE, findBy, elementCollection);
     }
 
     public SpanCollection Spans
     {
-      get { return SubElementsSupport.Spans(ie, elementCollection); }
+      get { return SubElementsSupport.Spans(IE, elementCollection); }
     }
 
-    public Div Div(string elementID)
+    public Div Div(string elementId)
     {
-      return Div(Find.ByID(elementID));
+      return Div(Find.ById(elementId));
     }
 
     public Div Div(AttributeValue findBy)
     {
-      return SubElementsSupport.Div(ie, findBy, elementCollection);
+      return SubElementsSupport.Div(IE, findBy, elementCollection);
     }
 
     public DivCollection Divs
     {
-      get { return SubElementsSupport.Divs(ie, elementCollection); }
+      get { return SubElementsSupport.Divs(IE, elementCollection); }
     }
 
-    public Image Image(string elementID)
+    public Image Image(string elementId)
     {
-      return Image(Find.ByID(elementID));
+      return Image(Find.ById(elementId));
     }
 
     public Image Image(AttributeValue findBy)
     {
-      return SubElementsSupport.Image(ie, findBy, elementCollection);
+      return SubElementsSupport.Image(IE, findBy, elementCollection);
     }
 
     public ImageCollection Images
     {
-      get { return SubElementsSupport.Images(ie, elementCollection); }
+      get { return SubElementsSupport.Images(IE, elementCollection); }
     }
     #endregion
 

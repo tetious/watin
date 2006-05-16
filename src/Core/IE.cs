@@ -106,10 +106,10 @@ namespace WatiN.Core
     /// <summary>
     /// Open new Internet Explorer and goto url. Internet Explorer will be closed when destroying this object.
     /// </summary>
-    /// <param name="URL">The URL te open</param>
-    public IE(string URL)
+    /// <param name="url">The URL te open</param>
+    public IE(string url)
     {
-      CreateNewIE(URL, true);
+      CreateNewIE(url, true);
     }
 
     /// <summary>
@@ -124,11 +124,11 @@ namespace WatiN.Core
     /// <summary>
     /// Open new Internet Explorer and goto url.
     /// </summary>
-    /// <param name="URL">The URL te open</param>
+    /// <param name="url">The URL te open</param>
     /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
-    public IE(string URL, bool autoClose)
+    public IE(string url, bool autoClose)
     {
-      CreateNewIE(URL, autoClose);
+      CreateNewIE(url, autoClose);
     }
 
     /// <summary>
@@ -136,13 +136,13 @@ namespace WatiN.Core
     /// object because otherwise all projects using WatiN should also
     /// reference the Interop.SHDocVw assembly.
     /// </summary>
-    /// <param name="SHDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
-    internal IE(object SHDocVwInternetExplorer)
+    /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
+    internal IE(object shDocVwInternetExplorer)
     {
       InternetExplorer ie = null;
       try
       {
-        ie = (InternetExplorer) SHDocVwInternetExplorer;
+        ie = (InternetExplorer) shDocVwInternetExplorer;
       }
       catch(System.InvalidCastException)
       {
@@ -153,7 +153,7 @@ namespace WatiN.Core
       WaitForComplete();
     }
 
-    private void CreateNewIE(string URL, bool autoClose)
+    private void CreateNewIE(string url, bool autoClose)
     {
       Logger.LogAction("Creating new IE instance");
 
@@ -161,7 +161,7 @@ namespace WatiN.Core
 
       InitIEAndStartPopupWatcher(new InternetExplorerClass());
 
-      GoTo(URL);
+      GoTo(url);
     }
 
     private void InitIEAndStartPopupWatcher(InternetExplorer ie)
@@ -250,12 +250,17 @@ namespace WatiN.Core
       }
     }
 
-    public void GoTo(string URL)
+    public void GoTo(Uri url)
     {
-      Logger.LogAction("Navigating to '" + URL + "'");
+      GoTo(url.ToString());
+    }
+
+    public void GoTo(string url)
+    {
+      Logger.LogAction("Navigating to '" + url + "'");
       
       object nil = null;
-      Ie.Navigate(URL, ref nil, ref nil, ref nil, ref nil);
+      ie.Navigate(url, ref nil, ref nil, ref nil, ref nil);
       WaitForComplete();
       
     }
@@ -283,22 +288,11 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Use this to gain access to the 'raw' internet explorer object.
-    /// </summary>
-    private InternetExplorer Ie
-    {
-      get
-      {
-        return ie;
-      }
-    }
-
-    /// <summary>
     /// Returns the current url, as displayed in the address bar of the browser
     /// </summary>
     public string Url
     {
-      get { return Ie.LocationURL; }
+      get { return ie.LocationURL; }
     }
 
     public string PopAlert()
@@ -354,14 +348,14 @@ namespace WatiN.Core
 
     public void Back()
     {
-      Ie.GoBack();
+      ie.GoBack();
       WaitForComplete();
       Logger.LogAction("Navigated Back to '" + Url + "'");
     }
 
     public void Forward()
     {
-      Ie.GoForward();
+      ie.GoForward();
       WaitForComplete();
       Logger.LogAction("Navigated Forward to '" + Url + "'");
     }
@@ -371,7 +365,7 @@ namespace WatiN.Core
       Logger.LogAction("Refreshing browser from '" + Url + "'");
 
       object REFRESH_COMPLETELY = 3;
-      Ie.Refresh2(ref REFRESH_COMPLETELY);
+      ie.Refresh2(ref REFRESH_COMPLETELY);
       WaitForComplete();
     }
 
@@ -379,15 +373,15 @@ namespace WatiN.Core
     {
       IntPtr ieHandle = GetIEHandle();
 
-      if (Win32.GetForegroundWindow() != ieHandle)
+      if (NativeMethods.GetForegroundWindow() != ieHandle)
       {
-        Win32.SetForegroundWindow(ieHandle);
+        NativeMethods.SetForegroundWindow(ieHandle);
       }
     }
 
-    public void ShowWindow(Win32.WindowShowStyle showStyle)
+    public void ShowWindow(NativeMethods.WindowShowStyle showStyle)
     {
-      Win32.ShowWindow(GetIEHandle(), (int)showStyle);
+      NativeMethods.ShowWindow(GetIEHandle(), (int)showStyle);
     }
 
     public void Close()
@@ -406,7 +400,7 @@ namespace WatiN.Core
       popupWatcher.Stop();
       popupWatcherThread.Join();
 
-      foreach(HTMLDialog htmlDialog in HTMLDialogs)
+      foreach(HtmlDialog htmlDialog in HtmlDialogs)
       {
         htmlDialog.Close();
       }
@@ -415,7 +409,7 @@ namespace WatiN.Core
 
       int iePid = GetProcessID();
 
-      Ie.Quit(); // ask IE to close
+      ie.Quit(); // ask IE to close
       ie = null;
       Thread.Sleep(1000); // wait for IE to close by itself
 
@@ -439,7 +433,7 @@ namespace WatiN.Core
       }
     }
 
-    public override IHTMLDocument2 OnGetHTMLDocument()
+    public override IHTMLDocument2 OnGetHtmlDocument()
     {
       return (IHTMLDocument2)ie.Document;
     }
@@ -447,19 +441,19 @@ namespace WatiN.Core
 
     public override void WaitForComplete()
     {
-      InitTimeOut();
+      InitTimeout();
 
       WaitWhileIEBusy();
       WaitWhileIEStateNotComplete();
       
-      WaitForCompleteTimeOutIsInitialized();
+      WaitForCompleteTimeoutIsInitialized();
     }
 
     private void WaitWhileIEStateNotComplete()
     {
-      while (Ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
+      while (ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
       {
-        ThrowExceptionWhenTimeOut("Internet Explorer state not complete");
+        ThrowExceptionWhenTimeout("Internet Explorer state not complete");
 
         Thread.Sleep(100);        
       }
@@ -467,9 +461,9 @@ namespace WatiN.Core
 
     private void WaitWhileIEBusy()
     {
-      while (Ie.Busy)
+      while (ie.Busy)
       {
-        ThrowExceptionWhenTimeOut("Internet Explorer busy");
+        ThrowExceptionWhenTimeout("Internet Explorer busy");
 
         Thread.Sleep(100);
       }
@@ -502,56 +496,56 @@ namespace WatiN.Core
         autoClose = value;
       }
     }
-    public HTMLDialogCollection HTMLDialogs
+    public HtmlDialogCollection HtmlDialogs
     {
       get
       {
         Process p = Process.GetProcessById(GetProcessID());
-        HTMLDialogCollection htmlDialogCollection = new HTMLDialogCollection(p); 
+        HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p); 
 
         return htmlDialogCollection;
       }
     }
 
     /// <summary>
-    /// Find a HTMLDialog
+    /// Find a HtmlDialog
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
-    public HTMLDialog HTMLDialog(UrlValue findBy)
+    public HtmlDialog HtmlDialog(UrlValue findBy)
     {
-      return HTMLDialog(findBy, waitForWindowTime);
+      return HtmlDialog(findBy, waitForWindowTime);
+    }
+
+    /// <summary>
+    /// Find a HtmlDialog
+    /// </summary>
+    /// <param name="findBy">The Title of the html page</param>
+    public HtmlDialog HtmlDialog(TitleValue findBy)
+    {
+      return HtmlDialog(findBy, waitForWindowTime);
+    }
+
+    /// <summary>
+    /// Find a HtmlDialog
+    /// </summary>
+    /// <param name="findBy">The url of the html page shown in the dialog</param>
+    /// <param name="timeout">Number of seconds before the search times out.</param>
+    public HtmlDialog HtmlDialog(UrlValue findBy, int timeout)
+    {
+      return findHtmlDialog(findBy, timeout);
     }
 
     /// <summary>
     /// Find a HTMLDialog
     /// </summary>
     /// <param name="findBy">The Title of the html page</param>
-    public HTMLDialog HTMLDialog(TitleValue findBy)
-    {
-      return HTMLDialog(findBy, waitForWindowTime);
-    }
-
-    /// <summary>
-    /// Find a HTMLDialog
-    /// </summary>
-    /// <param name="findBy">The url of the html page shown in the dialog</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HTMLDialog HTMLDialog(UrlValue findBy, int timeout)
+    public HtmlDialog HtmlDialog(TitleValue findBy, int timeout)
     {
-      return findHTMLDialog(findBy, timeout);
+      return findHtmlDialog(findBy, timeout);
     }
 
-    /// <summary>
-    /// Find a HTMLDialog
-    /// </summary>
-    /// <param name="findBy">The Title of the html page</param>
-    /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HTMLDialog HTMLDialog(TitleValue findBy, int timeout)
-    {
-      return findHTMLDialog(findBy, timeout);
-    }
-
-    private HTMLDialog findHTMLDialog(AttributeValue findBy, int timeout)
+    private HtmlDialog findHtmlDialog(AttributeValue findBy, int timeout)
     {
       Logger.LogAction("Finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
@@ -561,7 +555,7 @@ namespace WatiN.Core
       {
         Thread.Sleep(500);
 
-        foreach(HTMLDialog htmlDialog in HTMLDialogs)
+        foreach(HtmlDialog htmlDialog in HtmlDialogs)
         {
           string compareValue = string.Empty;
 
@@ -582,7 +576,7 @@ namespace WatiN.Core
         }
       }
 
-      throw new HTMLDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
+      throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }
 
     private static bool NotTimedOut(DateTime startTime, int durationInSeconds)

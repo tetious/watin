@@ -49,20 +49,20 @@ namespace WatiN.UnitTests
     {
       using(IE iemain = new IE(mainURI.ToString()))
       {
-        Assert.AreEqual(0, iemain.MainDocument.Frames.length);
+        Assert.AreEqual(0, iemain.MainDocument.Frames.Length);
       }
     }
 
     [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a frame by id with value 'contentsid'")]
     public void ExpectFrameNotFoundException()
     {
-      ie.MainDocument.Frame(Find.ByID("contentsid"));
+      ie.MainDocument.Frame(Find.ById("contentsid"));
     }
 
     [Test]
     public void Frame()
     {
-      Frame mainFrame = ie.MainDocument.Frame(Find.ByID("mainid"));
+      Frame mainFrame = ie.MainDocument.Frame(Find.ById("mainid"));
       Assert.IsNotNull(mainFrame, "Frame expected");
       Assert.AreEqual("main", mainFrame.Name);
       Assert.AreEqual("mainid", mainFrame.Id);
@@ -77,7 +77,7 @@ namespace WatiN.UnitTests
       const int expectedFramesCount = 2;
       FrameCollection frames = ie.MainDocument.Frames;
 
-      Assert.AreEqual(expectedFramesCount, frames.length, "Unexpected number of frames");
+      Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
       // Collection items by index
       Assert.AreEqual(frameNameContents, frames[0].Name);

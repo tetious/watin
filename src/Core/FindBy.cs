@@ -72,13 +72,13 @@ namespace WatiN.Core
 
     protected static bool IsNullOrEmpty(string value)
     {
-      return (value == null || value == string.Empty);
+      return (value == null || value.Length == 0);
     }
   }
 
-  public class IDValue : AttributeValue
+  public class IdValue : AttributeValue
   {
-    public IDValue(string id) : base("id", id)
+    public IdValue(string id) : base("id", id)
     {}
   }
 
@@ -187,9 +187,9 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="id">Element id</param>
     /// <returns></returns>
-    public static IDValue ByID(string id)
+    public static IdValue ById(string id)
     {
-      return new IDValue(id);
+      return new IdValue(id);
     }
 
     /// <summary>

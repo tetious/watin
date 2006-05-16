@@ -51,7 +51,7 @@ namespace WatiN.Core.Utils
     {
       FrameCollection frames = document.Frames;
 
-      System.Diagnostics.Debug.WriteLine("There are " + frames.length.ToString() + " Frames", "WatiN");
+      System.Diagnostics.Debug.WriteLine("There are " + frames.Length.ToString() + " Frames", "WatiN");
       
       int index = 0;
       foreach(Frame frame in frames)

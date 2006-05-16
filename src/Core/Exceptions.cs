@@ -63,11 +63,11 @@ namespace WatiN.Core.Exceptions
     }
   }
 
-  public class HTMLDialogNotFoundException : WatiNException
+  public class HtmlDialogNotFoundException : WatiNException
   {
     private string message = "";
 
-    public HTMLDialogNotFoundException(string attributeName, string value, int waitTimeInSeconds) : base()
+    public HtmlDialogNotFoundException(string attributeName, string value, int waitTimeInSeconds) : base()
     {
       message = "Could not find a HTMLDialog by " + attributeName + " with value '" + value + "'. (Search expired after '" + waitTimeInSeconds.ToString() + "' seconds)";
     }
@@ -138,11 +138,11 @@ namespace WatiN.Core.Exceptions
     }
   }
 
-  public class TimeOutException : WatiNException
+  public class TimeoutException : WatiNException
   {
     private string message = "";
 
-    public TimeOutException(string value) : base()
+    public TimeoutException(string value) : base()
     {
       message = "Timeout while '" + value + "'";
     }

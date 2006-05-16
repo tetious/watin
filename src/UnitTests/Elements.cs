@@ -43,12 +43,12 @@ namespace WatiN.UnitTests
     {
       const string tableId = "table1";
 
-      Assert.AreEqual(tableId,  ie.MainDocument.Table(Find.ByID(tableId)).Id);
+      Assert.AreEqual(tableId,  ie.MainDocument.Table(Find.ById(tableId)).Id);
       
       Table table = ie.MainDocument.Table(tableId);
       Assert.AreEqual(tableId,  table.Id);
       Assert.AreEqual(tableId,  table.ToString());
-      Assert.AreEqual(2, table.TableRows.length, "Unexpected number of rows");
+      Assert.AreEqual(2, table.TableRows.Length, "Unexpected number of rows");
 
       TableRow row = table.FindRow("a1",0);
       Assert.IsNotNull(row, "Row with a1 expected");
@@ -72,7 +72,7 @@ namespace WatiN.UnitTests
       // Collection.length
       TableCollection tables = ie.MainDocument.Tables;
       
-      Assert.AreEqual(2, tables.length);
+      Assert.AreEqual(2, tables.Length);
 
       // Collection items by index
       Assert.AreEqual("table1", tables[0].Id);
@@ -100,10 +100,10 @@ namespace WatiN.UnitTests
     [Test]
     public void TableRows()
     {
-      // Collection.length
+      // Collection.Length
       TableRowCollection rows = ie.MainDocument.Table("table1").TableRows;
       
-      Assert.AreEqual(2, rows.length);
+      Assert.AreEqual(2, rows.Length);
 
       // Collection items by index
       Assert.AreEqual("row0", rows[0].Id);
@@ -139,10 +139,10 @@ namespace WatiN.UnitTests
     [Test]
     public void TableCells()
     {
-      // Collection.length
+      // Collection.Length
       TableCellCollection cells = ie.MainDocument.Table("table1").TableRows[0].TableCells;
       
-      Assert.AreEqual(2, cells.length);
+      Assert.AreEqual(2, cells.Length);
 
       // Collection items by index
       Assert.AreEqual("td1", cells[0].Id);
@@ -171,7 +171,7 @@ namespace WatiN.UnitTests
     public void Button()
     {
       const string popupValue = "Show modeless dialog";
-      Assert.AreEqual(popupValue, ie.MainDocument.Button(Find.ByID("popupid")).Value);
+      Assert.AreEqual(popupValue, ie.MainDocument.Button(Find.ById("popupid")).Value);
       Assert.AreEqual(popupValue, ie.MainDocument.Button("popupid").Value);
       Assert.AreEqual(popupValue, ie.MainDocument.Button("popupid").ToString());
       Assert.AreEqual(popupValue, ie.MainDocument.Button(Find.ByName("popupname")).Value);
@@ -192,14 +192,14 @@ namespace WatiN.UnitTests
     public void Buttons()
     {
       const int expectedButtonsCount = 4;
-      Assert.AreEqual(expectedButtonsCount, ie.MainDocument.Buttons.length, "Unexpected number of buttons");
+      Assert.AreEqual(expectedButtonsCount, ie.MainDocument.Buttons.Length, "Unexpected number of buttons");
 
       Form form = ie.MainDocument.Form("Form");
 
-      // Collection.length
+      // Collection.Length
       ButtonCollection formButtons = form.Buttons;
       
-      Assert.AreEqual(expectedButtonsCount, formButtons.length);
+      Assert.AreEqual(expectedButtonsCount, formButtons.Length);
 
       // Collection items by index
       Assert.AreEqual("popupid", form.Buttons[0].Id);
@@ -244,12 +244,12 @@ namespace WatiN.UnitTests
     [Test]
     public void CheckBoxes()
     {
-      Assert.AreEqual(5, ie.MainDocument.CheckBoxs.length, "Unexpected number of checkboxes");
+      Assert.AreEqual(5, ie.MainDocument.CheckBoxs.Length, "Unexpected number of checkboxes");
 
       CheckBoxCollection formCheckBoxs = ie.MainDocument.Form("FormCheckboxes").CheckBoxs;
 
       // Collection items by index
-      Assert.AreEqual(3,formCheckBoxs.length, "Wrong number off checkboxes");
+      Assert.AreEqual(3,formCheckBoxs.Length, "Wrong number off checkboxes");
       Assert.AreEqual("Checkbox1", formCheckBoxs[0].Id);
       Assert.AreEqual("Checkbox2", formCheckBoxs[1].Id);
       Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);      
@@ -278,7 +278,7 @@ namespace WatiN.UnitTests
     {
       const string tableId = "table1";
 
-      Element element = ie.MainDocument.Table(Find.ByID(tableId));
+      Element element = ie.MainDocument.Table(Find.ById(tableId));
 
       Assert.IsNotNull(element,  "Element not found");
       Assert.AreEqual(tableId, element.GetAttributeValue("id"), "GetAttributeValue id failed");
@@ -304,7 +304,7 @@ namespace WatiN.UnitTests
     public void LabelWrapped()
     {
       LabelCollection labelCollection = ie.MainDocument.Labels;
-      Assert.AreEqual(2, ie.MainDocument.Labels.length, "Unexpected number of labels");
+      Assert.AreEqual(2, ie.MainDocument.Labels.Length, "Unexpected number of labels");
 
       Label label = labelCollection[1];
 
@@ -319,12 +319,12 @@ namespace WatiN.UnitTests
     {
       const int expectedLabelCount = 2;
 
-      Assert.AreEqual(expectedLabelCount, ie.MainDocument.Labels.length, "Unexpected number of labels");
+      Assert.AreEqual(expectedLabelCount, ie.MainDocument.Labels.Length, "Unexpected number of labels");
 
       LabelCollection labelCollection = ie.MainDocument.Labels;
 
       // Collection items by index
-      Assert.AreEqual(expectedLabelCount,labelCollection.length, "Wrong number of labels");
+      Assert.AreEqual(expectedLabelCount,labelCollection.Length, "Wrong number of labels");
 
       // Collection iteration and comparing the result with Enumerator
       IEnumerable labelEnumerable = labelCollection;
@@ -348,7 +348,7 @@ namespace WatiN.UnitTests
     [Test]
     public void Link()
     {
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByID("testlinkid")).Url);
+      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ById("testlinkid")).Url);
       Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link("testlinkid").Url);
       Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByName("testlinkname")).Url);
       Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByUrl(googleURI.ToString())).Url);
@@ -358,7 +358,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexcistinglinkid'")]
     public void LinkFindByInvalidEnum()
     {
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByID("noexcistinglinkid")).Url);
+      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ById("noexcistinglinkid")).Url);
     }
 
     [Test]
@@ -366,12 +366,12 @@ namespace WatiN.UnitTests
     {
       const int expectedLinkCount = 3;
 
-      Assert.AreEqual(expectedLinkCount, ie.MainDocument.Links.length, "Unexpected number of links");
+      Assert.AreEqual(expectedLinkCount, ie.MainDocument.Links.Length, "Unexpected number of links");
 
       LinkCollection links = ie.MainDocument.Links;
 
       // Collection items by index
-      Assert.AreEqual(expectedLinkCount,links.length, "Wrong number off links");
+      Assert.AreEqual(expectedLinkCount,links.Length, "Wrong number off links");
       Assert.AreEqual("testlinkid", links[0].Id);
       Assert.AreEqual("testlinkid1", links[1].Id);
 
@@ -452,11 +452,11 @@ namespace WatiN.UnitTests
     [Test]
     public void RadioButtons()
     {
-      Assert.AreEqual(3, ie.MainDocument.RadioButtons.length, "Unexpected number of RadioButtons");
+      Assert.AreEqual(3, ie.MainDocument.RadioButtons.Length, "Unexpected number of RadioButtons");
 
       RadioButtonCollection formRadioButtons = ie.MainDocument.Form("FormRadioButtons").RadioButtons;
 
-      Assert.AreEqual(2,formRadioButtons.length, "Wrong number off RadioButtons");
+      Assert.AreEqual(2,formRadioButtons.Length, "Wrong number off RadioButtons");
       Assert.AreEqual("Radio2", formRadioButtons[0].Id);
       Assert.AreEqual("Radio3", formRadioButtons[1].Id);
 
@@ -516,12 +516,12 @@ namespace WatiN.UnitTests
     [Test]
     public void SelectLists()
     {
-      Assert.AreEqual(2, ie.MainDocument.SelectLists.length);
+      Assert.AreEqual(2, ie.MainDocument.SelectLists.Length);
 
       // Collections
       SelectListCollection selectLists = ie.MainDocument.SelectLists;
 
-      Assert.AreEqual(2, selectLists.length);
+      Assert.AreEqual(2, selectLists.Length);
 
       // Collection items by index
       Assert.AreEqual("Select1", selectLists[0].Id);
@@ -625,11 +625,11 @@ namespace WatiN.UnitTests
     [Test]
     public void TextFields()
     {
-      Assert.AreEqual(6, ie.MainDocument.TextFields.length, "Number of TextFields should by 4");
+      Assert.AreEqual(6, ie.MainDocument.TextFields.Length, "Number of TextFields should by 4");
 
       // Collection items by index
       Form mainForm = ie.MainDocument.Form("FormHiddens");
-      Assert.AreEqual(2, mainForm.TextFields.length, "Wrong number of textfields in collectionTestForm");
+      Assert.AreEqual(2, mainForm.TextFields.Length, "Wrong number of textfields in collectionTestForm");
       Assert.AreEqual("first", mainForm.TextFields[0].Value);
       Assert.AreEqual("second", mainForm.TextFields[1].Value);
 
@@ -637,7 +637,7 @@ namespace WatiN.UnitTests
 
       // Collection.length
       TextFieldCollection textfields = form.TextFields;
-      Assert.AreEqual(1, textfields.length);
+      Assert.AreEqual(1, textfields.Length);
 
       // Collection iteration and comparing the result with Enumerator
       IEnumerable textfieldEnumerable = textfields;

@@ -45,7 +45,7 @@
 //			}
 //		}
 //
-//		public int length { get { return elements.Count; } }
+//		public int Length { get { return elements.Count; } }
 //
 //		public TableSection this[int index] { get { return (TableSection)elements[index]; } }
 //

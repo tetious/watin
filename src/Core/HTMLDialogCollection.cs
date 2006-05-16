@@ -23,11 +23,11 @@ using System.Diagnostics;
 
 namespace WatiN.Core
 {
-  public class HTMLDialogCollection : IEnumerable
+  public class HtmlDialogCollection : IEnumerable
   {
     private ArrayList htmlDialogs;
 
-    public HTMLDialogCollection(Process ieProcess) 
+    public HtmlDialogCollection(Process ieProcess) 
     {
       htmlDialogs = new ArrayList();
 
@@ -37,16 +37,16 @@ namespace WatiN.Core
       {
         int threadId = t.Id;
 
-        Win32.EnumThreadProc callbackProc = new Win32.EnumThreadProc(EnumChildForTridentDialogFrame);
-        Win32.EnumThreadWindows(threadId, callbackProc, hWnd);
+        NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
+        NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
       }
     }
 
     private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
     {
-      if (HTMLDialog.IsIETridenDlgFrame(hWnd))
+      if (HtmlDialog.IsIETridenDlgFrame(hWnd))
       {
-        HTMLDialog htmlDialog = new HTMLDialog(hWnd);
+        HtmlDialog htmlDialog = new HtmlDialog(hWnd);
         htmlDialogs.Add(htmlDialog);
       }
 
@@ -56,7 +56,7 @@ namespace WatiN.Core
 
     public int length { get { return htmlDialogs.Count; } }
 
-    public HTMLDialog this[int index] { get { return (HTMLDialog)htmlDialogs[index]; } }
+    public HtmlDialog this[int index] { get { return (HtmlDialog)htmlDialogs[index]; } }
 
     public Enumerator GetEnumerator() 
     {
@@ -89,11 +89,11 @@ namespace WatiN.Core
         return index < children.Count;
       }
 
-      public HTMLDialog Current 
+      public HtmlDialog Current 
       {
         get 
         {
-          return (HTMLDialog)children[index];
+          return (HtmlDialog)children[index];
         }
       }
 

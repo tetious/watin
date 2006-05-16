@@ -1,0 +1,2453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.312" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>False</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.312\Xml\FxCopReport.Xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <PermitAnalysis>True</PermitAnalysis>
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>100</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>10</RuleExceptionsThreshold>
+  <Spelling Locale="en-us" />
+  <VersionAware>False</VersionAware>
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+ </ProjectOptions>
+ <Targets>
+  <Target Name="C:\TAdev\WatiN\WatiN\trunk\build\Debug\Core\WatiN.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.312">
+  <Namespaces>
+   <Namespace Name="WatiN.Core">
+    <Messages>
+     <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Wati</Item>
+       <Item>WatiN.Core</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="WatiN.Core.Exceptions">
+    <Messages>
+     <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Wati</Item>
+       <Item>WatiN.Core.Exceptions</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="WatiN.Core.Interfaces">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2006-05-11 11:10:33Z">
+      <Issue>
+       <Item>WatiN.Core.Interfaces</Item>
+      </Issue>
+      <Notes>
+       <User Name="j.vanmenen">
+        <Note Id="1" />
+       </User>
+      </Notes>
+     </Message>
+     <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Wati</Item>
+       <Item>WatiN.Core.Interfaces</Item>
+      </Issue>
+      <Notes>
+       <User Name="j.vanmenen">
+        <Note Id="2" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="WatiN.Core.Logging">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2006-05-11 11:10:33Z">
+      <Issue>
+       <Item>WatiN.Core.Logging</Item>
+      </Issue>
+     </Message>
+     <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Wati</Item>
+       <Item>WatiN.Core.Logging</Item>
+      </Issue>
+      <Notes>
+       <User Name="j.vanmenen">
+        <Note Id="0" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="WatiN.Core.Utils">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2006-05-11 11:10:33Z">
+      <Issue>
+       <Item>WatiN.Core.Utils</Item>
+      </Issue>
+     </Message>
+     <Message Id="Utils" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Utils</Item>
+       <Item>WatiN.Core.Utils</Item>
+      </Issue>
+     </Message>
+     <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+      <Issue Name="Namespace">
+       <Item>Wati</Item>
+       <Item>WatiN.Core.Utils</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="C:\TAdev\WatiN\WatiN\trunk\build\Debug\Core\WatiN.Core.dll">
+    <Modules>
+     <Module Name="watin.core.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209" Created="2006-05-11 11:10:33Z">
+        <Issue>
+         <Item>WatiN.Core</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2006-05-11 11:10:33Z">
+        <Issue Name="NoStrongName">
+         <Item>WatiN.Core</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2006-05-11 11:10:33Z">
+        <Issue Name="NoAttr">
+         <Item>WatiN.Core</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2006-05-11 11:10:33Z">
+        <Issue Name="NoAttribute" Level="CriticalError">
+         <Item>WatiN.Core</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="WatiN.Core">
+        <Types>
+         <Type Name="AttributeValue">
+          <Members>
+           <Member Name="ArgumentNotNullOrEmpty(System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="System.ArgumentNullException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>AttributeValue.ArgumentNotNullOrEmpty(String, String):Void</Item>
+               <Item>2</Item>
+               <Item>ArgumentNullException..ctor(String, String)</Item>
+               <Item>Null or empty are not allowed</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Document">
+          <Members>
+           <Member Name="IE">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2006-05-11 12:19:32Z">
+              <Issue>
+               <Item>IE</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Url">
+            <Messages>
+             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Status="Excluded" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Url</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DomContainer">
+          <Members>
+           <Member Name=".ctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>DomContainer..ctor()</Item>
+               <Item>htmlDocument</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+              <Issue>
+               <Item>DomContainer..ctor()</Item>
+               <Item>mainDocument</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FireEvent(mshtml.DispHTMLBaseElement,System.String):System.Void">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Status="Excluded" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>FireEvent</Item>
+              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IsDocumentReadyStateAvailable(mshtml.IHTMLDocument2):System.Boolean">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>DomContainer.IsDocumentReadyStateAvailable(IHTMLDocument2):Boolean</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+             <Message Id="readyState" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>DomContainer.IsDocumentReadyStateAvailable(IHTMLDocument2):Boolean</Item>
+               <Item>readyState</Item>
+               <Item>System.String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OnGetHtmlDocument():mshtml.IHTMLDocument2">
+            <Messages>
+             <Message Id="System.NotImplementedException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+               <Item>1</Item>
+               <Item>NotImplementedException..ctor(String)</Item>
+               <Item>This method must be overriden by all sub classes</Item>
+              </Issue>
+             </Message>
+             <Message Id="overriden" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>overriden</Item>
+               <Item>This method must be overriden by all sub classes</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WaitWhileDocumentStateNotComplete(mshtml.IHTMLDocument2):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>htmlDocument</Item>
+               <Item>mshtml.HTMLDocument</Item>
+               <Item>DomContainer.WaitWhileDocumentStateNotComplete(IHTMLDocument2):Void</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WaitWhileFrameDocumentNotAvailable(mshtml.DispHTMLWindow2):mshtml.IHTMLDocument2">
+            <Messages>
+             <Message Id="WatiN.Core.Exceptions.WatiNException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>DomContainer.WaitWhileFrameDocumentNotAvailable(DispHTMLWindow2):IHTMLDocument2</Item>
+               <Item>1</Item>
+               <Item>WatiNException..ctor(String)</Item>
+               <Item>Could be Cross-domain scripting security. See KB Article KB196340 'HOWTO: Get the WebBrowser Object Model of an HTML Frame' - this technique bypasses security checks</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WaitWhileMainDocumentNotAvailable(WatiN.Core.DomContainer):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>DomContainer.WaitWhileMainDocumentNotAvailable(DomContainer):Void</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Element">
+          <Members>
+           <Member Name=".ctor(WatiN.Core.DomContainer,System.Object)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element..ctor(DomContainer, Object)</Item>
+               <Item>element</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Click():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element.Click():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Clicking ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ClickNoWait():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element.ClickNoWait():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Clicking (no wait) ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="dispHtmlBaseElement">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>dispHtmlBaseElement</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="DoubleClick():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element.DoubleClick():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Doubleclicking ______ '______'</Item>
+              </Issue>
+             </Message>
+             <Message Id="Doubleclicking" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Doubleclicking</Item>
+               <Item>Doubleclicking ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="element">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>element</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FireEvent(System.String):System.Void">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>FireEvent</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetAttributeValue(System.String):System.String">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element.GetAttributeValue(String):String</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#attributename" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Element.GetAttributeValue(String):String</Item>
+               <Item>attributename</Item>
+               <Item>attributename</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="HighLight(System.Boolean):System.Void">
+            <Messages>
+             <Message Id="HighLight" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2006-05-11 11:10:33Z">
+              <Issue Name="ShouldBeDiscreteTerm">
+               <Item>HighLight</Item>
+               <Item>method</Item>
+               <Item>HighLight</Item>
+               <Item>Highlight</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Element.HighLight(Boolean):Void</Item>
+               <Item>System.Object</Item>
+              </Issue>
+              <Issue>
+               <Item>Element.HighLight(Boolean):Void</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Ie">
+            <Messages>
+             <Message TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>Ie</Item>
+               <Item>Element.Ie:DomContainer</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Find">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>Find</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="ByCustom(System.String,System.String):WatiN.Core.AttributeValue">
+            <Messages>
+             <Message Id="0#attributename" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Find.ByCustom(String, String):AttributeValue</Item>
+               <Item>attributename</Item>
+               <Item>attributename</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ByUrl(System.String):WatiN.Core.UrlValue">
+            <Messages>
+             <Message Id="0#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>url</Item>
+               <Item>Find.ByUrl(String):UrlValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Form">
+          <Members>
+           <Member Name="Submit():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Form.Submit():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Submitting ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Frame">
+          <Members>
+           <Member Name="Find(WatiN.Core.FrameCollection,WatiN.Core.IdValue):WatiN.Core.Frame">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2006-05-11 12:19:32Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.IdValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Find(WatiN.Core.FrameCollection,WatiN.Core.NameValue):WatiN.Core.Frame">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.NameValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Find(WatiN.Core.FrameCollection,WatiN.Core.UrlValue):WatiN.Core.Frame">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.UrlValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HtmlDialog">
+          <Members>
+           <Member Name=".ctor(System.IntPtr)">
+            <Messages>
+             <Message Id="0#h" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Parameter">
+               <Item>HtmlDialog..ctor(IntPtr)</Item>
+               <Item>h</Item>
+               <Item>hWnd</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#Wnd" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Parameter">
+               <Item>HtmlDialog..ctor(IntPtr)</Item>
+               <Item>Wnd</Item>
+               <Item>hWnd</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IEDOMFromhWnd(System.IntPtr):mshtml.IHTMLDocument2">
+            <Messages>
+             <Message Id="System.Runtime.InteropServices.COMException.#ctor(System.String,System.Int32)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>HtmlDialog.IEDOMFromhWnd(IntPtr):IHTMLDocument2</Item>
+               <Item>1</Item>
+               <Item>COMException..ctor(String, Int32)</Item>
+               <Item>ObjectFromLresult has thown an exception</Item>
+              </Issue>
+             </Message>
+             <Message Id="Lresult" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>Lresult</Item>
+               <Item>ObjectFromLresult</Item>
+              </Issue>
+             </Message>
+             <Message Id="thown" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>thown</Item>
+               <Item>ObjectFromLresult has thown an exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IsIEServerWindow(System.IntPtr):System.Boolean">
+            <Messages>
+             <Message Id="this" TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
+              <Issue Name="MarkAsStatic">
+               <Item>HtmlDialog.IsIEServerWindow(IntPtr):Boolean</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IsIETridenDlgFrame(System.IntPtr):System.Boolean">
+            <Messages>
+             <Message Id="0#h" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Parameter">
+               <Item>HtmlDialog.IsIETridenDlgFrame(IntPtr):Boolean</Item>
+               <Item>h</Item>
+               <Item>hWnd</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#Wnd" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Parameter">
+               <Item>HtmlDialog.IsIETridenDlgFrame(IntPtr):Boolean</Item>
+               <Item>Wnd</Item>
+               <Item>hWnd</Item>
+              </Issue>
+             </Message>
+             <Message Id="Dlg" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>Dlg</Item>
+               <Item>IsIETridenDlgFrame</Item>
+              </Issue>
+             </Message>
+             <Message Id="Triden" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>Triden</Item>
+               <Item>IsIETridenDlgFrame</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HtmlDialogCollection">
+          <Members>
+           <Member Name="length">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>length</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IE">
+          <Members>
+           <Member Name=".ctor()">
+            <Messages>
+             <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE..ctor()</Item>
+               <Item>
+
+IE..ctor()
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void</Item>
+              </Issue>
+              <Issue>
+               <Item>IE..ctor()</Item>
+               <Item>
+
+IE..ctor()
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void
+DomContainer.WaitForCompleteTimeoutIsInitialized():Void
+DomContainer.get_HtmlDocument():HTMLDocument
+DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE..ctor(Boolean)</Item>
+               <Item>
+
+IE..ctor(Boolean)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void</Item>
+              </Issue>
+              <Issue>
+               <Item>IE..ctor(Boolean)</Item>
+               <Item>
+
+IE..ctor(Boolean)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void
+DomContainer.WaitForCompleteTimeoutIsInitialized():Void
+DomContainer.get_HtmlDocument():HTMLDocument
+DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.Object)">
+            <Messages>
+             <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE..ctor(Object)</Item>
+               <Item>
+
+IE..ctor(Object)
+DomContainer.WaitForComplete():Void</Item>
+              </Issue>
+              <Issue>
+               <Item>IE..ctor(Object)</Item>
+               <Item>
+
+IE..ctor(Object)
+DomContainer.WaitForComplete():Void
+DomContainer.WaitForCompleteTimeoutIsInitialized():Void
+DomContainer.get_HtmlDocument():HTMLDocument
+DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String)">
+            <Messages>
+             <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE..ctor(String)</Item>
+               <Item>
+
+IE..ctor(String)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void</Item>
+              </Issue>
+              <Issue>
+               <Item>IE..ctor(String)</Item>
+               <Item>
+
+IE..ctor(String)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void
+DomContainer.WaitForCompleteTimeoutIsInitialized():Void
+DomContainer.get_HtmlDocument():HTMLDocument
+DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Status="Excluded" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>url</Item>
+               <Item>IE..ctor(String)</Item>
+              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.Boolean)">
+            <Messages>
+             <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE..ctor(String, Boolean)</Item>
+               <Item>
+
+IE..ctor(String, Boolean)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void</Item>
+              </Issue>
+              <Issue>
+               <Item>IE..ctor(String, Boolean)</Item>
+               <Item>
+
+IE..ctor(String, Boolean)
+IE.CreateNewIE(String, Boolean):Void
+IE.GoTo(String):Void
+DomContainer.WaitForComplete():Void
+DomContainer.WaitForCompleteTimeoutIsInitialized():Void
+DomContainer.get_HtmlDocument():HTMLDocument
+DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>url</Item>
+               <Item>IE..ctor(String, Boolean)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="attachToIE(WatiN.Core.AttributeValue,System.Int32):WatiN.Core.IE">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.attachToIE(AttributeValue, Int32):IE</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Finding IE instance with ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="AttachToIE(WatiN.Core.TitleValue,System.Int32):WatiN.Core.IE">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Status="Excluded" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.TitleValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="AttachToIE(WatiN.Core.UrlValue,System.Int32):WatiN.Core.IE">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.UrlValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Back():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.Back():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Navigated Back to '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Close():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.Close():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Closing browser '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateNewIE(System.String,System.Boolean):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.CreateNewIE(String, Boolean):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Creating new IE instance</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="findHtmlDialog(WatiN.Core.AttributeValue,System.Int32):WatiN.Core.HtmlDialog">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>IE.findHtmlDialog(AttributeValue, Int32):HtmlDialog</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Finding HTMLDialog with ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FindIE(WatiN.Core.AttributeValue,System.Int32):WatiN.Core.IE">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.FindIE(AttributeValue, Int32):IE</Item>
+               <Item>System.Object</Item>
+              </Issue>
+              <Issue>
+               <Item>IE.FindIE(AttributeValue, Int32):IE</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FireEvent(mshtml.DispHTMLBaseElement,System.String):System.Void">
+            <Messages>
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>FireEvent</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FireEventOnElementByJScript(mshtml.DispHTMLBaseElement,System.String):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.FireEventOnElementByJScript(DispHTMLBaseElement, String):Void</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ForceClose():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.ForceClose():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Force closing all IE instances</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Forward():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.Forward():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Navigated Forward to '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GoTo(System.String):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.GoTo(String):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Navigating to '______'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057" Created="2006-05-11 11:48:14Z">
+              <Issue>
+               <Item>IE.GoTo(String):Void</Item>
+               <Item>url</Item>
+               <Item>IE.GoTo(Uri):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GoTo(System.Uri):System.Void">
+            <Messages>
+             <Message TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234" Created="2006-05-11 11:48:14Z">
+              <Issue>
+               <Item>IE.GoTo(Uri):Void</Item>
+               <Item>IE.GoTo(Uri):Void</Item>
+               <Item>IE.GoTo(String):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="HtmlDialog(WatiN.Core.TitleValue,System.Int32):WatiN.Core.HtmlDialog">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.TitleValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="HtmlDialog(WatiN.Core.UrlValue,System.Int32):WatiN.Core.HtmlDialog">
+            <Messages>
+             <Message TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011" Status="Excluded" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>findBy</Item>
+               <Item>WatiN.Core.UrlValue</Item>
+               <Item>WatiN.Core.AttributeValue</Item>
+              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Refresh():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IE.Refresh():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Refreshing browser from '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Url">
+            <Messages>
+             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Url</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IECollection">
+          <Members>
+           <Member Name=".ctor()">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IECollection..ctor()</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="length">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>length</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Image">
+          <Members>
+           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.IHTMLImgElement)">
+            <Messages>
+             <Message Id="1#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>HTMLImg</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Label">
+          <Members>
+           <Member Name="AccesKey">
+            <Messages>
+             <Message Id="Acces" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>Acces</Item>
+               <Item>AccesKey</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Link">
+          <Members>
+           <Member Name="Url">
+            <Messages>
+             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Url</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="NativeMethods">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2006-05-11 11:45:14Z">
+            <Issue>
+             <Item>NativeMethods</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="EnumThreadWindows(System.Int32,WatiN.Core.NativeMethods+EnumChildProc,System.IntPtr&amp;):System.Boolean">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>NativeMethods.EnumThreadWindows(Int32, EnumChildProc, IntPtr&amp;):Boolean</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SendMessage(System.IntPtr,System.Int32,System.Int32,System.Int32):System.Int32">
+            <Messages>
+             <Message Id="2" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
+              <Issue Name="Parameter">
+               <Item>wParam</Item>
+               <Item>NativeMethods.SendMessage(IntPtr, Int32, Int32, Int32):Int32</Item>
+               <Item>4</Item>
+               <Item>64-bit</Item>
+               <Item>8</Item>
+               <Item>System.Int32</Item>
+              </Issue>
+             </Message>
+             <Message Id="3" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
+              <Issue Name="Parameter">
+               <Item>lParam</Item>
+               <Item>NativeMethods.SendMessage(IntPtr, Int32, Int32, Int32):Int32</Item>
+               <Item>4</Item>
+               <Item>64-bit</Item>
+               <Item>8</Item>
+               <Item>System.Int32</Item>
+              </Issue>
+             </Message>
+             <Message Id="return" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
+              <Issue Name="Return">
+               <Item>NativeMethods.SendMessage(IntPtr, Int32, Int32, Int32):Int32</Item>
+               <Item>4</Item>
+               <Item>64-bit</Item>
+               <Item>8</Item>
+               <Item>System.Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="NativeMethods+WindowShowStyle">
+          <Messages>
+           <Message TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028" Created="2006-05-11 11:45:14Z">
+            <Issue Name="NotIntegral">
+             <Item>WatiN.Core.NativeMethods+WindowShowStyle</Item>
+             <Item>System.UInt32</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="Para">
+          <Members>
+           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLParaElement)">
+            <Messages>
+             <Message Id="1#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>HTMLParaElement</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="PopupWatcher">
+          <Members>
+           <Member Name=".ctor(System.Int32)">
+            <Messages>
+             <Message Id="0#Pid" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>PopupWatcher..ctor(Int32)</Item>
+               <Item>Pid</Item>
+               <Item>iePid</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="alertCount():System.Int32">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>alertCount</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="alerts">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>alerts</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>PopupWatcher.alerts:String[]</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="flushAlerts():System.Void">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>flushAlerts</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IsDialog(System.IntPtr):System.Boolean">
+            <Messages>
+             <Message Id="this" TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801" Created="2006-05-11 11:10:33Z" FixCategory="NonBreaking">
+              <Issue Name="MarkAsStatic">
+               <Item>PopupWatcher.IsDialog(IntPtr):Boolean</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="popAlert():System.String">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>popAlert</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="run():System.Void">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>run</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="PopupWatcher+Callback">
+          <Members>
+           <Member Name="BeginInvoke(System.IntPtr,System.Int32,System.AsyncCallback,System.Object):System.IAsyncResult">
+            <Messages>
+             <Message Id="1#l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Callback.BeginInvoke(IntPtr, Int32, AsyncCallback, Object):IAsyncResult</Item>
+               <Item>l</Item>
+               <Item>lParam</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#Param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Callback.BeginInvoke(IntPtr, Int32, AsyncCallback, Object):IAsyncResult</Item>
+               <Item>Param</Item>
+               <Item>lParam</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Invoke(System.IntPtr,System.Int32):System.Int32">
+            <Messages>
+             <Message Id="1#l" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Callback.Invoke(IntPtr, Int32):Int32</Item>
+               <Item>l</Item>
+               <Item>lParam</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#Param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>Callback.Invoke(IntPtr, Int32):Int32</Item>
+               <Item>Param</Item>
+               <Item>lParam</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="RadioCheck">
+          <Members>
+           <Member Name="Checked">
+            <Accessors>
+             <Accessor Name="set_Checked(System.Boolean):System.Void">
+              <Messages>
+               <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+                <Issue>
+                 <Item>RadioCheck.set_Checked(Boolean):Void</Item>
+                 <Item>1</Item>
+                 <Item>Logger.LogAction(String):Void</Item>
+                 <Item>Selecting ______ '______'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SelectList">
+          <Members>
+           <Member Name="ClearList():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SelectList.ClearList():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Clearing selection(s) in ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Select(System.String):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SelectList.Select(String):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Selecting '______' in ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SelectByValue(System.String):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SelectList.SelectByValue(String):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Selecting item with value '______' in ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Span">
+          <Members>
+           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLSpanElement)">
+            <Messages>
+             <Message Id="1#" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>HTMLSpanElement</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SubElementsSupport">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>SubElementsSupport</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="Checkboxes(WatiN.Core.DomContainer,mshtml.IHTMLElementCollection):WatiN.Core.CheckBoxCollection">
+            <Messages>
+             <Message Id="Checkboxes" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2006-05-11 11:10:33Z">
+              <Issue Name="ShouldBeCompoundWord">
+               <Item>Checkboxes</Item>
+               <Item>method</Item>
+               <Item>Checkboxes</Item>
+               <Item>CheckBoxes</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Divs(WatiN.Core.DomContainer,mshtml.IHTMLElementCollection):WatiN.Core.DivCollection">
+            <Messages>
+             <Message Id="Divs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>Divs</Item>
+               <Item>Divs</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FindElementByAttribute(System.String,System.String,WatiN.Core.AttributeValue,mshtml.IHTMLElementCollection):mshtml.IHTMLElement">
+            <Messages>
+             <Message Id="System.ArgumentNullException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SubElementsSupport.FindElementByAttribute(String, String, AttributeValue, IHTMLElementCollection):IHTMLElement</Item>
+               <Item>2</Item>
+               <Item>ArgumentNullException..ctor(String, String)</Item>
+               <Item>inputType must be set when tagName is 'input'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SubElementsSupport.FindElementByAttribute(String, String, AttributeValue, IHTMLElementCollection):IHTMLElement</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>SubElementsSupport.FindElementByAttribute(String, String, AttributeValue, IHTMLElementCollection):IHTMLElement</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="getAttributeValue(WatiN.Core.AttributeValue,mshtml.IHTMLElement):System.String">
+            <Messages>
+             <Message TypeName="CatchNonClsCompliantExceptionsInGeneralHandlers" Category="Microsoft.Security" CheckId="CA2102" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SubElementsSupport.getAttributeValue(AttributeValue, IHTMLElement):String</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SubElementsSupport.getAttributeValue(AttributeValue, IHTMLElement):String</Item>
+               <Item>System.Exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="IsInputElement(System.String):System.Boolean">
+            <Messages>
+             <Message Id="stack0" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
+              <Issue Name="UseStringCompare">
+               <Item>SubElementsSupport.IsInputElement(String):Boolean</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>'stack0', a local, </Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>SubElementsSupport.IsInputElement(String):Boolean</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Paras(WatiN.Core.DomContainer,mshtml.IHTMLElementCollection):WatiN.Core.ParaCollection">
+            <Messages>
+             <Message Id="Paras" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>Paras</Item>
+               <Item>Paras</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="TableCell(WatiN.Core.DomContainer,System.String,System.Int32,mshtml.IHTMLElementCollection):WatiN.Core.TableCell">
+            <Messages>
+             <Message Id="2#occurence" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Parameter">
+               <Item>SubElementsSupport.TableCell(DomContainer, String, Int32, IHTMLElementCollection):TableCell</Item>
+               <Item>occurence</Item>
+               <Item>occurence</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Table">
+          <Members>
+           <Member Name="FindRow(System.String,System.Int32):WatiN.Core.TableRow">
+            <Messages>
+             <Message Id="stack0" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
+              <Issue Name="UseStringCompare">
+               <Item>Table.FindRow(String, Int32):TableRow</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>'stack0', a local, </Item>
+              </Issue>
+             </Message>
+             <Message Id="stack1" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
+              <Issue Name="UseStringCompare">
+               <Item>Table.FindRow(String, Int32):TableRow</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>'stack1', a local, </Item>
+              </Issue>
+             </Message>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Table.FindRow(String, Int32):TableRow</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Searching for '______' in column ______ of ______ '______'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Table.FindRow(String, Int32):TableRow</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>Table.FindRow(String, Int32):TableRow</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TextField">
+          <Members>
+           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLInputElement)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField..ctor(DomContainer, HTMLInputElement)</Item>
+               <Item>textElement</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLTextAreaElement)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField..ctor(DomContainer, HTMLTextAreaElement)</Item>
+               <Item>textElement</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="AppendText(System.String):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField.AppendText(String):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Appending '______' to ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Clear():System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField.Clear():Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Clearing ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="TypeAppendClearText(System.String,System.Boolean,System.Boolean):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField.TypeAppendClearText(String, Boolean, Boolean):Void</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="TypeText(System.String):System.Void">
+            <Messages>
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextField.TypeText(String):Void</Item>
+               <Item>1</Item>
+               <Item>Logger.LogAction(String):Void</Item>
+               <Item>Typing '______' into ______ '______'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Value">
+            <Accessors>
+             <Accessor Name="set_Value(System.String):System.Void">
+              <Messages>
+               <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+                <Issue>
+                 <Item>TextField.set_Value(String):Void</Item>
+                 <Item>1</Item>
+                 <Item>Logger.LogAction(String):Void</Item>
+                 <Item>Setting ______ '______' to '______'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TextField+TextAreaElement">
+          <Members>
+           <Member Name=".ctor(mshtml.HTMLTextAreaElement)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextAreaElement..ctor(HTMLTextAreaElement)</Item>
+               <Item>htmlTextAreaElement</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TextField+TextFieldElement">
+          <Members>
+           <Member Name=".ctor(mshtml.HTMLInputElement)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TextFieldElement..ctor(HTMLInputElement)</Item>
+               <Item>inputElement</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="TitleValue">
+          <Members>
+           <Member Name="Compare(System.String):System.Boolean">
+            <Messages>
+             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>TitleValue.Compare(String):Boolean</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>TitleValue.Compare(String):Boolean</Item>
+               <Item>System.String.ToLower</Item>
+               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UrlValue">
+          <Members>
+           <Member Name=".ctor(System.String)">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>UrlValue..ctor(String)</Item>
+               <Item>findUrl</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>url</Item>
+               <Item>UrlValue..ctor(String)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="WatiN.Core.Exceptions">
+        <Types>
+         <Type Name="ElementDisabledException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected ElementDisabledException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementDisabledException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementDisabledException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>ElementDisabledException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ElementNotFoundException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected ElementNotFoundException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementNotFoundException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementNotFoundException(String)</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementNotFoundException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>ElementNotFoundException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ElementReadOnlyException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected ElementReadOnlyException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementReadOnlyException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public ElementReadOnlyException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>ElementReadOnlyException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="FrameNotFoundException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected FrameNotFoundException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public FrameNotFoundException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public FrameNotFoundException(String)</Item>
+            </Issue>
+            <Issue>
+             <Item>public FrameNotFoundException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>FrameNotFoundException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="HtmlDialogNotFoundException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:45:14Z">
+            <Issue>
+             <Item>protected HtmlDialogNotFoundException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public HtmlDialogNotFoundException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public HtmlDialogNotFoundException(String)</Item>
+            </Issue>
+            <Issue>
+             <Item>public HtmlDialogNotFoundException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:45:14Z">
+            <Issue Name="System.ApplicationException">
+             <Item>HtmlDialogNotFoundException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.Int32)">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2006-05-11 11:45:14Z">
+              <Issue>
+               <Item>HtmlDialogNotFoundException..ctor(String, String, Int32)</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IENotFoundException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected IENotFoundException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public IENotFoundException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public IENotFoundException(String)</Item>
+            </Issue>
+            <Issue>
+             <Item>public IENotFoundException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>IENotFoundException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.Int32)">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>IENotFoundException..ctor(String, String, Int32)</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="MissingAlertException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected MissingAlertException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public MissingAlertException(String)</Item>
+            </Issue>
+            <Issue>
+             <Item>public MissingAlertException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>MissingAlertException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="SelectListItemNotFoundException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected SelectListItemNotFoundException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public SelectListItemNotFoundException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public SelectListItemNotFoundException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>SelectListItemNotFoundException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="TimeoutException">
+          <Messages>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:45:14Z">
+            <Issue>
+             <Item>protected TimeoutException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public TimeoutException()</Item>
+            </Issue>
+            <Issue>
+             <Item>public TimeoutException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:45:14Z">
+            <Issue Name="System.ApplicationException">
+             <Item>TimeoutException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="WatiNException">
+          <Messages>
+           <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+            <Issue Name="Type">
+             <Item>Wati</Item>
+             <Item>WatiNException</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>protected WatiNException(SerializationInfo, StreamingContext)</Item>
+            </Issue>
+            <Issue>
+             <Item>public WatiNException(String, Exception)</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2006-05-11 11:10:33Z">
+            <Issue Level="Error">
+             <Item>WatiNException</Item>
+            </Issue>
+           </Message>
+           <Message Id="System.ApplicationException" TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058" Created="2006-05-11 11:10:33Z">
+            <Issue Name="System.ApplicationException">
+             <Item>WatiNException</Item>
+             <Item>System.ApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="WatiN.Core.Interfaces">
+        <Types>
+         <Type Name="ISubElements">
+          <Messages>
+           <Message TypeName="AvoidOverloadsInComVisibleInterfaces" Category="Microsoft.Interoperability" CheckId="CA1402" Created="2006-05-11 11:45:14Z">
+            <Issue>
+             <Item>WatiN.Core.Interfaces.ISubElements</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="CheckBoxs">
+            <Messages>
+             <Message Id="Boxs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>Boxs</Item>
+               <Item>CheckBoxs</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Divs">
+            <Messages>
+             <Message Id="Divs" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>Divs</Item>
+               <Item>Divs</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Paras">
+            <Messages>
+             <Message Id="Paras" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Member">
+               <Item>Paras</Item>
+               <Item>Paras</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="TableCell(System.String,System.Int32):WatiN.Core.TableCell">
+            <Messages>
+             <Message Id="1#occurence" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:45:14Z">
+              <Issue Name="Parameter">
+               <Item>ISubElements.TableCell(String, Int32):TableCell</Item>
+               <Item>occurence</Item>
+               <Item>occurence</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="WatiN.Core.Logging">
+        <Types>
+         <Type Name="Logger">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>Logger</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name=".cctor()">
+            <Messages>
+             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Logger..cctor()</Item>
+               <Item>mLogWriter</Item>
+               <Item>reference type</Item>
+               <Item>null</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="WatiN.Core.Utils">
+        <Types>
+         <Type Name="Utils">
+          <Messages>
+           <Message Id="Utils" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+            <Issue Name="Type">
+             <Item>Utils</Item>
+             <Item>Utils</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>Utils</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2006-05-11 11:10:33Z">
+            <Issue>
+             <Item>Utils</Item>
+             <Item>WatiN.Core.Utils</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="dumpElements(WatiN.Core.Document):System.Void">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>dumpElements</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="dumpElementsElab(WatiN.Core.Document):System.Void">
+            <Messages>
+             <Message TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>dumpElementsElab</Item>
+              </Issue>
+             </Message>
+             <Message Id="Elab" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2006-05-11 11:10:33Z">
+              <Issue Name="Member">
+               <Item>Elab</Item>
+               <Item>dumpElementsElab</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ShowFrames(WatiN.Core.Document):System.Void">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2006-05-11 11:10:33Z">
+              <Issue>
+               <Item>Utils.ShowFrames(Document):Void</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+              <Issue>
+               <Item>Utils.ShowFrames(Document):Void</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="j.vanmenen">
+    <Note Id="0" Modified="2006-05-11 11:14:41Z">WatiN is geen afkorting</Note>
+    <Note Id="1" Modified="2006-05-11 11:28:58Z">Vind ik niet</Note>
+    <Note Id="2" Modified="2006-05-11 11:29:37Z">WatiN is not an abriviation</Note>
+    <Note Id="3" Modified="2006-05-11 11:34:21Z">This is done on purpose because only find by Title and Name are supported by AttachToIE.</Note>
+    <Note Id="4" Modified="2006-05-11 11:49:36Z">This is done on purpose because only find by Title and Url are supported by HtmlDialog</Note>
+    <Note Id="5" Modified="2006-05-11 11:51:01Z">Overload exists</Note>
+    <Note Id="6" Modified="2006-05-11 12:26:20Z">It isn't an event. It fires one.</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209">
+    <Name>Assemblies should declare minimum security</Name>
+    <Description>Permission requests prevent security exceptions from being thrown after code in an assembly has already begun executing. With permission requests, the assembly does not load if it has insufficient permissions. This rule will fire if you have specified a permission request incorrectly, or incompletely. If you have specified requests but FxCop reports a violation for this rule, use the PermView.exe tool to view the security permissions in the assembly. An unenforceable permission appears as an empty permission set. Whidbey customers can use PermCalc.exe which gives even more detailed information. You should add attributes specifying what permissions your assembly will demand, might demand, and what permissions it does not want granted.  For example, the following attribute indicates that an assembly will, at minimum, require read access to the USERNAME environment variable: [assembly:EnvironmentPermissionAttribute(SecurityAction.RequestMinimum,
+Read="USERNAME")]. To specify permissions that the assembly might demand, use SecurityAction.RequestOptional. To specify permissions that the assembly must not be granted, use SecurityAction.RequestRefuse.</Description>
+    <Resolution Name="Default">No valid permission requests were found for assembly '{0}'. You should always specify the minimum security permissions using SecurityAction.RequestMinimum. If assembly permission requests have been specified, they are not enforceable; use the PermView.exe tool to view the assembly's permissions. Whidbey customers can use PermCalc.exe which gives even more detailed information.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Usage/AssembliesShouldDeclareMinimumSecurity.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="99">CriticalError</MessageLevel>
+    <File Name="UsageRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Name>Assemblies should have valid strong names</Name>
+    <Description>Either the assembly has no strong name, an invalid one, or the strong name is valid only because of the computer configuration. The assembly should not be deployed in this state. The most common causes of this are: 1) The assembly's contents were modified after it was signed. 2) The signing process failed. 3) The assembly was delay-signed. 4) A registry key existed that allowed the check to pass (where it would not have otherwise).</Description>
+    <Resolution Name="NoStrongName">Sign '{0}' with a strong name key.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/AssembliesShouldHaveValidStrongNames.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">CriticalError</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Name>Avoid namespaces with few types</Name>
+    <Description>A namespace should generally have more than five types.</Description>
+    <Resolution Name="Default">Consider merging the types defined in  '{0}' with another namespace.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/AvoidNamespacesWithFewTypes.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="50">Warning</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidOverloadsInComVisibleInterfaces" Category="Microsoft.Interoperability" CheckId="CA1402">
+    <Name>Avoid overloads in ComVisible interfaces</Name>
+    <Description>Interfaces that are visible to COM should not define overloads, as they will be renamed and cannot be implemented by VB6 clients. COM interfaces cannot contain overloaded methods. I.</Description>
+    <Resolution Name="Default">ComVisible(true) interface '{0}' defines overloaded methods. Give each method a unique name or make the type ComVisible(false).</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Interoperability/AvoidOverloadsInComVisibleInterfaces.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="90">CriticalWarning</MessageLevel>
+    <File Name="InteroperabilityRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Name>Avoid uncalled private code</Name>
+    <Description>There is uncalled code that is not externally visible and is not a known runtime entry point. If this violation fires in error, please send a problem report to the FxCop team.</Description>
+    <Resolution Name="Default">'{0}' appears to have no upstream public or protected callers.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/AvoidUncalledPrivateCode.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807">
+    <Name>Avoid unnecessary string creation</Name>
+    <Description>Avoid creating strings unnecessarily. When converting strings to upper or lowercase, cache the result when necessary rather than duplicating a previous string creation. Prefer String.Compare over converting strings to upper or lowercase when performing case-insensitive comparisons. Do not create strings that are no subsequently assigned to variables.</Description>
+    <Resolution Name="UseStringCompare">{0} calls {1} after converting {2} to upper or lowercase. If possible, eliminate the string creation and call the overload of String.Compare that performs a case-insensitive comparison.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/AvoidUnnecessaryStringCreation.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="90">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801">
+    <Name>Avoid unused parameters</Name>
+    <Description>Avoid declaring parameters that are not used in the method body. Unused parameters incur maintenance and performance costs. Sometimes a violation of this rule can point to an implementation bug in the method (i.e. the parameter should actually have been used in the method body). Exclude warnings of this rule if the parameter has to exist because of backward compatibility.</Description>
+    <Resolution Name="MarkAsStatic">The 'this' parameter (or 'Me' in VB) of {0} is never used. Mark the method as static (or Shared in VB) or use 'this'/Me in the method body.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/AvoidUnusedParameters.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="CatchNonClsCompliantExceptionsInGeneralHandlers" Category="Microsoft.Security" CheckId="CA2102">
+    <Name>Catch non-CLSCompliant exceptions in general handlers</Name>
+    <Description>Exception handlers which are truly intended to catch all exceptions should handle non-CLSCompliant exceptions if there is a possibility one can be raised. If possible, catch handlers should only catch specific exceptions or exception base types. In circumstances where a handler is required to catch all exceptions (e.g., when a try block wraps arbitrary plug-in code), the handler should also include a generic catch handler (in C#, catch{ ... }) to handle non-CLSCompliant exceptions. It is possible to raise non-CLSCompliant exceptions by modifying and recompiling IL.</Description>
+    <Resolution Name="Default">{0} contains a catch(Exception) handler that is not matched with a generic catch clause (catch{{}} in C#, catch(System::Object*){{}} in mc++) for non-CLSCompliant exception. Eliminate the catch(Exception) clause by catching a specific set of Exceptions or add a generic catch (catch() in C#) that duplicates the code contained within the catch(Exception) handler.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Security/CatchNonClsCompliantExceptionsInGeneralHandlers.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="80">Error</MessageLevel>
+    <File Name="SecurityRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Name>Compound words should be cased correctly</Name>
+    <Description>Avoid creating compound words from terms which exist in the dictionary as discrete terms. Do not create a compound word such as 'StopWatch' or 'PopUp'. These terms are recognized in the dictionary and should be cased as 'Stopwatch' and 'Popup'.</Description>
+    <Resolution Name="ShouldBeCompoundWord">The discrete term '{0}' in {1} '{2}' should be expressed as a compound term, '{3}'.</Resolution>
+    <Resolution Name="ShouldBeDiscreteTerm">The compound word '{0}' in {1} '{2}' exists as a discrete term. If your usage is intended to be single word, case it as '{3}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/CompoundWordsShouldBeCasedCorrectly.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="80">Error</MessageLevel>
+    <File Name="NamingRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="ConsiderPassingBaseTypesAsParameters" Category="Microsoft.Design" CheckId="CA1011">
+    <Name>Consider passing base types as parameters</Name>
+    <Description>Using base types as parameters to methods improves re-use of these methods if you only use methods &amp; properties from the parameter's base class. E.g. use Stream instead of FileStream as a parameter when only calling Stream.Read(), this makes the method work on all kind of streams instead of just File streams.</Description>
+    <Resolution Name="Default">Consider changing the type of parameter '{0}' from '{1}' to '{2}' since '{1}' derives from '{2}' and this method only calls methods that are defined in '{2}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/ConsiderPassingBaseTypesAsParameters.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214">
+    <Name>Do not call overridable methods in constructors</Name>
+    <Description>Virtual methods defined on the class should not be called from constructors. If a derived class has overridden the method, the derived class version will be called (before the derived class constructor is called).</Description>
+    <Resolution Name="Default">'{0}' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: {1}</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Usage/DoNotCallOverridableMethodsInConstructors.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">CriticalWarning</MessageLevel>
+    <File Name="UsageRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Name>Do not cast unnecessarily</Name>
+    <Description>Avoid duplicate casts where possible, since there is a cost associated with them.</Description>
+    <Resolution Name="Parameter">'{0}', a parameter, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/DoNotCastUnnecessarily.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Name>Do not catch Exceptions or SystemExceptions</Name>
+    <Description>You should not catch Exception or SystemException. Catching generic exception types can hide run-time problems from the library user, and can complicate debugging. You should catch only those exceptions that you can handle gracefully.</Description>
+    <Resolution Name="Default">Modify '{0}' to catch a more specific exception than '{1}' or rethrow the exception.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/DoNotCatchGeneralExceptionTypes.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">CriticalError</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
+    <Name>Do not declare visible instance fields</Name>
+    <Description>Public or protected instance fields limit your ability to change the implementation details for those data items. Use properties instead. They do not compromise usability or performance and they do provide flexibility in that they conceal the  implementation details of the underlying data.</Description>
+    <Resolution Name="Default">Make '{0}' private or internal (Friend in VB, public private in C++) and provide a public or protected property to access it.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/DoNotDeclareVisibleInstanceFields.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="90">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
+    <Name>Do not initialize unnecessarily</Name>
+    <Description>Do not make initializations that have already been done by the runtime.</Description>
+    <Resolution Name="Default">{0} initializes field '{1}', a {2}, to {3}. Remove this initialization, as it will be done automatically by the runtime.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/DoNotInitializeUnnecessarily.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="90">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
+    <Name>Do not pass literals as localized parameters</Name>
+    <Description>String literals that are embedded in source code are difficult to localize. Avoid passing string literals as arguments in circumstances where a localized string is generally expected. Most localized applications, for example, should localize string arguments that are passed to exception constructors. When creating an Exception instance, therefore, a string argument retrieved from a string table is more appropriate than a string literal.</Description>
+    <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Globalization/DoNotPassLiteralsAsLocalizedParameters.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="GlobalizationRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028">
+    <Name>Enum Storage should be Int32</Name>
+    <Description>There is little or no benefit to using a type smaller than Int32. You might require a type that is larger than Int32 if: 1) the enumeration values are flags and there are or will be many (&amp;amp;gt;32) values, or 2) the type needs to be different from Int32 for backward compatibility. Avoid using an underlying type that is not integral.</Description>
+    <Resolution Name="NotIntegral">If possible, make the underlying type of '{0}' Int32 instead of {1}. Otherwise consider Byte, Int16, or Int64.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/EnumStorageShouldBeInt32.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="60">Warning</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Name>Identifiers should be cased correctly</Name>
+    <Description>Type, namespace, and member identifiers are pascal-cased. Parameter identifiers are camel-cased. The pascal-casing convention capitalizes the first letter of each word, as in BackColor. The camel-casing convention formats the first letter of the first word in lowercase and capitalizes the first letter of all subsequent words, as in backgroundColor.</Description>
+    <Resolution Name="Member">Correct the casing of member name '{0}'.</Resolution>
+    <Resolution Name="Parameter">Correct the casing of parameter name '{0}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/IdentifiersShouldBeCasedCorrectly.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="NamingRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Name>Identifiers should be spelled correctly</Name>
+    <Description>The individual words that make up an identifier should not be abbreviated and should be spelled correctly. If this rule generates a false positive on a term that should be recognized, add the word to the FxCop custom dictionary.</Description>
+    <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member '{1}'.</Resolution>
+    <Resolution Name="Namespace">Correct the spelling of the unrecognized token '{0}' in namespace '{1}'.</Resolution>
+    <Resolution Name="Parameter">In {0}, correct the spelling of the unrecognized token '{1}' in parameter name '{2}' or strip it entirely if it represents any sort of hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type '{1}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/IdentifiersShouldBeSpelledCorrectly.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">CriticalWarning</MessageLevel>
+    <File Name="NamingRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032">
+    <Name>Implement standard exception constructors</Name>
+    <Description>Multiple constructors are required to correctly implement a custom exception. Missing constructors can make your exception unusable in certain scenarios. For example, the serialization constructor is required for handling exceptions in XML Web services.</Description>
+    <Resolution Name="Default">Add the following constructor to this class: {0}</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/ImplementStandardExceptionConstructors.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
+    <Name>Literals should be spelled correctly</Name>
+    <Description>Literals should consist of correctly spelled words.</Description>
+    <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Usage/LiteralsShouldBeSpelledCorrectly.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="85">Error</MessageLevel>
+    <File Name="UsageRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Name>Mark assemblies with CLSCompliant</Name>
+    <Description>Assemblies should explicitly state their Cls compliance using the CLSCompliant attribute. An assembly without this attribute is not CLS-compliant. Assemblies, modules, and types can be CLS-compliant even if some parts of the assembly, module, or type are not CLS-compliant. The following rules apply: 1) If the element is marked CLSCompliant, any noncompliant members must have the CLSCompliant attribute present with its argument set to false. 2) A comparable CLS-compliant alternative member must be supplied for each member that is not CLS-compliant.</Description>
+    <Resolution Name="NoAttr">'{0}' should be marked with CLSCompliantAttribute and its value should be true.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/MarkAssembliesWithClsCompliant.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="99">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
+    <Name>Mark assemblies with ComVisible</Name>
+    <Description>The ComVisible attribute indicates whether COM clients can use the library. Good design dictates that developers explicitly indicate COM visibility. The default value for this attribute is 'true'. However, the best design is to mark the assembly ComVisible false, and then marking types, interfaces, and individual members as ComVisible true, as appropriate. For more information, see the Design Guidelines section titled Exposing Functionality to COM.</Description>
+    <Resolution Name="NoAttribute">Explicitly mark '{0}' with the ComVisible attribute.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/MarkAssembliesWithComVisible.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="99">CriticalError, Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237">
+    <Name>Mark ISerializable types with serializable</Name>
+    <Description>The System.Runtime.Serialization.ISerializable interface allows the type to customize its serialization, while the Serializable attribute enables the common language runtime to recognize the type as being serializable.</Description>
+    <Resolution Name="Default">Add [Serializable] to type '{0}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Usage/MarkISerializableTypesWithSerializable.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error, Warning</MessageLevel>
+    <File Name="UsageRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234">
+    <Name>Pass system uri objects instead of strings</Name>
+    <Description>If there are two overloads one taking System.Uri and one taking System.String, library code should never call the string-based overload.</Description>
+    <Resolution Name="Default">Modify {0} to call {1} instead of {2}.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Usage/PassSystemUriObjectsInsteadOfStrings.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Warning</MessageLevel>
+    <File Name="UsageRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901">
+    <Name>PInvoke declarations should be portable</Name>
+    <Description>.</Description>
+    <Resolution Name="Parameter">As it is declared in your code, parameter '{0}' of PInvoke {1} will be {2} bytes wide on {3} platforms. This is not correct, as the actual native declaration of this API indicates it should be {4} bytes wide on {3} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of '{5}'.</Resolution>
+    <Resolution Name="Return">As it is declared in your code, the return type of PInvoke {0} will be {1} bytes wide on {2} platforms. This is not correct, as the actual native declaration of this API indicates it should be {3} bytes wide on {2} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of '{4}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Portability/PInvokeDeclarationsShouldBePortable.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Error</MessageLevel>
+    <File Name="PortabilityRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
+    <Name>Properties should not return arrays</Name>
+    <Description>Properties that return arrays are prone to code inefficiencies. Consider using a collection or making this a method. See the design guidelines for more information.</Description>
+    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/PropertiesShouldNotReturnArrays.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="50">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
+    <Name>Remove unused locals</Name>
+    <Description>Remove locals that are not used or are only assigned to in method implementations.</Description>
+    <Resolution Name="Default">{0} declares a local, '{1}', of type {2}, which is never used or is only assigned to. Use this local or remove it.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/RemoveUnusedLocals.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706">
+    <Name>Short acronyms should be uppercase</Name>
+    <Description>Two letter acronyms should be upper-cased. For example, use System.IO instead of System.Io. Although it may be common practice for some two letter acronyms to not be fully capitalized, violations of this rule should not be excluded for this reason. For example, 'DbConnection', is common but incorrect; use DBConnection. A violation of this rule might be required for compatibility with existing, non-managed symbol schemes. In general, however, these symbols should not be visible outside the assembly that uses them.</Description>
+    <Resolution Name="Member">Correct the capitalization of '{0}' in member name '{1}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/ShortAcronymsShouldBeUppercase.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="85">Error</MessageLevel>
+    <File Name="NamingRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304">
+    <Name>Specify CultureInfo</Name>
+    <Description>If an overload exists that takes a System.Globalization.CultureInfo argument, it should always be called in favor of an overload that does not. The CultureInfo type contains culture-specific information required for performing numeric and string operations, such as casing, formatting, and string comparisons. In scenarios where conversion and parsing behavior should never change between cultures, specify CultureInfo.InvariantCulture.</Description>
+    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide a CultureInfo. This should be replaced with a call to {2}.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Globalization/SpecifyCultureInfo.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="GlobalizationRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Name>Specify IFormatProvider</Name>
+    <Description>If an overload exists that takes an IFormatProvider argument, it should always be called in favor of an overload that does not. Some methods in the common language runtime convert a value to or from a string representation and take a string parameter that contains one or more characters, called format specifiers, which indicate how the value is to be converted. If the meaning of the format specifier varies by culture, a formatting object supplies the actual characters used in the string representation. In scenarios where sorting and comparison behavior should never change between cultures, specify CultureInfo.InvariantCulture.</Description>
+    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Globalization/SpecifyIFormatProvider.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="GlobalizationRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
+    <Name>Static holder types should not have constructors</Name>
+    <Description>Instances of types that define only static members do not need to be created. Many compilers will automatically add a public default constructor if no constructor is specified.  To prevent this, adding an empty private constructor may be required.</Description>
+    <Resolution Name="Default">Remove the public constructors from '{0}'.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/StaticHolderTypesShouldNotHaveConstructors.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="90">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057">
+    <Name>String uri overloads call system uri overloads</Name>
+    <Description>If a method overloads another method by replacing a System.Uri parameter with a string, then the string overload should simply build a Uri object from the string, and pass the result to the string overload.</Description>
+    <Resolution Name="Default">Refactor {0} so that it builds a System.Uri object from '{1}', and then calls {2}.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/StringUriOverloadsCallSystemUriOverloads.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724">
+    <Name>Type names should not match namespaces</Name>
+    <Description>Identifiers which conflict in whole or in part with namespace names should be avoided. Names that describe the purpose or contents of a type are preferred.</Description>
+    <Resolution Name="Default">The type name '{0}' conflicts in whole or in part with the namespace name '{1}'. Change either name to eliminate the conflict.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/TypeNamesShouldNotMatchNamespaces.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="95">Error</MessageLevel>
+    <File Name="NamingRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="TypesShouldNotExtendCertainBaseTypes" Category="Microsoft.Design" CheckId="CA1058">
+    <Name>Types should not extend certain base types</Name>
+    <Description>Types do not extend inheritance vulnerable types.</Description>
+    <Resolution Name="System.ApplicationException">Change {0}'s base type so that it no longer extends {1}. This base exception type does not provide any additional value for framework classes. Extend System.Exception or an existing unsealed exception type instead. Do not create a new exception base type unless there is specific value in enabling the creation of a catch handler for an entire class of exceptions.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/TypesShouldNotExtendCertainBaseTypes.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054">
+    <Name>Uri parameters should not be strings</Name>
+    <Description>If a parameter name contains "uri" or "url" or "urn", and it's typed as string, the parameter type should be changed to System.Uri, unless there is an overload method where the same parameter is typed as Uri.</Description>
+    <Resolution Name="Default">Change the type of parameter '{0}' of method {1} from string to System.Uri, or provide an overload of {1}, that allows '{0}' to be passed as a System.Uri object.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/UriParametersShouldNotBeStrings.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="60">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056">
+    <Name>Uri properties should not be strings</Name>
+    <Description>If a property name contains "uri" or "url" or "urn" and it's typed as string, it should be changed to System.Uri.</Description>
+    <Resolution Name="Default">Change the type of property '{0}' from string to System.Uri.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/UriPropertiesShouldNotBeStrings.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Error</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+   <Rule TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030">
+    <Name>Use events where appropriate</Name>
+    <Description>A method name suggestive of event functionality was encountered.</Description>
+    <Resolution Name="Default">Consider making '{0}' an event.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/UseEventsWhereAppropriate.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Warning</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

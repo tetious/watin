@@ -46,7 +46,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public int length { get { return elements.Count; } }
+		public int Length { get { return elements.Count; } }
 
 		public Frame this[int index] { get { return (Frame)elements[index]; } }
 

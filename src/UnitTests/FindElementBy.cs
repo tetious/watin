@@ -20,7 +20,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByID()
     {
-      IDValue value = Find.ByID("idvalue");
+      IdValue value = Find.ById("idvalue");
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
     }

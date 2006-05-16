@@ -45,7 +45,7 @@ namespace WatiN.Core.Interfaces
       get;
     }
 
-    string OuterHTML
+    string OuterHtml
     {
       get;
     }

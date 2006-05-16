@@ -19,6 +19,8 @@
 
 using mshtml;
 
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core
 {
 	/// <summary>
@@ -31,9 +33,9 @@ namespace WatiN.Core
 
     #region ISubElements
 
-    public Button Button(string elementID)
+    public Button Button(string elementId)
     {
-      return Button(Find.ByID(elementID));
+      return Button(Find.ById(elementId));
     }
 
     public Button Button(AttributeValue findBy)
@@ -46,9 +48,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Buttons(Ie, elementCollection); }
     }
 
-    public CheckBox CheckBox(string elementID)
+    public CheckBox CheckBox(string elementId)
     {
-      return CheckBox(Find.ByID(elementID));
+      return CheckBox(Find.ById(elementId));
     }
 
     public CheckBox CheckBox(AttributeValue findBy)
@@ -61,9 +63,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Checkboxes(Ie, elementCollection); }
     }
 
-    public Form Form(string elementID)
+    public Form Form(string elementId)
     {
-      return Form(Find.ByID(elementID));
+      return Form(Find.ById(elementId));
     }
 
     public Form Form(AttributeValue findBy)
@@ -76,9 +78,9 @@ namespace WatiN.Core
 	    get { return SubElementsSupport.Forms(Ie, elementCollection); }
 	  }
 
-	  public Label Label(string elementID)
+	  public Label Label(string elementId)
 	  {
-      return Label(Find.ByID(elementID));
+      return Label(Find.ById(elementId));
     }
 
 	  public Label Label(AttributeValue findBy)
@@ -91,9 +93,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Labels(Ie, elementCollection); }
     }
 
-	  public Link Link(string elementID)
+	  public Link Link(string elementId)
     {
-      return Link(Find.ByID(elementID));
+      return Link(Find.ById(elementId));
     }
 
     public Link Link(AttributeValue findBy)
@@ -106,9 +108,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Links(Ie, elementCollection); }
     }
 
-	  public Para Para(string elementID)
+	  public Para Para(string elementId)
 	  {
-	    return Para(Find.ByID(elementID));
+	    return Para(Find.ById(elementId));
 	  }
 
 	  public Para Para(AttributeValue findBy)
@@ -121,9 +123,9 @@ namespace WatiN.Core
 	    get { return SubElementsSupport.Paras(Ie, elementCollection); }
 	  }
 
-	  public RadioButton RadioButton(string elementID)
+	  public RadioButton RadioButton(string elementId)
 	  {
-	    return RadioButton(Find.ByID(elementID));
+	    return RadioButton(Find.ById(elementId));
 	  }
 
 	  public RadioButton RadioButton(AttributeValue findBy)
@@ -136,9 +138,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.RadioButtons(Ie, elementCollection); }
     }
 
-	  public SelectList SelectList(string elementID)
+	  public SelectList SelectList(string elementId)
     {
-      return SelectList(Find.ByID(elementID));
+      return SelectList(Find.ById(elementId));
     }
 
     public SelectList SelectList(AttributeValue findBy)
@@ -151,9 +153,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.SelectLists(Ie, elementCollection); }
     }
 
-    public Table Table(string elementID)
+    public Table Table(string elementId)
     {
-      return Table(Find.ByID(elementID));
+      return Table(Find.ById(elementId));
     }
 
     public Table Table(AttributeValue findBy)
@@ -171,9 +173,9 @@ namespace WatiN.Core
     //      get { return SubElementsSupport.TableSections(Ie, elementCollection); }
     //    }
 
-    public TableCell TableCell(string elementID)
+    public TableCell TableCell(string elementId)
     {
-      return TableCell(Find.ByID(elementID));
+      return TableCell(Find.ById(elementId));
     }
 
     public TableCell TableCell(AttributeValue findBy)
@@ -191,9 +193,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.TableCells(Ie, elementCollection); }
     }
 
-    public TableRow TableRow(string elementID)
+    public TableRow TableRow(string elementId)
     {
-      return TableRow(Find.ByID(elementID));
+      return TableRow(Find.ById(elementId));
     }
 
     public TableRow TableRow(AttributeValue findBy)
@@ -206,9 +208,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.TableRows(Ie,elementCollection); }
     }
 
-    public TextField TextField(string elementID)
+    public TextField TextField(string elementId)
     {
-      return TextField(Find.ByID(elementID));
+      return TextField(Find.ById(elementId));
     }
 
     public TextField TextField(AttributeValue findBy)
@@ -221,9 +223,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.TextFields(Ie, elementCollection); }
     }
 
-	  public Span Span(string elementID)
+	  public Span Span(string elementId)
 	  {
-	    return Span(Find.ByID(elementID));
+	    return Span(Find.ById(elementId));
 	  }
 
 	  public Span Span(AttributeValue findBy)
@@ -236,9 +238,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Spans(Ie, elementCollection); }
     }
 
-	  public Div Div(string elementID)
+	  public Div Div(string elementId)
 	  {
-	    return Div(Find.ByID(elementID));
+	    return Div(Find.ById(elementId));
 	  }
 
 	  public Div Div(AttributeValue findBy)
@@ -251,9 +253,9 @@ namespace WatiN.Core
       get { return SubElementsSupport.Divs(Ie, elementCollection); }
     }
 
-	  public Image Image(string elementID)
+	  public Image Image(string elementId)
 	  {
-	    return Image(Find.ByID(elementID));
+	    return Image(Find.ById(elementId));
 	  }
 
 	  public Image Image(AttributeValue findBy)
