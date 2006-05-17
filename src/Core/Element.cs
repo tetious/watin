@@ -221,11 +221,6 @@ namespace WatiN.Core
       FireEvent("onKeyUp");
     }
 
-    public void MouseEnter()
-    {
-      FireEvent("onMouseEnter");
-    }
-
     public void Blur()
     {
       FireEvent("onBlur");
@@ -236,9 +231,19 @@ namespace WatiN.Core
       FireEvent("onChange");
     }
 
+    public void MouseEnter()
+    {
+      FireEvent("onMouseEnter");
+    }
+    
     public void MouseDown()
     {
       FireEvent("onmousedown");
+    }
+
+    public void MouseUp()
+    {
+      FireEvent("onmouseup");
     }
 
     public void FireEvent(string eventName)
