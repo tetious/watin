@@ -27,7 +27,7 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(htmlTestBaseURI + "main.html"))
       {
-        Core.Utils.Utils.dumpElements(ie.MainDocument);
+        WatiN.Core.UtilityClass.DumpElements(ie.MainDocument);
       }
     }
 
@@ -36,7 +36,7 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(htmlTestBaseURI + "Frameset.html"))
       {
-        Core.Utils.Utils.dumpElementsElab(ie.MainDocument);
+        WatiN.Core.UtilityClass.DumpElementsWithHtmlSource(ie.MainDocument);
       }
     }
   }

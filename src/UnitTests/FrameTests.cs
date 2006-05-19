@@ -105,7 +105,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ShowFrames()
     {
-      Core.Utils.Utils.ShowFrames(ie.MainDocument);
+      WatiN.Core.UtilityClass.ShowFrames(ie.MainDocument);
     }
 
     private static void AssertFindFrame(IE ie, AttributeValue findBy, string expectedFrameName)

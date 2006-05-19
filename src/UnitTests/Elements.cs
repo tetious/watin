@@ -244,9 +244,9 @@ namespace WatiN.UnitTests
     [Test]
     public void CheckBoxes()
     {
-      Assert.AreEqual(5, ie.MainDocument.CheckBoxs.Length, "Unexpected number of checkboxes");
+      Assert.AreEqual(5, ie.MainDocument.CheckBoxes.Length, "Unexpected number of checkboxes");
 
-      CheckBoxCollection formCheckBoxs = ie.MainDocument.Form("FormCheckboxes").CheckBoxs;
+      CheckBoxCollection formCheckBoxs = ie.MainDocument.Form("FormCheckboxes").CheckBoxes;
 
       // Collection items by index
       Assert.AreEqual(3,formCheckBoxs.Length, "Wrong number off checkboxes");
