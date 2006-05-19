@@ -42,7 +42,7 @@ namespace WatiN.Core
     private Thread popupWatcherThread;
 
     /// <summary>
-    /// Attach to an excisting Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
     /// </summary>
     /// <param name="findBy">The Url to find IE</param>
     public static IE AttachToIE(UrlValue findBy)
@@ -51,7 +51,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Attach to an excisting Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
     /// </summary>
     /// <param name="findBy">The (partial) Title of the IE window to find</param>
     public static IE AttachToIE(TitleValue findBy)
@@ -60,7 +60,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Attach to an excisting Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
     /// </summary>
     /// <param name="findBy">The Url to find IE</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
@@ -70,7 +70,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Attach to an excisting Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
     /// </summary>
     /// <param name="findBy">Valid attributes are Url and Title</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
