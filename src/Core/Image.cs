@@ -28,7 +28,7 @@ namespace WatiN.Core
     //mshtml.IHTMLImgElement
     //mshtml.IHTMLImgElement2
 
-    public Image(DomContainer ie, IHTMLImgElement HTMLImg) : base(ie, (IHTMLElement) HTMLImg)
+    public Image(DomContainer ie, IHTMLImgElement imgElement) : base(ie, (IHTMLElement) imgElement)
     {}
   }
 }

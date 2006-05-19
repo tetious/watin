@@ -21,7 +21,7 @@ using System;
 
 namespace WatiN.Core.Exceptions
 {
-  public class WatiNException : ApplicationException
+  public class WatiNException : Exception
   {
     public WatiNException() : base()
     {}

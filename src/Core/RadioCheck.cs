@@ -35,10 +35,10 @@ namespace WatiN.Core
       {
         Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");
         
-        HighLight(true);
+        Highlight(true);
         inputElement.@checked = value;
         FireEvent("onClick");
-        HighLight(false);
+        Highlight(false);
       }
     }
 
@@ -49,7 +49,7 @@ namespace WatiN.Core
 
     private IHTMLInputElement inputElement
     {
-      get { return ((IHTMLInputElement) element); }
+      get { return ((IHTMLInputElement) DomElement); }
     }
   }
 }

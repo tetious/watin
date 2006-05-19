@@ -76,13 +76,13 @@ namespace WatiN.Core
       if (!Enabled) { throw new ElementDisabledException(ToString()); }
       if (ReadOnly) { throw new ElementReadOnlyException(ToString()); }
       
-      HighLight(true);
+      Highlight(true);
       Focus();
       if (!append) Select();
       if (!append) setValue("");
       if (!append) KeyPress();
       if (!clear) doKeyPress(value);
-      HighLight(false);
+      Highlight(false);
       if (!append) Change();
       try
       {

@@ -27,7 +27,7 @@ namespace WatiN.Core.Interfaces
 
     CheckBox CheckBox(string elementId);
     CheckBox CheckBox(AttributeValue findBy);
-    CheckBoxCollection CheckBoxs { get; }
+    CheckBoxCollection CheckBoxes { get; }
 
     Form Form(string elementId);
     Form Form(AttributeValue findBy);
@@ -60,7 +60,7 @@ namespace WatiN.Core.Interfaces
 
     TableCell TableCell(string elementId);
     TableCell TableCell(AttributeValue findBy);
-    TableCell TableCell(string elementId, int occurence);
+    TableCell TableCell(string elementId, int occurrence);
     TableCellCollection TableCells { get; }
 
     TableRow TableRow(string elementId);

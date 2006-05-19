@@ -32,14 +32,14 @@ namespace WatiN.Core
 	{
     private IntPtr hWnd = IntPtr.Zero;
 
-    public static bool IsIETridenDlgFrame(IntPtr hWnd)
+    public static bool IsIETridentDlgFrame(IntPtr windowHandle)
     {
-      return CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
+      return CompareClassNames(windowHandle, "Internet Explorer_TridentDlgFrame");
     }
 
-		public HtmlDialog(IntPtr hWnd)
-		{
-      this.hWnd = hWnd;
+    public HtmlDialog(IntPtr windowHandle)
+    {
+      this.hWnd = windowHandle;
     }
 
     public void Close()
@@ -67,7 +67,7 @@ namespace WatiN.Core
       Int32 lMsg = 0;
       Int32 hr = 0;
 
-      if (IsIETridenDlgFrame(hWnd))
+      if (IsIETridentDlgFrame(hWnd))
       {
         if (!IsIEServerWindow(hWnd))
         {

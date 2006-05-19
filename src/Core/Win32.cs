@@ -25,11 +25,16 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  public class NativeMethods
+  public sealed class NativeMethods
   {
     internal const int WM_SYSCOMMAND = 0x0112;
     internal const int WM_CLOSE = 0x0010;
     internal const int SC_CLOSE = 0xF060;
+
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private NativeMethods(){}
 
     internal delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
 
@@ -122,7 +127,7 @@ namespace WatiN.Core
 
     /// <summary>Enumeration of the different ways of showing a window using 
     /// ShowWindow</summary>
-    public enum WindowShowStyle : uint
+    public enum WindowShowStyle : int
     {
       /// <summary>Hides the window and activates another window.</summary>
       /// <remarks>See SW_HIDE</remarks>

@@ -29,8 +29,13 @@ namespace WatiN.Core
   /// <summary>
   /// Summary description for SubElements.
   /// </summary>
-  public class SubElementsSupport
+  public sealed class SubElementsSupport
   {
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private SubElementsSupport(){}
+
     public static Button Button(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
     {
       return new Button(ie, (HTMLInputElement)FindElementByAttribute("input", "button submit image reset", findBy, elements));
@@ -46,7 +51,7 @@ namespace WatiN.Core
       return new CheckBox(ie, (IHTMLInputElement) FindElementByAttribute("input", "checkbox", findBy, elements));
     }
 
-    public static CheckBoxCollection Checkboxes(DomContainer ie, IHTMLElementCollection elements)
+    public static CheckBoxCollection CheckBoxes(DomContainer ie, IHTMLElementCollection elements)
     {
       return new CheckBoxCollection(ie, elements); 
     }
@@ -131,7 +136,7 @@ namespace WatiN.Core
       return new TableCell(ie, (HTMLTableCell) FindElementByAttribute("TD", null, findBy, elements));
     }
 
-    public static TableCell TableCell(DomContainer ie, string elementId, int occurence, IHTMLElementCollection elementCollection)
+    public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
       int nr = -1;
       IHTMLElementCollection elements = (IHTMLElementCollection)elementCollection.tags("TD");
@@ -140,7 +145,7 @@ namespace WatiN.Core
         if (e.id == elementId)
         {
           ++nr;
-          if (nr == occurence)
+          if (nr == occurrence)
           {
             return new TableCell(ie, (HTMLTableCell) e);
           }

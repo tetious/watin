@@ -131,7 +131,7 @@ namespace WatiN.Core
 
     private HTMLSelectElementClass selectElement
     {
-      get { return ((HTMLSelectElementClass) element); }
+      get { return ((HTMLSelectElementClass) DomElement); }
     }
 
     /// <summary>

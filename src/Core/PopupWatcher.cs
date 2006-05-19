@@ -27,26 +27,24 @@ namespace WatiN.Core
 {
   public class PopupWatcher
   {
-    public delegate int Callback(IntPtr hwnd, int lParam);
-
-    private int iePid;
+    private int ieProcessId;
     private bool keepRunning;
 
     private System.Collections.Queue alertQueue;
 
-    public PopupWatcher(int iePid)
+    public PopupWatcher(int ieProcessId)
     {
-      this.iePid = iePid;
+      this.ieProcessId = ieProcessId;
       keepRunning = true;
       alertQueue = new System.Collections.Queue();
     }
 
-    public int alertCount()
+    public int AlertCount()
     {
       return alertQueue.Count;
     }
 
-    public string popAlert()
+    public string PopAlert()
     {
       if (alertQueue.Count == 0)
       {
@@ -56,7 +54,7 @@ namespace WatiN.Core
       return (string) alertQueue.Dequeue();
     }
 
-    public string[] alerts
+    public string[] Alerts
     {
       get
       {
@@ -66,18 +64,18 @@ namespace WatiN.Core
       }
     }
 
-    public void flushAlerts()
+    public void FlushAlerts()
     {
       alertQueue.Clear();
     }
 
-    public void run()
+    public void Run()
     {
       while (keepRunning)
       {
         Thread.Sleep(1000);
 
-        System.Diagnostics.Process p = System.Diagnostics.Process.GetProcessById(iePid);
+        System.Diagnostics.Process p = System.Diagnostics.Process.GetProcessById(ieProcessId);
 
         foreach (System.Diagnostics.ProcessThread t in p.Threads)
         {

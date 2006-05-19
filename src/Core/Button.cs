@@ -45,7 +45,7 @@ namespace WatiN.Core
 
     private HTMLInputElement inputButtonElement
     {
-      get { return ((HTMLInputElement) element); }
+      get { return ((HTMLInputElement) DomElement); }
     }
 
     public override string ToString()

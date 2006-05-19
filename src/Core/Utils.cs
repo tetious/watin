@@ -19,14 +19,19 @@
 
 using mshtml;
 
-namespace WatiN.Core.Utils
+namespace WatiN.Core
 {
 	/// <summary>
 	/// Summary description for Utils.
 	/// </summary>
-	public class Utils
+	public sealed class UtilityClass
 	{
-    public static void dumpElements(Document document)
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private UtilityClass(){}
+
+    public static void DumpElements(Document document)
     {
       System.Diagnostics.Debug.WriteLine("Dump:");
       IHTMLElementCollection elements = elementCollection(document);
@@ -36,7 +41,7 @@ namespace WatiN.Core.Utils
       }
     }
 
-    public static void dumpElementsElab(Document document)
+    public static void DumpElementsWithHtmlSource(Document document)
     {
       System.Diagnostics.Debug.WriteLine("Dump:==================================================");
       IHTMLElementCollection elements = elementCollection(document);

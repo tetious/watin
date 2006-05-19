@@ -44,7 +44,7 @@ namespace WatiN.Core
 
     private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
     {
-      if (HtmlDialog.IsIETridenDlgFrame(hWnd))
+      if (HtmlDialog.IsIETridentDlgFrame(hWnd))
       {
         HtmlDialog htmlDialog = new HtmlDialog(hWnd);
         htmlDialogs.Add(htmlDialog);
@@ -54,7 +54,7 @@ namespace WatiN.Core
     }
 
 
-    public int length { get { return htmlDialogs.Count; } }
+    public int Length { get { return htmlDialogs.Count; } }
 
     public HtmlDialog this[int index] { get { return (HtmlDialog)htmlDialogs[index]; } }
 

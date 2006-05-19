@@ -12,6 +12,7 @@ can be assigned to a release. So first thing to do
 - possibility to inherit from a particular WatiN element (like TextField) and
   making this usefull. Work needs to be done on how WatiN finds an element
   and the way it returns the WatiN.Element instance.
+- support xyz.Exists methods for all situations where a WatiNException can be thrown.
 - support for finding an element with xpath needed?
 - support for finding an element by multiple attributes needed?
 - support for making screenshots or saving the HTML page in mhtml format.

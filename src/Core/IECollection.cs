@@ -45,7 +45,7 @@ namespace WatiN.Core
       }
     }
 
-    public int length 
+    public int Length 
     { 
       get
       {

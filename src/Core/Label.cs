@@ -26,14 +26,14 @@ namespace WatiN.Core
     public Label(DomContainer ie, HTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)
     {}
 
-    public string AccesKey
+    public string AccessKey
     {
-      get {return ((IHTMLLabelElement)element).accessKey; }
+      get {return ((IHTMLLabelElement)DomElement).accessKey; }
     }
 
     public string For
     {
-      get {return ((IHTMLLabelElement)element).htmlFor; }
+      get {return ((IHTMLLabelElement)DomElement).htmlFor; }
     }
   }
 }

@@ -170,8 +170,13 @@ namespace WatiN.Core
   /// This class provides factory methods for de most commonly used attributes
   /// to find an element on a web page.
   /// </summary>
-  public class Find
+  public sealed class Find
   {
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private Find(){}
+    
     /// <summary>
     /// Find a Label element by the id of the element it's linked with
     /// </summary>
@@ -245,12 +250,12 @@ namespace WatiN.Core
     /// <summary>
     /// Find an element by an attribute
     /// </summary>
-    /// <param name="attributename">The attribute to compare the value with</param>
+    /// <param name="attributeName">The attribute to compare the value with</param>
     /// <param name="value">The exact matching value of the attribute</param>
     /// <returns></returns>
-    public static AttributeValue ByCustom(string attributename, string value)
+    public static AttributeValue ByCustom(string attributeName, string value)
     {
-      return new AttributeValue(attributename, value);
+      return new AttributeValue(attributeName, value);
     }
   }
 }

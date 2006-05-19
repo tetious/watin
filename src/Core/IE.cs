@@ -268,7 +268,7 @@ namespace WatiN.Core
     private void StartPopupWatcher(int iePid)
     {
       popupWatcher = new PopupWatcher(iePid);
-      popupWatcherThread = new Thread(new ThreadStart(popupWatcher.run));
+      popupWatcherThread = new Thread(new ThreadStart(popupWatcher.Run));
 
       // Start the thread.
       popupWatcherThread.Start();
@@ -297,12 +297,12 @@ namespace WatiN.Core
 
     public string PopAlert()
     {
-      return popupWatcher.popAlert();
+      return popupWatcher.PopAlert();
     }
 
     public void FlushAlerts()
     {
-      popupWatcher.flushAlerts();
+      popupWatcher.FlushAlerts();
     }
 
     public override void FireEvent(DispHTMLBaseElement element, string eventName)
@@ -478,7 +478,7 @@ namespace WatiN.Core
         Close();
       }
 
-      if (popupWatcher.alertCount() != 0)
+      if (popupWatcher.AlertCount() != 0)
       {
 //        throw new UnanticipatedAlertsException(popupWatcher.alerts);
       }

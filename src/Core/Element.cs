@@ -28,20 +28,20 @@ namespace WatiN.Core
 {
   public class Element
   {
-    private DomContainer ie;
-    protected object element = null;
+    private DomContainer domContainer;
+    private object element = null;
     
     private string originalcolor;
 
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
-    /// <param name="ie">Domcontainer this element is located in</param>
+    /// <param name="domContainer">Domcontainer this element is located in</param>
     /// <param name="element">The element</param>
-    public Element(DomContainer ie, object element)
+    public Element(DomContainer domContainer, object element)
     {
-      this.ie = ie;
-      this.element = element;
+      this.domContainer = domContainer;
+      this.DomElement = element;
     }
 
     public string ClassName
@@ -109,25 +109,25 @@ namespace WatiN.Core
 
     public Element NextSibling
     {
-      get { return new Element(ie, domNode.nextSibling); }
+      get { return new Element(domContainer, domNode.nextSibling); }
     }
 
     public Element Parent
     {
-      get { return new Element(ie, domNode.parentNode); }
+      get { return new Element(domContainer, domNode.parentNode); }
     }
 
     /// <summary>
     /// This methode can be used if the attribute isn't available as a property of
     /// Element or a subclass of Element.
     /// </summary>
-    /// <param name="attributename"></param>
+    /// <param name="attributeName"></param>
     /// <returns></returns>
-    public string GetAttributeValue(string attributename)
+    public string GetAttributeValue(string attributeName)
     {
       try
       {
-        return (string)htmlElement.getAttribute(attributename, 0);
+        return (string)htmlElement.getAttribute(attributeName, 0);
       }
       catch
       {
@@ -149,9 +149,9 @@ namespace WatiN.Core
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
       Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
-      HighLight(true);
+      Highlight(true);
 
-      dispHtmlBaseElement.click();
+      DispHtmlBaseElement.click();
 
       try
       {
@@ -165,7 +165,7 @@ namespace WatiN.Core
 //      }
       finally
       {
-        HighLight(false);
+        Highlight(false);
       }
     }
 
@@ -180,20 +180,20 @@ namespace WatiN.Core
 
       Logger.LogAction("Clicking (no wait) " + GetType().Name + " '" + ToString() + "'");
 
-      HighLight(true);
+      Highlight(true);
 
       Thread clickButton = new Thread(new ThreadStart(Click));
       clickButton.Start();
       clickButton.Join(500);
 
-      HighLight(false);
+      Highlight(false);
     }
 
     public void Focus()
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
-      dispHtmlBaseElement.focus();
+      DispHtmlBaseElement.focus();
       FireEvent("onFocus");
     }
 
@@ -250,24 +250,24 @@ namespace WatiN.Core
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
-      HighLight(true);
-      ie.FireEvent(dispHtmlBaseElement, eventName);
+      Highlight(true);
+      domContainer.FireEvent(DispHtmlBaseElement, eventName);
       WaitForComplete();
-      HighLight(false);
+      Highlight(false);
     }
 
     public void Flash()
     {
       for (int counter = 0; counter < 5; counter++)
       {
-        HighLight(true);
+        Highlight(true);
         Thread.Sleep(250);
-        HighLight(false);
+        Highlight(false);
         Thread.Sleep(250);
       }
     }
 
-    protected void HighLight(bool doHighlight)
+    protected void Highlight(bool doHighlight)
     {
       if (doHighlight)
       {
@@ -310,37 +310,43 @@ namespace WatiN.Core
 
     private IHTMLElement htmlElement
     {
-      get { return (IHTMLElement) element; }
+      get { return (IHTMLElement) DomElement; }
     }
 
     private IHTMLElement2 htmlElement2
     {
-      get { return (IHTMLElement2) element; }
+      get { return (IHTMLElement2) DomElement; }
     }
 
     private IHTMLElement3 htmlElement3
     {
-      get { return (IHTMLElement3) element; }
+      get { return (IHTMLElement3) DomElement; }
     }
 
     private IHTMLDOMNode domNode
     {
-      get { return (IHTMLDOMNode) element; }
+      get { return (IHTMLDOMNode) DomElement; }
     }
 
-    protected DispHTMLBaseElement dispHtmlBaseElement
+    protected DispHTMLBaseElement DispHtmlBaseElement
     {
-      get { return (DispHTMLBaseElement) element; }
+      get { return (DispHTMLBaseElement) DomElement; }
     }
 
-    protected DomContainer Ie
+    protected DomContainer DomContainer
     {
-      get { return ie; }
+      get { return domContainer; }
+    }
+
+    protected object DomElement
+    {
+      get { return element; }
+      set { element = value; }
     }
 
     public void WaitForComplete()
     {
-      ie.WaitForComplete();
+      domContainer.WaitForComplete();
     }
   }
 }

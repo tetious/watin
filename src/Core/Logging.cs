@@ -19,9 +19,15 @@
 
 namespace WatiN.Core.Logging
 {
-  public class Logger
+  public sealed class Logger
   {
     private static ILogWriter mLogWriter = null;
+
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private Logger(){}
+
     public static void LogAction(string message)
     {
       if (mLogWriter != null)
