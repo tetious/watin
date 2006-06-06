@@ -47,17 +47,17 @@ namespace WatiN.UnitTests
       UrlValue value = Find.ByUrl("http://www.google.nl");
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("http://www.google.nl", value.Value, "Wrong value");
-      Assert.IsTrue(value.Compare("http://www.google.nl"), "Should match Google");
+      Assert.IsTrue(value.Compare("http://www.google.nl/"), "Should match Google");
       Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
     }
 
-    [Test, ExpectedException(typeof(System.UriFormatException))]
+    [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidParam()
     {
       Find.ByUrl("www.google.nl");
     }
 
-    [Test, ExpectedException(typeof(System.UriFormatException))]
+    [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
       UrlValue value = Find.ByUrl("http://www.google.nl");
@@ -158,7 +158,7 @@ namespace WatiN.UnitTests
       value = new ElementUrlPartialValue("google.com");
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
-      string htmlLocation = new DirectoryInfo(System.Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
+      string htmlLocation = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
       Uri htmlTestBaseURI = new Uri(htmlLocation);
       Uri mainURI = new Uri(htmlTestBaseURI, "main.html");
       Uri googleURI = new Uri("http://www.google.com");
