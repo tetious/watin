@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="test" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
-    <property name="base.dir"                       value="C:\TAdev\WatiN\WatiN\trunk" />
+    <property name="base.dir"                       value="C:\TAdev\WatiNSF\trunk" />
 	<property name="source.dir"                     value="${base.dir}\src" />
 	<property name="build.dir"                      value="${base.dir}\build" />
   	<property name="build.solution.file" 			value="${source.dir}\WatiN.sln" />
