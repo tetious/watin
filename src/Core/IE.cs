@@ -31,6 +31,30 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This is the main class to access a webpage and all it's elements
+  /// in Internet Explorer
+  /// </summary>
+  /// <example>
+  /// The following example creates a new Internet Explorer instances and navigates to
+  /// the WatiN Project website on SourceForge.
+  /// <code>
+  /// using WatiN.Core;
+  /// 
+  /// namespace NewIEExample
+  /// {
+  ///    public class WatiNWebsite
+  ///    {
+  ///      public WatiNWebsite()
+  ///      {
+  ///        IE ie = new IE("http://watin.sourceforge.net");
+  ///        ie.MainDocument.Link(Find.ByText("RSS Feeds")).Click;
+  ///        ie.Close;
+  ///      }
+  ///    }
+  ///  }
+  /// </code>
+  /// </example>
   public class IE : DomContainer, IDisposable
   {
     const int waitForWindowTime = 60;
@@ -42,38 +66,103 @@ namespace WatiN.Core
     private Thread popupWatcherThread;
 
     /// <summary>
-    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The Url to find IE</param>
+    /// <param name="findBy">The Url to find.</param>
+    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
+    /// Url, the first match will be returned. </returns>
+    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+    /// IENotFoundException will be throw if an Internet Explorer window with the given Url isn't found within 30 seconds.
+    /// </exception>
+    /// <example>
+    /// Assuming you have http://www.example.com open in an Internet Explorer window,
+    /// this example will search for this Internet Explorer window and Attach to it so you
+    /// can start manipulating the page.
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
+    /// </code>
+    /// </example>
     public static IE AttachToIE(UrlValue findBy)
     {
       return AttachToIE(findBy, waitForWindowTime);
     }
 
     /// <summary>
-    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
+    /// </summary>
+    /// <param name="findBy">The Url to find.</param>
+    /// <param name="timeout">The number of seconds to wait before attach times out</param>
+    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
+    /// Url, the first match will be returned. </returns>
+    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+    /// IENotFoundException will be throw if an Internet Explorer window with the given Url isn't found within the specified <paramref name = "timeout" />.
+    /// </exception>
+    /// <example>
+    /// Assuming you have http://www.example.com open in an Internet Explorer window,
+    /// this example will search for this Internet Explorer window and Attach to it so you
+    /// can start manipulating the page.
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
+    /// </code>
+    /// </example>
+    public static IE AttachToIE(UrlValue findBy, int timeout)
+    {
+      return attachToIE(findBy, timeout);
+    }
+    
+    /// <summary>
+    /// Attach to an existing Internet Explorer by it's title. If multiple Internet Explorer windows have the same or partially 
+    /// the same Title, the first match will be returned. The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
     /// <param name="findBy">The (partial) Title of the IE window to find</param>
+    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
+    /// Url, the first match will be returned. </returns>
+    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+    /// IENotFoundException will be throw if an Internet Explorer window with the given Title isn't found within 30 seconds.
+    /// </exception>
+    /// <example>
+    /// Assuming you have an Internet Explorer window open with a titel "Example" (this 
+    /// will show as "Example - Microsoft Internet Explorer" in the titlebar).
+    /// This example will search for this Internet Explorer window and Attach to it so you
+    /// can start manipulating the page 
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Example"));
+    /// </code>
+    /// A parial match should also work
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Exa"));
+    /// </code>
+    /// </example>
+
     public static IE AttachToIE(TitleValue findBy)
     {
       return AttachToIE(findBy, waitForWindowTime);
     }
 
     /// <summary>
-    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
+    /// Attach to an existing Internet Explorer by it's title. If multiple Internet Explorer windows have the same or partially 
+    /// the same Title, the first match will be returned. The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The Url to find IE</param>
+    /// <param name="findBy">The (partial) Title of the IE window to find</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
-    public static IE AttachToIE(UrlValue findBy, int timeout)
-    {
-      return attachToIE(findBy, timeout);
-    }
-
-    /// <summary>
-    /// Attach to an existing Internet Explorer by url or title. Internet Explorer will be closed when destroying this object.
-    /// </summary>
-    /// <param name="findBy">Valid attributes are Url and Title</param>
-    /// <param name="timeout">The number of seconds to wait before timing out</param>
+    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
+    /// Url, the first match will be returned. </returns>
+    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+    /// IENotFoundException will be throw if an Internet Explorer window with the given Title isn't found within the specified <paramref name = "timeout" />.
+    /// </exception>
+    /// <example>
+    /// Assuming you have an Internet Explorer window open with a titel "Example" (this 
+    /// will show as "Example - Microsoft Internet Explorer" in the titlebar).
+    /// This example will search for this Internet Explorer window and Attach to it so you
+    /// can start manipulating the page 
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Example"));
+    /// </code>
+    /// A parial match should also work
+    /// <code>
+    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Exa"));
+    /// </code>
+    /// </example>
     public static IE AttachToIE(TitleValue findBy, int timeout)
     {
       return attachToIE(findBy, timeout);
@@ -87,45 +176,148 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// This is a convenience method for new IECollection
+    /// Creates a collection of new InternetExplorer objects and associates them with open Internet Explorers.
     /// </summary>
-    /// <returns></returns>
+    /// <example>
+    /// This code snippet illustrates the use of this method:
+    /// <code>IECollection InternetExplorers = IE.InternetExplorers</code>
+    /// The following code gives the same result:
+    /// <code>IECollection InternetExplorers = new IECollection</code>
+    /// </example>
     public static IECollection InternetExplorers()
     {
       return new IECollection();
     }
 
     /// <summary>
-    /// Open new Internet Explorer with a blank page. Internet Explorer will be closed when destroying this object.
+    /// Opens a new Internet Explorer with the Url pointing at a blank page. 
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// </note>
     /// </summary>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE();
+    ///        ie.GoTo("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public IE()
     {
       CreateNewIE("about:blank", true);
     }
 
     /// <summary>
-    /// Open new Internet Explorer and goto url. Internet Explorer will be closed when destroying this object.
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// </note>
     /// </summary>
     /// <param name="url">The URL te open</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public IE(string url)
     {
       CreateNewIE(url, true);
     }
 
     /// <summary>
-    /// Open new Internet Explorer with a blank page.
+    /// Opens a new Internet Explorer with the Url pointing at a blank page. The <paramref name="autoClose" />
+    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
+    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
     /// </summary>
     /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE(false);
+    ///        ie.GoTo("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public IE(bool autoClose)
     {
       CreateNewIE("about:blank", autoClose);
     }
 
     /// <summary>
-    /// Open new Internet Explorer and goto url.
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>. The <paramref name="autoClose" />
+    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
+    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
     /// </summary>
     /// <param name="url">The URL te open</param>
     /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net", false);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public IE(string url, bool autoClose)
     {
       CreateNewIE(url, autoClose);
@@ -134,22 +326,23 @@ namespace WatiN.Core
     /// <summary>
     /// Use existing InternetExplorer object. The param is of type
     /// object because otherwise all projects using WatiN should also
-    /// reference the Interop.SHDocVw assembly.
+    /// reference the Interop.SHDocVw assembly (yes also with the interal
+    /// access modifier)
     /// </summary>
     /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
     internal IE(object shDocVwInternetExplorer)
     {
-      InternetExplorer ie = null;
+      InternetExplorer internetExplorer;
       try
       {
-        ie = (InternetExplorer) shDocVwInternetExplorer;
+        internetExplorer = (InternetExplorer) shDocVwInternetExplorer;
       }
-      catch(System.InvalidCastException)
+      catch(InvalidCastException)
       {
         throw new ArgumentException("SHDocVwInternetExplorer needs to be of type SHDocVw.InternetExplorer");
       }
 
-      InitIEAndStartPopupWatcher(ie);
+      InitIEAndStartPopupWatcher(internetExplorer);
       WaitForComplete();
     }
 
@@ -164,10 +357,10 @@ namespace WatiN.Core
       GoTo(url);
     }
 
-    private void InitIEAndStartPopupWatcher(InternetExplorer ie)
+    private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)
     {
-      this.ie = ie;      
-      this.ie.Visible = true;
+      ie = internetExplorer;      
+      ie.Visible = true;
 
       int iePid = GetProcessID();
       StartPopupWatcher(iePid);
@@ -250,11 +443,60 @@ namespace WatiN.Core
       }
     }
 
+    
+    /// <summary>
+    /// Navigates Internet Explorer to the given <paramref name="url" />.
+    /// </summary>
+    /// <param name="url">The URL specified as a wel formed Uri.</param>
+    /// <example>
+    /// The following example creates a new Uri, Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// using System;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        Uri URL = new Uri("http://watin.sourceforge.net");
+    ///        IE ie = new IE();
+    ///        ie.GoTo(URL);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public void GoTo(Uri url)
     {
       GoTo(url.ToString());
     }
 
+    /// <summary>
+    /// Navigates Internet Explorer to the given <paramref name="url" />.
+    /// </summary>
+    /// <param name="url">The URL to GoTo.</param>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE();
+    ///        ie.GoTo("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public void GoTo(string url)
     {
       Logger.LogAction("Navigating to '" + url + "'");
@@ -275,9 +517,9 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Use this to gain access to the 'raw' internet explorer object.
-    /// Cast the object to type SHDocVw.InternetExplorer found in the
-    /// assembly Interop.SHDocVw supplied in the WatiN distribution.
+    /// Use this method to gain access to the full Internet Explorer object.
+    /// Do this by referencing the Interop.SHDocVw assembly (supplied in the WatiN distribution)
+    /// and cast the return value of this method to type SHDocVw.InternetExplorer.
     /// </summary>
     public object InternetExplorer
     {
@@ -288,23 +530,55 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the current url, as displayed in the address bar of the browser
+    /// Returns the url, as displayed in the address bar of the browser, of the currently
+    /// displayed web page.
     /// </summary>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances, navigates to
+    /// the WatiN Project website on SourceForge and writes the Url of the
+    /// currently displayed webpage to the debug window.
+    /// <code>
+    /// using WatiN.Core;
+    /// using System.Diagnostics;
+    ///
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///        Debug.WriteLine(ie.Url);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public string Url
     {
       get { return ie.LocationURL; }
     }
 
+    /// <summary>
+    /// Pops the most recent alert message from a que of shown alerts.C:\TAdev\WatiNSF\trunk\src\UnitTests\FindElementBy.cs
+    /// Use this method to get access to the displayed message in an alert window.
+    /// </summary>
+    /// <returns>The message displayed in the alert window</returns>
+    /// <example>For a working example see the unitttest Alert in WatiN.UnitTests.IEAndMainDocument</example>
     public string PopAlert()
     {
       return popupWatcher.PopAlert();
     }
 
+    /// <summary>
+    /// Flushes the alert messages in the que of displayed alert windows.
+    /// </summary>
     public void FlushAlerts()
     {
       popupWatcher.FlushAlerts();
     }
 
+    /// <exclude />
     public override void FireEvent(DispHTMLBaseElement element, string eventName)
     {
       // The code in base.FireEvent should work, but it doesn't. 
@@ -346,6 +620,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Navigates the browser back to the previously displayed Url (like the back
+    /// button in Internet Explorer). 
+    /// </summary>
     public void Back()
     {
       ie.GoBack();
@@ -353,6 +631,10 @@ namespace WatiN.Core
       Logger.LogAction("Navigated Back to '" + Url + "'");
     }
 
+    /// <summary>
+    /// Navigates the browser forward to the next displayed Url (like the forward
+    /// button in Internet Explorer). 
+    /// </summary>
     public void Forward()
     {
       ie.GoForward();
@@ -360,6 +642,10 @@ namespace WatiN.Core
       Logger.LogAction("Navigated Forward to '" + Url + "'");
     }
 
+    /// <summary>
+    /// Reloads the currently displayed webpage (like the Refresh button in 
+    /// Internet Explorer).
+    /// </summary>
     public void Refresh()
     {
       Logger.LogAction("Refreshing browser from '" + Url + "'");
@@ -369,6 +655,9 @@ namespace WatiN.Core
       WaitForComplete();
     }
 
+    /// <summary>
+    /// Brings the referenced Internet Explorer to the front (makes it the top window)
+    /// </summary>
     public void BringToFront()
     {
       IntPtr ieHandle = GetIEHandle();
@@ -379,11 +668,41 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Make the referenced Internet Explorer full screen, minimized, maximized and more.
+    /// </summary>
+    /// <param name="showStyle">The style to apply.</param>
     public void ShowWindow(NativeMethods.WindowShowStyle showStyle)
     {
       NativeMethods.ShowWindow(GetIEHandle(), (int)showStyle);
     }
 
+    /// <summary>
+    /// Closes the referenced Internet Explorer. Almost
+    /// all other functionality in this class and the element classes will give
+    /// exceptions when used after closing the browser.
+    /// </summary>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge. 
+    /// <code>
+    /// using WatiN.Core;
+    /// using System.Diagnostics;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///        Debug.WriteLine(ie.MainDocument.Html);
+    ///        ie.Close;
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public void Close()
     {
       Logger.LogAction("Closing browser '" + MainDocument.Title + "'");
@@ -416,6 +735,10 @@ namespace WatiN.Core
       return iePid;
     }
 
+    /// <summary>
+    /// Closes <i>all</i> running instances of Internet Explorer by killing the
+    /// process these instances run in. 
+    /// </summary>
     public virtual void ForceClose()
     {
       Logger.LogAction("Force closing all IE instances");
@@ -433,12 +756,17 @@ namespace WatiN.Core
       }
     }
 
+    /// <exclude />
     public override IHTMLDocument2 OnGetHtmlDocument()
     {
       return (IHTMLDocument2)ie.Document;
     }
 
-
+    /// <summary>
+    /// Waits till the webpage, it's frames and all it's elements are loaded. This
+    /// function is called by WatiN after each action (like clicking a link) so you
+    /// should have to use this function on rare occasions.
+    /// </summary>
     public override void WaitForComplete()
     {
       InitTimeout();
@@ -471,6 +799,10 @@ namespace WatiN.Core
 
     #region IDisposable Members
 
+    /// <summary>
+    /// This method must be called by its inheritor to dispose references
+    /// to internal resources.
+    /// </summary>
     public new void Dispose()
     {
       if (AutoCloseIE)
@@ -485,6 +817,11 @@ namespace WatiN.Core
     }
     #endregion
 
+    /// <summary>
+    /// Gets or sets a value indicating whether to auto close IE after destroying
+    /// a reference to the corresponding IE instance.
+    /// </summary>
+    /// <value><c>true</c> when to auto close IE (this is the default); otherwise, <c>false</c>.</value>
     public bool AutoCloseIE
     {
       get
@@ -496,6 +833,11 @@ namespace WatiN.Core
         autoClose = value;
       }
     }
+    
+    /// <summary>
+    /// Returns a collection of open HTML dialogs (modal as well as modeless).
+    /// </summary>
+    /// <value>The HTML dialogs.</value>
     public HtmlDialogCollection HtmlDialogs
     {
       get
@@ -508,7 +850,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Find a HtmlDialog
+    /// Find a HtmlDialog by it's Url.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     public HtmlDialog HtmlDialog(UrlValue findBy)
@@ -517,7 +859,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Find a HtmlDialog
+    /// Find a HtmlDialog by it's title.
     /// </summary>
     /// <param name="findBy">The Title of the html page</param>
     public HtmlDialog HtmlDialog(TitleValue findBy)
@@ -526,7 +868,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Find a HtmlDialog
+    /// Find a HtmlDialog by it's Url within the given <paramref name="timeout" /> period.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
@@ -536,7 +878,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Find a HTMLDialog
+    /// Find a HtmlDialog by it's Title within the given <paramref name="timeout" /> period.
     /// </summary>
     /// <param name="findBy">The Title of the html page</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
