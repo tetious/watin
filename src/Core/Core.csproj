@@ -387,18 +387,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "watir 1.211.2.2.rb"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "watir 1.274.rb"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "watir 934.rb"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Win32.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
