@@ -163,15 +163,15 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(mainURI.ToString()))
       {
-        int ieCount = IE.InternetExplorers().Length;
-
+        Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with 'gOo' in it's title allready exists. AttachToIEByParialTitle can't be correctly tested. Please close the window.");
+        
         ie.MainDocument.Link("testlinkid").Click();
         using (IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo")))
         {
           Assert.AreEqual(googleURI.ToString(), ieGoogle.Url);
         }
         
-        Assert.AreEqual(ieCount,IE.InternetExplorers().Length, "IE instance should be closed.");
+        Assert.IsFalse(IsGoogleIEWindowOpen(), "The Internet Explorer with 'gOo' in it's title should be closed.");
       }
     }
 
@@ -181,7 +181,7 @@ namespace WatiN.UnitTests
       
       using (IE ie = new IE(mainURI.ToString()))
       {
-        int ieCount = IE.InternetExplorers().Length;
+        Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with url " + googleURI.ToString() + " is allready open. AttachToIEByURL can't be correctly tested. Please close the window.");
         
         ie.MainDocument.Link("testlinkid").Click();
         using (IE ieGoogle = IE.AttachToIE(Find.ByUrl(googleURI.ToString())))
@@ -189,7 +189,7 @@ namespace WatiN.UnitTests
           Assert.AreEqual(googleURI.ToString(), ieGoogle.Url);
         }
         
-        Assert.AreEqual(ieCount,IE.InternetExplorers().Length, "IE instance should be closed.");
+        Assert.IsFalse(IsGoogleIEWindowOpen(), "The Internet Explorer with 'gOo' in it's title should be closed.");
       }
     }
 
@@ -298,11 +298,25 @@ namespace WatiN.UnitTests
         }
       }
     }
+
     [Test]
     public void NewUri()
     {
       Uri uri = new Uri("about:blank");
       Assert.AreEqual("about:blank", uri.ToString());
+    }
+
+    private static bool IsGoogleIEWindowOpen()
+    {
+      try
+      {
+        IE.AttachToIE(Find.ByTitle("gOo"), 5);
+      }
+      catch (IENotFoundException)
+      {
+        return false;
+      }
+      return true;
     }
   }
 }
