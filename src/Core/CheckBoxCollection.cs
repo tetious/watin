@@ -44,17 +44,19 @@ namespace WatiN.Core
 
 		public CheckBox this[int index] { get { return (CheckBox)elements[index]; } }
 
+    /// <exclude />
 		public Enumerator GetEnumerator() 
 		{
 			return new Enumerator(elements);
 		}
-
+	  
 		IEnumerator IEnumerable.GetEnumerator() 
 		{
 			return GetEnumerator();
 		}
 
-		public class Enumerator: IEnumerator 
+    /// <exclude />
+    public class Enumerator: IEnumerator 
 		{
 			ArrayList children;
 			int index;

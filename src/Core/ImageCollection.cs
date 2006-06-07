@@ -42,7 +42,8 @@ namespace WatiN.Core
 
 		public Image this[int index] { get { return (Image)elements[index]; } }
 
-		public Enumerator GetEnumerator() 
+    /// <exclude />
+    public Enumerator GetEnumerator() 
 		{
 			return new Enumerator(elements);
 		}
@@ -52,7 +53,8 @@ namespace WatiN.Core
 			return GetEnumerator();
 		}
 
-		public class Enumerator: IEnumerator 
+    /// <exclude />
+    public class Enumerator: IEnumerator 
 		{
 			ArrayList children;
 			int index;

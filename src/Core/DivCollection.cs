@@ -22,66 +22,68 @@ using mshtml;
 
 namespace WatiN.Core
 {
-	public class DivCollection : IEnumerable
-	{
-		ArrayList elements;
+  public class DivCollection : IEnumerable
+  {
+    ArrayList elements;
 		
-		public DivCollection(DomContainer ie, IHTMLElementCollection elements) 
-		{
-			this.elements = new ArrayList();
+    public DivCollection(DomContainer ie, IHTMLElementCollection elements) 
+    {
+      this.elements = new ArrayList();
       IHTMLElementCollection divs = (IHTMLElementCollection)elements.tags("div");
 
-			foreach (HTMLDivElement div in divs)
-			{
-				Div v = new Div(ie, div);
-				this.elements.Add(v);
-			}
-		}
+      foreach (HTMLDivElement div in divs)
+      {
+        Div v = new Div(ie, div);
+        this.elements.Add(v);
+      }
+    }
 
-		public int Length { get { return elements.Count; } }
+    public int Length { get { return elements.Count; } }
 
-		public Div this[int index] { get { return (Div)elements[index]; } }
+    public Div this[int index] { get { return (Div)elements[index]; } }
 
-		public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
+    /// <exclude />
+    public Enumerator GetEnumerator() 
+    {
+      return new Enumerator(elements);
+    }
+    
+    IEnumerator IEnumerable.GetEnumerator() 
+    {
+      return GetEnumerator();
+    }
 
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
+    /// <exclude />
+    public class Enumerator: IEnumerator 
+    {
+      ArrayList children;
+      int index;
+      public Enumerator(ArrayList children) 
+      {
+        this.children = children;
+        Reset();
+      }
 
-		public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
+      public void Reset() 
+      {
+        index = -1;
+      }
 
-			public void Reset() 
-			{
-				index = -1;
-			}
+      public bool MoveNext() 
+      {
+        ++index;
+        return index < children.Count;
+      }
 
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
+      public Div Current 
+      {
+        get 
+        {
+          return (Div)children[index];
+        }
+      }
 
-			public Div Current 
-			{
-				get 
-				{
-					return (Div)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+      object IEnumerator.Current { get { return Current; } }
+    }
+  }
 }

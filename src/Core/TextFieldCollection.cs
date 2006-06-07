@@ -53,7 +53,8 @@ namespace WatiN.Core
 
 		public TextField this[int index] { get { return (TextField)children[index]; } }
 
-		public Enumerator GetEnumerator() 
+    /// <exclude />
+    public Enumerator GetEnumerator() 
 		{
 			return new Enumerator(children);
 		}
@@ -63,7 +64,8 @@ namespace WatiN.Core
 			return GetEnumerator();
 		}
 
-		public class Enumerator: IEnumerator 
+    /// <exclude />
+    public class Enumerator: IEnumerator 
 		{
 			ArrayList children;
 			int index;

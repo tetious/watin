@@ -22,22 +22,33 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for HTML input elements of type 
+  /// button, submit, image and reset.
+  /// </summary>
   public class Button : Element
   {
-    public Button(DomContainer ie, HTMLInputElement inputButtonElement) : base(ie, (IHTMLElement) inputButtonElement)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Button"/> class.
+    /// </summary>
+    /// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
+    /// <param name="inputButtonElement">The input button element.</param>
+    public Button(DomContainer domContainer, HTMLInputElement inputButtonElement) : base(domContainer, (IHTMLElement) inputButtonElement)
     {}
 
     /// <summary>
-    /// The text displayed at the button
+    /// The text displayed at the button.
     /// </summary>
+    /// <value>The displayed text.</value>
     public string Value
     {
       get { return inputButtonElement.value; }
     }
 
     /// <summary>
-    /// Returns the same as the Value property
+    /// The text displayed at the button (alias for the Value property).
     /// </summary>
+    /// <value>The displayed text.</value>
     public override string Text
     {
       get { return Value; }
@@ -48,6 +59,12 @@ namespace WatiN.Core
       get { return ((HTMLInputElement) DomElement); }
     }
 
+    /// <summary>
+    /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+    /// </returns>
     public override string ToString()
     {
       return Value;

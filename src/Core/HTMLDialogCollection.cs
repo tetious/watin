@@ -58,6 +58,7 @@ namespace WatiN.Core
 
     public HtmlDialog this[int index] { get { return (HtmlDialog)htmlDialogs[index]; } }
 
+    /// <exclude />
     public Enumerator GetEnumerator() 
     {
       return new Enumerator(htmlDialogs);
@@ -68,6 +69,7 @@ namespace WatiN.Core
       return GetEnumerator();
     }
 
+    /// <exclude />
     public class Enumerator: IEnumerator 
     {
       ArrayList children;

@@ -44,6 +44,7 @@ namespace WatiN.Core
 
     public RadioButton this[int index] { get { return (RadioButton)elements[index]; } }
 
+    /// <exclude />
     public Enumerator GetEnumerator() 
     {
       return new Enumerator(elements);
@@ -54,6 +55,7 @@ namespace WatiN.Core
       return GetEnumerator();
     }
 
+    /// <exclude />
     public class Enumerator: IEnumerator 
     {
       ArrayList children;

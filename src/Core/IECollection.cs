@@ -61,6 +61,7 @@ namespace WatiN.Core
       }
     }
 
+    /// <exclude />
     public Enumerator GetEnumerator() 
     {
       return new Enumerator(internetExplorers);
@@ -71,6 +72,7 @@ namespace WatiN.Core
       return GetEnumerator();
     }
 
+    /// <exclude />
     public class Enumerator: IEnumerator 
     {
       ArrayList children;

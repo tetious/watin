@@ -26,6 +26,10 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This is the base class for all other element types in this project, like
+  /// Button, Checkbox etc.. It provides common functionality to all these elements
+  /// </summary>
   public class Element
   {
     private DomContainer domContainer;
@@ -36,37 +40,54 @@ namespace WatiN.Core
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
-    /// <param name="domContainer">Domcontainer this element is located in</param>
+    /// <param name="domContainer"><see cref="DomContainer" this element is located in</param>
     /// <param name="element">The element</param>
     public Element(DomContainer domContainer, object element)
     {
       this.domContainer = domContainer;
-      this.DomElement = element;
+      DomElement = element;
     }
 
+    /// <summary>
+    /// Gets the name of the stylesheet class assigned to this ellement (if any).
+    /// </summary>
+    /// <value>The name of the class.</value>
     public string ClassName
     {
       get { return htmlElement.className; }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="Element"/> is enabled.
+    /// </summary>
+    /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
     public bool Enabled
     {
       get { return !htmlElement3.disabled; }
     }
 
+    /// <summary>
+    /// Gets the id of this element as specified in the HTML.
+    /// </summary>
+    /// <value>The id.</value>
     public string Id
     {
       get { return htmlElement.id; }
     }
 
+    /// <summary>
+    /// Gets the text of this element (and the text of all the elements contained
+    /// in this element).
+    /// </summary>
+    /// <value>The text.</value>
     public virtual string Text
     {
       get { return htmlElement.innerText; }
     }
 
     /// <summary>
-    /// Returns the text before this element when it's wrapped
-    /// in a Label element. Otherwise it returns null.
+    /// Returns the text displayed after this element when it's wrapped
+    /// in a Label element; otherwise it returns <c>null</c>.
     /// </summary>
     public string TextAfter
     {
@@ -74,44 +95,81 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the text after this element when it's wrapped
-    /// in a Label element. Otherwise it returns null.
+    /// Returns the text displayed before this element when it's wrapped
+    /// in a Label element; otherwise it returns <c>null</c>.
     /// </summary>
     public string TextBefore
     {
       get { return htmlElement2.getAdjacentText("beforeBegin"); }
     }
 
+    /// <summary>
+    /// Gets the inner HTML of this element.
+    /// </summary>
+    /// <value>The inner HTML.</value>
     public string InnerHtml
     {
       get { return htmlElement.innerHTML; }
     }
 
+    /// <summary>
+    /// Gets the outer text.
+    /// </summary>
+    /// <value>The outer text.</value>
     public string OuterText
     {
       get { return htmlElement.outerText; }
     }
 
+    /// <summary>
+    /// Gets the outer HTML.
+    /// </summary>
+    /// <value>The outer HTML.</value>
     public string OuterHtml
     {
       get { return htmlElement.outerHTML; }
     }
 
+    /// <summary>
+    /// Gets the name of the tag.
+    /// </summary>
+    /// <value>The name of the tag.</value>
     public string TagName
     {
       get { return htmlElement.tagName; }
     }
 
+    /// <summary>
+    /// Gets the title.
+    /// </summary>
+    /// <value>The title.</value>
     public string Title
     {
       get { return htmlElement.title; }
     }
 
+    /// <summary>
+    /// Gets the next sibling of this element in the Dom of the HTML page.
+    /// </summary>
+    /// <value>The next sibling.</value>
     public Element NextSibling
     {
       get { return new Element(domContainer, domNode.nextSibling); }
     }
+    
+    /// <summary>
+    /// Gets the previous sibling of this element in the Dom of the HTML page.
+    /// </summary>
+    /// <value>The previous sibling.</value>
+    public Element PreviousSibling
+    {
+      get { return new Element(domContainer, domNode.previousSibling); }
+    }
 
+    /// <summary>
+    /// Gets the parent element of this element.
+    /// </summary>
+    /// <value>The parent.</value>
     public Element Parent
     {
       get { return new Element(domContainer, domNode.parentNode); }
@@ -121,8 +179,9 @@ namespace WatiN.Core
     /// This methode can be used if the attribute isn't available as a property of
     /// Element or a subclass of Element.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <returns></returns>
+    /// <param name="attributeName">The attribute name. This could be different then named in
+    /// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
+    /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
     public string GetAttributeValue(string attributeName)
     {
       try
@@ -135,6 +194,12 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+    /// </returns>
     public override string ToString()
     {
       if (!IsNullOrEmpty(Title))
@@ -144,6 +209,10 @@ namespace WatiN.Core
       return Text;
     }
 
+    /// <summary>
+    /// Clicks this instance and waits till the event is completely finished (page is loaded 
+    /// and ready) .
+    /// </summary>
     public void Click()
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
@@ -170,8 +239,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Use this method when you want to continue without waiting
-    /// for the click event to be finished. Ussualy when a pop-up
+    /// Clicks this instance and returns immediately. Use this method when you want to continue without waiting
+    /// for the click event to be finished. Mostly used when a pop-up
     /// window is displayed when clicking the element.
     /// </summary>
     public void ClickNoWait()
@@ -189,6 +258,9 @@ namespace WatiN.Core
       Highlight(false);
     }
 
+    /// <summary>
+    /// Gives the (input) focus to this instance.
+    /// </summary>
     public void Focus()
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
@@ -197,6 +269,9 @@ namespace WatiN.Core
       FireEvent("onFocus");
     }
 
+    /// <summary>
+    /// Doubleclicks this instance.
+    /// </summary>
     public void DoubleClick()
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
@@ -206,46 +281,73 @@ namespace WatiN.Core
       FireEvent("onDblClick");
     }
 
+    /// <summary>
+    /// Does a keydown on this instance.
+    /// </summary>
     public void KeyDown()
     {
       FireEvent("onKeyDown");
     }
 
+    /// <summary>
+    /// Does a keyspress on this instance..
+    /// </summary>
     public void KeyPress()
     {
       FireEvent("onKeyPress");
     }
 
+    /// <summary>
+    /// Does a keyup on this instance..
+    /// </summary>
     public void KeyUp()
     {
       FireEvent("onKeyUp");
     }
 
+    /// <summary>
+    /// Fires the blur event on this instance.
+    /// </summary>
     public void Blur()
     {
       FireEvent("onBlur");
     }
 
+    /// <summary>
+    /// Fires the change event on this instance.
+    /// </summary>
     public void Change()
     {
       FireEvent("onChange");
     }
 
+    /// <summary>
+    /// Fires the mouseenter event on this instance.
+    /// </summary>
     public void MouseEnter()
     {
       FireEvent("onMouseEnter");
     }
     
+    /// <summary>
+    /// Fires the mousedown event on this instance.
+    /// </summary>
     public void MouseDown()
     {
       FireEvent("onmousedown");
     }
 
+    /// <summary>
+    /// Fires the mouseup event on this instance.
+    /// </summary>
     public void MouseUp()
     {
       FireEvent("onmouseup");
     }
 
+    /// <summary>
+    /// Fires the specified <paramref name="eventName"/> on this instance.
+    /// </summary>
     public void FireEvent(string eventName)
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
@@ -256,6 +358,9 @@ namespace WatiN.Core
       Highlight(false);
     }
 
+    /// <summary>
+    /// Flashes this instance.
+    /// </summary>
     public void Flash()
     {
       for (int counter = 0; counter < 5; counter++)
@@ -267,6 +372,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Highlights this instance.
+    /// </summary>
+    /// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
     protected void Highlight(bool doHighlight)
     {
       if (doHighlight)
@@ -303,6 +412,13 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Determines whether the specified name is null or empty.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified name is null or empty; otherwise, <c>false</c>.
+    /// </returns>
     protected static bool IsNullOrEmpty(string name)
     {
       return name == null || name.Length == 0;
@@ -328,22 +444,38 @@ namespace WatiN.Core
       get { return (IHTMLDOMNode) DomElement; }
     }
 
+    /// <summary>
+    /// Gets the DispHtmlBaseElement by casting <see cref="DomElement" />.
+    /// </summary>
+    /// <value>The DispHtmlBaseElement.</value>
     protected DispHTMLBaseElement DispHtmlBaseElement
     {
       get { return (DispHTMLBaseElement) DomElement; }
     }
 
+    /// <summary>
+    /// Gets the DOM container for this element.
+    /// </summary>
+    /// <value>The DOM container.</value>
     protected DomContainer DomContainer
     {
       get { return domContainer; }
     }
 
+    /// <summary>
+    /// Gets or sets the DOM element for this instance.
+    /// </summary>
+    /// <value>The DOM element.</value>
     protected object DomElement
     {
       get { return element; }
       set { element = value; }
     }
 
+    /// <summary>
+    /// Waits till the page load is complete. This should only be used on rare occasions
+    /// because WatiN calls this function for you when it handles events (like Click etc..)
+    /// </summary>
     public void WaitForComplete()
     {
       domContainer.WaitForComplete();
