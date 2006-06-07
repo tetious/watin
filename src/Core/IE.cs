@@ -382,6 +382,10 @@ namespace WatiN.Core
 
     private static IE FindIE(AttributeValue findBy, int timeout)
     {
+      if (timeout<0)
+      {
+        throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
+      }
       DateTime startTime = DateTime.Now;
 
       while (NotTimedOut(startTime, timeout))

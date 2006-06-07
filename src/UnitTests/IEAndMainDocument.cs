@@ -177,6 +177,29 @@ namespace WatiN.UnitTests
       }      
     }
 
+    /// <summary>
+    /// Attaches to IE with a zero timeout interval. Allthough the timeout
+    /// interval is zero the existing IE instance should be found.
+    /// </summary>
+    [Test]
+    public void AttachToIEWithZeroTimeout()
+    {
+      // Create a new IE instance so we can find it.
+      new IE(mainURI.ToString());
+      
+      DateTime startTime = DateTime.Now;
+      IE.AttachToIE(new UrlValue(mainURI), 0);
+
+      // Should return (within 1 second).
+      Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
+    }
+
+    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void AttachToIEWithNegativeTimeoutNotAllowed()
+    {
+      IE.AttachToIE(Find.ByTitle("Bogs title"), -1);
+    }
+
     [Test]
     public void AttachToIEByParialTitle()
     {
@@ -217,14 +240,15 @@ namespace WatiN.UnitTests
     {
       DateTime startTime = DateTime.Now;
       const int timeoutTime = 5;
-      string expectedMessage = "Could not find an IE window by title with value 'Non Excisting IE Title'. (Search expired after '5' seconds)";
+      const string ieTitle = "Non Excisting IE Title";
+      const string expectedMessage = "Could not find an IE window by title with value '" + ieTitle + "'. (Search expired after '5' seconds)";
       
       try
       {
         // Time out after timeoutTime seconds
         startTime = DateTime.Now;
-        IE.AttachToIE(Find.ByTitle("Non Excisting IE Title"),timeoutTime);
-        Assert.Fail("Index.html should not be found");
+        IE.AttachToIE(Find.ByTitle(ieTitle),timeoutTime);
+        Assert.Fail(string.Format("Internet Explorer with title '{0}' should not be found", ieTitle));
       }
       catch (Exception e)
       {
