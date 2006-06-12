@@ -21,9 +21,19 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for HTML input elements of type 
+  /// checkbox.
+  /// </summary>
   public class CheckBox : RadioCheck
   {
-    public CheckBox(DomContainer ie, IHTMLInputElement inputElement) : base(ie, inputElement)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CheckBox"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The domContainer.</param>
+    /// <param name="inputElement">The input element.</param>
+    public CheckBox(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, inputElement)
     {}
   }
 }

@@ -21,9 +21,18 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for HTML div elements.
+  /// </summary>
   public class Div : ElementsContainer
   {
-    public Div(DomContainer ie, HTMLDivElement htmlDivElement) : base(ie, (IHTMLElement) htmlDivElement)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Div"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="htmlDivElement">The HTML div element.</param>
+    public Div(DomContainer domContainer, HTMLDivElement htmlDivElement) : base(domContainer, (IHTMLElement) htmlDivElement)
     {}
   }
 }

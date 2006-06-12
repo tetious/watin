@@ -30,6 +30,7 @@ namespace WatiN.Core
   {
     /// <summary>
     /// Initializes a new instance of the <see cref="Button"/> class.
+    /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
     /// <param name="inputButtonElement">The input button element.</param>

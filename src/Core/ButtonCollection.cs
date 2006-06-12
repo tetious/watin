@@ -78,48 +78,29 @@ namespace WatiN.Core
 		{
 			ArrayList children;
 			int index;
-      /// <summary>
-      /// Initializes a new instance of the <see cref="Enumerator"/> class.
-      /// </summary>
-      /// <param name="children">The children.</param>
-			public Enumerator(ArrayList children) 
+      
+      /// <exclude />
+      public Enumerator(ArrayList children) 
 			{
 				this.children = children;
 				Reset();
 			}
 
-      /// <summary>
-      /// Sets the enumerator to its initial position, which is before
-      /// the first element in the collection.
-      /// </summary>
-      /// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
-			public void Reset() 
+      /// <exclude />
+      public void Reset() 
 			{
 				index = -1;
 			}
 
-      /// <summary>
-      /// Advances the enumerator to the next element of the collection.
-      /// </summary>
-      /// <returns>
-      /// 	<see langword="true"/> if the enumerator was successfully advanced to the next element;
-      /// <see langword="false"/> if the enumerator has passed the end of the collection.
-      /// </returns>
-      /// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
-			public bool MoveNext() 
+      /// <exclude />
+      public bool MoveNext() 
 			{
 				++index;
 				return index < children.Count;
 			}
 
-      /// <summary>
-      /// Gets the current element in the collection.
-      /// </summary>
-      /// <value></value>
-      /// <exception cref="T:System.InvalidOperationException">
-      /// The enumerator is positioned before the first element of the collection or after the last element.
-      /// </exception>
-			public Button Current 
+      /// <exclude />
+      public Button Current 
 			{
 				get 
 				{
@@ -127,14 +108,8 @@ namespace WatiN.Core
 				}
 			}
 
-      /// <summary>
-      /// Gets the current element in the collection.
-      /// </summary>
-      /// <value></value>
-      /// <exception cref="T:System.InvalidOperationException">
-      /// The enumerator is positioned before the first element of the collection or after the last element.
-      /// </exception>
-			object IEnumerator.Current { get { return Current; } }
+      /// <exclude />
+      object IEnumerator.Current { get { return Current; } }
 		}
 	}
 }

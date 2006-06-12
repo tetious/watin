@@ -20,16 +20,52 @@
 using System;
 
 using mshtml;
-
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class gives access to all contained elements of the webpage or the
+  /// frames within this webpage.
+  /// </summary>
+  ///     /// <example>
+  /// This example opens a webpage, types some text and submits it by clicking
+  /// the submit button. The <c>mainDocument</c> variable is created to illustrate when
+  /// the <see cref="Document"/> object is used, but it could also be inlined.
+  /// <code>
+  /// using WatiN.Core;
+  /// 
+  /// namespace NewIEExample
+  /// {
+  ///    public class WatiNWebsite
+  ///    {
+  ///      public WatiNWebsite()
+  ///      {
+  ///        IE ie = new IE("http://www.example.net");
+  /// 
+  ///        Document mainDocument = ie.MainDocument;
+  /// 
+  ///        mainDocument.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
+  ///        mainDocument.Button(Find.ByText("Submit")).Click;
+  /// 
+  ///        ie.Close;
+  ///      }
+  ///    }
+  ///  }
+  /// </code>
+  /// </example>
   public class Document : ISubElements
   {
     private DomContainer ie;
     private IHTMLDocument2 htmlDocument;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Document"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="htmlDocument">The HTML document.</param>
     public Document(DomContainer domContainer, IHTMLDocument2 htmlDocument)
     {
       ArgumentRequired(domContainer, "domContainer");
@@ -45,6 +81,12 @@ namespace WatiN.Core
       htmlDocument = null;
     }
 
+    /// <summary>
+    /// Gives access to the wrapped IHTMLDocument2 interface. This makes it
+    /// possible to get even more control of the webpage by using the MSHTML
+    /// Dom objectmodel.
+    /// </summary>
+    /// <value>The HTML document.</value>
     public IHTMLDocument2 HtmlDocument
     {
       get
@@ -53,6 +95,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets the HTML of the Body part of the webpage.
+    /// </summary>
+    /// <value>The HTML.</value>
     public string Html
     {
       get
@@ -61,10 +107,22 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets the URL of the displayed webpage.
+    /// </summary>
+    /// <value>The URL.</value>
     public string Url
     {
       get { return HtmlDocument.url; }
     }
+    
+    /// <summary>
+    /// Determines whether the specified text contains the given <paramref name="text" />.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
+    /// </returns>
     public bool ContainsText(string text)
     {
       string innertext = HtmlDocument.body.innerText;
@@ -81,29 +139,58 @@ namespace WatiN.Core
 
     }
 
+    /// <summary>
+    /// Gets the title of the webpage.
+    /// </summary>
+    /// <value>The title.</value>
     public string Title
     {
       get { return htmlDocument.title; }
     }
 
-    public Frame Frame(string elementId)
+    /// <summary>
+    /// Gets the specified frame by it's id.
+    /// </summary>
+    /// <param name="id">The id of the frame.</param>
+    /// <exception cref="FrameNotFoundException">Thrown if the given <paramref name="id" /> isn't found.</exception>
+    public Frame Frame(string id)
     {
-      return Frame(Find.ById(elementId));
+      return Frame(Find.ById(id));
     }
     
+    /// <summary>
+    /// Gets the specified frame by it's name.
+    /// </summary>
+    /// <param name="findBy">The name of the frame.</param>
+    /// <exception cref="FrameNotFoundException">Thrown if the given name isn't found.</exception>
     public Frame Frame(NameValue findBy)
     {
       return Core.Frame.Find(Frames, findBy);
     }
+    
+    /// <summary>
+    /// Gets the specified frame by it's Url.
+    /// </summary>
+    /// <param name="findBy">The Url of the frame.</param>
+    /// <exception cref="FrameNotFoundException">Thrown if the given Url isn't found.</exception>
     public Frame Frame(UrlValue findBy)
     {
       return Core.Frame.Find(Frames, findBy);
     }
+    
+    /// <summary>
+    /// Gets the specified frame by it's id.
+    /// </summary>
+    /// <param name="findBy">The id of the frame.</param>
+    /// <exception cref="FrameNotFoundException">Thrown if the given id isn't found.</exception>
     public Frame Frame(IdValue findBy)
     {
       return Core.Frame.Find(Frames, findBy);
     }
 
+    /// <summary>
+    /// Gets a typed collection of <see cref="WatiN.Core.Frame"/> opend within this <see cref="Document"/>.
+    /// </summary>
     public FrameCollection Frames
     {
       get
@@ -114,16 +201,100 @@ namespace WatiN.Core
 
     #region ISubElements
 
+    /// <summary>
+    /// Gets the specified Button by it's id.
+    /// </summary>
+    /// <param name="elementId">The id of the element.</param>
+    /// <exception cref="ElementNotFoundException">Thrown if the given <paramref name="elementId"/> isn't found.</exception>
+    /// <example>
+    /// This example opens a webpage, types some text and submits it by clicking
+    /// the submit button.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://www.example.net");
+    ///        ie.MainDocument.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
+    ///        ie.MainDocument.Button("buttonSubmit").Click;
+    ///        ie.Close;
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public Button Button(string elementId)
     {
       return Button(Find.ById(elementId));
     }
 
+    /// <summary>
+    /// Gets the specified Button by using the given <see cref="AttributeValue" /> to find the Button.
+    /// <seealso cref="Find" />
+    /// </summary>
+    /// <param name="findBy">The <see cref="AttributeValue"/> class or one of it's subclasses to find an element by. The <see cref="Find" /> class provides factory methodes to create specialized instances.</param>
+    /// <exception cref="ElementNotFoundException">Thrown if the given <paramref name="findBy"/> doesn't match an element in the webpage.</exception>
+    /// <example>
+    /// This example opens a webpage, types some text and submits it by clicking
+    /// the submit button.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://www.example.net");
+    ///        IdValue textFieldId = new IdValue("textFieldComment");
+    ///        ie.MainDocument.TextField(textFieldId).TypeText("This is a comment to submit");
+    ///        ie.MainDocument.Button(Find.ByText("Submit")).Click;
+    ///        ie.Close;
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public Button Button(AttributeValue findBy)
     {
       return SubElementsSupport.Button(DomContainer, findBy, elementCollection);
     }
 
+    /// <summary>
+    /// Gets a typed collection of <see cref="WatiN.Core.Button" /> instances within this <see cref="Document"/>.
+    /// </summary>
+    ///     /// <example>
+    /// This example opens a webpage and writes out the text of each button to the
+    /// debug window.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://www.example.net");
+    ///       
+    ///        ButtonCollection buttons = ie.MainDocument.Buttons;
+    /// 
+    ///        foreach (Button button in buttons)
+    ///        {
+    ///          System.Diagnostics.Debug.Writeline(button.Text);
+    ///        }
+    /// 
+    ///        ie.Close;
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public ButtonCollection Buttons
     {
       get { return SubElementsSupport.Buttons(DomContainer, elementCollection); }

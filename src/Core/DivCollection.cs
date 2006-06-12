@@ -22,24 +22,41 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="Div" /> instances within a <see cref="DomContainer"/> or <see cref="Element"/>.
+  /// </summary>
   public class DivCollection : IEnumerable
   {
     ArrayList elements;
 		
-    public DivCollection(DomContainer ie, IHTMLElementCollection elements) 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DivCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public DivCollection(DomContainer domContainer, IHTMLElementCollection elements) 
     {
       this.elements = new ArrayList();
       IHTMLElementCollection divs = (IHTMLElementCollection)elements.tags("div");
 
       foreach (HTMLDivElement div in divs)
       {
-        Div v = new Div(ie, div);
+        Div v = new Div(domContainer, div);
         this.elements.Add(v);
       }
     }
 
+    /// <summary>
+    /// Gets the length.
+    /// </summary>
+    /// <value>The length.</value>
     public int Length { get { return elements.Count; } }
 
+    /// <summary>
+    /// Gets the <see cref="Div"/> at the specified index.
+    /// </summary>
+    /// <value></value>
     public Div this[int index] { get { return (Div)elements[index]; } }
 
     /// <exclude />
@@ -58,23 +75,28 @@ namespace WatiN.Core
     {
       ArrayList children;
       int index;
+      
+      /// <exclude />
       public Enumerator(ArrayList children) 
       {
         this.children = children;
         Reset();
       }
 
+      /// <exclude />
       public void Reset() 
       {
         index = -1;
       }
 
+      /// <exclude />
       public bool MoveNext() 
       {
         ++index;
         return index < children.Count;
       }
 
+      /// <exclude />
       public Div Current 
       {
         get 

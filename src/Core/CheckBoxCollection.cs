@@ -22,11 +22,20 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="CheckBox" /> instances within a <see cref="DomContainer"/> or <see cref="Element"/>.
+  /// </summary>
 	public class CheckBoxCollection : IEnumerable
 	{
 		ArrayList elements;
 		
-		public CheckBoxCollection(DomContainer ie, IHTMLElementCollection elements) 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+		public CheckBoxCollection(DomContainer domContainer, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
       IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("input");
@@ -35,13 +44,22 @@ namespace WatiN.Core
 			{
         if (item.type == "checkbox")
         {
-            CheckBox v = new CheckBox(ie, item);
+            CheckBox v = new CheckBox(domContainer, item);
             this.elements.Add(v);
         }
 			}
 		}
+    
+    /// <summary>
+    /// Gets the length.
+    /// </summary>
+    /// <value>The length.</value>
 		public int Length { get { return elements.Count; } }
 
+    /// <summary>
+    /// Gets the <see cref="CheckBox"/> at the specified index.
+    /// </summary>
+    /// <value></value>
 		public CheckBox this[int index] { get { return (CheckBox)elements[index]; } }
 
     /// <exclude />
@@ -60,24 +78,29 @@ namespace WatiN.Core
 		{
 			ArrayList children;
 			int index;
-			public Enumerator(ArrayList children) 
+
+      /// <exclude />
+      public Enumerator(ArrayList children) 
 			{
 				this.children = children;
 				Reset();
 			}
 
-			public void Reset() 
+      /// <exclude />
+      public void Reset() 
 			{
 				index = -1;
 			}
 
-			public bool MoveNext() 
+      /// <exclude />
+      public bool MoveNext() 
 			{
 				++index;
 				return index < children.Count;
 			}
 
-			public CheckBox Current 
+      /// <exclude />
+      public CheckBox Current 
 			{
 				get 
 				{
