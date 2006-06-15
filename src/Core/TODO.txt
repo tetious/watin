@@ -18,7 +18,7 @@ can be assigned to a release. So first thing to do
 - support for making screenshots or saving the HTML page in mhtml format.
 - creating an installer for WatiN (MSI or NullSoft?)
 - creating NAnt build script
-- Adding documentation to the code
+- Adding documentation to the code (In progress)
 - creating documentation with NDoc
 - test WatiN with Internet Explorer 7 (beta 2)
 - more unittests (and more code coverage)
