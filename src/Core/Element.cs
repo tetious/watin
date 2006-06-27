@@ -40,7 +40,7 @@ namespace WatiN.Core
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
-    /// <param name="domContainer"><see cref="DomContainer" this element is located in</param>
+    /// <param name="domContainer"><see cref="DomContainer" /> this element is located in</param>
     /// <param name="element">The element</param>
     public Element(DomContainer domContainer, object element)
     {

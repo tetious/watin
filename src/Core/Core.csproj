@@ -34,7 +34,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
-                    NoWarn = ""
+                    NoWarn = "1591"
                     Optimize = "false"
                     OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
@@ -74,7 +74,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
-                    NoWarn = ""
+                    NoWarn = "1591"
                     Optimize = "false"
                     OutputPath = "..\..\build\Debug\Core\"
                     RegisterForComInterop = "false"
@@ -260,10 +260,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "License.txt"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Link.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -377,10 +373,6 @@
                     RelPath = "TextFieldCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TODO.txt"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Utils.cs"

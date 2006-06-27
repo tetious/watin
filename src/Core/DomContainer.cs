@@ -208,9 +208,9 @@ namespace WatiN.Core
     {
       if (document != null)
       {
-        /// Sometimes an OutOfMemoryException or ComException occurs while accessing
-        /// the readystate property of IHTMLDocument2. Giving MSHTML some time
-        /// to do further processing seems to solve this problem.
+        // Sometimes an OutOfMemoryException or ComException occurs while accessing
+        // the readystate property of IHTMLDocument2. Giving MSHTML some time
+        // to do further processing seems to solve this problem.
         try
         {
           string readyState = ((HTMLDocument)document).readyState;
