@@ -30,12 +30,8 @@ using WatiN.Core.Logging;
 namespace WatiN.UnitTests
 {
   [TestFixture]
-  public class FrameTests
+  public class FrameTests : WatiNTest
   {
-    private static Uri htmlTestBaseURI ;
-    private static Uri indexURI;
-    private static Uri mainURI;
-
     const string frameNameContents = "contents";
     const string frameNameMain = "main";
 
@@ -47,14 +43,8 @@ namespace WatiN.UnitTests
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
       Logger.LogWriter = new DebugLogWriter();
-
-      string htmlLocation = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
             
-      htmlTestBaseURI = new Uri(htmlLocation);
-      indexURI = new Uri(htmlTestBaseURI, "Index.html");
-      mainURI = new Uri(htmlTestBaseURI, "main.html");
-
-      ie = new IE(htmlTestBaseURI + "frameset.html", true);
+      ie = new IE(FramesetURI.ToString(), true);
     }
 
     [TestFixtureTearDown]
@@ -66,7 +56,7 @@ namespace WatiN.UnitTests
     [Test]
     public void HasNoFrames()
     {
-      using(IE iemain = new IE(mainURI.ToString()))
+      using(IE iemain = new IE(MainURI.ToString()))
       {
         Assert.AreEqual(0, iemain.MainDocument.Frames.Length);
       }
@@ -87,7 +77,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual("mainid", mainFrame.Id);
 
       AssertFindFrame(ie, Find.ByName(frameNameMain), frameNameMain);
-      AssertFindFrame(ie, Find.ByUrl(indexURI.ToString()), frameNameContents);
+      AssertFindFrame(ie, Find.ByUrl(IndexURI.ToString()), frameNameContents);
     }
 
     [Test]

@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
 
 using NUnit.Framework;
 
@@ -30,11 +29,8 @@ using WatiN.Core.Exceptions;
 namespace WatiN.UnitTests
 {
   [TestFixture]
-  public class Elements
+  public class Elements : WatiNTest
   {
-    private static Uri htmlTestBaseURI ;
-    private static Uri mainURI;
-    private static Uri googleURI;
     private IE ie;
 
     [TestFixtureSetUp]
@@ -42,13 +38,7 @@ namespace WatiN.UnitTests
     {
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
-      string htmlLocation = string.Format(@"{0}\html\", new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName);
-      htmlTestBaseURI = new Uri(htmlLocation);
-      mainURI = new Uri(htmlTestBaseURI, "main.html");
-
-      googleURI = new Uri("http://www.google.com");
-
-      ie = new IE(mainURI.ToString());
+      ie = new IE(MainURI.ToString());
     }
 
     [TestFixtureTearDown]
@@ -367,17 +357,17 @@ namespace WatiN.UnitTests
     [Test]
     public void Link()
     {
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ById("testlinkid")).Url);
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link("testlinkid").Url);
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByName("testlinkname")).Url);
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ByUrl(googleURI.ToString())).Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.MainDocument.Link(Find.ById("testlinkid")).Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.MainDocument.Link("testlinkid").Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.MainDocument.Link(Find.ByName("testlinkname")).Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.MainDocument.Link(Find.ByUrl(GoogleURI.ToString())).Url);
       Assert.AreEqual("Microsoft", ie.MainDocument.Link(Find.ByText("Microsoft")).Text);
     }
 
     [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexcistinglinkid'")]
     public void LinkFindByInvalidEnum()
     {
-      Assert.AreEqual(googleURI.ToString(), ie.MainDocument.Link(Find.ById("noexcistinglinkid")).Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.MainDocument.Link(Find.ById("noexcistinglinkid")).Url);
     }
 
     [Test]
@@ -676,6 +666,6 @@ namespace WatiN.UnitTests
       Assert.IsFalse(textfieldEnumerator.MoveNext(), "Expected last item");
 
       Assert.AreEqual(1, count);
-    }
+    }    
   }
 }

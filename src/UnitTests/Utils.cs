@@ -16,10 +16,6 @@
 // 02111-1307 USA 
 
 #endregion Copyright
-
-using System;
-using System.IO;
-
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -27,24 +23,18 @@ using WatiN.Core;
 namespace WatiN.UnitTests
 {
   [TestFixture]
-  public class Utils
+  public class Utils : WatiNTest
   {
-    private static Uri htmlTestBaseURI ;
-
     [TestFixtureSetUp]
     public void Setup()
     {
       System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
-
-      string htmlTestLocation = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
-            
-      htmlTestBaseURI = new Uri(htmlTestLocation);
     }
 
     [Test]
     public void DumpElements()
     {
-      using (IE ie = new IE(htmlTestBaseURI + "main.html"))
+      using (IE ie = new IE(HtmlTestBaseURI + "main.html"))
       {
         UtilityClass.DumpElements(ie.MainDocument);
       }
@@ -53,7 +43,7 @@ namespace WatiN.UnitTests
     [Test]
     public void DumpElementsElab()
     {
-      using (IE ie = new IE(htmlTestBaseURI + "Frameset.html"))
+      using (IE ie = new IE(HtmlTestBaseURI + "Frameset.html"))
       {
         UtilityClass.DumpElementsWithHtmlSource(ie.MainDocument);
       }
