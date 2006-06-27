@@ -28,6 +28,9 @@ Global
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		Core\License.txt = Core\License.txt
+		Core\Readme.txt = Core\Readme.txt
+		Core\TODO.txt = Core\TODO.txt
 		..\WatiN.build = ..\WatiN.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
