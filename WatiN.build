@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="dist" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
@@ -8,11 +8,11 @@
 	<property name="source.dir"                     value="${base.dir}\src" />
 	<property name="build.dir"                      value="${base.dir}\build" />
   	<property name="build.solution.file" 			value="${source.dir}\WatiN.sln" />
-  	<property name="build.configuration" 			value="AutomatedDebug"  />
+  	<property name="build.configuration" 			value="AutomatedDebug" />
     <property name="reports.output.dir" 			value="${build.dir}\test-reports" />
 	<property name="coverage.xml.file" 				value="${reports.output.dir}\Coverage.xml" />
 	<property name="distribution.dir"               value="${build.dir}\dist" />
-  	<property name="unittests.html.todir"           value="${build.dir}\html" />
+  	<property name="unittests.html.todir"           value="${build.dir}\Debug\UnitTests\html" />
   	<property name="unittests.html.fromdir"         value="${source.dir}\UnitTests\html" />
 
 	<property name="nunit.xml.file" 				value="${reports.output.dir}\UnitTests.xml" />
@@ -105,14 +105,25 @@
 	</target>
 	
 	<target name="dist">
-		<copy todir="${distribution.dir}">
+        <copy file="${source.dir}\Core\Readme.txt" todir ="${distribution.dir}" />
+        <copy file="${source.dir}\Core\License.txt" todir ="${distribution.dir}" />
+        
+		<copy todir="${distribution.dir}\bin">
 			<fileset basedir="${build.dir}\Debug\UnitTests">
 				<include name="*.dll"/>
 			</fileset>
 		</copy>
+		
+		<copy todir="${distribution.dir}\bin\html">
+		    <fileset basedir ="${unittests.html.todir}">
+                <include name="*.*" />
+		    </fileset>
+		</copy>
+
+
 		<zip zipfile="${build.dir}\WatiN.zip">
-			<fileset basedir="${build.dir}\dist">
-				<include name="*" />
+			<fileset basedir="${distribution.dir}">
+				<include name="\*" />
 			</fileset>
 		</zip>
 	</target>
