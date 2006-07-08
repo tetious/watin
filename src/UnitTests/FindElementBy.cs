@@ -18,7 +18,6 @@
 #endregion Copyright
 
 using System;
-using System.IO;
 
 using NUnit.Framework;
 using WatiN.Core;
@@ -26,7 +25,7 @@ using WatiN.Core;
 namespace WatiN.UnitTests
 {
   [TestFixture]
-  public class FindElementBy
+  public class FindElementBy : WatiNTest
   {
     [Test]
     public void FindByFor()
@@ -177,16 +176,11 @@ namespace WatiN.UnitTests
       value = new ElementUrlPartialValue("google.com");
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
-      string htmlLocation = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName + @"\html\";
-      Uri htmlTestBaseURI = new Uri(htmlLocation);
-      Uri mainURI = new Uri(htmlTestBaseURI, "main.html");
-      Uri googleURI = new Uri("http://www.google.com");
-
-      using (IE ie = new IE(mainURI.ToString()))
+      using (IE ie = new IE(MainURI.ToString()))
       {
         ie.MainDocument.Link("testlinkid").Click();
         IE ieGoogle = IE.AttachToIE(new ElementUrlPartialValue("google.com"));
-        Assert.AreEqual(googleURI.ToString(), ieGoogle.Url);
+        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
         ieGoogle.Close();
       }
     }
