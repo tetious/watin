@@ -170,13 +170,14 @@ namespace WatiN.UnitTests
     public void AttachToIEWithZeroTimeout()
     {
       // Create a new IE instance so we can find it.
-      new IE(MainURI.ToString());
-      
-      DateTime startTime = DateTime.Now;
-      IE.AttachToIE(new UrlValue(MainURI), 0);
+      using(new IE(MainURI.ToString()))
+      {
+        DateTime startTime = DateTime.Now;
+        IE.AttachToIE(new UrlValue(MainURI), 0);
 
-      // Should return (within 1 second).
-      Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
+        // Should return (within 1 second).
+        Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
+      }
     }
 
     [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
