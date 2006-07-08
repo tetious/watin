@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="dist" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
@@ -47,7 +47,7 @@
 	<target name="test" depends="compile, run-unit-tests" 
 		description="Compile and Run Tests" />
 		
-	<target name="full" depends="clean, test, dist"	description="Compiles, tests, and produces distributions" />
+	<target name="full" depends="clean, test, ndoc, dist"	description="Compiles, tests, and produces distributions" />
 
 	<!-- Internal targets -->
 	<target name="run-unit-tests">
@@ -105,9 +105,12 @@
 	</target>
 	
 	<target name="dist">
+	    <!-- Copy distribution root files -->
         <copy file="${source.dir}\Core\Readme.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\Core\License.txt" todir ="${distribution.dir}" />
+        <copy file="${build.dir}\ndoc\WatiN.chm" todir ="${distribution.dir}" />
         
+        <!-- Copy the binaries -->
 		<copy todir="${distribution.dir}\bin">
 			<fileset basedir="${build.dir}\Debug\UnitTests">
 				<include name="*.dll"/>
@@ -120,13 +123,54 @@
 		    </fileset>
 		</copy>
 
+        <!-- Copy the sources -->
+		<copy todir="${distribution.dir}\src\UnitTests">
+			<fileset basedir="${source.dir}\UnitTests">
+				<include name="*.cs"/>
+				<include name="*.csproj"/>
+				<include name="html\*.*"/>
+			</fileset>
+		</copy>
 
+		<copy todir="${distribution.dir}\src\Core">
+			<fileset basedir="${source.dir}\Core">
+				<include name="*.cs"/>
+				<include name="*.csproj"/>
+			</fileset>
+		</copy>
+
+        <copy file="${source.dir}\WatiN.sln" todir ="${distribution.dir}\src" />
+
+        <!-- Adjust reference to Interop.SHDocVw -->
+        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Interop.SHDocVw']/@HintPath"
+            value="..\..\bin\Interop.SHDocVw.dll" />
+
+        <!-- Create distribution zip file -->
 		<zip zipfile="${build.dir}\WatiN.zip">
 			<fileset basedir="${distribution.dir}">
-				<include name="\*" />
+				<include name="\**" />
 			</fileset>
 		</zip>
 	</target>
 	
+	<target name="ndoc" description="Creates documentation with ndoc">
+	    <ndoc>
+            <assemblies basedir="${build.dir}\Debug\Core">
+                <include name="WatiN.Core.dll" />
+            </assemblies>
+            <documenters>
+                <documenter name="MSDN">
+                    <property name="OutputDirectory" value="${build.dir}\ndoc\" />
+                    <property name="HtmlHelpName" value="WatiN" />
+                    <property name="Title" value="WatiN Documentation (generated with NDoc)" />
+                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
+                    <property name="Preliminary" value="True" />
+                    <property name="CleanIntermediates" value="True" />
+                </documenter>
+            </documenters>
+        </ndoc>
+	</target>
 </project>
 
