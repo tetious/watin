@@ -108,6 +108,7 @@
 	    <!-- Copy distribution root files -->
         <copy file="${source.dir}\Core\Readme.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\Core\License.txt" todir ="${distribution.dir}" />
+        <copy file="${source.dir}\ReleaseHistory.txt" todir ="${distribution.dir}" />
         <copy file="${build.dir}\ndoc\WatiN.chm" todir ="${distribution.dir}" />
         
         <!-- Copy the binaries -->

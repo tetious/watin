@@ -1,0 +1,18 @@
+WatiN 0.7.0.4000 (July 8, 2006)
+
+* In the previous release running the unittests from the binary watin.unittest.dll resulted in 
+  a lot of open IE windows because the HTML files were not distributed in the right place.
+  This problem is solved in this distribution. The logic to find the location of the HTML files
+  is also changed so the test can be both run by the binary and in de VS2003 IDE 
+  using "Test Driven.net"
+* Added documentation and examples to the source code resulting in beter support by intellisense when
+  using WatiN during your development. There's also a helpfile available (WatiN.chm). 
+  Although the most important parts are documented to get you started with WatiN, there is still 
+  a lot to be documented.
+* Removed microsoft.mshtml.dll from the distribution because it's unclear if it's legal to 
+  distribute it this way. WatiN now references the version registered in the GAC.
+* Improved the build file.
+
+
+WatiN 0.6.3.3007 (May 32, 2006)
+* Initial release at Sourceforge
