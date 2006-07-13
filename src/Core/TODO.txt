@@ -23,3 +23,5 @@ can be assigned to a release. So first thing to do
 - test WatiN with Internet Explorer 7 (beta 2)
 - more unittests (and more code coverage)
 - create a good deployment package that works out of the box
+
+- Testing commits maillinglist
