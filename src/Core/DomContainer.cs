@@ -132,8 +132,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// This method is called to initialise the start time for a
-    /// determining a time out at the current time.
+    /// This method is called to initialise the start time for
+    /// determining a time out. It's set to the current time.
     /// </summary>
     /// <returns></returns>
     protected internal DateTime InitTimeout()
