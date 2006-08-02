@@ -22,8 +22,6 @@ using System.Threading;
 
 using mshtml;
 
-using WatiN.Core.Exceptions;
-
 namespace WatiN.Core
 {
   /// <summary>
@@ -150,7 +148,7 @@ namespace WatiN.Core
     {
       if (IsTimedOut())
       {
-        throw new TimeoutException(timeoutMessage);
+        throw new Exceptions.TimeoutException(timeoutMessage);
       }
     }
 
@@ -253,7 +251,7 @@ namespace WatiN.Core
             // KB Article KB196340: http://support.microsoft.com/default.aspx?scid=kb;en-us;196340
             // C# implementation of KB196340: http://www.colinneller.com/blog/PermaLink,guid,64eac67e-df2a-4a20-82f0-16b0c5ce9615.aspx
 
-            throw new WatiNException("Could be Cross-domain scripting security. See KB Article KB196340 'HOWTO: Get the WebBrowser Object Model of an HTML Frame' - this technique bypasses security checks");
+            throw new Exceptions.WatiNException("Could be Cross-domain scripting security. See KB Article KB196340 'HOWTO: Get the WebBrowser Object Model of an HTML Frame' - this technique bypasses security checks");
           }
 
           Thread.Sleep(400);
@@ -269,7 +267,7 @@ namespace WatiN.Core
 
         if (isTimedout && frame == null)
         {
-          throw new TimeoutException("waiting for frame document becoming available");
+          throw new Exceptions.TimeoutException("waiting for frame document becoming available");
         }
 
 
