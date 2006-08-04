@@ -220,22 +220,21 @@ namespace WatiN.Core
       Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
       Highlight(true);
 
-      DispHtmlBaseElement.click();
+      ClickDispHtmlBaseElement();
 
       try
       {
-        // When Click is called by ClickNoWait, WaitForComplete throws
-        // an exception in get_Frames. Uncomment catch to see the details 
         WaitForComplete();
       }
-//      catch (Exception e)
-//      {
-//        Debug.WriteLine(e.ToString());
-//      }
       finally
       {
         Highlight(false);
       }
+    }
+
+    private void ClickDispHtmlBaseElement()
+    {
+      DispHtmlBaseElement.click();
     }
 
     /// <summary>
@@ -251,7 +250,7 @@ namespace WatiN.Core
 
       Highlight(true);
 
-      Thread clickButton = new Thread(new ThreadStart(Click));
+      Thread clickButton = new Thread(new ThreadStart(ClickDispHtmlBaseElement));
       clickButton.Start();
       clickButton.Join(500);
 
