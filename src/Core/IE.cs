@@ -901,24 +901,35 @@ namespace WatiN.Core
       {
         Thread.Sleep(500);
 
-        foreach(HtmlDialog htmlDialog in HtmlDialogs)
+        try
         {
-          string compareValue = string.Empty;
-
-          if (findBy is UrlValue)
+          foreach(HtmlDialog htmlDialog in HtmlDialogs)
           {
-            compareValue = htmlDialog.MainDocument.Url;
-          }
+            string compareValue = string.Empty;
 
-          else if (findBy is TitleValue)
-          {
-            compareValue = htmlDialog.MainDocument.Title;
-          }
+            if (findBy is UrlValue)
+            {
+              compareValue = htmlDialog.MainDocument.Url;
+            }
 
-          if (findBy.Compare(compareValue))
-          {
-            return htmlDialog;
+            else if (findBy is TitleValue)
+            {
+              compareValue = htmlDialog.MainDocument.Title;
+            }
+
+            if (findBy.Compare(compareValue))
+            {
+              return htmlDialog;
+            }
           }
+        }
+        catch 
+        {
+          // SF 1530859 fix
+          // Accessing the DOM of the HTMLDialog page hasn't fully loaded yet 
+          // raises an error. Using WaitForComplete at some point in the search
+          // for a HTMLDialog would be a better option but for now I've implemented 
+          // this catch all.
         }
       }
 
