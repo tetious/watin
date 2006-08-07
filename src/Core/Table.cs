@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 
 using WatiN.Core.Logging;
@@ -49,7 +50,7 @@ namespace WatiN.Core
       {
         TableCellCollection tableCells = tableRow.TableCells;
 
-        if (tableCells[inColumn].Text.ToLower() == findText.ToLower())
+        if (String.Compare(tableCells[inColumn].Text, findText, true) == 0)
         {
           return tableRow;
         }

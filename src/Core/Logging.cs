@@ -21,7 +21,7 @@ namespace WatiN.Core.Logging
 {
   public sealed class Logger
   {
-    private static ILogWriter mLogWriter = null;
+    private static ILogWriter mLogWriter;
 
     /// <summary>
     /// Prevent creating an instance of this class (contains only static members)

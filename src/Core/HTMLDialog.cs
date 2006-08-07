@@ -39,7 +39,7 @@ namespace WatiN.Core
 
     public HtmlDialog(IntPtr windowHandle)
     {
-      this.hWnd = windowHandle;
+      hWnd = windowHandle;
     }
 
     public void Close()
@@ -64,8 +64,8 @@ namespace WatiN.Core
       Guid IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
 
       Int32 lRes = 0;
-      Int32 lMsg = 0;
-      Int32 hr = 0;
+      Int32 lMsg;
+      Int32 hr;
 
       if (IsIETridentDlgFrame(hWnd))
       {
@@ -89,7 +89,7 @@ namespace WatiN.Core
             hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
             if (hr != 0)
             {
-              throw new COMException("ObjectFromLresult has thown an exception", hr);
+              throw new COMException("ObjectFromLresult has thrown an exception", hr);
             }
             return ieDOMFromhWnd;
           }
@@ -111,7 +111,7 @@ namespace WatiN.Core
       }
     }
 
-    private bool IsIEServerWindow(IntPtr hWnd)
+    private static bool IsIEServerWindow(IntPtr hWnd)
     {
       return CompareClassNames(hWnd, "Internet Explorer_Server");
     }

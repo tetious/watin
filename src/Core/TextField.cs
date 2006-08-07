@@ -28,7 +28,7 @@ namespace WatiN.Core
   public class TextField : Element
   {
 
-    private ITextElement textElement = null;
+    private ITextElement textElement;
 
     public TextField(DomContainer ie, HTMLInputElement htmlInputElement) : base(ie, htmlInputElement)
     {
@@ -179,7 +179,7 @@ namespace WatiN.Core
     /// </summary>
     private class TextAreaElement : ITextElement
     {
-      private HTMLTextAreaElement htmlTextAreaElement = null;
+      private HTMLTextAreaElement htmlTextAreaElement;
       public TextAreaElement(HTMLTextAreaElement htmlTextAreaElement)
       {
         this.htmlTextAreaElement = htmlTextAreaElement;
@@ -223,7 +223,7 @@ namespace WatiN.Core
 
     private class TextFieldElement : ITextElement
     {
-      private HTMLInputElement inputElement = null;
+      private HTMLInputElement inputElement;
 
       public TextFieldElement(HTMLInputElement htmlInputElement)
       {

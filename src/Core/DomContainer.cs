@@ -31,7 +31,7 @@ namespace WatiN.Core
   /// </summary>
   public abstract class DomContainer : Document
   {
-    private IHTMLDocument2 htmlDocument = null;
+    private IHTMLDocument2 htmlDocument;
     private DateTime startWaitForComplete;
 
     public DomContainer()
@@ -158,9 +158,10 @@ namespace WatiN.Core
 
     private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
     {
-      while (((HTMLDocument)htmlDocument).readyState != "complete")
+      HTMLDocument document = (HTMLDocument)htmlDocument;
+      while (document.readyState != "complete")
       {
-        ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + ((HTMLDocument)htmlDocument).readyState + "'");
+        ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");
         Thread.Sleep(100);
       }
     }

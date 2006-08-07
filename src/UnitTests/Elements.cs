@@ -176,6 +176,13 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void GetInvalidAttribute()
+    {
+      Button helloButton = ie.Button("helloid");
+      System.Diagnostics.Debug.WriteLine(helloButton.GetAttributeValue("NONSENCE"));
+    }
+
+    [Test]
     public void Button()
     {
       const string popupValue = "Show modeless dialog";

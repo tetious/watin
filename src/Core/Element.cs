@@ -33,7 +33,7 @@ namespace WatiN.Core
   public class Element
   {
     private DomContainer domContainer;
-    private object element = null;
+    private object element;
     
     private string originalcolor;
 
@@ -275,7 +275,7 @@ namespace WatiN.Core
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
-      Logger.LogAction("Doubleclicking " + GetType().Name + " '" + ToString() + "'");
+      Logger.LogAction("Double clicking " + GetType().Name + " '" + ToString() + "'");
 
       FireEvent("onDblClick");
     }

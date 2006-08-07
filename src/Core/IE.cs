@@ -475,7 +475,11 @@ namespace WatiN.Core
     /// </example>
     public void GoTo(Uri url)
     {
-      GoTo(url.ToString());
+      Logger.LogAction("Navigating to '" + url + "'");
+      
+      object nil = null;
+      ie.Navigate(url.ToString(), ref nil, ref nil, ref nil, ref nil);
+      WaitForComplete();
     }
 
     /// <summary>
@@ -503,12 +507,7 @@ namespace WatiN.Core
     /// </example>
     public void GoTo(string url)
     {
-      Logger.LogAction("Navigating to '" + url + "'");
-      
-      object nil = null;
-      ie.Navigate(url, ref nil, ref nil, ref nil, ref nil);
-      WaitForComplete();
-      
+      GoTo(new Uri(url));
     }
 
     private void StartPopupWatcher(int iePid)

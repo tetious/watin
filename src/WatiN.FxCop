@@ -20,7 +20,10 @@
   <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
  </ProjectOptions>
  <Targets>
-  <Target Name="C:\TAdev\WatiN\WatiN\trunk\build\Debug\Core\WatiN.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <AssemblyReferenceDirectories>
+   <Directory>C:\TAdev\WatiN\WatiN\trunk\build\Debug\Core\</Directory>
+  </AssemblyReferenceDirectories>
+  <Target Name="C:\TAdev\WatiN\trunk\build\Debug\Core\WatiN.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
@@ -151,10 +154,15 @@
    </Namespace>
    <Namespace Name="WatiN.Core.Logging">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2006-05-11 11:10:33Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Excluded" Created="2006-05-11 11:10:33Z">
       <Issue>
        <Item>WatiN.Core.Logging</Item>
       </Issue>
+      <Notes>
+       <User Name="j.vanmenen">
+        <Note Id="25" />
+       </User>
+      </Notes>
      </Message>
      <Message Id="Wati" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2006-05-11 11:10:33Z">
       <Issue Name="Namespace">
@@ -171,7 +179,7 @@
    </Namespace>
   </Namespaces>
   <Targets>
-   <Target Name="C:\TAdev\WatiN\WatiN\trunk\build\Debug\Core\WatiN.Core.dll">
+   <Target Name="C:\TAdev\WatiN\trunk\build\Debug\Core\WatiN.Core.dll">
     <Modules>
      <Module Name="watin.core.dll">
       <Messages>
@@ -216,6 +224,13 @@
           </Members>
          </Type>
          <Type Name="Document">
+          <Messages>
+           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2006-08-07 15:47:37Z">
+            <Issue>
+             <Item>Document</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
            <Member Name="Url">
             <Messages>
@@ -229,25 +244,14 @@
           </Members>
          </Type>
          <Type Name="DomContainer">
+          <Messages>
+           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2006-08-07 15:47:37Z">
+            <Issue>
+             <Item>DomContainer</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name=".ctor()">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>DomContainer..ctor()</Item>
-               <Item>htmlDocument</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-              <Issue>
-               <Item>DomContainer..ctor()</Item>
-               <Item>mainDocument</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="FireEvent(mshtml.DispHTMLBaseElement,System.String):System.Void">
             <Messages>
              <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Status="Excluded" Created="2006-05-11 11:10:33Z">
@@ -270,12 +274,17 @@
                <Item>System.Object</Item>
               </Issue>
              </Message>
-             <Message Id="readyState" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2006-05-11 11:10:33Z">
+             <Message Id="readyState" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Status="Excluded" Created="2006-05-11 11:10:33Z">
               <Issue>
                <Item>DomContainer.IsDocumentReadyStateAvailable(IHTMLDocument2):Boolean</Item>
                <Item>readyState</Item>
                <Item>System.String</Item>
               </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="22" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -287,18 +296,6 @@
                <Item>1</Item>
                <Item>NotImplementedException..ctor(String)</Item>
                <Item>This method must be overridden by all sub classes</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="WaitWhileDocumentStateNotComplete(mshtml.IHTMLDocument2):System.Void">
-            <Messages>
-             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2006-05-11 11:10:33Z">
-              <Issue Name="Parameter">
-               <Item>htmlDocument</Item>
-               <Item>mshtml.HTMLDocument</Item>
-               <Item>DomContainer.WaitWhileDocumentStateNotComplete(IHTMLDocument2):Void</Item>
-               <Item>castclass</Item>
               </Issue>
              </Message>
             </Messages>
@@ -329,18 +326,6 @@
          </Type>
          <Type Name="Element">
           <Members>
-           <Member Name=".ctor(WatiN.Core.DomContainer,System.Object)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>Element..ctor(DomContainer, Object)</Item>
-               <Item>element</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="Click():System.Void">
             <Messages>
              <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
@@ -372,39 +357,43 @@
                <Item>Element.DoubleClick():Void</Item>
                <Item>1</Item>
                <Item>Logger.LogAction(String):Void</Item>
-               <Item>Doubleclicking ______ '______'</Item>
-              </Issue>
-             </Message>
-             <Message Id="Doubleclicking" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>Doubleclicking</Item>
-               <Item>Doubleclicking ______ '______'</Item>
+               <Item>Double clicking ______ '______'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="FireEvent(System.String):System.Void">
             <Messages>
-             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2006-05-11 11:10:33Z">
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Status="Excluded" Created="2006-05-11 11:10:33Z">
               <Issue>
                <Item>FireEvent</Item>
               </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="18" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="GetAttributeValue(System.String):System.String">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-11 11:10:33Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Excluded" Created="2006-05-11 11:10:33Z">
               <Issue>
                <Item>Element.GetAttributeValue(String):String</Item>
                <Item>System.Object</Item>
               </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="19" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
            <Member Name="Highlight(System.Boolean):System.Void">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-05-19 10:32:22Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Excluded" Created="2006-05-19 10:32:22Z">
               <Issue>
                <Item>Element.Highlight(Boolean):Void</Item>
                <Item>System.Object</Item>
@@ -412,6 +401,26 @@
               <Issue>
                <Item>Element.Highlight(Boolean):Void</Item>
                <Item>System.Object</Item>
+              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="20" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Find">
+          <Members>
+           <Member Name="ByUrl(System.String):WatiN.Core.UrlValue">
+            <Messages>
+             <Message TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234" Created="2006-08-03 15:18:27Z">
+              <Issue>
+               <Item>Find.ByUrl(String):UrlValue</Item>
+               <Item>UrlValue..ctor(Uri)</Item>
+               <Item>UrlValue..ctor(String)</Item>
               </Issue>
              </Message>
             </Messages>
@@ -495,29 +504,19 @@
                <Item>HtmlDialog.IEDOMFromhWnd(IntPtr):IHTMLDocument2</Item>
                <Item>1</Item>
                <Item>COMException..ctor(String, Int32)</Item>
-               <Item>ObjectFromLresult has thown an exception</Item>
+               <Item>ObjectFromLresult has thrown an exception</Item>
               </Issue>
              </Message>
-             <Message Id="Lresult" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:45:14Z">
+             <Message Id="Lresult" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Status="Excluded" Created="2006-05-11 11:45:14Z">
               <Issue>
                <Item>Lresult</Item>
                <Item>ObjectFromLresult</Item>
               </Issue>
-             </Message>
-             <Message Id="thown" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2006-05-11 11:45:14Z">
-              <Issue>
-               <Item>thown</Item>
-               <Item>ObjectFromLresult has thown an exception</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="IsIEServerWindow(System.IntPtr):System.Boolean">
-            <Messages>
-             <Message Id="this" TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
-              <Issue Name="MarkAsStatic">
-               <Item>HtmlDialog.IsIEServerWindow(IntPtr):Boolean</Item>
-              </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="23" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -550,6 +549,7 @@
 IE..ctor()
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void</Item>
               </Issue>
               <Issue>
@@ -559,10 +559,10 @@ DomContainer.WaitForComplete():Void</Item>
 IE..ctor()
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void
 DomContainer.WaitForCompleteTimeoutIsInitialized():Void
-DomContainer.get_HtmlDocument():HTMLDocument
-DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+Document.get_HtmlDocument():IHTMLDocument2</Item>
               </Issue>
              </Message>
             </Messages>
@@ -577,6 +577,7 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
 IE..ctor(Boolean)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void</Item>
               </Issue>
               <Issue>
@@ -586,10 +587,10 @@ DomContainer.WaitForComplete():Void</Item>
 IE..ctor(Boolean)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void
 DomContainer.WaitForCompleteTimeoutIsInitialized():Void
-DomContainer.get_HtmlDocument():HTMLDocument
-DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+Document.get_HtmlDocument():IHTMLDocument2</Item>
               </Issue>
              </Message>
             </Messages>
@@ -611,8 +612,7 @@ DomContainer.WaitForComplete():Void</Item>
 IE..ctor(Object)
 DomContainer.WaitForComplete():Void
 DomContainer.WaitForCompleteTimeoutIsInitialized():Void
-DomContainer.get_HtmlDocument():HTMLDocument
-DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+Document.get_HtmlDocument():IHTMLDocument2</Item>
               </Issue>
              </Message>
             </Messages>
@@ -627,6 +627,7 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
 IE..ctor(String)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void</Item>
               </Issue>
               <Issue>
@@ -636,10 +637,10 @@ DomContainer.WaitForComplete():Void</Item>
 IE..ctor(String)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void
 DomContainer.WaitForCompleteTimeoutIsInitialized():Void
-DomContainer.get_HtmlDocument():HTMLDocument
-DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+Document.get_HtmlDocument():IHTMLDocument2</Item>
               </Issue>
              </Message>
              <Message Id="0#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Status="Excluded" Created="2006-05-11 11:45:14Z">
@@ -665,6 +666,7 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
 IE..ctor(String, Boolean)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void</Item>
               </Issue>
               <Issue>
@@ -674,10 +676,10 @@ DomContainer.WaitForComplete():Void</Item>
 IE..ctor(String, Boolean)
 IE.CreateNewIE(String, Boolean):Void
 IE.GoTo(String):Void
+IE.GoTo(Uri):Void
 DomContainer.WaitForComplete():Void
 DomContainer.WaitForCompleteTimeoutIsInitialized():Void
-DomContainer.get_HtmlDocument():HTMLDocument
-DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
+Document.get_HtmlDocument():IHTMLDocument2</Item>
               </Issue>
              </Message>
             </Messages>
@@ -764,6 +766,12 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
            </Member>
            <Member Name="findHtmlDialog(WatiN.Core.AttributeValue,System.Int32):WatiN.Core.HtmlDialog">
             <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-08-07 15:47:37Z">
+              <Issue>
+               <Item>IE.findHtmlDialog(AttributeValue, Int32):HtmlDialog</Item>
+               <Item>System.Object</Item>
+              </Issue>
+             </Message>
              <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:45:14Z">
               <Issue>
                <Item>IE.findHtmlDialog(AttributeValue, Int32):HtmlDialog</Item>
@@ -786,14 +794,27 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
                <Item>System.Object</Item>
               </Issue>
              </Message>
+             <Message Id="System.ArgumentOutOfRangeException.#ctor(System.String,System.Object,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-08-03 15:18:27Z">
+              <Issue>
+               <Item>IE.FindIE(AttributeValue, Int32):IE</Item>
+               <Item>3</Item>
+               <Item>ArgumentOutOfRangeException..ctor(String, Object, String)</Item>
+               <Item>Should be equal are greater then zero.</Item>
+              </Issue>
+             </Message>
             </Messages>
            </Member>
            <Member Name="FireEvent(mshtml.DispHTMLBaseElement,System.String):System.Void">
             <Messages>
-             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Created="2006-05-11 11:10:33Z">
+             <Message TypeName="UseEventsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1030" Status="Excluded" Created="2006-05-11 11:10:33Z">
               <Issue>
                <Item>FireEvent</Item>
               </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="24" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -831,32 +852,14 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
              </Message>
             </Messages>
            </Member>
-           <Member Name="GoTo(System.String):System.Void">
+           <Member Name="GoTo(System.Uri):System.Void">
             <Messages>
-             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
+             <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-08-07 15:47:37Z">
               <Issue>
-               <Item>IE.GoTo(String):Void</Item>
+               <Item>IE.GoTo(Uri):Void</Item>
                <Item>1</Item>
                <Item>Logger.LogAction(String):Void</Item>
                <Item>Navigating to '______'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057" Created="2006-05-11 11:48:14Z">
-              <Issue>
-               <Item>IE.GoTo(String):Void</Item>
-               <Item>url</Item>
-               <Item>IE.GoTo(Uri):Void</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="GoTo(System.Uri):System.Void">
-            <Messages>
-             <Message TypeName="PassSystemUriObjectsInsteadOfStrings" Category="Microsoft.Usage" CheckId="CA2234" Created="2006-05-11 11:48:14Z">
-              <Issue>
-               <Item>IE.GoTo(Uri):Void</Item>
-               <Item>IE.GoTo(Uri):Void</Item>
-               <Item>IE.GoTo(String):Void</Item>
               </Issue>
              </Message>
             </Messages>
@@ -923,15 +926,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
          </Type>
          <Type Name="NativeMethods">
           <Members>
-           <Member Name="EnumThreadWindows(System.Int32,WatiN.Core.NativeMethods+EnumChildProc,System.IntPtr&amp;):System.Boolean">
-            <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2006-05-11 11:45:14Z">
-              <Issue>
-               <Item>NativeMethods.EnumThreadWindows(Int32, EnumChildProc, IntPtr&amp;):Boolean</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="SendMessage(System.IntPtr,System.Int32,System.Int32,System.Int32):System.Int32">
             <Messages>
              <Message Id="2" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2006-05-11 11:45:14Z" FixCategory="NonBreaking">
@@ -980,10 +974,15 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
            </Member>
            <Member Name="IsDialog(System.IntPtr):System.Boolean">
             <Messages>
-             <Message Id="this" TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801" Created="2006-05-11 11:10:33Z" FixCategory="NonBreaking">
+             <Message Id="this" TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801" Status="Excluded" Created="2006-05-11 11:10:33Z" FixCategory="NonBreaking">
               <Issue Name="MarkAsStatic">
                <Item>PopupWatcher.IsDialog(IntPtr):Boolean</Item>
               </Issue>
+              <Notes>
+               <User Name="j.vanmenen">
+                <Note Id="21" />
+               </User>
+              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -1107,18 +1106,11 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
            </Member>
            <Member Name="IsInputElement(System.String):System.Boolean">
             <Messages>
-             <Message Id="stack0" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
-              <Issue Name="UseStringCompare">
-               <Item>SubElementsSupport.IsInputElement(String):Boolean</Item>
-               <Item>String.op_Equality(String, String):Boolean</Item>
-               <Item>'stack0', a local, </Item>
-              </Issue>
-             </Message>
-             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-08-07 15:47:37Z">
               <Issue>
                <Item>SubElementsSupport.IsInputElement(String):Boolean</Item>
-               <Item>System.String.ToLower</Item>
-               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1160,20 +1152,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
           <Members>
            <Member Name="FindRow(System.String,System.Int32):WatiN.Core.TableRow">
             <Messages>
-             <Message Id="stack0" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
-              <Issue Name="UseStringCompare">
-               <Item>Table.FindRow(String, Int32):TableRow</Item>
-               <Item>String.op_Equality(String, String):Boolean</Item>
-               <Item>'stack0', a local, </Item>
-              </Issue>
-             </Message>
-             <Message Id="stack1" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2006-05-11 11:10:33Z">
-              <Issue Name="UseStringCompare">
-               <Item>Table.FindRow(String, Int32):TableRow</Item>
-               <Item>String.op_Equality(String, String):Boolean</Item>
-               <Item>'stack1', a local, </Item>
-              </Issue>
-             </Message>
              <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
               <Issue>
                <Item>Table.FindRow(String, Int32):TableRow</Item>
@@ -1182,16 +1160,11 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
                <Item>Searching for '______' in column ______ of ______ '______'</Item>
               </Issue>
              </Message>
-             <Message Id="System.String.ToLower" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-05-11 11:10:33Z">
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2006-08-07 15:47:37Z">
               <Issue>
                <Item>Table.FindRow(String, Int32):TableRow</Item>
-               <Item>System.String.ToLower</Item>
-               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
-              </Issue>
-              <Issue>
-               <Item>Table.FindRow(String, Int32):TableRow</Item>
-               <Item>System.String.ToLower</Item>
-               <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1200,30 +1173,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
          </Type>
          <Type Name="TextField">
           <Members>
-           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLInputElement)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>TextField..ctor(DomContainer, HTMLInputElement)</Item>
-               <Item>textElement</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name=".ctor(WatiN.Core.DomContainer,mshtml.HTMLTextAreaElement)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>TextField..ctor(DomContainer, HTMLTextAreaElement)</Item>
-               <Item>textElement</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="AppendText(System.String):System.Void">
             <Messages>
              <Message Id="WatiN.Core.Logging.Logger.LogAction(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2006-05-11 11:10:33Z">
@@ -1288,38 +1237,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
            </Member>
           </Members>
          </Type>
-         <Type Name="TextField+TextAreaElement">
-          <Members>
-           <Member Name=".ctor(mshtml.HTMLTextAreaElement)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>TextAreaElement..ctor(HTMLTextAreaElement)</Item>
-               <Item>htmlTextAreaElement</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="TextField+TextFieldElement">
-          <Members>
-           <Member Name=".ctor(mshtml.HTMLInputElement)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>TextFieldElement..ctor(HTMLInputElement)</Item>
-               <Item>inputElement</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="TitleValue">
           <Members>
            <Member Name="Compare(System.String):System.Boolean">
@@ -1334,22 +1251,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
                <Item>TitleValue.Compare(String):Boolean</Item>
                <Item>System.String.ToLower</Item>
                <Item>System.String.ToLower(System.Globalization.CultureInfo)</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="UrlValue">
-          <Members>
-           <Member Name=".ctor(System.String)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>UrlValue..ctor(String)</Item>
-               <Item>findUrl</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
               </Issue>
              </Message>
             </Messages>
@@ -1628,26 +1529,6 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
          </Type>
         </Types>
        </Namespace>
-       <Namespace Name="WatiN.Core.Logging">
-        <Types>
-         <Type Name="Logger">
-          <Members>
-           <Member Name=".cctor()">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2006-05-11 11:10:33Z">
-              <Issue>
-               <Item>Logger..cctor()</Item>
-               <Item>mLogWriter</Item>
-               <Item>reference type</Item>
-               <Item>null</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
       </Namespaces>
      </Module>
     </Modules>
@@ -1673,9 +1554,27 @@ DomContainer.OnGetHtmlDocument():IHTMLDocument2</Item>
     <Note Id="15" Modified="2006-05-19 11:07:30Z">Spelling OK</Note>
     <Note Id="16" Modified="2006-05-19 11:07:41Z">Spelling OK</Note>
     <Note Id="17" Modified="2006-05-19 11:11:36Z">This is the typename where looking for. So it's OK.</Note>
+    <Note Id="18" Modified="2006-08-07 15:05:37Z">FireEvent denotes an action to be taken. Name is OK</Note>
+    <Note Id="19" Modified="2006-08-07 15:13:45Z">This is OK</Note>
+    <Note Id="20" Modified="2006-08-07 15:16:29Z">Is OK</Note>
+    <Note Id="21" Modified="2006-08-07 15:19:15Z">Seems to be a wrong message. Don't see code using this.</Note>
+    <Note Id="22" Modified="2006-08-07 15:21:04Z">This call is needed to check to see if the DOM is available</Note>
+    <Note Id="23" Modified="2006-08-07 15:35:57Z">Spelling is according to the fuction name.</Note>
+    <Note Id="24" Modified="2006-08-07 15:39:20Z">FireEvent expresses an action</Note>
+    <Note Id="25" Modified="2006-08-07 15:40:35Z">I like the logging to be in a seperate namespace</Note>
    </User>
   </Notes>
   <Rules>
+   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
+    <Name>Abstract types should not have constructors</Name>
+    <Description>Public constructors for abstract types do not make sense because you cannot create instances of abstract types.</Description>
+    <Resolution Name="Default">Change the accessibility of all public constructors in '{0}' to protected.</Resolution>
+    <Owner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/AbstractTypesShouldNotHaveConstructors.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="99">CriticalWarning</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.312.0.0" />
+   </Rule>
    <Rule TypeName="AssembliesShouldDeclareMinimumSecurity" Category="Microsoft.Usage" CheckId="CA2209">
     <Name>Assemblies should declare minimum security</Name>
     <Description>Permission requests prevent security exceptions from being thrown after code in an assembly has already begun executing. With permission requests, the assembly does not load if it has insufficient permissions. This rule will fire if you have specified a permission request incorrectly, or incompletely. If you have specified requests but FxCop reports a violation for this rule, use the PermView.exe tool to view the security permissions in the assembly. An unenforceable permission appears as an empty permission set. Whidbey customers can use PermCalc.exe which gives even more detailed information. You should add attributes specifying what permissions your assembly will demand, might demand, and what permissions it does not want granted.  For example, the following attribute indicates that an assembly will, at minimum, require read access to the USERNAME environment variable: [assembly:EnvironmentPermissionAttribute(SecurityAction.RequestMinimum,
@@ -1717,26 +1616,6 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
     <MessageLevel Certainty="90">CriticalWarning</MessageLevel>
     <File Name="InteroperabilityRules.dll" Version="1.312.0.0" />
    </Rule>
-   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
-    <Name>Avoid uncalled private code</Name>
-    <Description>There is uncalled code that is not externally visible and is not a known runtime entry point. If this violation fires in error, please send a problem report to the FxCop team.</Description>
-    <Resolution Name="Default">'{0}' appears to have no upstream public or protected callers.</Resolution>
-    <Owner />
-    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/AvoidUncalledPrivateCode.html</Url>
-    <Email>askfxcop@microsoft.com</Email>
-    <MessageLevel Certainty="75">Warning</MessageLevel>
-    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
-   </Rule>
-   <Rule TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807">
-    <Name>Avoid unnecessary string creation</Name>
-    <Description>Avoid creating strings unnecessarily. When converting strings to upper or lowercase, cache the result when necessary rather than duplicating a previous string creation. Prefer String.Compare over converting strings to upper or lowercase when performing case-insensitive comparisons. Do not create strings that are no subsequently assigned to variables.</Description>
-    <Resolution Name="UseStringCompare">{0} calls {1} after converting {2} to upper or lowercase. If possible, eliminate the string creation and call the overload of String.Compare that performs a case-insensitive comparison.</Resolution>
-    <Owner />
-    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/AvoidUnnecessaryStringCreation.html</Url>
-    <Email>askfxcop@microsoft.com</Email>
-    <MessageLevel Certainty="90">Warning</MessageLevel>
-    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
-   </Rule>
    <Rule TypeName="AvoidUnusedParameters" Category="Microsoft.Performance" CheckId="CA1801">
     <Name>Avoid unused parameters</Name>
     <Description>Avoid declaring parameters that are not used in the method body. Unused parameters incur maintenance and performance costs. Sometimes a violation of this rule can point to an implementation bug in the method (i.e. the parameter should actually have been used in the method body). Exclude warnings of this rule if the parameter has to exist because of backward compatibility.</Description>
@@ -1777,16 +1656,6 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
     <MessageLevel Certainty="95">CriticalWarning</MessageLevel>
     <File Name="UsageRules.dll" Version="1.312.0.0" />
    </Rule>
-   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
-    <Name>Do not cast unnecessarily</Name>
-    <Description>Avoid duplicate casts where possible, since there is a cost associated with them.</Description>
-    <Resolution Name="Parameter">'{0}', a parameter, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
-    <Owner />
-    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/DoNotCastUnnecessarily.html</Url>
-    <Email>askfxcop@microsoft.com</Email>
-    <MessageLevel Certainty="95">Warning</MessageLevel>
-    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
-   </Rule>
    <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
     <Name>Do not catch Exceptions or SystemExceptions</Name>
     <Description>You should not catch Exception or SystemException. Catching generic exception types can hide run-time problems from the library user, and can complicate debugging. You should catch only those exceptions that you can handle gracefully.</Description>
@@ -1796,16 +1665,6 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
     <Email>askfxcop@microsoft.com</Email>
     <MessageLevel Certainty="95">CriticalError</MessageLevel>
     <File Name="DesignRules.dll" Version="1.312.0.0" />
-   </Rule>
-   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
-    <Name>Do not initialize unnecessarily</Name>
-    <Description>Do not make initializations that have already been done by the runtime.</Description>
-    <Resolution Name="Default">{0} initializes field '{1}', a {2}, to {3}. Remove this initialization, as it will be done automatically by the runtime.</Resolution>
-    <Owner />
-    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Performance/DoNotInitializeUnnecessarily.html</Url>
-    <Email>askfxcop@microsoft.com</Email>
-    <MessageLevel Certainty="90">Warning</MessageLevel>
-    <File Name="PerformanceRules.dll" Version="1.312.0.0" />
    </Rule>
    <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
     <Name>Do not pass literals as localized parameters</Name>
@@ -1822,6 +1681,7 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
     <Description>The individual words that make up an identifier should not be abbreviated and should be spelled correctly. If this rule generates a false positive on a term that should be recognized, add the word to the FxCop custom dictionary.</Description>
     <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member '{1}'.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of the unrecognized token '{0}' in namespace '{1}'.</Resolution>
+    <Resolution Name="Parameter" />
     <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type '{1}'.</Resolution>
     <Owner />
     <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Naming/IdentifiersShouldBeSpelledCorrectly.html</Url>
@@ -1940,19 +1800,10 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
     <MessageLevel Certainty="95">Error</MessageLevel>
     <File Name="GlobalizationRules.dll" Version="1.312.0.0" />
    </Rule>
-   <Rule TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057">
-    <Name>String uri overloads call system uri overloads</Name>
-    <Description>If a method overloads another method by replacing a System.Uri parameter with a string, then the string overload should simply build a Uri object from the string, and pass the result to the string overload.</Description>
-    <Resolution Name="Default">Refactor {0} so that it builds a System.Uri object from '{1}', and then calls {2}.</Resolution>
-    <Owner />
-    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/StringUriOverloadsCallSystemUriOverloads.html</Url>
-    <Email>askfxcop@microsoft.com</Email>
-    <MessageLevel Certainty="75">Error</MessageLevel>
-    <File Name="DesignRules.dll" Version="1.312.0.0" />
-   </Rule>
    <Rule TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054">
     <Name>Uri parameters should not be strings</Name>
     <Description>If a parameter name contains "uri" or "url" or "urn", and it's typed as string, the parameter type should be changed to System.Uri, unless there is an overload method where the same parameter is typed as Uri.</Description>
+    <Resolution Name="Default" />
     <Owner />
     <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/UriParametersShouldNotBeStrings.html</Url>
     <Email>askfxcop@microsoft.com</Email>
@@ -1962,6 +1813,7 @@ Read="USERNAME")]. To specify permissions that the assembly might demand, use Se
    <Rule TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056">
     <Name>Uri properties should not be strings</Name>
     <Description>If a property name contains "uri" or "url" or "urn" and it's typed as string, it should be changed to System.Uri.</Description>
+    <Resolution Name="Default" />
     <Owner />
     <Url>http://www.gotdotnet.com/team/fxcop/docs/rules.aspx?version=1.312&amp;&amp;url=/Design/UriPropertiesShouldNotBeStrings.html</Url>
     <Email>askfxcop@microsoft.com</Email>

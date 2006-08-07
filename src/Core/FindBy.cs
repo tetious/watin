@@ -195,16 +195,14 @@ namespace WatiN.Core
   /// </example>
   public class UrlValue : AttributeValue
   {
-    Uri findUrl = null;
+    Uri findUrl;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UrlValue"/> class.
     /// </summary>
     /// <param name="url">The (well-formed) URL to find.</param>
-    public UrlValue(string url) : base("href", url)
-    {
-      findUrl = new Uri(url);
-    }
+    public UrlValue(string url) : this(new Uri(url))
+    {}
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UrlValue"/> class.

@@ -41,9 +41,6 @@ namespace WatiN.Core
     [DllImport("user32.dll", CharSet=CharSet.Auto)]
     internal static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
 
-    [DllImport("user32.dll", CharSet=CharSet.Auto)]
-    internal static extern bool EnumThreadWindows(int threadId, EnumChildProc pfnEnum, ref IntPtr lParam);
-
     [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
     internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
     

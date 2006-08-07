@@ -274,7 +274,7 @@ namespace WatiN.Core
 
     private static bool IsInputElement(string tagName)
     {
-      return tagName.ToLower() == "input";
+      return String.Compare(tagName, "input", true) == 0;
     }
 
     private static string getAttributeValue(AttributeValue findBy, IHTMLElement element)
