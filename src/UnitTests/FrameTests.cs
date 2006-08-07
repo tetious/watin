@@ -40,7 +40,7 @@ namespace WatiN.UnitTests
     [TestFixtureSetUp]
     public void Setup()
     {
-      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
+//      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
 
       Logger.LogWriter = new DebugLogWriter();
             
@@ -58,20 +58,20 @@ namespace WatiN.UnitTests
     {
       using(IE iemain = new IE(MainURI.ToString()))
       {
-        Assert.AreEqual(0, iemain.MainDocument.Frames.Length);
+        Assert.AreEqual(0, iemain.Frames.Length);
       }
     }
 
     [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a frame by id with value 'contentsid'")]
     public void ExpectFrameNotFoundException()
     {
-      ie.MainDocument.Frame(Find.ById("contentsid"));
+      ie.Frame(Find.ById("contentsid"));
     }
 
     [Test]
     public void Frame()
     {
-      Frame mainFrame = ie.MainDocument.Frame(Find.ById("mainid"));
+      Frame mainFrame = ie.Frame(Find.ById("mainid"));
       Assert.IsNotNull(mainFrame, "Frame expected");
       Assert.AreEqual("main", mainFrame.Name);
       Assert.AreEqual("mainid", mainFrame.Id);
@@ -84,7 +84,7 @@ namespace WatiN.UnitTests
     public void Frames()
     {
       const int expectedFramesCount = 2;
-      FrameCollection frames = ie.MainDocument.Frames;
+      FrameCollection frames = ie.Frames;
 
       Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
@@ -114,7 +114,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ShowFrames()
     {
-      UtilityClass.ShowFrames(ie.MainDocument);
+      UtilityClass.ShowFrames(ie);
     }
 
     private static void AssertFindFrame(IE ie, AttributeValue findBy, string expectedFrameName)
@@ -122,11 +122,11 @@ namespace WatiN.UnitTests
       Frame frame = null;
       if (findBy is UrlValue)
       {
-        frame = ie.MainDocument.Frame((UrlValue)findBy);
+        frame = ie.Frame((UrlValue)findBy);
       }
       else if (findBy is NameValue)
       {
-        frame = ie.MainDocument.Frame((NameValue)findBy);
+        frame = ie.Frame((NameValue)findBy);
       }
       Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
       Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy.ToString() + ", " + findBy.Value);

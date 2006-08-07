@@ -48,7 +48,7 @@ namespace WatiN.Core
   ///      public WatiNWebsite()
   ///      {
   ///        IE ie = new IE("http://watin.sourceforge.net");
-  ///        ie.MainDocument.Link(Find.ByText("RSS Feeds")).Click;
+  ///        ie.Link(Find.ByText("RSS Feeds")).Click;
   ///        ie.Close;
   ///      }
   ///    }
@@ -558,10 +558,10 @@ namespace WatiN.Core
     ///  }
     /// </code>
     /// </example>
-    public string Url
-    {
-      get { return ie.LocationURL; }
-    }
+//    public string Url
+//    {
+//      get { return ie.LocationURL; }
+//    }
 
     /// <summary>
     /// Pops the most recent alert message from a que of shown alerts.C:\TAdev\WatiNSF\trunk\src\UnitTests\FindElementBy.cs
@@ -700,7 +700,7 @@ namespace WatiN.Core
     ///      public WatiNWebsite()
     ///      {
     ///        IE ie = new IE("http://watin.sourceforge.net");
-    ///        Debug.WriteLine(ie.MainDocument.Html);
+    ///        Debug.WriteLine(ie.Html);
     ///        ie.Close;
     ///      }
     ///    }
@@ -709,7 +709,7 @@ namespace WatiN.Core
     /// </example>
     public void Close()
     {
-      Logger.LogAction("Closing browser '" + MainDocument.Title + "'");
+      Logger.LogAction("Closing browser '" + Title + "'");
       StopPopupWatcherAndQuitIE();
     }
 
@@ -909,12 +909,12 @@ namespace WatiN.Core
 
             if (findBy is UrlValue)
             {
-              compareValue = htmlDialog.MainDocument.Url;
+              compareValue = htmlDialog.Url;
             }
 
             else if (findBy is TitleValue)
             {
-              compareValue = htmlDialog.MainDocument.Title;
+              compareValue = htmlDialog.Title;
             }
 
             if (findBy.Compare(compareValue))

@@ -26,9 +26,9 @@ namespace WatiN.Core
   /// this class or one of it's subclasses to implement your own comparison logic.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Link(new AttributeValue("id", "testlinkid")).Url</code>
+  /// <code>ie.Link(new AttributeValue("id", "testlinkid")).Url</code>
   /// or use 
-  /// <code>ie.MainDocument.Link(Find.ByCustom("id", "testlinkid")).Url</code>
+  /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
   /// </example>
 
   public class AttributeValue
@@ -110,9 +110,9 @@ namespace WatiN.Core
   /// Class to find an element by it's id.
   /// </summary>  
   /// <example>
-  /// <code>ie.MainDocument.Link(new IdValue("testlinkid")).Url</code>
+  /// <code>ie.Link(new IdValue("testlinkid")).Url</code>
   /// or use
-  /// <code>ie.MainDocument.Link(Find.ByLink("testlinkid")).Url</code>
+  /// <code>ie.Link(Find.ByLink("testlinkid")).Url</code>
   /// </example>
   public class IdValue : AttributeValue
   {
@@ -128,9 +128,9 @@ namespace WatiN.Core
   /// Class to find an element by it's name.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Link(new NameValue("testlinkname")).Url</code>
+  /// <code>ie.Link(new NameValue("testlinkname")).Url</code>
   /// or use
-  /// <code>ie.MainDocument.Link(Find.ByName("testlinkname")).Url</code>
+  /// <code>ie.Link(Find.ByName("testlinkname")).Url</code>
   /// </example>
   public class NameValue : AttributeValue
   {
@@ -146,9 +146,9 @@ namespace WatiN.Core
   /// Class to find an element by it's text.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Link(new TextValue("my link")).Url</code>
+  /// <code>ie.Link(new TextValue("my link")).Url</code>
   /// or use
-  /// <code>ie.MainDocument.Link(Find.ByText("my link")).Url</code>
+  /// <code>ie.Link(Find.ByText("my link")).Url</code>
   /// </example>
   public class TextValue : AttributeValue
   {
@@ -164,9 +164,9 @@ namespace WatiN.Core
   /// Class to find a label element placed for an element.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Label(new ForValue("optionbuttonid")).Text</code>
+  /// <code>ie.Label(new ForValue("optionbuttonid")).Text</code>
   /// or use
-  /// <code>ie.MainDocument.Label(Find.ByFor("optionbuttonid")).Text</code>
+  /// <code>ie.Label(Find.ByFor("optionbuttonid")).Text</code>
   /// </example>
   public class ForValue : AttributeValue
   {
@@ -189,9 +189,9 @@ namespace WatiN.Core
   /// Class to find a Link, Frame, Internet Explorer window or HTML Dialog by a Url.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Link(new UrlValue("http://watin.sourceforge.net")).Click</code>
+  /// <code>ie.Link(new UrlValue("http://watin.sourceforge.net")).Click</code>
   /// or use
-  /// <code>ie.MainDocument.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
+  /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
   /// </example>
   public class UrlValue : AttributeValue
   {
@@ -282,9 +282,9 @@ namespace WatiN.Core
   /// Class to find an element by it's value.
   /// </summary>
   /// <example>
-  /// <code>ie.MainDocument.Button(new ValueValue("My Button"))</code>
+  /// <code>ie.Button(new ValueValue("My Button"))</code>
   /// or use
-  /// <code>ie.MainDocument.Button(Find.ByValue("My Button"))</code>
+  /// <code>ie.Button(Find.ByValue("My Button"))</code>
   /// </example>
   public class ValueValue : AttributeValue
   {
@@ -313,7 +313,7 @@ namespace WatiN.Core
     /// <param name="forId">Id of the element the label is linked with.</param>
     /// <returns><see cref="ForValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Label(Find.ByFor("optionbuttonid")).Text</code>
+    /// <code>ie.Label(Find.ByFor("optionbuttonid")).Text</code>
     /// </example>
     public static ForValue ByFor(string forId)
     {
@@ -326,7 +326,7 @@ namespace WatiN.Core
     /// <param name="id">Element id to find.</param>
     /// <returns><see cref="IdValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Link(Find.ByLink("testlinkid")).Url</code>
+    /// <code>ie.Link(Find.ByLink("testlinkid")).Url</code>
     /// </example>
     public static IdValue ById(string id)
     {
@@ -339,7 +339,7 @@ namespace WatiN.Core
     /// <param name="name">Name to find.</param>
     /// <returns><see cref="NameValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Link(Find.ByName("testlinkname")).Url</code>
+    /// <code>ie.Link(Find.ByName("testlinkname")).Url</code>
     /// </example>
     public static NameValue ByName(string name)
     {
@@ -352,7 +352,7 @@ namespace WatiN.Core
     /// <param name="text">Element text</param>
     /// <returns><see cref="TextValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Link(Find.ByText("my link")).Url</code>
+    /// <code>ie.Link(Find.ByText("my link")).Url</code>
     /// </example>
     public static TextValue ByText(string text)
     {
@@ -365,7 +365,7 @@ namespace WatiN.Core
     /// <param name="url">The well-formed url to find.</param>
     /// <returns><see cref="UrlValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
+    /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
     /// </example>
     public static UrlValue ByUrl(string url)
     {
@@ -391,7 +391,7 @@ namespace WatiN.Core
     /// <param name="value">The value to find.</param>
     /// <returns><see cref="ValueValue"/></returns>
     /// <example>
-    /// <code>ie.MainDocument.Button(Find.ByValue("My Button"))</code>
+    /// <code>ie.Button(Find.ByValue("My Button"))</code>
     /// </example>
     public static ValueValue ByValue(string value)
     {
@@ -405,7 +405,7 @@ namespace WatiN.Core
     /// <param name="value">The exact matching value of the attribute</param>
     /// <returns><see cref="AttributeValue" /></returns>
     /// <example>
-    /// <code>ie.MainDocument.Link(Find.ByCustom("id", "testlinkid")).Url</code>
+    /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
     /// </example>
     public static AttributeValue ByCustom(string attributeName, string value)
     {

@@ -29,12 +29,16 @@ namespace WatiN.Core
   /// to a document and its elements and/or frames. Currently implemented
   /// by IE and HTMLDialog.
   /// </summary>
-  public abstract class DomContainer
+  public abstract class DomContainer : Document
   {
     private IHTMLDocument2 htmlDocument = null;
-    private Document mainDocument = null;
     private DateTime startWaitForComplete;
 
+    public DomContainer()
+    {
+      DomContainer = this;
+    }
+    
     /// <summary>
     /// This method must be overriden by all sub classes
     /// </summary>
@@ -46,7 +50,7 @@ namespace WatiN.Core
     /// <summary>
     /// Returns the 'raw' html document for the internet explorer DOM.
     /// </summary>
-    public HTMLDocument HtmlDocument
+    public override IHTMLDocument2 HtmlDocument
     {
       get
       {
@@ -55,23 +59,7 @@ namespace WatiN.Core
           htmlDocument = OnGetHtmlDocument();
         }
 
-        return (HTMLDocument)htmlDocument;
-      }
-    }
-
-    /// <summary>
-    /// Returns the main document of DomContainer
-    /// </summary>
-    public Document MainDocument
-    {
-      get
-      {
-        if (mainDocument == null)
-        {
-          mainDocument = new Document(this, (IHTMLDocument2) HtmlDocument);
-        }
-
-        return mainDocument;
+        return htmlDocument;
       }
     }
 
@@ -93,11 +81,10 @@ namespace WatiN.Core
     /// This method must be called by its inheritor to dispose references
     /// to internal resources.
     /// </summary>
-    public void Dispose()
+    internal override void Dispose()
     {
+      base.Dispose();
       htmlDocument = null;
-      if (mainDocument != null) mainDocument.Close();
-      mainDocument = null;
     }
 
     /// <summary>
@@ -117,12 +104,12 @@ namespace WatiN.Core
     protected internal void WaitForCompleteTimeoutIsInitialized()
     {
       WaitWhileMainDocumentNotAvailable(this);
-      WaitWhileDocumentStateNotComplete((IHTMLDocument2) HtmlDocument);
+      WaitWhileDocumentStateNotComplete(HtmlDocument);
 
       int framesCount = HtmlDocument.frames.length;
       for (int i = 0; i != framesCount; ++i)
       {
-        DispHTMLWindow2 frame = Frame.GetFrameFromHTMLDocument(i, (IHTMLDocument2) HtmlDocument);
+        DispHTMLWindow2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, HtmlDocument);
         IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
 
         WaitWhileDocumentStateNotComplete(document);
@@ -188,7 +175,7 @@ namespace WatiN.Core
 
         try
         {
-          maindocument = (IHTMLDocument2) domContainer.HtmlDocument;
+          maindocument = domContainer.HtmlDocument;
         }
         catch
         {        

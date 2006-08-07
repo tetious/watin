@@ -178,7 +178,7 @@ namespace WatiN.UnitTests
 
       using (IE ie = new IE(MainURI.ToString()))
       {
-        ie.MainDocument.Link("testlinkid").Click();
+        ie.Link("testlinkid").Click();
         IE ieGoogle = IE.AttachToIE(new ElementUrlPartialValue("google.com"));
         Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
         ieGoogle.Close();

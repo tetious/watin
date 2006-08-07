@@ -56,10 +56,10 @@ namespace WatiN.UnitTests
 
       using (IE ie = new IE(GoogleURI.ToString(), true))
       {
-        ie.MainDocument.TextField(Find.ByName("q")).TypeText("WatiN");
-        ie.MainDocument.Button(Find.ByName("btnG")).Click();
+        ie.TextField(Find.ByName("q")).TypeText("WatiN");
+        ie.Button(Find.ByName("btnG")).Click();
 
-        Assert.IsTrue(ie.MainDocument.ContainsText("WatiN"));
+        Assert.IsTrue(ie.ContainsText("WatiN"));
       }
     }
     
@@ -72,10 +72,10 @@ namespace WatiN.UnitTests
 
       using (IE ie = new IE(GoogleURI.ToString(), true))
       {
-        ie.MainDocument.TextField(Find.ByName("q")).TypeText("WatiN");
-        ie.MainDocument.Form(Find.ByName("f")).Submit();
+        ie.TextField(Find.ByName("q")).TypeText("WatiN");
+        ie.Form(Find.ByName("f")).Submit();
 
-        Assert.IsTrue(ie.MainDocument.ContainsText("WatiN"));
+        Assert.IsTrue(ie.ContainsText("WatiN"));
       }
     }
 
@@ -84,8 +84,8 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(MainURI.ToString(), true))
       {
-        ie.MainDocument.Button("popupid").Click();
-        Document dialog = ie.HtmlDialogs[0].MainDocument;
+        ie.Button("popupid").Click();
+        Document dialog = ie.HtmlDialogs[0];
 
         Assert.AreEqual("47", dialog.TextField("dims").Value);
       }
@@ -96,8 +96,8 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(MainURI.ToString(), true))
       {
-        Assert.IsTrue(ie.MainDocument.ContainsText("Contains text in DIV"), "Text not found");
-        Assert.IsFalse(ie.MainDocument.ContainsText("abcde"), "Text incorrectly found");
+        Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
+        Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
       }
     }
     [Test]
@@ -105,7 +105,7 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(MainURI.ToString(), true))
       {
-        ie.MainDocument.Button("helloid").Click();
+        ie.Button("helloid").Click();
 
         // getting alert text
         Assert.AreEqual("hello", ie.PopAlert());
@@ -128,18 +128,27 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(MainURI.ToString(), true))
       {
-        Assert.AreEqual(MainURI.ToString(), ie.Url);
+        Assert.AreEqual(MainURI,new Uri(ie.Url));
       }
     }
 
     [Test]
-    public void GoTo()
+    public void GoToUrl()
     {
       using (IE ie = new IE())
       {
-        Uri URL = new Uri(MainURI.ToString());
-        ie.GoTo(URL.ToString());
-        Assert.AreEqual(URL.ToString(), ie.Url);
+        ie.GoTo(MainURI.ToString());
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
+      }
+    }
+    
+    [Test]
+    public void GoToUri()
+    {
+      using (IE ie = new IE())
+      {
+        ie.GoTo(MainURI);
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
       }
     }
 
@@ -148,17 +157,17 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE())
       {
-        ie.GoTo(MainURI.ToString());
-        Assert.AreEqual(MainURI.ToString(), ie.Url);
+        ie.GoTo(MainURI);
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
         
-        ie.MainDocument.Link(Find.ByUrl(IndexURI.ToString())).Click();
-        Assert.AreEqual(IndexURI.ToString(), ie.Url);
+        ie.Link(Find.ByUrl(IndexURI.ToString())).Click();
+        Assert.AreEqual(IndexURI, new Uri(ie.Url));
 
         ie.Back();
-        Assert.AreEqual(MainURI.ToString(), ie.Url);
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
 
         ie.Forward();
-        Assert.AreEqual(IndexURI.ToString(), ie.Url);
+        Assert.AreEqual(IndexURI, new Uri(ie.Url));
       }      
     }
 
@@ -193,7 +202,7 @@ namespace WatiN.UnitTests
       {
         Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with 'gOo' in it's title allready exists. AttachToIEByParialTitle can't be correctly tested. Please close the window.");
         
-        ie.MainDocument.Link("testlinkid").Click();
+        ie.Link("testlinkid").Click();
         using (IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo")))
         {
           Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
@@ -211,7 +220,7 @@ namespace WatiN.UnitTests
       {
         Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with url " + GoogleURI.ToString() + " is allready open. AttachToIEByURL can't be correctly tested. Please close the window.");
         
-        ie.MainDocument.Link("testlinkid").Click();
+        ie.Link("testlinkid").Click();
         using (IE ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI.ToString())))
         {
           Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
@@ -250,15 +259,15 @@ namespace WatiN.UnitTests
     {
       IE ie = new IE(MainURI.ToString());
 
-      ie.MainDocument.Button("modalid").ClickNoWait();
+      ie.Button("modalid").ClickNoWait();
 
       HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-      Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
+      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
   
-      htmlDialog.MainDocument.TextField("name").TypeText("Textfield in HTMLDialog");
-      htmlDialog.MainDocument.Button("hello").Click();
+      htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
+      htmlDialog.Button("hello").Click();
 
       htmlDialog.Close();
 
@@ -271,12 +280,12 @@ namespace WatiN.UnitTests
     {
       IE ie = new IE(MainURI.ToString());
 
-      ie.MainDocument.Button("modalid").ClickNoWait();
+      ie.Button("modalid").ClickNoWait();
 
       HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-      Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
+      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
   
       htmlDialog.Close();
 
@@ -289,12 +298,12 @@ namespace WatiN.UnitTests
     {
       IE ie = new IE(MainURI.ToString());
 
-      ie.MainDocument.Button("modalid").ClickNoWait();
+      ie.Button("modalid").ClickNoWait();
 
       HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI.ToString()));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-      Assert.AreEqual("PopUpTest", htmlDialog.MainDocument.Title, "Unexpected title");
+      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
   
       htmlDialog.Close();
 

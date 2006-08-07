@@ -31,8 +31,7 @@ namespace WatiN.Core
   /// </summary>
   ///     /// <example>
   /// This example opens a webpage, types some text and submits it by clicking
-  /// the submit button. The <c>mainDocument</c> variable is created to illustrate when
-  /// the <see cref="Document"/> object is used, but it could also be inlined.
+  /// the submit button.
   /// <code>
   /// using WatiN.Core;
   /// 
@@ -44,10 +43,8 @@ namespace WatiN.Core
   ///      {
   ///        IE ie = new IE("http://www.example.net");
   /// 
-  ///        Document mainDocument = ie.MainDocument;
-  /// 
-  ///        mainDocument.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
-  ///        mainDocument.Button(Find.ByText("Submit")).Click;
+  ///        ie.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
+  ///        ie.Button(Find.ByText("Submit")).Click;
   /// 
   ///        ie.Close;
   ///      }
@@ -55,11 +52,19 @@ namespace WatiN.Core
   ///  }
   /// </code>
   /// </example>
-  public class Document : ISubElements
+  public abstract class Document : ISubElements
   {
-    private DomContainer ie;
+    private DomContainer domContainer;
     private IHTMLDocument2 htmlDocument;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Document"/> class.
+    /// Mainly used by WatiN internally. You should override HtmlDocument
+    /// and set DomContainer before accessing any method or property of 
+    /// this class.
+    /// </summary>
+    public Document(){}
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Document"/> class.
     /// Mainly used by WatiN internally.
@@ -75,7 +80,7 @@ namespace WatiN.Core
       this.htmlDocument = htmlDocument;
     }
 
-    internal void Close()
+    internal virtual void Dispose()
     {
       DomContainer = null;
       htmlDocument = null;
@@ -87,7 +92,7 @@ namespace WatiN.Core
     /// Dom objectmodel.
     /// </summary>
     /// <value>The HTML document.</value>
-    public IHTMLDocument2 HtmlDocument
+    public virtual IHTMLDocument2 HtmlDocument
     {
       get
       {
@@ -145,7 +150,7 @@ namespace WatiN.Core
     /// <value>The title.</value>
     public string Title
     {
-      get { return htmlDocument.title; }
+      get { return HtmlDocument.title; }
     }
 
     /// <summary>
@@ -195,7 +200,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new FrameCollection(DomContainer, htmlDocument);
+        return new FrameCollection(DomContainer, HtmlDocument);
       }
     }
 
@@ -219,8 +224,8 @@ namespace WatiN.Core
     ///      public WatiNWebsite()
     ///      {
     ///        IE ie = new IE("http://www.example.net");
-    ///        ie.MainDocument.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
-    ///        ie.MainDocument.Button("buttonSubmit").Click;
+    ///        ie.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
+    ///        ie.Button("buttonSubmit").Click;
     ///        ie.Close;
     ///      }
     ///    }
@@ -252,8 +257,8 @@ namespace WatiN.Core
     ///      {
     ///        IE ie = new IE("http://www.example.net");
     ///        IdValue textFieldId = new IdValue("textFieldComment");
-    ///        ie.MainDocument.TextField(textFieldId).TypeText("This is a comment to submit");
-    ///        ie.MainDocument.Button(Find.ByText("Submit")).Click;
+    ///        ie.TextField(textFieldId).TypeText("This is a comment to submit");
+    ///        ie.Button(Find.ByText("Submit")).Click;
     ///        ie.Close;
     ///      }
     ///    }
@@ -282,7 +287,7 @@ namespace WatiN.Core
     ///      {
     ///        IE ie = new IE("http://www.example.net");
     ///       
-    ///        ButtonCollection buttons = ie.MainDocument.Buttons;
+    ///        ButtonCollection buttons = ie.Buttons;
     /// 
     ///        foreach (Button button in buttons)
     ///        {
@@ -525,14 +530,14 @@ namespace WatiN.Core
     {
       get
       {
-        return htmlDocument.all;
+        return HtmlDocument.all;
       }
     }
 
     protected DomContainer DomContainer
     {
-      get { return ie; }
-      set { ie = value; }
+      get { return domContainer; }
+      set { domContainer = value; }
     }
 
     private static void ArgumentRequired(object requiredObject, string name)
