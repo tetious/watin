@@ -62,12 +62,27 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByUrl()
     {
-      UrlValue value = Find.ByUrl("http://www.google.nl");
-      Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("http://www.google.nl", value.Value, "Wrong value");
-      Assert.IsTrue(value.Compare("http://www.google.nl/"), "Should match Google");
-      Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
+      UrlValue value = Find.ByUrl("http://www.google.com");
+      AssertUrlValue(value);
     }
+
+    [Test]
+    public void FindByUri()
+    {
+      UrlValue value = new UrlValue(GoogleURI);
+      AssertUrlValue(value);
+    }
+    
+    private static void AssertUrlValue(UrlValue value)
+    {
+      Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual("http://www.google.com/", value.Value, "Wrong value");
+      Assert.IsTrue(value.Compare("http://www.google.com/"), "Should match Google url");
+      Assert.IsTrue(value.Compare(GoogleURI), "Should match Google uri");
+      Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
+      Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
+    }
+
 
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidParam()
@@ -78,7 +93,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
-      UrlValue value = Find.ByUrl("http://www.google.nl");
+      UrlValue value = Find.ByUrl("http://www.google.com");
       value.Compare("google.com");
     }
 
@@ -110,6 +125,7 @@ namespace WatiN.UnitTests
       ValueValue value = Find.ByValue("valuevalue");
       Assert.AreEqual("value", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
+      Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]

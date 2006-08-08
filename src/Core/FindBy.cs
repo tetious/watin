@@ -104,6 +104,11 @@ namespace WatiN.Core
     {
       return (value == null || value.Length == 0);
     }
+    
+    public override string ToString()
+    {
+      return Value;
+    }
   }
 
   /// <summary>
