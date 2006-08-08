@@ -344,6 +344,27 @@ namespace WatiN.UnitTests
       Assert.AreEqual("about:blank", uri.ToString());
     }
 
+    [Test]
+    public void FireKeyDownEventOnElementWithNoId()
+    {
+      using (IE ie = new IE(TestEventsURI.ToString()))
+      {
+        TextField report = ie.TextField("Report");
+        Assert.IsNull(report.Text, "Report not empty");
+        
+        Button button = ie.Button(Find.ByValue("Button"));
+        Assert.IsNull(button.Id, "Button id not null before click event");
+        
+        button.KeyDown();
+        
+        Assert.IsNotNull(report.Text, "No keydown event fired (report is empty )");
+        StringAssert.StartsWith("button.id = ", report.Text, "Report should start with 'button.id = '");
+        Assert.Greater(report.Text.Length, "button.id = ".Length, "No assigned id report");
+        
+        Assert.IsEmpty(button.Id, "Button id not null after click event");
+      }
+    }
+    
     private static bool IsGoogleIEWindowOpen()
     {
       try

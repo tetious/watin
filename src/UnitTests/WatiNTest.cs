@@ -10,6 +10,7 @@ namespace WatiN.UnitTests
     private static Uri indexURI = null;
     private static Uri popUpURI = null;
     private static Uri framesetURI = null;
+    private static Uri testEventsURI = null;
 
     private static Uri googleURI;
 
@@ -73,6 +74,20 @@ namespace WatiN.UnitTests
         return framesetURI;
       }
     }
+    
+    public static Uri TestEventsURI
+    {
+      get
+      {
+        if (testEventsURI == null)
+        {
+          testEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
+        }
+
+        return testEventsURI;
+      }
+    }
+
 
     public static Uri GoogleURI
     {

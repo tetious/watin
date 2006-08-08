@@ -155,6 +155,10 @@
                     RelPath = "html\popup.html"
                     BuildAction = "Content"
                 />
+                <File
+                    RelPath = "html\TestEvents.html"
+                    BuildAction = "Content"
+                />
             </Include>
         </Files>
     </CSHARP>

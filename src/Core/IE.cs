@@ -585,23 +585,32 @@ namespace WatiN.Core
     public override void FireEvent(DispHTMLBaseElement element, string eventName)
     {
       // The code in base.FireEvent should work, but it doesn't. 
-      // The button value inside the event handling scripts in the html page 
-      // is still 0 while explicitly set to 1 in the code
+      // The EventObject.button property in the java event handling scripts (in the html page) 
+      // still returns 0 while explicitly set to 1 in the code.
       // I've searched the internet, but this really should be it.
       // Since it doesn't work, I came up with this workaround using execScript.
-      // Only this doesn't work if the elements ID attribute isn't set in the html
 
       // TODO: Passing the eventarguments in a new param of type array. This array
       //       holds 0 or more name/value pairs where the name is a property of the event object
       //       and the value is the value that's assigned to the property.
 
-      if (element.id != null)
+      bool resetIdToNull = false;
+      
+      // If the element has no Id, assign a temporary and unique Id so we can find 
+      // the element within the java code (I know, it's a bit dirty hack)
+      if (element.id == null || element.id == String.Empty)
       {
-        FireEventOnElementByJScript(element, eventName);
+        element.id = Guid.NewGuid().ToString();
+        resetIdToNull = true;
       }
-      else
+
+      // Execute the JScriopt to fire the event inside the Browser.
+      FireEventOnElementByJScript(element, eventName);
+      
+      // Restore Id to null if temporary Id was assigned.
+      if (resetIdToNull)
       {
-        base.FireEvent(element, eventName);
+        element.id = String.Empty;
       }
     }
 
