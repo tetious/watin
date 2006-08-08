@@ -25,12 +25,6 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class Utils : WatiNTest
   {
-    [TestFixtureSetUp]
-    public void Setup()
-    {
-      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
-    }
-
     [Test]
     public void DumpElements()
     {

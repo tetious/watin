@@ -332,6 +332,8 @@ namespace WatiN.Core
     /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
     internal IE(object shDocVwInternetExplorer)
     {
+      SetCurrentThreadAppartmentStateToSTA();
+
       InternetExplorer internetExplorer;
       try
       {
@@ -348,6 +350,8 @@ namespace WatiN.Core
 
     private void CreateNewIE(string url, bool autoClose)
     {
+      SetCurrentThreadAppartmentStateToSTA();
+
       Logger.LogAction("Creating new IE instance");
 
       SetAutoCloseAndMoveMouse(autoClose);
@@ -355,6 +359,18 @@ namespace WatiN.Core
       InitIEAndStartPopupWatcher(new InternetExplorerClass());
 
       GoTo(url);
+    }
+
+    private static void SetCurrentThreadAppartmentStateToSTA()
+    {
+      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
+      {
+        Thread.CurrentThread.ApartmentState = ApartmentState.STA;
+      }
+      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
+      {
+        throw new ThreadStateException("Setting Thread.CurrentThread.AppartmentState to STA didn't succeed.");
+      }
     }
 
     private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)

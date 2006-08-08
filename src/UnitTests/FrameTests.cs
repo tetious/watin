@@ -17,9 +17,8 @@
 
 #endregion Copyright
 
-using System;
+
 using System.Collections;
-using System.IO;
 
 using NUnit.Framework;
 
@@ -40,8 +39,6 @@ namespace WatiN.UnitTests
     [TestFixtureSetUp]
     public void Setup()
     {
-//      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
-
       Logger.LogWriter = new DebugLogWriter();
             
       ie = new IE(FramesetURI.ToString(), true);

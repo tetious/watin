@@ -18,7 +18,6 @@
 #endregion Copyright
 
 using System;
-using System.Threading;
 
 using NUnit.Framework;
 
@@ -34,8 +33,6 @@ namespace WatiN.UnitTests
     [TestFixtureSetUp]
     public void Setup()
     {
-      Thread.CurrentThread.ApartmentState = ApartmentState.STA;
-
       Logger.LogWriter = new DebugLogWriter();
     }
 
@@ -185,7 +182,7 @@ namespace WatiN.UnitTests
         IE.AttachToIE(new UrlValue(MainURI), 0);
 
         // Should return (within 1 second).
-        Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
+        Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);       
       }
     }
 

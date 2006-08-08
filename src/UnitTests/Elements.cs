@@ -35,8 +35,6 @@ namespace WatiN.UnitTests
     [TestFixtureSetUp]
     public void Setup()
     {
-      System.Threading.Thread.CurrentThread.ApartmentState = System.Threading.ApartmentState.STA;
-
       ie = new IE(MainURI.ToString());
     }
 
