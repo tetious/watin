@@ -673,6 +673,12 @@ namespace WatiN.UnitTests
       Assert.IsFalse(textfieldEnumerator.MoveNext(), "Expected last item");
 
       Assert.AreEqual(1, count);
-    }    
+    }
+    
+    [Test, ExpectedException(typeof(InvalidAttributException))]
+    public void TryFindingElementByInvalidAttribute()
+    {
+      ie.TextField(Find.ByCustom("xyz", "value"));
+    }
   }
 }

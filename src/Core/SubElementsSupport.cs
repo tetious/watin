@@ -294,15 +294,15 @@ namespace WatiN.Core
 
       else 
       {
-        try
+        
+        object attribute = element.getAttribute(findBy.AttributeName, 0);
+
+        if (attribute == DBNull.Value)
         {
-          return (string) element.getAttribute(findBy.AttributeName, 0);
+          throw new InvalidAttributException(findBy.AttributeName, element.tagName);
         }
-        catch (Exception e)
-        {
-          Console.Write("Exception while trying to getAttribute '" + findBy.AttributeName + "' " );
-          Console.WriteLine(e);
-        }
+
+        return (string) attribute;
       }
 
       return null;
