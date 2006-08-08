@@ -43,8 +43,8 @@ namespace WatiN.Core
     /// <param name="value">The value to look for.</param>
     public AttributeValue(string attributeName, string value)
     {
-      ArgumentNotNullOrEmpty(attributeName, "attributeName");
-      ArgumentNotNullOrEmpty(value, "value");
+      CheckArgumentNotNullOrEmpty(attributeName, "attributeName");
+      CheckArgumentNotNullOrEmpty(value, "value");
 
       this.attributeName = attributeName;
       valueToLookFor = value;
@@ -85,7 +85,7 @@ namespace WatiN.Core
       return false;
     }
 
-    private static void ArgumentNotNullOrEmpty(string requiredObject, string name)
+    private static void CheckArgumentNotNullOrEmpty(string requiredObject, string name)
     {
       if (IsNullOrEmpty(requiredObject))
       {
