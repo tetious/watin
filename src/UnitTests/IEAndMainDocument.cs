@@ -361,7 +361,7 @@ namespace WatiN.UnitTests
         StringAssert.StartsWith("button.id = ", report.Text, "Report should start with 'button.id = '");
         Assert.Greater(report.Text.Length, "button.id = ".Length, "No assigned id report");
         
-        Assert.IsEmpty(button.Id, "Button id not null after click event");
+        Assert.IsNull(button.Id, "Button id not null after click event");
       }
     }
     

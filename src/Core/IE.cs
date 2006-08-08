@@ -594,23 +594,23 @@ namespace WatiN.Core
       //       holds 0 or more name/value pairs where the name is a property of the event object
       //       and the value is the value that's assigned to the property.
 
-      bool resetIdToNull = false;
+      bool removeIdAttribute = false;
       
       // If the element has no Id, assign a temporary and unique Id so we can find 
       // the element within the java code (I know, it's a bit dirty hack)
-      if (element.id == null || element.id == String.Empty)
+      if (element.id == null)
       {
         element.id = Guid.NewGuid().ToString();
-        resetIdToNull = true;
+        removeIdAttribute = true;
       }
 
       // Execute the JScriopt to fire the event inside the Browser.
       FireEventOnElementByJScript(element, eventName);
       
-      // Restore Id to null if temporary Id was assigned.
-      if (resetIdToNull)
+      // Remove Id attribute if temporary Id was assigned.
+      if (removeIdAttribute)
       {
-        element.id = String.Empty;
+        element.removeAttribute("id", 0);
       }
     }
 
