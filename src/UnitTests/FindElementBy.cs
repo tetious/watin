@@ -18,9 +18,10 @@
 #endregion Copyright
 
 using System;
-
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core;
+using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
@@ -30,50 +31,72 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByFor()
     {
-      ForValue value = Find.ByFor("foridvalue");
+      For value = Find.ByFor("foridvalue");
       Assert.AreEqual("htmlfor", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("foridvalue", value.Value, "Wrong value");
+      
+      Regex regex = new Regex("^id");
+      value = Find.ByFor(regex);
+      Assert.IsTrue(value.Compare("idvalue"), "Regex ^id should match");
     }
 
     [Test]
     public void FindByID()
     {
-      IdValue value = Find.ById("idvalue");
+      Id value = Find.ById("idvalue");
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
+      
+      Regex regex = new Regex("lue$");
+      value = Find.ById(regex);
+      Assert.IsTrue(value.Compare("idvalue"), "Regex lue$ should match");
     }
 
     [Test]
     public void FindByName()
     {
-      NameValue value = Find.ByName("namevalue");
+      Name value = Find.ByName("namevalue");
       Assert.AreEqual("name", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("namevalue", value.Value, "Wrong value");
+      
+      Regex regex = new Regex("lue$");
+      value = Find.ByName(regex);
+      Assert.IsTrue(value.Compare("namevalue"), "Regex lue$ should match");
     }
 
     [Test]
     public void FindByText()
     {
-      TextValue value = Find.ByText("textvalue");
+      Text value = Find.ByText("textvalue");
       Assert.AreEqual("text", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("textvalue", value.Value, "Wrong value");
+      
+      Regex regex = new Regex("lue$");
+      value = Find.ByText(regex);
+      Assert.IsTrue(value.Compare("textvalue"), "Regex lue$ should match");
     }
 
     [Test]
     public void FindByUrl()
     {
-      UrlValue value = Find.ByUrl("http://www.google.com");
+      Url value = Find.ByUrl("http://www.google.com");
       AssertUrlValue(value);
     }
 
+    [Test, ExpectedException(typeof(UriFormatException))]
+    public void FindingEmptyUrlNotAllowed()
+    {
+      new Url(String.Empty);
+    }
+    
     [Test]
     public void FindByUri()
     {
-      UrlValue value = new UrlValue(GoogleURI);
+      Url value = new Url(GoogleURI);
       AssertUrlValue(value);
     }
     
-    private static void AssertUrlValue(UrlValue value)
+    private static void AssertUrlValue(Url value)
     {
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("http://www.google.com/", value.Value, "Wrong value");
@@ -81,8 +104,17 @@ namespace WatiN.UnitTests
       Assert.IsTrue(value.Compare(GoogleURI), "Should match Google uri");
       Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
       Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
+      Assert.IsFalse(value.Compare(null), "Null should not match");
+      Assert.IsFalse(value.Compare(String.Empty), "Null should not match");
     }
 
+    [Test]
+    public void FindByUrlWithRegex()
+    {
+      Regex regex = new Regex("^http://watin");
+      Url value = Find.ByUrl(regex);
+      Assert.IsTrue(value.Compare("http://watin.sourceforge.net"), "Regex ^http://watin should match");
+    }
 
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidParam()
@@ -93,22 +125,28 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
-      UrlValue value = Find.ByUrl("http://www.google.com");
+      Url value = Find.ByUrl("http://www.google.com");
       value.Compare("google.com");
     }
 
     [Test]
     public void FindByTitle()
     {
-      TitleValue value = Find.ByTitle("titlevalue");
+      Title value = Find.ByTitle("titlevalue");
       Assert.AreEqual("title", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
       
       Assert.IsTrue(value.Compare("titlevalue"), "Compare should match");
       
-      value = Find.ByTitle("tit");
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match tit");
+      Assert.IsFalse(value.Compare(String.Empty), "Empty should not match");
+      Assert.IsFalse(value.Compare(null), "Null should not match");
       
+      value = Find.ByTitle("titl");
+      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match titl");
+      
+      value = Find.ByTitle("tItL");
+      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match tItL");
+
       value = Find.ByTitle("lev");
       Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match lev");
       
@@ -117,49 +155,69 @@ namespace WatiN.UnitTests
 
       value = Find.ByTitle("titlevalue");
       Assert.IsFalse(value.Compare("title"), "Compare should not match title");
+      
+      Regex regex = new Regex("^titl");
+      value = Find.ByTitle(regex);
+      Assert.IsTrue(value.Compare("titlevalue"), "Regex ^titl should match");
     }
 
     [Test]
     public void FindByValue()
     {
-      ValueValue value = Find.ByValue("valuevalue");
+      Value value = Find.ByValue("valuevalue");
       Assert.AreEqual("value", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
       Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
+      
+      Regex regex = new Regex("lue$");
+      value = Find.ByValue(regex);
+      Assert.IsTrue(value.Compare("valuevalue"), "Regex lue$ should match");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithNullAttribute()
+    public void NewElementAttributeWithNullAttribute()
     {
       Find.ByCustom(null,"idvalue");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithNullValue()
+    public void NewElementAttributeWithNullValue()
     {
-      Find.ByCustom("id",null);
+      new Attribute("id",(string)null);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithNulls()
+    public void NewElementAttributeWithNulls()
     {
-      Find.ByCustom(null,null);
+      new Attribute(null,(string)null);
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void NewElementAttributeWithNullRegex()
+    {
+      new Attribute("id",(Regex)null);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithEmptyAttribute()
+    public void NewElementAttributeWithNullsRegex()
+    {
+      new Attribute(null,(Regex)null);
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void NewElementAttributeWithEmptyAttribute()
     {
       Find.ByCustom(string.Empty,"idvalue");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithEmptyValue()
+    public void NewElementAttributeWithEmptyValue()
     {
       Find.ByCustom("id",string.Empty);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeValueWithEmpties()
+    public void NewElementAttributeWithEmpties()
     {
       Find.ByCustom(string.Empty,string.Empty);
     }
@@ -167,7 +225,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByCustom()
     {
-      AttributeValue value = Find.ByCustom("id","idvalue");
+      Attribute value = Find.ByCustom("id","idvalue");
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
       
@@ -175,6 +233,10 @@ namespace WatiN.UnitTests
       Assert.IsFalse(value.Compare("id"), "Compare should not partial match id");
       Assert.IsFalse(value.Compare("val"), "Compare should not partial match val");
       Assert.IsFalse(value.Compare("value"), "Compare should not partial match value");
+      
+      Regex regex = new Regex("lue$");
+      value = Find.ByCustom("id", regex);
+      Assert.IsTrue(value.Compare("idvalue"), "Regex lue$ should match");
     }
 
     [Test]
@@ -202,7 +264,7 @@ namespace WatiN.UnitTests
     }
   }
 
-  public class ElementUrlPartialValue : UrlValue
+  public class ElementUrlPartialValue : Url
   {
     private string url = null;
 
@@ -220,7 +282,7 @@ namespace WatiN.UnitTests
     {
       bool containedInValue = value.ToLower().IndexOf(Value.ToLower()) >= 0;
 
-      if (!IsNullOrEmpty(value) && containedInValue)
+      if (UtilityClass.IsNotNullOrEmpty(value) && containedInValue)
       {
         return true;
       }

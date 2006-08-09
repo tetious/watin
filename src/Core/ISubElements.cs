@@ -22,65 +22,65 @@ namespace WatiN.Core.Interfaces
   public interface ISubElements
   {
     Button Button(string elementId);
-    Button Button(AttributeValue findBy);
+    Button Button(Attribute findBy);
     ButtonCollection Buttons { get; }
 
     CheckBox CheckBox(string elementId);
-    CheckBox CheckBox(AttributeValue findBy);
+    CheckBox CheckBox(Attribute findBy);
     CheckBoxCollection CheckBoxes { get; }
 
     Form Form(string elementId);
-    Form Form(AttributeValue findBy);
+    Form Form(Attribute findBy);
     FormCollection Forms { get; }
 
     Label Label(string elementId);
-    Label Label(AttributeValue findBy);
+    Label Label(Attribute findBy);
     LabelCollection Labels { get; }
 
     Link Link(string elementId);
-    Link Link(AttributeValue findBy);
+    Link Link(Attribute findBy);
     LinkCollection Links { get; }
 
     Para Para(string elementId);
-    Para Para(AttributeValue findBy);
+    Para Para(Attribute findBy);
     ParaCollection Paras { get; }
 
     RadioButton RadioButton(string elementId);
-    RadioButton RadioButton(AttributeValue findBy);
+    RadioButton RadioButton(Attribute findBy);
     RadioButtonCollection RadioButtons { get; }
 
     SelectList SelectList(string elementId);
-    SelectList SelectList(AttributeValue findBy);
+    SelectList SelectList(Attribute findBy);
     SelectListCollection SelectLists { get; }
 
     Table Table(string elementId);
-    Table Table(AttributeValue findBy);
+    Table Table(Attribute findBy);
     TableCollection Tables { get; }
 //    TableSectionCollection TableSections { get; }
 
     TableCell TableCell(string elementId);
-    TableCell TableCell(AttributeValue findBy);
+    TableCell TableCell(Attribute findBy);
     TableCell TableCell(string elementId, int occurrence);
     TableCellCollection TableCells { get; }
 
     TableRow TableRow(string elementId);
-    TableRow TableRow(AttributeValue findBy);
+    TableRow TableRow(Attribute findBy);
     TableRowCollection TableRows { get; }
     
     TextField TextField(string elementId);
-    TextField TextField(AttributeValue findBy);
+    TextField TextField(Attribute findBy);
     TextFieldCollection TextFields { get; }
 
     Span Span(string elementId);
-    Span Span(AttributeValue findBy);
+    Span Span(Attribute findBy);
     SpanCollection Spans { get; }
 
     Div Div(string elementId);
-    Div Div(AttributeValue findBy);
+    Div Div(Attribute findBy);
     DivCollection Divs { get; }
 
     Image Image(string elementId);
-    Image Image(AttributeValue findBy);
+    Image Image(Attribute findBy);
     ImageCollection Images { get; }
   }
 }

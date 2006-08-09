@@ -16,6 +16,8 @@
 // 02111-1307 USA 
 
 #endregion Copyright
+
+using System;
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -41,6 +43,24 @@ namespace WatiN.UnitTests
       {
         UtilityClass.DumpElementsWithHtmlSource(ie);
       }
+    }
+    
+    [Test]
+    public void IsNullOrEmpty()
+    {
+      Assert.IsTrue(UtilityClass.IsNullOrEmpty(null), "null should return true");
+      Assert.IsTrue(UtilityClass.IsNullOrEmpty(String.Empty), "Empty should return true");
+      Assert.IsTrue(UtilityClass.IsNullOrEmpty(""), "zero length string should return true");
+      Assert.IsFalse(UtilityClass.IsNullOrEmpty("test"), "string 'test' should return false");
+    }
+    
+    [Test]
+    public void IsNotNullOrEmpty()
+    {
+      Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(null), "null should return false");
+      Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(String.Empty), "Empty should return false");
+      Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(""), "zero length string should return false");
+      Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
     }
   }
 }

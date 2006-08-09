@@ -49,7 +49,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="frames">Collection of frames to find the frame in</param>
     /// <param name="findBy">The name of the frame</param>
-    public static Frame Find(FrameCollection frames, NameValue findBy)
+    public static Frame Find(FrameCollection frames, Name findBy)
     {
       return findFrame(frames, findBy);
     }
@@ -59,7 +59,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="frames">Collection of frames to find the frame in</param>
     /// <param name="findBy">The Url of the Frame html page</param>
-    public static Frame Find(FrameCollection frames, UrlValue findBy)
+    public static Frame Find(FrameCollection frames, Url findBy)
     {
       return findFrame(frames, findBy);
     }
@@ -69,28 +69,28 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="frames">Collection of frames to find the frame in</param>
     /// <param name="findBy">The Id of the Frame</param>
-    public static Frame Find(FrameCollection frames, IdValue findBy)
+    public static Frame Find(FrameCollection frames, Id findBy)
     {
       return findFrame(frames, findBy);
     }
 
-    private static Frame findFrame(FrameCollection frames, AttributeValue findBy)
+    private static Frame findFrame(FrameCollection frames, Attribute findBy)
     {
       foreach (Frame frame in frames)
       {
         string compareValue = string.Empty;
 
-        if (findBy is NameValue)
+        if (findBy is Name)
         {
           compareValue = frame.Name;
         }
 
-        else if(findBy is UrlValue)
+        else if(findBy is Url)
         {
             compareValue = frame.Url;
         }
 
-        else if(findBy is IdValue)
+        else if(findBy is Id)
         {
           compareValue = frame.Id;
         }

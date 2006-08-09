@@ -82,7 +82,7 @@ namespace WatiN.Core
     /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
     /// </code>
     /// </example>
-    public static IE AttachToIE(UrlValue findBy)
+    public static IE AttachToIE(Url findBy)
     {
       return AttachToIE(findBy, waitForWindowTime);
     }
@@ -105,7 +105,7 @@ namespace WatiN.Core
     /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
     /// </code>
     /// </example>
-    public static IE AttachToIE(UrlValue findBy, int timeout)
+    public static IE AttachToIE(Url findBy, int timeout)
     {
       return attachToIE(findBy, timeout);
     }
@@ -134,7 +134,7 @@ namespace WatiN.Core
     /// </code>
     /// </example>
 
-    public static IE AttachToIE(TitleValue findBy)
+    public static IE AttachToIE(Title findBy)
     {
       return AttachToIE(findBy, waitForWindowTime);
     }
@@ -163,12 +163,12 @@ namespace WatiN.Core
     /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Exa"));
     /// </code>
     /// </example>
-    public static IE AttachToIE(TitleValue findBy, int timeout)
+    public static IE AttachToIE(Title findBy, int timeout)
     {
       return attachToIE(findBy, timeout);
     }
 
-   private static IE attachToIE(AttributeValue findBy, int timeout)
+   private static IE attachToIE(Attribute findBy, int timeout)
     {
       Logger.LogAction("Finding IE instance with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
@@ -396,7 +396,7 @@ namespace WatiN.Core
       return iePid;
     }
 
-    private static IE FindIE(AttributeValue findBy, int timeout)
+    private static IE FindIE(Attribute findBy, int timeout)
     {
       if (timeout<0)
       {
@@ -419,7 +419,7 @@ namespace WatiN.Core
 
           string compareValue = string.Empty;
 
-          if (findBy is UrlValue)
+          if (findBy is Url)
           {
             try
             {
@@ -429,7 +429,7 @@ namespace WatiN.Core
             {}
           }
 
-          else if(findBy is TitleValue)
+          else if(findBy is Title)
           {
             try
             {
@@ -881,7 +881,7 @@ namespace WatiN.Core
     /// Find a HtmlDialog by it's Url.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
-    public HtmlDialog HtmlDialog(UrlValue findBy)
+    public HtmlDialog HtmlDialog(Url findBy)
     {
       return HtmlDialog(findBy, waitForWindowTime);
     }
@@ -890,7 +890,7 @@ namespace WatiN.Core
     /// Find a HtmlDialog by it's title.
     /// </summary>
     /// <param name="findBy">The Title of the html page</param>
-    public HtmlDialog HtmlDialog(TitleValue findBy)
+    public HtmlDialog HtmlDialog(Title findBy)
     {
       return HtmlDialog(findBy, waitForWindowTime);
     }
@@ -900,7 +900,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HtmlDialog HtmlDialog(UrlValue findBy, int timeout)
+    public HtmlDialog HtmlDialog(Url findBy, int timeout)
     {
       return findHtmlDialog(findBy, timeout);
     }
@@ -910,12 +910,12 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The Title of the html page</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HtmlDialog HtmlDialog(TitleValue findBy, int timeout)
+    public HtmlDialog HtmlDialog(Title findBy, int timeout)
     {
       return findHtmlDialog(findBy, timeout);
     }
 
-    private HtmlDialog findHtmlDialog(AttributeValue findBy, int timeout)
+    private HtmlDialog findHtmlDialog(Attribute findBy, int timeout)
     {
       Logger.LogAction("Finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
@@ -931,12 +931,12 @@ namespace WatiN.Core
           {
             string compareValue = string.Empty;
 
-            if (findBy is UrlValue)
+            if (findBy is Url)
             {
               compareValue = htmlDialog.Url;
             }
 
-            else if (findBy is TitleValue)
+            else if (findBy is Title)
             {
               compareValue = htmlDialog.Title;
             }

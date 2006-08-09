@@ -202,7 +202,7 @@ namespace WatiN.Core
     /// </returns>
     public override string ToString()
     {
-      if (!IsNullOrEmpty(Title))
+      if (UtilityClass.IsNotNullOrEmpty(Title))
       {
         return Title;
       }
@@ -409,18 +409,6 @@ namespace WatiN.Core
           originalcolor = null;
         }
       }
-    }
-
-    /// <summary>
-    /// Determines whether the specified name is null or empty.
-    /// </summary>
-    /// <param name="name">The name.</param>
-    /// <returns>
-    /// 	<c>true</c> if the specified name is null or empty; otherwise, <c>false</c>.
-    /// </returns>
-    protected static bool IsNullOrEmpty(string name)
-    {
-      return name == null || name.Length == 0;
     }
 
     private IHTMLElement htmlElement

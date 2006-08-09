@@ -69,6 +69,30 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Determines whether the specified <paramref name="value" /> is null or empty.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified value is null or empty; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsNullOrEmpty(string value)
+    {
+      return (value == null || value.Length == 0);
+    }
+	  
+    /// <summary>
+    /// Determines whether the specified <paramref name="value" /> is null or empty.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified value is null or empty; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsNotNullOrEmpty(string value)
+    {
+      return !IsNullOrEmpty(value);
+    }
+
     private static IHTMLElementCollection elementCollection(Document document)
     {
       return document.HtmlDocument.all;

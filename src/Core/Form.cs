@@ -38,15 +38,15 @@ namespace WatiN.Core
 
     public override string ToString()
     {
-      if (!IsNullOrEmpty(Title))
+      if (UtilityClass.IsNotNullOrEmpty(Title))
       {
         return Title;
       }
-      if (!IsNullOrEmpty(Id))
+      if (UtilityClass.IsNotNullOrEmpty(Id))
       {
         return Id;
       }
-      if (!IsNullOrEmpty(Name))
+      if (UtilityClass.IsNotNullOrEmpty(Name))
       {
         return Name;
       }

@@ -188,7 +188,6 @@ namespace WatiN.UnitTests
       Assert.AreEqual(popupValue, ie.Button("popupid").Value);
       Assert.AreEqual(popupValue, ie.Button("popupid").ToString());
       Assert.AreEqual(popupValue, ie.Button(Find.ByName("popupname")).Value);
-      Assert.AreEqual(popupValue, ie.Button(Find.ByValue(popupValue)).Value);
       
       Button helloButton = ie.Button("helloid");
       Assert.AreEqual("Show allert", helloButton.Value);
@@ -368,10 +367,10 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Microsoft", ie.Link(Find.ByText("Microsoft")).Text);
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexcistinglinkid'")]
+    [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexistinglinkid'")]
     public void LinkFindByInvalidEnum()
     {
-      Assert.AreEqual(GoogleURI.ToString(), ie.Link(Find.ById("noexcistinglinkid")).Url);
+      Assert.AreEqual(GoogleURI.ToString(), ie.Link(Find.ById("noexistinglinkid")).Url);
     }
 
     [Test]
@@ -519,11 +518,11 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Third text", selectList.SelectedItem, "Unexpected SelectedItem");
     }
 
-    [Test, ExpectedException(typeof(SelectListItemNotFoundException), "No item with text or value 'None excisting item' was found in the selectlist")]
+    [Test, ExpectedException(typeof(SelectListItemNotFoundException), "No item with text or value 'None existing item' was found in the selectlist")]
     public void SingleSelectItemNotFoundException()
     {
       SelectList selectList = ie.SelectList("Select1");
-      selectList.Select("None excisting item");
+      selectList.Select("None existing item");
     }
 
     [Test]

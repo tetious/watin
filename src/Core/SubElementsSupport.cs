@@ -36,7 +36,7 @@ namespace WatiN.Core
     /// </summary>
     private SubElementsSupport(){}
 
-    public static Button Button(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Button(ie, (HTMLInputElement)FindElementByAttribute("input", "button submit image reset", findBy, elements));
     }
@@ -46,7 +46,7 @@ namespace WatiN.Core
        return new ButtonCollection(ie, elements);
     }
 
-    public static CheckBox CheckBox(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new CheckBox(ie, (IHTMLInputElement) FindElementByAttribute("input", "checkbox", findBy, elements));
     }
@@ -56,7 +56,7 @@ namespace WatiN.Core
       return new CheckBoxCollection(ie, elements); 
     }
 
-    public static Form Form(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Form(ie, (HTMLFormElement) FindElementByAttribute("form", null, findBy, elements));
     }
@@ -66,7 +66,7 @@ namespace WatiN.Core
       return new FormCollection(ie, elements);
     }
 
-    public static Label Label(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Label Label(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Label(ie, (HTMLLabelElement) FindElementByAttribute("label", null, findBy, elements));
     }
@@ -76,7 +76,7 @@ namespace WatiN.Core
       return new LabelCollection(ie, elements);
     }
 
-    public static Link Link(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Link Link(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Link(ie, (HTMLAnchorElement) FindElementByAttribute("A", null, findBy, elements));
     }
@@ -86,7 +86,7 @@ namespace WatiN.Core
       return new LinkCollection(ie, elements);
     }
 
-    public static Para Para(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Para(ie, (HTMLParaElement) FindElementByAttribute("p", null, findBy, elements));
     }
@@ -96,7 +96,7 @@ namespace WatiN.Core
       return new ParaCollection(ie, elements); 
     }
 
-    public static RadioButton RadioButton(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new RadioButton(ie, (IHTMLInputElement) FindElementByAttribute("input", "radio", findBy, elements));
     }
@@ -106,7 +106,7 @@ namespace WatiN.Core
       return new RadioButtonCollection(ie, elements); 
     }
 
-    public static SelectList SelectList(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new SelectList(ie, FindElementByAttribute("select", null, findBy, elements));
     }
@@ -116,7 +116,7 @@ namespace WatiN.Core
       return new SelectListCollection(ie, elements);
     }
 
-    public static Table Table(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Table(ie, (HTMLTable) FindElementByAttribute("table", null, findBy, elements));
     }
@@ -131,7 +131,7 @@ namespace WatiN.Core
 //      return new TableSectionCollection(ie, elements);
 //    }
 
-    public static TableCell TableCell(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new TableCell(ie, (HTMLTableCell) FindElementByAttribute("TD", null, findBy, elements));
     }
@@ -159,7 +159,7 @@ namespace WatiN.Core
       return new TableCellCollection(ie, elements); 
     }
 
-    public static TableRow TableRow(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static TableRow TableRow(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new TableRow(ie, (HTMLTableRow) FindElementByAttribute("TR", null, findBy, elements));
     }
@@ -169,7 +169,7 @@ namespace WatiN.Core
       return new TableRowCollection(ie, elements);
     }
 
-    public static TextField TextField(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       TextField textfield;
 
@@ -197,7 +197,7 @@ namespace WatiN.Core
       return new TextFieldCollection(ie, elements);
     }
 
-    public static Span Span(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Span Span(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Span(ie, (HTMLSpanElement) FindElementByAttribute("span", null, findBy, elements));
     }
@@ -207,7 +207,7 @@ namespace WatiN.Core
       return new SpanCollection(ie, elements);
     }
 
-    public static Div Div(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Div Div(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Div(ie, (HTMLDivElement) FindElementByAttribute("div", null, findBy, elements));
     }
@@ -217,7 +217,7 @@ namespace WatiN.Core
       return new DivCollection(ie, elements);
     }
 
-    public static Image Image(DomContainer ie, AttributeValue findBy, IHTMLElementCollection elements)
+    public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Image(ie, (IHTMLImgElement) FindElementByAttribute("img", null, findBy, elements));
     }
@@ -227,7 +227,7 @@ namespace WatiN.Core
       return new ImageCollection(ie, elements);
     }
 
-    private static IHTMLElement FindElementByAttribute(string tagName, string inputType, AttributeValue findBy, IHTMLElementCollection elementsCollection)
+    private static IHTMLElement FindElementByAttribute(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
       if (IsInputElement(tagName) && (inputType == null || inputType.Length == 0))
       {
@@ -277,14 +277,14 @@ namespace WatiN.Core
       return String.Compare(tagName, "input", true) == 0;
     }
 
-    private static string getAttributeValue(AttributeValue findBy, IHTMLElement element)
+    private static string getAttributeValue(Attribute findBy, IHTMLElement element)
     {
-      if (findBy is IdValue)
+      if (findBy is Id)
       {
         return element.id;        
       }
 
-      else if (findBy is TextValue)
+      else if (findBy is Text)
       {
         if (element.innerText != null)
         {

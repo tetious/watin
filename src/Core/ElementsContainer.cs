@@ -38,7 +38,7 @@ namespace WatiN.Core
       return Button(Find.ById(elementId));
     }
 
-    public Button Button(AttributeValue findBy)
+    public Button Button(Attribute findBy)
     {
       return SubElementsSupport.Button(DomContainer, findBy, elementCollection);
     }
@@ -53,7 +53,7 @@ namespace WatiN.Core
       return CheckBox(Find.ById(elementId));
     }
 
-    public CheckBox CheckBox(AttributeValue findBy)
+    public CheckBox CheckBox(Attribute findBy)
     {
       return SubElementsSupport.CheckBox(DomContainer, findBy, elementCollection);
     }
@@ -68,7 +68,7 @@ namespace WatiN.Core
       return Form(Find.ById(elementId));
     }
 
-    public Form Form(AttributeValue findBy)
+    public Form Form(Attribute findBy)
     {
       return SubElementsSupport.Form(DomContainer, findBy, elementCollection);
     }
@@ -83,7 +83,7 @@ namespace WatiN.Core
       return Label(Find.ById(elementId));
     }
 
-	  public Label Label(AttributeValue findBy)
+	  public Label Label(Attribute findBy)
 	  {
       return SubElementsSupport.Label(DomContainer, findBy, elementCollection);
     }
@@ -98,7 +98,7 @@ namespace WatiN.Core
       return Link(Find.ById(elementId));
     }
 
-    public Link Link(AttributeValue findBy)
+    public Link Link(Attribute findBy)
     {
       return SubElementsSupport.Link(DomContainer, findBy, elementCollection);
     }
@@ -113,7 +113,7 @@ namespace WatiN.Core
 	    return Para(Find.ById(elementId));
 	  }
 
-	  public Para Para(AttributeValue findBy)
+	  public Para Para(Attribute findBy)
 	  {
 	    return SubElementsSupport.Para(DomContainer, findBy, elementCollection);
 	  }
@@ -128,7 +128,7 @@ namespace WatiN.Core
 	    return RadioButton(Find.ById(elementId));
 	  }
 
-	  public RadioButton RadioButton(AttributeValue findBy)
+	  public RadioButton RadioButton(Attribute findBy)
 	  {
       return SubElementsSupport.RadioButton(DomContainer, findBy, elementCollection);
     }
@@ -143,7 +143,7 @@ namespace WatiN.Core
       return SelectList(Find.ById(elementId));
     }
 
-    public SelectList SelectList(AttributeValue findBy)
+    public SelectList SelectList(Attribute findBy)
     {
       return SubElementsSupport.SelectList(DomContainer, findBy, elementCollection);
     }
@@ -158,7 +158,7 @@ namespace WatiN.Core
       return Table(Find.ById(elementId));
     }
 
-    public Table Table(AttributeValue findBy)
+    public Table Table(Attribute findBy)
     {
       return SubElementsSupport.Table(DomContainer, findBy, elementCollection);
     }
@@ -178,7 +178,7 @@ namespace WatiN.Core
       return TableCell(Find.ById(elementId));
     }
 
-    public TableCell TableCell(AttributeValue findBy)
+    public TableCell TableCell(Attribute findBy)
     {
       return SubElementsSupport.TableCell(DomContainer, findBy, elementCollection);
     }
@@ -198,7 +198,7 @@ namespace WatiN.Core
       return TableRow(Find.ById(elementId));
     }
 
-    public TableRow TableRow(AttributeValue findBy)
+    public TableRow TableRow(Attribute findBy)
     {
       return SubElementsSupport.TableRow(DomContainer, findBy, elementCollection);
     }
@@ -213,7 +213,7 @@ namespace WatiN.Core
       return TextField(Find.ById(elementId));
     }
 
-    public TextField TextField(AttributeValue findBy)
+    public TextField TextField(Attribute findBy)
     {
       return SubElementsSupport.TextField(DomContainer, findBy, elementCollection);
     }
@@ -228,7 +228,7 @@ namespace WatiN.Core
 	    return Span(Find.ById(elementId));
 	  }
 
-	  public Span Span(AttributeValue findBy)
+	  public Span Span(Attribute findBy)
 	  {
       return SubElementsSupport.Span(DomContainer, findBy, elementCollection);
     }
@@ -243,7 +243,7 @@ namespace WatiN.Core
 	    return Div(Find.ById(elementId));
 	  }
 
-	  public Div Div(AttributeValue findBy)
+	  public Div Div(Attribute findBy)
 	  {
       return SubElementsSupport.Div(DomContainer, findBy, elementCollection);
     }
@@ -258,7 +258,7 @@ namespace WatiN.Core
 	    return Image(Find.ById(elementId));
 	  }
 
-	  public Image Image(AttributeValue findBy)
+	  public Image Image(Attribute findBy)
 	  {
       return SubElementsSupport.Image(DomContainer, findBy, elementCollection);
     }

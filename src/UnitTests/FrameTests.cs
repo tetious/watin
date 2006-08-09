@@ -114,16 +114,16 @@ namespace WatiN.UnitTests
       UtilityClass.ShowFrames(ie);
     }
 
-    private static void AssertFindFrame(IE ie, AttributeValue findBy, string expectedFrameName)
+    private static void AssertFindFrame(IE ie, Attribute findBy, string expectedFrameName)
     {
       Frame frame = null;
-      if (findBy is UrlValue)
+      if (findBy is Url)
       {
-        frame = ie.Frame((UrlValue)findBy);
+        frame = ie.Frame((Url)findBy);
       }
-      else if (findBy is NameValue)
+      else if (findBy is Name)
       {
-        frame = ie.Frame((NameValue)findBy);
+        frame = ie.Frame((Name)findBy);
       }
       Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
       Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy.ToString() + ", " + findBy.Value);

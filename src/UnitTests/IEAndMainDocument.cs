@@ -28,7 +28,7 @@ using WatiN.Core.Logging;
 namespace WatiN.UnitTests
 {
   [TestFixture]
-  public class IEAndMainDocument : WatiNTest
+  public class IeTests : WatiNTest
   {
     [TestFixtureSetUp]
     public void Setup()
@@ -63,10 +63,6 @@ namespace WatiN.UnitTests
     [Test]
     public void GoogleFormSubmit()
     {
-      // Instantiate a new DebugLogger to output "user" events to
-      // the debug window in VS
-      Logger.LogWriter = new DebugLogWriter();
-
       using (IE ie = new IE(GoogleURI.ToString(), true))
       {
         ie.TextField(Find.ByName("q")).TypeText("WatiN");
@@ -179,7 +175,7 @@ namespace WatiN.UnitTests
       using(new IE(MainURI.ToString()))
       {
         DateTime startTime = DateTime.Now;
-        IE.AttachToIE(new UrlValue(MainURI), 0);
+        IE.AttachToIE(new Url(MainURI), 0);
 
         // Should return (within 1 second).
         Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);       
@@ -193,38 +189,32 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void AttachToIEByParialTitle()
+    public void AttachToIEByPartialTitleAndByUrl()
     {
-      using (IE ie = new IE(MainURI.ToString()))
+      Assert.IsFalse(IsIEWindowOpen("gOo"), "An Internet Explorer with 'gOo' in it's title already exists. AttachToIEByParialTitle can't be correctly tested. Close all IE windows and run this test again.");
+
+      using (new IE(GoogleURI.ToString()))
       {
-        Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with 'gOo' in it's title allready exists. AttachToIEByParialTitle can't be correctly tested. Please close the window.");
+        IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo"));
+        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
         
-        ie.Link("testlinkid").Click();
-        using (IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo")))
-        {
-          Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
-        }
-        
-        Assert.IsFalse(IsGoogleIEWindowOpen(), "The Internet Explorer with 'gOo' in it's title should be closed.");
+        ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI.ToString()));
+        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
       }
     }
-
+    
     [Test]
-    public void AttachToIEByURL()
+    public void IEClosedByDispose()
     {
-      
-      using (IE ie = new IE(MainURI.ToString()))
+      Assert.IsFalse(IsIEWindowOpen("main"), "An Internet Explorer with 'main' in it's title already exists. IEClosedByDispose can't be correctly tested. Close all IE windows and run this test again.");
+
+      using (new IE(MainURI.ToString()))
       {
-        Assert.IsFalse(IsGoogleIEWindowOpen(), "An Internet Explorer with url " + GoogleURI.ToString() + " is allready open. AttachToIEByURL can't be correctly tested. Please close the window.");
-        
-        ie.Link("testlinkid").Click();
-        using (IE ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI.ToString())))
-        {
-          Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
-        }
-        
-        Assert.IsFalse(IsGoogleIEWindowOpen(), "The Internet Explorer with 'gOo' in it's title should be closed.");
+        IE ie = IE.AttachToIE(Find.ByTitle("main"));
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
       }
+
+      Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer not closed by IE.Dispose");
     }
 
     [Test]
@@ -232,7 +222,7 @@ namespace WatiN.UnitTests
     {
       DateTime startTime = DateTime.Now;
       const int timeoutTime = 5;
-      const string ieTitle = "Non Excisting IE Title";
+      const string ieTitle = "Non Existing IE Title";
       const string expectedMessage = "Could not find an IE window by title with value '" + ieTitle + "'. (Search expired after '5' seconds)";
       
       try
@@ -362,11 +352,11 @@ namespace WatiN.UnitTests
       }
     }
     
-    private static bool IsGoogleIEWindowOpen()
+    private static bool IsIEWindowOpen(string partialTitle)
     {
       try
       {
-        IE.AttachToIE(Find.ByTitle("gOo"), 5);
+        IE.AttachToIE(Find.ByTitle(partialTitle), 3);
       }
       catch (IENotFoundException)
       {
