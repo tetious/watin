@@ -422,6 +422,33 @@ namespace WatiN.Core
   }
 
   /// <summary>
+  /// Class to find an image by it's source (src) attribute.
+  /// </summary>
+  /// <example>
+  /// <code>ie.Image(new Src("image.gif")).Url</code>
+  /// or use
+  /// <code>ie.Image(Find.BySrc("image.gif")).Url</code>
+  /// </example>
+  public class Src : Attribute
+  {
+    private const string attributeName = "src";
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Src"/> class.
+    /// </summary>
+    /// <param name="name">The exact src to find.</param>
+    public Src(string name) : base(attributeName, name)
+    {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Src"/> class.
+    /// </summary>
+    /// <param regex="regex">The regular expression to match with.</param>
+    public Src(Regex regex) : base(attributeName, regex)
+    {}
+  }
+
+  /// <summary>
   /// This class provides factory methods for de most commonly used attributes
   /// to find an element on a web page.
   /// </summary>
@@ -602,6 +629,29 @@ namespace WatiN.Core
     public static Value ByValue(Regex regex)
     {
       return new Value(regex);
+    }
+
+    /// <summary>
+    /// Find an <see cref="Image"/> by its source (src) attribute.
+    /// </summary>
+    /// <param name="src">Src to find.</param>
+    /// <returns><see cref="Src" /></returns>
+    /// <example>
+    /// <code>ie.Image(Find.BySrc("image.gif"))</code>
+    /// </example>
+    public static Src BySrc(string src)
+    {
+      return new Src(src);
+    }
+
+    /// <param regex="regex">Regular expression to find a matching Src.</param>
+    /// <returns><see cref="Src" /></returns>
+    /// <example>
+    /// <code>ie.Image(Find.BySrc(new Regex("pattern goes here"))))</code>
+    /// </example>
+    public static Src BySrc(Regex regex)
+    {
+      return new Src(regex);
     }
 
     /// <summary>

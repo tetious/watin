@@ -174,6 +174,21 @@ namespace WatiN.UnitTests
       Assert.IsTrue(value.Compare("valuevalue"), "Regex lue$ should match");
     }
 
+    [Test]
+    public void FindBySrc()
+    {
+      Src value = Find.BySrc("image.gif");
+      Assert.AreEqual("src", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual("image.gif", value.Value, "Wrong value");
+      
+      Assert.IsFalse(value.Compare("/images/image.gif"), "Should not match /images/image.gif");
+      Assert.IsTrue(value.Compare("image.gif"), "Should match image.gif");
+      
+      Regex regex = new Regex("image.gif$");
+      value = Find.BySrc(regex);
+      Assert.IsTrue(value.Compare("/images/image.gif"), "Regex image.gif$ should match");
+    }
+
     [Test, ExpectedException(typeof(ArgumentNullException))]
     public void NewElementAttributeWithNullAttribute()
     {
