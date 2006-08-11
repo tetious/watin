@@ -75,14 +75,30 @@ namespace WatiN.Core
       {
         Thread.Sleep(1000);
 
-        System.Diagnostics.Process p = System.Diagnostics.Process.GetProcessById(ieProcessId);
-
-        foreach (System.Diagnostics.ProcessThread t in p.Threads)
+        if (keepRunning)
         {
-          int threadId = t.Id;
+        	System.Diagnostics.Process p;
 
-          NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(MyEnumThreadWindowsProc);
-          NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
+        	try
+        	{
+      			p = System.Diagnostics.Process.GetProcessById(ieProcessId);
+        	}
+        	catch(ArgumentException)
+      		{
+        		// Thrown when the ieProcessId is not running (anymore)
+        		p = null;
+        	}
+      		
+      		if (p != null)
+      		{
+	    			foreach (System.Diagnostics.ProcessThread t in p.Threads)
+		        {
+		          int threadId = t.Id;
+		
+		          NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(MyEnumThreadWindowsProc);
+		          NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
+		        }
+      		}
         }
       }
     }
