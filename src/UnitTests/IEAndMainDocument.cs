@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Threading;
 
 using NUnit.Framework;
 
@@ -36,6 +37,16 @@ namespace WatiN.UnitTests
       Logger.LogWriter = new DebugLogWriter();
     }
 
+    [Test]
+    public void ApartmentStateMustBeSTA()
+    {
+      // Code for .Net 1.1
+    	Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
+      
+      // Code for .Net 2.0
+      // Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+    }
+    
     [Test]
     public void NUnitGUI()
     {

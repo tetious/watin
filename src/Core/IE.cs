@@ -363,14 +363,21 @@ namespace WatiN.Core
 
     private static void SetCurrentThreadAppartmentStateToSTA()
     {
+      // Code for .Net 1.1
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
       {
         Thread.CurrentThread.ApartmentState = ApartmentState.STA;
       }
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
       {
-        throw new ThreadStateException("Setting Thread.CurrentThread.AppartmentState to STA didn't succeed.");
+        throw new ThreadStateException("The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.");
       }
+
+      // Code for .Net 2.0
+//      if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
+//      {
+//        throw new ThreadStateException("The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.");
+//      }
     }
 
     private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)
