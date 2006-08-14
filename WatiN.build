@@ -1,18 +1,19 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="dist" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
+    <property name="system32.dir"                   value="${environment::get-variable('SystemRoot')}\system32"/>
+    <property name="pia.dir"                        value="${environment::get-variable('SystemDrive')}\Program Files\Microsoft.Net\Primary Interop Assemblies"/>
     <property name="base.dir"                       value="${project::get-base-directory()}" />
 	<property name="source.dir"                     value="${base.dir}\src" />
-	<property name="build.dir"                      value="${base.dir}\build" />
-  	<property name="build.solution.file" 			value="${source.dir}\WatiN.sln" />
-  	<property name="build.configuration" 			value="AutomatedDebug" />
+	<property name="build.base.dir"                 value="${base.dir}\build" />
+	<property name="build.dir"                      value="${base.dir}\build\Net\1.1" />
     <property name="reports.output.dir" 			value="${build.dir}\test-reports" />
 	<property name="coverage.xml.file" 				value="${reports.output.dir}\Coverage.xml" />
 	<property name="distribution.dir"               value="${build.dir}\dist" />
-  	<property name="unittests.html.todir"           value="${build.dir}\Debug\UnitTests\html" />
+  	<property name="unittests.html.todir"           value="${build.dir}\html"/>
   	<property name="unittests.html.fromdir"         value="${source.dir}\UnitTests\html" />
 
 	<property name="nunit.xml.file" 				value="${reports.output.dir}\UnitTests.xml" />
@@ -23,8 +24,10 @@
 	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
 	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
 	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\bin\nunit-console.exe" />
+	<property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
+    <property name="define"                         value="NET11" />
     <property name="project.name"                   value="WatiN" />
-	<property name="test.assembly" 				    value="${build.dir}\Debug\UnitTests\WatiN.UnitTests.dll" />
+	<property name="test.assembly" 				    value="${build.dir}\WatiN.UnitTests.dll" />
     
 
 	<!-- User targets -->
@@ -33,15 +36,94 @@
 	</target>
 	
 	<target name="compile" description="Compiles using the Configuration">
-		<solution solutionfile="${build.solution.file}" configuration="${build.configuration}"  verbose="true"/>
 
-		<mkdir dir="${unittests.html.todir}" unless="${directory::exists(unittests.html.todir)}"/>
+        <call target="build-net-1.1-version" />
+        <call target="copy-html-dir" />
+        <call target="build-net-2.0-version" />
+        <call target="copy-html-dir" />
+        
+    	<call target="set-net-1.1-version" />
+	</target>
 
-		<copy todir="${unittests.html.todir}">
+	<target name="build">
+
+        <tlbimp typelib="${system32.dir}\shdocvw.dll" output="${build.dir}\Interop.SHDocVw.dll" namespace="SHDocVw"/>
+        <csc define="${define}" debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.Core.dll">
+            <sources>
+                <include name="${source.dir}\Core\*.cs"/>
+            </sources>
+            <references>
+                <include name="${build.dir}\Interop.SHDocVw.dll"/>
+                <include name="${pia.dir}\Microsoft.mshtml.dll"/>
+                <include name="System.dll"/>
+                <include name="System.Drawing.dll"/>
+                <include name="System.Windows.Forms.dll"/>
+            </references>
+        </csc>
+        <csc debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.UnitTests.dll">
+            <sources>
+                <include name="${source.dir}\UnitTests\*.cs"/>
+            </sources>
+            <references>
+                <include name="${build.dir}\WatiN.Core.dll"/>
+                <include name="${path.nunit.framework.dll}\nunit.framework.dll"/>
+                <include name="System.dll"/>
+            </references>
+        </csc>
+    </target>
+
+    <target name="set-net-1.1-version">
+        <property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
+	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
+	    <property name="build.dir"                      value="${base.dir}\build\Net\1.1" />
+	    <property name="unittests.html.todir"           value="${build.dir}\html" />
+        <property name="define"                         value="NET11" />
+    </target>
+
+    <target name="build-net-1.1-version" depends="set-net-1.1-version">        
+        <call target="build" />
+    </target>
+
+    <target name="set-net-2.0-version">
+    	<property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
+	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\2.0" />
+	    <property name="build.dir"                      value="${base.dir}\build\Net\2.0" />
+  	    <property name="unittests.html.todir"           value="${build.dir}\html" />
+        <property name="define"                         value="NET20" />
+    </target>
+
+    <target name="build-net-2.0-version" depends="set-net-2.0-version">
+        <call target="build" />
+    </target>
+
+    <target name="copy-html-dir">
+    	<mkdir dir="${unittests.html.todir}" unless="${directory::exists(unittests.html.todir)}" />
+
+		<copy todir="${unittests.html.todir}" >
 		    <fileset basedir ="${unittests.html.fromdir}">
                 <include name="*.*" />
 		    </fileset>
 		</copy>
+
+    </target>
+
+	<target name="ndoc" description="Creates documentation with ndoc">
+	    <ndoc>
+            <assemblies basedir="${build.dir}">
+                <include name="WatiN.Core.dll" />
+            </assemblies>
+            <documenters>
+                <documenter name="MSDN">
+                    <property name="OutputDirectory" value="${build.base.dir}\ndoc\" />
+                    <property name="HtmlHelpName" value="WatiN" />
+                    <property name="Title" value="WatiN Documentation (generated with NDoc)" />
+                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
+                    <property name="Preliminary" value="True" />
+                    <property name="CleanIntermediates" value="True" />
+                </documenter>
+            </documenters>
+        </ndoc>
 	</target>
 	
 	<target name="test" depends="compile, run-unit-tests" 
@@ -109,11 +191,11 @@
         <copy file="${source.dir}\Core\Readme.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\Core\License.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\ReleaseHistory.txt" todir ="${distribution.dir}" />
-        <copy file="${build.dir}\ndoc\WatiN.chm" todir ="${distribution.dir}" />
+        <copy file="${build.base.dir}\ndoc\WatiN.chm" todir ="${distribution.dir}" />
         
         <!-- Copy the binaries -->
 		<copy todir="${distribution.dir}\bin">
-			<fileset basedir="${build.dir}\Debug\UnitTests">
+			<fileset basedir="${build.dir}">
 				<include name="*.dll"/>
 			</fileset>
 		</copy>
@@ -148,30 +230,12 @@
             value="..\..\bin\Interop.SHDocVw.dll" />
 
         <!-- Create distribution zip file -->
-		<zip zipfile="${build.dir}\WatiN.zip">
+		<zip zipfile="${build.base.dir}\WatiN.zip">
 			<fileset basedir="${distribution.dir}">
 				<include name="\**" />
 			</fileset>
 		</zip>
 	</target>
 	
-	<target name="ndoc" description="Creates documentation with ndoc">
-	    <ndoc>
-            <assemblies basedir="${build.dir}\Debug\Core">
-                <include name="WatiN.Core.dll" />
-            </assemblies>
-            <documenters>
-                <documenter name="MSDN">
-                    <property name="OutputDirectory" value="${build.dir}\ndoc\" />
-                    <property name="HtmlHelpName" value="WatiN" />
-                    <property name="Title" value="WatiN Documentation (generated with NDoc)" />
-                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
-                    <property name="Preliminary" value="True" />
-                    <property name="CleanIntermediates" value="True" />
-                </documenter>
-            </documenters>
-        </ndoc>
-	</target>
 </project>
 
