@@ -190,51 +190,52 @@ namespace WatiN.UnitTests
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithNullAttribute()
+    public void NewAttributeWithNullAttribute()
     {
-      Find.ByCustom(null,"idvalue");
+      new Attribute(null,"idvalue");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithNullValue()
+    public void NewAttributeWithNullValue()
     {
       new Attribute("id",(string)null);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithNulls()
+    public void NewAttributeWithNulls()
     {
       new Attribute(null,(string)null);
     }
     
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithNullRegex()
+    public void NewAttributeWithNullRegex()
     {
       new Attribute("id",(Regex)null);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithNullsRegex()
+    public void NewAttributeWithNullsRegex()
     {
       new Attribute(null,(Regex)null);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithEmptyAttribute()
+    public void NewAttributeWithEmptyAttribute()
     {
-      Find.ByCustom(string.Empty,"idvalue");
+      new Attribute(string.Empty,"idvalue");
+    }
+
+    [Test]
+    public void NewAttributeWithEmptyValue()
+    {
+      Attribute attribute = new Attribute("id",string.Empty);
+      Assert.IsEmpty(attribute.Value);
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithEmptyValue()
+    public void NewAttributeWithEmpties()
     {
-      Find.ByCustom("id",string.Empty);
-    }
-
-    [Test, ExpectedException(typeof(ArgumentNullException))]
-    public void NewElementAttributeWithEmpties()
-    {
-      Find.ByCustom(string.Empty,string.Empty);
+      new Attribute(string.Empty,string.Empty);
     }
     
     [Test]
@@ -277,6 +278,7 @@ namespace WatiN.UnitTests
         ieGoogle.Close();
       }
     }
+    
   }
 
   public class ElementUrlPartialValue : Url

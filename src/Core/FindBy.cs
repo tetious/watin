@@ -129,7 +129,7 @@ namespace WatiN.Core
     /// <param name="value">The value to look for.</param>
     public Attribute(string attributeName, string value)
     {
-      CheckArgumentNotNullOrEmpty("value", value);
+      CheckArgumentNotNull("value", value);
       Init(attributeName, value, new StringComparer(value));
     }
 
