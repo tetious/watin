@@ -211,6 +211,7 @@
 			<fileset basedir="${source.dir}\UnitTests">
 				<include name="*.cs"/>
 				<include name="*.csproj"/>
+				<include name="*.config"/>
 				<include name="html\*.*"/>
 			</fileset>
 		</copy>
