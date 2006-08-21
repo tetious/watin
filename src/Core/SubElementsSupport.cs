@@ -238,10 +238,7 @@ namespace WatiN.Core
 
       foreach (IHTMLElement element in elements)
       {
-        while (((IHTMLElement2)element).readyStateValue != 4 )
-        {
-          Thread.Sleep(100);
-        }
+        WaitUntilElementReadyStateIsComplete(element, tagName);
 
         string compareValue = getAttributeValue(findBy, element);
 
@@ -263,6 +260,29 @@ namespace WatiN.Core
       }
 
       throw new ElementNotFoundException(tagName, findBy.AttributeName, findBy.Value);
+    }
+
+    private static void WaitUntilElementReadyStateIsComplete(IHTMLElement element, string tagName)
+    {
+      DateTime startTime = DateTime.Now;
+      
+      // Check if element is fully loaded (complete)
+      // Do an escape for IMG elements since an image
+      // with an empty src attribute will never 
+      // reach the complete state.
+      // Wait 30 seconds.
+      while (((IHTMLElement2)element).readyStateValue != 4 
+             && String.Compare(tagName, "img", true) != 0)
+      { 
+        if(DateTime.Now.Subtract(startTime).Seconds <= 30)
+        {
+          Thread.Sleep(100);
+        }
+        else
+        {
+          throw new WatiNException("Element didn't reach readystate = complete within 30 seconds.");
+        }
+      }
     }
 
     private static IHTMLElementCollection getElementCollectionByTagName(IHTMLElementCollection elements, string tagName)
