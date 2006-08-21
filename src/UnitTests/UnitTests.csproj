@@ -97,7 +97,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\nunit.framework.dll"
+                    HintPath = "..\..\lib\Net\1.1\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -132,6 +132,10 @@
                     RelPath = "Utils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WatiN.UnitTests.dll.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "WatiNTest.cs"
