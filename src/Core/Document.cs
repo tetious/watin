@@ -113,9 +113,30 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the URL of the displayed webpage.
+    /// Returns the url, as displayed in the address bar of the browser, of the currently
+    /// displayed web page.
     /// </summary>
-    /// <value>The URL.</value>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances, navigates to
+    /// the WatiN Project website on SourceForge and writes the Url of the
+    /// currently displayed webpage to the debug window.
+    /// <code>
+    /// using WatiN.Core;
+    /// using System.Diagnostics;
+    ///
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///        Debug.WriteLine(ie.Url);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
     public string Url
     {
       get { return HtmlDocument.url; }
