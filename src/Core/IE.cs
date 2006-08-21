@@ -332,7 +332,7 @@ namespace WatiN.Core
     /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
     internal IE(object shDocVwInternetExplorer)
     {
-      SetCurrentThreadAppartmentStateToSTA();
+      CheckThreadAppartmentStateIsSTA();
 
       InternetExplorer internetExplorer;
       try
@@ -350,7 +350,7 @@ namespace WatiN.Core
 
     private void CreateNewIE(string url, bool autoClose)
     {
-      SetCurrentThreadAppartmentStateToSTA();
+      CheckThreadAppartmentStateIsSTA();
 
       Logger.LogAction("Creating new IE instance");
 
@@ -361,20 +361,17 @@ namespace WatiN.Core
       GoTo(url);
     }
 
-    private static void SetCurrentThreadAppartmentStateToSTA()
+    private static void CheckThreadAppartmentStateIsSTA()
     {
+      
 #if NET11
-      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
-      {
-        Thread.CurrentThread.ApartmentState = ApartmentState.STA;
-      }
+      SetThreadAppartmentStateToSTA();
+      
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
       {
         throw new ThreadStateException("The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.");
       }
-#endif
-
-#if NET20
+#elif NET20
       // Code for .Net 2.0
       if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
       {
@@ -382,7 +379,16 @@ namespace WatiN.Core
       }
 #endif
     } 
-
+    
+    private static void SetThreadAppartmentStateToSTA()
+    {
+#if NET11
+      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
+      {
+        Thread.CurrentThread.ApartmentState = ApartmentState.STA;
+      }
+#endif
+    } 
     
     private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)
     {
@@ -558,36 +564,6 @@ namespace WatiN.Core
         return ie;
       }
     }
-
-    /// <summary>
-    /// Returns the url, as displayed in the address bar of the browser, of the currently
-    /// displayed web page.
-    /// </summary>
-    /// <example>
-    /// The following example creates a new Internet Explorer instances, navigates to
-    /// the WatiN Project website on SourceForge and writes the Url of the
-    /// currently displayed webpage to the debug window.
-    /// <code>
-    /// using WatiN.Core;
-    /// using System.Diagnostics;
-    ///
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE("http://watin.sourceforge.net");
-    ///        Debug.WriteLine(ie.Url);
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
-//    public string Url
-//    {
-//      get { return ie.LocationURL; }
-//    }
 
     /// <summary>
     /// Pops the most recent alert message from a que of shown alerts.C:\TAdev\WatiNSF\trunk\src\UnitTests\FindElementBy.cs
