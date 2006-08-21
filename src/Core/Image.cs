@@ -23,12 +23,31 @@ namespace WatiN.Core
 {
   public class Image : Element
   {
-    //TODO: Add image specific properties and methodes
-    //mshtml.DispHTMLImg
-    //mshtml.IHTMLImgElement
-    //mshtml.IHTMLImgElement2
-
     public Image(DomContainer ie, IHTMLImgElement imgElement) : base(ie, (IHTMLElement) imgElement)
     {}
+    
+    public string Src
+    {
+      get
+      {
+        return ((IHTMLImgElement) DomElement).src;
+      }
+    }
+    
+    public string Href
+    {
+      get
+      {
+        return ((IHTMLImgElement) DomElement).href;
+      }
+    }
+    
+    public string Alt
+    {
+      get
+      {
+        return ((IHTMLImgElement) DomElement).alt;
+      }
+    }
   }
 }
