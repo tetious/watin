@@ -18,7 +18,7 @@
 #endregion Copyright
 
 using System;
-
+using System.Threading;
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -42,11 +42,10 @@ namespace WatiN.UnitTests
 #if NET11
       // Code for .Net 1.1
     	Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
-#endif
-      
-#if NET20
+
+#elif NET20
       // Code for .Net 2.0
-      // Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+      Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
       }
     
