@@ -88,20 +88,21 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// This method calls InitTimeOut and wait till IE is ready
+    /// This method calls InitTimeOut and waits till IE is ready
     /// processing or the timeout periode has expired.
     /// </summary>
     public virtual void WaitForComplete()
     {
       InitTimeout();
-      WaitForCompleteTimeoutIsInitialized();
+      WaitForCompleteOrTimeout();
     }
 
     /// <summary>
     /// This method waits till IE is ready
-    /// processing or the timeout periode has expired.
+    /// processing or the timeout periode has expired. You should
+    /// call InitTimeout prior to calling this method.
     /// </summary>
-    protected internal void WaitForCompleteTimeoutIsInitialized()
+    protected internal void WaitForCompleteOrTimeout()
     {
       WaitWhileMainDocumentNotAvailable(this);
       WaitWhileDocumentStateNotComplete(HtmlDocument);
