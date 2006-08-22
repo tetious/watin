@@ -175,6 +175,27 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Gets the active element in this webpage.
+    /// </summary>
+    /// <value>The active element or <c>null</c> if no element has the focus.</value>
+    public Element ActiveElement
+    {
+      get
+      {
+        IHTMLElement activeElement = HtmlDocument.activeElement;
+
+        if (activeElement == null)
+        {
+          return null;
+        }
+        else
+        {
+          return new Element(domContainer, HtmlDocument.activeElement);
+        }
+      }
+    }
+
+    /// <summary>
     /// Gets the specified frame by it's id.
     /// </summary>
     /// <param name="id">The id of the frame.</param>
