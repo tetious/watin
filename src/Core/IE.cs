@@ -19,6 +19,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 using mshtml;
@@ -671,6 +672,37 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Sends a Tab keyto the IE window to simulate tabbing through
+    /// the elements (and adress bar).
+    /// </summary>
+    public void PressTab()
+
+    {
+      if (!Debugger.IsAttached )
+      {
+        int intThreadIDIE;
+        int intCurrentThreadID;
+
+        NativeMethods.WindowShowStyle currentStyle = GetWindowStyle();
+
+        ShowWindow(NativeMethods.WindowShowStyle.Restore);
+        BringToFront();
+        
+        intThreadIDIE = GetProcessID();
+        intCurrentThreadID = NativeMethods.GetCurrentThreadId();
+        
+        NativeMethods.AttachThreadInput(intCurrentThreadID,intThreadIDIE, true);
+
+        NativeMethods.keybd_event( NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY, 0 );
+        NativeMethods.keybd_event( NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP, 0 );
+
+        NativeMethods.AttachThreadInput(intCurrentThreadID,intThreadIDIE, false);
+        
+        ShowWindow(currentStyle);
+      }
+    }
+
+    /// <summary>
     /// Brings the referenced Internet Explorer to the front (makes it the top window)
     /// </summary>
     public void BringToFront()
@@ -692,6 +724,20 @@ namespace WatiN.Core
       NativeMethods.ShowWindow(GetIEHandle(), (int)showStyle);
     }
 
+    /// <summary>
+    /// Gets the window style.
+    /// </summary>
+    /// <returns>The style currently applied to the ie window.</returns>
+    public NativeMethods.WindowShowStyle GetWindowStyle()
+    {
+      NativeMethods.WINDOWPLACEMENT placement = new NativeMethods.WINDOWPLACEMENT();
+      placement.length = Marshal.SizeOf(placement);
+      
+      NativeMethods.GetWindowPlacement(GetIEHandle(), ref placement);
+      
+      return (NativeMethods.WindowShowStyle)placement.showCmd;
+    }
+    
     /// <summary>
     /// Closes the referenced Internet Explorer. Almost
     /// all other functionality in this class and the element classes will give
@@ -789,7 +835,7 @@ namespace WatiN.Core
       WaitWhileIEBusy();
       WaitWhileIEStateNotComplete();
       
-      WaitForCompleteTimeoutIsInitialized();
+      WaitForCompleteOrTimeout();
     }
 
     private void WaitWhileIEStateNotComplete()
@@ -947,6 +993,15 @@ namespace WatiN.Core
       throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }
 
+    [Obsolete("The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead.")]
+    public Document MainDocument
+    {
+      get
+      {
+        return this;
+      }
+    }
+    
     private static bool NotTimedOut(DateTime startTime, int durationInSeconds)
     {
       return !IsTimedOut(startTime, durationInSeconds);

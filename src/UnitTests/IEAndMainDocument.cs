@@ -72,6 +72,44 @@ namespace WatiN.UnitTests
         Assert.IsTrue(ie.ContainsText("WatiN"));
       }
     }
+       
+    [Test]
+    public void PressTabAndActiveElement()
+    {
+      using (IE ie = new IE(MainURI.ToString(), true))
+      {              
+        ie.TextField("name").Focus();
+        
+        Element element = ie.ActiveElement;
+        Assert.AreEqual("name",element.Id);
+
+        ie.PressTab();
+                
+        element = ie.ActiveElement;
+        Assert.AreEqual("popupid", element.Id);
+      }
+    }
+        
+    [Test]
+    public void WindowStyle()
+    {
+      using(IE ie = new IE(MainURI.ToString()))
+      {
+        NativeMethods.WindowShowStyle currentStyle = ie.GetWindowStyle();
+        
+        ie.ShowWindow(NativeMethods.WindowShowStyle.Maximize);
+        Assert.AreEqual(NativeMethods.WindowShowStyle.Maximize.ToString(),ie.GetWindowStyle().ToString(),"Not maximized");
+
+        ie.ShowWindow(NativeMethods.WindowShowStyle.Restore);
+        Assert.AreEqual(currentStyle.ToString(),ie.GetWindowStyle().ToString(),"Not Restored");
+
+        ie.ShowWindow(NativeMethods.WindowShowStyle.Minimize);
+        Assert.AreEqual(NativeMethods.WindowShowStyle.ShowMinimized.ToString(),ie.GetWindowStyle().ToString(),"Not Minimize");
+        
+        ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+        Assert.AreEqual(NativeMethods.WindowShowStyle.ShowNormal.ToString(),ie.GetWindowStyle().ToString(),"Not ShowNormal");
+      }
+    }
     
     [Test]
     public void GoogleFormSubmit()

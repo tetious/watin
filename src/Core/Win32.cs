@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -27,103 +28,59 @@ namespace WatiN.Core
 {
   public sealed class NativeMethods
   {
+    #region Constants
+
     internal const int WM_SYSCOMMAND = 0x0112;
     internal const int WM_CLOSE = 0x0010;
     internal const int SC_CLOSE = 0xF060;
 
-    /// <summary>
-    /// Prevent creating an instance of this class (contains only static members)
-    /// </summary>
-    private NativeMethods(){}
+    internal const int KEYEVENTF_EXTENDEDKEY = 0x1;
+    internal const int KEYEVENTF_KEYUP = 0x2;
+    internal const int KEYEVENTF_TAB = 0x09;
+
+    internal const Int32 SMTO_ABORTIFHUNG = 2;
+
+    #endregion Constants
+
+    #region Structs
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WINDOWPLACEMENT
+    {
+      public int length;
+      public int flags;
+      public int showCmd;
+      public POINT ptMinPosition;
+      public POINT ptMaxPosition;
+      public RECT rcNormalPosition;
+    }
+
+    [StructLayout( LayoutKind.Sequential )]
+      public struct POINT 
+    {
+      public int X;
+      public int Y;
+    }
+
+    public struct RECT 
+    {
+      public int Left;
+      public int Top;
+      public int Right;
+      public int Bottom;
+    }
+
+    #endregion Structs
 
     internal delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
-
-    [DllImport("user32.dll", CharSet=CharSet.Auto)]
-    internal static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
-
-    [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-    internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
-    
-    [DllImport( "user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
-    internal static extern IntPtr GetDlgItem( IntPtr handleToWindow, int ControlId );
-
-    /// <summary>
-    /// The GetForegroundWindow function returns a handle to the foreground window.
-    /// </summary>
-    [DllImport("user32.dll", SetLastError=true)]
-    internal static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
-    internal static extern int GetWindowText( IntPtr handleToWindow, StringBuilder windowText, int maxTextLength );
-
-    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
-    internal static extern int GetWindowTextLength(IntPtr hWnd);
-
-    [DllImport("user32.dll", CharSet=CharSet.Auto)]
-    internal static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-
-    [DllImport("user32.dll", SetLastError=true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-    internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildProc lpEnumFunc, ref IntPtr lParam);
-    
-    [DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-    internal static extern Int32 RegisterWindowMessage(string lpString);
-    
-    [DllImport("user32", EntryPoint = "SendMessageTimeoutA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-    internal static extern Int32 SendMessageTimeout(IntPtr hWnd, Int32 msg, Int32 wParam, Int32 lParam, Int32 fuFlags, Int32 uTimeout, ref Int32 lpdwResult);
-    
-    [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-    internal static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
-    
-    internal const Int32 SMTO_ABORTIFHUNG = 2;
-    
     internal delegate bool EnumChildProc(IntPtr hWnd, ref IntPtr lParam);
 
-    /// <summary>Shows a Window</summary>
-    /// <remarks>
-    /// <para>To perform certain special effects when showing or hiding a 
-    /// window, use AnimateWindow.</para>
-    ///<para>The first time an application calls ShowWindow, it should use 
-    ///the WinMain function's nCmdShow parameter as its nCmdShow parameter. 
-    ///Subsequent calls to ShowWindow must use one of the values in the 
-    ///given list, instead of the one specified by the WinMain function's 
-    ///nCmdShow parameter.</para>
-    ///<para>As noted in the discussion of the nCmdShow parameter, the 
-    ///nCmdShow value is ignored in the first call to ShowWindow if the 
-    ///program that launched the application specifies startup information 
-    ///in the structure. In this case, ShowWindow uses the information 
-    ///specified in the STARTUPINFO structure to show the window. On 
-    ///subsequent calls, the application must call ShowWindow with nCmdShow 
-    ///set to SW_SHOWDEFAULT to use the startup information provided by the 
-    ///program that launched the application. This behavior is designed for 
-    ///the following situations: </para>
-    ///<list type="">
-    ///    <item>Applications create their main window by calling CreateWindow 
-    ///    with the WS_VISIBLE flag set. </item>
-    ///    <item>Applications create their main window by calling CreateWindow 
-    ///    with the WS_VISIBLE flag cleared, and later call ShowWindow with the 
-    ///    SW_SHOW flag set to make it visible.</item>
-    ///</list></remarks>
-    /// <param name="hWnd">Handle to the window.</param>
-    /// <param name="nCmdShow">Specifies how the window is to be shown. 
-    /// This parameter is ignored the first time an application calls 
-    /// ShowWindow, if the program that launched the application provides a 
-    /// STARTUPINFO structure. Otherwise, the first time ShowWindow is called, 
-    /// the value should be the value obtained by the WinMain function in its 
-    /// nCmdShow parameter. In subsequent calls, this parameter can be one of 
-    /// the WindowShowStyle members.</param>
-    /// <returns>
-    /// If the window was previously visible, the return value is nonzero. 
-    /// If the window was previously hidden, the return value is zero.
-    /// </returns>
-    [DllImport("user32.dll")]
-    internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    #region Enums
 
-    /// <summary>Enumeration of the different ways of showing a window using 
-    /// ShowWindow</summary>
+    /// <summary>
+    /// Enumeration of the different ways of showing a window using 
+    /// ShowWindow
+    /// </summary>
     public enum WindowShowStyle : int
     {
       /// <summary>Hides the window and activates another window.</summary>
@@ -182,5 +139,108 @@ namespace WatiN.Core
       /// <remarks>See SW_FORCEMINIMIZE</remarks>
       ForceMinimized = 11
     }
+
+    #endregion Enums
+    
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private NativeMethods(){}
+
+    #region DllImport User32
+
+    [DllImport("user32.dll", CharSet=CharSet.Auto)]
+    internal static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
+
+    [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+    internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
+    
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    internal static extern IntPtr GetDlgItem( IntPtr handleToWindow, int ControlId );
+
+    /// <summary>
+    /// The GetForegroundWindow function returns a handle to the foreground window.
+    /// </summary>
+    [DllImport("user32.dll", SetLastError=true)]
+    internal static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    internal static extern int GetWindowText( IntPtr handleToWindow, StringBuilder windowText, int maxTextLength );
+
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    internal static extern int GetWindowTextLength(IntPtr hWnd);
+
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    internal static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+    [DllImport("user32.dll", CharSet=CharSet.Auto)]
+    internal static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+    [DllImport("user32.dll", SetLastError=true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+    internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildProc lpEnumFunc, ref IntPtr lParam);
+    
+    [DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+    internal static extern Int32 RegisterWindowMessage(string lpString);
+    
+    [DllImport("user32", EntryPoint = "SendMessageTimeoutA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+    internal static extern Int32 SendMessageTimeout(IntPtr hWnd, Int32 msg, Int32 wParam, Int32 lParam, Int32 fuFlags, Int32 uTimeout, ref Int32 lpdwResult);
+    
+    [DllImport("user32.dll")]
+    internal static extern bool AttachThreadInput(int idAttach, int idAttachTo,bool fAttach);
+
+    [DllImport("user32.dll")]
+    internal static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+
+    /// <summary>Shows a Window</summary>
+    /// <remarks>
+    /// <para>To perform certain special effects when showing or hiding a 
+    /// window, use AnimateWindow.</para>
+    ///<para>The first time an application calls ShowWindow, it should use 
+    ///the WinMain function's nCmdShow parameter as its nCmdShow parameter. 
+    ///Subsequent calls to ShowWindow must use one of the values in the 
+    ///given list, instead of the one specified by the WinMain function's 
+    ///nCmdShow parameter.</para>
+    ///<para>As noted in the discussion of the nCmdShow parameter, the 
+    ///nCmdShow value is ignored in the first call to ShowWindow if the 
+    ///program that launched the application specifies startup information 
+    ///in the structure. In this case, ShowWindow uses the information 
+    ///specified in the STARTUPINFO structure to show the window. On 
+    ///subsequent calls, the application must call ShowWindow with nCmdShow 
+    ///set to SW_SHOWDEFAULT to use the startup information provided by the 
+    ///program that launched the application. This behavior is designed for 
+    ///the following situations: </para>
+    ///<list type="">
+    ///    <item>Applications create their main window by calling CreateWindow 
+    ///    with the WS_VISIBLE flag set. </item>
+    ///    <item>Applications create their main window by calling CreateWindow 
+    ///    with the WS_VISIBLE flag cleared, and later call ShowWindow with the 
+    ///    SW_SHOW flag set to make it visible.</item>
+    ///</list></remarks>
+    /// <param name="hWnd">Handle to the window.</param>
+    /// <param name="nCmdShow">Specifies how the window is to be shown. 
+    /// This parameter is ignored the first time an application calls 
+    /// ShowWindow, if the program that launched the application provides a 
+    /// STARTUPINFO structure. Otherwise, the first time ShowWindow is called, 
+    /// the value should be the value obtained by the WinMain function in its 
+    /// nCmdShow parameter. In subsequent calls, this parameter can be one of 
+    /// the WindowShowStyle members.</param>
+    /// <returns>
+    /// If the window was previously visible, the return value is nonzero. 
+    /// If the window was previously hidden, the return value is zero.
+    /// </returns>
+    [DllImport("user32.dll")]
+    internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    #endregion DllImport User32
+
+    [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+    internal static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
+    
+    [DllImport("kernel32")]
+    internal static extern int GetCurrentThreadId();
   }
 }
