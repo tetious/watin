@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML para element.
+  /// </summary>
   public class Para : ElementsContainer
   {
     public Para(DomContainer ie, HTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement)

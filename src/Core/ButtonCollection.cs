@@ -23,7 +23,7 @@ using mshtml;
 namespace WatiN.Core
 {
   /// <summary>
-  /// A typed collection of <see cref="Button" /> instances within a <see cref="DomContainer"/> or <see cref="Element"/>.
+  /// A typed collection of <see cref="Button" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
 	public class ButtonCollection : IEnumerable
 	{

@@ -22,7 +22,10 @@ using mshtml;
 
 namespace WatiN.Core
 {
-	public class FrameCollection : IEnumerable
+  /// <summary>
+  /// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
+  /// </summary>
+  public class FrameCollection : IEnumerable
 	{
 		ArrayList elements;
 		

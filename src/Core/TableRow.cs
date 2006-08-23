@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML tr element.
+  /// </summary>
   public class TableRow : ElementsContainer
   {
     public TableRow(DomContainer ie, HTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow)

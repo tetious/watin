@@ -25,6 +25,9 @@ using WatiN.Core.Exceptions;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a Frame or IFrame.
+  /// </summary>
   public class Frame : Document
   {
     private string frameName = string.Empty;

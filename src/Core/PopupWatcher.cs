@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
@@ -25,6 +26,11 @@ using WatiN.Core.Exceptions;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class handles alert/popup dialogs. Every second it checks if a dialog
+  /// is show. If so, it stores it's message in the alertQueue and closses the dialog
+  /// by clicking the close button in the title bar.  
+  /// </summary>
   public class PopupWatcher
   {
     private int ieProcessId;
@@ -77,21 +83,11 @@ namespace WatiN.Core
 
         if (keepRunning)
         {
-        	System.Diagnostics.Process p;
+        	Process p = GetProcess();
 
-        	try
-        	{
-      			p = System.Diagnostics.Process.GetProcessById(ieProcessId);
-        	}
-        	catch(ArgumentException)
+          if (p != null)
       		{
-        		// Thrown when the ieProcessId is not running (anymore)
-        		p = null;
-        	}
-      		
-      		if (p != null)
-      		{
-	    			foreach (System.Diagnostics.ProcessThread t in p.Threads)
+	    			foreach (ProcessThread t in p.Threads)
 		        {
 		          int threadId = t.Id;
 		
@@ -101,6 +97,21 @@ namespace WatiN.Core
       		}
         }
       }
+    }
+
+    private Process GetProcess()
+    {
+      Process p;
+      try
+      {
+        p = Process.GetProcessById(ieProcessId);
+      }
+      catch(ArgumentException)
+      {
+        // Thrown when the ieProcessId is not running (anymore)
+        p = null;
+      }
+      return p;
     }
 
     public void Stop()

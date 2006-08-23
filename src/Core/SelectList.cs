@@ -26,6 +26,9 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML select element.
+  /// </summary>
   public class SelectList : Element
   {
     /// <summary>

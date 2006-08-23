@@ -19,14 +19,25 @@
 
 using System;
 using System.Text.RegularExpressions;
+using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Interfaces
 {
+  /// <summary>
+  /// This interface is used by <see cref="Attribute"/> to compare a searched attribute
+  /// with a given attribute.
+  /// </summary>
   public interface ICompare
   {
     bool Compare(string value);
   }
-  
+}
+
+namespace WatiN.Core
+{
+  /// <summary>
+  /// Class that supports an exact comparison of two string values.
+  /// </summary>
   public class StringComparer :ICompare
   {
     private string valueToCompareWith;
@@ -46,6 +57,9 @@ namespace WatiN.Core
     }
   }
   
+  /// <summary>
+  /// Class that supports a simple matching of two strings.
+  /// </summary>
   public class StringContainsAndCaseInsensitiveComparer :ICompare
   {
     private string valueToCompareWith;
@@ -63,6 +77,9 @@ namespace WatiN.Core
     }
   }
   
+  /// <summary>
+  /// Class that supports matching a regular expression with a string value.
+  /// </summary>
   public class RegexComparer :ICompare
   {
     private Regex regexToUse;
@@ -80,6 +97,9 @@ namespace WatiN.Core
     }
   }
   
+  /// <summary>
+  /// Class that supports compares a <see cref="Uri"/> instance with a string value.
+  /// </summary>
   public class UriComparer :ICompare
   {
     private Uri uriToCompareWith;

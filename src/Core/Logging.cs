@@ -17,8 +17,15 @@
 
 #endregion Copyright
 
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core.Logging
 {
+  /// <summary>
+  /// This class provides some basic means to write actions to a logger class.
+  /// WatiN uses this class to log which actions are done while driving Internet
+  /// Explorer.
+  /// </summary>
   public sealed class Logger
   {
     private static ILogWriter mLogWriter;
@@ -28,6 +35,10 @@ namespace WatiN.Core.Logging
     /// </summary>
     private Logger(){}
 
+    /// <summary>
+    /// Logs the action.
+    /// </summary>
+    /// <param name="message">The message.</param>
     public static void LogAction(string message)
     {
       if (mLogWriter != null)
@@ -36,6 +47,10 @@ namespace WatiN.Core.Logging
       }
     }
 
+    /// <summary>
+    /// Gets or sets the log writer.
+    /// </summary>
+    /// <value>The log writer.</value>
     public static ILogWriter LogWriter
     {
       get
@@ -49,19 +64,34 @@ namespace WatiN.Core.Logging
     }
   }
   
-  public interface ILogWriter
+  /// <summary>
+  /// This logger class writes it's output to the debug window.
+  /// </summary>
+  /// <example>
+  /// The following code attaches the DebugLogWriter to WatiN and writes a
+  /// LogAction. Open de output window in your debugger to see the result.
+  /// <code>
+  /// Logger.LogWriter = new DebugLogWriter;
+  /// Logger.LogAction("Attached DebugLogWriter");
+  /// </code>
+  /// </example>
+  public class DebugLogWriter : ILogWriter
   {
-    void LogAction(string message);
-  }
-
-	/// <summary>
-	/// Summary description for LoggerDebug.
-	/// </summary>
-	public class DebugLogWriter : ILogWriter
-	{
     public void LogAction(string message)
     {
       System.Diagnostics.Debug.WriteLine(message);
     }
+  }
+}
+
+namespace WatiN.Core.Interfaces
+{
+  /// <summary>
+  /// Implement this interface if you create your own Logger class.
+  /// For example <c>Logger.LogWriter = new MyLogWriter</c>.
+  /// </summary>
+  public interface ILogWriter
+  {
+    void LogAction(string message);
   }
 }

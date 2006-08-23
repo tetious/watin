@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML img element.
+  /// </summary>
   public class Image : Element
   {
     public Image(DomContainer ie, IHTMLImgElement imgElement) : base(ie, (IHTMLElement) imgElement)

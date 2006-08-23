@@ -22,6 +22,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="Link" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+  /// </summary>
   public class LinkCollection : IEnumerable
   {
     ArrayList elements;

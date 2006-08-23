@@ -22,7 +22,7 @@ using mshtml;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// Summary description for Utils.
+	/// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
 	/// </summary>
 	public sealed class UtilityClass
 	{

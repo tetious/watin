@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML label element.
+  /// </summary>
   public class Label : ElementsContainer
   {
     public Label(DomContainer ie, HTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)

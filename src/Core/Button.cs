@@ -23,7 +23,7 @@ using mshtml;
 namespace WatiN.Core
 {
   /// <summary>
-  /// This class provides specialized functionality for HTML input elements of type 
+  /// This class provides specialized functionality for a HTML input element of type 
   /// button, submit, image and reset.
   /// </summary>
   public class Button : Element

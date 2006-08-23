@@ -21,6 +21,10 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML input element of type 
+  /// radio.
+  /// </summary>
   public class RadioButton : RadioCheck
   {
     public RadioButton(DomContainer ie, IHTMLInputElement inputElement) : base(ie, inputElement)

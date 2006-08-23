@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML link element.
+  /// </summary>
   public class Link : Element
   {
     public Link(DomContainer ie, HTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement)

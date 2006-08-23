@@ -17,9 +17,16 @@
 
 #endregion Copyright
 
+using WatiN.Core;
+
 namespace WatiN.Core.Interfaces
 {
-  public interface ITextElement
+  /// <summary>
+  /// This interface is used by <see cref="TextField"/> to support both
+  /// HTML input element of type text password textarea hidden and 
+  /// for a HTML textarea element.
+  /// </summary>
+  internal interface ITextElement
   {
     int MaxLength
     {
@@ -37,7 +44,9 @@ namespace WatiN.Core.Interfaces
     }
 
     void Select();
+    
     void SetValue(string value);
+    
     string ToString();
 
     string Name

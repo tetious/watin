@@ -22,6 +22,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="Label" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+  /// </summary>
 	public class LabelCollection : IEnumerable
 	{
 		ArrayList elements;

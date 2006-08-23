@@ -21,7 +21,10 @@ using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
-{
+{  
+  /// <summary>
+  /// A typed collection of <see cref="Image" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+  /// </summary>
 	public class ImageCollection : IEnumerable
 	{
 		ArrayList elements;

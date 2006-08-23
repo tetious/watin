@@ -23,6 +23,9 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML Form element.
+  /// </summary>
   public class Form : ElementsContainer
   {
     public Form(DomContainer ie, HTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)

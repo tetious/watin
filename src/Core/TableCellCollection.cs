@@ -22,6 +22,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="TableCell" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+  /// </summary>
 	public class TableCellCollection : IEnumerable
 	{
 		ArrayList elements;

@@ -24,6 +24,9 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML table element.
+  /// </summary>
   public class Table : ElementsContainer
   {
     public Table(DomContainer ie, HTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable)

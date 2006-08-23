@@ -25,10 +25,11 @@ using mshtml;
 
 namespace WatiN.Core
 {
-	/// <summary>
-	/// Summary description for HTMLDialog.
-	/// </summary>
-	public class HtmlDialog : DomContainer
+  /// <summary>
+  /// This is the main class to access a webpage within a modal or modeles
+  /// HTML dialog.
+  /// </summary>
+  public class HtmlDialog : DomContainer
 	{
     private IntPtr hWnd = IntPtr.Zero;
 

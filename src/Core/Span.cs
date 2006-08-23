@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML span element.
+  /// </summary>
   public class Span : ElementsContainer
   {
     public Span(DomContainer ie, HTMLSpanElement htmlSpanElement) : base(ie, (IHTMLElement) htmlSpanElement)

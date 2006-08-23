@@ -21,6 +21,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML td element.
+  /// </summary>
   public class TableCell : ElementsContainer
   {
     public TableCell(DomContainer ie, HTMLTableCell htmlTableCell) : base(ie, (IHTMLElement) htmlTableCell)

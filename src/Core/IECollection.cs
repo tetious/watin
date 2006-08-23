@@ -23,6 +23,9 @@ using SHDocVw;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of open <see cref="IE" /> instances.
+  /// </summary>
   public class IECollection : IEnumerable
   {
     ArrayList internetExplorers;

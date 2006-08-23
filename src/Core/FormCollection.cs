@@ -22,6 +22,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/>.
+  /// </summary>
 	public class FormCollection : IEnumerable
 	{
 		ArrayList elements;

@@ -22,7 +22,7 @@ using mshtml;
 namespace WatiN.Core
 {
   /// <summary>
-  /// This class provides specialized functionality for HTML div elements.
+  /// This class provides specialized functionality for a HTML div element.
   /// </summary>
   public class Div : ElementsContainer
   {

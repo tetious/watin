@@ -23,6 +23,9 @@ using System.Diagnostics;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// A typed collection of open <see cref="HtmlDialog" />.
+  /// </summary>
   public class HtmlDialogCollection : IEnumerable
   {
     private ArrayList htmlDialogs;

@@ -25,9 +25,12 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML input element of type 
+  /// text password textarea hidden and for a HTML textarea element.
+  /// </summary>
   public class TextField : Element
   {
-
     private ITextElement textElement;
 
     public TextField(DomContainer ie, HTMLInputElement htmlInputElement) : base(ie, htmlInputElement)
