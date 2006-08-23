@@ -365,9 +365,7 @@ namespace WatiN.Core
     private static void CheckThreadApartmentStateIsSTA()
     {
       
-#if NET11
-      SetThreadApartmentStateToSTA();
-      
+#if NET11      
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
       {
         throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
@@ -380,17 +378,7 @@ namespace WatiN.Core
       }
 #endif
     } 
-    
-    private static void SetThreadApartmentStateToSTA()
-    {
-#if NET11
-      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
-      {
-        Thread.CurrentThread.ApartmentState = ApartmentState.STA;
-      }
-#endif
-    } 
-    
+        
     private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)
     {
       ie = internetExplorer;      
