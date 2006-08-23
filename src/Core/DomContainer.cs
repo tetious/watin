@@ -64,6 +64,19 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead. 
+    /// </summary>
+    /// <value>The main document.</value>
+    [Obsolete("The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead.")]
+    public Document MainDocument
+    {
+      get
+      {
+        return this;
+      }
+    }
+
+    /// <summary>
     /// Fires the given event on the given element.
     /// </summary>
     /// <param name="element">Element to fire the event on</param>

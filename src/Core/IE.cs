@@ -333,7 +333,7 @@ namespace WatiN.Core
     /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
     internal IE(object shDocVwInternetExplorer)
     {
-      CheckThreadAppartmentStateIsSTA();
+      CheckThreadApartmentStateIsSTA();
 
       InternetExplorer internetExplorer;
       try
@@ -351,7 +351,7 @@ namespace WatiN.Core
 
     private void CreateNewIE(string url, bool autoClose)
     {
-      CheckThreadAppartmentStateIsSTA();
+      CheckThreadApartmentStateIsSTA();
 
       Logger.LogAction("Creating new IE instance");
 
@@ -362,26 +362,26 @@ namespace WatiN.Core
       GoTo(url);
     }
 
-    private static void CheckThreadAppartmentStateIsSTA()
+    private static void CheckThreadApartmentStateIsSTA()
     {
       
 #if NET11
-      SetThreadAppartmentStateToSTA();
+      SetThreadApartmentStateToSTA();
       
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
       {
-        throw new ThreadStateException("The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.");
+        throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
       }
 #elif NET20
       // Code for .Net 2.0
       if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
       {
-        throw new ThreadStateException("The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.");
+        throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
       }
 #endif
     } 
     
-    private static void SetThreadAppartmentStateToSTA()
+    private static void SetThreadApartmentStateToSTA()
     {
 #if NET11
       if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
@@ -991,15 +991,6 @@ namespace WatiN.Core
       }
 
       throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
-    }
-
-    [Obsolete("The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead.")]
-    public Document MainDocument
-    {
-      get
-      {
-        return this;
-      }
     }
     
     private static bool NotTimedOut(DateTime startTime, int durationInSeconds)
