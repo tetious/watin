@@ -9,16 +9,14 @@ can be assigned to a release. So first thing to do
 - support for messageboxes (dialogs with Yes, No, Cancel etc.. buttons)
 - support for filedownload
 - support for login window
-- possibility to inherit from a particular WatiN element (like TextField) and
+- support to make inheriting a particular WatiN element (like TextField) and
   making this usefull. Work needs to be done on how WatiN finds an element
   and the way it returns the WatiN.Element instance.
 - support xyz.Exists methods for all situations where a WatiNException can be thrown.
 - support for finding an element by multiple attributes needed?
 - support for making screenshots or saving the HTML page in mhtml format.
-- create an installer for WatiN (MSI or NullSoft?)
-- Adding documentation to the code (In progress)
-- test WatiN with Internet Explorer 7 (beta 2)
+- create an installer for WatiN (WIX)
+- add documentation to the code (In progress)
 - more unittests (and more code coverage)
 - create a good deployment package that works out of the box
-
-- Testing commits maillinglist
+- add a recorder like WatirRecorder++
