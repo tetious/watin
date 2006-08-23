@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="dist" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
 
 	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
 
@@ -48,7 +48,7 @@
 	<target name="build">
 
         <tlbimp typelib="${system32.dir}\shdocvw.dll" output="${build.dir}\Interop.SHDocVw.dll" namespace="SHDocVw"/>
-        <csc define="${define}" debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.Core.dll">
+        <csc define="${define}" debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.Core.dll" doc="${build.dir}\WatiN.Core.xml">
             <sources>
                 <include name="${source.dir}\Core\*.cs"/>
             </sources>
@@ -226,9 +226,9 @@
         <copy file="${source.dir}\WatiN.sln" todir ="${distribution.dir}\src" />
 
         <!-- Adjust reference to Interop.SHDocVw -->
-        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+        <!-- xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
             xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Interop.SHDocVw']/@HintPath"
-            value="..\..\bin\Interop.SHDocVw.dll" />
+            value="..\..\bin\Interop.SHDocVw.dll" /-->
 
         <!-- Create distribution zip file -->
 		<zip zipfile="${build.base.dir}\WatiN.zip">
