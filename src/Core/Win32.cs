@@ -18,7 +18,6 @@
 #endregion Copyright
 
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -26,6 +25,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// Class that contains native win32 API support.
+  /// </summary>
   public sealed class NativeMethods
   {
     #region Constants
@@ -45,7 +47,7 @@ namespace WatiN.Core
     #region Structs
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct WINDOWPLACEMENT
+    internal struct WINDOWPLACEMENT
     {
       public int length;
       public int flags;
@@ -56,13 +58,14 @@ namespace WatiN.Core
     }
 
     [StructLayout( LayoutKind.Sequential )]
-      public struct POINT 
+    internal struct POINT 
     {
       public int X;
       public int Y;
     }
 
-    public struct RECT 
+    [StructLayout( LayoutKind.Sequential )]
+    internal struct RECT 
     {
       public int Left;
       public int Top;
