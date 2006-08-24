@@ -270,15 +270,16 @@ namespace WatiN.UnitTests
       value = new ElementUrlPartialValue("google.com");
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
-      using (IE ie = new IE(MainURI.ToString()))
+      using (new IE(MainURI.ToString()))
       {
-        ie.Link("testlinkid").Click();
-        IE ieGoogle = IE.AttachToIE(new ElementUrlPartialValue("google.com"));
-        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
-        ieGoogle.Close();
+        string partialUrl = MainURI.ToString();
+        partialUrl = partialUrl.Remove(0, partialUrl.Length - 8);
+
+        IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl));
+        
+        Assert.AreEqual(MainURI, ie.Uri);
       }
-    }
-    
+    }   
   }
 
   public class ElementUrlPartialValue : Url
