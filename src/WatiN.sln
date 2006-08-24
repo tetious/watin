@@ -9,19 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		AutomatedDebug = AutomatedDebug
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug.ActiveCfg = AutomatedDebug|.NET
-		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug.Build.0 = AutomatedDebug|.NET
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug.ActiveCfg = Debug|.NET
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug.Build.0 = Debug|.NET
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release.ActiveCfg = Release|.NET
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release.Build.0 = Release|.NET
-		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug.ActiveCfg = AutomatedDebug|.NET
-		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug.Build.0 = AutomatedDebug|.NET
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug.ActiveCfg = Debug|.NET
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug.Build.0 = Debug|.NET
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release.ActiveCfg = Release|.NET
