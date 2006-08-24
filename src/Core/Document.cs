@@ -113,6 +113,36 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Returns a System.Uri instance of the url displayed in the address bar of the browser, 
+    /// of the currently displayed web page.
+    /// </summary>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances, navigates to
+    /// the WatiN Project website on SourceForge and writes the Uri of the
+    /// currently displayed webpage to the debug window.
+    /// <code>
+    /// using WatiN.Core;
+    /// using System.Diagnostics;
+    ///
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///        Debug.WriteLine(ie.Uri.ToString());
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public Uri Uri
+    {
+      get { return new Uri(HtmlDocument.url); }
+    }
+    
+    /// <summary>
     /// Returns the url, as displayed in the address bar of the browser, of the currently
     /// displayed web page.
     /// </summary>
