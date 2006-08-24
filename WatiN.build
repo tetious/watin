@@ -1,159 +1,156 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd">
+<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
 
-	<property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
-
+    <property name="project.name"                   value="WatiN" />
+    
+    <property name="base.dir"                       value="${project::get-base-directory()}" />
+    <property name="build.base.dir"                 value="${base.dir}\build" />
+	<property name="source.dir"                     value="${base.dir}\src" />
+    
     <property name="system32.dir"                   value="${environment::get-variable('SystemRoot')}\system32"/>
     <property name="pia.dir"                        value="${environment::get-variable('SystemDrive')}\Program Files\Microsoft.Net\Primary Interop Assemblies"/>
-    <property name="base.dir"                       value="${project::get-base-directory()}" />
-	<property name="source.dir"                     value="${base.dir}\src" />
-	<property name="build.base.dir"                 value="${base.dir}\build" />
-	<property name="build.dir"                      value="${base.dir}\build\Net\1.1" />
-    <property name="reports.output.dir" 			value="${build.dir}\test-reports" />
-	<property name="coverage.xml.file" 				value="${reports.output.dir}\Coverage.xml" />
-	<property name="distribution.dir"               value="${build.dir}\dist" />
-  	<property name="unittests.html.todir"           value="${build.dir}\html"/>
-  	<property name="unittests.html.fromdir"         value="${source.dir}\UnitTests\html" />
 
-	<property name="nunit.xml.file" 				value="${reports.output.dir}\UnitTests.xml" />
+    <property name="core.name"                      value="WatiN.Core" />
+    <property name="core.assembly.name"             value="${core.name}.dll" />
+    <property name="core.xmldoc.name"               value="${core.name}.xml" />
+	<property name="core.source.dir"                value="${source.dir}\Core" />
+	<property name="core.helpfile.name"             value="WatiN.chm" />
+
+    <property name="unittests.name"                 value="${core.name}.UnitTests" />
+    <property name="unittests.assembly.name"        value="${unittests.name}.dll" />
+	<property name="unittests.source.dir"           value="${source.dir}\UnitTests" />
+    <property name="unittests.config.name"          value="${unittests.assembly.name}.config" />
+    <property name="unittests.config.file"          value="${unittests.source.dir}\${unittests.config.name}" />
+	<property name="unittests.htmlfiles.dir"        value="${unittests.source.dir}\html" />
+    
+    <property name="shdocvw.namespace"              value="SHDocVw" />
+    <property name="shdocvw.assembly.name"          value="Interop.SHDocVw.dll" />
+    <property name="shdocvw.typlib"                 value="${system32.dir}\shdocvw.dll" />
+    
+
 	<property name="tools.dir"                      value="${base.dir}\tools" />
 	<property name="path.ncoverexplorer.exe" 		value="${tools.dir}\NCoverExplorer\NCoverExplorer.exe" />
 	<property name="path.ncoverexplorer.console"	value="${tools.dir}\NCoverExplorer\NCoverExplorer.Console.exe" />
 	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
-	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
-	<property name="path.ncover.console"	        value="${tools.dir}\NCover\NCover.Console.exe" />
-	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\bin\nunit-console.exe" />
-	<property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
-    <property name="define"                         value="NET11" />
-    <property name="project.name"                   value="WatiN" />
-	<property name="test.assembly" 				    value="${build.dir}\WatiN.UnitTests.dll" />
     
-
 	<!-- User targets -->
 	<target name="clean" description="Delete Automated Build artifacts">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
 	</target>
 	
-	<target name="compile" description="Compiles using the Configuration">
-
-        <call target="build-net-1.1-version" />
-        <call target="copy-html-dir" />
-        <call target="build-net-2.0-version" />
-        <call target="copy-html-dir" />
-        
-    	<call target="set-net-1.1-version" />
-	</target>
-
 	<target name="build">
-
-        <tlbimp typelib="${system32.dir}\shdocvw.dll" output="${build.dir}\Interop.SHDocVw.dll" namespace="SHDocVw"/>
-        <csc define="${define}" debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.Core.dll" doc="${build.dir}\WatiN.Core.xml">
+        <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
+        
+        <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
+        <csc define="${project.properties.define}" debug="false" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
             <sources>
-                <include name="${source.dir}\Core\*.cs"/>
+                <include name="${core.source.dir}\*.cs"/>
             </sources>
             <references>
-                <include name="${build.dir}\Interop.SHDocVw.dll"/>
+                <include name="${bin.dir}\${shdocvw.assembly.name}"/>
                 <include name="${pia.dir}\Microsoft.mshtml.dll"/>
                 <include name="System.dll"/>
                 <include name="System.Drawing.dll"/>
                 <include name="System.Windows.Forms.dll"/>
             </references>
+            <nowarn>
+                <warning number="1591" />
+            </nowarn>
         </csc>
-        <csc debug="false" rebuild="true" target="library" output="${build.dir}\WatiN.UnitTests.dll">
+        <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
+
+        <csc debug="false" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
             <sources>
-                <include name="${source.dir}\UnitTests\*.cs"/>
+                <include name="${unittests.source.dir}\*.cs"/>
             </sources>
             <references>
-                <include name="${build.dir}\WatiN.Core.dll"/>
+                <include name="${bin.dir}\${core.assembly.name}"/>
                 <include name="${path.nunit.framework.dll}\nunit.framework.dll"/>
                 <include name="System.dll"/>
             </references>
         </csc>
+        
+        <call target="copy-testdata" />
     </target>
 
     <target name="set-net-1.1-version">
         <property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
+        <property name="project.properties.define"      value="NET11" />
 	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
-	    <property name="build.dir"                      value="${base.dir}\build\Net\1.1" />
-	    <property name="unittests.html.todir"           value="${build.dir}\html" />
-        <property name="define"                         value="NET11" />
-    </target>
-
-    <target name="build-net-1.1-version" depends="set-net-1.1-version">        
-        <call target="build" />
+       	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-1.1-bin\nunit-console.exe" />
+        
+        <call target="init-properties"  />
     </target>
 
     <target name="set-net-2.0-version">
     	<property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
+        <property name="project.properties.define"      value="NET20" />
 	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\2.0" />
-	    <property name="build.dir"                      value="${base.dir}\build\Net\2.0" />
-  	    <property name="unittests.html.todir"           value="${build.dir}\html" />
-        <property name="define"                         value="NET20" />
+       	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
+
+        <call target="init-properties"  />
     </target>
 
-    <target name="build-net-2.0-version" depends="set-net-2.0-version">
-        <call target="build" />
+    <target name="init-properties">
+	    <property name="build.dir"                      value="${build.base.dir}\${nant.settings.currentframework}" />
+
+        <property name="bin.dir" 			            value="${build.dir}\bin" />
+        <property name="reports.dir" 			        value="${build.dir}\test-reports" />
+	    <property name="distribution.dir"               value="${build.dir}\dist" />
+	    
+	    <property name="coverage.xml.output.file" 		value="${reports.dir}\Coverage.xml" />
+  	    
+  	    <property name="unittests.htmlfiles.todir"      value="${bin.dir}\html"/>
+	    <property name="unittest.assembly.file"		    value="${bin.dir}\${unittests.assembly.name}" />
+	    <property name="unittest.xml.output.file" 		value="${reports.dir}\UnitTests.xml" />
+	    
+       	<property name="core.helpfile.file"             value="${build.dir}\ndoc\${core.helpfile.name}" />
     </target>
 
-    <target name="copy-html-dir">
-    	<mkdir dir="${unittests.html.todir}" unless="${directory::exists(unittests.html.todir)}" />
+    <target name="copy-testdata">
+        <!-- Copy HTML files -->
+    	<mkdir dir="${unittests.htmlfiles.todir}" unless="${directory::exists(unittests.htmlfiles.todir)}" />
 
-		<copy todir="${unittests.html.todir}" >
-		    <fileset basedir ="${unittests.html.fromdir}">
+		<copy todir="${unittests.htmlfiles.todir}" >
+		    <fileset basedir ="${unittests.htmlfiles.dir}">
                 <include name="*.*" />
 		    </fileset>
 		</copy>
-
-    </target>
-
-	<target name="ndoc" description="Creates documentation with ndoc">
-	    <ndoc>
-            <assemblies basedir="${build.dir}">
-                <include name="WatiN.Core.dll" />
-            </assemblies>
-            <documenters>
-                <documenter name="MSDN">
-                    <property name="OutputDirectory" value="${build.base.dir}\ndoc\" />
-                    <property name="HtmlHelpName" value="WatiN" />
-                    <property name="Title" value="WatiN Documentation (generated with NDoc)" />
-                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
-                    <property name="Preliminary" value="True" />
-                    <property name="CleanIntermediates" value="True" />
-                </documenter>
-            </documenters>
-        </ndoc>
-	</target>
+        
+        <!-- Copy config file for running tests with NUnit -->
+		<copy file="${unittests.config.file}"  todir="${bin.dir}" />
+    </target>   
 	
-	<target name="test" depends="compile, run-unit-tests" 
-		description="Compile and Run Tests" />
-		
-	<target name="full" depends="clean, test, ndoc, dist"	description="Compiles, tests, and produces distributions" />
-
 	<!-- Internal targets -->
 	<target name="run-unit-tests">
-		<mkdir dir="${reports.output.dir}" />
+		<mkdir dir="${reports.dir}" />
+		
+		<exec
+		    program="${path::get-file-name(path.nunit.console)}" basedir="${path::get-directory-name(path.nunit.console)}" workingdir="${path::get-directory-name(unittest.assembly.file)}">
+			<arg value="${unittest.assembly.file}" />
+			<arg value="/xml:${unittest.xml.output.file}" />
+		</exec>
+	</target>
+	
+	<target name="run-unit-tests-with-coverage">
+		<mkdir dir="${reports.dir}" />
+		
 		<exec program="regsvr32" workingdir="${path::get-directory-name(path.ncover.console)}" commandline="/s CoverLib.dll" />
+		
 		<!-- This runs NUnit through NCover.org version 1.3, giving coverage results. 
 			If you don't want to use NCover, delete this 'exec' instance, and use the plain NUnit one below -->
 		<exec 
 			program="${path.ncover.console}" 
-			workingdir="${path::get-directory-name(test.assembly)}">
+			workingdir="${path::get-directory-name(unittest.assembly.file)}">
 			<arg value="/w" />
 			<arg value="." />
 			<arg value="/o" />
-			<arg value="&quot;${coverage.xml.file}&quot;" />
+			<arg value="&quot;${coverage.xml.output.file}&quot;" />
 			<arg value="/c" />
 			<arg value="&quot;${path.nunit.console}&quot;" />
-			<arg value="&quot;${test.assembly} /xml:${nunit.xml.file} /nologo&quot;" />
+			<arg value="&quot;${unittest.assembly.file} /xml:${unittest.xml.output.file} /nologo&quot;" />
 		</exec>
-<!--
-		<exec program="nunit-console.exe" basedir="tools\nunit" workingdir="${build.dir}\Debug\UnitTests">
-			<arg value="WatiN.UnitTests.dll" />
-			<arg value="/xml:..\..\test-reports\UnitTests.xml" />
-		</exec>
--->
 
         <call target="util.ncoverexplorer.exec" />
 	</target>
@@ -164,7 +161,7 @@
 		<exec program="${path.ncoverexplorer.console}" 
 			  workingdir="${path::get-directory-name(path.ncoverexplorer.console)}" >
 			<!-- Names of the coverage.xml file(s) to merge into the coverage report -->
-			<arg value="&quot;${coverage.xml.file}&quot;" />
+			<arg value="&quot;${coverage.xml.output.file}&quot;" />
 			<!-- /r[eport] Report type (1=Module, 2=Namespace, 3=Module/Namespace)   -->
 			<arg value="/r:3"/>
 			<!-- /x[ml][:filename] If specified will generate an xml report.         -->
@@ -185,23 +182,45 @@
 			<!--<arg value="/c:MyProject.config" />-->
 		</exec>
 	</target>
+
+	<target name="ndoc" description="Creates documentation with ndoc">
+	    <ndoc>
+            <assemblies basedir="${bin.dir}">
+                <include name="${core.assembly.name}" />
+            </assemblies>
+            <documenters>
+                <documenter name="MSDN">
+                    <property name="OutputDirectory" value="${path::get-directory-name(core.helpfile.file)}" />
+                    <property name="HtmlHelpName" value="${core.helpfile.name}" />
+                    <property name="Title" value="${project.name} ${core.assembly.version} Documentation (generated with NDoc)" />
+                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
+                    <property name="Preliminary" value="True" />
+                    <property name="CleanIntermediates" value="True" />
+                </documenter>
+            </documenters>
+        </ndoc>
+	</target>
 	
 	<target name="dist">
 	    <!-- Copy distribution root files -->
         <copy file="${source.dir}\Core\Readme.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\Core\License.txt" todir ="${distribution.dir}" />
         <copy file="${source.dir}\ReleaseHistory.txt" todir ="${distribution.dir}" />
-        <copy file="${build.base.dir}\ndoc\WatiN.chm" todir ="${distribution.dir}" />
+        <copy file="${core.helpfile.file}" todir ="${distribution.dir}" />
         
         <!-- Copy the binaries -->
 		<copy todir="${distribution.dir}\bin">
-			<fileset basedir="${build.dir}">
+			<fileset basedir="${bin.dir}">
 				<include name="*.dll"/>
-			</fileset>
+				<include name="*.config"/>
+            </fileset>
 		</copy>
 		
+		<copy file="${pia.dir}\Microsoft.mshtml.dll" todir="${distribution.dir}\bin" />
+		
 		<copy todir="${distribution.dir}\bin\html">
-		    <fileset basedir ="${unittests.html.todir}">
+		    <fileset basedir ="${unittests.htmlfiles.todir}">
                 <include name="*.*" />
 		    </fileset>
 		</copy>
@@ -225,18 +244,66 @@
 
         <copy file="${source.dir}\WatiN.sln" todir ="${distribution.dir}\src" />
 
-        <!-- Adjust reference to Interop.SHDocVw -->
-        <!-- xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+        <!-- Adjust reference to Interop.SHDocVw.dll -->
+        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
             xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Interop.SHDocVw']/@HintPath"
-            value="..\..\bin\Interop.SHDocVw.dll" /-->
+            value="..\..\bin\Interop.SHDocVw.dll" />
+        
+        <!-- Adjust reference to Microsoft.mshtml.dll -->
+        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Microsoft.mshtml']/@HintPath"
+            value="..\..\bin\Microsoft.mshtml.dll" />
+        
+        <!-- Adjust conditional compilation constants -->        
+        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
+            value="DEBUG;TRACE;${project.properties.define}" />
+
+        <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Release']/@DefineConstants"
+            value="TRACE;${project.properties.define}" />
+        
+        <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
+            value="DEBUG;TRACE;${project.properties.define}" />
+
+        <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Release']/@DefineConstants"
+            value="TRACE;${project.properties.define}" />
 
         <!-- Create distribution zip file -->
-		<zip zipfile="${build.base.dir}\WatiN.zip">
+   	    <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
+
+        <property name="distribution.zip.name" value="${project.name}-${core.assembly.version}-${nant.settings.currentframework}.zip" />
+		<zip zipfile="${build.dir}\${distribution.zip.name}">
 			<fileset basedir="${distribution.dir}">
 				<include name="\**" />
 			</fileset>
 		</zip>
 	</target>
+
+	<target name="full" description="Compiles, tests, and produces distributions">
+	    <call target="full-net-1.1" />
+	    <call target="full-net-2.0" />
+	</target>
 	
+	<target name="full-net-1.1" if="${framework::sdk-exists('net-1.1')}" description="Compiles, tests, and produces distributions for .Net 1.1" >
+	    <call target="set-net-1.1-version" />
+	    <call target="clean" />
+	    <call target="build" />
+	    <call target="run-unit-tests-with-coverage" />
+	    <call target="ndoc" />
+	    <call target="dist" />
+	</target>
+	    
+	<target name="full-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">
+	    <call target="set-net-2.0-version" />
+	    <call target="clean" />
+	    <call target="build" />
+	    <call target="run-unit-tests" />
+	    <call target="ndoc" />
+	    <call target="dist" />
+	</target>
+
 </project>
 
