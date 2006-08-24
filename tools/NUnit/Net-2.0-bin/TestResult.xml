@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\bin\Debug\Watin.UNittests.dll" total="84" failures="57" not-run="0" date="2006-08-10" time="01:22:24">
+  <environment nunit-version="2.2.8.0" clr-version="2.0.50727.42" os-version="Microsoft Windows NT 5.1.2600 Service Pack 2" platform="Win32NT" cwd="C:\Program Files\NUnit-Net-2.0 2.2.8\bin" machine-name="DB-JME" user="j.vanmenen" user-domain="DATABALK" />
+  <culture-info current-culture="nl-NL" current-uiculture="nl-NL" />
+  <test-suite name="C:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\bin\Debug\Watin.UNittests.dll" success="False" time="13.396" asserts="0">
+    <results>
+      <test-suite name="C:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\bin\Debug\Watin.UNittests.dll" success="False" time="13.366" asserts="0">
+        <results>
+          <test-suite name="WatiN" success="False" time="13.366" asserts="0">
+            <results>
+              <test-suite name="WatiN.UnitTests" success="False" time="13.366" asserts="0">
+                <results>
+                  <test-suite name="WatiN.UnitTests.Elements" success="False" time="0.201" asserts="0">
+                    <failure>
+                      <message><![CDATA[The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                      <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.Elements.Setup() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\Elements.cs:line 38
+]]></stack-trace>
+                    </failure>
+                    <results>
+                      <test-case name="WatiN.UnitTests.Elements.Button" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.ButtonDisabledException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Buttons" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.CheckBox" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.CheckBoxes" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Element" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.GetInvalidAttribute" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.LabelByFor" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Labels" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.LabelWrapped" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Link" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.LinkFindByInvalidEnum" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Links" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.MultiSelectList" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.RadioButton" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.RadioButtons" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.SelectLists" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.SingleSelectItemNotFoundException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.SingleSelectList" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Table" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TableCellByIndex" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TableCells" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TableRows" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.Tables" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextField" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextFieldDisabledException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextFieldFlash" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextFieldReadyOnlyException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextFields" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TextFieldTextAreaElement" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Elements.TryFindingElementByInvalidAttribute" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite name="WatiN.UnitTests.FindElementBy" success="False" time="0.401" asserts="0">
+                    <results>
+                      <test-case name="WatiN.UnitTests.FindElementBy.ElementUrlPartialValue" executed="True" success="False" time="0.030" asserts="5">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.FindElementBy.ElementUrlPartialValue() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\FindElementBy.cs:line 257
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByCustom" executed="True" success="True" time="0.181" asserts="7" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByFor" executed="True" success="True" time="0.010" asserts="3" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByID" executed="True" success="True" time="0.000" asserts="3" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByName" executed="True" success="True" time="0.000" asserts="3" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByText" executed="True" success="True" time="0.000" asserts="3" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByTitle" executed="True" success="True" time="0.010" asserts="11" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByUri" executed="True" success="True" time="0.020" asserts="8" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByUrl" executed="True" success="True" time="0.000" asserts="8" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByUrlInvalidCompare" executed="True" success="True" time="0.060" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByUrlInvalidParam" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByUrlWithRegex" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindByValue" executed="True" success="True" time="0.010" asserts="4" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.FindingEmptyUrlNotAllowed" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithEmpties" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithEmptyAttribute" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithEmptyValue" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithNullAttribute" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithNullRegex" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithNulls" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithNullsRegex" executed="True" success="True" time="0.020" asserts="0" />
+                      <test-case name="WatiN.UnitTests.FindElementBy.NewElementAttributeWithNullValue" executed="True" success="True" time="0.000" asserts="0" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="WatiN.UnitTests.FrameTests" success="False" time="0.010" asserts="0">
+                    <failure>
+                      <message><![CDATA[The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                      <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.FrameTests.Setup() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\FrameTests.cs:line 44
+]]></stack-trace>
+                    </failure>
+                    <results>
+                      <test-case name="WatiN.UnitTests.FrameTests.ExpectFrameNotFoundException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.FrameTests.Frame" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.FrameTests.Frames" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.FrameTests.HasNoFrames" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.FrameTests.ShowFrames" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[TestFixtureSetUp Failed]]></message>
+                          <stack-trace />
+                        </failure>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite name="WatiN.UnitTests.IeTests" success="False" time="12.733" asserts="0">
+                    <results>
+                      <test-case name="WatiN.UnitTests.IeTests.Alert" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.Alert() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 121
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.AttachToIEByPartialTitleAndByUrl" executed="True" success="False" time="3.321" asserts="1">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.AttachToIEByPartialTitleAndByUrl() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 218
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.AttachToIEWithNegativeTimeoutNotAllowed" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="WatiN.UnitTests.IeTests.AttachToIEWithZeroTimeout" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.AttachToIEWithZeroTimeout() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 197
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.BackAndForward" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 223
+   at WatiN.UnitTests.IeTests.BackAndForward() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 173
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.ContainsText" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.ContainsText() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 112
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.FireKeyDownEventOnElementWithNoId" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.FireKeyDownEventOnElementWithNoId() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 359
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.Google" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.Google() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 76
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.GoogleFormSubmit" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.GoogleFormSubmit() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 88
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.GoToUri" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 223
+   at WatiN.UnitTests.IeTests.GoToUri() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 163
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.GoToUrl" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 223
+   at WatiN.UnitTests.IeTests.GoToUrl() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 153
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.HTMLDialog" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.HTMLDialog() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 269
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.HTMLDialogFindByTitle" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.HTMLDialogFindByTitle() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 290
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.HTMLDialogFindByUrl" executed="True" success="False" time="0.020" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.HTMLDialogFindByUrl() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 308
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.HTMLDialogNotFoundException" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.HTMLDialogNotFoundException() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 326
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.IEClosedByDispose" executed="True" success="False" time="3.091" asserts="1">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.IeTests.IEClosedByDispose() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 233
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.IENotFoundException" executed="True" success="True" time="5.148" asserts="3" />
+                      <test-case name="WatiN.UnitTests.IeTests.IsSTAThread" executed="True" success="False" time="0.010" asserts="1">
+                        <failure>
+                          <message><![CDATA[]]></message>
+                          <stack-trace><![CDATA[   at WatiN.UnitTests.IeTests.IsSTAThread() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 49
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.ModelessDialog" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.ModelessDialog() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 100
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.IeTests.NewUri" executed="True" success="True" time="0.020" asserts="1" />
+                      <test-case name="WatiN.UnitTests.IeTests.NUnitGUI" executed="True" success="True" time="1.023" asserts="0" />
+                      <test-case name="WatiN.UnitTests.IeTests.URL" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 323
+   at WatiN.UnitTests.IeTests.URL() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\IEAndMainDocument.cs:line 144
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                  <test-suite name="WatiN.UnitTests.Utils" success="False" time="0.010" asserts="0">
+                    <results>
+                      <test-case name="WatiN.UnitTests.Utils.DumpElements" executed="True" success="False" time="0.010" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.Utils.DumpElements() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\Utils.cs:line 33
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Utils.DumpElementsElab" executed="True" success="False" time="0.000" asserts="0">
+                        <failure>
+                          <message><![CDATA[System.Threading.ThreadStateException : The CurrentThread needs to have it's AppartmentState set to AppartmentState.STA to be able to automate Internet Explorer.]]></message>
+                          <stack-trace><![CDATA[   at WatiN.Core.IE.SetCurrentThreadAppartmentStateToSTA() in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 368
+   at WatiN.Core.IE.CreateNewIE(String url, Boolean autoClose) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 353
+   at WatiN.Core.IE..ctor(String url) in c:\TAdev\WatiN\WatiN .Net 2.0\src\Core\IE.cs:line 257
+   at WatiN.UnitTests.Utils.DumpElementsElab() in c:\TAdev\WatiN\WatiN .Net 2.0\src\UnitTests\Utils.cs:line 42
+]]></stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="WatiN.UnitTests.Utils.IsNotNullOrEmpty" executed="True" success="True" time="0.000" asserts="4" />
+                      <test-case name="WatiN.UnitTests.Utils.IsNullOrEmpty" executed="True" success="True" time="0.000" asserts="4" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
