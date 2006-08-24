@@ -36,9 +36,41 @@ namespace WatiN.Core
     /// </summary>
     private SubElementsSupport(){}
 
+    public const string InputTagName = "INPUT";
+    public const string InputButtonTypeConstant = "button submit image reset";
+    public const string InputCheckBoxTypeConstant = "checkbox";
+    public const string InputRadioButtonTypeConstant = "radio";
+    public const string InputTextFieldTypeConstant = "text password textarea hidden";
+    public const string FormTagName = "form";
+    public const string FormTypeConstant = null;
+    public const string LabelTagName = "label";
+    public const string LabelTypeConstant = null;
+    public const string LinkTagName = "A";
+    public const string LinkTypeConstant = null;
+    public const string ParaTagName = "p";
+    public const string ParaTypeConstant = null;
+    public const string SelectListsTagName = "select";
+    public const string SelectListsTypeConstant = null;
+    public const string TableTagName = "table";
+    public const string TableTypeConstant = null;
+    public const string TableCellTagName = "TD";
+    public const string TableCellTypeConstant = null;
+    public const string TableRowTagName = "TR";
+    public const string TableRowTypeConstant = null;
+    public const string TextAreaTagName = "textarea";
+    public const string TextAreaTypeConstant = null;
+    public const string SpanTagName = "span";
+    public const string SpanTypeConstant = null;
+    public const string DivTagName = "div";
+    public const string DivTypeConstant = null;
+    public const string ImageTagName = "img";
+    public const string ImageTypeConstant = null;
+    public const string FrameTagName = "FRAME";
+    public const string FrameTypeConstant = null;
+
     public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Button(ie, (HTMLInputElement)FindElementByAttribute("input", "button submit image reset", findBy, elements));
+      return new Button(ie, (HTMLInputElement)FindElementByAttribute(InputTagName, InputButtonTypeConstant, findBy, elements));
     }
 
     public static ButtonCollection Buttons(DomContainer ie, IHTMLElementCollection elements)
@@ -48,7 +80,7 @@ namespace WatiN.Core
 
     public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new CheckBox(ie, (IHTMLInputElement) FindElementByAttribute("input", "checkbox", findBy, elements));
+      return new CheckBox(ie, (IHTMLInputElement) FindElementByAttribute(InputTagName, InputCheckBoxTypeConstant, findBy, elements));
     }
 
     public static CheckBoxCollection CheckBoxes(DomContainer ie, IHTMLElementCollection elements)
@@ -58,7 +90,7 @@ namespace WatiN.Core
 
     public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Form(ie, (HTMLFormElement) FindElementByAttribute("form", null, findBy, elements));
+      return new Form(ie, (HTMLFormElement) FindElementByAttribute(FormTagName, FormTypeConstant, findBy, elements));
     }
 
     public static FormCollection Forms(DomContainer ie, IHTMLElementCollection elements)
@@ -68,7 +100,7 @@ namespace WatiN.Core
 
     public static Label Label(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Label(ie, (HTMLLabelElement) FindElementByAttribute("label", null, findBy, elements));
+      return new Label(ie, (HTMLLabelElement) FindElementByAttribute(LabelTagName, LabelTypeConstant, findBy, elements));
     }
 
     public static LabelCollection Labels(DomContainer ie, IHTMLElementCollection elements)
@@ -78,7 +110,7 @@ namespace WatiN.Core
 
     public static Link Link(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Link(ie, (HTMLAnchorElement) FindElementByAttribute("A", null, findBy, elements));
+      return new Link(ie, (HTMLAnchorElement) FindElementByAttribute(LinkTagName, LinkTypeConstant, findBy, elements));
     }
 
     public static LinkCollection Links(DomContainer ie, IHTMLElementCollection elements)
@@ -88,7 +120,7 @@ namespace WatiN.Core
 
     public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Para(ie, (HTMLParaElement) FindElementByAttribute("p", null, findBy, elements));
+      return new Para(ie, (HTMLParaElement) FindElementByAttribute(ParaTagName, ParaTypeConstant, findBy, elements));
     }
 
     public static ParaCollection Paras(DomContainer ie, IHTMLElementCollection elements)
@@ -98,7 +130,7 @@ namespace WatiN.Core
 
     public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new RadioButton(ie, (IHTMLInputElement) FindElementByAttribute("input", "radio", findBy, elements));
+      return new RadioButton(ie, (IHTMLInputElement) FindElementByAttribute(InputTagName, InputRadioButtonTypeConstant, findBy, elements));
     }
 
     public static RadioButtonCollection RadioButtons(DomContainer ie, IHTMLElementCollection elements)
@@ -108,7 +140,7 @@ namespace WatiN.Core
 
     public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new SelectList(ie, FindElementByAttribute("select", null, findBy, elements));
+      return new SelectList(ie, FindElementByAttribute(SelectListsTagName, SelectListsTypeConstant, findBy, elements));
     }
 
     public static SelectListCollection SelectLists(DomContainer ie, IHTMLElementCollection elements)
@@ -118,7 +150,7 @@ namespace WatiN.Core
 
     public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Table(ie, (HTMLTable) FindElementByAttribute("table", null, findBy, elements));
+      return new Table(ie, (HTMLTable) FindElementByAttribute(TableTagName, TableTypeConstant, findBy, elements));
     }
 
     public static TableCollection Tables(DomContainer ie, IHTMLElementCollection elements)
@@ -133,13 +165,13 @@ namespace WatiN.Core
 
     public static TableCell TableCell(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, (HTMLTableCell) FindElementByAttribute("TD", null, findBy, elements));
+      return new TableCell(ie, (HTMLTableCell) FindElementByAttribute(TableCellTagName, TableCellTypeConstant, findBy, elements));
     }
 
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
       int nr = -1;
-      IHTMLElementCollection elements = (IHTMLElementCollection)elementCollection.tags("TD");
+      IHTMLElementCollection elements = (IHTMLElementCollection)elementCollection.tags(TableCellTagName);
       foreach (IHTMLElement e in elements)
       {
         if (e.id == elementId)
@@ -161,7 +193,7 @@ namespace WatiN.Core
 
     public static TableRow TableRow(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableRow(ie, (HTMLTableRow) FindElementByAttribute("TR", null, findBy, elements));
+      return new TableRow(ie, (HTMLTableRow) FindElementByAttribute(TableRowTagName, TableRowTypeConstant, findBy, elements));
     }
 
     public static TableRowCollection TableRows(DomContainer ie, IHTMLElementCollection elements)
@@ -175,13 +207,13 @@ namespace WatiN.Core
 
       try
       {
-        textfield = new TextField(ie, (HTMLInputElement)FindElementByAttribute("input", "text password textarea hidden", findBy, elements));
+        textfield = new TextField(ie, (HTMLInputElement)FindElementByAttribute(InputTagName, InputTextFieldTypeConstant, findBy, elements));
       }
       catch (ElementNotFoundException)
       {
         try
         {
-          textfield = new TextField(ie, (HTMLTextAreaElement)FindElementByAttribute("textarea", null, findBy, elements));
+          textfield = new TextField(ie, (HTMLTextAreaElement)FindElementByAttribute(TextAreaTagName, TextAreaTypeConstant, findBy, elements));
         }
         catch (ElementNotFoundException)
         {
@@ -199,7 +231,7 @@ namespace WatiN.Core
 
     public static Span Span(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Span(ie, (HTMLSpanElement) FindElementByAttribute("span", null, findBy, elements));
+      return new Span(ie, (HTMLSpanElement) FindElementByAttribute(SpanTagName, SpanTypeConstant, findBy, elements));
     }
 
     public static SpanCollection Spans(DomContainer ie, IHTMLElementCollection elements)
@@ -209,7 +241,7 @@ namespace WatiN.Core
 
     public static Div Div(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Div(ie, (HTMLDivElement) FindElementByAttribute("div", null, findBy, elements));
+      return new Div(ie, (HTMLDivElement) FindElementByAttribute(DivTagName, DivTypeConstant, findBy, elements));
     }
 
     public static DivCollection Divs(DomContainer ie, IHTMLElementCollection elements)
@@ -219,7 +251,7 @@ namespace WatiN.Core
 
     public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Image(ie, (IHTMLImgElement) FindElementByAttribute("img", null, findBy, elements));
+      return new Image(ie, (IHTMLImgElement) FindElementByAttribute(ImageTagName, ImageTypeConstant, findBy, elements));
     }
 
     public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
@@ -294,7 +326,7 @@ namespace WatiN.Core
 
     private static bool IsInputElement(string tagName)
     {
-      return String.Compare(tagName, "input", true) == 0;
+      return String.Compare(tagName, InputTagName, true) == 0;
     }
 
     private static string getAttributeValue(Attribute findBy, IHTMLElement element)

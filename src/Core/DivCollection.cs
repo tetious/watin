@@ -38,7 +38,7 @@ namespace WatiN.Core
     public DivCollection(DomContainer domContainer, IHTMLElementCollection elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection divs = (IHTMLElementCollection)elements.tags("div");
+      IHTMLElementCollection divs = (IHTMLElementCollection)elements.tags(SubElementsSupport.DivTagName);
 
       foreach (HTMLDivElement div in divs)
       {

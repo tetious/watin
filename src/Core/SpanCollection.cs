@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public SpanCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection spans = (IHTMLElementCollection)elements.tags("span");
+      IHTMLElementCollection spans = (IHTMLElementCollection)elements.tags(SubElementsSupport.SpanTagName);
 			
       foreach (HTMLSpanElement span in spans)
 			{

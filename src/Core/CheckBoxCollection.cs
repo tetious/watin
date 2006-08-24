@@ -38,11 +38,11 @@ namespace WatiN.Core
 		public CheckBoxCollection(DomContainer domContainer, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("input");
+      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
 			foreach (IHTMLInputElement item in inputElements)
 			{
-        if (item.type == "checkbox")
+        if (item.type == SubElementsSupport.InputCheckBoxTypeConstant)
         {
             CheckBox v = new CheckBox(domContainer, item);
             this.elements.Add(v);

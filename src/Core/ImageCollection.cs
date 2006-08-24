@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public ImageCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("img");
+      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.ImageTagName);
 			
       foreach (IHTMLInputElement inputElement in inputElements)
       {

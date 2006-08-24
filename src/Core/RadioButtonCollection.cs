@@ -32,11 +32,11 @@ namespace WatiN.Core
     public RadioButtonCollection(DomContainer ie, IHTMLElementCollection elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("input");
+      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
       foreach (IHTMLInputElement item in inputElements)
       {
-        if (item.type == "radio")
+        if (item.type == SubElementsSupport.InputRadioButtonTypeConstant)
         {
           RadioButton v = new RadioButton(ie, item);
           this.elements.Add(v);

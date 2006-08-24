@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public TableCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection tables = (IHTMLElementCollection)elements.tags("table");
+      IHTMLElementCollection tables = (IHTMLElementCollection)elements.tags(SubElementsSupport.TableTagName);
 			
       foreach (HTMLTable table in tables)
 			{

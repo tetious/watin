@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public LabelCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection labels = (IHTMLElementCollection)elements.tags("label");
+      IHTMLElementCollection labels = (IHTMLElementCollection)elements.tags(SubElementsSupport.LabelTagName);
 			
       foreach (HTMLLabelElement label in labels)
 			{

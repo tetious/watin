@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public ParaCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection Paras = (IHTMLElementCollection)elements.tags("p");
+      IHTMLElementCollection Paras = (IHTMLElementCollection)elements.tags(SubElementsSupport.ParaTagName);
 			
       foreach (HTMLParaElement Para in Paras)
 			{

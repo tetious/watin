@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
 		{
 			elements = new ArrayList();
-      IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags("FRAME");
+      IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
 
       for (int index = 0; index < htmlDocument.frames.length; index++)
       {

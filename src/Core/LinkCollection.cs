@@ -32,7 +32,7 @@ namespace WatiN.Core
     public LinkCollection(DomContainer ie, IHTMLElementCollection elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection links = (IHTMLElementCollection)elements.tags("a");
+      IHTMLElementCollection links = (IHTMLElementCollection)elements.tags(SubElementsSupport.LinkTagName);
 
       foreach (HTMLAnchorElement link in links)
       {

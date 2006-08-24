@@ -32,18 +32,18 @@ namespace WatiN.Core
     public TextFieldCollection(DomContainer ie, IHTMLElementCollection elements) 
     {
       children = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("input");
+      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
       foreach (IHTMLInputElement inputElement in inputElements)
       {
-        if ("text password textarea hidden".IndexOf(inputElement.type) >= 0)
+        if (SubElementsSupport.InputTextFieldTypeConstant.IndexOf(inputElement.type) >= 0)
         {
           TextField v = new TextField(ie, (HTMLInputElement)inputElement);
           children.Add(v);
         }
       }
 
-      IHTMLElementCollection textElements = (IHTMLElementCollection)elements.tags("textarea");
+      IHTMLElementCollection textElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.TextAreaTagName);
 
       foreach (IHTMLElement textElement in textElements)
       {

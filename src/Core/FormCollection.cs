@@ -32,7 +32,7 @@ namespace WatiN.Core
 		public FormCollection(DomContainer ie, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection forms = (IHTMLElementCollection)elements.tags("form");
+      IHTMLElementCollection forms = (IHTMLElementCollection)elements.tags(SubElementsSupport.FormTagName);
 
 			foreach (HTMLFormElement form in forms)
 			{

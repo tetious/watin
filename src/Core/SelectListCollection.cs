@@ -32,7 +32,7 @@ namespace WatiN.Core
     public SelectListCollection(DomContainer ie, IHTMLElementCollection elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection selectlists = (IHTMLElementCollection)elements.tags("select");
+      IHTMLElementCollection selectlists = (IHTMLElementCollection)elements.tags(SubElementsSupport.SelectListsTagName);
 
       foreach (IHTMLElement selectlist in selectlists)
       {

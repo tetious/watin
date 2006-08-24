@@ -38,11 +38,11 @@ namespace WatiN.Core
 		public ButtonCollection(DomContainer domContainer, IHTMLElementCollection elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags("input");
+      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 			
       foreach (IHTMLInputElement inputElement in inputElements)
 			{
-        if ("button submit image reset".IndexOf(inputElement.type) >= 0)
+        if (SubElementsSupport.InputButtonTypeConstant.IndexOf(inputElement.type) >= 0)
         {
             Button v = new Button(domContainer, (HTMLInputElement)inputElement);
             this.elements.Add(v);
