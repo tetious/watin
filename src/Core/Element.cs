@@ -131,7 +131,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the name of the tag.
+    /// Gets the tag name of this element.
     /// </summary>
     /// <value>The name of the tag.</value>
     public string TagName
@@ -210,7 +210,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Clicks this instance and waits till the event is completely finished (page is loaded 
+    /// Clicks this element and waits till the event is completely finished (page is loaded 
     /// and ready) .
     /// </summary>
     public void Click()
@@ -239,8 +239,8 @@ namespace WatiN.Core
 
     /// <summary>
     /// Clicks this instance and returns immediately. Use this method when you want to continue without waiting
-    /// for the click event to be finished. Mostly used when a pop-up
-    /// window is displayed when clicking the element.
+    /// for the click event to be finished. Mostly used when a 
+    /// HTMLDialog is displayed after clicking the element.
     /// </summary>
     public void ClickNoWait()
     {
@@ -258,7 +258,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gives the (input) focus to this instance.
+    /// Gives the (input) focus to this element.
     /// </summary>
     public void Focus()
     {
@@ -269,7 +269,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Doubleclicks this instance.
+    /// Doubleclicks this element.
     /// </summary>
     public void DoubleClick()
     {
@@ -281,7 +281,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Does a keydown on this instance.
+    /// Does a keydown on this element.
     /// </summary>
     public void KeyDown()
     {
@@ -289,7 +289,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Does a keyspress on this instance..
+    /// Does a keyspress on this element.
     /// </summary>
     public void KeyPress()
     {
@@ -297,7 +297,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Does a keyup on this instance..
+    /// Does a keyup on this element.
     /// </summary>
     public void KeyUp()
     {
@@ -305,7 +305,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the blur event on this instance.
+    /// Fires the blur event on this element.
     /// </summary>
     public void Blur()
     {
@@ -313,7 +313,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the change event on this instance.
+    /// Fires the change event on this element.
     /// </summary>
     public void Change()
     {
@@ -321,7 +321,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the mouseenter event on this instance.
+    /// Fires the mouseenter event on this element.
     /// </summary>
     public void MouseEnter()
     {
@@ -329,7 +329,7 @@ namespace WatiN.Core
     }
     
     /// <summary>
-    /// Fires the mousedown event on this instance.
+    /// Fires the mousedown event on this element.
     /// </summary>
     public void MouseDown()
     {
@@ -337,7 +337,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the mouseup event on this instance.
+    /// Fires the mouseup event on this element.
     /// </summary>
     public void MouseUp()
     {
@@ -345,7 +345,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the specified <paramref name="eventName"/> on this instance.
+    /// Fires the specified <paramref name="eventName"/> on this element.
     /// </summary>
     public void FireEvent(string eventName)
     {
@@ -358,7 +358,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Flashes this instance.
+    /// Flashes this element.
     /// </summary>
     public void Flash()
     {
@@ -372,7 +372,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Highlights this instance.
+    /// Highlights this element.
     /// </summary>
     /// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
     protected void Highlight(bool doHighlight)
