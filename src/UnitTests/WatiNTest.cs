@@ -19,8 +19,6 @@
 
 using System;
 using System.IO;
-using WatiN.Core;
-using WatiN.Core.Logging;
 
 namespace WatiN.UnitTests
 {
@@ -33,8 +31,6 @@ namespace WatiN.UnitTests
     private static Uri framesetURI = null;
     private static Uri testEventsURI = null;
     private static Uri watinURI = null;
-
-    private static Uri googleURI;
 
     public static Uri HtmlTestBaseURI
     {
@@ -123,16 +119,11 @@ namespace WatiN.UnitTests
       }
     }
 
-
-    public static Uri GoogleURI
+    public static string googleUrl
     {
       get
       {
-        if(googleURI == null)
-        {
-          googleURI = new Uri("http://www.google.com");
-        }
-        return googleURI;
+        return "http://www.google.com";
       }
     }
 
