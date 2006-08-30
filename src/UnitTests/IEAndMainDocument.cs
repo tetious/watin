@@ -203,6 +203,15 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void NewIE()
+    {
+      using (IE ie = new IE(true))
+      {
+        Assert.AreEqual("about:blank", ie.Url);
+      }
+    }
+    
+    [Test]
     public void NewIEWithUri()
     {
       using (IE ie = new IE(MainURI))
@@ -219,6 +228,32 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(url))
       {
         Assert.AreEqual(MainURI, new Uri(ie.Url));
+      }
+    }
+
+    [Test]
+    public void RefreshWithNeverExpiredPage()
+    {
+      using (IE ie = new IE(MainURI))
+      {
+        ie.TextField("name").TypeText("refresh test");
+                
+        ie.Refresh();
+        
+        Assert.AreEqual("refresh test", ie.TextField("name").Text);
+      }
+    }
+    
+    [Test]
+    public void RefreshWithImmediatelyExpiredPage()
+    {
+      using (IE ie = new IE(GoogleURI))
+      {
+        ie.TextField(Find.ByName("q")).TypeText("refresh test");
+                
+        ie.Refresh();
+        
+        Assert.AreEqual(null, ie.TextField(Find.ByName("q")).Text);
       }
     }
 
@@ -268,15 +303,15 @@ namespace WatiN.UnitTests
     [Test]
     public void AttachToIEByPartialTitleAndByUrl()
     {
-      Assert.IsFalse(IsIEWindowOpen("gOo"), "An Internet Explorer with 'gOo' in it's title already exists. AttachToIEByParialTitle can't be correctly tested. Close all IE windows and run this test again.");
+      Assert.IsFalse(IsIEWindowOpen("Ai"), "An Internet Explorer with 'Ai' in it's title already exists. AttachToIEByParialTitle can't be correctly tested. Close all IE windows and run this test again.");
 
-      using (new IE(GoogleURI))
+      using (new IE(MainURI))
       {
-        IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo"));
-        Assert.AreEqual(GoogleURI, ieGoogle.Uri);
+        IE ieMain = IE.AttachToIE(Find.ByTitle("Ai"));
+        Assert.AreEqual(MainURI, ieMain.Uri);
         
-        ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI));
-        Assert.AreEqual(GoogleURI, ieGoogle.Uri);
+        ieMain = IE.AttachToIE(Find.ByUrl(MainURI));
+        Assert.AreEqual(MainURI, ieMain.Uri);
       }
     }
     

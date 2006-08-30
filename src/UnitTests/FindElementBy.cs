@@ -79,7 +79,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByUrl()
     {
-      string url = GoogleURI.ToString();
+      string url = WatiNURI.ToString();
       Url value = Find.ByUrl(url);
       AssertUrlValue(value);
     }
@@ -93,16 +93,16 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByUri()
     {
-      Url value = new Url(GoogleURI);
+      Url value = new Url(WatiNURI);
       AssertUrlValue(value);
     }
     
     private static void AssertUrlValue(Url value)
     {
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual(GoogleURI.ToString(), value.Value, "Wrong value");
-      Assert.IsTrue(value.Compare(GoogleURI.ToString()), "Should match Google url");
-      Assert.IsTrue(value.Compare(GoogleURI), "Should match Google uri");
+      Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
+      Assert.IsTrue(value.Compare(WatiNURI.ToString()), "Should match WatiN url");
+      Assert.IsTrue(value.Compare(WatiNURI), "Should match WatiN uri");
       Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
       Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
       Assert.IsFalse(value.Compare(null), "Null should not match");
@@ -126,8 +126,8 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
-      Url value = Find.ByUrl(GoogleURI.ToString());
-      value.Compare("google.com");
+      Url value = Find.ByUrl(WatiNURI.ToString());
+      value.Compare("watin.sourceforge.net");
     }
 
     [Test]
@@ -259,16 +259,14 @@ namespace WatiN.UnitTests
     [Test]
     public void ElementUrlPartialValue()
     {
-      ElementUrlPartialValue value = new ElementUrlPartialValue("google.com");
+      ElementUrlPartialValue value = new ElementUrlPartialValue("watin.sourceforge");
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("google.com", value.Value, "Wrong value");
+      Assert.AreEqual("watin.sourceforge", value.Value, "Wrong value");
       
-      Assert.IsTrue(value.Compare("google.com"), "Compare should match");
+      Assert.IsTrue(value.Compare("watin.sourceforge"), "Compare should match");
       
-      value = new ElementUrlPartialValue("google.com");
-      Assert.IsTrue(value.Compare(GoogleURI.ToString()), "Compare should partial match tit");
-      
-      value = new ElementUrlPartialValue("google.com");
+      value = new ElementUrlPartialValue("watin.sourceforge");
+      Assert.IsTrue(value.Compare(WatiNURI.ToString()), "Compare should partial match title");      
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
       using (new IE(MainURI))

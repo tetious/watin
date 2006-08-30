@@ -19,6 +19,8 @@
 
 using System;
 using System.IO;
+using WatiN.Core;
+using WatiN.Core.Logging;
 
 namespace WatiN.UnitTests
 {
@@ -30,6 +32,7 @@ namespace WatiN.UnitTests
     private static Uri popUpURI = null;
     private static Uri framesetURI = null;
     private static Uri testEventsURI = null;
+    private static Uri watinURI = null;
 
     private static Uri googleURI;
 
@@ -104,6 +107,19 @@ namespace WatiN.UnitTests
         }
 
         return testEventsURI;
+      }
+    }
+    
+    public static Uri WatiNURI
+    {
+      get
+      {
+        if (watinURI == null)
+        {
+          watinURI = new Uri(HtmlTestBaseURI, "http://watin.sourceforge.net");
+        }
+
+        return watinURI;
       }
     }
 

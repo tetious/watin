@@ -360,17 +360,17 @@ namespace WatiN.UnitTests
     [Test]
     public void Link()
     {
-      Assert.AreEqual(GoogleURI, ie.Link(Find.ById("testlinkid")).Url);
-      Assert.AreEqual(GoogleURI, ie.Link("testlinkid").Url);
-      Assert.AreEqual(GoogleURI, ie.Link(Find.ByName("testlinkname")).Url);
-      Assert.AreEqual(GoogleURI, ie.Link(Find.ByUrl(GoogleURI)).Url);
+      Assert.AreEqual(WatiNURI, ie.Link(Find.ById("testlinkid")).Url);
+      Assert.AreEqual(WatiNURI, ie.Link("testlinkid").Url);
+      Assert.AreEqual(WatiNURI, ie.Link(Find.ByName("testlinkname")).Url);
+      Assert.AreEqual(WatiNURI, ie.Link(Find.ByUrl(WatiNURI)).Url);
       Assert.AreEqual("Microsoft", ie.Link(Find.ByText("Microsoft")).Text);
     }
 
     [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexistinglinkid'")]
     public void LinkFindByInvalidEnum()
     {
-      Assert.AreEqual(GoogleURI, ie.Link(Find.ById("noexistinglinkid")).Url);
+      ie.Link(Find.ById("noexistinglinkid"));
     }
 
     [Test]
