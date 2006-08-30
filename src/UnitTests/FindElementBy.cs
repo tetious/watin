@@ -79,7 +79,8 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByUrl()
     {
-      Url value = Find.ByUrl("http://www.google.com");
+      string url = GoogleURI.ToString();
+      Url value = Find.ByUrl(url);
       AssertUrlValue(value);
     }
 
@@ -99,8 +100,8 @@ namespace WatiN.UnitTests
     private static void AssertUrlValue(Url value)
     {
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("http://www.google.com/", value.Value, "Wrong value");
-      Assert.IsTrue(value.Compare("http://www.google.com/"), "Should match Google url");
+      Assert.AreEqual(GoogleURI.ToString(), value.Value, "Wrong value");
+      Assert.IsTrue(value.Compare(GoogleURI.ToString()), "Should match Google url");
       Assert.IsTrue(value.Compare(GoogleURI), "Should match Google uri");
       Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
       Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
@@ -119,13 +120,13 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidParam()
     {
-      Find.ByUrl("www.google.nl");
+      Find.ByUrl("www.xyz.nl");
     }
 
     [Test, ExpectedException(typeof(UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
-      Url value = Find.ByUrl("http://www.google.com");
+      Url value = Find.ByUrl(GoogleURI.ToString());
       value.Compare("google.com");
     }
 
@@ -265,12 +266,12 @@ namespace WatiN.UnitTests
       Assert.IsTrue(value.Compare("google.com"), "Compare should match");
       
       value = new ElementUrlPartialValue("google.com");
-      Assert.IsTrue(value.Compare("www.google.com"), "Compare should partial match tit");
+      Assert.IsTrue(value.Compare(GoogleURI.ToString()), "Compare should partial match tit");
       
       value = new ElementUrlPartialValue("google.com");
       Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
 
-      using (new IE(MainURI.ToString()))
+      using (new IE(MainURI))
       {
         string partialUrl = MainURI.ToString();
         partialUrl = partialUrl.Remove(0, partialUrl.Length - 8);

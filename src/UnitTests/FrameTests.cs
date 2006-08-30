@@ -41,7 +41,7 @@ namespace WatiN.UnitTests
     {
       Logger.LogWriter = new DebugLogWriter();
             
-      ie = new IE(FramesetURI.ToString(), true);
+      ie = new IE(FramesetURI, true);
     }
 
     [TestFixtureTearDown]
@@ -53,7 +53,7 @@ namespace WatiN.UnitTests
     [Test]
     public void HasNoFrames()
     {
-      using(IE iemain = new IE(MainURI.ToString()))
+      using(IE iemain = new IE(MainURI))
       {
         Assert.AreEqual(0, iemain.Frames.Length);
       }
@@ -74,7 +74,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual("mainid", mainFrame.Id);
 
       AssertFindFrame(ie, Find.ByName(frameNameMain), frameNameMain);
-      AssertFindFrame(ie, Find.ByUrl(IndexURI.ToString()), frameNameContents);
+      AssertFindFrame(ie, Find.ByUrl(IndexURI), frameNameContents);
     }
 
     [Test]

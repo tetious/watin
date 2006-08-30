@@ -52,7 +52,7 @@ namespace WatiN.UnitTests
     [Test]
     public void NUnitGUI()
     {
-      using (new IE(MainURI.ToString(), true))
+      using (new IE(MainURI, true))
       {
       }
     }
@@ -64,7 +64,7 @@ namespace WatiN.UnitTests
       // the debug window in VS
       Logger.LogWriter = new DebugLogWriter();
 
-      using (IE ie = new IE(GoogleURI.ToString(), true))
+      using (IE ie = new IE(GoogleURI, true))
       {
         ie.TextField(Find.ByName("q")).TypeText("WatiN");
         ie.Button(Find.ByName("btnG")).Click();
@@ -76,7 +76,7 @@ namespace WatiN.UnitTests
     [Test,Ignore("Second assert fails in nunit console mode.")]
     public void PressTabAndActiveElement()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      using (IE ie = new IE(MainURI, true))
       {              
         ie.TextField("name").Focus();
         
@@ -93,7 +93,7 @@ namespace WatiN.UnitTests
     [Test]
     public void WindowStyle()
     {
-      using(IE ie = new IE(MainURI.ToString()))
+      using(IE ie = new IE(MainURI))
       {
         NativeMethods.WindowShowStyle currentStyle = ie.GetWindowStyle();
         
@@ -114,7 +114,7 @@ namespace WatiN.UnitTests
     [Test]
     public void GoogleFormSubmit()
     {
-      using (IE ie = new IE(GoogleURI.ToString(), true))
+      using (IE ie = new IE(GoogleURI, true))
       {
         ie.TextField(Find.ByName("q")).TypeText("WatiN");
         ie.Form(Find.ByName("f")).Submit();
@@ -126,7 +126,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ModelessDialog()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      using (IE ie = new IE(MainURI, true))
       {
         ie.Button("popupid").Click();
         Document dialog = ie.HtmlDialogs[0];
@@ -138,7 +138,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ContainsText()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      using (IE ie = new IE(MainURI, true))
       {
         Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
         Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
@@ -148,7 +148,7 @@ namespace WatiN.UnitTests
     [Test]
     public void Alert()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      using (IE ie = new IE(MainURI, true))
       {
         ie.Button("helloid").Click();
 
@@ -160,7 +160,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(MissingAlertException))]
     public void MissingAlertException()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      using (IE ie = new IE(MainURI, true))
       {
         ie.PopAlert();
       }
@@ -169,7 +169,9 @@ namespace WatiN.UnitTests
     [Test]
     public void DocumentUrlandUri()
     {
-      using (IE ie = new IE(MainURI.ToString(), true))
+      string url = MainURI.ToString();
+      
+      using (IE ie = new IE(url, true))
       {
         Uri uri = new Uri(ie.Url);
         Assert.AreEqual(MainURI, uri);
@@ -182,7 +184,10 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE())
       {
-        ie.GoTo(MainURI.ToString());
+        string url = MainURI.ToString();
+        
+        ie.GoTo(url);
+        
         Assert.AreEqual(MainURI, new Uri(ie.Url));
       }
     }
@@ -198,6 +203,26 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void NewIEWithUri()
+    {
+      using (IE ie = new IE(MainURI))
+      {
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
+      }
+    }
+    
+    [Test]
+    public void NewIEWithUrl()
+    {
+      string url = MainURI.ToString();
+      
+      using (IE ie = new IE(url))
+      {
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
+      }
+    }
+
+    [Test]
     public void BackAndForward()
     {
       using (IE ie = new IE())
@@ -205,7 +230,7 @@ namespace WatiN.UnitTests
         ie.GoTo(MainURI);
         Assert.AreEqual(MainURI, new Uri(ie.Url));
         
-        ie.Link(Find.ByUrl(IndexURI.ToString())).Click();
+        ie.Link(Find.ByUrl(IndexURI)).Click();
         Assert.AreEqual(IndexURI, new Uri(ie.Url));
 
         ie.Back();
@@ -224,7 +249,7 @@ namespace WatiN.UnitTests
     public void AttachToIEWithZeroTimeout()
     {
       // Create a new IE instance so we can find it.
-      using(new IE(MainURI.ToString()))
+      using(new IE(MainURI))
       {
         DateTime startTime = DateTime.Now;
         IE.AttachToIE(new Url(MainURI), 0);
@@ -245,13 +270,13 @@ namespace WatiN.UnitTests
     {
       Assert.IsFalse(IsIEWindowOpen("gOo"), "An Internet Explorer with 'gOo' in it's title already exists. AttachToIEByParialTitle can't be correctly tested. Close all IE windows and run this test again.");
 
-      using (new IE(GoogleURI.ToString()))
+      using (new IE(GoogleURI))
       {
         IE ieGoogle = IE.AttachToIE(Find.ByTitle("gOo"));
-        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
+        Assert.AreEqual(GoogleURI, ieGoogle.Uri);
         
-        ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI.ToString()));
-        Assert.AreEqual(GoogleURI.ToString(), ieGoogle.Url);
+        ieGoogle = IE.AttachToIE(Find.ByUrl(GoogleURI));
+        Assert.AreEqual(GoogleURI, ieGoogle.Uri);
       }
     }
     
@@ -260,7 +285,7 @@ namespace WatiN.UnitTests
     {
       Assert.IsFalse(IsIEWindowOpen("main"), "An Internet Explorer with 'main' in it's title already exists. IEClosedByDispose can't be correctly tested. Close all IE windows and run this test again.");
 
-      using (new IE(MainURI.ToString()))
+      using (new IE(MainURI))
       {
         IE ie = IE.AttachToIE(Find.ByTitle("main"));
         Assert.AreEqual(MainURI, new Uri(ie.Url));
@@ -296,7 +321,7 @@ namespace WatiN.UnitTests
     [Test]
     public void HTMLDialog()
     {
-      IE ie = new IE(MainURI.ToString());
+      IE ie = new IE(MainURI);
 
       ie.Button("modalid").ClickNoWait();
 
@@ -317,7 +342,7 @@ namespace WatiN.UnitTests
     [Test]
     public void HTMLDialogFindByTitle()
     {
-      IE ie = new IE(MainURI.ToString());
+      IE ie = new IE(MainURI);
 
       ie.Button("modalid").ClickNoWait();
 
@@ -335,11 +360,11 @@ namespace WatiN.UnitTests
     [Test]
     public void HTMLDialogFindByUrl()
     {
-      IE ie = new IE(MainURI.ToString());
+      IE ie = new IE(MainURI);
 
       ie.Button("modalid").ClickNoWait();
 
-      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI.ToString()));
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI));
   
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
@@ -353,7 +378,7 @@ namespace WatiN.UnitTests
     [Test]
     public void HTMLDialogNotFoundException()
     {
-      using (IE ie = new IE(MainURI.ToString()))
+      using (IE ie = new IE(MainURI))
       {
         DateTime startTime = DateTime.Now;
         const int timeoutTime = 5;
@@ -386,7 +411,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FireKeyDownEventOnElementWithNoId()
     {
-      using (IE ie = new IE(TestEventsURI.ToString()))
+      using (IE ie = new IE(TestEventsURI))
       {
         TextField report = ie.TextField("Report");
         Assert.IsNull(report.Text, "Report not empty");

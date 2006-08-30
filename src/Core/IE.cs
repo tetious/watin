@@ -85,7 +85,7 @@ namespace WatiN.Core
     /// </example>
     public static IE AttachToIE(Url findBy)
     {
-      return AttachToIE(findBy, waitForWindowTime);
+      return findIE(findBy, waitForWindowTime);
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ namespace WatiN.Core
     /// </example>
     public static IE AttachToIE(Url findBy, int timeout)
     {
-      return attachToIE(findBy, timeout);
+      return findIE(findBy, timeout);
     }
     
     /// <summary>
@@ -137,7 +137,7 @@ namespace WatiN.Core
 
     public static IE AttachToIE(Title findBy)
     {
-      return AttachToIE(findBy, waitForWindowTime);
+      return findIE(findBy, waitForWindowTime);
     }
 
     /// <summary>
@@ -166,14 +166,7 @@ namespace WatiN.Core
     /// </example>
     public static IE AttachToIE(Title findBy, int timeout)
     {
-      return attachToIE(findBy, timeout);
-    }
-
-   private static IE attachToIE(Attribute findBy, int timeout)
-    {
-      Logger.LogAction("Finding IE instance with " + findBy.AttributeName + " '" + findBy.Value + "'");
-
-      return FindIE(findBy, timeout);
+      return findIE(findBy, timeout);
     }
 
     /// <summary>
@@ -221,7 +214,7 @@ namespace WatiN.Core
     /// </example>
     public IE()
     {
-      CreateNewIE("about:blank", true);
+      createNewIEAndGotToUrl("about:blank", true);
     }
 
     /// <summary>
@@ -255,7 +248,41 @@ namespace WatiN.Core
     /// </example>
     public IE(string url)
     {
-      CreateNewIE(url, true);
+      createNewIEAndGotToUrl(url, true);
+    }
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// </note>
+    /// </summary>
+    /// <param name="uri">The Uri te open</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using System;
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"));
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(Uri uri)
+    {
+      createNewIEAndGotToUrl(uri, true);
     }
 
     /// <summary>
@@ -288,7 +315,7 @@ namespace WatiN.Core
     /// </example>
     public IE(bool autoClose)
     {
-      CreateNewIE("about:blank", autoClose);
+      createNewIEAndGotToUrl("about:blank", autoClose);
     }
 
     /// <summary>
@@ -296,7 +323,7 @@ namespace WatiN.Core
     /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
     /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
     /// </summary>
-    /// <param name="url">The URL te open</param>
+    /// <param name="url">The Url te open</param>
     /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
@@ -321,7 +348,40 @@ namespace WatiN.Core
     /// </example>
     public IE(string url, bool autoClose)
     {
-      CreateNewIE(url, autoClose);
+      createNewIEAndGotToUrl(url, autoClose);
+    }
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>. The <paramref name="autoClose" />
+    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
+    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
+    /// </summary>
+    /// <param name="uri">The Uri te open</param>
+    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using System;
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), false);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(Uri uri, bool autoClose)
+    {
+      createNewIEAndGotToUrl(uri, autoClose);
     }
 
     /// <summary>
@@ -346,10 +406,23 @@ namespace WatiN.Core
       }
 
       InitIEAndStartPopupWatcher(internetExplorer);
-      WaitForComplete();
     }
 
-    private void CreateNewIE(string url, bool autoClose)
+    private void createNewIEAndGotToUrl(string url, bool autoClose)
+    {
+      createNewIE(autoClose);
+
+      GoTo(url);
+    }
+    
+    private void createNewIEAndGotToUrl(Uri uri, bool autoClose)
+    {
+      createNewIE(autoClose);
+
+      GoTo(uri);
+    }
+
+    private void createNewIE(bool autoClose)
     {
       CheckThreadApartmentStateIsSTA();
 
@@ -358,8 +431,6 @@ namespace WatiN.Core
       SetAutoCloseAndMoveMouse(autoClose);
 
       InitIEAndStartPopupWatcher(new InternetExplorerClass());
-
-      GoTo(url);
     }
 
     private static void CheckThreadApartmentStateIsSTA()
@@ -402,12 +473,15 @@ namespace WatiN.Core
       return iePid;
     }
 
-    private static IE FindIE(Attribute findBy, int timeout)
+    private static IE findIE(Attribute findBy, int timeout)
     {
-      if (timeout<0)
+      if (timeout < 0)
       {
         throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
       }
+      
+      Logger.LogAction("Busy finding Internet Explorer with " + findBy.AttributeName + " '" + findBy.Value + "'");
+
       DateTime startTime = DateTime.Now;
 
       while (NotTimedOut(startTime, timeout))
@@ -447,7 +521,10 @@ namespace WatiN.Core
 
           if (findBy.Compare(compareValue))
           {
-            return new IE(e);
+            IE ie = new IE(e);
+            ie.WaitForComplete();
+            
+            return ie;
           }
 
           browserCounter++;
@@ -904,7 +981,7 @@ namespace WatiN.Core
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     public HtmlDialog HtmlDialog(Url findBy)
     {
-      return HtmlDialog(findBy, waitForWindowTime);
+      return findHtmlDialog(findBy, waitForWindowTime);
     }
 
     /// <summary>
@@ -913,7 +990,7 @@ namespace WatiN.Core
     /// <param name="findBy">The Title of the html page</param>
     public HtmlDialog HtmlDialog(Title findBy)
     {
-      return HtmlDialog(findBy, waitForWindowTime);
+      return findHtmlDialog(findBy, waitForWindowTime);
     }
 
     /// <summary>
@@ -938,7 +1015,12 @@ namespace WatiN.Core
 
     private HtmlDialog findHtmlDialog(Attribute findBy, int timeout)
     {
-      Logger.LogAction("Finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
+      if (timeout < 0)
+      {
+        throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
+      }
+
+      Logger.LogAction("Busy finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
       DateTime startTime = DateTime.Now;
 
@@ -964,6 +1046,7 @@ namespace WatiN.Core
 
             if (findBy.Compare(compareValue))
             {
+              htmlDialog.WaitForComplete();
               return htmlDialog;
             }
           }
