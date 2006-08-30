@@ -310,6 +310,7 @@ namespace WatiN.UnitTests
 
       Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
       Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+      Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
     }
 
     [Test]
