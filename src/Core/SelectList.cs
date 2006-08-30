@@ -99,6 +99,7 @@ namespace WatiN.Core
     private void SelectByTextOrValue(string textOrValue, bool selectByText)
     {
       bool optionFound = false;
+      bool wait = false;
       int numberOfOptions = selectElement.length;
 
       for (int index = 0; (optionFound == false) && (index < numberOfOptions) ; index++)
@@ -115,12 +116,15 @@ namespace WatiN.Core
         if (textOrValue.Equals(compareValueOrText))
         {
           if (option.selected)
-          { optionFound = true; }
+          {
+            optionFound = true;
+          }
           else
           {
             option.selected = true;
             FireEvent("onchange");
             optionFound = true;
+            wait = true;
           }
         }
       }
@@ -129,7 +133,11 @@ namespace WatiN.Core
       {
         throw new SelectListItemNotFoundException(textOrValue);
       }
-
+      
+      if (wait)
+      {
+        WaitForComplete();
+      }
     }
 
     private HTMLSelectElementClass selectElement
