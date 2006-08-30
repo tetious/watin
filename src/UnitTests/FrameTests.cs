@@ -41,7 +41,7 @@ namespace WatiN.UnitTests
     {
       Logger.LogWriter = new DebugLogWriter();
             
-      ie = new IE(FramesetURI, true);
+      ie = new IE(FramesetURI);
     }
 
     [TestFixtureTearDown]
