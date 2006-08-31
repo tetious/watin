@@ -5,7 +5,7 @@ can be assigned to a release. So first thing to do
 
 - create roadmap for WatiN releases
 
-- support for PRE element/tag
+- support for PRE, UL, LI tags
 - support for messageboxes (dialogs with Yes, No, Cancel etc.. buttons)
 - support for filedownload
 - support for login window
