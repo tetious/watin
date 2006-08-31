@@ -1,4 +1,92 @@
-WatiN 0.7.0.4000 (July 8, 2006)
+WatiN 0.8.0.4000 (31 August, 2006)
+
+** Changes in general **
+
+* WatiN is now available in a .Net 1.1 and .Net 2.0 distribution
+* IE and HTMLDialog now support all functionality which in 0.7.0 was only 
+  accessible by using IE.MainDocument.xxx. The MainDocument property has been 
+  marked obsolete. You are encouraged to change your code because the MainDocument 
+  property will be removed is the next release. To make this new syntax possible 
+  some code breaking changes are introduced(see API Changes).
+* Added support for finding elements with a regular expression.
+* Added support for finding an Image by its Src (source) attribute and added 
+  functionality to the Image class.
+* Improved IE.HTMLDialog behaviour.
+* Added support to get the active element (element with the focus) in a document.
+* Added IE.PressTab which sends a Tab key to IE. This allows tabbing through the 
+  elements (and address bar). Combined with Document.ActiveElement this makes it 
+  possible to do some usability testing.
+* IE constructors throw a InvalidThreadState exception if code is not executed on 
+  a single threaded apartment. Read the 'WatiN and Thread.ApartmentState' article 
+  on http://watin.sourceforge.net for more information.
+* Added 2 new constructors to WatiN.Core.IE that accept an System.Uri instance.
+* Added support for firing events on elements with no id (only for elements not 
+  shown in an HtmlDialog).
+* Added IE.GetWindowStyle to determine the window style (normal, minimized, maximized, etc).
+* Updated documentation (all class have an explanation about their purpose)
+* Updated build file to support building both a .Net 1.1 and .Net 2.0 version.
+* Updated and added (many) unit tests.
+* Added Microsoft.mshtml.dll to the distribution files.
+
+
+** API Changes **
+
+Attribute class (and subclasses)
+* Renamed AttributeValue to Attribute. All subclasses are renamed accordingly (BREAKING CHANGE).
+* Added Regex support for Attribute and it's subclasses.
+* Attribute class now overrides ToString which returns the same as the Value property.
+* Attribute constructor now allows for empty Value parameter.
+
+Document class
+* Added support to get the active element (element with the focus) of a document
+* Added Document.Uri which returns a System.Uri instance of the Document.Url.
+* throws an InvalidAttributException when searching for an element by an invalid attribute.
+
+DomContainer class [inherits Document]
+* Inherits Document class.
+* Property HtmlDocument now returns IHTMLDocument2 instead of HtmlDocument(BREAKING CHANGE).
+* Dispose method changed from public to internal (BREAKING CHANGE).
+
+Find class
+* Added Regex factory methods.
+* Added support for finding an Image by its Src (source) attribute.
+
+IE class [Inherits DomContainer]
+* Url property is now inherited from Document instead of returning the url in the 
+  navigation bar. Result should be the same although the encoding of the url might 
+  be a bit different. (BREAKING CHANGE).
+* Added 2 new constructors to WatiN.Core.IE that accept a System.Uri instance.
+* Added IE.PressTab which sends a Tab key to IE. This allows tabbing through the 
+  elements (and address bar). Combined with Document.ActiveElement this makes it 
+  possible to do some usability testing.
+* Added IE.GetWindowStyle to determine the window style (normal, minimized, maximized, etc).
+
+Image class [Inherits Element]
+* Added Src, Alt and Href properties.
+
+Src class [Inherits Attribute]
+* New class to support finding an Image by its Src (source) attribute.
+
+
+** SourceForge Trackers **
+
+* Added Feature requests:
+1543115  Throw exception when Thread has invalid ApartmentState
+1535932  Access elements like ie.TextField
+1530889  Upgrade to .net 2.0
+
+* Fixed Bugs:
+1549329  Google's redirect to localized Google fail tests  
+1549145  ie.HTMLDialog(...) doesn't WaitForComplete  
+1549138  SelectList.Select doesn't WaitForComplete  
+1543108  Image with an empty Src hangs WatiN/IE  
+1530876  Unit tests fail on W2K3 SP1 due to IE local machine lockdown  
+1530874  Core.Element.ClickNoWait throws an unhandled exception  
+1530859  Exceptions are thrown from Watin.Core.IE.findHtmlDialog  
+
+
+-------------------------------
+WatiN 0.7.0.4000 (8 July, 2006)
 
 * In the previous release running the unittests from the binary watin.unittest.dll resulted in 
   a lot of open IE windows because the HTML files were not distributed in the right place.
@@ -13,6 +101,6 @@ WatiN 0.7.0.4000 (July 8, 2006)
   distribute it this way. WatiN now references the version registered in the GAC.
 * Improved the build file.
 
-
-WatiN 0.6.3.3007 (May 32, 2006)
+-------------------------------
+WatiN 0.6.3.3007 (31 May, 2006)
 * Initial release at Sourceforge
