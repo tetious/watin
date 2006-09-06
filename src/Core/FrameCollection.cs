@@ -17,8 +17,12 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
+using System.Runtime.InteropServices;
+
 using mshtml;
+using SHDocVw;
 
 namespace WatiN.Core
 {
@@ -31,23 +35,73 @@ namespace WatiN.Core
 		
 		public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
 		{
-			elements = new ArrayList();
-      IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
+          elements = new ArrayList();
 
-      for (int index = 0; index < htmlDocument.frames.length; index++)
-      {
-        // Get the frame
-        DispHTMLWindow2 thisFrame = Frame.GetFrameFromHTMLDocument(index, htmlDocument);
-        
-        // Get the frame element from the parent document
-        IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
+          IEnumUnknown eu = null;
+          IOleContainer oc = htmlDocument as IOleContainer;
+          int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+          Marshal.ThrowExceptionForHR(hr);
 
-        // Create new Frame instance
-        Frame frame = new Frame(ie, thisFrame.document, thisFrame.name, frameElement.id);
+          try
+          {
+            IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
+            object pUnk = null;
+            int fetched = 0;
+            const int MAX_FETCH_COUNT = 1;
 
-        elements.Add(frame);
-			}
-		}
+            // get the first embedded object
+            // pUnk alloc
+            hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+            Marshal.ThrowExceptionForHR(hr);
+
+            int index = 0;
+            while (hr == 0)
+            {
+              //QI pUnk for the IWebBrowser2 interface
+              IWebBrowser2 brow = pUnk as IWebBrowser2;
+
+              if (brow != null)
+              {
+                string name = "";
+
+                // try to get the name from the frame
+                try
+                {
+                  // Get the frame name from the HTMLDocument - this will throw an exception
+                  // with cross-domain scripting
+                  name = Frame.GetFrameFromHTMLDocument(index, htmlDocument).name;
+                }
+                catch
+                {
+                    name = brow.Name;
+                }
+
+                // Get the frame element from the parent document
+                IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
+                string frameid = "";
+                if (frameElement != null)
+                  frameid = frameElement.id;
+
+                Frame frame = new Frame(ie, brow.Document as IHTMLDocument2, name, frameid);
+                elements.Add(frame);
+                index++;
+              } // if(brow != null)
+
+              // pUnk free
+              Marshal.ReleaseComObject(brow);
+
+              //get the next ebmedded object
+              // pUnk alloc
+              hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+              Marshal.ThrowExceptionForHR(hr);
+            } // while (hr == 0)
+          }
+          finally
+          {
+            // eu free
+            Marshal.ReleaseComObject(eu);
+          }
+        }
 
 		public int Length { get { return elements.Count; } }
 

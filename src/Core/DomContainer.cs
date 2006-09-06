@@ -19,8 +19,10 @@
 
 using System;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 using mshtml;
+using SHDocVw;
 
 namespace WatiN.Core
 {
@@ -123,10 +125,14 @@ namespace WatiN.Core
       int framesCount = HtmlDocument.frames.length;
       for (int i = 0; i != framesCount; ++i)
       {
-        DispHTMLWindow2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, HtmlDocument);
+        IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, (HTMLDocument) HtmlDocument);
         IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
+        if (document != null)
+            WaitWhileDocumentStateNotComplete(document);
 
-        WaitWhileDocumentStateNotComplete(document);
+        // pUnk free
+        if (frame != null)
+          Marshal.ReleaseComObject(frame);
       }
     }
 
@@ -233,51 +239,24 @@ namespace WatiN.Core
       return false;
     }
 
-    private IHTMLDocument2 WaitWhileFrameDocumentNotAvailable(DispHTMLWindow2 frame)
+    private IHTMLDocument2 WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
     {
       IHTMLDocument2 document = null;
 
       while (document == null)
       {
-        bool isTimedout = IsTimedOut();
+        document = frame.Document as IHTMLDocument2;
 
-        try
+        if (IsTimedOut() && frame == null)
         {
-          document = frame.document;
+          throw new WatiN.Core.Exceptions.TimeoutException("waiting for frame document becoming available");
         }
-        catch(UnauthorizedAccessException)
-        {
-          if (isTimedout)
-          { // TODO: Implement solution for Cross-domain scripting security.
-            // Following urls provide more info:
-            // KB Article KB196340: http://support.microsoft.com/default.aspx?scid=kb;en-us;196340
-            // C# implementation of KB196340: http://www.colinneller.com/blog/PermaLink,guid,64eac67e-df2a-4a20-82f0-16b0c5ce9615.aspx
-
-            throw new Exceptions.WatiNException("Could be Cross-domain scripting security. See KB Article KB196340 'HOWTO: Get the WebBrowser Object Model of an HTML Frame' - this technique bypasses security checks");
-          }
-
-          Thread.Sleep(400);
-
-        }
-        catch
-        {
-          if (isTimedout)
-          {
-            throw;
-          }
-        }
-
-        if (isTimedout && frame == null)
-        {
-          throw new Exceptions.TimeoutException("waiting for frame document becoming available");
-        }
-
 
         if (document == null)
         {
           Thread.Sleep(100);
         }
-        else if(!IsDocumentReadyStateAvailable(document))
+        else if (!IsDocumentReadyStateAvailable(document))
         {
           Thread.Sleep(500);
         }

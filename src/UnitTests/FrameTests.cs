@@ -59,10 +59,10 @@ namespace WatiN.UnitTests
       }
     }
 
-    [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a frame by id with value 'contentsid'")]
+    [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a frame by id with value 'NonExistingFrameID'")]
     public void ExpectFrameNotFoundException()
     {
-      ie.Frame(Find.ById("contentsid"));
+      ie.Frame(Find.ById("NonExistingFrameID"));
     }
 
     [Test]
@@ -113,7 +113,7 @@ namespace WatiN.UnitTests
     {
       UtilityClass.ShowFrames(ie);
     }
-
+    
     private static void AssertFindFrame(IE ie, Attribute findBy, string expectedFrameName)
     {
       Frame frame = null;
@@ -127,6 +127,37 @@ namespace WatiN.UnitTests
       }
       Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
       Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy.ToString() + ", " + findBy.Value);
+    }
+  }
+  
+  [TestFixture]
+  public class CrossDomainTests : WatiNTest
+  {
+    [Test]
+    public void CrossDomainTest()
+    {
+      using(IE ieframes = new IE(FramesetURI))
+      {
+        ieframes.Frames[0].Link("googlelink").Click();
+        
+        try
+        {
+          ieframes.Frames[1].TextField(Find.ByName("q"));
+        }
+        catch
+        {
+          Assert.Fail("Failed when using Document.FramesCollection");
+        }
+        
+        try
+        {
+          ieframes.Frame("mainid").TextField(Find.ByName("q"));
+        }
+        catch
+        {
+          Assert.Fail("Failed when using Document.Frame");
+        }
+      }            
     }
   }
 }

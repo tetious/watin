@@ -18,13 +18,74 @@
 #endregion Copyright
 
 using System;
+using System.Runtime.InteropServices;
 
 using mshtml;
+using SHDocVw;
 
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core
 {
+  [
+  ComImport,
+  Guid("00000100-0000-0000-C000-000000000046"),
+  InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
+  ]
+  public interface IEnumUnknown
+  {
+    [PreserveSig]
+    int Next(
+        [In, MarshalAs(UnmanagedType.U4)] int celt,
+        [Out, MarshalAs(UnmanagedType.IUnknown)] out object rgelt,
+        [Out, MarshalAs(UnmanagedType.U4)] out int pceltFetched
+    );
+
+    [PreserveSig]
+    int Skip(
+        [In, MarshalAs(UnmanagedType.U4)] int celt
+    );
+
+    void Reset();
+
+    void Clone(
+        out IEnumUnknown ppenum
+    );
+  }
+
+  [Flags()]
+  public enum tagOLECONTF
+  {
+    OLECONTF_EMBEDDINGS = 1,
+    OLECONTF_LINKS = 2,
+    OLECONTF_OTHERS = 4,
+    OLECONTF_ONLYUSER = 8,
+    OLECONTF_ONLYIFRUNNING = 16,
+  }
+
+  [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0000011B-0000-0000-C000-000000000046")]
+  public interface IOleContainer
+  {
+    [PreserveSig]
+    int ParseDisplayName(
+        [In, MarshalAs(UnmanagedType.Interface)] object pbc,
+        [In, MarshalAs(UnmanagedType.BStr)] string pszDisplayName,
+        [Out, MarshalAs(UnmanagedType.LPArray)] int[] pchEaten,
+        [Out, MarshalAs(UnmanagedType.LPArray)] object[] ppmkOut
+    );
+
+    [PreserveSig]
+    int EnumObjects(
+        [In, MarshalAs(UnmanagedType.U4)] tagOLECONTF grfFlags,
+        out IEnumUnknown ppenum
+    );
+
+    [PreserveSig]
+    int LockContainer(
+        bool fLock
+    );
+  }
+
   /// <summary>
   /// This class provides specialized functionality for a Frame or IFrame.
   /// </summary>
@@ -123,6 +184,59 @@ namespace WatiN.Core
       Object o = i;
       return (DispHTMLWindow2) htmlDocument.frames.item(ref o);
     }
+
+    internal static IWebBrowser2 GetFrameFromHTMLDocument(int i, HTMLDocument HtmlDocument)
+    {
+      IWebBrowser2 result = null;
+      IEnumUnknown eu;
+      IOleContainer oc = HtmlDocument as IOleContainer;
+      int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+      Marshal.ThrowExceptionForHR(hr);
+
+      try
+      {
+        object pUnk;
+        int fetched;
+        const int MAX_FETCH_COUNT = 1;
+
+        //get the first ebmedded object
+        //pUnk alloc
+        hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+        Marshal.ThrowExceptionForHR(hr);
+
+        int index = 0;
+        while (hr == 0)
+        {
+          //QI pUnk for the IWebBrowser2 interface
+          IWebBrowser2 brow = pUnk as IWebBrowser2;
+
+          if (brow != null)
+          {
+            if (index++ == i)
+            {
+              result = brow;
+              break;
+            }
+            //pUnk free
+            else
+              Marshal.ReleaseComObject(brow);
+          } // if(brow != null)
+
+          //get the next ebmedded object
+          //pUnk alloc
+          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+          Marshal.ThrowExceptionForHR(hr);
+        } // while (hr == 0)
+      }
+      finally
+      {
+        //eu free
+        Marshal.ReleaseComObject(eu);
+      }
+
+      return result;
+    }
+
 
     private void Init(string name, string id)
     {
