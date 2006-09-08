@@ -143,6 +143,16 @@ namespace WatiN.Core
       ForceMinimized = 11
     }
 
+    [Flags()]
+    public enum tagOLECONTF
+    {
+      OLECONTF_EMBEDDINGS = 1,
+      OLECONTF_LINKS = 2,
+      OLECONTF_OTHERS = 4,
+      OLECONTF_ONLYUSER = 8,
+      OLECONTF_ONLYIFRUNNING = 16,
+    }
+
     #endregion Enums
     
     /// <summary>
@@ -245,5 +255,49 @@ namespace WatiN.Core
     
     [DllImport("kernel32")]
     internal static extern int GetCurrentThreadId();
+    
+    #region ComImport Interfaces
+
+    [ComImport, Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IEnumUnknown
+    {
+      [PreserveSig]
+      int Next(
+        [In, MarshalAs(UnmanagedType.U4)] int celt,
+        [Out, MarshalAs(UnmanagedType.IUnknown)] out object rgelt,
+        [Out, MarshalAs(UnmanagedType.U4)] out int pceltFetched
+        );
+
+      [PreserveSig]
+      int Skip([In, MarshalAs(UnmanagedType.U4)] int celt);
+
+      void Reset();
+
+      void Clone(out IEnumUnknown ppenum);
+    }
+
+    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0000011B-0000-0000-C000-000000000046")]
+    public interface IOleContainer
+    {
+      [PreserveSig]
+      int ParseDisplayName(
+        [In, MarshalAs(UnmanagedType.Interface)] object pbc,
+        [In, MarshalAs(UnmanagedType.BStr)] string pszDisplayName,
+        [Out, MarshalAs(UnmanagedType.LPArray)] int[] pchEaten,
+        [Out, MarshalAs(UnmanagedType.LPArray)] object[] ppmkOut
+        );
+
+      [PreserveSig]
+      int EnumObjects(
+        [In, MarshalAs(UnmanagedType.U4)] tagOLECONTF grfFlags,
+        out IEnumUnknown ppenum
+        );
+
+      [PreserveSig]
+      int LockContainer(bool fLock);
+    }
+
+    #endregion ComImport Interfaces
+
   }
 }

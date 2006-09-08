@@ -29,6 +29,8 @@ namespace WatiN.UnitTests
     private static Uri indexURI = null;
     private static Uri popUpURI = null;
     private static Uri framesetURI = null;
+    private static Uri framesetWithinFramesetURI = null;
+    private static Uri crossDomainFramesetURI = null;
     private static Uri testEventsURI = null;
     private static Uri watinURI = null;
 
@@ -90,6 +92,30 @@ namespace WatiN.UnitTests
           framesetURI = new Uri(HtmlTestBaseURI, "Frameset.html");
         }
         return framesetURI;
+      }
+    }
+    
+    public static Uri CrossDomainFramesetURI
+    {
+      get
+      {
+        if(crossDomainFramesetURI == null)
+        {
+          crossDomainFramesetURI = new Uri(HtmlTestBaseURI, "CrossDomainFrameset.html");
+        }
+        return crossDomainFramesetURI;
+      }
+    }
+    
+    public static Uri FramesetWithinFramesetURI
+    {
+      get
+      {
+        if(framesetWithinFramesetURI == null)
+        {
+          framesetWithinFramesetURI = new Uri(HtmlTestBaseURI, "FramesetWithinFrameset.html");
+        }
+        return framesetWithinFramesetURI;
       }
     }
     

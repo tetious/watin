@@ -70,14 +70,14 @@
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "Core"
-                    Project = "{217E2D34-F6DF-431B-AC5A-B368F481A530}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\Net\1.1\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Core"
+                    Project = "{217E2D34-F6DF-431B-AC5A-B368F481A530}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -123,7 +123,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "html\CrossDomainFrameset.html"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\Frameset.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\FramesetWithinFrameset.html"
                     BuildAction = "Content"
                 />
                 <File

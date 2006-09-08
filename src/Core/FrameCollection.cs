@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
@@ -30,125 +29,118 @@ namespace WatiN.Core
   /// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
   /// </summary>
   public class FrameCollection : IEnumerable
-	{
-		ArrayList elements;
+  {
+    ArrayList elements;
 		
-		public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
-		{
-          elements = new ArrayList();
+    public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
+    {
+      elements = new ArrayList();
+      IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
 
-          IEnumUnknown eu = null;
-          IOleContainer oc = htmlDocument as IOleContainer;
-          int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
-          Marshal.ThrowExceptionForHR(hr);
+      NativeMethods.IEnumUnknown eu;
+      NativeMethods.IOleContainer oc = htmlDocument as NativeMethods.IOleContainer;
+      int hr = oc.EnumObjects(NativeMethods.tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+      Marshal.ThrowExceptionForHR(hr);
 
-          try
+      try
+      {
+        object pUnk;
+        int fetched;
+        const int MAX_FETCH_COUNT = 1;
+
+        // get the first embedded object
+        // pUnk alloc
+        hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+        Marshal.ThrowExceptionForHR(hr);
+
+        int index = 0;
+        while (hr == 0)
+        {
+          // Query Interface pUnk for the IWebBrowser2 interface
+          IWebBrowser2 brow = pUnk as IWebBrowser2;
+
+          if (brow != null)
           {
-            IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
-            object pUnk = null;
-            int fetched = 0;
-            const int MAX_FETCH_COUNT = 1;
+            // Get the frame element from the parent document
+            IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
+            
+            string frameName = null;
+            string frameId = null;
 
-            // get the first embedded object
-            // pUnk alloc
-            hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-            Marshal.ThrowExceptionForHR(hr);
-
-            int index = 0;
-            while (hr == 0)
+            if (frameElement != null)
             {
-              //QI pUnk for the IWebBrowser2 interface
-              IWebBrowser2 brow = pUnk as IWebBrowser2;
+              frameId = frameElement.id;
+              frameName = frameElement.getAttribute("name", 0) as string;
+            }
 
-              if (brow != null)
-              {
-                string name = "";
-
-                // try to get the name from the frame
-                try
-                {
-                  // Get the frame name from the HTMLDocument - this will throw an exception
-                  // with cross-domain scripting
-                  name = Frame.GetFrameFromHTMLDocument(index, htmlDocument).name;
-                }
-                catch
-                {
-                    name = brow.Name;
-                }
-
-                // Get the frame element from the parent document
-                IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
-                string frameid = "";
-                if (frameElement != null)
-                  frameid = frameElement.id;
-
-                Frame frame = new Frame(ie, brow.Document as IHTMLDocument2, name, frameid);
-                elements.Add(frame);
-                index++;
-              } // if(brow != null)
-
-              // pUnk free
-              Marshal.ReleaseComObject(brow);
-
-              //get the next ebmedded object
-              // pUnk alloc
-              hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-              Marshal.ThrowExceptionForHR(hr);
-            } // while (hr == 0)
+            Frame frame = new Frame(ie, brow.Document as IHTMLDocument2, frameName, frameId);
+            elements.Add(frame);
+                
+            index++;
           }
-          finally
-          {
-            // eu free
-            Marshal.ReleaseComObject(eu);
-          }
+
+          // pUnk free
+          Marshal.ReleaseComObject(brow);
+
+          // get the next ebmedded object
+          // pUnk alloc
+          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+          Marshal.ThrowExceptionForHR(hr);
         }
+      }
+      finally
+      {
+        // eu free
+        Marshal.ReleaseComObject(eu);
+      }
+    }
 
-		public int Length { get { return elements.Count; } }
+    public int Length { get { return elements.Count; } }
 
-		public Frame this[int index] { get { return (Frame)elements[index]; } }
+    public Frame this[int index] { get { return (Frame)elements[index]; } }
 
     /// <exclude />
     public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
+    {
+      return new Enumerator(elements);
+    }
 
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
+    IEnumerator IEnumerable.GetEnumerator() 
+    {
+      return GetEnumerator();
+    }
 
     /// <exclude />
     public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
+    {
+      ArrayList children;
+      int index;
+      public Enumerator(ArrayList children) 
+      {
+        this.children = children;
+        Reset();
+      }
 
-			public void Reset() 
-			{
-				index = -1;
-			}
+      public void Reset() 
+      {
+        index = -1;
+      }
 
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
+      public bool MoveNext() 
+      {
+        ++index;
+        return index < children.Count;
+      }
 
-			public Frame Current 
-			{
-				get 
-				{
-					return (Frame)children[index];
-				}
-			}
+      public Frame Current 
+      {
+        get 
+        {
+          return (Frame)children[index];
+        }
+      }
 
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+      object IEnumerator.Current { get { return Current; } }
+    }
+  }
 }
