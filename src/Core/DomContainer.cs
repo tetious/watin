@@ -128,11 +128,15 @@ namespace WatiN.Core
         IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, (HTMLDocument) HtmlDocument);
         IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
         if (document != null)
-            WaitWhileDocumentStateNotComplete(document);
+        {
+          WaitWhileDocumentStateNotComplete(document);
+        }
 
         // pUnk free
         if (frame != null)
+        {
           Marshal.ReleaseComObject(frame);
+        }
       }
     }
 
@@ -205,7 +209,7 @@ namespace WatiN.Core
 
         if (!IsDocumentReadyStateAvailable(maindocument))
         {
-          maindocument=null;
+          maindocument = null;
         }
       }
     }
@@ -222,14 +226,6 @@ namespace WatiN.Core
           string readyState = ((HTMLDocument)document).readyState;
           return true;
         }
-//        catch(System.OutOfMemoryException)
-//        {
-//          Thread.Sleep(500);
-//        }
-//        catch(System.Runtime.InteropServices.COMException)
-//        {
-//          Thread.Sleep(500);
-//        }
         catch
         {
           Thread.Sleep(500);
