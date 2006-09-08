@@ -897,13 +897,13 @@ namespace WatiN.Core
     {
       InitTimeout();
 
-      WaitWhileIEBusy();
-      WaitWhileIEStateNotComplete();
+      waitWhileIEBusy();
+      waitWhileIEStateNotComplete();
       
       WaitForCompleteOrTimeout();
     }
 
-    private void WaitWhileIEStateNotComplete()
+    private void waitWhileIEStateNotComplete()
     {
       while (ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
       {
@@ -913,7 +913,7 @@ namespace WatiN.Core
       }
     }
 
-    private void WaitWhileIEBusy()
+    private void waitWhileIEBusy()
     {
       while (ie.Busy)
       {
