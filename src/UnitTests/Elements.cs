@@ -31,6 +31,7 @@ namespace WatiN.UnitTests
   public class Elements : WatiNTest
   {
     private IE ie;
+    const string tableId = "table1";
 
     [TestFixtureSetUp]
     public void Setup()
@@ -47,8 +48,6 @@ namespace WatiN.UnitTests
     [Test]
     public void Table()
     {
-      const string tableId = "table1";
-
       Assert.AreEqual(tableId,  ie.Table(Find.ById(tableId)).Id);
       
       Table table = ie.Table(tableId);
@@ -60,9 +59,6 @@ namespace WatiN.UnitTests
       Assert.IsNotNull(row, "Row with a1 expected");
       Assert.AreEqual("a1", row.TableCells[0].Text, "Unexpected text in cell");
       
-      row = table.FindRow("A2",1);
-      Assert.IsNotNull(row, "Row with a1 expected");
-      Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
 
       row = table.FindRow("b2",1);
       Assert.IsNotNull(row, "Row with b1 expected");
@@ -72,6 +68,38 @@ namespace WatiN.UnitTests
       Assert.IsNull(row, "No row with c1 expected");
     }
 
+    [Test]
+    public void TableFindRowWithTextIgnoreCase()
+    {
+      Table table = ie.Table(tableId);
+
+      // test: ignore case of the text to find
+      TableRow row = table.FindRow("A2",1);
+      Assert.IsNotNull(row, "Row with a1 expected");
+      Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
+    }
+
+    [Test]
+    public void TableFindRowWithTextNoPartialMatch()
+    {
+      Table table = ie.Table(tableId);
+
+      // test: ignore case of the text to find
+      TableRow row = table.FindRow("a",1);
+      Assert.IsNull(row, "No row expected");
+    }
+
+    [Test]
+    public void TableFindRowWithRegex()
+    {
+      Table table = ie.Table(tableId);
+      
+      TableRow row = table.FindRow(new Regex("b"),1);
+      
+      Assert.IsNotNull(row, "Row with b1 expected");
+      Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
+    }
+    
     [Test]
     public void Tables()
     {

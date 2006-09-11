@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Text.RegularExpressions;
 using mshtml;
 
 using WatiN.Core.Logging;
@@ -42,9 +43,9 @@ namespace WatiN.Core
     /// <summary>
     /// Finds te first row that matches findText in inColumn. If no match is found, null is returned.
     /// </summary>
-    /// <param name="findText">The text to find</param>
-    /// <param name="inColumn">Index of the column to find the text in</param>
-    /// <returns></returns>
+    /// <param name="findText">The text to find.</param>
+    /// <param name="inColumn">Index of the column to find the text in.</param>
+    /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
     public TableRow FindRow(string findText, int inColumn)
     {
       Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
@@ -54,6 +55,28 @@ namespace WatiN.Core
         TableCellCollection tableCells = tableRow.TableCells;
 
         if (String.Compare(tableCells[inColumn].Text, findText, true) == 0)
+        {
+          return tableRow;
+        }
+      }
+      return null;
+    }
+    
+    /// <summary>
+    /// Finds te first row that matches findTextRegex in inColumn. If no match is found, null is returned.
+    /// </summary>
+    /// <param name="findTextRegex">The regular expression the cell text must match.</param>
+    /// <param name="inColumn">Index of the column to find the text in.</param>
+    /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+    public TableRow FindRow(Regex findTextRegex, int inColumn)
+    {
+      Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+
+      foreach (TableRow tableRow in TableRows)
+      {
+        TableCellCollection tableCells = tableRow.TableCells;
+
+        if (findTextRegex.Match(tableCells[inColumn].Text).Success)
         {
           return tableRow;
         }
