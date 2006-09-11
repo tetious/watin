@@ -17,8 +17,9 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections.Specialized;
-
+using System.Text.RegularExpressions;
 using mshtml;
 
 using WatiN.Core.Exceptions;
@@ -83,6 +84,18 @@ namespace WatiN.Core
 
       SelectByTextOrValue(text, true);
     }
+    
+    /// <summary>
+    /// This method selects an item by text using the supplied regular expression.
+    /// Raises NoValueFoundException if the specified value is not found.
+    /// </summary>
+    /// <param name="regex"></param>
+    public void Select(Regex regex)
+    {
+      Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
+
+      SelectByTextOrValue(regex, true);
+    }
 
     /// <summary>
     /// Selects an item in a select box, by value.
@@ -95,13 +108,37 @@ namespace WatiN.Core
 
       SelectByTextOrValue(value, false);
     }
+    
+    /// <summary>
+    /// Selects an item in a select box by value using the supplied regular expression.
+    /// Raises NoValueFoundException if the specified value is not found.
+    /// </summary>
+    /// <param name="regex"></param>
+    public void SelectByValue(Regex regex)
+    {
+      Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
+
+      SelectByTextOrValue(regex, false);
+    }
 
     private void SelectByTextOrValue(string textOrValue, bool selectByText)
+    {
+      try
+      {
+        SelectByTextOrValue(new Regex("^" + textOrValue + "$"), selectByText);
+      }
+      catch (SelectListItemNotFoundException)
+      {
+        throw new SelectListItemNotFoundException(textOrValue);
+      }
+    }
+
+    private void SelectByTextOrValue(Regex textOrValueRegex, bool selectByText)
     {
       bool optionFound = false;
       bool wait = false;
       int numberOfOptions = selectElement.length;
-
+      
       for (int index = 0; (optionFound == false) && (index < numberOfOptions) ; index++)
       {
         IHTMLOptionElement option = GetOptionElement(index);
@@ -113,7 +150,7 @@ namespace WatiN.Core
         else 
         { compareValueOrText = option.value; }
 
-        if (textOrValue.Equals(compareValueOrText))
+        if (textOrValueRegex.Match(compareValueOrText).Success)
         {
           if (option.selected)
           {
@@ -131,7 +168,7 @@ namespace WatiN.Core
 
       if (!optionFound)
       {
-        throw new SelectListItemNotFoundException(textOrValue);
+        throw new SelectListItemNotFoundException("Using regular expression: " + textOrValueRegex.ToString());
       }
       
       if (wait)

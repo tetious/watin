@@ -19,7 +19,7 @@
 
 using System.Collections;
 using System.Collections.Specialized;
-
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -409,7 +409,7 @@ namespace WatiN.UnitTests
 
 
     [Test]
-    public void MultiSelectList()
+    public void SelectListMultipleSelect()
     {
       SelectList selectList = ie.SelectList("Select2");
 
@@ -494,7 +494,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void SingleSelectList()
+    public void SelectListSingleSelect()
     {
       SelectList selectList = ie.SelectList("Select1");
 
@@ -519,11 +519,39 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Third text", selectList.SelectedItem, "Unexpected SelectedItem");
     }
 
+    [Test]
+    public void SelectListSelectTextWithRegex()
+    {
+      SelectList selectList = ie.SelectList("Select1");
+
+      selectList.Select(new Regex("cond te"));
+      Assert.IsTrue(selectList.HasSelectedItems, "Selected item expected");
+      Assert.AreEqual(1,selectList.SelectedItems.Count, "Unexpected count");
+      Assert.AreEqual("Second text", selectList.SelectedItems[0], "Unexpected SelectedItem by index");
+      Assert.AreEqual("Second text", selectList.SelectedItem, "Unexpected SelectedItem");
+    }
+    
+    [Test]
+    public void SelectListSelectValueWithRegex()
+    {
+      SelectList selectList = ie.SelectList("Select1");
+
+      selectList.SelectByValue(new Regex("twee"));
+      Assert.AreEqual("Second text", selectList.SelectedItem, "Unexpected SelectedItem");
+    }
+
     [Test, ExpectedException(typeof(SelectListItemNotFoundException), "No item with text or value 'None existing item' was found in the selectlist")]
-    public void SingleSelectItemNotFoundException()
+    public void SelectListSelectItemNotFoundException()
     {
       SelectList selectList = ie.SelectList("Select1");
       selectList.Select("None existing item");
+    }
+
+    [Test, ExpectedException(typeof(SelectListItemNotFoundException))]
+    public void SelectListSelectPartialTextMatchItemNotFoundException()
+    {
+      SelectList selectList = ie.SelectList("Select1");
+      selectList.Select("Second");
     }
 
     [Test]
@@ -565,7 +593,6 @@ namespace WatiN.UnitTests
       const string value = "Hello world!";
       const string appendValue = " This is WatiN!";
       TextField textfieldName = ie.TextField("name");
-//      TextField textfieldName = ie.TextField("name");
 
       Assert.AreEqual("name", textfieldName.Id);
       Assert.AreEqual("textinput1", textfieldName.Name);
