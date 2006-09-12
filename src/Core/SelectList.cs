@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using mshtml;
 
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -94,7 +95,7 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(regex, true);
+      SelectByTextOrValue(new RegexComparer(regex), true);
     }
 
     /// <summary>
@@ -118,14 +119,14 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(regex, false);
+      SelectByTextOrValue(new RegexComparer(regex), false);
     }
 
     private void SelectByTextOrValue(string textOrValue, bool selectByText)
     {
       try
       {
-        SelectByTextOrValue(new Regex("^" + textOrValue + "$"), selectByText);
+        SelectByTextOrValue(new StringEqualsAndCaseInsensitiveComparer(textOrValue), selectByText);
       }
       catch (SelectListItemNotFoundException)
       {
@@ -133,7 +134,7 @@ namespace WatiN.Core
       }
     }
 
-    private void SelectByTextOrValue(Regex textOrValueRegex, bool selectByText)
+    private void SelectByTextOrValue(ICompare comparer, bool selectByText)
     {
       bool optionFound = false;
       bool wait = false;
@@ -150,7 +151,7 @@ namespace WatiN.Core
         else 
         { compareValueOrText = option.value; }
 
-        if (textOrValueRegex.Match(compareValueOrText).Success)
+        if (comparer.Compare(compareValueOrText))
         {
           if (option.selected)
           {
@@ -168,7 +169,7 @@ namespace WatiN.Core
 
       if (!optionFound)
       {
-        throw new SelectListItemNotFoundException("Using regular expression: " + textOrValueRegex.ToString());
+        throw new SelectListItemNotFoundException("Using " + comparer.ToString()) ;
       }
       
       if (wait)

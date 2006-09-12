@@ -17,10 +17,9 @@
 
 #endregion Copyright
 
-using System;
 using System.Text.RegularExpressions;
 using mshtml;
-
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -50,18 +49,9 @@ namespace WatiN.Core
     {
       Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      foreach (TableRow tableRow in TableRows)
-      {
-        TableCellCollection tableCells = tableRow.TableCells;
-
-        if (String.Compare(tableCells[inColumn].Text, findText, true) == 0)
-        {
-          return tableRow;
-        }
-      }
-      return null;
+      return findRow(new StringEqualsAndCaseInsensitiveComparer(findText), inColumn);
     }
-    
+
     /// <summary>
     /// Finds te first row that matches findTextRegex in inColumn. If no match is found, null is returned.
     /// </summary>
@@ -72,21 +62,26 @@ namespace WatiN.Core
     {
       Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      foreach (TableRow tableRow in TableRows)
-      {
-        TableCellCollection tableCells = tableRow.TableCells;
-
-        if (findTextRegex.Match(tableCells[inColumn].Text).Success)
-        {
-          return tableRow;
-        }
-      }
-      return null;
+      return findRow(new RegexComparer(findTextRegex), inColumn);
     }
 
     public override string ToString()
     {
       return Id;
+    }
+    
+    private TableRow findRow(ICompare comparer, int inColumn)
+    {
+      foreach (TableRow tableRow in TableRows)
+      {
+        TableCellCollection tableCells = tableRow.TableCells;
+
+        if (comparer.Compare(tableCells[inColumn].Text))
+        {
+          return tableRow;
+        }
+      }
+      return null;
     }
   }
 }

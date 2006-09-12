@@ -55,6 +55,11 @@ namespace WatiN.Core
       }      
       return false;
     }
+ 
+    public override string ToString()
+    {
+      return GetType().ToString() + " compares with: " + valueToCompareWith;
+    }
   }
   
   /// <summary>
@@ -75,6 +80,36 @@ namespace WatiN.Core
       
       return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
     }
+    
+    public override string ToString()
+    {
+      return GetType().ToString() + " compares with: " + valueToCompareWith;
+    }
+  }
+  
+  /// <summary>
+  /// Class that supports a simple matching of two strings.
+  /// </summary>
+  public class StringEqualsAndCaseInsensitiveComparer :ICompare
+  {
+    private string valueToCompareWith;
+    
+    public StringEqualsAndCaseInsensitiveComparer(string value)
+    {
+      valueToCompareWith = value.ToLower();
+    }
+    
+    public bool Compare(string value)
+    {
+      if (UtilityClass.IsNullOrEmpty(value)) return false;
+      
+      return (String.Compare(value, valueToCompareWith, true) == 0);
+    }
+    
+    public override string ToString()
+    {
+      return GetType().ToString() + " compares with: " + valueToCompareWith;
+    }
   }
   
   /// <summary>
@@ -94,6 +129,11 @@ namespace WatiN.Core
       if (value == null) return false;
       
       return regexToUse.IsMatch(value);
+    }
+    
+    public override string ToString()
+    {
+      return GetType().ToString() + " matching against: " + regexToUse.ToString();
     }
   }
   
