@@ -102,7 +102,7 @@ namespace WatiN.UnitTests
         object enumFrame = frameEnumerator.Current;
         
         Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
-        Assert.AreEqual(frame.Html, ((Frame)enumFrame).Html, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(frame.Html, ((Frame)enumFrame).Html, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
