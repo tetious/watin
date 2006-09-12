@@ -38,18 +38,22 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports an exact comparison of two string values.
   /// </summary>
-  public class StringComparer :ICompare
+  public class StringComparer : ICompare
   {
-    private string valueToCompareWith;
+    protected string valueToCompareWith;
     
     public StringComparer(string value)
     {
+      if (value == null)
+      {
+        throw new ArgumentNullException("value");        
+      }
       valueToCompareWith = value;
     }
     
-    public bool Compare(string value)
+    public virtual bool Compare(string value)
     {
-      if (UtilityClass.IsNotNullOrEmpty(value) && valueToCompareWith.Equals(value))
+      if (value != null && valueToCompareWith.Equals(value))
       {
         return true;
       }      
@@ -65,50 +69,44 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports a simple matching of two strings.
   /// </summary>
-  public class StringContainsAndCaseInsensitiveComparer :ICompare
+  public class StringContainsAndCaseInsensitiveComparer : StringComparer
   {
-    private string valueToCompareWith;
-    
-    public StringContainsAndCaseInsensitiveComparer(string value)
+    public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
     {
       valueToCompareWith = value.ToLower();
     }
     
-    public bool Compare(string value)
+    public override bool Compare(string value)
     {
-      if (UtilityClass.IsNullOrEmpty(value)) return false;
+      if (value == null)
+      {
+        return false;
+      }
+      
+      if (valueToCompareWith == String.Empty & value != String.Empty)
+      {
+        return false;
+      }
       
       return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
-    }
-    
-    public override string ToString()
-    {
-      return GetType().ToString() + " compares with: " + valueToCompareWith;
     }
   }
   
   /// <summary>
   /// Class that supports a simple matching of two strings.
   /// </summary>
-  public class StringEqualsAndCaseInsensitiveComparer :ICompare
-  {
-    private string valueToCompareWith;
-    
-    public StringEqualsAndCaseInsensitiveComparer(string value)
+  public class StringEqualsAndCaseInsensitiveComparer : StringComparer
+  {    
+    public StringEqualsAndCaseInsensitiveComparer(string value) : base(value)
     {
       valueToCompareWith = value.ToLower();
     }
     
-    public bool Compare(string value)
+    public override bool Compare(string value)
     {
-      if (UtilityClass.IsNullOrEmpty(value)) return false;
+      if (value == null) return false;
       
       return (String.Compare(value, valueToCompareWith, true) == 0);
-    }
-    
-    public override string ToString()
-    {
-      return GetType().ToString() + " compares with: " + valueToCompareWith;
     }
   }
   
@@ -121,6 +119,10 @@ namespace WatiN.Core
     
     public RegexComparer(Regex regex)
     {
+      if (regex == null)
+      {
+        throw new ArgumentNullException("regex");        
+      }
       regexToUse = regex;
     }
     
@@ -146,6 +148,10 @@ namespace WatiN.Core
     
     public UriComparer(Uri uri)
     {
+      if (uri == null)
+      {
+        throw new ArgumentNullException("uri");        
+      }
       uriToCompareWith = uri;
     }
     
@@ -164,6 +170,11 @@ namespace WatiN.Core
     public bool Compare(Uri url)
     {
       return uriToCompareWith.Equals(url);
+    }
+    
+    public override string ToString()
+    {
+      return GetType().ToString() + " compares with: " + uriToCompareWith.ToString();
     }
   }
   

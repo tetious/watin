@@ -21,6 +21,7 @@ using System;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core;
+using WatiN.Core.Interfaces;
 using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
@@ -288,22 +289,245 @@ namespace WatiN.UnitTests
     public ElementUrlPartialValue(string url) : base("http://www.fakeurl.com")
     {
       this.url = url;  
+      comparer = new StringContainsAndCaseInsensitiveComparer(url);
     }
 
     public override string Value
     {
        get { return url; }
     }
-
-    public override bool Compare(string value)
+  }
+  
+  [TestFixture]
+  public class StringComparerTests
+  {
+    [Test]
+    public void ConstructorWithValue()
     {
-      bool containedInValue = value.ToLower().IndexOf(Value.ToLower()) >= 0;
+      ICompare comparer = new StringComparer("A test value");
+      
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
+      
+      Assert.IsFalse(comparer.Compare("a test Value"), "Match should be case sensitive");
+      Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
+      Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
+      Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void ConstructorWithNullShouldThrowArgumentNullException()
+    {
+      new StringComparer(null);
+    }
+    
+    [Test]
+    public void ConstuctorWithStringEmpty()
+    {
+      ICompare comparer = new StringComparer(String.Empty);
+      
+      Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
+      
+      Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test]
+    public void ToStringTest()
+    {
+      StringComparer comparer = new StringComparer("A test value");
+      
+      Assert.AreEqual("WatiN.Core.StringComparer compares with: A test value", comparer.ToString());
+    }
+  }
+  
+  [TestFixture]
+  public class StringContainsAndCaseInsensitiveComparerTests
+  {
+    [Test]
+    public void ConstructorWithValue()
+    {
+      ICompare comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
+      
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
+      Assert.IsTrue(comparer.Compare("a test Value"), "Case should be ignored");
+      Assert.IsTrue(comparer.Compare("A test value 2"), "Exact match plus more should pass.");
+      
+      Assert.IsFalse(comparer.Compare("test"), "A part of the Value should not match");
+      Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
+      Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void ConstructorWithNullShouldThrowArgumentNullException()
+    {
+      new StringContainsAndCaseInsensitiveComparer(null);
+    }
+    
+    [Test]
+    public void ConstuctorWithStringEmpty()
+    {
+      ICompare comparer = new StringContainsAndCaseInsensitiveComparer(String.Empty);
+      
+      Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
+      
+      Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test]
+    public void ToStringTest()
+    {
+      StringContainsAndCaseInsensitiveComparer comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
+      
+      Assert.AreEqual("WatiN.Core.StringContainsAndCaseInsensitiveComparer compares with: a test value", comparer.ToString());
+    }
+  }
+  
+  [TestFixture]
+  public class StringEqualsAndCaseInsensitiveComparerTests
+  {
+    [Test]
+    public void ConstructorWithValue()
+    {
+      ICompare comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
+      
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");      
+      Assert.IsTrue(comparer.Compare("a test Value"), "Match should be case insensitive");
+      
+      Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
+      Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
+      Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void ConstructorWithNullShouldThrowArgumentNullException()
+    {
+      new StringEqualsAndCaseInsensitiveComparer(null);
+    }
+    
+    [Test]
+    public void ConstuctorWithStringEmpty()
+    {
+      ICompare comparer = new StringEqualsAndCaseInsensitiveComparer(String.Empty);
+      
+      Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
+      
+      Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test]
+    public void ToStringTest()
+    {
+      StringEqualsAndCaseInsensitiveComparer comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
+      
+      Assert.AreEqual("WatiN.Core.StringEqualsAndCaseInsensitiveComparer compares with: a test value", comparer.ToString());
+    }
+  }
+  
+  [TestFixture]
+  public class RegexComparerTests
+  {
+    [Test]
+    public void ConstructorWithValue()
+    {
+      ICompare comparer = new RegexComparer(new Regex("^A test value$"));
+      
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");      
+      
+      Assert.IsFalse(comparer.Compare("a test Value"), "Match should be case sensitive");
+      Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
+      Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
+      Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void ConstructorWithNullShouldThrowArgumentNullException()
+    {
+      new RegexComparer(null);
+    }
+    
+    [Test]
+    public void ConstuctorWithStringEmpty()
+    {
+      ICompare comparer = new RegexComparer(new Regex(String.Empty));
+      
+      Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
+      Assert.IsTrue(comparer.Compare(" "), "Any string should not match");
+      
+      Assert.IsFalse(comparer.Compare(null), "null should not match");
+    }
+    
+    [Test]
+    public void ToStringTest()
+    {
+      RegexComparer comparer = new RegexComparer(new Regex("^A test value$"));
+      
+      Assert.AreEqual("WatiN.Core.RegexComparer matching against: ^A test value$", comparer.ToString());
+    }
+  }
+  
+  [TestFixture]
+  public class UriComparerTests
+  {
+    [Test]
+    public void ConstructorWithValueAndStringCompare()
+    {
+      ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+      
+      // String Compare
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net"), "Exact match should pass.");      
+      Assert.IsTrue(comparer.Compare("HTTP://watin.Sourceforge.net"), "Match should not be case sensitive");
 
-      if (UtilityClass.IsNotNullOrEmpty(value) && containedInValue)
-      {
-        return true;
-      }
-      return false;
+      Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net/index.html"), "Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare("http://watin"), "Partial match should not match");
+      Assert.IsFalse(comparer.Compare("file://html/main.html"), "Something completely different should not match");
+      Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
+      Assert.IsFalse(comparer.Compare((string)null), "String: null should not match");
+    }
+    
+    [Test]
+    public void ConstructorWithValueAndUriCompare()
+    {
+      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+      
+      // Uri Compare
+      Assert.IsTrue(comparer.Compare(new Uri("http://watin.sourceforge.net")), "Uri: Exact match should pass.");      
+      Assert.IsTrue(comparer.Compare(new Uri("HTTP://watin.Sourceforge.net")), "Uri: Match should not be case sensitive");
+
+      Assert.IsFalse(comparer.Compare(new Uri("http://watin.sourceforge.net/index.html")), "Uri: Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare(new Uri("http://watin")), "Uri: Partial match should not match");
+      Assert.IsFalse(comparer.Compare(new Uri("file://html/main.html")), "Uri: Something completely different should not match");
+      Assert.IsFalse(comparer.Compare((Uri)null), "Uri: null should not match");
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void ConstructorWithNullShouldThrowArgumentNullException()
+    {
+      new UriComparer(null);
+    }
+    
+    [Test, ExpectedException(typeof(UriFormatException))]
+    public void StringCompareOnlyExceptsValidUrl()
+    {
+      ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+
+      comparer.Compare("watin");
+    }
+    
+    [Test]
+    public void ToStringTest()
+    {
+      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+      
+      Assert.AreEqual("WatiN.Core.UriComparer compares with: http://watin.sourceforge.net/", comparer.ToString());
     }
   }
 }
