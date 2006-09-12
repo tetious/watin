@@ -123,7 +123,7 @@ namespace WatiN.UnitTests
         object enumTable = tableEnumerator.Current;
         
         Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(table.OuterHtml, ((Table)enumTable).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(table.OuterHtml, ((Table)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -154,7 +154,7 @@ namespace WatiN.UnitTests
         object enumTable = rowEnumerator.Current;
         
         Assert.IsInstanceOfType(row.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(row.OuterHtml, ((TableRow)enumTable).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(row.OuterHtml, ((TableRow)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -193,7 +193,7 @@ namespace WatiN.UnitTests
         object enumTable = cellEnumerator.Current;
         
         Assert.IsInstanceOfType(cell.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(cell.OuterHtml, ((TableCell)enumTable).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(cell.OuterHtml, ((TableCell)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -257,7 +257,7 @@ namespace WatiN.UnitTests
         object enumButton = buttonEnumerator.Current;
         
         Assert.IsInstanceOfType(inputButton.GetType(), enumButton, "Types are not the same");
-        Assert.AreEqual(inputButton.OuterHtml, ((Button)enumButton).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(inputButton.OuterHtml, ((Button)enumButton).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -305,7 +305,7 @@ namespace WatiN.UnitTests
         object enumCheckbox = checkboxEnumerator.Current;
         
         Assert.IsInstanceOfType(checkBox.GetType(), enumCheckbox, "Types are not the same");
-        Assert.AreEqual(checkBox.OuterHtml, ((CheckBox)enumCheckbox).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(checkBox.OuterHtml, ((CheckBox)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -313,6 +313,43 @@ namespace WatiN.UnitTests
       Assert.AreEqual(3, count);
     }
 
+    [Test]
+    public void Div()
+    {
+      Assert.AreEqual("divid", ie.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
+      Assert.AreEqual("divid", ie.Div("divid").Id, "Find Div by ie.Div()");
+    }
+
+    [Test]
+    public void Divs()
+    {
+      Assert.AreEqual(1, ie.Divs.Length, "Unexpected number of Divs");
+
+      DivCollection divs = ie.Divs;
+
+      // Collection items by index
+      Assert.AreEqual("divid", divs[0].Id);
+
+      // Collection iteration and comparing the result with Enumerator
+      IEnumerable divEnumerable = divs;
+      IEnumerator divEnumerator = divEnumerable.GetEnumerator();
+
+      int count = 0;
+      foreach (Div div in divs)
+      {
+        divEnumerator.MoveNext();
+        object enumDiv = divEnumerator.Current;
+        
+        Assert.IsInstanceOfType(div.GetType(), enumDiv, "Types are not the same");
+        Assert.AreEqual(div.OuterHtml, ((Div)enumDiv).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(1, count);
+    }
+
+    
     [Test]
     public void Element()
     {
@@ -376,7 +413,7 @@ namespace WatiN.UnitTests
         object enumCheckbox = labelEnumerator.Current;
         
         Assert.IsInstanceOfType(label.GetType(), enumCheckbox, "Types are not the same");
-        Assert.AreEqual(label.OuterHtml, ((Label)enumCheckbox).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(label.OuterHtml, ((Label)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -425,7 +462,7 @@ namespace WatiN.UnitTests
         object enumLink = linksEnumerator.Current;
         
         Assert.IsInstanceOfType(link.GetType(), enumLink, "Types are not the same");
-        Assert.AreEqual(link.OuterHtml, ((Link)enumLink).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(link.OuterHtml, ((Link)enumLink).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -510,7 +547,7 @@ namespace WatiN.UnitTests
         object enumRadioButton = radiobuttonEnumerator.Current;
         
         Assert.IsInstanceOfType(radioButton.GetType(), enumRadioButton, "Types are not the same");
-        Assert.AreEqual(radioButton.OuterHtml, ((RadioButton)enumRadioButton).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(radioButton.OuterHtml, ((RadioButton)enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -610,7 +647,7 @@ namespace WatiN.UnitTests
         object enumSelectList = selectListEnumerator.Current;
         
         Assert.IsInstanceOfType(selectList.GetType(), enumSelectList, "Types are not the same");
-        Assert.AreEqual(selectList.OuterHtml, ((SelectList)enumSelectList).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(selectList.OuterHtml, ((SelectList)enumSelectList).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
@@ -722,7 +759,7 @@ namespace WatiN.UnitTests
         object enumTextfield = textfieldEnumerator.Current;
         
         Assert.IsInstanceOfType(textField.GetType(), enumTextfield, "Types are not the same");
-        Assert.AreEqual(textField.OuterHtml, ((TextField)enumTextfield).OuterHtml, "foreach en IEnumator don't act the same.");
+        Assert.AreEqual(textField.OuterHtml, ((TextField)enumTextfield).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
       
