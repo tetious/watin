@@ -316,8 +316,6 @@ namespace WatiN.UnitTests
     [Test]
     public void Element()
     {
-      const string tableId = "table1";
-
       Element element = ie.Table(Find.ById(tableId));
 
       Assert.IsNotNull(element,  "Element not found");
@@ -524,14 +522,19 @@ namespace WatiN.UnitTests
     [Test]
     public void SelectListSingleSelect()
     {
+      // Make sure the page is fresh so the selected item (after loading
+      // the page) is the right one.
+      ie.GoTo(ie.Url);
+      
       SelectList selectList = ie.SelectList("Select1");
 
       Assert.IsNotNull(selectList,"SelectList niet aangetroffen");
 
       Assert.IsFalse(selectList.Multiple, "Select 1 must not allow multiple selection to pass the next tests");
 
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "'First text' not selected on page load");
-      Assert.AreEqual("First text", selectList.SelectedItems[0]);
+      Assert.AreEqual(1,selectList.SelectedItems.Count, "Not one item selected on page load");
+      // Test if the right item is selected after a page load
+      Assert.AreEqual("First text", selectList.SelectedItem, "'First text' not selected on page load");
               
       selectList.ClearList();
       Assert.AreEqual(1,selectList.SelectedItems.Count, "SelectedItem should still be selected after ClearList");
