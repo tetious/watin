@@ -88,6 +88,5 @@ namespace WatiN.Core
     {
       return Id;
     }
-
   }
 }
