@@ -22,6 +22,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using mshtml;
+using SHDocVw;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -299,5 +301,67 @@ namespace WatiN.Core
 
     #endregion ComImport Interfaces
 
+    #region Methods
+
+    internal static void EnumIWebBrowser2Interfaces(IProcessIWebBrowser2 processer)
+    {
+      IEnumUnknown eu;
+      IOleContainer oc = processer.HTMLDocument() as IOleContainer;
+      int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+      Marshal.ThrowExceptionForHR(hr);
+
+      try
+      {
+        object pUnk;
+        int fetched;
+        const int MAX_FETCH_COUNT = 1;
+
+        // get the first embedded object
+        // pUnk alloc
+        hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+        Marshal.ThrowExceptionForHR(hr);
+
+        while (hr == 0)
+        {
+          // Query Interface pUnk for the IWebBrowser2 interface
+          IWebBrowser2 brow = pUnk as IWebBrowser2;
+
+          if (brow != null)
+          {
+            processer.Process(brow);
+                   
+            if (!processer.Continue())
+            {
+              break;
+            }
+          }
+
+          // pUnk free
+          Marshal.ReleaseComObject(brow);
+
+          // get the next embedded object
+          // pUnk alloc
+          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+          Marshal.ThrowExceptionForHR(hr);
+        }
+      }
+      finally
+      {
+        // eu free
+        Marshal.ReleaseComObject(eu);
+      }
+    }
+
+    #endregion Methods
+  }
+}
+
+namespace WatiN.Core.Interfaces
+{
+  internal interface IProcessIWebBrowser2
+  {
+    HTMLDocument HTMLDocument();
+    void Process(IWebBrowser2 webBrowser2);
+    bool Continue();
   }
 }

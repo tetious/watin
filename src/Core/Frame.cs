@@ -17,12 +17,11 @@
 
 #endregion Copyright
 
-using System.Runtime.InteropServices;
-
 using mshtml;
 using SHDocVw;
 
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -121,61 +120,55 @@ namespace WatiN.Core
 
     internal static IWebBrowser2 GetFrameFromHTMLDocument(int frameIndex, HTMLDocument htmlDocument)
     {
-      IWebBrowser2 result = null;
+      FrameByIndexProcessor processor = new FrameByIndexProcessor(frameIndex, htmlDocument);
       
-      NativeMethods.IEnumUnknown eu;
-      NativeMethods.IOleContainer oc = htmlDocument as NativeMethods.IOleContainer;
-      int hr = oc.EnumObjects(NativeMethods.tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
-      Marshal.ThrowExceptionForHR(hr);
-
-      try
-      {
-        object pUnk;
-        int fetched;
-        const int MAX_FETCH_COUNT = 1;
-
-        // get the first embedded object
-        // pUnk alloc
-        hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-        Marshal.ThrowExceptionForHR(hr);
-
-        int index = 0;
-        while (hr == 0)
-        {
-          // Query Interface pUnk for the IWebBrowser2 interface
-          IWebBrowser2 brow = pUnk as IWebBrowser2;
-
-          if (brow != null)
-          {
-            if (index++ == frameIndex)
-            {
-              result = brow;
-              break;
-            }
-          }
-
-          // pUnk free
-          Marshal.ReleaseComObject(brow);
-
-          // get the next embedded object
-          // pUnk alloc
-          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-          Marshal.ThrowExceptionForHR(hr);
-        }
-      }
-      finally
-      {
-        // eu free
-        Marshal.ReleaseComObject(eu);
-      }
-
-      return result;
+      NativeMethods.EnumIWebBrowser2Interfaces(processor);
+      
+      return processor.IWebBrowser2();
     }
 
     private void Init(string name, string id)
     {
       frameName = name;
       frameId = id;
+    }
+  }
+    
+  internal class FrameByIndexProcessor :IProcessIWebBrowser2
+  {
+    private HTMLDocument htmlDocument;
+    private int index;
+    private int counter = 0;
+    private IWebBrowser2 iWebBrowser2 = null;
+    
+    public FrameByIndexProcessor(int index, HTMLDocument htmlDocument)
+    {
+      this.index = index;
+      this.htmlDocument = htmlDocument;  
+    }
+
+    public HTMLDocument HTMLDocument()
+    {
+      return htmlDocument;
+    }
+
+    public void Process(IWebBrowser2 webBrowser2)
+    {
+      if (counter == index)
+      {
+        iWebBrowser2 = webBrowser2;
+      }
+      counter++;
+    }
+
+    public bool Continue()
+    {
+      return (iWebBrowser2 == null);
+    }
+    
+    public IWebBrowser2 IWebBrowser2()
+    {
+      return iWebBrowser2;
     }
   }
 }

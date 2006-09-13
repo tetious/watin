@@ -18,10 +18,10 @@
 #endregion Copyright
 
 using System.Collections;
-using System.Runtime.InteropServices;
 
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -34,65 +34,11 @@ namespace WatiN.Core
 		
     public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
     {
-      elements = new ArrayList();
-      IHTMLElementCollection frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
-
-      NativeMethods.IEnumUnknown eu;
-      NativeMethods.IOleContainer oc = htmlDocument as NativeMethods.IOleContainer;
-      int hr = oc.EnumObjects(NativeMethods.tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
-      Marshal.ThrowExceptionForHR(hr);
-
-      try
-      {
-        object pUnk;
-        int fetched;
-        const int MAX_FETCH_COUNT = 1;
-
-        // get the first embedded object
-        // pUnk alloc
-        hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-        Marshal.ThrowExceptionForHR(hr);
-
-        int index = 0;
-        while (hr == 0)
-        {
-          // Query Interface pUnk for the IWebBrowser2 interface
-          IWebBrowser2 brow = pUnk as IWebBrowser2;
-
-          if (brow != null)
-          {
-            // Get the frame element from the parent document
-            IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
-            
-            string frameName = null;
-            string frameId = null;
-
-            if (frameElement != null)
-            {
-              frameId = frameElement.id;
-              frameName = frameElement.getAttribute("name", 0) as string;
-            }
-
-            Frame frame = new Frame(ie, brow.Document as IHTMLDocument2, frameName, frameId);
-            elements.Add(frame);
-                
-            index++;
-          }
-
-          // pUnk free
-          Marshal.ReleaseComObject(brow);
-
-          // get the next ebmedded object
-          // pUnk alloc
-          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-          Marshal.ThrowExceptionForHR(hr);
-        }
-      }
-      finally
-      {
-        // eu free
-        Marshal.ReleaseComObject(eu);
-      }
+      AllFramesProcessor processor = new AllFramesProcessor(ie, (HTMLDocument)htmlDocument);
+      
+      NativeMethods.EnumIWebBrowser2Interfaces(processor);
+      
+      elements = processor.elements;
     }
 
     public int Length { get { return elements.Count; } }
@@ -141,6 +87,55 @@ namespace WatiN.Core
       }
 
       object IEnumerator.Current { get { return Current; } }
+    }
+  }
+  
+  internal class AllFramesProcessor : IProcessIWebBrowser2
+  {
+    public ArrayList elements;
+    
+    private HTMLDocument htmlDocument;
+    private IHTMLElementCollection frameElements;
+    private int index = 0;
+    private DomContainer ie;
+    
+    public AllFramesProcessor(DomContainer ie, HTMLDocument htmlDocument)
+    {
+      elements = new ArrayList();
+      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
+
+      this.ie = ie;
+      this.htmlDocument = htmlDocument;  
+    }
+
+    public HTMLDocument HTMLDocument()
+    {
+      return htmlDocument;
+    }
+
+    public void Process(IWebBrowser2 webBrowser2)
+    {
+      // Get the frame element from the parent document
+      IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
+            
+      string frameName = null;
+      string frameId = null;
+
+      if (frameElement != null)
+      {
+        frameId = frameElement.id;
+        frameName = frameElement.getAttribute("name", 0) as string;
+      }
+
+      Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
+      elements.Add(frame);
+                
+      index++;
+    }
+
+    public bool Continue()
+    {
+      return true;
     }
   }
 }
