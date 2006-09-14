@@ -33,6 +33,9 @@ namespace WatiN.UnitTests
     public void FindByFor()
     {
       For value = Find.ByFor("foridvalue");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "For class should inherit Attribute class" );
+
       Assert.AreEqual("htmlfor", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("foridvalue", value.Value, "Wrong value");
       
@@ -45,6 +48,9 @@ namespace WatiN.UnitTests
     public void FindByID()
     {
       Id value = Find.ById("idvalue");
+
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Id class should inherit Attribute class" );
+
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
       
@@ -57,6 +63,9 @@ namespace WatiN.UnitTests
     public void FindByIDAndOccurenceByString()
     {
       IdAndOccurrence value = new IdAndOccurrence("elementid", 2);
+      
+      Assert.IsInstanceOfType(typeof(Id), value, "IdAndOccurrence class should inherit Id class" );
+      
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("elementid", value.Value, "Wrong value");
       Assert.AreEqual(2, value.Occurrence, "Wrong occurence");
@@ -75,17 +84,15 @@ namespace WatiN.UnitTests
       Assert.IsFalse(value.Compare("elementid"), "second elementid should not match");
       Assert.IsTrue(value.Compare("elementid"), "third elementid should match");
       Assert.IsFalse(value.Compare("elementid"), "forth elementid should not match");
-
-      Regex regex = new Regex("lue$");
-      value = new IdAndOccurrence(regex, 2);
-      Assert.IsTrue(value.Compare("idvalue"), "Regex lue$ should match");
     }
     
     [Test]
     public void FindByIDAndOccurenceByRegex()
     {
       Regex regex = new Regex("entid$");
+
       IdAndOccurrence value = new IdAndOccurrence(regex, 1);
+      
       Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("entid$", value.Value, "Wrong value");
       Assert.AreEqual(1, value.Occurrence, "Wrong occurence");
@@ -102,6 +109,9 @@ namespace WatiN.UnitTests
     public void FindByName()
     {
       Name value = Find.ByName("namevalue");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Name class should inherit Attribute class" );
+
       Assert.AreEqual("name", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("namevalue", value.Value, "Wrong value");
       
@@ -114,6 +124,9 @@ namespace WatiN.UnitTests
     public void FindByText()
     {
       Text value = Find.ByText("textvalue");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Text class should inherit Attribute class" );
+
       Assert.AreEqual("text", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("textvalue", value.Value, "Wrong value");
       
@@ -127,6 +140,9 @@ namespace WatiN.UnitTests
     {
       string url = WatiNURI.ToString();
       Url value = Find.ByUrl(url);
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Url class should inherit Attribute class" );
+
       AssertUrlValue(value);
     }
 
@@ -180,6 +196,9 @@ namespace WatiN.UnitTests
     public void FindByTitle()
     {
       Title value = Find.ByTitle("titlevalue");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Title class should inherit Attribute class" );
+
       Assert.AreEqual("title", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
       
@@ -212,6 +231,9 @@ namespace WatiN.UnitTests
     public void FindByValue()
     {
       Value value = Find.ByValue("valuevalue");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Value class should inherit Attribute class" );
+
       Assert.AreEqual("value", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
       Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
@@ -225,6 +247,9 @@ namespace WatiN.UnitTests
     public void FindBySrc()
     {
       Src value = Find.BySrc("image.gif");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "Src class should inherit Attribute class" );
+
       Assert.AreEqual("src", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("image.gif", value.Value, "Wrong value");
       
@@ -306,6 +331,9 @@ namespace WatiN.UnitTests
     public void ElementUrlPartialValue()
     {
       ElementUrlPartialValue value = new ElementUrlPartialValue("watin.sourceforge");
+      
+      Assert.IsInstanceOfType(typeof(Url), value, "ElementUrlPartialValue class should inherit Url class" );
+
       Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("watin.sourceforge", value.Value, "Wrong value");
       
