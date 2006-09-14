@@ -41,7 +41,7 @@
         <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
         
         <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
-        <csc define="${project.properties.define}" debug="false" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
+        <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
             <sources>
                 <include name="${core.source.dir}\*.cs"/>
             </sources>
@@ -58,7 +58,7 @@
         </csc>
         <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
 
-        <csc debug="false" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
+        <csc debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
             <sources>
                 <include name="${unittests.source.dir}\*.cs"/>
             </sources>
