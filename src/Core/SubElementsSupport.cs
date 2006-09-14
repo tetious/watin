@@ -168,22 +168,18 @@ namespace WatiN.Core
       return new TableCell(ie, (HTMLTableCell) FindElementByAttribute(TableCellTagName, TableCellTypeConstant, findBy, elements));
     }
 
+    /// <summary>
+    /// Finds a TableCell by the n-th occurrence of an id. 
+    /// Occurrence counting is zero based.
+    /// </summary>  
+    /// <example>
+    /// This example will get Text of the third(!) occurrence on the page of a
+    /// TableCell element with "tablecellid" as it's id value. 
+    /// <code>ie.TableCell(new IdAndOccurrence("tablecellid", 2)).Text</code>
+    /// </example>
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
-      int nr = -1;
-      IHTMLElementCollection elements = (IHTMLElementCollection)elementCollection.tags(TableCellTagName);
-      foreach (IHTMLElement e in elements)
-      {
-        if (e.id == elementId)
-        {
-          ++nr;
-          if (nr == occurrence)
-          {
-            return new TableCell(ie, (HTMLTableCell) e);
-          }
-        }
-      }
-      return null;
+      return TableCell(ie, new IdAndOccurrence(elementId, occurrence), elementCollection);
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)
