@@ -29,12 +29,11 @@ namespace WatiN.Core
 	{
 		ArrayList elements;
 		
-		public TableCellCollection(DomContainer ie, IHTMLElementCollection elements) 
+		public TableCellCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection tableCells = (IHTMLElementCollection)elements.tags(SubElementsSupport.TableCellTagName);
 
-			foreach(HTMLTableCell tableCell in tableCells)
+			foreach(HTMLTableCell tableCell in elements)
 			{
 			  TableCell v = new TableCell(ie, tableCell);
 				this.elements.Add(v);

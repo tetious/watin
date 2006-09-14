@@ -29,12 +29,11 @@ namespace WatiN.Core
 	{
 		ArrayList elements;
 		
-		public SpanCollection(DomContainer ie, IHTMLElementCollection elements) 
+		public SpanCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection spans = (IHTMLElementCollection)elements.tags(SubElementsSupport.SpanTagName);
 			
-      foreach (HTMLSpanElement span in spans)
+      foreach (HTMLSpanElement span in elements)
 			{
 				Span v = new Span(ie, span);
 				this.elements.Add(v);

@@ -275,6 +275,17 @@ namespace WatiN.Core
     }
   }
 
+  public class NoFindBy : Attribute
+  {
+    public NoFindBy() : base("non", "")
+    {}
+    
+    public override bool Compare(string value)
+    {
+      return true;
+    }
+  }
+  
   /// <summary>
   /// Class to find an element by it's id.
   /// </summary>  

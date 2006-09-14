@@ -35,18 +35,14 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="elements">The elements.</param>
-		public ButtonCollection(DomContainer domContainer, IHTMLElementCollection elements) 
+		public ButtonCollection(DomContainer domContainer, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 			
-      foreach (IHTMLInputElement inputElement in inputElements)
+      foreach (IHTMLInputElement inputElement in elements)
 			{
-        if (SubElementsSupport.InputButtonTypeConstant.IndexOf(inputElement.type) >= 0)
-        {
-            Button v = new Button(domContainer, (HTMLInputElement)inputElement);
-            this.elements.Add(v);
-        }
+        Button v = new Button(domContainer, (HTMLInputElement)inputElement);
+        this.elements.Add(v);
 			}
 		}
 

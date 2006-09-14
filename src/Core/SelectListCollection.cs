@@ -29,12 +29,11 @@ namespace WatiN.Core
   {
     ArrayList elements;
 		
-    public SelectListCollection(DomContainer ie, IHTMLElementCollection elements) 
+    public SelectListCollection(DomContainer ie, ArrayList elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection selectlists = (IHTMLElementCollection)elements.tags(SubElementsSupport.SelectListsTagName);
 
-      foreach (IHTMLElement selectlist in selectlists)
+      foreach (IHTMLElement selectlist in elements)
       {
         SelectList v = new SelectList(ie, selectlist);
         this.elements.Add(v);

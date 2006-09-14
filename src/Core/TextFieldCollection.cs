@@ -29,23 +29,17 @@ namespace WatiN.Core
 	{
 		ArrayList children;
 		
-    public TextFieldCollection(DomContainer ie, IHTMLElementCollection elements) 
+    public TextFieldCollection(DomContainer ie, ArrayList inputElements, ArrayList textAreaElements) 
     {
       children = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
       foreach (IHTMLInputElement inputElement in inputElements)
       {
-        if (SubElementsSupport.InputTextFieldTypeConstant.IndexOf(inputElement.type) >= 0)
-        {
-          TextField v = new TextField(ie, (HTMLInputElement)inputElement);
-          children.Add(v);
-        }
+        TextField v = new TextField(ie, (HTMLInputElement)inputElement);
+        children.Add(v);
       }
 
-      IHTMLElementCollection textElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.TextAreaTagName);
-
-      foreach (IHTMLElement textElement in textElements)
+      foreach (IHTMLElement textElement in textAreaElements)
       {
         TextField v = new TextField(ie, (HTMLInputElement)textElement);
         children.Add(v);

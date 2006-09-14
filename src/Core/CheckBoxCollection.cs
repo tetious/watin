@@ -34,19 +34,15 @@ namespace WatiN.Core
     /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>
-		public CheckBoxCollection(DomContainer domContainer, IHTMLElementCollection elements) 
+    /// <param name="elements">The elements.</param>    
+		public CheckBoxCollection(DomContainer domContainer, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
-			foreach (IHTMLInputElement item in inputElements)
+			foreach (IHTMLInputElement item in elements)
 			{
-        if (item.type == SubElementsSupport.InputCheckBoxTypeConstant)
-        {
-            CheckBox v = new CheckBox(domContainer, item);
-            this.elements.Add(v);
-        }
+        CheckBox v = new CheckBox(domContainer, item);
+        this.elements.Add(v);
 			}
 		}
     

@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Threading;
 
 using mshtml;
@@ -36,126 +37,115 @@ namespace WatiN.Core
     /// </summary>
     private SubElementsSupport(){}
 
+    public const string InputNullType = null;
     public const string InputTagName = "INPUT";
-    public const string InputButtonTypeConstant = "button submit image reset";
-    public const string InputCheckBoxTypeConstant = "checkbox";
-    public const string InputRadioButtonTypeConstant = "radio";
-    public const string InputTextFieldTypeConstant = "text password textarea hidden";
+    public const string InputButtonType = "button submit image reset";
+    public const string InputCheckBoxType = "checkbox";
+    public const string InputRadioButtonType = "radio";
+    public const string InputTextFieldType = "text password textarea hidden";
+    
     public const string FormTagName = "form";
-    public const string FormTypeConstant = null;
     public const string LabelTagName = "label";
-    public const string LabelTypeConstant = null;
     public const string LinkTagName = "A";
-    public const string LinkTypeConstant = null;
     public const string ParaTagName = "p";
-    public const string ParaTypeConstant = null;
     public const string SelectListsTagName = "select";
-    public const string SelectListsTypeConstant = null;
     public const string TableTagName = "table";
-    public const string TableTypeConstant = null;
     public const string TableCellTagName = "TD";
-    public const string TableCellTypeConstant = null;
     public const string TableRowTagName = "TR";
-    public const string TableRowTypeConstant = null;
     public const string TextAreaTagName = "textarea";
-    public const string TextAreaTypeConstant = null;
     public const string SpanTagName = "span";
-    public const string SpanTypeConstant = null;
     public const string DivTagName = "div";
-    public const string DivTypeConstant = null;
     public const string ImageTagName = "img";
-    public const string ImageTypeConstant = null;
     public const string FrameTagName = "FRAME";
-    public const string FrameTypeConstant = null;
 
     public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Button(ie, (HTMLInputElement)FindElementByAttribute(InputTagName, InputButtonTypeConstant, findBy, elements));
+      return new Button(ie, (HTMLInputElement)FindFirstElement(InputTagName, InputButtonType, findBy, elements));
     }
 
     public static ButtonCollection Buttons(DomContainer ie, IHTMLElementCollection elements)
     {
-       return new ButtonCollection(ie, elements);
+       return new ButtonCollection(ie, FindAllElements(InputTagName, InputButtonType, elements));
     }
 
     public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new CheckBox(ie, (IHTMLInputElement) FindElementByAttribute(InputTagName, InputCheckBoxTypeConstant, findBy, elements));
+      return new CheckBox(ie, (IHTMLInputElement) FindFirstElement(InputTagName, InputCheckBoxType, findBy, elements));
     }
 
     public static CheckBoxCollection CheckBoxes(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new CheckBoxCollection(ie, elements); 
+      return new CheckBoxCollection(ie, FindAllElements(InputTagName, InputCheckBoxType, elements));
     }
 
     public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Form(ie, (HTMLFormElement) FindElementByAttribute(FormTagName, FormTypeConstant, findBy, elements));
+      return new Form(ie, (HTMLFormElement) FindFirstElement(FormTagName, InputNullType, findBy, elements));
     }
 
     public static FormCollection Forms(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new FormCollection(ie, elements);
+      return new FormCollection(ie, FindAllElements(FormTagName, InputNullType, elements));
     }
 
     public static Label Label(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Label(ie, (HTMLLabelElement) FindElementByAttribute(LabelTagName, LabelTypeConstant, findBy, elements));
+      return new Label(ie, (HTMLLabelElement) FindFirstElement(LabelTagName, InputNullType, findBy, elements));
     }
 
     public static LabelCollection Labels(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new LabelCollection(ie, elements);
+      return new LabelCollection(ie, FindAllElements(LabelTagName, InputNullType, elements));
     }
 
     public static Link Link(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Link(ie, (HTMLAnchorElement) FindElementByAttribute(LinkTagName, LinkTypeConstant, findBy, elements));
+      return new Link(ie, (HTMLAnchorElement) FindFirstElement(LinkTagName, InputNullType, findBy, elements));
     }
 
     public static LinkCollection Links(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new LinkCollection(ie, elements);
+      return new LinkCollection(ie, FindAllElements(LinkTagName, InputNullType, elements));
     }
 
     public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Para(ie, (HTMLParaElement) FindElementByAttribute(ParaTagName, ParaTypeConstant, findBy, elements));
+      return new Para(ie, (HTMLParaElement) FindFirstElement(ParaTagName, InputNullType, findBy, elements));
     }
 
     public static ParaCollection Paras(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new ParaCollection(ie, elements); 
+      return new ParaCollection(ie, FindAllElements(ParaTagName, InputNullType, elements));
     }
 
     public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new RadioButton(ie, (IHTMLInputElement) FindElementByAttribute(InputTagName, InputRadioButtonTypeConstant, findBy, elements));
+      return new RadioButton(ie, (IHTMLInputElement) FindFirstElement(InputTagName, InputRadioButtonType, findBy, elements));
     }
 
     public static RadioButtonCollection RadioButtons(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new RadioButtonCollection(ie, elements); 
+      return new RadioButtonCollection(ie, FindAllElements(InputTagName, InputRadioButtonType, elements));
     }
 
     public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new SelectList(ie, FindElementByAttribute(SelectListsTagName, SelectListsTypeConstant, findBy, elements));
+      return new SelectList(ie, FindFirstElement(SelectListsTagName, InputNullType, findBy, elements));
     }
 
     public static SelectListCollection SelectLists(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new SelectListCollection(ie, elements);
+      return new SelectListCollection(ie, FindAllElements(SelectListsTagName, InputNullType, elements));
     }
 
     public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Table(ie, (HTMLTable) FindElementByAttribute(TableTagName, TableTypeConstant, findBy, elements));
+      return new Table(ie, (HTMLTable) FindFirstElement(TableTagName, InputNullType, findBy, elements));
     }
 
     public static TableCollection Tables(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new TableCollection(ie, elements); 
+      return new TableCollection(ie, FindAllElements(TableTagName, InputNullType, elements));
     }
 
 //    public static TableSectionCollection TableSections(IDomContainer ie, IHTMLElementCollection elements)
@@ -165,7 +155,7 @@ namespace WatiN.Core
 
     public static TableCell TableCell(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, (HTMLTableCell) FindElementByAttribute(TableCellTagName, TableCellTypeConstant, findBy, elements));
+      return new TableCell(ie, (HTMLTableCell) FindFirstElement(TableCellTagName, InputNullType, findBy, elements));
     }
 
     /// <summary>
@@ -184,17 +174,17 @@ namespace WatiN.Core
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new TableCellCollection(ie, elements); 
+      return new TableCellCollection(ie, FindAllElements(TableCellTagName, InputNullType, elements));
     }
 
     public static TableRow TableRow(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableRow(ie, (HTMLTableRow) FindElementByAttribute(TableRowTagName, TableRowTypeConstant, findBy, elements));
+      return new TableRow(ie, (HTMLTableRow) FindFirstElement(TableRowTagName, InputNullType, findBy, elements));
     }
 
     public static TableRowCollection TableRows(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new TableRowCollection(ie, elements);
+      return new TableRowCollection(ie, FindAllElements(TableRowTagName, InputNullType, elements));
     }
 
     public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
@@ -203,13 +193,13 @@ namespace WatiN.Core
 
       try
       {
-        textfield = new TextField(ie, (HTMLInputElement)FindElementByAttribute(InputTagName, InputTextFieldTypeConstant, findBy, elements));
+        textfield = new TextField(ie, (HTMLInputElement)FindFirstElement(InputTagName, InputTextFieldType, findBy, elements));
       }
       catch (ElementNotFoundException)
       {
         try
         {
-          textfield = new TextField(ie, (HTMLTextAreaElement)FindElementByAttribute(TextAreaTagName, TextAreaTypeConstant, findBy, elements));
+          textfield = new TextField(ie, (HTMLTextAreaElement)FindFirstElement(TextAreaTagName, InputNullType, findBy, elements));
         }
         catch (ElementNotFoundException)
         {
@@ -222,54 +212,84 @@ namespace WatiN.Core
 
     public static TextFieldCollection TextFields(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new TextFieldCollection(ie, elements);
+      ArrayList inputElements = FindAllElements(InputTagName, InputTextFieldType, elements);
+      ArrayList textAreaElements = FindAllElements(TextAreaTagName, InputNullType, elements);
+      
+      return new TextFieldCollection(ie, inputElements, textAreaElements);
     }
 
     public static Span Span(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Span(ie, (HTMLSpanElement) FindElementByAttribute(SpanTagName, SpanTypeConstant, findBy, elements));
+      return new Span(ie, (HTMLSpanElement) FindFirstElement(SpanTagName, InputNullType, findBy, elements));
     }
 
     public static SpanCollection Spans(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new SpanCollection(ie, elements);
+      return new SpanCollection(ie, FindAllElements(SpanTagName, InputNullType, elements));
     }
 
     public static Div Div(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Div(ie, (HTMLDivElement) FindElementByAttribute(DivTagName, DivTypeConstant, findBy, elements));
+      return new Div(ie, (HTMLDivElement) FindFirstElement(DivTagName, InputNullType, findBy, elements));
     }
 
     public static DivCollection Divs(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new DivCollection(ie, elements);
+      return new DivCollection(ie, FindAllElements(DivTagName, InputNullType, elements));
     }
 
     public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Image(ie, (IHTMLImgElement) FindElementByAttribute(ImageTagName, ImageTypeConstant, findBy, elements));
+      return new Image(ie, (IHTMLImgElement) FindFirstElement(ImageTagName, InputNullType, findBy, elements));
     }
 
     public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new ImageCollection(ie, elements);
+      return new ImageCollection(ie, FindAllElements(ImageTagName, InputNullType, elements));
     }
 
-    private static IHTMLElement FindElementByAttribute(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
+    internal static IHTMLElement FindFirstElement(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
+    {
+      ArrayList elements = FindElementsByAttribute(tagName, inputType, findBy, elementsCollection, true);
+
+      if (elements.Count > 0)
+      {
+        return (IHTMLElement)elements[0];
+      }
+      
+      throw new ElementNotFoundException(tagName, findBy.AttributeName, findBy.Value);
+    }
+
+    internal static ArrayList FindAllElements(string tagName, string inputType, IHTMLElementCollection elementsCollection)
+    {
+      return FindElementsByAttribute(tagName, inputType, new NoFindBy(), elementsCollection, false);
+    }
+    
+    internal static ArrayList FindAllElements(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
+    {
+      return FindElementsByAttribute(tagName, inputType, findBy, elementsCollection, false);
+    }
+
+    internal static ArrayList FindElementsByAttribute(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection, bool returnFirstOnly)
     {
       if (IsInputElement(tagName) && (inputType == null || inputType.Length == 0))
       {
         throw new ArgumentNullException("inputType", "inputType must be set when tagName is 'input'");
       }
 
+      ArrayList children = new ArrayList();
+
       IHTMLElementCollection elements = getElementCollectionByTagName(elementsCollection, tagName);
 
       foreach (IHTMLElement element in elements)
       {
+        
         WaitUntilElementReadyStateIsComplete(element, tagName);
 
         string compareValue = getAttributeValue(findBy, element);
 
+        bool addElement = false;
+        
         if (findBy.Compare(compareValue))
         {
           if (IsInputElement(tagName))
@@ -277,17 +297,26 @@ namespace WatiN.Core
             string inputElementType = ((IHTMLInputElement) element).type.ToLower();
             if (inputType.ToLower().IndexOf(inputElementType) >= 0)
             {
-              return element;
+              addElement = true;
             }
           }
           else
           {
-            return element;
+            addElement = true;
+          }
+        }
+        
+        if (addElement)
+        {
+          children.Add(element);
+          if (returnFirstOnly)
+          {
+            return children;
           }
         }
       }
 
-      throw new ElementNotFoundException(tagName, findBy.AttributeName, findBy.Value);
+      return children;
     }
 
     private static void WaitUntilElementReadyStateIsComplete(IHTMLElement element, string tagName)
@@ -313,7 +342,7 @@ namespace WatiN.Core
       }
     }
 
-    private static IHTMLElementCollection getElementCollectionByTagName(IHTMLElementCollection elements, string tagName)
+    internal static IHTMLElementCollection getElementCollectionByTagName(IHTMLElementCollection elements, string tagName)
     {
       IHTMLElementCollection elementsWithTagName = (IHTMLElementCollection) elements.tags(tagName);
 
@@ -327,7 +356,12 @@ namespace WatiN.Core
 
     private static string getAttributeValue(Attribute findBy, IHTMLElement element)
     {
-      if (findBy is Id)
+      if (findBy is NoFindBy)
+      {
+        return String.Empty;        
+      }
+
+      else if (findBy is Id)
       {
         return element.id;        
       }
@@ -339,6 +373,7 @@ namespace WatiN.Core
           return element.innerText.Trim();
         }
       }
+
 
       else 
       {

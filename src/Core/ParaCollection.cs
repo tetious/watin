@@ -29,12 +29,11 @@ namespace WatiN.Core
 	{
 		ArrayList elements;
 		
-		public ParaCollection(DomContainer ie, IHTMLElementCollection elements) 
+		public ParaCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection Paras = (IHTMLElementCollection)elements.tags(SubElementsSupport.ParaTagName);
 			
-      foreach (HTMLParaElement Para in Paras)
+      foreach (HTMLParaElement Para in elements)
 			{
 				Para v = new Para(ie, Para);
 				this.elements.Add(v);

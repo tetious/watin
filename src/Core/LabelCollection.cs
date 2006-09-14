@@ -29,12 +29,11 @@ namespace WatiN.Core
 	{
 		ArrayList elements;
 		
-		public LabelCollection(DomContainer ie, IHTMLElementCollection elements) 
+		public LabelCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection labels = (IHTMLElementCollection)elements.tags(SubElementsSupport.LabelTagName);
 			
-      foreach (HTMLLabelElement label in labels)
+      foreach (HTMLLabelElement label in elements)
 			{
 				Label v = new Label(ie, label);
 				this.elements.Add(v);

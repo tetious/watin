@@ -35,12 +35,11 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="elements">The elements.</param>
-    public DivCollection(DomContainer domContainer, IHTMLElementCollection elements) 
+    public DivCollection(DomContainer domContainer, ArrayList elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection divs = (IHTMLElementCollection)elements.tags(SubElementsSupport.DivTagName);
 
-      foreach (HTMLDivElement div in divs)
+      foreach (HTMLDivElement div in elements)
       {
         Div v = new Div(domContainer, div);
         this.elements.Add(v);

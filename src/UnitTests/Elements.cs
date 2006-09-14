@@ -367,6 +367,40 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void Forms()
+    {
+      Assert.AreEqual(6, ie.Forms.Length, "Unexpected number of forms");
+
+      FormCollection forms = ie.Forms;
+
+      // Collection items by index
+      Assert.AreEqual("Form", forms[0].Id);
+      Assert.AreEqual("FormInputElement", forms[1].Id);
+      Assert.AreEqual("FormHiddens", forms[2].Id);      
+      Assert.AreEqual("ReadyOnlyDisabledInputs", forms[3].Id);      
+      Assert.AreEqual("FormCheckboxes", forms[4].Id);      
+      Assert.AreEqual("FormRadioButtons", forms[5].Id);      
+
+      // Collection iteration and comparing the result with Enumerator
+      IEnumerable checkboxEnumerable = forms;
+      IEnumerator checkboxEnumerator = checkboxEnumerable.GetEnumerator();
+
+      int count = 0;
+      foreach (Form form in forms)
+      {
+        checkboxEnumerator.MoveNext();
+        object enumCheckbox = checkboxEnumerator.Current;
+        
+        Assert.IsInstanceOfType(form.GetType(), enumCheckbox, "Types are not the same");
+        Assert.AreEqual(form.OuterHtml, ((Form)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(6, count);
+    }
+
+    [Test]
     public void LabelByFor()
     {
       Label label = ie.Label(Find.ByFor("Checkbox21"));

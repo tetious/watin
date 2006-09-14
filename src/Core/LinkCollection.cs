@@ -28,13 +28,12 @@ namespace WatiN.Core
   public class LinkCollection : IEnumerable
   {
     ArrayList elements;
-		
-    public LinkCollection(DomContainer ie, IHTMLElementCollection elements) 
+		   
+    public LinkCollection(DomContainer ie, ArrayList elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection links = (IHTMLElementCollection)elements.tags(SubElementsSupport.LinkTagName);
 
-      foreach (HTMLAnchorElement link in links)
+      foreach (HTMLAnchorElement link in elements)
       {
         Link v = new Link(ie, link);
         this.elements.Add(v);

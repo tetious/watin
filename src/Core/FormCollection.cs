@@ -28,13 +28,12 @@ namespace WatiN.Core
 	public class FormCollection : IEnumerable
 	{
 		ArrayList elements;
-		
-		public FormCollection(DomContainer ie, IHTMLElementCollection elements) 
+		    
+		public FormCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection forms = (IHTMLElementCollection)elements.tags(SubElementsSupport.FormTagName);
 
-			foreach (HTMLFormElement form in forms)
+			foreach (HTMLFormElement form in elements)
 			{
 				Form v = new Form(ie, form);
 				this.elements.Add(v);

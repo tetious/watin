@@ -28,15 +28,14 @@ namespace WatiN.Core
 	public class ImageCollection : IEnumerable
 	{
 		ArrayList elements;
-		
-		public ImageCollection(DomContainer ie, IHTMLElementCollection elements) 
+		   
+		public ImageCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.ImageTagName);
 			
-      foreach (IHTMLInputElement inputElement in inputElements)
+      foreach (IHTMLImgElement inputElement in elements)
       {
-        Image v = new Image(ie, (IHTMLImgElement)inputElement);
+        Image v = new Image(ie, inputElement);
 			  this.elements.Add(v);
 			}
 		}

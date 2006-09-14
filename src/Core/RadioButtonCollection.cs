@@ -29,20 +29,17 @@ namespace WatiN.Core
   {
     ArrayList elements;
 		
-    public RadioButtonCollection(DomContainer ie, IHTMLElementCollection elements) 
+    public RadioButtonCollection(DomContainer ie, ArrayList elements) 
     {
       this.elements = new ArrayList();
-      IHTMLElementCollection inputElements = (IHTMLElementCollection)elements.tags(SubElementsSupport.InputTagName);
 
-      foreach (IHTMLInputElement item in inputElements)
+      foreach (IHTMLInputElement item in elements)
       {
-        if (item.type == SubElementsSupport.InputRadioButtonTypeConstant)
-        {
-          RadioButton v = new RadioButton(ie, item);
-          this.elements.Add(v);
-        }
+        RadioButton v = new RadioButton(ie, item);
+        this.elements.Add(v);
       }
     }
+    
     public int Length { get { return elements.Count; } }
 
     public RadioButton this[int index] { get { return (RadioButton)elements[index]; } }

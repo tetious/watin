@@ -34,9 +34,11 @@ namespace WatiN.Core
 
     public override TableRowCollection TableRows
     {
-      get {
+      get 
+      {
         IHTMLElement firstTBody = (IHTMLElement)((HTMLTable)DomElement).tBodies.item(0,null);
-        return new TableRowCollection(DomContainer, (IHTMLElementCollection)(firstTBody.all)); }
+        return SubElementsSupport.TableRows(DomContainer, (IHTMLElementCollection)(firstTBody.all)); 
+      }
     }
 
     /// <summary>
