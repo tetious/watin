@@ -169,7 +169,9 @@ namespace WatiN.Core
     /// </example>
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
-      return TableCell(ie, new IdAndOccurrence(elementId, occurrence), elementCollection);
+      ArrayList ids = FindElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
+      TableCellCollection collection = new TableCellCollection(ie, ids);
+      return collection[occurrence];
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)

@@ -312,59 +312,7 @@ namespace WatiN.Core
     public Id(Regex regex) : base(attributeName, regex)
     {}
   }
-
-  /// <summary>
-  /// Class to find an element by the n-th occurrence of an id. Occurrence counting
-  /// is zero based.
-  /// </summary>  
-  /// <example>
-  /// This example will get the third(!) occurrence on the page of a
-  /// link element with "testlinkid" as it's id value. 
-  /// <code>ie.Link(new IdAndOccurrence("testlinkid", 2)).Url</code>
-  /// </example>
-  public class IdAndOccurrence : Id
-  {
-    private int occurrence;
-    private int counter = -1;
-    
-    public IdAndOccurrence(string id, int occurrence) : base(id)
-    {
-      this.occurrence = occurrence;
-    }
-
-    public IdAndOccurrence(Regex regex, int occurrence) : base(regex)
-    {
-      this.occurrence = occurrence;
-    }
-    
-    public int Occurrence
-    {
-      get
-      {
-        return occurrence;
-      }
-    }
-    
-    public override bool Compare(string value)
-    {
-      bool baseCompare = base.Compare(value);
-      
-      if (baseCompare)
-      {
-        counter++;
-      }
-
-      if (baseCompare & counter == occurrence)
-      {
-        return true;
-      }
-      
-      
-      return false;
-    }
-
-  }
-  
+ 
   /// <summary>
   /// Class to find an element by it's name.
   /// </summary>

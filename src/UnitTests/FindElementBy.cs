@@ -60,52 +60,6 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void FindByIDAndOccurenceByString()
-    {
-      IdAndOccurrence value = new IdAndOccurrence("elementid", 2);
-      
-      Assert.IsInstanceOfType(typeof(Id), value, "IdAndOccurrence class should inherit Id class" );
-      
-      Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("elementid", value.Value, "Wrong value");
-      Assert.AreEqual(2, value.Occurrence, "Wrong occurence");
-      
-      // occurence is (currently) zero based!
-      Assert.IsFalse(value.Compare("elementid"), "first elementid should not match");
-      Assert.IsFalse(value.Compare("elementid"), "second elementid should not match");
-      Assert.IsTrue(value.Compare("elementid"), "third elementid should match");
-      Assert.IsFalse(value.Compare("elementid"), "forth elementid should not match");
-      
-      // Test with another id before finding the right occurence
-      value = new IdAndOccurrence("elementid", 2);
-
-      Assert.IsFalse(value.Compare("elementid"), "first elementid should not match");
-      Assert.IsFalse(value.Compare("otherid"), "otherid should not match");
-      Assert.IsFalse(value.Compare("elementid"), "second elementid should not match");
-      Assert.IsTrue(value.Compare("elementid"), "third elementid should match");
-      Assert.IsFalse(value.Compare("elementid"), "forth elementid should not match");
-    }
-    
-    [Test]
-    public void FindByIDAndOccurenceByRegex()
-    {
-      Regex regex = new Regex("entid$");
-
-      IdAndOccurrence value = new IdAndOccurrence(regex, 1);
-      
-      Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("entid$", value.Value, "Wrong value");
-      Assert.AreEqual(1, value.Occurrence, "Wrong occurence");
-      
-      // occurence is (currently) zero based!      
-      // Test with another id before finding the right occurence
-      Assert.IsFalse(value.Compare("elementid"), "first elementid should not match");
-      Assert.IsFalse(value.Compare("otherid"), "otherid should not match");
-      Assert.IsTrue(value.Compare("elementid"), "second elementid should match");
-      Assert.IsFalse(value.Compare("elementid"), "third elementid should not match");
-    }
-
-    [Test]
     public void FindByName()
     {
       Name value = Find.ByName("namevalue");
@@ -563,7 +517,7 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare("http://watin"), "Partial match should not match");
       Assert.IsFalse(comparer.Compare("file://html/main.html"), "Something completely different should not match");
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
-      Assert.IsFalse(comparer.Compare((string)null), "String: null should not match");
+      Assert.IsFalse(comparer.Compare(null), "String: null should not match");
     }
     
     [Test]
