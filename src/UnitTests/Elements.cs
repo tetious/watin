@@ -205,7 +205,7 @@ namespace WatiN.UnitTests
     public void GetInvalidAttribute()
     {
       Button helloButton = ie.Button("helloid");
-      System.Diagnostics.Debug.WriteLine(helloButton.GetAttributeValue("NONSENCE"));
+      Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
     }
 
     [Test]
