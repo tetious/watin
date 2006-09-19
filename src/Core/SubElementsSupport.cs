@@ -77,6 +77,16 @@ namespace WatiN.Core
     {
       return new CheckBoxCollection(ie, FindAllElements(InputTagName, InputCheckBoxType, elements));
     }
+    
+    public static Element Element(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    {
+      return new Element(ie, FindFirstElement(null, InputNullType, findBy, elements));
+    }
+
+    public static ElementCollection Elements(DomContainer ie, IHTMLElementCollection elements)
+    {
+      return new ElementCollection(ie, FindAllElements(null, InputNullType, elements));
+    }
 
     public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
@@ -169,7 +179,7 @@ namespace WatiN.Core
     /// </example>
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
-      ArrayList ids = FindElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
+      ArrayList ids = findElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
       TableCellCollection collection = new TableCellCollection(ie, ids);
       return collection[occurrence];
     }
@@ -252,7 +262,7 @@ namespace WatiN.Core
 
     public static IHTMLElement FindFirstElement(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
-      ArrayList elements = FindElementsByAttribute(tagName, inputType, findBy, elementsCollection, true);
+      ArrayList elements = findElementsByAttribute(tagName, inputType, findBy, elementsCollection, true);
 
       if (elements.Count > 0)
       {
@@ -264,17 +274,17 @@ namespace WatiN.Core
 
     public static ArrayList FindAllElements(string tagName, string inputType, IHTMLElementCollection elementsCollection)
     {
-      return FindElementsByAttribute(tagName, inputType, new NoFindBy(), elementsCollection, false);
+      return findElementsByAttribute(tagName, inputType, new NoFindBy(), elementsCollection, false);
     }
     
     public static ArrayList FindAllElements(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
-      return FindElementsByAttribute(tagName, inputType, findBy, elementsCollection, false);
+      return findElementsByAttribute(tagName, inputType, findBy, elementsCollection, false);
     }
-
-    internal static ArrayList FindElementsByAttribute(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection, bool returnFirstOnly)
+   
+    internal static ArrayList findElementsByAttribute(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection, bool returnFirstOnly)
     {
-      bool isInputElement = IsInputElement(tagName);
+      bool isInputElement = SubElementsSupport.isInputElement(tagName);
       
       // Check arguments
       if (isInputElement && UtilityClass.IsNullOrEmpty(inputType))
@@ -284,15 +294,15 @@ namespace WatiN.Core
 
       // Get elements with the tagname from the page
       ArrayList children = new ArrayList();
-      IHTMLElementCollection elements = getElementCollectionByTagName(elementsCollection, tagName);
+      IHTMLElementCollection elements = getElementCollection(elementsCollection, tagName);
 
       // 
       foreach (IHTMLElement element in elements)
       {
         
-        WaitUntilElementReadyStateIsComplete(element, tagName);
+        waitUntilElementReadyStateIsComplete(element, tagName);
 
-        if (DoCompare(element, findBy, isInputElement, inputType))
+        if (doCompare(element, findBy, isInputElement, inputType))
         {
           children.Add(element);
           if (returnFirstOnly)
@@ -305,7 +315,7 @@ namespace WatiN.Core
       return children;
     }
 
-    private static bool DoCompare(IHTMLElement element, Attribute findBy, bool isInputElement, string inputType)
+    private static bool doCompare(IHTMLElement element, Attribute findBy, bool isInputElement, string inputType)
     {
       if (findBy.Compare(element))
       {
@@ -313,7 +323,7 @@ namespace WatiN.Core
         {
           return true;
         }
-        else if (IsInputOfType(element, inputType))
+        else if (isInputOfType(element, inputType))
         {
           return true;
         }
@@ -322,7 +332,7 @@ namespace WatiN.Core
       return false;
     }
 
-    private static bool IsInputOfType(IHTMLElement element, string inputType)
+    private static bool isInputOfType(IHTMLElement element, string inputType)
     {
       string inputElementType = ((IHTMLInputElement) element).type.ToLower();
       
@@ -334,17 +344,27 @@ namespace WatiN.Core
       return false;
     }
 
-    private static void WaitUntilElementReadyStateIsComplete(IHTMLElement element, string tagName)
+    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element, string tagName)
     {
+      //TODO: See if this method could be dropped, it seems to give
+      //      more troubles (uninitialized state of elements)
+      //      then benefits (I just introduced this method to be on 
+      //      the save side, but don't no if it saved me to prevent an exception)
+      
+      if (String.Compare(tagName, "img", true) == 0)
+      {
+        return;
+      }
+      
       DateTime startTime = DateTime.Now;
       
-      // Check if element is fully loaded (complete)
-      // Do an escape for IMG elements since an image
-      // with an empty src attribute will never 
-      // reach the complete state.
-      // Wait 30 seconds.
-      while (((IHTMLElement2)element).readyStateValue != 4 
-             && String.Compare(tagName, "img", true) != 0)
+      // Wait if the readystate of an element is BETWEEN
+      // Uninitialized and Complete. If it's uninitialized,
+      // it's quite probable that it will never reach Complete.
+      // Like for elements that could not load an image or ico
+      // or some other bits not part of the HTML page.
+      int readyState = ((IHTMLElement2)element).readyStateValue;
+      while (readyState != 0 && readyState !=4)
       { 
         if(DateTime.Now.Subtract(startTime).Seconds <= 30)
         {
@@ -352,17 +372,24 @@ namespace WatiN.Core
         }
         else
         {
-          throw new WatiNException("Element didn't reach readystate = complete within 30 seconds.");
+          throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
         }
+
+        readyState = ((IHTMLElement2)element).readyStateValue;
       }
     }
 
-    internal static IHTMLElementCollection getElementCollectionByTagName(IHTMLElementCollection elements, string tagName)
+    internal static IHTMLElementCollection getElementCollection(IHTMLElementCollection elements, string tagName)
     {
+      if (tagName == null)
+      {
+        return elements;
+      }
+      
       return (IHTMLElementCollection)elements.tags(tagName);
     }
 
-    private static bool IsInputElement(string tagName)
+    private static bool isInputElement(string tagName)
     {
       return String.Compare(tagName, InputTagName, true) == 0;
     }

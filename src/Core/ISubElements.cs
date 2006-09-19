@@ -31,6 +31,10 @@ namespace WatiN.Core.Interfaces
     CheckBox CheckBox(string elementId);
     CheckBox CheckBox(Attribute findBy);
     CheckBoxCollection CheckBoxes { get; }
+    
+    Element Element(string elementId);
+    Element Element(Attribute findBy);
+    ElementCollection Elements { get; }
 
     Form Form(string elementId);
     Form Form(Attribute findBy);

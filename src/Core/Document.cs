@@ -392,6 +392,21 @@ namespace WatiN.Core
       get { return SubElementsSupport.CheckBoxes(DomContainer, elementCollection); }
     }
 
+    public Element Element(string elementId)
+    {
+      return Element(Find.ById(elementId));
+    }
+
+    public Element Element(Attribute findBy)
+    {
+      return SubElementsSupport.Element(DomContainer, findBy, elementCollection);
+    }
+
+    public ElementCollection Elements
+    {
+      get { return SubElementsSupport.Elements(DomContainer, elementCollection); }
+    }
+
     public Form Form(string elementId)
     {
       return Form(Find.ById(elementId));
