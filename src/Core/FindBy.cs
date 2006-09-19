@@ -19,6 +19,8 @@
 
 using System;
 using System.Text.RegularExpressions;
+using mshtml;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Interfaces
@@ -253,6 +255,32 @@ namespace WatiN.Core
     {
       return comparer.Compare(value);
     }
+    
+    /// <summary>
+    /// This methode implements an exact match comparison. If you want
+    /// different behaviour, inherit this class or one of its subclasses and 
+    /// override Compare with a specific implementation.
+    /// </summary>
+    /// <param name="ihtmlelement">IHTMLElement to compare against</param>
+    /// <returns><c>true</c> if the searched for value equals the given value</returns>
+    public virtual bool Compare(object ihtmlelement)
+    {
+      IHTMLElement element = ihtmlelement as IHTMLElement;
+      
+      if (element == null)
+      {
+        throw new ArgumentException("Object should be of type mshtml.IHTMLElement", "ihtmlelement");
+      }
+      
+      object attribute = element.getAttribute(attributeName, 0);
+
+      if (attribute == DBNull.Value)
+      {
+        throw new InvalidAttributException(attributeName, element.tagName);
+      }
+
+      return Compare((string)attribute);
+    }
 
     public override string ToString()
     {
@@ -284,6 +312,12 @@ namespace WatiN.Core
     {
       return true;
     }
+    
+    public override bool Compare(object ihtmlelement)
+    {
+      return true;
+    }
+
   }
   
   /// <summary>
@@ -350,7 +384,7 @@ namespace WatiN.Core
   /// </example>
   public class Text : Attribute
   {
-    private const string attributeName = "text";
+    private const string attributeName = "innertext";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Text"/> class.

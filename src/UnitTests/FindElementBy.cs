@@ -81,7 +81,7 @@ namespace WatiN.UnitTests
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Text class should inherit Attribute class" );
 
-      Assert.AreEqual("text", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual("innertext", value.AttributeName, "Wrong attributename");
       Assert.AreEqual("textvalue", value.Value, "Wrong value");
       
       Regex regex = new Regex("lue$");
