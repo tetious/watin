@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Threading;
 
 using mshtml;
@@ -184,14 +185,14 @@ namespace WatiN.Core
     /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
     public string GetAttributeValue(string attributeName)
     {
-      try
-      {
-        return (string)htmlElement.getAttribute(attributeName, 0);
-      }
-      catch
+      object attribute = htmlElement.getAttribute(attributeName, 0);
+
+      if (attribute == DBNull.Value)
       {
         return null;
       }
+
+      return (string) attribute;
     }
 
     /// <summary>
