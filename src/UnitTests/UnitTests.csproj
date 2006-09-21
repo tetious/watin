@@ -150,6 +150,22 @@
                     RelPath = "html\TestEvents.html"
                     BuildAction = "Content"
                 />
+                <File
+                    RelPath = "html\iframes\leftpage.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\iframes\main.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\iframes\middlepage.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\iframes\rightpage.html"
+                    BuildAction = "Content"
+                />
             </Include>
         </Files>
     </CSHARP>

@@ -102,7 +102,15 @@ namespace WatiN.Core
     public AllFramesProcessor(DomContainer ie, HTMLDocument htmlDocument)
     {
       elements = new ArrayList();
+
       frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
+      
+      // If the current document doesn't contain FRAME elements, it then
+      // might contain IFRAME elements.
+      if (frameElements.length == 0)
+      {
+        frameElements = (IHTMLElementCollection)htmlDocument.all.tags("IFRAME");
+      }
 
       this.ie = ie;
       this.htmlDocument = htmlDocument;  

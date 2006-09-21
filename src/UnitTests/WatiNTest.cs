@@ -34,6 +34,12 @@ namespace WatiN.UnitTests
     private static Uri testEventsURI = null;
     private static Uri watinURI = null;
 
+    public static Uri IFramesMainURI = new Uri(HtmlTestBaseURI, "iframes\\main.html");
+    public static Uri iframesLeftURI = new Uri(HtmlTestBaseURI, "iframes\\leftpage.html");
+    public static Uri iframesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
+    public static Uri iframesRightURI = new Uri(HtmlTestBaseURI, "iframes\\rightpage.html");
+
+    
     public static Uri HtmlTestBaseURI
     {
       get
@@ -94,7 +100,7 @@ namespace WatiN.UnitTests
         return framesetURI;
       }
     }
-    
+        
     public static Uri CrossDomainFramesetURI
     {
       get
