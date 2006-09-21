@@ -170,6 +170,9 @@ namespace WatiN.Core
     [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
     internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
     
+    [DllImport("user32.dll", SetLastError=true)]
+    internal static extern IntPtr SetActiveWindow(IntPtr hWnd);
+    
     [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
     internal static extern IntPtr GetDlgItem( IntPtr handleToWindow, int ControlId );
 
@@ -352,6 +355,37 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// This method incapsulates all the details of getting
+    /// the full length text in a StringBuffer and returns
+    /// the StringBuffer contents as a string.
+    /// </summary>
+    /// <param name="hwnd">The handle to the window</param>
+    /// <returns>Text of the window</returns>
+    public static string GetWindowText(IntPtr hwnd)
+    {
+      int length = GetWindowTextLength(hwnd) + 1;
+      StringBuilder buffer = new StringBuilder(length);
+      GetWindowText(hwnd, buffer, length);
+			
+      return buffer.ToString();
+    }
+
+    /// <summary>
+    /// This method incapsulates all the details of getting
+    /// the full length classname in a StringBuffer and returns
+    /// the StringBuffer contents as a string.
+    /// </summary>
+    /// <param name="hwnd">The handle to the window</param>
+    /// <returns>Text of the window</returns>
+    public static string GetClassName(IntPtr hwnd)
+    {
+      StringBuilder className = new StringBuilder(255);
+      GetClassName(hwnd, className, className.Capacity);
+      
+      return className.ToString();
+    }
+    
     #endregion Methods
   }
 }

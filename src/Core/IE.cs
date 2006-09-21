@@ -63,8 +63,7 @@ namespace WatiN.Core
     private InternetExplorer ie;
 
     private bool autoClose = true;
-    private PopupWatcher popupWatcher;
-    private Thread popupWatcherThread;
+    private DialogWatcher dialogWatcher;
 
     /// <summary>
     /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
@@ -611,11 +610,7 @@ namespace WatiN.Core
 
     private void StartPopupWatcher(int iePid)
     {
-      popupWatcher = new PopupWatcher(iePid);
-      popupWatcherThread = new Thread(new ThreadStart(popupWatcher.Run));
-
-      // Start the thread.
-      popupWatcherThread.Start();
+      dialogWatcher = new DialogWatcher(iePid);
     }
 
     /// <summary>
@@ -639,7 +634,7 @@ namespace WatiN.Core
     /// <example>For a working example see the unitttest Alert in WatiN.UnitTests.IEAndMainDocument</example>
     public string PopAlert()
     {
-      return popupWatcher.PopAlert();
+      return dialogWatcher.PopAlert();
     }
 
     /// <summary>
@@ -647,7 +642,7 @@ namespace WatiN.Core
     /// </summary>
     public void FlushAlerts()
     {
-      popupWatcher.FlushAlerts();
+      dialogWatcher.FlushAlerts();
     }
 
     /// <exclude />
@@ -842,8 +837,7 @@ namespace WatiN.Core
 
     private int StopPopupWatcherAndQuitIE()
     {
-      popupWatcher.Stop();
-      popupWatcherThread.Join();
+      dialogWatcher.Stop();
 
       foreach(HtmlDialog htmlDialog in HtmlDialogs)
       {
@@ -934,11 +928,6 @@ namespace WatiN.Core
       if (AutoCloseIE)
       {
         Close();
-      }
-
-      if (popupWatcher.AlertCount() != 0)
-      {
-//        throw new UnanticipatedAlertsException(popupWatcher.alerts);
       }
     }
     #endregion
