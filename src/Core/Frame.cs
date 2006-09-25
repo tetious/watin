@@ -134,7 +134,7 @@ namespace WatiN.Core
     }
   }
     
-  internal class FrameByIndexProcessor :IProcessIWebBrowser2
+  internal class FrameByIndexProcessor :IWebBrowser2Processor
   {
     private HTMLDocument htmlDocument;
     private int index;

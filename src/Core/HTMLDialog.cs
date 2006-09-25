@@ -35,7 +35,7 @@ namespace WatiN.Core
 
     public static bool IsIETridentDlgFrame(IntPtr windowHandle)
     {
-      return CompareClassNames(windowHandle, "Internet Explorer_TridentDlgFrame");
+      return UtilityClass.CompareClassNames(windowHandle, "Internet Explorer_TridentDlgFrame");
     }
 
     public HtmlDialog(IntPtr windowHandle)
@@ -114,21 +114,7 @@ namespace WatiN.Core
 
     private static bool IsIEServerWindow(IntPtr hWnd)
     {
-      return CompareClassNames(hWnd, "Internet Explorer_Server");
-    }
-
-    private static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
-    {
-      StringBuilder className = new StringBuilder(100);
-
-      // Get the window class name
-      Int32 lRes = NativeMethods.GetClassName(hWnd, className, className.MaxCapacity);
-      if (lRes == 0)
-      {
-        return false;
-      }
-
-      return className.ToString().Equals(expectedClassName);
+      return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
     }
 	}
 }

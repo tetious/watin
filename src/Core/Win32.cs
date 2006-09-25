@@ -59,20 +59,35 @@ namespace WatiN.Core
       public RECT rcNormalPosition;
     }
 
-    [StructLayout( LayoutKind.Sequential )]
+    [StructLayout(LayoutKind.Sequential)]
     internal struct POINT 
     {
       public int X;
       public int Y;
     }
 
-    [StructLayout( LayoutKind.Sequential )]
+    [StructLayout(LayoutKind.Sequential)]
     internal struct RECT 
     {
       public int Left;
       public int Top;
       public int Right;
       public int Bottom;
+    }
+    
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct WINDOWINFO
+    {
+      public uint cbSize;
+      public RECT rcWindow;
+      public RECT rcClient;
+      public uint dwStyle;
+      public uint dwExStyle;
+      public uint dwWindowStatus;
+      public uint cxWindowBorders;
+      public uint cyWindowBorders;
+      public ushort atomWindowType;
+      public ushort wCreatorVersion;
     }
 
     #endregion Structs
@@ -170,6 +185,12 @@ namespace WatiN.Core
     [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
     internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
     
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
+    
+    [DllImport("user32.dll", SetLastError = true)]
+    internal static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className,  IntPtr windowTitle);
+
     [DllImport("user32.dll", SetLastError=true)]
     internal static extern IntPtr SetActiveWindow(IntPtr hWnd);
     
@@ -306,10 +327,10 @@ namespace WatiN.Core
 
     #region Methods
 
-    internal static void EnumIWebBrowser2Interfaces(IProcessIWebBrowser2 processer)
+    internal static void EnumIWebBrowser2Interfaces(IWebBrowser2Processor processor)
     {
       IEnumUnknown eu;
-      IOleContainer oc = processer.HTMLDocument() as IOleContainer;
+      IOleContainer oc = processor.HTMLDocument() as IOleContainer;
       int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
       Marshal.ThrowExceptionForHR(hr);
 
@@ -331,9 +352,9 @@ namespace WatiN.Core
 
           if (brow != null)
           {
-            processer.Process(brow);
+            processor.Process(brow);
                    
-            if (!processer.Continue())
+            if (!processor.Continue())
             {
               break;
             }
@@ -381,18 +402,33 @@ namespace WatiN.Core
     public static string GetClassName(IntPtr hwnd)
     {
       StringBuilder className = new StringBuilder(255);
-      GetClassName(hwnd, className, className.Capacity);
+      
+      Int32 lRes = GetClassName(hwnd, className, className.MaxCapacity);
+      if (lRes == 0)
+      {
+        return String.Empty;
+      }
       
       return className.ToString();
     }
     
+    public static Int64 GetWindowStyle(IntPtr hwnd)
+    {
+      WINDOWINFO info = new WINDOWINFO();
+      info.cbSize = (uint)Marshal.SizeOf(info);
+      GetWindowInfo(hwnd, ref info);
+      
+      return Convert.ToInt64(info.dwStyle);
+    }
+
     #endregion Methods
+
   }
 }
 
 namespace WatiN.Core.Interfaces
 {
-  internal interface IProcessIWebBrowser2
+  internal interface IWebBrowser2Processor
   {
     HTMLDocument HTMLDocument();
     void Process(IWebBrowser2 webBrowser2);

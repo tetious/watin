@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 
 namespace WatiN.Core
@@ -97,5 +98,12 @@ namespace WatiN.Core
     {
       return document.HtmlDocument.all;
     }
-  }
+
+	  internal static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
+	  {
+	    string className = NativeMethods.GetClassName(hWnd);
+      
+	    return className.Equals(expectedClassName);
+	  }
+	}
 }

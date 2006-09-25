@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 
@@ -167,6 +168,20 @@ namespace WatiN.UnitTests
       }
     }
 
+    [Test]
+    public void LogonDialogTest()
+    {
+      IE ie = new IE();
+      
+      ie.DialogWatcher.Add(new CertificateHandler());
+      ie.DialogWatcher.Add(new LogonDialogHandler(@"username", "password"));
+
+      ie.GoTo("https://www.somesecuresite.com");
+
+      ie.DialogWatcher.Clear();
+
+    }
+    
     [Test]
     public void DocumentUrlandUri()
     {
@@ -573,5 +588,25 @@ namespace WatiN.UnitTests
       }
       return true;
     }
+  }
+  
+  public class CertificateHandler : IDialogHandler
+  {
+    #region IDialogHandler Members
+
+    private const string certificateDialogStyle = "94C808C4";
+    
+    public bool HandleDialog(Window window)
+    {
+      if (window.StyleInHex == certificateDialogStyle)
+      {
+        Debug.WriteLine("Certificate dialog is shown, make your choice!");
+        return true;
+      }
+      
+      return false;
+    }
+
+    #endregion
   }
 }

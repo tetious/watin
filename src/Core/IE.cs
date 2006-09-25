@@ -404,7 +404,7 @@ namespace WatiN.Core
         throw new ArgumentException("SHDocVwInternetExplorer needs to be of type SHDocVw.InternetExplorer");
       }
 
-      InitIEAndStartPopupWatcher(internetExplorer);
+      InitIEAndStartDialogWatcher(internetExplorer);
     }
 
     private void createNewIEAndGotToUrl(string url, bool autoClose)
@@ -429,7 +429,7 @@ namespace WatiN.Core
 
       SetAutoCloseAndMoveMouse(autoClose);
 
-      InitIEAndStartPopupWatcher(new InternetExplorerClass());
+      InitIEAndStartDialogWatcher(new InternetExplorerClass());
     }
 
     private static void CheckThreadApartmentStateIsSTA()
@@ -449,13 +449,13 @@ namespace WatiN.Core
 #endif
     } 
         
-    private void InitIEAndStartPopupWatcher(InternetExplorer internetExplorer)
+    private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer)
     {
       ie = internetExplorer;      
       ie.Visible = true;
 
       int iePid = GetProcessID();
-      StartPopupWatcher(iePid);
+      StartDialogWatcher(iePid);
     }
 
     private int GetProcessID()
@@ -608,7 +608,7 @@ namespace WatiN.Core
       GoTo(new Uri(url));
     }
 
-    private void StartPopupWatcher(int iePid)
+    private void StartDialogWatcher(int iePid)
     {
       dialogWatcher = new DialogWatcher(iePid);
     }
@@ -634,7 +634,7 @@ namespace WatiN.Core
     /// <example>For a working example see the unitttest Alert in WatiN.UnitTests.IEAndMainDocument</example>
     public string PopAlert()
     {
-      return dialogWatcher.PopAlert();
+      return DialogWatcher.PopAlert();
     }
 
     /// <summary>
@@ -642,7 +642,7 @@ namespace WatiN.Core
     /// </summary>
     public void FlushAlerts()
     {
-      dialogWatcher.FlushAlerts();
+      DialogWatcher.FlushAlerts();
     }
 
     /// <exclude />
@@ -837,7 +837,7 @@ namespace WatiN.Core
 
     private int StopPopupWatcherAndQuitIE()
     {
-      dialogWatcher.Stop();
+      DialogWatcher.Stop();
 
       foreach(HtmlDialog htmlDialog in HtmlDialogs)
       {
@@ -962,6 +962,11 @@ namespace WatiN.Core
 
         return htmlDialogCollection;
       }
+    }
+
+    public DialogWatcher DialogWatcher
+    {
+      get { return dialogWatcher; }
     }
 
     /// <summary>

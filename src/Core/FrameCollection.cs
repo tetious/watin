@@ -90,7 +90,7 @@ namespace WatiN.Core
     }
   }
   
-  internal class AllFramesProcessor : IProcessIWebBrowser2
+  internal class AllFramesProcessor : IWebBrowser2Processor
   {
     public ArrayList elements;
     

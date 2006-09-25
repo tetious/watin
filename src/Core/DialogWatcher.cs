@@ -35,7 +35,7 @@ namespace WatiN.Core
   {
     private int ieProcessId;
     private bool keepRunning = true;
-    private DefaultPopUpDialogHandler defaultHandler = new DefaultPopUpDialogHandler();
+    private DefaultDialogHandler defaultHandler = new DefaultDialogHandler();
     private ArrayList handlers = new ArrayList();
     private Thread watcherThread;
 
@@ -43,6 +43,9 @@ namespace WatiN.Core
     {
       this.ieProcessId = ieProcessId;
       
+      defaultHandler = new DefaultDialogHandler();
+      handlers = new ArrayList();
+
       // Create thread to watch windows
       watcherThread = new Thread(new ThreadStart(Start));
       // Start the thread.
@@ -53,7 +56,7 @@ namespace WatiN.Core
     {
       lock (this)
       {
-        return defaultHandler.AlertCount;
+        return DefaultHandler.AlertCount;
       }
     }
 
@@ -61,7 +64,7 @@ namespace WatiN.Core
     {
       lock (this)
       {
-        return defaultHandler.PopAlert();
+        return DefaultHandler.PopAlert();
       }
     }
     
@@ -71,7 +74,25 @@ namespace WatiN.Core
       {
         lock (this)
         {
-          return defaultHandler.Alerts;
+          return DefaultHandler.Alerts;
+        }
+      }
+    }
+
+    public DefaultDialogHandler DefaultHandler
+    {
+      get
+      {
+        lock (this)
+        {
+          return defaultHandler;
+        }
+      }
+      set
+      {
+        lock (this)
+        {
+          defaultHandler = value;
         }
       }
     }
@@ -80,11 +101,11 @@ namespace WatiN.Core
     {
       lock (this)
       {
-        defaultHandler.FlushAlerts();
+        DefaultHandler.FlushAlerts();
       }
     }
 
-    public void AddDialogHandler(IDialogHandler handler)
+    public void Add(IDialogHandler handler)
     {
       lock (this)
       {
@@ -92,11 +113,19 @@ namespace WatiN.Core
       }
     }
     
-    public void RemoveDialogHandler(IDialogHandler handler)
+    public void Remove(IDialogHandler handler)
     {
       lock (this)
       {
         handlers.Remove(handler);
+      }
+    }
+    
+    public void Clear()
+    {
+      lock (this)
+      {
+        handlers.Clear();
       }
     }
 
@@ -110,7 +139,7 @@ namespace WatiN.Core
       {
         lock (this)
         {
-          Process process = GetProcess();
+          Process process = getProcess();
 
           if (process != null)
           {
@@ -118,7 +147,7 @@ namespace WatiN.Core
             {
               int threadId = t.Id;
 	
-              NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(MyEnumThreadWindowsProc);
+              NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
               NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
             }
           }
@@ -136,7 +165,7 @@ namespace WatiN.Core
       }
     }
 
-    private Process GetProcess()
+    private Process getProcess()
     {
       Process process;
       try
@@ -151,7 +180,7 @@ namespace WatiN.Core
       return process;
     }
 
-    private bool MyEnumThreadWindowsProc(IntPtr hwnd, IntPtr lParam)
+    private bool myEnumThreadWindowsProc(IntPtr hwnd, IntPtr lParam)
     {
       Window window = new Window(hwnd);
       
@@ -167,7 +196,10 @@ namespace WatiN.Core
         
         // If no dialogHandler handled the dialog, the
         // defaultHandler will close the dialog.
-        defaultHandler.HandleDialog(window);
+        if (defaultHandler != null)
+        {
+          DefaultHandler.HandleDialog(window);
+        }
       }
 
       return true;
@@ -212,6 +244,21 @@ namespace WatiN.Core
       }
     }
 
+    public Int64 Style
+    {
+      get
+      {
+        return NativeMethods.GetWindowStyle(Hwnd);
+      }
+    }
+    public string StyleInHex
+    {
+      get
+      {
+        return NativeMethods.GetWindowStyle(Hwnd).ToString("X");
+      }
+    }
+    
     public bool IsDialog()
     {
       return (ClassName == "#32770");
@@ -223,11 +270,11 @@ namespace WatiN.Core
     }
   }
   
-  public class DefaultPopUpDialogHandler : IDialogHandler
+  public class DefaultDialogHandler : IDialogHandler
   {
     private Queue alertQueue;
 
-    public DefaultPopUpDialogHandler()
+    public DefaultDialogHandler()
     {
       alertQueue = new Queue();
     }
@@ -300,7 +347,8 @@ namespace WatiN.Core
     
     public bool HandleDialog(Window window)
     {
-      if (IsLogonDialog(window.Title))
+      if (IsLogonDialog(window))
+//      if (IsLogonDialog(window.Title))
       {
         NativeMethods.SetForegroundWindow(window.Hwnd);
         NativeMethods.SetActiveWindow(window.Hwnd);
@@ -320,5 +368,37 @@ namespace WatiN.Core
     {
       return message.StartsWith("Connect to") || message.StartsWith("Enter Network Password");
     }
+    
+    public virtual bool IsLogonDialog(Window window)
+    {
+      IntPtr hWnd = window.Hwnd;
+      
+      // Get 1st child IE server window
+      NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(EnumChildForSysCredentials);
+      NativeMethods.EnumChildWindows(window.Hwnd, childProc, ref hWnd);
+      
+      return IsSysCredentialsWindow(hWnd);
+
+//      return message.StartsWith("Connect to") || message.StartsWith("Enter Network Password");
+    }
+    
+    private bool EnumChildForSysCredentials(IntPtr hWnd, ref IntPtr lParam)
+    {
+      if (IsSysCredentialsWindow(hWnd))
+      {
+        lParam = hWnd;
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+
+    private static bool IsSysCredentialsWindow(IntPtr hWnd)
+    {
+      return UtilityClass.CompareClassNames(hWnd, "SysCredential");
+    }
+
   }
 }
