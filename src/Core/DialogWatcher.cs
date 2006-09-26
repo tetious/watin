@@ -324,31 +324,42 @@ namespace WatiN.Core
     }
   }
   
+  /// <summary>
+  /// This class handles the logon dialog by passing in the username and password
+  /// and clicking the OK button.
+  /// </summary>
+  /// <example>
+  /// The following code shows the use of this dialog handler
+  /// <code>
+  /// IE ie = new IE();
+  ///
+  /// ie.DialogWatcher.Add(new LogonDialogHandler(@"domain\username", "password"));
+  ///
+  /// ie.GoTo("https://www.somesecuresite.com");
+  /// </code>
+  /// </example>
   public class LogonDialogHandler : IDialogHandler
   {
     private string userName;
     private string password;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LogonDialogHandler"/> class.
+    /// </summary>
+    /// <param name="userName">Name of the user.</param>
+    /// <param name="password">The password.</param>
     public LogonDialogHandler(string userName, string password)
     {
-      if (UtilityClass.IsNullOrEmpty(userName))
-      {
-        throw new ArgumentException("Username must be specified", "username");
-      }
+      checkArgument("Username must be specified", userName, "username");
+      checkArgument("Password must be specified", password, "password");
 
-      if (UtilityClass.IsNullOrEmpty(password))
-      {
-        throw new ArgumentException("Password must be specified", "password");
-      }
-      
       this.userName = userName;
       this.password = password;
     }
-    
+
     public bool HandleDialog(Window window)
     {
       if (IsLogonDialog(window))
-//      if (IsLogonDialog(window.Title))
       {
         NativeMethods.SetForegroundWindow(window.Hwnd);
         NativeMethods.SetActiveWindow(window.Hwnd);
@@ -364,41 +375,104 @@ namespace WatiN.Core
       return false;
     }
 
-    public virtual bool IsLogonDialog(string message)
-    {
-      return message.StartsWith("Connect to") || message.StartsWith("Enter Network Password");
-    }
-    
+    /// <summary>
+    /// Determines whether the specified window is a logon dialog.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified window is a logon dialog; otherwise, <c>false</c>.
+    /// </returns>
     public virtual bool IsLogonDialog(Window window)
     {
-      IntPtr hWnd = window.Hwnd;
+      IntPtr hWnd = IntPtr.Zero;
       
-      // Get 1st child IE server window
-      NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(EnumChildForSysCredentials);
+      // Go throught the child windows of the dialog window
+      NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(enumChildForSysCredentials);
       NativeMethods.EnumChildWindows(window.Hwnd, childProc, ref hWnd);
       
-      return IsSysCredentialsWindow(hWnd);
-
-//      return message.StartsWith("Connect to") || message.StartsWith("Enter Network Password");
+      // If a logon dialog window is found hWnd will be set.
+      return hWnd != IntPtr.Zero;
     }
-    
-    private bool EnumChildForSysCredentials(IntPtr hWnd, ref IntPtr lParam)
+
+    private static void checkArgument(string message, string parameter, string parameterName)
     {
-      if (IsSysCredentialsWindow(hWnd))
+      if (UtilityClass.IsNullOrEmpty(parameter))
+      {
+        throw new ArgumentNullException(message, parameterName);
+      }
+    }
+
+    private bool enumChildForSysCredentials(IntPtr hWnd, ref IntPtr lParam)
+    {
+      if (classNameIsSysCredential(hWnd))
       {
         lParam = hWnd;
         return false;
       }
-      else
-      {
-        return true;
-      }
+
+      return true;
     }
 
-    private static bool IsSysCredentialsWindow(IntPtr hWnd)
+    private static bool classNameIsSysCredential(IntPtr hWnd)
     {
       return UtilityClass.CompareClassNames(hWnd, "SysCredential");
     }
+  }
+  
+  public class CertificateWarningHandler : IDialogHandler
+  {
+    public enum ButtonsEnum
+    {
+      Yes = 1,
+      No = 2
+    }
+    
+    private const string certificateDialogStyle = "94C808C4";
 
+    private ButtonsEnum buttonToPush;
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CertificateWarningHandler"/> class.
+    /// This handler will click the "Yes" button at the certificate warning dialog.
+    /// </summary>
+    public CertificateWarningHandler()
+    {
+      buttonToPush = ButtonsEnum.Yes;
+    }
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CertificateWarningHandler"/> class.
+    /// </summary>
+    /// <param name="buttonToPush">The button to push.</param>
+    public CertificateWarningHandler(ButtonsEnum buttonToPush)
+    {
+      this.buttonToPush = buttonToPush;
+    }
+       
+    public bool HandleDialog(Window window)
+    {      
+      if (IsCertificateDialog(window))
+      {
+        NativeMethods.SetActiveWindow(window.Hwnd);
+
+        NativeMethods.ClickDialogButton((int)buttonToPush, window.Hwnd);
+      
+        return true;
+      }
+      
+      return false;
+    }
+    
+    /// <summary>
+    /// Determines whether the specified window is a certificate dialog.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified window is a certificate dialog; otherwise, <c>false</c>.
+    /// </returns>
+    protected virtual bool IsCertificateDialog(Window window)
+    {     
+      return window.StyleInHex == certificateDialogStyle;
+    }
   }
 }

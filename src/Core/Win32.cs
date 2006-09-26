@@ -43,6 +43,7 @@ namespace WatiN.Core
     internal const int KEYEVENTF_TAB = 0x09;
 
     internal const Int32 SMTO_ABORTIFHUNG = 2;
+    internal const int BM_CLICK = 245;
 
     #endregion Constants
 
@@ -419,6 +420,12 @@ namespace WatiN.Core
       GetWindowInfo(hwnd, ref info);
       
       return Convert.ToInt64(info.dwStyle);
+    }
+
+    internal static void ClickDialogButton(int buttonid, IntPtr parentHwnd)
+    {
+      IntPtr buttonPtr = GetDlgItem(parentHwnd, buttonid);
+      SendMessage(buttonPtr, BM_CLICK, 0, 0);
     }
 
     #endregion Methods

@@ -213,7 +213,7 @@ namespace WatiN.Core
     /// </example>
     public IE()
     {
-      createNewIEAndGotToUrl("about:blank", true);
+      CreateNewIEAndGoToUrl("about:blank", true);
     }
 
     /// <summary>
@@ -247,7 +247,7 @@ namespace WatiN.Core
     /// </example>
     public IE(string url)
     {
-      createNewIEAndGotToUrl(url, true);
+      CreateNewIEAndGoToUrl(url, true);
     }
     /// <summary>
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
@@ -281,7 +281,7 @@ namespace WatiN.Core
     /// </example>
     public IE(Uri uri)
     {
-      createNewIEAndGotToUrl(uri, true);
+      CreateNewIEAndGoToUrl(uri, true);
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ namespace WatiN.Core
     /// </example>
     public IE(bool autoClose)
     {
-      createNewIEAndGotToUrl("about:blank", autoClose);
+      CreateNewIEAndGoToUrl("about:blank", autoClose);
     }
 
     /// <summary>
@@ -347,8 +347,43 @@ namespace WatiN.Core
     /// </example>
     public IE(string url, bool autoClose)
     {
-      createNewIEAndGotToUrl(url, autoClose);
+      CreateNewIEAndGoToUrl(url, autoClose);
     }
+    
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>. The <paramref name="autoClose" />
+    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
+    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
+    /// </summary>
+    /// <param name="url">The Url te open</param>
+    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE("http://watin.sourceforge.net", true, logon);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(string url, bool autoClose, LogonDialogHandler logonDialogHandler)
+    {
+      CreateNewIEAndGoToUrl(url, autoClose, logonDialogHandler);
+    }
+    
     /// <summary>
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>. The <paramref name="autoClose" />
     /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
@@ -380,7 +415,7 @@ namespace WatiN.Core
     /// </example>
     public IE(Uri uri, bool autoClose)
     {
-      createNewIEAndGotToUrl(uri, autoClose);
+      CreateNewIEAndGoToUrl(uri, autoClose);
     }
 
     /// <summary>
@@ -407,14 +442,24 @@ namespace WatiN.Core
       InitIEAndStartDialogWatcher(internetExplorer);
     }
 
-    private void createNewIEAndGotToUrl(string url, bool autoClose)
+    private void CreateNewIEAndGoToUrl(string url, bool autoClose)
+    {
+      CreateNewIEAndGoToUrl(url, autoClose, null);
+    }
+
+    private void CreateNewIEAndGoToUrl(string url, bool autoClose, LogonDialogHandler logonDialogHandler)
     {
       createNewIE(autoClose);
 
+      if (logonDialogHandler != null)
+      {
+        DialogWatcher.Add(logonDialogHandler);
+      }
+      
       GoTo(url);
     }
     
-    private void createNewIEAndGotToUrl(Uri uri, bool autoClose)
+    private void CreateNewIEAndGoToUrl(Uri uri, bool autoClose)
     {
       createNewIE(autoClose);
 
