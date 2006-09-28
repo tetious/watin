@@ -63,7 +63,6 @@ namespace WatiN.Core
     private InternetExplorer ie;
 
     private bool autoClose = true;
-    private DialogWatcher dialogWatcher;
 
     /// <summary>
     /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
@@ -357,6 +356,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="url">The Url te open</param>
     /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <param name="logonDialogHandler">A class  instanciated with the logon credentials.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
     /// </remarks>
@@ -498,23 +498,7 @@ namespace WatiN.Core
     {
       ie = internetExplorer;      
       ie.Visible = true;
-
-      int iePid = GetProcessID();
-      StartDialogWatcher(iePid);
-    }
-
-    private int GetProcessID()
-    {
-      int iePid = 0;
-      IntPtr hwnd = GetIEHandle();
-      foreach (Process p in Process.GetProcesses())
-      {
-        if (p.MainWindowHandle == hwnd)
-        {
-          iePid = p.Id;
-        }
-      }
-      return iePid;
+      StartDialogWatcher();
     }
 
     private static IE findIE(Attribute findBy, int timeout)
@@ -653,11 +637,6 @@ namespace WatiN.Core
       GoTo(new Uri(url));
     }
 
-    private void StartDialogWatcher(int iePid)
-    {
-      dialogWatcher = new DialogWatcher(iePid);
-    }
-
     /// <summary>
     /// Use this method to gain access to the full Internet Explorer object.
     /// Do this by referencing the Interop.SHDocVw assembly (supplied in the WatiN distribution)
@@ -781,7 +760,6 @@ namespace WatiN.Core
     /// the elements (and adress bar).
     /// </summary>
     public void PressTab()
-
     {
       if (!Debugger.IsAttached )
       {
@@ -793,7 +771,7 @@ namespace WatiN.Core
         ShowWindow(NativeMethods.WindowShowStyle.Restore);
         BringToFront();
         
-        intThreadIDIE = GetProcessID();
+        intThreadIDIE = ProcessID;
         intCurrentThreadID = NativeMethods.GetCurrentThreadId();
         
         NativeMethods.AttachThreadInput(intCurrentThreadID,intThreadIDIE, true);
@@ -812,11 +790,9 @@ namespace WatiN.Core
     /// </summary>
     public void BringToFront()
     {
-      IntPtr ieHandle = GetIEHandle();
-
-      if (NativeMethods.GetForegroundWindow() != ieHandle)
+      if (NativeMethods.GetForegroundWindow() != hWnd)
       {
-        NativeMethods.SetForegroundWindow(ieHandle);
+        NativeMethods.SetForegroundWindow(hWnd);
       }
     }
 
@@ -826,7 +802,7 @@ namespace WatiN.Core
     /// <param name="showStyle">The style to apply.</param>
     public void ShowWindow(NativeMethods.WindowShowStyle showStyle)
     {
-      NativeMethods.ShowWindow(GetIEHandle(), (int)showStyle);
+      NativeMethods.ShowWindow(hWnd, (int)showStyle);
     }
 
     /// <summary>
@@ -838,7 +814,7 @@ namespace WatiN.Core
       NativeMethods.WINDOWPLACEMENT placement = new NativeMethods.WINDOWPLACEMENT();
       placement.length = Marshal.SizeOf(placement);
       
-      NativeMethods.GetWindowPlacement(GetIEHandle(), ref placement);
+      NativeMethods.GetWindowPlacement(hWnd, ref placement);
       
       return (NativeMethods.WindowShowStyle)placement.showCmd;
     }
@@ -875,11 +851,6 @@ namespace WatiN.Core
       StopPopupWatcherAndQuitIE();
     }
 
-    private IntPtr GetIEHandle()
-    {
-      return new IntPtr(ie.HWND);
-    }
-
     private int StopPopupWatcherAndQuitIE()
     {
       DialogWatcher.Stop();
@@ -891,7 +862,7 @@ namespace WatiN.Core
 
       base.Dispose();
 
-      int iePid = GetProcessID();
+      int iePid = ProcessID;
 
       ie.Quit(); // ask IE to close
       ie = null;
@@ -1002,16 +973,19 @@ namespace WatiN.Core
     {
       get
       {
-        Process p = Process.GetProcessById(GetProcessID());
+        Process p = Process.GetProcessById(ProcessID);
         HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p); 
 
         return htmlDialogCollection;
       }
     }
 
-    public DialogWatcher DialogWatcher
+    public override IntPtr hWnd
     {
-      get { return dialogWatcher; }
+      get
+      {
+        return new IntPtr(ie.HWND);
+      }
     }
 
     /// <summary>

@@ -275,6 +275,9 @@ namespace WatiN.Core
     [DllImport("user32.dll")]
     internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+    [DllImport("User32.dll")]
+    internal static extern int GetWindowThreadProcessId(IntPtr window, out int processId);
+
     #endregion DllImport User32
 
     [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]

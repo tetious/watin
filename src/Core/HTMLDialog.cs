@@ -31,7 +31,12 @@ namespace WatiN.Core
   /// </summary>
   public class HtmlDialog : DomContainer
 	{
-    private IntPtr hWnd = IntPtr.Zero;
+    private IntPtr hwnd = IntPtr.Zero;
+
+    public override IntPtr hWnd
+    {
+      get { return hwnd; }
+    }
 
     public static bool IsIETridentDlgFrame(IntPtr windowHandle)
     {
@@ -40,13 +45,13 @@ namespace WatiN.Core
 
     public HtmlDialog(IntPtr windowHandle)
     {
-      hWnd = windowHandle;
+      hwnd = windowHandle;
     }
 
     public void Close()
     {
       Dispose();
-      NativeMethods.SendMessage(hWnd, NativeMethods.WM_CLOSE, 0, 0);
+      NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
     }
 
     public bool HasFocus()
@@ -57,7 +62,7 @@ namespace WatiN.Core
 
     public override IHTMLDocument2 OnGetHtmlDocument()
     {
-      return IEDOMFromhWnd(hWnd);
+      return IEDOMFromhWnd(hwnd);
     }
 
     private IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)

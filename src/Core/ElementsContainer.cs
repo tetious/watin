@@ -78,6 +78,21 @@ namespace WatiN.Core
       get { return SubElementsSupport.Elements(DomContainer, elementCollection); }
     }
 
+    public FileUpload FileUpload(string elementId)
+    {
+      return FileUpload(Find.ById(elementId));
+    }
+
+    public FileUpload FileUpload(Attribute findBy)
+    {
+      return SubElementsSupport.FileUpload(DomContainer, findBy, elementCollection);
+    }
+
+    public FileUploadCollection FileUploads
+    {
+      get { return SubElementsSupport.FileUploads(DomContainer, elementCollection); }
+    }
+	  
     public Form Form(string elementId)
     {
       return Form(Find.ById(elementId));

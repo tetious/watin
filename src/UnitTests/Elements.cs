@@ -807,5 +807,56 @@ namespace WatiN.UnitTests
     {
       ie.TextField(Find.ByCustom("xyz", "value"));
     }
+    
+    [Test]
+    public void FileUpload()
+    {
+      FileUpload fileUpload = ie.FileUpload("upload");
+      
+      Assert.IsNotNull(fileUpload);
+      Assert.IsNull(fileUpload.FileName);
+      
+      fileUpload.Set(MainURI.LocalPath);
+      
+      Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);      
+    }
+    
+    [Test, ExpectedException(typeof(System.IO.FileNotFoundException))]
+    public void FileUploadFileNotFoundException()
+    {
+      FileUpload fileUpload = ie.FileUpload("upload");
+      fileUpload.Set("nonexistingfile.nef");
+    }
+    
+    [Test]
+    public void FileUploads()
+    {
+      const int expectedFileUploadsCount = 1;
+      Assert.AreEqual(expectedFileUploadsCount, ie.FileUploads.Length, "Unexpected number of FileUploads");
+
+      // Collection.Length
+      FileUploadCollection formFileUploads = ie.FileUploads;
+      
+      // Collection items by index
+      Assert.AreEqual("upload", ie.FileUploads[0].Id);
+
+      IEnumerable FileUploadEnumerable = formFileUploads;
+      IEnumerator FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
+
+      // Collection iteration and comparing the result with Enumerator
+      int count = 0;
+      foreach (FileUpload inputFileUpload in formFileUploads)
+      {
+        FileUploadEnumerator.MoveNext();
+        object enumFileUpload = FileUploadEnumerator.Current;
+        
+        Assert.IsInstanceOfType(inputFileUpload.GetType(), enumFileUpload, "Types are not the same");
+        Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload)enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(expectedFileUploadsCount, count);
+    }
   }
 }

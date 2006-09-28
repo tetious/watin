@@ -38,8 +38,32 @@ namespace WatiN.Core
     private DefaultDialogHandler defaultHandler = new DefaultDialogHandler();
     private ArrayList handlers = new ArrayList();
     private Thread watcherThread;
+    private bool closeUnhandledDialogs = true;
+    
+    private static ArrayList dialogWatchers = new ArrayList();
+    
+    public static DialogWatcher GetDialogWatcherForProcess(int ieProcessId)
+    {     
+      // Loop through already created dialogwatchers and
+      // return a dialogWatcher if one exists for the given processid
+      foreach (DialogWatcher dialogWatcher in dialogWatchers)
+      {
+        if (dialogWatcher.ProcessId == ieProcessId)
+        {
+          return dialogWatcher;
+        }
+      }
 
-    public DialogWatcher(int ieProcessId)
+      // If no dialogwatcher exists for the ieprocessid then 
+      // create a new one, store it and return it.
+      DialogWatcher newDialogWatcher = new DialogWatcher(ieProcessId);
+      
+      dialogWatchers.Add(newDialogWatcher);
+      
+      return newDialogWatcher;
+    }
+    
+    internal DialogWatcher(int ieProcessId)
     {
       this.ieProcessId = ieProcessId;
       
@@ -128,12 +152,40 @@ namespace WatiN.Core
         handlers.Clear();
       }
     }
+    
+    public int Count
+    {
+      get
+      {
+        lock (this)
+        {
+          return handlers.Count;
+        }
+      }
+    }
+
+    public bool CloseUnhandledDialogs
+    {
+      get
+      {
+        return closeUnhandledDialogs;
+      }
+      set
+      {
+        closeUnhandledDialogs = value;
+      }
+    }
+
+    public int ProcessId
+    {
+      get { return ieProcessId; }
+    }
 
     /// <summary>
     /// Called by the constructor to start watching popups
     /// on a separate thread.
     /// </summary>
-    public void Start()
+    private void Start()
     {
       while (keepRunning)
       {
@@ -170,7 +222,7 @@ namespace WatiN.Core
       Process process;
       try
       {
-        process = Process.GetProcessById(ieProcessId);
+        process = Process.GetProcessById(ProcessId);
       }
       catch(ArgumentException)
       {
@@ -193,12 +245,19 @@ namespace WatiN.Core
             return true;
           }
         }
-        
-        // If no dialogHandler handled the dialog, the
-        // defaultHandler will close the dialog.
-        if (defaultHandler != null)
+
+        if (CloseUnhandledDialogs)
         {
-          DefaultHandler.HandleDialog(window);
+          // using defaultHandler should be removed and this 
+          // line of code should be all.
+//          window.ForceClose();
+          
+          // If no dialogHandler handled the dialog, the
+          // defaultHandler will close the dialog.
+          if (defaultHandler != null)
+          {
+            DefaultHandler.HandleDialog(window);
+          }
         }
       }
 
@@ -474,5 +533,40 @@ namespace WatiN.Core
     {     
       return window.StyleInHex == certificateDialogStyle;
     }
+  }
+  
+  public class FileUploadDialogHandler : IDialogHandler
+  {
+    private String fileName;
+    
+    public FileUploadDialogHandler(String fileName)
+    {
+      this.fileName = fileName;  
+    }
+    
+    #region IDialogHandler Members
+
+    public bool HandleDialog(Window window)
+    {
+      if (IsFileUploadDialog(window))
+      {
+        NativeMethods.SetForegroundWindow(window.Hwnd);
+        NativeMethods.SetActiveWindow(window.Hwnd);
+
+        System.Windows.Forms.SendKeys.SendWait(fileName + "{ENTER}");
+        return true;
+      }
+        
+      return false;
+    }
+
+    public bool IsFileUploadDialog(Window window)
+    {
+      // "96CC20C4" is valid for Windows XP, Win 2000 and Win 2003
+      // and probably Vista
+      return window.StyleInHex == "96CC20C4";
+    }
+
+    #endregion
   }
 }

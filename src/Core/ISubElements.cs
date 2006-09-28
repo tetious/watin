@@ -36,6 +36,10 @@ namespace WatiN.Core.Interfaces
     Element Element(Attribute findBy);
     ElementCollection Elements { get; }
 
+    FileUpload FileUpload(string elementId);
+    FileUpload FileUpload(Attribute findBy);
+    FileUploadCollection FileUploads { get; }
+
     Form Form(string elementId);
     Form Form(Attribute findBy);
     FormCollection Forms { get; }

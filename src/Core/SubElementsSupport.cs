@@ -32,18 +32,7 @@ namespace WatiN.Core
   /// </summary>
   public sealed class SubElementsSupport
   {
-    /// <summary>
-    /// Prevent creating an instance of this class (contains only static members)
-    /// </summary>
-    private SubElementsSupport(){}
-
-    public const string InputNullType = null;
     public const string InputTagName = "INPUT";
-    public const string InputButtonType = "button submit image reset";
-    public const string InputCheckBoxType = "checkbox";
-    public const string InputRadioButtonType = "radio";
-    public const string InputTextFieldType = "text password textarea hidden";
-    
     public const string FormTagName = "form";
     public const string LabelTagName = "label";
     public const string LinkTagName = "A";
@@ -58,6 +47,18 @@ namespace WatiN.Core
     public const string ImageTagName = "img";
     public const string FrameTagName = "FRAME";
 
+    public const string InputNullType = null;
+    public const string InputButtonType = "button submit image reset";
+    public const string InputCheckBoxType = "checkbox";
+    public const string InputFileType = "file";
+    public const string InputRadioButtonType = "radio";
+    public const string InputTextFieldType = "text password textarea hidden";
+
+    /// <summary>
+    /// Prevent creating an instance of this class (contains only static members)
+    /// </summary>
+    private SubElementsSupport(){}
+    
     public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Button(ie, (HTMLInputElement)FindFirstElement(InputTagName, InputButtonType, findBy, elements));
@@ -88,6 +89,16 @@ namespace WatiN.Core
       return new ElementCollection(ie, FindAllElements(null, InputNullType, elements));
     }
 
+    public static FileUpload FileUpload(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    {
+      return new FileUpload(ie, (IHTMLInputFileElement) FindFirstElement(InputTagName, InputFileType, findBy, elements));
+    }
+
+    public static FileUploadCollection FileUploads(DomContainer ie, IHTMLElementCollection elements)
+    {
+      return new FileUploadCollection(ie, FindAllElements(InputTagName, InputFileType, elements), null);
+    }
+    
     public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new Form(ie, (HTMLFormElement) FindFirstElement(FormTagName, InputNullType, findBy, elements));

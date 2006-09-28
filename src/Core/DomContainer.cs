@@ -35,10 +35,16 @@ namespace WatiN.Core
   {
     private IHTMLDocument2 htmlDocument;
     private DateTime startWaitForComplete;
+    private DialogWatcher dialogWatcher;
 
     public DomContainer()
     {
       DomContainer = this;
+    }
+    
+    public abstract IntPtr hWnd
+    {
+      get;
     }
     
     /// <summary>
@@ -75,6 +81,19 @@ namespace WatiN.Core
       get
       {
         return this;
+      }
+    }
+
+    protected void StartDialogWatcher()
+    {
+      dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+    }
+
+    public DialogWatcher DialogWatcher
+    {
+      get
+      {
+        return dialogWatcher;
       }
     }
 
@@ -259,6 +278,18 @@ namespace WatiN.Core
       }
 
       return document;
+    }
+
+    public int ProcessID
+    {
+      get
+      {
+        int iePid;
+
+        NativeMethods.GetWindowThreadProcessId(hWnd, out iePid);
+
+        return iePid;
+      }
     }
   }
 }
