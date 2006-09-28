@@ -848,13 +848,11 @@ namespace WatiN.Core
     public void Close()
     {
       Logger.LogAction("Closing browser '" + Title + "'");
-      StopPopupWatcherAndQuitIE();
+      QuitIE();
     }
 
-    private int StopPopupWatcherAndQuitIE()
+    private void QuitIE()
     {
-      DialogWatcher.Stop();
-
       foreach(HtmlDialog htmlDialog in HtmlDialogs)
       {
         htmlDialog.Close();
@@ -862,13 +860,9 @@ namespace WatiN.Core
 
       base.Dispose();
 
-      int iePid = ProcessID;
-
       ie.Quit(); // ask IE to close
       ie = null;
       Thread.Sleep(1000); // wait for IE to close by itself
-
-      return iePid;
     }
 
     /// <summary>
@@ -879,7 +873,9 @@ namespace WatiN.Core
     {
       Logger.LogAction("Force closing all IE instances");
 
-      int iePid = StopPopupWatcherAndQuitIE();
+      int iePid = ProcessID;
+      
+      QuitIE();
 
       try
       {

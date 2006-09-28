@@ -31,7 +31,7 @@ namespace WatiN.Core
   /// is shown. If so, it stores it's message in the alertQueue and closses the dialog
   /// by clicking the close button in the title bar.  
   /// </summary>
-  public class DialogWatcher
+  public class DialogWatcher : IDisposable
   {
     private int ieProcessId;
     private bool keepRunning = true;
@@ -44,6 +44,8 @@ namespace WatiN.Core
     
     public static DialogWatcher GetDialogWatcherForProcess(int ieProcessId)
     {     
+      CleanupDialogWatchers();
+      
       // Loop through already created dialogwatchers and
       // return a dialogWatcher if one exists for the given processid
       foreach (DialogWatcher dialogWatcher in dialogWatchers)
@@ -62,7 +64,26 @@ namespace WatiN.Core
       
       return newDialogWatcher;
     }
-    
+
+    private static void CleanupDialogWatchers()
+    {
+      ArrayList cleanedupDialogWatchers = new ArrayList();
+      
+      foreach (DialogWatcher dialogWatcher in dialogWatchers)
+      {
+        if (!dialogWatcher.ProcessStillExists)
+        {
+          dialogWatcher.Dispose();
+        }
+        else
+        {
+          cleanedupDialogWatchers.Add(dialogWatcher);
+        }
+      }
+      
+      dialogWatchers = cleanedupDialogWatchers;
+    }
+
     internal DialogWatcher(int ieProcessId)
     {
       this.ieProcessId = ieProcessId;
@@ -208,12 +229,11 @@ namespace WatiN.Core
       }
     }
 
-    public void Stop()
+    public bool ProcessStillExists
     {
-      lock (this)
+      get
       {
-        keepRunning = false;
-        watcherThread.Join();
+        return (getProcess() != null);
       }
     }
 
@@ -263,6 +283,22 @@ namespace WatiN.Core
 
       return true;
     }
+    #region IDisposable Members
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+      lock (this)
+      {
+        keepRunning = false;
+        watcherThread.Join();
+      }
+    }
+
+    #endregion
   }
   
   public interface IDialogHandler
