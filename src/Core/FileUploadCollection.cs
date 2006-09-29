@@ -19,6 +19,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {  

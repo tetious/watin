@@ -18,11 +18,11 @@
 #endregion Copyright
 
 using System;
-using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 
 using WatiN.Core;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using Attribute=WatiN.Core.Attribute;
@@ -43,13 +43,13 @@ namespace WatiN.UnitTests
     {
 #if NET11
       // Code for .Net 1.1
-    	Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
+      Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
 
 #elif NET20
       // Code for .Net 2.0
       Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
-      }
+    }
     
     [Test]
     public void NUnitGUI()
@@ -168,12 +168,11 @@ namespace WatiN.UnitTests
       }
     }
 
-    [Test]
+    [Test, Ignore()]
     public void LogonDialogTest()
     {
       IE ie = new IE();
-      
-      ie.DialogWatcher.Add(new CertificateHandler());
+            
       ie.DialogWatcher.Add(new LogonDialogHandler(@"username", "password"));
 
       ie.GoTo("https://www.somesecuresite.com");
@@ -181,6 +180,59 @@ namespace WatiN.UnitTests
       ie.DialogWatcher.Clear();
 
     }
+    
+//    [Test]
+//    public void DialogTestSpike1()
+//    {
+//      IE ie = new IE("http://www.ergens.nl");
+//      
+//      ConfirmDialog confirmDialog = new ConfirmDialog();
+//      ie.DialogWatcher.Add(confirmDialog);
+//      
+//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
+//      
+//      confirmDialog.WaitUntilExists();
+//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
+//      
+//      confirmDialog.Button("OK").Click();
+//      ie.DialogWatcher.Remove(confirmDialog);
+//      
+//      ie.Close();
+//    }
+//    
+//    [Test]
+//    public void DialogTestSpike2()
+//    {
+//      IE ie = new IE("http://www.ergens.nl");
+//
+//      ie.DialogWatcher.Add(new AlertDialog("OK"));
+//      
+//      ie.Button(Find.ByText("Show confirm dialog")).Click();
+//            
+//      ie.DialogWatcher.Remove(new Dialog());
+//
+//      ie.PopAlert();
+//      ie.Close();
+//    }
+//    
+//    [Test]
+//    public void DialogTestSpike3()
+//    {
+//      IE ie = new IE("http://www.ergens.nl");
+//      
+//      ie.DialogWatcher.CloseUnhandledDialogs = false;
+//      
+//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
+//      
+//      Dialog confirmDialog = ie.Dialog;
+//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
+//      
+//      confirmDialog.Button("OK").Click();
+//      
+//      ie.DialogWatcher.CloseUnhandledDialogs = true;
+//      
+//      ie.Close();
+//    }
     
     [Test]
     public void DocumentUrlandUri()
@@ -588,25 +640,36 @@ namespace WatiN.UnitTests
       }
       return true;
     }
-  }
-  
-  public class CertificateHandler : IDialogHandler
-  {
-    #region IDialogHandler Members
-
-    private const string certificateDialogStyle = "94C808C4";
     
-    public bool HandleDialog(Window window)
+    [Test]
+    public void IECreatedInSameProcess()
     {
-      if (window.StyleInHex == certificateDialogStyle)
+      using(IE ie1 = new IE())
       {
-        Debug.WriteLine("Certificate dialog is shown, make your choice!");
-        return true;
+        using(IE ie2 = new IE())
+        {
+          Assert.AreEqual(ie1.ProcessID, ie2.ProcessID);
+        }
+      }      
+    }
+    
+    [Test]
+    public void IECreatedInDifferentProcess()
+    {
+      int ie1processid;
+      int ie2processid;
+      
+      using (IE ie = new IE())
+      {
+        ie1processid = ie.ProcessID;
       }
       
-      return false;
+      using (IE ie = new IE())
+      {
+        ie2processid = ie.ProcessID;
+      }
+      
+      Assert.AreNotEqual(ie1processid, ie2processid);
     }
-
-    #endregion
   }
 }

@@ -24,7 +24,7 @@ using System.Threading;
 
 using WatiN.Core.Exceptions;
 
-namespace WatiN.Core
+namespace WatiN.Core.DialogHandlers
 {
   /// <summary>
   /// This class handles alert/popup dialogs. Every second it checks if a dialog
@@ -500,7 +500,7 @@ namespace WatiN.Core
       No = 2
     }
     
-    private const string certificateDialogStyle = "94C808C4";
+    private const string certificateWarningDialogStyle = "94C808C4";
 
     private ButtonsEnum buttonToPush;
     
@@ -545,7 +545,7 @@ namespace WatiN.Core
     /// </returns>
     protected virtual bool IsCertificateDialog(Window window)
     {     
-      return window.StyleInHex == certificateDialogStyle;
+      return window.StyleInHex == certificateWarningDialogStyle;
     }
   }
   

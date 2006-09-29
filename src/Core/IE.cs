@@ -27,6 +27,7 @@ using mshtml;
 using SHDocVw;
 
 using WatiN.Core;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 

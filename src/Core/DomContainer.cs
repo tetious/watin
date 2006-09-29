@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 
 using mshtml;
 using SHDocVw;
+using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {

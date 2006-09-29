@@ -1,6 +1,7 @@
 using System.IO;
 using mshtml;
 using WatiN.Core;
+using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {
