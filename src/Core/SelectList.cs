@@ -183,11 +183,20 @@ namespace WatiN.Core
       get { return ((HTMLSelectElementClass) DomElement); }
     }
 
+    [Obsolete("The AllContents property is no longer supported, use Items property instead.")]
+    public StringCollection AllContents
+    {
+      get
+      {
+        return Items;
+      }
+    }
+    
     /// <summary>
     /// Returns all the items in the select list as an array.
     /// An empty array is returned if the select box has no contents.
     /// </summary>
-    public StringCollection AllContents
+    public StringCollection Items
     {
       get
       {
