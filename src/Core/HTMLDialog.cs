@@ -78,8 +78,7 @@ namespace WatiN.Core
         if (!IsIEServerWindow(hWnd))
         {
           // Get 1st child IE server window
-          NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(EnumChildForServerWindow);
-          NativeMethods.EnumChildWindows(hWnd, childProc, ref hWnd);
+          hWnd = NativeMethods.GetChildWindowHwnd(hWnd, "Internet Explorer_Server");
         }
 
         if (IsIEServerWindow(hWnd))
@@ -102,19 +101,6 @@ namespace WatiN.Core
         }
       }
       return null;
-    }
-
-    private bool EnumChildForServerWindow(IntPtr hWnd, ref IntPtr lParam)
-    {
-      if (IsIEServerWindow(hWnd))
-      {
-        lParam = hWnd;
-        return false;
-      }
-      else
-      {
-        return true;
-      }
     }
 
     private static bool IsIEServerWindow(IntPtr hWnd)

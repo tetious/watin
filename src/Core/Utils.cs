@@ -101,6 +101,8 @@ namespace WatiN.Core
 
 	  internal static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
 	  {
+	    if (hWnd == IntPtr.Zero) return false;
+	    
 	    string className = NativeMethods.GetClassName(hWnd);
       
 	    return className.Equals(expectedClassName);

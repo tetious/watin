@@ -479,14 +479,8 @@ namespace WatiN.Core
     /// </returns>
     public virtual bool IsLogonDialog(Window window)
     {
-      IntPtr hWnd = IntPtr.Zero;
-      
-      // Go throught the child windows of the dialog window
-      NativeMethods.EnumChildProc childProc = new NativeMethods.EnumChildProc(enumChildForSysCredentials);
-      NativeMethods.EnumChildWindows(window.Hwnd, childProc, ref hWnd);
-      
       // If a logon dialog window is found hWnd will be set.
-      return hWnd != IntPtr.Zero;
+      return NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential") != IntPtr.Zero;
     }
 
     private static void checkArgument(string message, string parameter, string parameterName)
@@ -495,22 +489,6 @@ namespace WatiN.Core
       {
         throw new ArgumentNullException(message, parameterName);
       }
-    }
-
-    private bool enumChildForSysCredentials(IntPtr hWnd, ref IntPtr lParam)
-    {
-      if (classNameIsSysCredential(hWnd))
-      {
-        lParam = hWnd;
-        return false;
-      }
-
-      return true;
-    }
-
-    private static bool classNameIsSysCredential(IntPtr hWnd)
-    {
-      return UtilityClass.CompareClassNames(hWnd, "SysCredential");
     }
   }
   

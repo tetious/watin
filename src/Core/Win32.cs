@@ -32,6 +32,8 @@ namespace WatiN.Core
   /// </summary>
   public sealed class NativeMethods
   {
+    private static string enumChildWindowClassName;
+
     #region Constants
 
     internal const int WM_SYSCOMMAND = 0x0112;
@@ -429,6 +431,30 @@ namespace WatiN.Core
     {
       IntPtr buttonPtr = GetDlgItem(parentHwnd, buttonid);
       SendMessage(buttonPtr, BM_CLICK, 0, 0);
+    }
+    
+    internal static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
+    {
+      IntPtr hWnd = IntPtr.Zero;
+      enumChildWindowClassName = className;
+      
+      // Go throught the child windows of the dialog window
+      EnumChildProc childProc = new EnumChildProc(EnumChildWindows);
+      EnumChildWindows(parentHwnd, childProc, ref hWnd);
+      
+      // If a logon dialog window is found hWnd will be set.
+      return hWnd;
+    }
+    
+    private static bool EnumChildWindows(IntPtr hWnd, ref IntPtr lParam)
+    {
+      if (UtilityClass.CompareClassNames(hWnd, enumChildWindowClassName))
+      {
+        lParam = hWnd;
+        return false;
+      }
+
+      return true;
     }
 
     #endregion Methods
