@@ -112,7 +112,7 @@
 
 		<copy todir="${unittests.htmlfiles.todir}" >
 		    <fileset basedir ="${unittests.htmlfiles.dir}">
-                <include name="*.*" />
+                <include name="\**" />
 		    </fileset>
 		</copy>
         
@@ -219,7 +219,7 @@
 		
 		<copy todir="${distribution.dir}\bin\html">
 		    <fileset basedir ="${unittests.htmlfiles.todir}">
-                <include name="*.*" />
+                <include name="\**" />
 		    </fileset>
 		</copy>
 
@@ -229,7 +229,7 @@
 				<include name="*.cs"/>
 				<include name="*.csproj"/>
 				<include name="*.config"/>
-				<include name="html\*.*"/>
+				<include name="html\**"/>
 			</fileset>
 		</copy>
 
