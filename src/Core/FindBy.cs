@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core;
 
 namespace WatiN.Core.Interfaces
 {

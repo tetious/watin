@@ -338,7 +338,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ConstructorWithValue()
     {
-      ICompare comparer = new StringComparer("A test value");
+      ICompare comparer = new WatiN.Core.StringComparer("A test value");
       
       Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
       
@@ -353,13 +353,13 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
-      new StringComparer(null);
+      new WatiN.Core.StringComparer(null);
     }
     
     [Test]
     public void ConstuctorWithStringEmpty()
     {
-      ICompare comparer = new StringComparer(String.Empty);
+      ICompare comparer = new WatiN.Core.StringComparer(String.Empty);
       
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
       
@@ -370,7 +370,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ToStringTest()
     {
-      StringComparer comparer = new StringComparer("A test value");
+      WatiN.Core.StringComparer comparer = new WatiN.Core.StringComparer("A test value");
       
       Assert.AreEqual("WatiN.Core.StringComparer compares with: A test value", comparer.ToString());
     }
