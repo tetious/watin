@@ -213,7 +213,7 @@ namespace WatiN.Core
     /// </example>
     public IE()
     {
-      CreateNewIEAndGoToUrl("about:blank", true);
+      CreateNewIEAndGoToUri(new Uri("about:blank"), null);
     }
 
     /// <summary>
@@ -247,7 +247,7 @@ namespace WatiN.Core
     /// </example>
     public IE(string url)
     {
-      CreateNewIEAndGoToUrl(url, true);
+      CreateNewIEAndGoToUri(new Uri(url), null);
     }
     /// <summary>
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
@@ -281,82 +281,13 @@ namespace WatiN.Core
     /// </example>
     public IE(Uri uri)
     {
-      CreateNewIEAndGoToUrl(uri, true);
-    }
-
-    /// <summary>
-    /// Opens a new Internet Explorer with the Url pointing at a blank page. The <paramref name="autoClose" />
-    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
-    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
-    /// </summary>
-    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
-    /// <remarks>
-    /// You could also use one of the overloaded constructors.
-    /// </remarks>
-    /// <example>
-    /// The following example creates a new Internet Explorer instances and navigates to
-    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
-    /// <code>
-    /// using WatiN.Core;
-    /// 
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE(false);
-    ///        ie.GoTo("http://watin.sourceforge.net");
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
-    public IE(bool autoClose)
-    {
-      CreateNewIEAndGoToUrl("about:blank", autoClose);
-    }
-
-    /// <summary>
-    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>. The <paramref name="autoClose" />
-    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
-    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
-    /// </summary>
-    /// <param name="url">The Url te open</param>
-    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
-    /// <remarks>
-    /// You could also use one of the overloaded constructors.
-    /// </remarks>
-    /// <example>
-    /// The following example creates a new Internet Explorer instances and navigates to
-    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
-    /// <code>
-    /// using WatiN.Core;
-    /// 
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE("http://watin.sourceforge.net", false);
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
-    public IE(string url, bool autoClose)
-    {
-      CreateNewIEAndGoToUrl(url, autoClose);
+      CreateNewIEAndGoToUri(uri, null);
     }
     
     /// <summary>
-    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>. The <paramref name="autoClose" />
-    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
-    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
     /// </summary>
     /// <param name="url">The Url te open</param>
-    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
     /// <param name="logonDialogHandler">A class  instanciated with the logon credentials.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
@@ -374,24 +305,22 @@ namespace WatiN.Core
     ///      public WatiNWebsite()
     ///      {
     ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
-    ///        IE ie = new IE("http://watin.sourceforge.net", true, logon);
+    ///        IE ie = new IE("http://watin.sourceforge.net", logon);
     ///      }
     ///    }
     ///  }
     /// </code>
     /// </example>
-    public IE(string url, bool autoClose, LogonDialogHandler logonDialogHandler)
+    public IE(string url, LogonDialogHandler logonDialogHandler)
     {
-      CreateNewIEAndGoToUrl(url, autoClose, logonDialogHandler);
+      CreateNewIEAndGoToUri(new Uri(url), logonDialogHandler);
     }
     
     /// <summary>
-    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>. The <paramref name="autoClose" />
-    /// parameter provides the option to <i>not</i> close the created Internet Explorer when the
-    /// corresponding <see cref="WatiN.Core.IE" /> instance is destroyed. 
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
     /// </summary>
     /// <param name="uri">The Uri te open</param>
-    /// <param name="autoClose">Close Internet Explorer when destroying this object.</param>
+    /// <param name="logonDialogHandler">A class  instanciated with the logon credentials.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
     /// </remarks>
@@ -399,7 +328,6 @@ namespace WatiN.Core
     /// The following example creates a new Internet Explorer instances and navigates to
     /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
     /// <code>
-    /// using System;
     /// using WatiN.Core;
     /// 
     /// namespace NewIEExample
@@ -408,17 +336,18 @@ namespace WatiN.Core
     ///    {
     ///      public WatiNWebsite()
     ///      {
-    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), false);
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
     ///      }
     ///    }
     ///  }
     /// </code>
     /// </example>
-    public IE(Uri uri, bool autoClose)
+    public IE(Uri uri, LogonDialogHandler logonDialogHandler)
     {
-      CreateNewIEAndGoToUrl(uri, autoClose);
+      CreateNewIEAndGoToUri(uri, logonDialogHandler);
     }
-
+    
     /// <summary>
     /// Use existing InternetExplorer object. The param is of type
     /// object because otherwise all projects using WatiN should also
@@ -443,37 +372,25 @@ namespace WatiN.Core
       InitIEAndStartDialogWatcher(internetExplorer);
     }
 
-    private void CreateNewIEAndGoToUrl(string url, bool autoClose)
+    private void CreateNewIEAndGoToUri(Uri uri, LogonDialogHandler logonDialogHandler)
     {
-      CreateNewIEAndGoToUrl(url, autoClose, null);
-    }
-
-    private void CreateNewIEAndGoToUrl(string url, bool autoClose, LogonDialogHandler logonDialogHandler)
-    {
-      createNewIE(autoClose);
+      createNewIE();
 
       if (logonDialogHandler != null)
       {
         DialogWatcher.Add(logonDialogHandler);
       }
       
-      GoTo(url);
-    }
-    
-    private void CreateNewIEAndGoToUrl(Uri uri, bool autoClose)
-    {
-      createNewIE(autoClose);
-
       GoTo(uri);
     }
-
-    private void createNewIE(bool autoClose)
+    
+    private void createNewIE()
     {
       CheckThreadApartmentStateIsSTA();
 
       Logger.LogAction("Creating new IE instance");
 
-      SetAutoCloseAndMoveMouse(autoClose);
+      MoveMouseToTopLeft();
 
       InitIEAndStartDialogWatcher(new InternetExplorerClass());
     }
@@ -563,16 +480,10 @@ namespace WatiN.Core
       throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }
 
-    private void SetAutoCloseAndMoveMouse(bool autoClose)
+    private void MoveMouseToTopLeft()
     {
-      AutoCloseIE = autoClose;
-
-      if (autoClose)
-      {
-        // We assume that when this flag is on, everything should run automatically.
-        // Better move the mouse out of the way.
-        System.Windows.Forms.Cursor.Position = new System.Drawing.Point(0, 0);
-      }
+      // Better move the mouse out of the way.
+      System.Windows.Forms.Cursor.Position = new System.Drawing.Point(0, 0);
     }
 
     
@@ -938,7 +849,7 @@ namespace WatiN.Core
     /// </summary>
     public new void Dispose()
     {
-      if (AutoCloseIE)
+      if (AutoClose)
       {
         Close();
       }
@@ -950,7 +861,7 @@ namespace WatiN.Core
     /// a reference to the corresponding IE instance.
     /// </summary>
     /// <value><c>true</c> when to auto close IE (this is the default); otherwise, <c>false</c>.</value>
-    public bool AutoCloseIE
+    public bool AutoClose
     {
       get
       {

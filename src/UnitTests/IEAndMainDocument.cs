@@ -277,7 +277,7 @@ namespace WatiN.UnitTests
     [Test]
     public void NewIE()
     {
-      using (IE ie = new IE(true))
+      using (IE ie = new IE())
       {
         Assert.AreEqual("about:blank", ie.Url);
       }
@@ -293,11 +293,11 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void NewIEWithUriAndAutoClose()
+    public void NewIEWithUriShouldAutoClose()
     {
       FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
 
-      using (new IE(MainURI, true))
+      using (new IE(MainURI))
       {
       }
       
@@ -309,50 +309,30 @@ namespace WatiN.UnitTests
     {
       FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
 
-      using (new IE(MainURI, false))
+      using (IE ie = new IE(MainURI))
       {
+        Assert.IsTrue(ie.AutoClose);
+        ie.AutoClose = false;
       }
       
       Assert.IsTrue(IsIEWindowOpen("main"), "Internet Explorer should NOT be closed by IE.Dispose");
 
       IE.AttachToIE(Find.ByTitle("main"), 3).Close();
     }
-    
-    [Test]
-    public void NewIEWithUrlAndAutoClose()
-    {
-      FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
-
-      using (new IE(MainURI.ToString(), true))
-      {
-      }
-      
-      Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
-    }
-    
-    [Test]
-    public void NewIEWithUrlNotAutoClose()
-    {
-      FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
-
-      using (new IE(MainURI.ToString(), false))
-      {
-      }
-      
-      Assert.IsTrue(IsIEWindowOpen("main"), "Internet Explorer should NOT be closed by IE.Dispose");
-
-      IE.AttachToIE(Find.ByTitle("main"), 3).Close();
-    }
-
+        
     [Test]
     public void NewIEWithUrl()
     {
+      FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
+      
       string url = MainURI.ToString();
       
       using (IE ie = new IE(url))
       {
         Assert.AreEqual(MainURI, new Uri(ie.Url));
       }
+      
+      Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
     }
 
     [Test]
