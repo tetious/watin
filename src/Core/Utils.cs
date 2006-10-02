@@ -99,7 +99,13 @@ namespace WatiN.Core
       return document.HtmlDocument.all;
     }
 
-	  internal static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
+    /// <summary>
+    /// Compares the class names.
+    /// </summary>
+    /// <param name="hWnd">The hWND of the window if which the class name should be retrieved.</param>
+    /// <param name="expectedClassName">Expected name of the class.</param>
+    /// <returns></returns>
+	  public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
 	  {
 	    if (hWnd == IntPtr.Zero) return false;
 	    
