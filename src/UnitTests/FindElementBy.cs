@@ -264,6 +264,13 @@ namespace WatiN.UnitTests
       new Attribute(string.Empty,string.Empty);
     }
     
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void AttributeCompareObject()
+    {
+      Attribute attribute = new Attribute("test", "value");
+      attribute.Compare(new object());
+    }
+    
     [Test]
     public void FindByCustom()
     {
