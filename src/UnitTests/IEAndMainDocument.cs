@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using NUnit.Framework;
 
@@ -144,6 +145,9 @@ namespace WatiN.UnitTests
       {
         Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
         Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
+                
+        Assert.IsTrue(ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
+        Assert.IsFalse(ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
       }
     }
     

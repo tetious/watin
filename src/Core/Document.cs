@@ -18,7 +18,7 @@
 #endregion Copyright
 
 using System;
-
+using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -173,7 +173,7 @@ namespace WatiN.Core
     }
     
     /// <summary>
-    /// Determines whether the specified text contains the given <paramref name="text" />.
+    /// Determines whether the text inside the HTML Body element contains the given <paramref name="text" />.
     /// </summary>
     /// <param name="text">The text.</param>
     /// <returns>
@@ -186,13 +186,22 @@ namespace WatiN.Core
       if (innertext == null) return false;
 
       return (innertext.IndexOf(text) >= 0);
+    }
+    
+    /// <summary>
+    /// Determines whether the text inside the HTML Body element contains the given <paramref name="text" />.
+    /// </summary>
+    /// <param name="regex">The regular expression to match with.</param>
+    /// <returns>
+    /// 	<c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
+    /// </returns>
+    public bool ContainsText(Regex regex)
+    {
+      string innertext = HtmlDocument.body.innerText;
+      
+      if (innertext == null) return false;
 
-      // Also found this implementation which seems to work OK to.
-      // TODO: test if innertext assert might return a wrong result when
-      // using hidden fields/ fields which aren't visible for the user.
-      //  		HTMLBody body = (HTMLBody)htmlDocument.getElementsByTagName("body").item(0, null);
-      //			return (body.createTextRange().findText(text, 0, 0) == true);
-
+      return (regex.Match(innertext).Success);
     }
 
     /// <summary>
