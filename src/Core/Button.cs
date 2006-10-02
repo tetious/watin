@@ -29,12 +29,12 @@ namespace WatiN.Core
   public class Button : Element
   {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Button"/> class.
+    /// Initialises a new instance of the <see cref="Button"/> class.
     /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
-    /// <param name="inputButtonElement">The input button element.</param>
-    public Button(DomContainer domContainer, HTMLInputElement inputButtonElement) : base(domContainer, (IHTMLElement) inputButtonElement)
+    /// <param name="element">The input button or button element.</param>
+    public Button(DomContainer domContainer, IHTMLElement element) : base(domContainer, element)
     {}
 
     /// <summary>
@@ -43,7 +43,7 @@ namespace WatiN.Core
     /// <value>The displayed text.</value>
     public string Value
     {
-      get { return inputButtonElement.value; }
+      get { return GetAttributeValue("value"); }
     }
 
     /// <summary>
@@ -53,11 +53,6 @@ namespace WatiN.Core
     public override string Text
     {
       get { return Value; }
-    }
-
-    private HTMLInputElement inputButtonElement
-    {
-      get { return ((HTMLInputElement) DomElement); }
     }
 
     /// <summary>

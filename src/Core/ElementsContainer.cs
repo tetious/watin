@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Summary description for ElementsContainer.
 	/// </summary>
-	public class ElementsContainer : Element, ISubElements
+	public class ElementsContainer : Element, IElementsContainer
 	{
 	  public ElementsContainer(DomContainer ie, object element): base(ie, element) 
 		{}
@@ -40,12 +40,12 @@ namespace WatiN.Core
 
     public Button Button(Attribute findBy)
     {
-      return SubElementsSupport.Button(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Button(DomContainer, findBy, elementCollection);
     }
   
     public ButtonCollection Buttons
     {
-      get { return SubElementsSupport.Buttons(DomContainer, elementCollection); }
+      get { return ElementsSupport.Buttons(DomContainer, elementCollection); }
     }
 
     public CheckBox CheckBox(string elementId)
@@ -55,12 +55,12 @@ namespace WatiN.Core
 
     public CheckBox CheckBox(Attribute findBy)
     {
-      return SubElementsSupport.CheckBox(DomContainer, findBy, elementCollection);
+      return ElementsSupport.CheckBox(DomContainer, findBy, elementCollection);
     }
 
     public CheckBoxCollection CheckBoxes
     {
-      get { return SubElementsSupport.CheckBoxes(DomContainer, elementCollection); }
+      get { return ElementsSupport.CheckBoxes(DomContainer, elementCollection); }
     }
 
     public Element Element(string elementId)
@@ -70,12 +70,12 @@ namespace WatiN.Core
 
     public Element Element(Attribute findBy)
     {
-      return SubElementsSupport.Element(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Element(DomContainer, findBy, elementCollection);
     }
 
     public ElementCollection Elements
     {
-      get { return SubElementsSupport.Elements(DomContainer, elementCollection); }
+      get { return ElementsSupport.Elements(DomContainer, elementCollection); }
     }
 
     public FileUpload FileUpload(string elementId)
@@ -85,12 +85,12 @@ namespace WatiN.Core
 
     public FileUpload FileUpload(Attribute findBy)
     {
-      return SubElementsSupport.FileUpload(DomContainer, findBy, elementCollection);
+      return ElementsSupport.FileUpload(DomContainer, findBy, elementCollection);
     }
 
     public FileUploadCollection FileUploads
     {
-      get { return SubElementsSupport.FileUploads(DomContainer, elementCollection); }
+      get { return ElementsSupport.FileUploads(DomContainer, elementCollection); }
     }
 	  
     public Form Form(string elementId)
@@ -100,12 +100,12 @@ namespace WatiN.Core
 
     public Form Form(Attribute findBy)
     {
-      return SubElementsSupport.Form(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Form(DomContainer, findBy, elementCollection);
     }
 
 	  public FormCollection Forms
 	  {
-	    get { return SubElementsSupport.Forms(DomContainer, elementCollection); }
+	    get { return ElementsSupport.Forms(DomContainer, elementCollection); }
 	  }
 
 	  public Label Label(string elementId)
@@ -115,12 +115,12 @@ namespace WatiN.Core
 
 	  public Label Label(Attribute findBy)
 	  {
-      return SubElementsSupport.Label(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Label(DomContainer, findBy, elementCollection);
     }
 
 	  public LabelCollection Labels
 	  {
-      get { return SubElementsSupport.Labels(DomContainer, elementCollection); }
+      get { return ElementsSupport.Labels(DomContainer, elementCollection); }
     }
 
 	  public Link Link(string elementId)
@@ -130,12 +130,12 @@ namespace WatiN.Core
 
     public Link Link(Attribute findBy)
     {
-      return SubElementsSupport.Link(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Link(DomContainer, findBy, elementCollection);
     }
 
     public LinkCollection Links
     {
-      get { return SubElementsSupport.Links(DomContainer, elementCollection); }
+      get { return ElementsSupport.Links(DomContainer, elementCollection); }
     }
 
 	  public Para Para(string elementId)
@@ -145,12 +145,12 @@ namespace WatiN.Core
 
 	  public Para Para(Attribute findBy)
 	  {
-	    return SubElementsSupport.Para(DomContainer, findBy, elementCollection);
+	    return ElementsSupport.Para(DomContainer, findBy, elementCollection);
 	  }
 
 	  public ParaCollection Paras
 	  {
-	    get { return SubElementsSupport.Paras(DomContainer, elementCollection); }
+	    get { return ElementsSupport.Paras(DomContainer, elementCollection); }
 	  }
 
 	  public RadioButton RadioButton(string elementId)
@@ -160,12 +160,12 @@ namespace WatiN.Core
 
 	  public RadioButton RadioButton(Attribute findBy)
 	  {
-      return SubElementsSupport.RadioButton(DomContainer, findBy, elementCollection);
+      return ElementsSupport.RadioButton(DomContainer, findBy, elementCollection);
     }
 
 	  public RadioButtonCollection RadioButtons
 	  {
-      get { return SubElementsSupport.RadioButtons(DomContainer, elementCollection); }
+      get { return ElementsSupport.RadioButtons(DomContainer, elementCollection); }
     }
 
 	  public SelectList SelectList(string elementId)
@@ -175,12 +175,12 @@ namespace WatiN.Core
 
     public SelectList SelectList(Attribute findBy)
     {
-      return SubElementsSupport.SelectList(DomContainer, findBy, elementCollection);
+      return ElementsSupport.SelectList(DomContainer, findBy, elementCollection);
     }
 
     public SelectListCollection SelectLists
     {
-      get { return SubElementsSupport.SelectLists(DomContainer, elementCollection); }
+      get { return ElementsSupport.SelectLists(DomContainer, elementCollection); }
     }
 
     public Table Table(string elementId)
@@ -190,12 +190,12 @@ namespace WatiN.Core
 
     public Table Table(Attribute findBy)
     {
-      return SubElementsSupport.Table(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Table(DomContainer, findBy, elementCollection);
     }
 
     public TableCollection Tables
     {
-      get { return SubElementsSupport.Tables(DomContainer, elementCollection); }
+      get { return ElementsSupport.Tables(DomContainer, elementCollection); }
     }
 
     //    public TableSectionCollection TableSections
@@ -210,7 +210,7 @@ namespace WatiN.Core
 
     public TableCell TableCell(Attribute findBy)
     {
-      return SubElementsSupport.TableCell(DomContainer, findBy, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, findBy, elementCollection);
     }
 
     /// <summary>
@@ -224,12 +224,12 @@ namespace WatiN.Core
     /// </example>
     public TableCell TableCell(string elementId, int occurrence)
     {
-      return SubElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
     }
 
     public TableCellCollection TableCells
     {
-      get { return SubElementsSupport.TableCells(DomContainer, elementCollection); }
+      get { return ElementsSupport.TableCells(DomContainer, elementCollection); }
     }
 
     public TableRow TableRow(string elementId)
@@ -239,12 +239,12 @@ namespace WatiN.Core
 
     public TableRow TableRow(Attribute findBy)
     {
-      return SubElementsSupport.TableRow(DomContainer, findBy, elementCollection);
+      return ElementsSupport.TableRow(DomContainer, findBy, elementCollection);
     }
 
     public virtual TableRowCollection TableRows
     {
-      get { return SubElementsSupport.TableRows(DomContainer,elementCollection); }
+      get { return ElementsSupport.TableRows(DomContainer,elementCollection); }
     }
 
     public TextField TextField(string elementId)
@@ -254,12 +254,12 @@ namespace WatiN.Core
 
     public TextField TextField(Attribute findBy)
     {
-      return SubElementsSupport.TextField(DomContainer, findBy, elementCollection);
+      return ElementsSupport.TextField(DomContainer, findBy, elementCollection);
     }
 
     public TextFieldCollection TextFields
     {
-      get { return SubElementsSupport.TextFields(DomContainer, elementCollection); }
+      get { return ElementsSupport.TextFields(DomContainer, elementCollection); }
     }
 
 	  public Span Span(string elementId)
@@ -269,12 +269,12 @@ namespace WatiN.Core
 
 	  public Span Span(Attribute findBy)
 	  {
-      return SubElementsSupport.Span(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Span(DomContainer, findBy, elementCollection);
     }
 
 	  public SpanCollection Spans
     {
-      get { return SubElementsSupport.Spans(DomContainer, elementCollection); }
+      get { return ElementsSupport.Spans(DomContainer, elementCollection); }
     }
 
 	  public Div Div(string elementId)
@@ -284,12 +284,12 @@ namespace WatiN.Core
 
 	  public Div Div(Attribute findBy)
 	  {
-      return SubElementsSupport.Div(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Div(DomContainer, findBy, elementCollection);
     }
 
 	  public DivCollection Divs
     {
-      get { return SubElementsSupport.Divs(DomContainer, elementCollection); }
+      get { return ElementsSupport.Divs(DomContainer, elementCollection); }
     }
 
 	  public Image Image(string elementId)
@@ -299,12 +299,12 @@ namespace WatiN.Core
 
 	  public Image Image(Attribute findBy)
 	  {
-      return SubElementsSupport.Image(DomContainer, findBy, elementCollection);
+      return ElementsSupport.Image(DomContainer, findBy, elementCollection);
     }
 
 	  public ImageCollection Images
     {
-      get { return SubElementsSupport.Images(DomContainer, elementCollection); }
+      get { return ElementsSupport.Images(DomContainer, elementCollection); }
     }
     #endregion
 

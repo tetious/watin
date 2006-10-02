@@ -22,7 +22,7 @@ namespace WatiN.Core.Interfaces
   /// <summary>
   /// This interface is used by all classes which provide access to (sub)elements.
   /// </summary>
-  public interface ISubElements
+  public interface IElementsContainer
   {
     Button Button(string elementId);
     Button Button(Attribute findBy);

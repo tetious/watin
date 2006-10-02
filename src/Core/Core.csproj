@@ -180,6 +180,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ElementsSupport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -240,17 +245,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IElementsContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Image.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ImageCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ISubElements.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -326,11 +331,6 @@
                 />
                 <File
                     RelPath = "SpanCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SubElementsSupport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

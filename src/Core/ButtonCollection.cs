@@ -39,9 +39,9 @@ namespace WatiN.Core
 		{
 			this.elements = new ArrayList();
 			
-      foreach (IHTMLInputElement inputElement in elements)
+      foreach (IHTMLElement inputElement in elements)
 			{
-        Button v = new Button(domContainer, (HTMLInputElement)inputElement);
+        Button v = new Button(domContainer, inputElement);
         this.elements.Add(v);
 			}
 		}

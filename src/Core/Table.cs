@@ -37,7 +37,7 @@ namespace WatiN.Core
       get 
       {
         IHTMLElement firstTBody = (IHTMLElement)((HTMLTable)DomElement).tBodies.item(0,null);
-        return SubElementsSupport.TableRows(DomContainer, (IHTMLElementCollection)(firstTBody.all)); 
+        return ElementsSupport.TableRows(DomContainer, (IHTMLElementCollection)(firstTBody.all)); 
       }
     }
 

@@ -67,7 +67,7 @@ namespace WatiN.UnitTests
     [Test]
     public void DocumentIsISubElement()
     {
-      Assert.IsInstanceOfType(typeof(ISubElements), ie); 
+      Assert.IsInstanceOfType(typeof(IElementsContainer), ie); 
     }   
 
     [Test]
@@ -234,7 +234,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void Button()
+    public void ButtonFormInputElement()
     {
       const string popupValue = "Show modeless dialog";
       Assert.AreEqual(popupValue, ie.Button(Find.ById("popupid")).Value);
@@ -246,6 +246,19 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Show allert", helloButton.Value);
       Assert.AreEqual(helloButton.Value, helloButton.Text);
     }
+    
+    [Test]
+    public void ButtonFormButtonElement()
+    {
+      const string Value = "Button Element";
+      Assert.AreEqual(Value, ie.Button(Find.ById("buttonelementid")).Value);
+      Assert.AreEqual(Value, ie.Button("buttonelementid").Value);
+      Assert.AreEqual(Value, ie.Button("buttonelementid").ToString());
+      Assert.AreEqual(Value, ie.Button(Find.ByName("buttonelementname")).Value);
+
+      Assert.AreEqual(Value, ie.Button(Find.ByText("Button Element")).Value);
+      Assert.AreEqual(Value, ie.Button(Find.ByValue("ButtonElementValue")).Value);
+    }
 
     [Test, ExpectedException(typeof(ElementDisabledException))]
     public void ButtonDisabledException()
@@ -253,18 +266,25 @@ namespace WatiN.UnitTests
       ie.Button("disabledid").Click();
     }
 
+    [Test, ExpectedException(typeof(ElementNotFoundException), "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
+    public void ButtonElementNotFoundException()
+    {
+      ie.Button("noneexistingbuttonid").Click();
+    }
+  
     [Test]
     public void Buttons()
     {
-      const int expectedButtonsCount = 4;
+      const int expectedButtonsCount = 5;
       Assert.AreEqual(expectedButtonsCount, ie.Buttons.Length, "Unexpected number of buttons");
 
+      const int expectedFormButtonsCount = 4;
       Form form = ie.Form("Form");
 
       // Collection.Length
       ButtonCollection formButtons = form.Buttons;
       
-      Assert.AreEqual(expectedButtonsCount, formButtons.Length);
+      Assert.AreEqual(expectedFormButtonsCount, formButtons.Length);
 
       // Collection items by index
       Assert.AreEqual("popupid", form.Buttons[0].Id);
@@ -287,7 +307,7 @@ namespace WatiN.UnitTests
       }
       
       Assert.IsFalse(buttonEnumerator.MoveNext(), "Expected last item");
-      Assert.AreEqual(expectedButtonsCount, count);
+      Assert.AreEqual(expectedFormButtonsCount, count);
     }
 
     [Test]
@@ -790,6 +810,12 @@ namespace WatiN.UnitTests
       textField.TypeText("This should go wrong");
     }
 
+    [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
+    public void TextFieldElementNotFoundException()
+    {
+      ie.TextField("noneexistingtextfieldid").TypeText("");
+    }
+    
     [Test]
     public void TextFields()
     {

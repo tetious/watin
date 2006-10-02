@@ -103,7 +103,7 @@ namespace WatiN.Core
     {
       elements = new ArrayList();
 
-      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(SubElementsSupport.FrameTagName);
+      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.FrameTagName);
       
       // If the current document doesn't contain FRAME elements, it then
       // might contain IFRAME elements.

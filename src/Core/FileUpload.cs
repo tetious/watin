@@ -20,6 +20,7 @@ namespace WatiN.Core
 
     public void Set(string fileName)
     { 
+      
       FileInfo info = new FileInfo(fileName);
       if (!info.Exists)
       {
