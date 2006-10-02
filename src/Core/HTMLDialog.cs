@@ -54,12 +54,6 @@ namespace WatiN.Core
       NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
     }
 
-    public bool HasFocus()
-    {
-      // TODO: Find Win32 API to determine if window has the focus
-      return true;
-    }
-
     public override IHTMLDocument2 OnGetHtmlDocument()
     {
       return IEDOMFromhWnd(hwnd);
