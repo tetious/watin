@@ -62,5 +62,11 @@ namespace WatiN.UnitTests
       Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(""), "zero length string should return false");
       Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
     }
+    
+    [Test]
+    public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
+    {
+      Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero,"classname"));
+    }
   }
 }
