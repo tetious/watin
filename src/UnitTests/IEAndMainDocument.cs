@@ -486,6 +486,8 @@ namespace WatiN.UnitTests
 
       HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
   
+      Assert.IsInstanceOfType(typeof(DomContainer), htmlDialog);
+      
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
   
@@ -643,37 +645,6 @@ namespace WatiN.UnitTests
         return false;
       }
       return true;
-    }
-    
-    [Test]
-    public void IECreatedInSameProcess()
-    {
-      using(IE ie1 = new IE())
-      {
-        using(IE ie2 = new IE())
-        {
-          Assert.AreEqual(ie1.ProcessID, ie2.ProcessID);
-        }
-      }      
-    }
-    
-    [Test]
-    public void IECreatedInDifferentProcess()
-    {
-      int ie1processid;
-      int ie2processid;
-      
-      using (IE ie = new IE())
-      {
-        ie1processid = ie.ProcessID;
-      }
-      
-      using (IE ie = new IE())
-      {
-        ie2processid = ie.ProcessID;
-      }
-      
-      Assert.AreNotEqual(ie1processid, ie2processid);
     }
   }
 }

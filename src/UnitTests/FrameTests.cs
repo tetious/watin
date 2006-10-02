@@ -50,6 +50,18 @@ namespace WatiN.UnitTests
       ie.Close();
     }
 
+    [Test]
+    public void IEFrameIsAFrame()
+    {
+      Assert.IsInstanceOfType(typeof(Frame),ie.Frame("mainid"));
+    }
+    
+    [Test]
+    public void FrameIsADocument()
+    {
+      Assert.IsInstanceOfType(typeof(Document),ie.Frame("mainid"));
+    }
+  
     [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a Frame or IFrame by id with value 'NonExistingFrameID'")]
     public void ExpectFrameNotFoundException()
     {

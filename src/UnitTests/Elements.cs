@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 using WatiN.Core;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.UnitTests
 {
@@ -44,6 +45,30 @@ namespace WatiN.UnitTests
     {
       ie.Close();
     }
+
+    [Test]
+    public void IEIsIE()
+    {
+      Assert.IsInstanceOfType(typeof(IE), ie);
+    }
+
+    [Test]
+    public void IEIsDomContainer()
+    {
+      Assert.IsInstanceOfType(typeof(DomContainer), ie); 
+    }
+    
+    [Test]
+    public void DomContainerIsDocument()
+    {
+      Assert.IsInstanceOfType(typeof(Document), ie); 
+    }   
+    
+    [Test]
+    public void DocumentIsISubElement()
+    {
+      Assert.IsInstanceOfType(typeof(ISubElements), ie); 
+    }   
 
     [Test]
     public void Table()
