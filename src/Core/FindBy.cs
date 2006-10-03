@@ -266,21 +266,33 @@ namespace WatiN.Core
     /// <returns><c>true</c> if the searched for value equals the given value</returns>
     public virtual bool Compare(object ihtmlelement)
     {
-      IHTMLElement element = ihtmlelement as IHTMLElement;
-      
-      if (element == null)
-      {
-        throw new ArgumentException("Object should be of type mshtml.IHTMLElement", "ihtmlelement");
-      }
-      
+      IHTMLElement element = GetIHTMLElement(ihtmlelement);
+
+      string attribute = GetAttribute(element, attributeName);
+
+      return Compare(attribute);
+    }
+
+    protected string GetAttribute(IHTMLElement element, string attributeName)
+    {
       object attribute = element.getAttribute(attributeName, 0);
 
       if (attribute == DBNull.Value)
       {
         throw new InvalidAttributException(attributeName, element.tagName);
       }
+      return (string)attribute;
+    }
 
-      return Compare((string)attribute);
+    protected static IHTMLElement GetIHTMLElement(object ihtmlelement)
+    {
+      IHTMLElement element = ihtmlelement as IHTMLElement;
+      
+      if (element == null)
+      {
+        throw new ArgumentException("Object should be of type mshtml.IHTMLElement", "ihtmlelement");
+      }
+      return element;
     }
 
     public override string ToString()
@@ -304,9 +316,13 @@ namespace WatiN.Core
     }
   }
 
-  public class NoFindBy : Attribute
+  /// <summary>
+  /// This class is only used in the ElementsSupport Class to 
+  /// create a collection of all elements.
+  /// </summary>
+  internal class NoAttributeCompare : Attribute
   {
-    public NoFindBy() : base("non", "")
+    public NoAttributeCompare() : base("noAttribute", "")
     {}
     
     public override bool Compare(string value)
@@ -318,7 +334,6 @@ namespace WatiN.Core
     {
       return true;
     }
-
   }
   
   /// <summary>

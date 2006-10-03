@@ -257,7 +257,10 @@ namespace WatiN.UnitTests
       Assert.AreEqual(Value, ie.Button(Find.ByName("buttonelementname")).Value);
 
       Assert.AreEqual(Value, ie.Button(Find.ByText("Button Element")).Value);
-      Assert.AreEqual(Value, ie.Button(Find.ByValue("ButtonElementValue")).Value);
+      // OK, this one is weird. The HTML says value="ButtonElementValue"
+      // but the value attribute seems to return the innertext(!)
+      // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
+      Assert.AreEqual(Value, ie.Button(Find.ByValue("Button Element")).Value);
     }
 
     [Test, ExpectedException(typeof(ElementDisabledException))]

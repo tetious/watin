@@ -305,7 +305,7 @@ namespace WatiN.Core
 
     public static ArrayList FindAllElements(string tagName, string inputType, IHTMLElementCollection elementsCollection)
     {
-      return findElementsByAttribute(tagName, inputType, new NoFindBy(), elementsCollection, false);
+      return findElementsByAttribute(tagName, inputType, new NoAttributeCompare(), elementsCollection, false);
     }
     
     public static ArrayList FindFilteredElements(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
