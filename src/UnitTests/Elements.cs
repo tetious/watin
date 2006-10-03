@@ -398,7 +398,9 @@ namespace WatiN.UnitTests
     [Test]
     public void Element()
     {
-      Element element = ie.Table(Find.ById(tableId));
+      Element element = ie.Element(Find.ById(tableId));
+
+      Assert.IsAssignableFrom(typeof(ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
 
       Assert.IsNotNull(element,  "Element not found");
       Assert.AreEqual(tableId, element.GetAttributeValue("id"), "GetAttributeValue id failed");

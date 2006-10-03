@@ -41,7 +41,7 @@ namespace WatiN.Core
 			
       foreach (IHTMLElement element in elements)
 			{
-        Element v = new Element(domContainer, element);
+        Element v = new ElementsContainer(domContainer, element);
         this.elements.Add(v);
 			}
 		}

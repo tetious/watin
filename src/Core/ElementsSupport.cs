@@ -99,7 +99,7 @@ namespace WatiN.Core
     
     public static Element Element(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Element(ie, FindFirstElement(null, InputNullType, findBy, elements, true));
+      return new ElementsContainer(ie, FindFirstElement(null, InputNullType, findBy, elements, true));
     }
 
     public static ElementCollection Elements(DomContainer ie, IHTMLElementCollection elements)

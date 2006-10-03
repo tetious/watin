@@ -31,7 +31,7 @@ namespace WatiN.Core
 	  public ElementsContainer(DomContainer ie, object element): base(ie, element) 
 		{}
 
-    #region ISubElements
+    #region IElementsContainer
 
     public Button Button(string elementId)
     {

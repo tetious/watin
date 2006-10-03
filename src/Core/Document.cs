@@ -189,7 +189,7 @@ namespace WatiN.Core
     }
     
     /// <summary>
-    /// Determines whether the text inside the HTML Body element contains the given <paramref name="text" />.
+    /// Determines whether the text inside the HTML Body element contains the given <paramref name="regex" />.
     /// </summary>
     /// <param name="regex">The regular expression to match with.</param>
     /// <returns>
@@ -285,7 +285,7 @@ namespace WatiN.Core
       }
     }
 
-    #region ISubElements
+    #region IElementsContainer
 
     /// <summary>
     /// Gets the specified Button by it's id.
