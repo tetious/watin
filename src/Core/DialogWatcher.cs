@@ -35,7 +35,6 @@ namespace WatiN.Core.DialogHandlers
   {
     private int ieProcessId;
     private bool keepRunning = true;
-    private DefaultDialogHandler defaultHandler = new DefaultDialogHandler();
     private ArrayList handlers = new ArrayList();
     private Thread watcherThread;
     private bool closeUnhandledDialogs = true;
@@ -84,70 +83,22 @@ namespace WatiN.Core.DialogHandlers
       dialogWatchers = cleanedupDialogWatchers;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DialogWatcher"/> class.
+    /// You are encouraged to use the Factory method DialogWatcher.GetDialogWatcherForProcess
+    /// instead.
+    /// </summary>
+    /// <param name="ieProcessId">The ie process id.</param>
     internal DialogWatcher(int ieProcessId)
     {
       this.ieProcessId = ieProcessId;
       
-      defaultHandler = new DefaultDialogHandler();
       handlers = new ArrayList();
 
       // Create thread to watch windows
       watcherThread = new Thread(new ThreadStart(Start));
       // Start the thread.
       watcherThread.Start();
-    }
-
-    public int AlertCount()
-    {
-      lock (this)
-      {
-        return DefaultHandler.AlertCount;
-      }
-    }
-
-    public string PopAlert()
-    {
-      lock (this)
-      {
-        return DefaultHandler.PopAlert();
-      }
-    }
-    
-    public string[] Alerts
-    {
-      get
-      {
-        lock (this)
-        {
-          return DefaultHandler.Alerts;
-        }
-      }
-    }
-
-    public DefaultDialogHandler DefaultHandler
-    {
-      get
-      {
-        lock (this)
-        {
-          return defaultHandler;
-        }
-      }
-      set
-      {
-        lock (this)
-        {
-          defaultHandler = value;
-        }
-      }
-    }
-
-    public void FlushAlerts()
-    {
-      lock (this)
-      {
-        DefaultHandler.FlushAlerts();
-      }
     }
 
     public void Add(IDialogHandler handler)
@@ -172,6 +123,11 @@ namespace WatiN.Core.DialogHandlers
       {
         handlers.Clear();
       }
+    }
+    
+    public bool Contains(object handler)
+    {
+      return handlers.Contains(handler);
     }
     
     public int Count
@@ -268,16 +224,7 @@ namespace WatiN.Core.DialogHandlers
 
         if (CloseUnhandledDialogs)
         {
-          // using defaultHandler should be removed and this 
-          // line of code should be all.
-//          window.ForceClose();
-          
-          // If no dialogHandler handled the dialog, the
-          // defaultHandler will close the dialog.
-          if (defaultHandler != null)
-          {
-            DefaultHandler.HandleDialog(window);
-          }
+          window.ForceClose();
         }
       }
 
@@ -361,20 +308,29 @@ namespace WatiN.Core.DialogHandlers
 
     public void ForceClose()
     {
-      NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
+      NativeMethods.SendMessage(Hwnd, NativeMethods.WM_CLOSE, 0, 0);
+    }
+    
+    public bool Exists()
+    {
+      return NativeMethods.IsWindow(Hwnd);
     }
   }
   
-  public class DefaultDialogHandler : IDialogHandler
+  public class AlertAndConfirmDialogHandler : IDialogHandler
   {
     private Queue alertQueue;
 
-    public DefaultDialogHandler()
+    public AlertAndConfirmDialogHandler()
     {
       alertQueue = new Queue();
     }
 
-    public int AlertCount
+    /// <summary>
+    /// Gets the count of the messages in the que of displayed alert and confirm windows.
+    /// </summary>
+    /// <value>The count of the alert and confirm messages in the que.</value>
+    public int Count
     {
       get
       {
@@ -382,7 +338,12 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public string PopAlert()
+    /// <summary>
+    /// Pops the most recent message from a que of displayed alert and confirm windows.
+    /// Use this method to get the displayed message.
+    /// </summary>
+    /// <returns>The displayed message.</returns>
+    public string Pop()
     {
       if (alertQueue.Count == 0)
       {
@@ -392,6 +353,10 @@ namespace WatiN.Core.DialogHandlers
       return (string) alertQueue.Dequeue();
     }
     
+    /// <summary>
+    /// Gets the alert and confirm messages in the que of displayed alert and confirm windows.
+    /// </summary>
+    /// <value>The alert and confirm messages in the que.</value>
     public string[] Alerts
     {
       get
@@ -402,7 +367,10 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public void FlushAlerts()
+    /// <summary>
+    /// Clears all the messages from the que of displayed alert and confirm windows.
+    /// </summary>
+    public void Clear()
     {
       alertQueue.Clear();
     }
@@ -411,11 +379,16 @@ namespace WatiN.Core.DialogHandlers
     {
       IntPtr handle = NativeMethods.GetDlgItem(window.Hwnd, 0xFFFF);
 
-      alertQueue.Enqueue(NativeMethods.GetWindowText(handle));
+      if (handle != IntPtr.Zero)
+      {
+        alertQueue.Enqueue(NativeMethods.GetWindowText(handle));
+        
+        window.ForceClose();
       
-      window.ForceClose();
-      
-      return true;
+        return true;
+      }
+
+      return false;
     }
   }
   
@@ -526,16 +499,22 @@ namespace WatiN.Core.DialogHandlers
     {      
       if (IsCertificateDialog(window))
       {
+        NativeMethods.SetForegroundWindow(window.Hwnd);
         NativeMethods.SetActiveWindow(window.Hwnd);
 
-        NativeMethods.ClickDialogButton((int)buttonToPush, window.Hwnd);
+        ButtonToPush(window).Click();
       
         return true;
       }
       
       return false;
     }
-    
+
+    private WinButton ButtonToPush(Window window)
+    {
+      return new WinButton((int)buttonToPush, window.Hwnd);
+    }
+
     /// <summary>
     /// Determines whether the specified window is a certificate dialog.
     /// </summary>
@@ -582,5 +561,198 @@ namespace WatiN.Core.DialogHandlers
     }
 
     #endregion
+  }
+  
+  public class WinButton
+  {
+    private IntPtr hWnd;
+    
+    public WinButton(IntPtr Hwnd)
+    {
+      hWnd = Hwnd;
+    }
+
+    public WinButton(int buttonid, IntPtr parentHwnd)
+    {
+      hWnd = NativeMethods.GetDlgItem(parentHwnd, buttonid);
+    }
+    
+    public void Click()
+    {
+      if (Exists())
+      {
+        NativeMethods.SendMessage(hWnd, NativeMethods.BM_CLICK, 0, 0);
+      }
+    }
+    
+    public bool Exists()
+    {
+      return NativeMethods.IsWindow(hWnd);
+    }
+    
+    public string Title
+    {
+      get
+      {
+        return NativeMethods.GetWindowText(hWnd);
+      }
+    }
+    
+    public bool Enabled
+    {
+      get
+      {
+        return NativeMethods.IsWindowEnabled(hWnd);
+      }
+    }
+    
+    public bool Visible
+    {
+      get
+      {
+        return NativeMethods.IsWindowVisible(hWnd);
+      }
+    }
+  }
+  
+  public abstract class JavaDialogHandler : IDialogHandler
+  {
+    protected Window window;
+
+    public bool HandleDialog(Window window)
+    {
+      if (CanHandleJavaDialog(window))
+      {
+        this.window = window;
+      
+        while(window.Exists())
+        {
+          Thread.Sleep(200);
+        }
+        return true;
+        
+      }
+      return false;
+    }
+
+    protected abstract bool CanHandleJavaDialog(Window window);
+
+    public bool Exists()
+    {
+      if (window == null) return false;
+      
+      return window.Exists();
+    }
+
+    public void WaitUntilExists()
+    {
+      WaitUntilExists(30);
+    }
+    
+    public void WaitUntilExists(int waitDurationInSeconds)
+    {
+      DateTime startWaitUntilExists = DateTime.Now;
+
+      bool dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
+      
+      while (dialogNotAvailable)
+      {
+        Thread.Sleep(200);
+        dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
+      }
+      
+      if (dialogNotAvailable)
+      {
+        throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
+      }
+    }
+
+    public string Title
+    {
+      get
+      {
+        ThrowExceptionIfDialogDoesNotExist();
+        
+        return window.Title;
+      }
+    }
+
+    public string Message
+    {
+      get
+      {
+        ThrowExceptionIfDialogDoesNotExist();
+        
+        IntPtr messagehWnd = NativeMethods.GetDlgItem(window.Hwnd, 65535);
+        return NativeMethods.GetWindowText(messagehWnd);
+      }
+    }
+
+    public WinButton OKButton
+    {
+      get
+      {
+        ThrowExceptionIfDialogDoesNotExist();
+        
+        return new WinButton(getOKButtonID(), window.Hwnd );
+      }
+    }
+
+    protected abstract int getOKButtonID();
+
+    protected bool ButtonWithId1Exists(IntPtr windowHwnd)
+    {
+      WinButton button = new WinButton(1, windowHwnd);
+      return button.Exists();
+    }
+    
+    protected WinButton createCancelButton(IntPtr windowHwnd)
+    {
+      return new WinButton(2, windowHwnd );
+    }
+
+    protected void ThrowExceptionIfDialogDoesNotExist()
+    {
+      if (!Exists())
+      {
+        throw new WatiNException("Operation not available. Dialog doesn't exist.");
+      }
+    }
+  }
+
+  public class ConfirmDialogHandler : JavaDialogHandler
+  {
+    public WinButton CancelButton
+    {
+      get
+      {
+        ThrowExceptionIfDialogDoesNotExist();
+
+        return new WinButton(2, window.Hwnd);
+      }
+    }
+
+    protected override bool CanHandleJavaDialog(Window window)
+    {
+      return (window.StyleInHex == "94C801C5" && ButtonWithId1Exists(window.Hwnd));
+    }
+
+    protected override int getOKButtonID()
+    {
+      return 1;
+    }
+  }
+  
+  public class AlertDialogHandler : JavaDialogHandler
+  {
+    protected override bool CanHandleJavaDialog(Window window)
+    {      
+      return (window.StyleInHex == "94C801C5" && !ButtonWithId1Exists(window.Hwnd));
+    }
+
+    protected override int getOKButtonID()
+    {
+      return 2;
+    }
   }
 }

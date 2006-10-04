@@ -562,25 +562,6 @@ namespace WatiN.Core
       }
     }
 
-    /// <summary>
-    /// Pops the most recent alert message from a que of shown alerts.C:\TAdev\WatiNSF\trunk\src\UnitTests\FindElementBy.cs
-    /// Use this method to get access to the displayed message in an alert window.
-    /// </summary>
-    /// <returns>The message displayed in the alert window</returns>
-    /// <example>For a working example see the unitttest Alert in WatiN.UnitTests.IEAndMainDocument</example>
-    public string PopAlert()
-    {
-      return DialogWatcher.PopAlert();
-    }
-
-    /// <summary>
-    /// Flushes the alert messages in the que of displayed alert windows.
-    /// </summary>
-    public void FlushAlerts()
-    {
-      DialogWatcher.FlushAlerts();
-    }
-
     /// <exclude />
     public override void FireEvent(DispHTMLBaseElement element, string eventName)
     {
@@ -987,7 +968,7 @@ namespace WatiN.Core
     
     private static bool NotTimedOut(DateTime startTime, int durationInSeconds)
     {
-      return !IsTimedOut(startTime, durationInSeconds);
+      return !UtilityClass.IsTimedOut(startTime, durationInSeconds);
     }
   }
 }

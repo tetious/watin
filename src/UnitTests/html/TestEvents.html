@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<!-- saved from url=(0029)http://watin.sourceforge.net/ --> 
+<!-- saved from url=(0029)http://watin.sourceforge.net/ -->
 <html>
     <head>
         <title></title>
@@ -7,19 +7,38 @@
         <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
         <meta name="ProgId" content="VisualStudio.HTML">
         <meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
-        <script id="clientEventHandlersJS" language="javascript">
-<!--
+        <script language="javascript">
 
 function Button1_onkeydown(element) {
     report = document.getElementById("Report")
     report.value = "button.id = " + element.id
-return true
+    return true
 }
 
-//-->
+function ShowConfirmDialog() {
+     var answer = confirm('Do you want to do xyz?');
+     report = document.getElementById("ReportConfirmResult")
+     if (answer == true)
+         report.value = "OK"
+     else
+         report.value = "Cancel";
+}
+
+function ShowAlertDialog() {
+     alert('This is an alert!');
+}
+
         </script>
     </head>
     <body>
-        <INPUT type="button" value="Button" onkeydown="return Button1_onkeydown(this)"><INPUT id="Report" type="text" name="Report" style="WIDTH: 464px; HEIGHT: 22px" size="72">
+        <P>
+            <INPUT type="button" value="Button without id" onkeydown="return Button1_onkeydown(this)"><INPUT id="Report" type="text" name="Report" style="WIDTH: 456px; HEIGHT: 22px" size="70">
+        </P>
+        <P>
+            <INPUT id="confirmdialogid" onclick="javascript:ShowConfirmDialog()" type="button" value="Show confirm dialog"><INPUT id="ReportConfirmResult" type="text" style="WIDTH: 432px; HEIGHT: 22px" size="66">
+        </P>
+        <P>
+            <INPUT id="alertdialogid" onclick="javascript:ShowAlertDialog()" type="button" value="Show alert dialog">
+        </P>
     </body>
 </html>

@@ -113,5 +113,16 @@ namespace WatiN.Core
       
 	    return className.Equals(expectedClassName);
 	  }
+
+    /// <summary>
+    /// This method evaluates the time between the <paramref name="startTime" />
+    /// and the current time. If the timespan is more than <paramref name="durationInSeconds" /> seconds,
+    /// the return value will be true.
+    /// </summary>
+    /// <returns><c>true</c> if the timespan is more than <paramref name="durationInSeconds" /> seconds</returns>
+    public static bool IsTimedOut(DateTime startTime, int durationInSeconds)
+	  {
+	    return DateTime.Now.Subtract(startTime).TotalSeconds > durationInSeconds;
+	  }
 	}
 }

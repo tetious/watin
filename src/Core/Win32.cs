@@ -215,6 +215,15 @@ namespace WatiN.Core
     [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
     internal static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
+    [DllImport("user32.dll")]
+    internal static extern bool IsWindow(IntPtr hWnd);
+    
+    [DllImport("user32.dll")]
+    internal static extern bool IsWindowEnabled(IntPtr hWnd);
+    
+    [DllImport("user32.dll")]
+    internal static extern bool IsWindowVisible(IntPtr hWnd);
+    
     [DllImport("user32.dll", CharSet=CharSet.Auto)]
     internal static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 

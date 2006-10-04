@@ -18,8 +18,11 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.IO;
+
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -152,14 +155,25 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void Alert()
+    public void AlertAndConfirmDialogHandler()
     {
       using (IE ie = new IE(MainURI))
       {
+        // Create handler for Alert dialogs and register it.
+        AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
+        ie.AddDialogHandler(dialogHandler);
+        
+        Assert.AreEqual(0, dialogHandler.Count);
+        
         ie.Button("helloid").Click();
 
+        Assert.AreEqual(1, dialogHandler.Count);
+        Assert.AreEqual("hello", dialogHandler.Alerts[0]);
+        
         // getting alert text
-        Assert.AreEqual("hello", ie.PopAlert());
+        Assert.AreEqual("hello", dialogHandler.Pop());
+
+        Assert.AreEqual(0, dialogHandler.Count);
       }
     }
     
@@ -168,7 +182,10 @@ namespace WatiN.UnitTests
     {
       using (IE ie = new IE(MainURI))
       {
-        ie.PopAlert();
+        AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
+        ie.DialogWatcher.Add(dialogHandler);
+
+        dialogHandler.Pop();
       }
     }
 
@@ -237,7 +254,96 @@ namespace WatiN.UnitTests
 //      
 //      ie.Close();
 //    }
+
+//    [Test]
+//    public void DialogTestSpike3()
+//    {
+//      IE ie = new IE("http://www.ergens.nl");
+//      
+//      ie.ExpectConfirmDialog;
+//      
+//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
+//      
+//      ConfirmDialog confirmDialog = ie.ConfirmDialog;
+//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
+//      Assert.AreEqual("This is a message.", confirmDialog.Message);
+//      
+//      confirmDialog.OKButton.Click();
+//      
+//      ie.Close();
+//    }
+
+    [Test]
+    public void AlertDialogHandler()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+      
+        ie.AddDialogHandler(alertDialogHandler);
+      
+        ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+      
+        alertDialogHandler.WaitUntilExists();
+        
+        Assert.AreEqual("This is an alert!", alertDialogHandler.Message);
+      
+        alertDialogHandler.OKButton.Click();
+      
+        Thread.Sleep(1000);
+        
+        Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
+
+        ie.RemoveDialogHandler(alertDialogHandler);
+      }      
+    }
     
+    [Test]
+    public void ConfirmDialogHandlerOK()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
+      
+        ie.AddDialogHandler(confirmDialogHandler);
+      
+        ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+      
+        confirmDialogHandler.WaitUntilExists();
+        
+        Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
+      
+        confirmDialogHandler.OKButton.Click();
+      
+        Assert.AreEqual("OK", ie.TextField("ReportConfirmResult").Text, "OK button expected.");
+
+        ie.RemoveDialogHandler(confirmDialogHandler);
+      }      
+    }
+    
+    [Test]
+    public void ConfirmDialogHandlerCancel()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
+      
+        ie.AddDialogHandler(confirmDialogHandler);
+      
+        ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+      
+        confirmDialogHandler.WaitUntilExists();
+        
+        Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
+      
+        confirmDialogHandler.CancelButton.Click();
+      
+        Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
+
+        ie.RemoveDialogHandler(confirmDialogHandler);
+      }      
+    }
+
     [Test]
     public void DocumentUrlandUri()
     {
@@ -625,6 +731,147 @@ namespace WatiN.UnitTests
         return false;
       }
       return true;
+    }
+  }
+
+  [TestFixture]
+  public class WatiNOnGoogle : WatiNTest
+  {
+    [Test]
+    public void SearchTheWebForWatiN()
+    {
+      ArrayList foundResults = new ArrayList();
+      
+      foundResults.AddRange(SearchWatiNOnGoogle());
+      foundResults.AddRange(SearchWatiNOnLive());
+
+      TextWriter htmlresult = File.CreateText(@"c:\tmp\WatiN.html");
+
+      foreach (string result in foundResults)
+      {
+        htmlresult.WriteLine(result);
+      }
+
+      htmlresult.Flush();
+      htmlresult.Close();
+    }
+
+    private static ArrayList SearchWatiNOnGoogle()
+    {
+      ArrayList foundResults = new ArrayList();
+      
+      using (IE ie = new IE(googleUrl))
+      {
+        ie.TextField(Find.ByName("q")).TypeText("WatiN");
+        ie.Button(Find.ByName("btnG")).Click();
+
+        
+        bool doContinue = true;
+        
+        while (doContinue)
+        {
+          ParaCollection searchResults = ie.Divs[0].Paras;
+
+          Regex watin = new Regex("WatiN");
+          foreach (Para searchResult in searchResults)
+          {
+          
+            if (watin.IsMatch(searchResult.OuterText))
+            {
+              foundResults.Add(searchResult.OuterHtml);
+            }
+          }
+
+          Link link = GetNextLinkOnGoogle(ie);
+
+          if (link != null)
+          {
+            link.Click();
+          }
+          else
+          {
+            doContinue = false;
+          }
+        }
+      }
+      return foundResults;
+    }
+    
+    private static ArrayList SearchWatiNOnLive()
+    {
+      ArrayList foundResults = new ArrayList();
+      
+      using (IE ie = new IE("http://www.live.com"))
+      {
+        ie.TextField("q").TypeText("WatiN");
+        ie.Button("go").Click();
+
+        
+        bool doContinue = true;
+        
+        while (doContinue)
+        {
+          ElementCollection searchResults = ie.Div("results").Elements;
+
+          Regex watin = new Regex("WatiN");
+          foreach (Element searchResult in searchResults)
+          {
+            if (searchResult.TagName.ToLower().Equals("li") 
+                && watin.IsMatch(searchResult.OuterText))
+            {
+              foundResults.Add(searchResult.OuterHtml);
+            }
+          }
+
+          Link link = GetNextLinkOnLive(ie);
+          string currentPage = GetLiveCurrentPage(ie);
+          
+          if (link != null)
+          {
+            link.Click();
+            doContinue = !(currentPage.Equals(GetLiveCurrentPage(ie)));
+          }
+          else
+          {
+            doContinue = false;
+          }
+        }
+      }
+      return foundResults;
+    }
+
+    private static string GetLiveCurrentPage(IE ie)
+    {
+      return ie.Div("pagination_bottom").Element(Find.ByCustom("classname", "selected")).Text;
+    }
+
+    private static Link GetNextLinkOnGoogle(IE ie)
+    {
+      try
+      {
+        return ie.Div("navbar").Link(Find.ByText(new Regex("Next")));
+      }
+      catch
+      {
+        return null;
+      }
+    }
+    
+    private static Link GetNextLinkOnLive(IE ie)
+    {
+      try
+      {
+        Attribute findByClassName = Find.ByCustom("classname", "nextPage");
+
+        Div navbar = ie.Div("pagination_bottom");
+        ElementsContainer next = (ElementsContainer)navbar.Element(findByClassName);
+        
+        return next.Links[0];
+      }
+      catch
+      {
+        return null;
+      }
     }
   }
 }

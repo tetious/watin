@@ -202,12 +202,7 @@ namespace WatiN.Core
     /// return value will be true</returns>
     protected internal bool IsTimedOut()
     {
-      return IsTimedOut(startWaitForComplete, 30);
-    }
-
-    protected static internal bool IsTimedOut(DateTime startTime, int durationInSeconds)
-    {
-      return DateTime.Now.Subtract(startTime).TotalSeconds > durationInSeconds;
+      return UtilityClass.IsTimedOut(startWaitForComplete, 30);
     }
 
     private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
