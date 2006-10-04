@@ -18,10 +18,8 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.IO;
 
 using NUnit.Framework;
 
@@ -202,58 +200,6 @@ namespace WatiN.UnitTests
 
     }
     
-//    [Test]
-//    public void DialogTestSpike1()
-//    {
-//      IE ie = new IE("http://www.ergens.nl");
-//      
-//      ConfirmDialog confirmDialog = new ConfirmDialog();
-//      ie.DialogWatcher.Add(confirmDialog);
-//      
-//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
-//      
-//      confirmDialog.WaitUntilExists();
-//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
-//      
-//      confirmDialog.Button("OK").Click();
-//      ie.DialogWatcher.Remove(confirmDialog);
-//      
-//      ie.Close();
-//    }
-//    
-//    [Test]
-//    public void DialogTestSpike2()
-//    {
-//      IE ie = new IE("http://www.ergens.nl");
-//
-//      ie.DialogWatcher.Add(new AlertDialog("OK"));
-//      
-//      ie.Button(Find.ByText("Show confirm dialog")).Click();
-//            
-//      ie.DialogWatcher.Remove(new Dialog());
-//
-//      ie.PopAlert();
-//      ie.Close();
-//    }
-//    
-//    [Test]
-//    public void DialogTestSpike3()
-//    {
-//      IE ie = new IE("http://www.ergens.nl");
-//      
-//      ie.DialogWatcher.CloseUnhandledDialogs = false;
-//      
-//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
-//      
-//      Dialog confirmDialog = ie.Dialog;
-//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
-//      
-//      confirmDialog.Button("OK").Click();
-//      
-//      ie.DialogWatcher.CloseUnhandledDialogs = true;
-//      
-//      ie.Close();
-//    }
 
 //    [Test]
 //    public void DialogTestSpike3()
@@ -699,7 +645,7 @@ namespace WatiN.UnitTests
         TextField report = ie.TextField("Report");
         Assert.IsNull(report.Text, "Report not empty");
         
-        Button button = ie.Button(Find.ByValue("Button"));
+        Button button = ie.Button(Find.ByValue("Button without id"));
         Assert.IsNull(button.Id, "Button id not null before click event");
         
         button.KeyDown();
@@ -734,144 +680,4 @@ namespace WatiN.UnitTests
     }
   }
 
-  [TestFixture]
-  public class WatiNOnGoogle : WatiNTest
-  {
-    [Test]
-    public void SearchTheWebForWatiN()
-    {
-      ArrayList foundResults = new ArrayList();
-      
-      foundResults.AddRange(SearchWatiNOnGoogle());
-      foundResults.AddRange(SearchWatiNOnLive());
-
-      TextWriter htmlresult = File.CreateText(@"c:\tmp\WatiN.html");
-
-      foreach (string result in foundResults)
-      {
-        htmlresult.WriteLine(result);
-      }
-
-      htmlresult.Flush();
-      htmlresult.Close();
-    }
-
-    private static ArrayList SearchWatiNOnGoogle()
-    {
-      ArrayList foundResults = new ArrayList();
-      
-      using (IE ie = new IE(googleUrl))
-      {
-        ie.TextField(Find.ByName("q")).TypeText("WatiN");
-        ie.Button(Find.ByName("btnG")).Click();
-
-        
-        bool doContinue = true;
-        
-        while (doContinue)
-        {
-          ParaCollection searchResults = ie.Divs[0].Paras;
-
-          Regex watin = new Regex("WatiN");
-          foreach (Para searchResult in searchResults)
-          {
-          
-            if (watin.IsMatch(searchResult.OuterText))
-            {
-              foundResults.Add(searchResult.OuterHtml);
-            }
-          }
-
-          Link link = GetNextLinkOnGoogle(ie);
-
-          if (link != null)
-          {
-            link.Click();
-          }
-          else
-          {
-            doContinue = false;
-          }
-        }
-      }
-      return foundResults;
-    }
-    
-    private static ArrayList SearchWatiNOnLive()
-    {
-      ArrayList foundResults = new ArrayList();
-      
-      using (IE ie = new IE("http://www.live.com"))
-      {
-        ie.TextField("q").TypeText("WatiN");
-        ie.Button("go").Click();
-
-        
-        bool doContinue = true;
-        
-        while (doContinue)
-        {
-          ElementCollection searchResults = ie.Div("results").Elements;
-
-          Regex watin = new Regex("WatiN");
-          foreach (Element searchResult in searchResults)
-          {
-            if (searchResult.TagName.ToLower().Equals("li") 
-                && watin.IsMatch(searchResult.OuterText))
-            {
-              foundResults.Add(searchResult.OuterHtml);
-            }
-          }
-
-          Link link = GetNextLinkOnLive(ie);
-          string currentPage = GetLiveCurrentPage(ie);
-          
-          if (link != null)
-          {
-            link.Click();
-            doContinue = !(currentPage.Equals(GetLiveCurrentPage(ie)));
-          }
-          else
-          {
-            doContinue = false;
-          }
-        }
-      }
-      return foundResults;
-    }
-
-    private static string GetLiveCurrentPage(IE ie)
-    {
-      return ie.Div("pagination_bottom").Element(Find.ByCustom("classname", "selected")).Text;
-    }
-
-    private static Link GetNextLinkOnGoogle(IE ie)
-    {
-      try
-      {
-        return ie.Div("navbar").Link(Find.ByText(new Regex("Next")));
-      }
-      catch
-      {
-        return null;
-      }
-    }
-    
-    private static Link GetNextLinkOnLive(IE ie)
-    {
-      try
-      {
-        Attribute findByClassName = Find.ByCustom("classname", "nextPage");
-
-        Div navbar = ie.Div("pagination_bottom");
-        ElementsContainer next = (ElementsContainer)navbar.Element(findByClassName);
-        
-        return next.Links[0];
-      }
-      catch
-      {
-        return null;
-      }
-    }
-  }
 }
