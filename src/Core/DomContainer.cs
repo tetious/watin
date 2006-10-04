@@ -98,6 +98,16 @@ namespace WatiN.Core
       }
     }
 
+    public void AddDialogHandler(IDialogHandler handler)
+    {
+      DialogWatcher.Add(handler);
+    }
+
+    public void RemoveDialogHandler(IDialogHandler handler)
+    {
+      DialogWatcher.Remove(handler);
+    }
+    
     /// <summary>
     /// Fires the given event on the given element.
     /// </summary>
