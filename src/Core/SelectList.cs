@@ -178,9 +178,9 @@ namespace WatiN.Core
       }
     }
 
-    private HTMLSelectElementClass selectElement
+    private IHTMLSelectElement selectElement
     {
-      get { return ((HTMLSelectElementClass) DomElement); }
+      get { return ((IHTMLSelectElement) DomElement); }
     }
 
     [Obsolete("The AllContents property is no longer supported, use Items property instead.")]
