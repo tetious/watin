@@ -86,7 +86,7 @@ namespace WatiN.UnitTests
       
 
       row = table.FindRow("b2",1);
-      Assert.IsNotNull(row, "Row with b1 expected");
+      Assert.IsNotNull(row, "Row with b2 expected");
       Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
 
       row = table.FindRow("c1",0);

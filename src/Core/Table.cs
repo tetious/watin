@@ -36,9 +36,19 @@ namespace WatiN.Core
     {
       get 
       {
-        IHTMLElement firstTBody = (IHTMLElement)((HTMLTable)DomElement).tBodies.item(0,null);
-        return ElementsSupport.TableRows(DomContainer, (IHTMLElementCollection)(firstTBody.all)); 
+        IHTMLElementCollection bodyElements = GetBodyElements();
+        return ElementsSupport.TableRows(DomContainer, bodyElements); 
       }
+    }
+
+    private IHTMLElementCollection GetBodyElements()
+    {
+      return (IHTMLElementCollection)(GetFirstTBody().all);
+    }
+
+    private IHTMLElement GetFirstTBody()
+    {
+      return (IHTMLElement)((IHTMLTable)DomElement).tBodies.item(0,null);
     }
 
     /// <summary>
@@ -51,7 +61,14 @@ namespace WatiN.Core
     {
       Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      return findRow(new StringEqualsAndCaseInsensitiveComparer(findText), inColumn);
+      string innertext = GetFirstTBody().innerText.ToLower();
+      
+      if (innertext != null && innertext.IndexOf(findText.ToLower()) >= 0)
+      {
+        return findRow(new TableRowFinder(findText, inColumn));
+      }
+      
+      return null;
     }
 
     /// <summary>
@@ -64,7 +81,14 @@ namespace WatiN.Core
     {
       Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      return findRow(new RegexComparer(findTextRegex), inColumn);
+      string innertext = GetFirstTBody().innerText;
+      
+      if (innertext != null && findTextRegex.IsMatch(innertext))
+      {
+        return findRow(new TableRowFinder(findTextRegex, inColumn));
+      }
+      
+      return null;
     }
 
     public override string ToString()
@@ -72,18 +96,54 @@ namespace WatiN.Core
       return Id;
     }
     
-    private TableRow findRow(ICompare comparer, int inColumn)
+    private TableRow findRow(TableRowFinder findBy)
     {
-      foreach (TableRow tableRow in TableRows)
+      IHTMLElementCollection bodyElements = GetBodyElements();
+      IHTMLElement element = ElementsSupport.FindFirstElement(ElementsSupport.TableRowTagName, ElementsSupport.InputNullType, findBy, bodyElements, false);
+      
+      if (element != null)
       {
-        TableCellCollection tableCells = tableRow.TableCells;
-
-        if (comparer.Compare(tableCells[inColumn].Text))
-        {
-          return tableRow;
-        }
+        return new TableRow(DomContainer,(HTMLTableRow)element);
       }
+
       return null;
+    }
+    
+    private class TextEqualsAndCaseInsensitive : Text
+    {
+      public TextEqualsAndCaseInsensitive(string text) : base(text)
+      {
+        comparer = new StringEqualsAndCaseInsensitiveComparer(text);
+      }
+    }
+    
+    private class TableRowFinder : Attribute
+    {
+      private int columnIndex;
+      private Text findByText;
+      
+      public TableRowFinder(string findText, int inColumn): base("noattribute","")
+      {
+        columnIndex = inColumn;
+        findByText = new TextEqualsAndCaseInsensitive(findText);
+      }
+      
+      public TableRowFinder(Regex findTextRegex, int inColumn): base("noattribute","")
+      {
+        columnIndex = inColumn;
+        findByText = new Text(findTextRegex);
+      }
+      
+      public override bool Compare(object ihtmlelement)
+      {
+        IHTMLElement element = GetIHTMLElement(ihtmlelement);
+
+        // Get all elements and filter this for TableCells
+        IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
+        IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
+        
+        return findByText.Compare(tableCellElements.item(columnIndex, null));
+      }
     }
   }
 }
