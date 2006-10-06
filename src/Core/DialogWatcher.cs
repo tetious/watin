@@ -127,7 +127,10 @@ namespace WatiN.Core.DialogHandlers
     
     public bool Contains(object handler)
     {
-      return handlers.Contains(handler);
+      lock (this)
+      {
+        return handlers.Contains(handler);
+      }
     }
     
     public int Count
@@ -166,21 +169,19 @@ namespace WatiN.Core.DialogHandlers
     {
       while (keepRunning)
       {
-        lock (this)
-        {
-          Process process = getProcess();
+        Process process = getProcess();
 
-          if (process != null)
+        if (process != null)
+        {
+          foreach (ProcessThread t in process.Threads)
           {
-            foreach (ProcessThread t in process.Threads)
-            {
-              int threadId = t.Id;
-	
-              NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
-              NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
-            }
+            int threadId = t.Id;
+
+            NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
+            NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
           }
         }
+
         Thread.Sleep(1000);
       }
     }
@@ -214,17 +215,21 @@ namespace WatiN.Core.DialogHandlers
       
       if (window.IsDialog())
       {
-        foreach (IDialogHandler dialogHandler in handlers)
+        lock (this)
         {
-          if (dialogHandler.HandleDialog(window))
+          foreach (IDialogHandler dialogHandler in handlers)
           {
-            return true;
+            if (dialogHandler.HandleDialog(window))
+            {
+              return true;
+            }
           }
-        }
 
-        if (CloseUnhandledDialogs)
-        {
-          window.ForceClose();
+          if (CloseUnhandledDialogs)
+          {
+            Debug.WriteLine("Auto closing: " + window.Title);
+            window.ForceClose();
+          }
         }
       }
 
