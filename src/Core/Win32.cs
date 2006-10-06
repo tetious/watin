@@ -373,10 +373,13 @@ namespace WatiN.Core
             {
               break;
             }
+
+            // free brow
+            Marshal.ReleaseComObject(brow);
           }
 
           // pUnk free
-          Marshal.ReleaseComObject(brow);
+          Marshal.ReleaseComObject(pUnk);
 
           // get the next embedded object
           // pUnk alloc
