@@ -186,7 +186,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer with the Url pointing at a blank page. 
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// instance is destroyed the openend Internet Explorer will also be closed.
     /// </note>
     /// </summary>
     /// <remarks>
@@ -220,7 +220,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// instance is destroyed the opened Internet Explorer will also be closed.
     /// </note>
     /// </summary>
     /// <param name="url">The URL te open</param>
@@ -253,7 +253,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the openend Internet Explore will also be closed.
+    /// instance is destroyed the opened Internet Explorer will also be closed.
     /// </note>
     /// </summary>
     /// <param name="uri">The Uri te open</param>
