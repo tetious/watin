@@ -65,7 +65,7 @@ namespace WatiN.Core
       
       if (innertext != null && innertext.IndexOf(findText.ToLower()) >= 0)
       {
-        return findRow(new TableRowFinder(findText, inColumn));
+        return FindRow(new TableRowFinder(findText, inColumn));
       }
       
       return null;
@@ -83,9 +83,9 @@ namespace WatiN.Core
 
       string innertext = GetFirstTBody().innerText;
       
-      if (innertext != null && findTextRegex.IsMatch(innertext))
+      if (innertext != null)
       {
-        return findRow(new TableRowFinder(findTextRegex, inColumn));
+        return FindRow(new TableRowFinder(findTextRegex, inColumn));
       }
       
       return null;
@@ -96,7 +96,7 @@ namespace WatiN.Core
       return Id;
     }
     
-    private TableRow findRow(TableRowFinder findBy)
+    public TableRow FindRow(TableRowFinder findBy)
     {
       IHTMLElementCollection bodyElements = GetBodyElements();
       IHTMLElement element = ElementsSupport.FindFirstElement(ElementsSupport.TableRowTagName, ElementsSupport.InputNullType, findBy, bodyElements, false);
@@ -111,38 +111,98 @@ namespace WatiN.Core
     
     private class TextEqualsAndCaseInsensitive : Text
     {
-      public TextEqualsAndCaseInsensitive(string text) : base(text)
+      public   TextEqualsAndCaseInsensitive(string text) : base(text)
       {
         comparer = new StringEqualsAndCaseInsensitiveComparer(text);
       }
     }
     
-    private class TableRowFinder : Attribute
+    private class TextContainsAndCaseInsensitive : Text
+    {
+      public   TextContainsAndCaseInsensitive(string text) : base(text)
+      {
+        comparer = new StringContainsAndCaseInsensitiveComparer(text);
+      }
+    }
+
+    private class TextAlwaysTrue : Text
+    {
+      public   TextAlwaysTrue() : base("")
+      {
+        comparer = new AlwaysTrueComparer();
+      }
+
+      private class AlwaysTrueComparer : ICompare
+      {
+        public bool Compare(string value)
+        {
+          return true;
+        }
+      }
+    }
+    
+    /// <summary>
+    /// Use this class to find a row which contains a particular value
+    /// in a table cell contained in a table column.
+    /// </summary>
+    public class TableRowFinder : Attribute
     {
       private int columnIndex;
       private Text findByText;
+      private Text containsText;
       
+      /// <summary>
+      /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
+      /// </summary>
+      /// <param name="findText">The text to find (exact match but case insensitive).</param>
+      /// <param name="inColumn">The column index in which to look for the value.</param>
       public TableRowFinder(string findText, int inColumn): base("noattribute","")
       {
         columnIndex = inColumn;
         findByText = new TextEqualsAndCaseInsensitive(findText);
+        containsText = new TextContainsAndCaseInsensitive(findText);
       }
       
+      /// <summary>
+      /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
+      /// </summary>
+      /// <param name="findTextRegex">The regular expression to match with.</param>
+      /// <param name="inColumn">The column index in which to look for the value.</param>
       public TableRowFinder(Regex findTextRegex, int inColumn): base("noattribute","")
       {
         columnIndex = inColumn;
         findByText = new Text(findTextRegex);
+        containsText = new TextAlwaysTrue();
       }
       
+      /// <summary>
+      /// Compares the given <paramref name = "value" /> with the regex or
+      /// text this class was constructed with. This should be a table cell elements
+      /// innertext.
+      /// </summary>
+      /// <param name="value">Value to compare with</param>
+      /// <returns>
+      /// 	<c>true</c> if the searched for value equals the given value
+      /// </returns>
+      public override bool Compare(string value)
+      {
+        return findByText.Compare(value);
+      }
+ 
       public override bool Compare(object ihtmlelement)
       {
         IHTMLElement element = GetIHTMLElement(ihtmlelement);
 
-        // Get all elements and filter this for TableCells
-        IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
-        IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
+        if (containsText.Compare(element.innerText))
+        {
+          // Get all elements and filter this for TableCells
+          IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
+          IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
         
-        return findByText.Compare(tableCellElements.item(columnIndex, null));
+          return Compare(tableCellElements.item(columnIndex, null));
+        }
+        
+        return false;
       }
     }
   }
