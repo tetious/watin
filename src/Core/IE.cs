@@ -378,12 +378,17 @@ namespace WatiN.Core
 
       if (logonDialogHandler != null)
       {
+        // remove other logon dialog handlers since only one handler
+        // can effectively handle the logon dialog.
+        DialogWatcher.RemoveAll(new LogonDialogHandler("", ""));
+
+        // Add the (new) logonHandler
         DialogWatcher.Add(logonDialogHandler);
       }
       
       GoTo(uri);
     }
-    
+
     private void createNewIE()
     {
       CheckThreadApartmentStateIsSTA();

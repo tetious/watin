@@ -117,6 +117,14 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
+    public void RemoveAll(IDialogHandler handler)
+    {
+      while (Contains(handler))
+      {
+        Remove(handler);
+      }
+    }
+
     public void Clear()
     {
       lock (this)
