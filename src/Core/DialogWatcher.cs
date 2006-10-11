@@ -156,11 +156,17 @@ namespace WatiN.Core.DialogHandlers
     {
       get
       {
-        return closeUnhandledDialogs;
+        lock (this)
+        {
+          return closeUnhandledDialogs;
+        }
       }
       set
       {
-        closeUnhandledDialogs = value;
+        lock (this)
+        {
+          closeUnhandledDialogs = value;
+        }
       }
     }
 
@@ -177,7 +183,7 @@ namespace WatiN.Core.DialogHandlers
     {
       while (keepRunning)
       {
-        Process process = getProcess();
+        Process process = getProcess(ProcessId);
 
         if (process != null)
         {
@@ -198,16 +204,16 @@ namespace WatiN.Core.DialogHandlers
     {
       get
       {
-        return (getProcess() != null);
+        return (getProcess(ProcessId) != null);
       }
     }
 
-    private Process getProcess()
+    private Process getProcess(int processId)
     {
       Process process;
       try
       {
-        process = Process.GetProcessById(ProcessId);
+        process = Process.GetProcessById(processId);
       }
       catch(ArgumentException)
       {
@@ -219,30 +225,48 @@ namespace WatiN.Core.DialogHandlers
 
     private bool myEnumThreadWindowsProc(IntPtr hwnd, IntPtr lParam)
     {
-      Window window = new Window(hwnd);
+      // Create a window wrapper class
+      HandleWindow(new Window(hwnd));
       
+      // Always return true so all windows in all threads will
+      // be enumerated.
+      return true;
+    }
+
+    private void HandleWindow(Window window)
+    {
       if (window.IsDialog())
       {
+        // Wait untill window is visible so all properties
+        // of the window class (like Style and StyleInHex)
+        // will return valid values.
+        while (window.Visible == false)
+        {
+          Thread.Sleep(50);
+        }
+        
+        // Lock the thread and see if a handler will handle
+        // this dialog window
         lock (this)
         {
           foreach (IDialogHandler dialogHandler in handlers)
           {
             if (dialogHandler.HandleDialog(window))
             {
-              return true;
+              return;
             }
           }
 
+          // If no handler handled the dialog, see if it
+          // should be close automatically.
           if (CloseUnhandledDialogs)
           {
-            Debug.WriteLine("Auto closing: " + window.Title);
             window.ForceClose();
           }
         }
       }
-
-      return true;
     }
+
     #region IDisposable Members
 
     /// <summary>
@@ -327,6 +351,14 @@ namespace WatiN.Core.DialogHandlers
     public bool Exists()
     {
       return NativeMethods.IsWindow(Hwnd);
+    }
+    
+    public bool Visible
+    {
+      get
+      {
+        return NativeMethods.IsWindowVisible(Hwnd);
+      }
     }
   }
   
@@ -554,6 +586,8 @@ namespace WatiN.Core.DialogHandlers
 
     public bool HandleDialog(Window window)
     {
+      Debug.WriteLine(Environment.TickCount + " Enter handler: " + window.Title);
+      
       if (IsFileUploadDialog(window))
       {
         NativeMethods.SetForegroundWindow(window.Hwnd);
@@ -566,14 +600,15 @@ namespace WatiN.Core.DialogHandlers
       return false;
     }
 
+    #endregion
+
     public bool IsFileUploadDialog(Window window)
     {
       // "96CC20C4" is valid for Windows XP, Win 2000 and Win 2003
       // and probably Vista
-      return window.StyleInHex == "96CC20C4";
+      bool returnValue = (window.StyleInHex == "96CC20C4");
+      return returnValue;
     }
-
-    #endregion
   }
   
   public class WinButton
@@ -628,56 +663,16 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public abstract class JavaDialogHandler : IDialogHandler
+  public abstract class JavaDialog
   {
-    protected Window window;
-
-    public bool HandleDialog(Window window)
-    {
-      if (CanHandleJavaDialog(window))
-      {
-        this.window = window;
-      
-        while(window.Exists())
-        {
-          Thread.Sleep(200);
-        }
-        return true;
-        
-      }
-      return false;
-    }
-
-    protected abstract bool CanHandleJavaDialog(Window window);
+    internal Window window;
+    internal abstract bool CanHandleDialog(Window window);
 
     public bool Exists()
     {
       if (window == null) return false;
       
       return window.Exists();
-    }
-
-    public void WaitUntilExists()
-    {
-      WaitUntilExists(30);
-    }
-    
-    public void WaitUntilExists(int waitDurationInSeconds)
-    {
-      DateTime startWaitUntilExists = DateTime.Now;
-
-      bool dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
-      
-      while (dialogNotAvailable)
-      {
-        Thread.Sleep(200);
-        dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
-      }
-      
-      if (dialogNotAvailable)
-      {
-        throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
-      }
     }
 
     public string Title
@@ -718,7 +713,7 @@ namespace WatiN.Core.DialogHandlers
       WinButton button = new WinButton(1, windowHwnd);
       return button.Exists();
     }
-    
+
     protected WinButton createCancelButton(IntPtr windowHwnd)
     {
       return new WinButton(2, windowHwnd );
@@ -729,6 +724,48 @@ namespace WatiN.Core.DialogHandlers
       if (!Exists())
       {
         throw new WatiNException("Operation not available. Dialog doesn't exist.");
+      }
+    }
+  }
+
+  public abstract class JavaDialogHandler : JavaDialog, IDialogHandler
+  {
+    public bool HandleDialog(Window window)
+    {
+      if (CanHandleDialog(window))
+      {
+        this.window = window;
+      
+        while(window.Exists())
+        {
+          Thread.Sleep(200);
+        }
+        return true;
+        
+      }
+      return false;
+    }
+
+    public void WaitUntilExists()
+    {
+      WaitUntilExists(30);
+    }
+    
+    public void WaitUntilExists(int waitDurationInSeconds)
+    {
+      DateTime startWaitUntilExists = DateTime.Now;
+
+      bool dialogNotAvailable = !Exists();
+      
+      while (dialogNotAvailable)
+      {
+        Thread.Sleep(200);
+        dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
+      }
+      
+      if (dialogNotAvailable)
+      {
+        throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
       }
     }
   }
@@ -745,7 +782,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    protected override bool CanHandleJavaDialog(Window window)
+    internal override bool CanHandleDialog(Window window)
     {
       return (window.StyleInHex == "94C801C5" && ButtonWithId1Exists(window.Hwnd));
     }
@@ -758,7 +795,7 @@ namespace WatiN.Core.DialogHandlers
   
   public class AlertDialogHandler : JavaDialogHandler
   {
-    protected override bool CanHandleJavaDialog(Window window)
+    internal override bool CanHandleDialog(Window window)
     {      
       return (window.StyleInHex == "94C801C5" && !ButtonWithId1Exists(window.Hwnd));
     }
@@ -767,5 +804,65 @@ namespace WatiN.Core.DialogHandlers
     {
       return 2;
     }
+  }
+  
+  public class SimpleJavaDialogHandler : IDialogHandler
+  {
+    JavaDialog dialogHandler;
+    bool clickCancelButton = false;
+    private bool hasHandledDialog = false;
+    private string message;
+    
+    public SimpleJavaDialogHandler()
+    {
+      dialogHandler = new AlertDialogHandler();  
+    }
+    
+    public SimpleJavaDialogHandler(bool clickCancelButton)
+    {
+      this.clickCancelButton = clickCancelButton;
+      dialogHandler = new ConfirmDialogHandler();
+    }
+
+    public string Message
+    {
+      get { return message; }
+    }
+
+    public bool HasHandledDialog
+    {
+      get { return hasHandledDialog; }
+    }
+
+    #region IDialogHandler Members
+
+    public bool HandleDialog(Window window)
+    {
+      if (dialogHandler.CanHandleDialog(window))
+      {
+        dialogHandler.window = window;
+        
+        message = dialogHandler.Message;
+        
+        ConfirmDialogHandler confirmDialogHandler = dialogHandler as ConfirmDialogHandler;
+        
+        if (confirmDialogHandler != null && clickCancelButton)
+        {
+          confirmDialogHandler.CancelButton.Click();
+        }
+        else
+        {
+          dialogHandler.OKButton.Click();
+        }
+        
+        hasHandledDialog = true;
+        
+        return true;
+      }
+      
+      return false;
+    }
+
+    #endregion
   }
 }
