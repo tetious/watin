@@ -199,7 +199,7 @@ namespace WatiN.Core
           IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
           IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
         
-          return Compare(tableCellElements.item(columnIndex, null));
+          return findByText.Compare(tableCellElements.item(columnIndex, null));
         }
         
         return false;
