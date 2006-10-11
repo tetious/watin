@@ -64,10 +64,11 @@ namespace WatiN.UnitTests
     [Test]
     public void EbayTest()
     {
-      // ebay seems to include some active-x component
+      // ebay seems to embed some active-x(?) component
       // which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces
       // Changed the code to release the pUnk.
-      // This test should ensure propper working.
+      // This test should ensure propper working untill I'm able to 
+      // create a better test.
       using(new IE("http://www.ebay.com/"))
       {
       }
@@ -209,7 +210,6 @@ namespace WatiN.UnitTests
       ie.GoTo("https://www.somesecuresite.com");
 
       ie.DialogWatcher.Clear();
-
     }
     
 
@@ -244,12 +244,56 @@ namespace WatiN.UnitTests
       
         alertDialogHandler.WaitUntilExists();
         
+        Assert.AreEqual("This is an alert!", alertDialogHandler.Message, "Unexpected message");
+      
+        alertDialogHandler.OKButton.Click();
+      
+        ie.WaitForComplete();
+
+        Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
+
+        ie.RemoveDialogHandler(alertDialogHandler);
+      }      
+    }
+    
+    [Test]
+    public void AlertDialogSimpleJavaDialogHandler()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+      
+        ie.AddDialogHandler(dialogHandler);
+      
+        ie.Button(Find.ByValue("Show alert dialog")).Click();
+      
+        Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
+        Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
+
+        ie.RemoveDialogHandler(dialogHandler);
+      }      
+    }
+    
+    [Test]
+    public void AlertDialogHandlerWithoutAutoCloseDialogs()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        ie.DialogWatcher.CloseUnhandledDialogs = false;      
+      
+        ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+      
+        AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+        ie.AddDialogHandler(alertDialogHandler);
+        
+        alertDialogHandler.WaitUntilExists();
+        
         Assert.AreEqual("This is an alert!", alertDialogHandler.Message);
       
         alertDialogHandler.OKButton.Click();
       
-        Thread.Sleep(1000);
-        
+        ie.WaitForComplete();
+
         Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
 
         ie.RemoveDialogHandler(alertDialogHandler);
@@ -273,6 +317,8 @@ namespace WatiN.UnitTests
       
         confirmDialogHandler.OKButton.Click();
       
+        ie.WaitForComplete();
+
         Assert.AreEqual("OK", ie.TextField("ReportConfirmResult").Text, "OK button expected.");
 
         ie.RemoveDialogHandler(confirmDialogHandler);
@@ -296,12 +342,50 @@ namespace WatiN.UnitTests
       
         confirmDialogHandler.CancelButton.Click();
       
+        ie.WaitForComplete();
+
         Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
 
         ie.RemoveDialogHandler(confirmDialogHandler);
       }      
     }
+    
+    [Test]
+    public void ConfirmDialogSimpleJavaDialogHandlerCancel()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler(true);
+        ie.AddDialogHandler(dialogHandler);
+      
+        ie.Button(Find.ByValue("Show confirm dialog")).Click();
+      
+        Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
+        Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
+        Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
 
+        ie.RemoveDialogHandler(dialogHandler);
+      }      
+    }
+
+    [Test]
+    public void NewIEWithUrlAndLogonDialogHandler()
+    {
+      FailIfIEWindowExists("main", "NewIEWithUrlAndLogonDialogHandler");
+      
+      string url = MainURI.ToString();
+      LogonDialogHandler logon = new LogonDialogHandler("y", "z");
+      
+      using (IE ie = new IE(url, logon))
+      {
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
+        Assert.IsTrue(ie.DialogWatcher.Contains(logon));
+        Assert.AreEqual(1, ie.DialogWatcher.Count);
+      }
+      
+      Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
+    }
+    
     [Test]
     public void DocumentUrlandUri()
     {
@@ -359,7 +443,7 @@ namespace WatiN.UnitTests
     [Test]
     public void NewIEWithUriShouldAutoClose()
     {
-      FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
+      FailIfIEWindowExists("main", "NewIEWithUriShouldAutoClose");
 
       using (new IE(MainURI))
       {
@@ -387,13 +471,14 @@ namespace WatiN.UnitTests
     [Test]
     public void NewIEWithUrl()
     {
-      FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
+      FailIfIEWindowExists("main", "NewIEWithUrl");
       
       string url = MainURI.ToString();
       
       using (IE ie = new IE(url))
       {
         Assert.AreEqual(MainURI, new Uri(ie.Url));
+        Assert.IsFalse(ie.DialogWatcher.Contains(new LogonDialogHandler("x", "y")), "DialogWatcher shouldn't contain a LogonDialogHandler");
       }
       
       Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");

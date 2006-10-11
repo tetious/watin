@@ -156,15 +156,16 @@ namespace WatiN.Core
       for (int i = 0; i != framesCount; ++i)
       {
         IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, (HTMLDocument) HtmlDocument);
-        IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
-        if (document != null)
-        {
-          WaitWhileDocumentStateNotComplete(document);
-        }
-
-        // pUnk free
+        
         if (frame != null)
         {
+          waitWhileIEBusy(frame);
+          waitWhileIEStateNotComplete(frame);
+          
+          IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
+          WaitWhileDocumentStateNotComplete(document);
+
+          // free frame
           Marshal.ReleaseComObject(frame);
         }
       }
@@ -217,26 +218,36 @@ namespace WatiN.Core
 
     private void WaitWhileMainDocumentNotAvailable(DomContainer domContainer)
     {
-      IHTMLDocument2 maindocument = null;
+      IHTMLDocument2 document = null;
 
-      while(maindocument == null)
+      while(document == null)
       {
-        ThrowExceptionWhenTimeout("waiting for main document becoming available");
-
         try
         {
-          maindocument = domContainer.HtmlDocument;
+          document = domContainer.HtmlDocument;
         }
-        catch
-        {        
-          Thread.Sleep(100);
-        }
+        catch{}
 
-        if (!IsDocumentReadyStateAvailable(maindocument))
-        {
-          maindocument = null;
-        }
+        document = IsDocumentAvailable(document, "frame");
       }
+    }
+
+    private IHTMLDocument2 WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
+    {
+      IHTMLDocument2 document = null;
+
+      while (document == null)
+      {
+        try
+        {
+          document = frame.Document as IHTMLDocument2;
+        }
+        catch{}
+
+        document = IsDocumentAvailable(document, "frame");
+      }
+
+      return document;
     }
 
     private static bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
@@ -260,29 +271,18 @@ namespace WatiN.Core
       return false;
     }
 
-    private IHTMLDocument2 WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
+    private IHTMLDocument2 IsDocumentAvailable(IHTMLDocument2 document, string documentType)
     {
-      IHTMLDocument2 document = null;
-
-      while (document == null)
+      if (document == null)
       {
-        document = frame.Document as IHTMLDocument2;
-
-        if (IsTimedOut() && frame == null)
-        {
-          throw new WatiN.Core.Exceptions.TimeoutException("waiting for frame document becoming available");
-        }
-
-        if (document == null)
-        {
-          Thread.Sleep(100);
-        }
-        else if (!IsDocumentReadyStateAvailable(document))
-        {
-          Thread.Sleep(500);
-        }
+        ThrowExceptionWhenTimeout(String.Format("waiting for {0} document becoming available", documentType));
+          
+        Thread.Sleep(100);
       }
-
+      else if (!IsDocumentReadyStateAvailable(document))
+      {
+        document = null;
+      }
       return document;
     }
 
@@ -295,6 +295,26 @@ namespace WatiN.Core
         NativeMethods.GetWindowThreadProcessId(hWnd, out iePid);
 
         return iePid;
+      }
+    }
+
+    protected void waitWhileIEStateNotComplete(IWebBrowser2 ie)
+    {
+      while (ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
+      {
+        ThrowExceptionWhenTimeout("Internet Explorer state not complete");
+
+        Thread.Sleep(100);        
+      }
+    }
+
+    protected void waitWhileIEBusy(IWebBrowser2 ie)
+    {
+      while (ie.Busy)
+      {
+        ThrowExceptionWhenTimeout("Internet Explorer busy");
+
+        Thread.Sleep(100);
       }
     }
   }

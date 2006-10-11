@@ -380,7 +380,7 @@ namespace WatiN.Core
       {
         // remove other logon dialog handlers since only one handler
         // can effectively handle the logon dialog.
-        DialogWatcher.RemoveAll(new LogonDialogHandler("", ""));
+        DialogWatcher.RemoveAll(new LogonDialogHandler("a", "b"));
 
         // Add the (new) logonHandler
         DialogWatcher.Add(logonDialogHandler);
@@ -801,30 +801,10 @@ namespace WatiN.Core
     {
       InitTimeout();
 
-      waitWhileIEBusy();
-      waitWhileIEStateNotComplete();
+      waitWhileIEBusy(ie);
+      waitWhileIEStateNotComplete(ie);
       
       WaitForCompleteOrTimeout();
-    }
-
-    private void waitWhileIEStateNotComplete()
-    {
-      while (ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
-      {
-        ThrowExceptionWhenTimeout("Internet Explorer state not complete");
-
-        Thread.Sleep(100);        
-      }
-    }
-
-    private void waitWhileIEBusy()
-    {
-      while (ie.Busy)
-      {
-        ThrowExceptionWhenTimeout("Internet Explorer busy");
-
-        Thread.Sleep(100);
-      }
     }
 
     #region IDisposable Members
