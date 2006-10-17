@@ -381,6 +381,13 @@ namespace WatiN.UnitTests
         Assert.AreEqual(MainURI, new Uri(ie.Url));
         Assert.IsTrue(ie.DialogWatcher.Contains(logon));
         Assert.AreEqual(1, ie.DialogWatcher.Count);
+        
+        using (IE ie1 = new IE(url, logon))
+        {
+          Assert.AreEqual(MainURI, new Uri(ie1.Url));
+          Assert.IsTrue(ie.DialogWatcher.Contains(logon));
+          Assert.AreEqual(1, ie.DialogWatcher.Count);
+        }
       }
       
       Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");

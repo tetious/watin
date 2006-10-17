@@ -41,6 +41,13 @@ namespace WatiN.Core.DialogHandlers
     
     private static ArrayList dialogWatchers = new ArrayList();
     
+    /// <summary>
+    /// Gets the dialog watcher for the specified process. It creates
+    /// a new instance if no dialog watcher for the specified process 
+    /// exists.
+    /// </summary>
+    /// <param name="ieProcessId">The ie process id.</param>
+    /// <returns></returns>
     public static DialogWatcher GetDialogWatcherForProcess(int ieProcessId)
     {     
       CleanupDialogWatchers();
@@ -70,7 +77,7 @@ namespace WatiN.Core.DialogHandlers
       
       foreach (DialogWatcher dialogWatcher in dialogWatchers)
       {
-        if (!dialogWatcher.ProcessStillExists)
+        if (!dialogWatcher.ProcessExists)
         {
           dialogWatcher.Dispose();
         }
@@ -101,6 +108,10 @@ namespace WatiN.Core.DialogHandlers
       watcherThread.Start();
     }
 
+    /// <summary>
+    /// Adds the specified handler.
+    /// </summary>
+    /// <param name="handler">The handler.</param>
     public void Add(IDialogHandler handler)
     {
       lock (this)
@@ -109,6 +120,10 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
+    /// <summary>
+    /// Removes the specified handler.
+    /// </summary>
+    /// <param name="handler">The handler.</param>
     public void Remove(IDialogHandler handler)
     {
       lock (this)
@@ -117,6 +132,28 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
+    /// <summary>
+    /// Removes all instances that match <paramref name="handler"/>.
+    /// This method determines equality by calling Object.Equals.
+    /// </summary>
+    /// <param name="handler">The object implementing IDialogHandler.</param>
+    /// <example>
+    /// If you want to use RemoveAll with your custom dialog handler to
+    /// remove all instances of your dialog handler from a DialogWatcher instance,
+    /// you should override the Equals method in your custom dialog handler class 
+    /// like this:
+    /// <code>
+    /// public override bool Equals(object obj)
+    /// {
+    ///   if (obj == null) return false;
+    ///   
+    ///   return (obj is YourDialogHandlerClassNameGoesHere);
+    /// }                               
+    /// </code>
+    /// You could also inherit from <see cref="BaseDialogHandler"/> instead of implementing
+    /// <see cref="IDialogHandler"/> in your custom dialog handler. <see cref="BaseDialogHandler"/> provides
+    /// overrides for Equals and GetHashCode that work with RemoveAll.
+    /// </example>
     public void RemoveAll(IDialogHandler handler)
     {
       while (Contains(handler))
@@ -125,6 +162,9 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
+    /// <summary>
+    /// Removes all registered dialog handlers.
+    /// </summary>
     public void Clear()
     {
       lock (this)
@@ -133,6 +173,13 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
+    /// <summary>
+    /// Determines whether this <see cref="DialogWatcher"/> contains the specified dialog handler.
+    /// </summary>
+    /// <param name="handler">The dialog handler.</param>
+    /// <returns>
+    /// 	<c>true</c> if [contains] [the specified handler]; otherwise, <c>false</c>.
+    /// </returns>
     public bool Contains(object handler)
     {
       lock (this)
@@ -141,6 +188,10 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
+    /// <summary>
+    /// Gets the count of registered dialog handlers.
+    /// </summary>
+    /// <value>The count.</value>
     public int Count
     {
       get
@@ -152,6 +203,12 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether unhandled dialogs should be closed automaticaly.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if unhandled dialogs should be closed automaticaly; otherwise, <c>false</c>.
+    /// </value>
     public bool CloseUnhandledDialogs
     {
       get
@@ -170,6 +227,10 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
+    /// <summary>
+    /// Gets the process id this dialog watcher watches.
+    /// </summary>
+    /// <value>The process id.</value>
     public int ProcessId
     {
       get { return ieProcessId; }
@@ -200,7 +261,12 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public bool ProcessStillExists
+    /// <summary>
+    /// Gets a value indicating whether the process this dialog watcher
+    /// watches (still) exists.
+    /// </summary>
+    /// <value><c>true</c> if process exists; otherwise, <c>false</c>.</value>
+    public bool ProcessExists
     {
       get
       {
@@ -233,6 +299,10 @@ namespace WatiN.Core.DialogHandlers
       return true;
     }
 
+    /// <summary>
+    /// Handles the window.
+    /// </summary>
+    /// <param name="window">The window.</param>
     private void HandleWindow(Window window)
     {
       if (window.IsDialog())
@@ -279,6 +349,7 @@ namespace WatiN.Core.DialogHandlers
       {
         keepRunning = false;
         watcherThread.Join();
+        Clear();
       }
     }
 
@@ -362,7 +433,7 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public class AlertAndConfirmDialogHandler : IDialogHandler
+  public class AlertAndConfirmDialogHandler : BaseDialogHandler
   {
     private Queue alertQueue;
 
@@ -420,8 +491,10 @@ namespace WatiN.Core.DialogHandlers
       alertQueue.Clear();
     }
 
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
+      // See if the dialog has a static control with a controlID 
+      // of 0xFFFF. This is unique for alert and confirm dialogboxes.
       IntPtr handle = NativeMethods.GetDlgItem(window.Hwnd, 0xFFFF);
 
       if (handle != IntPtr.Zero)
@@ -451,7 +524,7 @@ namespace WatiN.Core.DialogHandlers
   /// ie.GoTo("https://www.somesecuresite.com");
   /// </code>
   /// </example>
-  public class LogonDialogHandler : IDialogHandler
+  public class LogonDialogHandler : BaseDialogHandler
   {
     private string userName;
     private string password;
@@ -470,7 +543,7 @@ namespace WatiN.Core.DialogHandlers
       this.password = password;
     }
 
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
       if (IsLogonDialog(window))
       {
@@ -510,7 +583,7 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public class CertificateWarningHandler : IDialogHandler
+  public class CertificateWarningHandler : BaseDialogHandler
   {
     public enum ButtonsEnum
     {
@@ -540,7 +613,7 @@ namespace WatiN.Core.DialogHandlers
       this.buttonToPush = buttonToPush;
     }
        
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {      
       if (IsCertificateDialog(window))
       {
@@ -573,7 +646,7 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public class FileUploadDialogHandler : IDialogHandler
+  public class FileUploadDialogHandler : BaseDialogHandler
   {
     private String fileName;
     
@@ -582,9 +655,7 @@ namespace WatiN.Core.DialogHandlers
       this.fileName = fileName;  
     }
     
-    #region IDialogHandler Members
-
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
       Debug.WriteLine(Environment.TickCount + " Enter handler: " + window.Title);
       
@@ -599,8 +670,6 @@ namespace WatiN.Core.DialogHandlers
         
       return false;
     }
-
-    #endregion
 
     public bool IsFileUploadDialog(Window window)
     {
@@ -663,17 +732,9 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public abstract class JavaDialog
+  public abstract class JavaDialogHandler : BaseDialogHandler
   {
     internal Window window;
-    internal abstract bool CanHandleDialog(Window window);
-
-    public bool Exists()
-    {
-      if (window == null) return false;
-      
-      return window.Exists();
-    }
 
     public string Title
     {
@@ -706,31 +767,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    protected abstract int getOKButtonID();
-
-    protected bool ButtonWithId1Exists(IntPtr windowHwnd)
-    {
-      WinButton button = new WinButton(1, windowHwnd);
-      return button.Exists();
-    }
-
-    protected WinButton createCancelButton(IntPtr windowHwnd)
-    {
-      return new WinButton(2, windowHwnd );
-    }
-
-    protected void ThrowExceptionIfDialogDoesNotExist()
-    {
-      if (!Exists())
-      {
-        throw new WatiNException("Operation not available. Dialog doesn't exist.");
-      }
-    }
-  }
-
-  public abstract class JavaDialogHandler : JavaDialog, IDialogHandler
-  {
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
       if (CanHandleDialog(window))
       {
@@ -766,6 +803,36 @@ namespace WatiN.Core.DialogHandlers
       if (dialogNotAvailable)
       {
         throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
+      }
+    }
+
+    internal abstract bool CanHandleDialog(Window window);
+
+    public bool Exists()
+    {
+      if (window == null) return false;
+      
+      return window.Exists();
+    }
+
+    protected abstract int getOKButtonID();
+
+    protected bool ButtonWithId1Exists(IntPtr windowHwnd)
+    {
+      WinButton button = new WinButton(1, windowHwnd);
+      return button.Exists();
+    }
+
+    protected WinButton createCancelButton(IntPtr windowHwnd)
+    {
+      return new WinButton(2, windowHwnd );
+    }
+
+    protected void ThrowExceptionIfDialogDoesNotExist()
+    {
+      if (!Exists())
+      {
+        throw new WatiNException("Operation not available. Dialog doesn't exist.");
       }
     }
   }
@@ -806,9 +873,9 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
-  public class SimpleJavaDialogHandler : IDialogHandler
+  public class SimpleJavaDialogHandler : BaseDialogHandler
   {
-    JavaDialog dialogHandler;
+    JavaDialogHandler dialogHandler;
     bool clickCancelButton = false;
     private bool hasHandledDialog = false;
     private string message;
@@ -834,9 +901,7 @@ namespace WatiN.Core.DialogHandlers
       get { return hasHandledDialog; }
     }
 
-    #region IDialogHandler Members
-
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
       if (dialogHandler.CanHandleDialog(window))
       {
@@ -862,6 +927,24 @@ namespace WatiN.Core.DialogHandlers
       
       return false;
     }
+  }
+  
+  public abstract class BaseDialogHandler : IDialogHandler
+  {
+    public override bool Equals(object obj)
+    {
+      if (obj == null) return false;
+      
+      return (GetType().Equals(obj.GetType()));
+    }
+
+    public override int GetHashCode()
+    {
+      return GetType().ToString().GetHashCode();
+    }
+    #region IDialogHandler Members
+
+    public abstract bool HandleDialog(Window window);
 
     #endregion
   }

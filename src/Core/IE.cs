@@ -941,7 +941,7 @@ namespace WatiN.Core
         catch 
         {
           // SF 1530859 fix
-          // Accessing the DOM of the HTMLDialog page hasn't fully loaded yet 
+          // Accessing the DOM if the HTMLDialog page hasn't been fully loaded 
           // raises an error. Using WaitForComplete at some point in the search
           // for a HTMLDialog would be a better option but for now I've implemented 
           // this catch all.
