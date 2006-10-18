@@ -562,7 +562,7 @@ namespace WatiN.UnitTests
 
       Assert.IsNotNull(selectList,"SelectList niet aangetroffen");
 
-      StringCollection items = selectList.Items;
+      StringCollection items = selectList.AllContents;
 
       Assert.AreEqual(4, items.Count);
       Assert.AreEqual("First Listitem",items[0],"First Listitem not found");

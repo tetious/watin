@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using mshtml;
@@ -183,20 +182,11 @@ namespace WatiN.Core
       get { return ((IHTMLSelectElement) DomElement); }
     }
 
-    [Obsolete("The AllContents property is no longer supported, use Items property instead.")]
-    public StringCollection AllContents
-    {
-      get
-      {
-        return Items;
-      }
-    }
-    
     /// <summary>
     /// Returns all the items in the select list as an array.
     /// An empty array is returned if the select box has no contents.
     /// </summary>
-    public StringCollection Items
+    public StringCollection AllContents
     {
       get
       {
