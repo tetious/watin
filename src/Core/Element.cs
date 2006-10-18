@@ -400,7 +400,7 @@ namespace WatiN.Core
           }
           else
           {
-            htmlElement.style.backgroundColor = "transparent";
+            htmlElement.style.backgroundColor = "";
           }
         }
 
