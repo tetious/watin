@@ -497,7 +497,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="url">The URL specified as a wel formed Uri.</param>
     /// <example>
-    /// The following example creates a new Uri, Internet Explorer instances and navigates to
+    /// The following example creates an Uri and Internet Explorer instance and navigates to
     /// the WatiN Project website on SourceForge.
     /// <code>
     /// using WatiN.Core;
@@ -531,7 +531,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="url">The URL to GoTo.</param>
     /// <example>
-    /// The following example creates a new Internet Explorer instances and navigates to
+    /// The following example creates a new Internet Explorer instance and navigates to
     /// the WatiN Project website on SourceForge.
     /// <code>
     /// using WatiN.Core;
@@ -590,7 +590,7 @@ namespace WatiN.Core
         removeIdAttribute = true;
       }
 
-      // Execute the JScriopt to fire the event inside the Browser.
+      // Execute the JScript to fire the event inside the Browser.
       FireEventOnElementByJScript(element, eventName);
       
       // Remove Id attribute if temporary Id was assigned.
@@ -654,8 +654,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Sends a Tab keyto the IE window to simulate tabbing through
-    /// the elements (and adress bar).
+    /// Sends a Tab key to the IE window to simulate tabbing through
+    /// the elements (and adres bar).
     /// </summary>
     public void PressTab()
     {
