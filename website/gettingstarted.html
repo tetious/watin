@@ -26,17 +26,17 @@ w\:* {behavior:url(#default#VML);}
  <o:DocumentProperties>
   <o:Author>J.vanMenen</o:Author>
   <o:LastAuthor>J.vanMenen</o:LastAuthor>
-  <o:Revision>31</o:Revision>
-  <o:TotalTime>451</o:TotalTime>
+  <o:Revision>32</o:Revision>
+  <o:TotalTime>457</o:TotalTime>
   <o:Created>2006-07-11T11:06:00Z</o:Created>
-  <o:LastSaved>2006-08-30T12:27:00Z</o:LastSaved>
+  <o:LastSaved>2006-10-18T22:01:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>870</o:Words>
-  <o:Characters>4785</o:Characters>
-  <o:Lines>39</o:Lines>
+  <o:Words>896</o:Words>
+  <o:Characters>4932</o:Characters>
+  <o:Lines>41</o:Lines>
   <o:Paragraphs>11</o:Paragraphs>
-  <o:CharactersWithSpaces>5644</o:CharactersWithSpaces>
-  <o:Version>11.8036</o:Version>
+  <o:CharactersWithSpaces>5817</o:CharactersWithSpaces>
+  <o:Version>11.8107</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <w:WordDocument>
@@ -288,7 +288,7 @@ table.MsoTableGrid
 	mso-bidi-language:#0400;}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="17410">
+ <o:shapedefaults v:ext="edit" spidmax="18434">
   <o:colormenu v:ext="edit" fillcolor="silver"/>
  </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
@@ -413,8 +413,10 @@ color:#FFCC00;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
-mso-ansi-language:EN-GB'>This section explains some basics to get you up and
-running automating Internet Explorer with WatiN. <o:p></o:p></span></p>
+mso-ansi-language:EN-GB'>This article explains some basics to get you up and running
+automating Internet Explorer with WatiN. You will find a German version of this
+article <a
+href="http://blogs.dotnetgerman.com/alexonasp.net/PermaLink,guid,03b01395-6318-4c14-8158-a38adaa8f4bc.aspx">here</a>.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-family:Tahoma;mso-ansi-language:
 EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -466,8 +468,8 @@ from a console application <o:p></o:p></span></b></p>
 <ul style='margin-top:0cm' type=disc>
  <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list 36.0pt'><span
      lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:
-     EN-GB'>Start your favourite .Net ide. For now let’s assume you’ll use
-     Visual Studio.<o:p></o:p></span></li>
+     EN-GB'>Start your favourite .Net ide. For now let’s assume you’ll use Visual
+     Studio.<o:p></o:p></span></li>
  <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list 36.0pt'><span
      lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:
      EN-GB'>Create a new console application.<o:p></o:p></span></li>
@@ -697,8 +699,8 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 <ul style='margin-top:0cm' type=disc>
  <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list 36.0pt'><span
      lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:
-     EN-GB'>Build and start the project and see Internet Explorer goto the
-     Google website, search for WatiN and show the results webpage.<o:p></o:p></span></li>
+     EN-GB'>Build and start the project and see Internet Explorer goto the Google
+     website, search for WatiN and show the results webpage.<o:p></o:p></span></li>
 </ul>
 
 <p class=MsoNormal style='margin-left:18.0pt'><span lang=EN-GB
@@ -743,18 +745,18 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>After we opened the Dom Explorer with the “View DOM”
-button, we can select the results table cell on the webpage by using “Select
-element by click” in the “Find” menu. The DOM Explorer then shows where the
-table cell is located in the DOM hierarchy.<o:p></o:p></span></p>
+button, we can select the results table cell on the webpage by using “Select element
+by click” in the “Find” menu. The DOM Explorer then shows where the table cell
+is located in the DOM hierarchy.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=cl style='background:white'><span lang=EN-GB style='font-size:11.0pt;
 font-family:Tahoma;mso-ansi-language:EN-GB'>WatiN looks in the Body section by
-default so lets concentrate on finding the table the results table cell is located
-in. The table is the third table so we could use the Table collection to get a
-reference to this table. The code would look like this:<o:p></o:p></span></p>
+default so lets concentrate on finding the table the results table cell is
+located in. The table is the third table so we could use the Table collection
+to get a reference to this table. The code would look like this:<o:p></o:p></span></p>
 
 <p class=cl style='background:white'><span lang=EN-GB style='font-size:11.0pt;
 font-family:Tahoma;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -826,8 +828,7 @@ EN-GB'>&nbsp;<o:p></o:p></span></p>
 <p class=cl style='margin-left:35.4pt;background:#D9D9D9'><span class=cb11><span
 lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:
 EN-GB'>namespace</span></span><span lang=EN-GB style='font-size:10.0pt;
-font-family:"Courier New";color:black;mso-ansi-language:EN-GB'>
-WatiNGettingStarted<o:p></o:p></span></p>
+font-family:"Courier New";color:black;mso-ansi-language:EN-GB'> WatiNGettingStarted<o:p></o:p></span></p>
 
 <p class=cl style='margin-left:35.4pt;background:#D9D9D9'><span lang=EN-GB
 style='font-size:10.0pt;font-family:"Courier New";color:black;mso-ansi-language:
@@ -894,8 +895,8 @@ EN-GB'>&nbsp;<o:p></o:p></span></p>
 <p class=cl style='margin-left:35.4pt;background:#D9D9D9'><span lang=EN-GB
 style='font-size:10.0pt;font-family:"Courier New";color:black;mso-ansi-language:
 EN-GB'>&nbsp; &nbsp; &nbsp; </span><span class=cb21><span lang=EN-GB
-style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:EN-GB'>//
-Find the search text field and type Watin in it.</span></span><span lang=EN-GB
+style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:EN-GB'>// Find
+the search text field and type Watin in it.</span></span><span lang=EN-GB
 style='font-size:10.0pt;font-family:"Courier New";color:black;mso-ansi-language:
 EN-GB'><o:p></o:p></span></p>
 
@@ -1053,7 +1054,7 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=right style='text-align:right'><span lang=EN-GB
   style='font-size:10.0pt;font-family:Tahoma;mso-ansi-language:EN-GB'>Last
   update on <span style='mso-field-code:" DATE \\\@ \0022dd MMMM yyyy\0022 "'><span
-  style='mso-no-proof:yes'>30 August 2006</span></span><o:p></o:p></span></p>
+  style='mso-no-proof:yes'>18 October 2006</span></span><o:p></o:p></span></p>
   </td>
  </tr>
 </table>
