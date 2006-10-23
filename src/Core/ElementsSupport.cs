@@ -41,7 +41,7 @@ namespace WatiN.Core
     public const string LabelTagName = "LABEL";
     public const string LinkTagName = "A";
     public const string ParaTagName = "P";
-    public const string SelectListsTagName = "SELECT";
+    public const string SelectListTagName = "SELECT";
     public const string SpanTagName = "SPAN";
     public const string TableTagName = "TABLE";
     public const string TableCellTagName = "TD";
@@ -73,7 +73,7 @@ namespace WatiN.Core
 
       if (element != null)
       {
-        return new Button(ie,element);
+        return new Button(ie, element);
       }
 
       throw new ElementNotFoundException(string.Format("{0} ({1}) or {2}", InputTagName, InputButtonType, ButtonTagName), findBy.AttributeName, findBy.Value);
@@ -169,12 +169,12 @@ namespace WatiN.Core
 
     public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new SelectList(ie, FindFirstElement(SelectListsTagName, InputNullType, findBy, elements, true));
+      return new SelectList(ie, FindFirstElement(SelectListTagName, InputNullType, findBy, elements, true));
     }
 
     public static SelectListCollection SelectLists(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new SelectListCollection(ie, FindAllElements(SelectListsTagName, InputNullType, elements));
+      return new SelectListCollection(ie, FindAllElements(SelectListTagName, InputNullType, elements));
     }
 
     public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
@@ -208,8 +208,8 @@ namespace WatiN.Core
     /// </example>
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
     {
-      ArrayList ids = findElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
-      TableCellCollection collection = new TableCellCollection(ie, ids);
+      ArrayList elements = findElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
+      TableCellCollection collection = new TableCellCollection(ie, elements);
       return collection[occurrence];
     }
 
@@ -375,7 +375,7 @@ namespace WatiN.Core
       //TODO: See if this method could be dropped, it seems to give
       //      more troubles (uninitialized state of elements)
       //      then benefits (I just introduced this method to be on 
-      //      the save side, but don't no if it saved me to prevent an exception)
+      //      the save side, but don't know if it saved me to prevent an exception)
       
       if (String.Compare(tagName, "img", true) == 0)
       {
