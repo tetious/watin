@@ -972,6 +972,49 @@ namespace WatiN.UnitTests
       Assert.IsFalse(ParaEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedParasCount, count);
     }
+    
+    [Test]
+    public void Span()
+    {
+      Span Span = ie.Span("spanid1");
+      
+      Assert.IsInstanceOfType(typeof(ElementsContainer), Span);
+      
+      Assert.IsNotNull(Span, "Span should bot be null");
+      Assert.AreEqual("spanid1", Span.Id, "Unexpected id");
+    }
+    
+    [Test]
+    public void Spans()
+    {
+      const int expectedSpansCount = 2;
+      Assert.AreEqual(expectedSpansCount, ie.Spans.Length, "Unexpected number of Spans");
+
+      // Collection.Length
+      SpanCollection formSpans = ie.Spans;
+      
+      // Collection items by index
+      Assert.AreEqual("spanid1", ie.Spans[0].Id);
+      Assert.AreEqual("Span1", ie.Spans[1].Id);
+
+      IEnumerable SpanEnumerable = formSpans;
+      IEnumerator SpanEnumerator = SpanEnumerable.GetEnumerator();
+
+      // Collection iteration and comparing the result with Enumerator
+      int count = 0;
+      foreach (Span inputSpan in formSpans)
+      {
+        SpanEnumerator.MoveNext();
+        object enumSpan = SpanEnumerator.Current;
+        
+        Assert.IsInstanceOfType(inputSpan.GetType(), enumSpan, "Types are not the same");
+        Assert.AreEqual(inputSpan.OuterHtml, ((Span)enumSpan).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(expectedSpansCount, count);
+    }
   }
   
   [TestFixture]
