@@ -61,14 +61,9 @@ namespace WatiN.Core
     {
       Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      string innertext = GetFirstTBody().innerText.ToLower();
+      TableRowFinder finder = new TableRowFinder(findText, inColumn);
       
-      if (innertext != null && innertext.IndexOf(findText.ToLower()) >= 0)
-      {
-        return FindRow(new TableRowFinder(findText, inColumn));
-      }
-      
-      return null;
+      return findRow(finder);
     }
 
     /// <summary>
@@ -81,11 +76,18 @@ namespace WatiN.Core
     {
       Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
+      TableRowFinder finder = new TableRowFinder(findTextRegex, inColumn);
+
+      return FindRow(finder);
+    }
+
+    private TableRow findRow(TableRowFinder finder)
+    {
       string innertext = GetFirstTBody().innerText;
       
-      if (innertext != null)
+      if (innertext != null && finder.IsTextContainedIn(innertext))
       {
-        return FindRow(new TableRowFinder(findTextRegex, inColumn));
+        return FindRow(finder);
       }
       
       return null;
@@ -108,59 +110,26 @@ namespace WatiN.Core
 
       return null;
     }
-    
-    private class TextEqualsAndCaseInsensitive : Text
-    {
-      public   TextEqualsAndCaseInsensitive(string text) : base(text)
-      {
-        comparer = new StringEqualsAndCaseInsensitiveComparer(text);
-      }
-    }
-    
-    private class TextContainsAndCaseInsensitive : Text
-    {
-      public   TextContainsAndCaseInsensitive(string text) : base(text)
-      {
-        comparer = new StringContainsAndCaseInsensitiveComparer(text);
-      }
-    }
-
-    private class TextAlwaysTrue : Text
-    {
-      public   TextAlwaysTrue() : base("")
-      {
-        comparer = new AlwaysTrueComparer();
-      }
-
-      private class AlwaysTrueComparer : ICompare
-      {
-        public bool Compare(string value)
-        {
-          return true;
-        }
-      }
-    }
-    
+           
     /// <summary>
     /// Use this class to find a row which contains a particular value
     /// in a table cell contained in a table column.
     /// </summary>
-    public class TableRowFinder : Attribute
+    public class TableRowFinder : Text
     {
       private int columnIndex;
-      private Text findByText;
-      private Text containsText;
+      private ICompare containsText;
       
       /// <summary>
       /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
       /// </summary>
       /// <param name="findText">The text to find (exact match but case insensitive).</param>
       /// <param name="inColumn">The column index in which to look for the value.</param>
-      public TableRowFinder(string findText, int inColumn): base("noattribute","")
+      public TableRowFinder(string findText, int inColumn): base(findText)
       {
         columnIndex = inColumn;
-        findByText = new TextEqualsAndCaseInsensitive(findText);
-        containsText = new TextContainsAndCaseInsensitive(findText);
+        comparer = new StringEqualsAndCaseInsensitiveComparer(findText);
+        containsText = new StringContainsAndCaseInsensitiveComparer(findText);
       }
       
       /// <summary>
@@ -168,41 +137,39 @@ namespace WatiN.Core
       /// </summary>
       /// <param name="findTextRegex">The regular expression to match with.</param>
       /// <param name="inColumn">The column index in which to look for the value.</param>
-      public TableRowFinder(Regex findTextRegex, int inColumn): base("noattribute","")
+      public TableRowFinder(Regex findTextRegex, int inColumn): base(findTextRegex)
       {
         columnIndex = inColumn;
-        findByText = new Text(findTextRegex);
-        containsText = new TextAlwaysTrue();
+        containsText = new AlwaysTrueComparer();
       }
       
-      /// <summary>
-      /// Compares the given <paramref name = "value" /> with the regex or
-      /// text this class was constructed with. This should be a table cell elements
-      /// innertext.
-      /// </summary>
-      /// <param name="value">Value to compare with</param>
-      /// <returns>
-      /// 	<c>true</c> if the searched for value equals the given value
-      /// </returns>
-      public override bool Compare(string value)
-      {
-        return findByText.Compare(value);
-      }
- 
       public override bool Compare(object ihtmlelement)
       {
         IHTMLElement element = GetIHTMLElement(ihtmlelement);
 
-        if (containsText.Compare(element.innerText))
+        if (IsTextContainedIn(element.innerText))
         {
           // Get all elements and filter this for TableCells
           IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
           IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
         
-          return findByText.Compare(tableCellElements.item(columnIndex, null));
+          return base.Compare(tableCellElements.item(columnIndex, null));
         }
         
         return false;
+      }
+      
+      private class AlwaysTrueComparer : ICompare
+      {
+        public bool Compare(string value)
+        {
+          return true;
+        }
+      }
+
+      public bool IsTextContainedIn(string text)
+      {
+        return containsText.Compare(text);
       }
     }
   }
