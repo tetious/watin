@@ -1,36 +1,42 @@
 * Welcome
-Thanks for dowloading WatiN. I Hope you will be able to automate your web testing 
-with WatiN succesfully. Visit http://watin.sourcefoge.net to download the latest version and
-more info.
+Thanks for dowloading WatiN. WatiN (pronounced "what-in") stands for Web Application Testing 
+in dotNet. Inspired by Watir, WatiN enables web application testing, through Internet Explorer 
+on a Windows platform, expressed in any .Net language.
+ 
+Visit http://watin.sourcefoge.net for more information and to download the latest version. 
 
 * License
-WatiN is LGPL licensed but before using WatiN please read the license.txt so you know
+WatiN is LGPL licensed so before using WatiN please read the license.txt so you know
 the terms and conditions for using and modifying WatiN.
 
 * Pre requisits
-- WatiN is currently tested on Windows XP SP2, Windows 2000 and Windows 2003.
-- Make sure you have a working IE6 installed and microsoft.mshtml.dll is available on your machine.
-- The .Net framework 1.1 needs to be installed
+- WatiN has been tested on Windows XP SP2, Windows 2000 and Windows 2003.
+- Make sure you have a working IE6 or IE7 installed on your machine.
+- The .Net 1.1 or .Net 2.0 framework needs to be installed.
 
 * Installing WatiN
-- Create an installation directory like C:\Program Files\WatiN <versionnumber>
-- unzip the files in this zip file to the installation directory
+- Create an installation directory like C:\Program Files\WatiN <versionnumber>.
+- unzip the files in this zip file to the installation directory.
 - ready!
 
 * Using WatiN
-- Create a new project in Visual Studio 2003 (or another dev tool like SharpDevelop)
-- Create a reference to WatiN.Core.dll in the installation directory
-- Start exploring the object model 
-- See the code files in the UnitTests directory for code examples
+Following are the basic steps:
+- Create a new project in Visual Studio 2003/2005 (or another dev tool like SharpDevelop).
+- Create a reference to WatiN.Core.dll in the installation directory.
+- Start coding and exploring the object model (See the code files in the UnitTests directory 
+  for code examples).
+
+For a more complete example visit http://watin.sourceforge.net/gettingstarted.html.
+For more documentation about (using) WatiN visit http://watin.sourceforge.net/documentatie.html.
 
 * Support
-Subscribe to the mailinglist(s), use the bug tracker and feature tracker on 
+Subscribe to the mailinglist(s) and/or use the bug and feature tracker on 
 http://sourceforge.net/projects/watin for the intended purposes.
 
 * RSS
 Stay informed about new releases by subscribing to the project news RSS feed on 
 http://watin.sourcefoge.net
 
-Happy Web Testing!
+Enjoy testing with WatiN!
 
 Copyright Jeroen van Menen 2006
