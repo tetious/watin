@@ -185,6 +185,15 @@ namespace WatiN.UnitTests
         Assert.AreEqual("hello", dialogHandler.Pop());
 
         Assert.AreEqual(0, dialogHandler.Count);
+        
+        // Test Clear
+        ie.Button("helloid").Click();
+
+        Assert.AreEqual(1, dialogHandler.Count);
+
+        dialogHandler.Clear();
+
+        Assert.AreEqual(0, dialogHandler.Count);
       }
     }
     

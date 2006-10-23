@@ -927,6 +927,51 @@ namespace WatiN.UnitTests
       Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFileUploadsCount, count);
     }
+    
+    [Test]
+    public void Para()
+    {
+      Para para = ie.Para("links");
+      
+      Assert.IsInstanceOfType(typeof(ElementsContainer), para);
+      
+      Assert.IsNotNull(para);
+      Assert.AreEqual("links", para.Id);
+    }
+    
+    [Test]
+    public void Paras()
+    {
+      const int expectedParasCount = 4;
+      Assert.AreEqual(expectedParasCount, ie.Paras.Length, "Unexpected number of Paras");
+
+      // Collection.Length
+      ParaCollection formParas = ie.Paras;
+      
+      // Collection items by index
+      Assert.IsNull(ie.Paras[0].Id);
+      Assert.AreEqual("links", ie.Paras[1].Id);
+      Assert.IsNull(ie.Paras[2].Id);
+      Assert.IsNull(ie.Paras[3].Id);
+
+      IEnumerable ParaEnumerable = formParas;
+      IEnumerator ParaEnumerator = ParaEnumerable.GetEnumerator();
+
+      // Collection iteration and comparing the result with Enumerator
+      int count = 0;
+      foreach (Para inputPara in formParas)
+      {
+        ParaEnumerator.MoveNext();
+        object enumPara = ParaEnumerator.Current;
+        
+        Assert.IsInstanceOfType(inputPara.GetType(), enumPara, "Types are not the same");
+        Assert.AreEqual(inputPara.OuterHtml, ((Para)enumPara).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(ParaEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(expectedParasCount, count);
+    }
   }
   
   [TestFixture]
