@@ -295,7 +295,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual("left", leftFrame.Name);
       Assert.AreEqual(null, leftFrame.Id);
 
-      leftFrame = ie.Frame(Find.ByUrl(iframesLeftURI));
+      leftFrame = ie.Frame(Find.ByUrl(IFramesLeftURI));
       Assert.AreEqual("left", leftFrame.Name);
     }
     
@@ -307,7 +307,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual("middle", middleFrame.Name);
       Assert.AreEqual("iframe2", middleFrame.Id);
 
-      middleFrame = ie.Frame(Find.ByUrl(iframesMiddleURI));
+      middleFrame = ie.Frame(Find.ByUrl(IFramesMiddleURI));
       Assert.AreEqual("middle", middleFrame.Name);
       
       middleFrame = ie.Frame(Find.ById("iframe2"));
@@ -317,7 +317,7 @@ namespace WatiN.UnitTests
     [Test]
     public void RightFrame()
     {
-      Frame rightFrame = ie.Frame(Find.ByUrl(iframesRightURI));
+      Frame rightFrame = ie.Frame(Find.ByUrl(IFramesRightURI));
       Assert.IsNotNull(rightFrame, "Frame expected");
       Assert.AreEqual(null, rightFrame.Name);
       Assert.AreEqual(null, rightFrame.Id);

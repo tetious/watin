@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
@@ -926,5 +927,83 @@ namespace WatiN.UnitTests
       Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFileUploadsCount, count);
     }
+  }
+  
+  [TestFixture]
+  public class ImageTests : WatiNTest
+  {
+    private IE ie;
+
+    private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
+
+    [TestFixtureSetUp]
+    public void Setup()
+    {
+      ie = new IE(ImagesURI);
+    }
+    
+    [TestFixtureTearDown]
+    public void Teardown()
+    {
+      ie.Close();
+    }
+    
+    [Test]
+    public void Image()
+    {
+      Image image = ie.Image("Image2");
+
+      Assert.AreEqual("Image2", image.Id, "Unexpected id");
+      Assert.AreEqual("ImageName2", image.Name, "Unexpected name");
+      Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
+      Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
+    }
+    
+    // Image shouldn't support Input elements of type image (yet)
+    [Test, ExpectedException(typeof(ElementNotFoundException))]
+    public void InputTypeIsImage()
+    {
+      ie.Image("Image4");
+    }
+    
+    [Test]
+    public void ImageReadyStateUninitializedButShouldReturn()
+    {
+      Assert.IsFalse(ie.Image("Image3").Complete);
+    }
+    
+    [Test]
+    public void Images()
+    {
+      const int expectedImagesCount = 3;
+      Assert.AreEqual(expectedImagesCount, ie.Images.Length, "Unexpected number of Images");
+
+      // Collection.Length
+      ImageCollection formImages = ie.Images;
+      
+      // Collection items by index
+      Assert.AreEqual("Image1", ie.Images[0].Id);
+      Assert.AreEqual("Image2", ie.Images[1].Id);
+      Assert.AreEqual("Image3", ie.Images[2].Id);
+
+      IEnumerable ImageEnumerable = formImages;
+      IEnumerator ImageEnumerator = ImageEnumerable.GetEnumerator();
+
+      // Collection iteration and comparing the result with Enumerator
+      int count = 0;
+      foreach (Image inputImage in formImages)
+      {
+        ImageEnumerator.MoveNext();
+        object enumImage = ImageEnumerator.Current;
+        
+        Assert.IsInstanceOfType(inputImage.GetType(), enumImage, "Types are not the same");
+        Assert.AreEqual(inputImage.OuterHtml, ((Image)enumImage).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+      
+      Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(expectedImagesCount, count);
+    }
+
   }
 }

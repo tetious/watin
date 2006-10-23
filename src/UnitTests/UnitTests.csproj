@@ -135,6 +135,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "html\images.html"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\Index.html"
                     BuildAction = "Content"
                 />
@@ -164,6 +168,14 @@
                 />
                 <File
                     RelPath = "html\iframes\rightpage.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\images\watin.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\images\watinwebsite.jpg"
                     BuildAction = "Content"
                 />
             </Include>

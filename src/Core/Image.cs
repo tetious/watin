@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 
 namespace WatiN.Core
@@ -37,11 +38,12 @@ namespace WatiN.Core
       }
     }
     
+    [Obsolete("The Image.Href syntax is no longer supported, use Image.Src instead.")]
     public string Href
     {
       get
       {
-        return ((IHTMLImgElement) DomElement).href;
+        return Src;
       }
     }
     
@@ -52,5 +54,14 @@ namespace WatiN.Core
         return ((IHTMLImgElement) DomElement).alt;
       }
     }
+    
+    public string Name
+    {
+      get
+      {
+        return ((IHTMLImgElement) DomElement).name;
+      }
+    }
+
   }
 }

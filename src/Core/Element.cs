@@ -59,6 +59,15 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Gets a value indicating whether this <see cref="Element"/> is completely loaded.
+    /// </summary>
+    /// <value><c>true</c> if complete; otherwise, <c>false</c>.</value>
+    public bool Complete
+    {
+      get { return htmlElement2.readyStateValue == 4; }
+    }
+    
+    /// <summary>
     /// Gets a value indicating whether this <see cref="Element"/> is enabled.
     /// </summary>
     /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>

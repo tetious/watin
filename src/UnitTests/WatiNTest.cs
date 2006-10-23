@@ -25,20 +25,20 @@ namespace WatiN.UnitTests
   public class WatiNTest
   {
     private static Uri htmlTestBaseURI = null;
-    private static Uri mainURI = null;
-    private static Uri indexURI = null;
-    private static Uri popUpURI = null;
-    private static Uri framesetURI = null;
-    private static Uri framesetWithinFramesetURI = null;
-    private static Uri crossDomainFramesetURI = null;
-    private static Uri testEventsURI = null;
-    private static Uri watinURI = null;
-
+    public static Uri MainURI = new Uri(HtmlTestBaseURI, "main.html");
+    public static Uri IndexURI = new Uri(HtmlTestBaseURI, "Index.html");
+    public static Uri PopUpURI = new Uri(HtmlTestBaseURI, "popup.html");
+    public static Uri FramesetURI = new Uri(HtmlTestBaseURI, "Frameset.html");
+    public static Uri FramesetWithinFramesetURI = new Uri(HtmlTestBaseURI, "FramesetWithinFrameset.html");
+    public static Uri CrossDomainFramesetURI = new Uri(HtmlTestBaseURI, "CrossDomainFrameset.html");
+    public static Uri TestEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
+    public static Uri WatiNURI = new Uri("http://watin.sourceforge.net");
+    public static Uri ImagesURI = new Uri(HtmlTestBaseURI,"images.html");
     public static Uri IFramesMainURI = new Uri(HtmlTestBaseURI, "iframes\\main.html");
-    public static Uri iframesLeftURI = new Uri(HtmlTestBaseURI, "iframes\\leftpage.html");
-    public static Uri iframesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
-    public static Uri iframesRightURI = new Uri(HtmlTestBaseURI, "iframes\\rightpage.html");
-
+    public static Uri IFramesLeftURI = new Uri(HtmlTestBaseURI, "iframes\\leftpage.html");
+    public static Uri IFramesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
+    public static Uri IFramesRightURI = new Uri(HtmlTestBaseURI, "iframes\\rightpage.html");
+    public static string GoogleUrl = "http://www.google.com";
     
     public static Uri HtmlTestBaseURI
     {
@@ -52,114 +52,7 @@ namespace WatiN.UnitTests
       }
     }
 
-    public static Uri MainURI
-    {
-      get
-      {
-        if (mainURI == null)
-        {
-          mainURI = new Uri(HtmlTestBaseURI, "main.html");
-        }
-        return mainURI;
-      }
-    }
-
-    public static Uri IndexURI
-    {
-      get
-      {
-        if (indexURI == null)
-        {
-          indexURI = new Uri(HtmlTestBaseURI, "Index.html");
-        }
-
-        return indexURI;
-      }
-    }
-
-    public static Uri PopUpURI
-    {
-      get
-      {
-        if(popUpURI == null)
-        {
-          popUpURI = new Uri(HtmlTestBaseURI, "popup.html");
-        }
-        return popUpURI;
-      }
-    }
-    
-    public static Uri FramesetURI
-    {
-      get
-      {
-        if(framesetURI == null)
-        {
-          framesetURI = new Uri(HtmlTestBaseURI, "Frameset.html");
-        }
-        return framesetURI;
-      }
-    }
-        
-    public static Uri CrossDomainFramesetURI
-    {
-      get
-      {
-        if(crossDomainFramesetURI == null)
-        {
-          crossDomainFramesetURI = new Uri(HtmlTestBaseURI, "CrossDomainFrameset.html");
-        }
-        return crossDomainFramesetURI;
-      }
-    }
-    
-    public static Uri FramesetWithinFramesetURI
-    {
-      get
-      {
-        if(framesetWithinFramesetURI == null)
-        {
-          framesetWithinFramesetURI = new Uri(HtmlTestBaseURI, "FramesetWithinFrameset.html");
-        }
-        return framesetWithinFramesetURI;
-      }
-    }
-    
-    public static Uri TestEventsURI
-    {
-      get
-      {
-        if (testEventsURI == null)
-        {
-          testEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
-        }
-
-        return testEventsURI;
-      }
-    }
-    
-    public static Uri WatiNURI
-    {
-      get
-      {
-        if (watinURI == null)
-        {
-          watinURI = new Uri(HtmlTestBaseURI, "http://watin.sourceforge.net");
-        }
-
-        return watinURI;
-      }
-    }
-
-    public static string googleUrl
-    {
-      get
-      {
-        return "http://www.google.com";
-      }
-    }
-
-    public static string GetHtmlTestFilesLocation()
+    private static string GetHtmlTestFilesLocation()
     {
       DirectoryInfo baseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
       
@@ -169,7 +62,7 @@ namespace WatiN.UnitTests
       
       if (!Directory.Exists(htmlTestFilesLocation))
       {
-        // If html dirctory not found, search two dirs up in the directory tree
+        // If html directory not found, search two dirs up in the directory tree
         // Valid when executing WatiN UnitTests from within Visual Studio
         htmlTestFilesLocation = baseDirectory.Parent.Parent.FullName + @"\html\";
       }

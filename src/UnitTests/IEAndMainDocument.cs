@@ -81,7 +81,7 @@ namespace WatiN.UnitTests
       // the debug window in VS
       Logger.LogWriter = new DebugLogWriter();
 
-      using (IE ie = new IE(googleUrl))
+      using (IE ie = new IE(GoogleUrl))
       {
         ie.TextField(Find.ByName("q")).TypeText("WatiN");
         ie.Button(Find.ByName("btnG")).Click();
@@ -131,7 +131,7 @@ namespace WatiN.UnitTests
     [Test]
     public void GoogleFormSubmit()
     {
-      using (IE ie = new IE(googleUrl))
+      using (IE ie = new IE(GoogleUrl))
       {
         ie.TextField(Find.ByName("q")).TypeText("WatiN");
         ie.Form(Find.ByName("f")).Submit();
@@ -507,7 +507,7 @@ namespace WatiN.UnitTests
     [Test]
     public void RefreshWithImmediatelyExpiredPage()
     {
-      using (IE ie = new IE(googleUrl))
+      using (IE ie = new IE(GoogleUrl))
       {
         ie.TextField(Find.ByName("q")).TypeText("refresh test");
                 
