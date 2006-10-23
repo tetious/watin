@@ -101,9 +101,7 @@ namespace WatiN.Core
   public class StringEqualsAndCaseInsensitiveComparer : StringComparer
   {    
     public StringEqualsAndCaseInsensitiveComparer(string value) : base(value)
-    {
-      valueToCompareWith = value.ToLower();
-    }
+    {}
     
     public override bool Compare(string value)
     {
@@ -446,7 +444,7 @@ namespace WatiN.Core
     /// <summary>
     /// Initializes a new instance of the <see cref="For"/> class.
     /// </summary>
-    /// <param name="element">The element to which the Label element is attached.</param>
+    /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
     public For(Element element) : base(attributeName, element.Id)
     {}
   }
@@ -613,6 +611,18 @@ namespace WatiN.Core
     public static For ByFor(Regex regex)
     {
       return new For(regex);
+    }
+    
+    /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
+    /// <returns><see cref="For" /></returns>
+    /// <example>
+    /// <code>
+    /// CheckBox checkbox = ie.CheckBox("checkboxid");
+    /// ie.Label(Find.ByFor(checkbox).Text</code>
+    /// </example>
+    public static For ByFor(Element element)
+    {
+      return new For(element);
     }
 
     /// <summary>

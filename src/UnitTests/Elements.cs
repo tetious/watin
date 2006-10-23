@@ -459,6 +459,18 @@ namespace WatiN.UnitTests
       Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
       Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
     }
+    
+    [Test]
+    public void LabelByForWithElement()
+    {
+      CheckBox checkBox = ie.CheckBox("Checkbox21");
+      
+      Label label = ie.Label(Find.ByFor(checkBox));
+
+      Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
+      Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+      Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+    }
 
     [Test]
     public void LabelWrapped()
