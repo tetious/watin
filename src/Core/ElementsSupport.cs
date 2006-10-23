@@ -375,7 +375,7 @@ namespace WatiN.Core
       //TODO: See if this method could be dropped, it seems to give
       //      more troubles (uninitialized state of elements)
       //      then benefits (I just introduced this method to be on 
-      //      the save side, but don't know if it saved me to prevent an exception)
+      //      the save side)
       
       if (String.Compare(tagName, "img", true) == 0)
       {
