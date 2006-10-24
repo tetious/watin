@@ -41,7 +41,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void ApartmentStateMustBeSTA()
+    public void TestRunnerApartmentStateMustBeSTA()
     {
 #if NET11
       // Code for .Net 1.1
@@ -53,14 +53,6 @@ namespace WatiN.UnitTests
 #endif
     }
     
-    [Test]
-    public void NUnitGUI()
-    {
-      using (new IE(MainURI))
-      {
-      }
-    }
-
     [Test]
     public void Google()
     {
