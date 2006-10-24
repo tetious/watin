@@ -745,22 +745,30 @@ namespace WatiN.Core
     /// </example>
     public void Close()
     {
-      Logger.LogAction("Closing browser '" + Title + "'");
-      QuitIE();
+      if (ie != null)
+      {
+        Logger.LogAction("Closing browser '" + Title + "'");
+        QuitIE();
+      }
     }
 
     private void QuitIE()
     {
-      foreach(HtmlDialog htmlDialog in HtmlDialogs)
+      if (ie != null)
       {
-        htmlDialog.Close();
+        foreach(HtmlDialog htmlDialog in HtmlDialogs)
+        {
+          htmlDialog.Close();
+        }
+
+        base.Dispose();
+
+        ie.Quit(); // ask IE to close
+        ie = null;
+        Thread.Sleep(1000); // wait for IE to close by itself
+        
+//        DialogHandlers.DialogWatcher.CleanupDialogWatcherCache();
       }
-
-      base.Dispose();
-
-      ie.Quit(); // ask IE to close
-      ie = null;
-      Thread.Sleep(1000); // wait for IE to close by itself
     }
 
     /// <summary>
@@ -769,6 +777,11 @@ namespace WatiN.Core
     /// </summary>
     public virtual void ForceClose()
     {
+      if (ie == null)
+      {
+        throw new ObjectDisposedException("Internet Explorer", "The Internet Explorer instance is already disposed. ForceClose can't be performed.");
+      }
+      
       Logger.LogAction("Force closing all IE instances");
 
       int iePid = ProcessID;

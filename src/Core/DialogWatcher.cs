@@ -50,8 +50,24 @@ namespace WatiN.Core.DialogHandlers
     /// <returns></returns>
     public static DialogWatcher GetDialogWatcherForProcess(int ieProcessId)
     {     
-      CleanupDialogWatchers();
+      CleanupDialogWatcherCache();
+
+      DialogWatcher dialogWatcher = GetDialogWatcherFromCache(ieProcessId);
+
+      // If no dialogwatcher exists for the ieprocessid then 
+      // create a new one, store it and return it.
+      if (dialogWatcher == null)
+      {
+        dialogWatcher = new DialogWatcher(ieProcessId);
       
+        dialogWatchers.Add(dialogWatcher);
+      }
+      
+      return dialogWatcher;
+    }
+
+    public static DialogWatcher GetDialogWatcherFromCache(int ieProcessId)
+    {
       // Loop through already created dialogwatchers and
       // return a dialogWatcher if one exists for the given processid
       foreach (DialogWatcher dialogWatcher in dialogWatchers)
@@ -61,19 +77,13 @@ namespace WatiN.Core.DialogHandlers
           return dialogWatcher;
         }
       }
-
-      // If no dialogwatcher exists for the ieprocessid then 
-      // create a new one, store it and return it.
-      DialogWatcher newDialogWatcher = new DialogWatcher(ieProcessId);
       
-      dialogWatchers.Add(newDialogWatcher);
-      
-      return newDialogWatcher;
+      return null;
     }
 
-    private static void CleanupDialogWatchers()
+    public static void CleanupDialogWatcherCache()
     {
-      ArrayList cleanedupDialogWatchers = new ArrayList();
+      ArrayList cleanedupDialogWatcherCache = new ArrayList();
       
       foreach (DialogWatcher dialogWatcher in dialogWatchers)
       {
@@ -83,11 +93,11 @@ namespace WatiN.Core.DialogHandlers
         }
         else
         {
-          cleanedupDialogWatchers.Add(dialogWatcher);
+          cleanedupDialogWatcherCache.Add(dialogWatcher);
         }
       }
       
-      dialogWatchers = cleanedupDialogWatchers;
+      dialogWatchers = cleanedupDialogWatcherCache;
     }
 
     /// <summary>
@@ -255,12 +265,23 @@ namespace WatiN.Core.DialogHandlers
             NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
             NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
           }
-        }
 
-        Thread.Sleep(1000);
+          Thread.Sleep(1000);
+        }
+        else
+        {
+          keepRunning = false;
+        }
       }
     }
 
+    public bool IsRunning
+    {
+      get
+      {
+        return watcherThread.IsAlive;
+      }
+    }
     /// <summary>
     /// Gets a value indicating whether the process this dialog watcher
     /// watches (still) exists.

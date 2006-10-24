@@ -771,6 +771,45 @@ namespace WatiN.UnitTests
       }
     }
     
+    [Test]
+    public void CallingIEDisposeAfterIECloseShouldNotThrowAnExeption()
+    {
+      IE ie = new IE(); 
+      ie.Close(); 
+      ie.Dispose(); 
+    }
+    
+    [Test, ExpectedException(typeof(ObjectDisposedException))]
+    public void CallingIEForceCloseAfterIECloseShouldThrowAnExeption()
+    {
+      IE ie = new IE(); 
+      ie.Close(); 
+      ie.ForceClose(); 
+    }
+    
+    [Test]
+    public void DialogWatcherShouldKeepRunningWhenClosingOneOfTwoInstancesInSameProcess()
+    {
+      IE ie1 = new IE();
+      IE ie2 = new IE();
+      
+      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids should be the same");
+      
+      ie2.Close();
+      
+      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
+      
+      Assert.IsNotNull(dialogWatcher);
+      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId);
+      Assert.IsTrue(dialogWatcher.ProcessExists);
+      Assert.IsTrue(dialogWatcher.IsRunning);
+           
+      ie1.Close();
+      
+      Assert.IsFalse(dialogWatcher.ProcessExists);
+      Assert.IsFalse(dialogWatcher.IsRunning);
+    }
+
     private static void FailIfIEWindowExists(string partialTitle, string testName)
     {
       if (IsIEWindowOpen(partialTitle))

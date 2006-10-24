@@ -130,6 +130,7 @@ namespace WatiN.Core
     {
       base.Dispose();
       htmlDocument = null;
+      dialogWatcher = null;
     }
 
     /// <summary>
