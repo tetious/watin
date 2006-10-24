@@ -62,19 +62,6 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void EbayTest()
-    {
-      // ebay seems to embed some active-x(?) component
-      // which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces
-      // Changed the code to release the pUnk.
-      // This test should ensure propper working untill I'm able to 
-      // create a better test.
-      using(new IE("http://www.ebay.com/"))
-      {
-      }
-    }
-
-    [Test]
     public void Google()
     {
       // Instantiate a new DebugLogger to output "user" events to

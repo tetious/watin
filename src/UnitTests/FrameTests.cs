@@ -354,5 +354,19 @@ namespace WatiN.UnitTests
       Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFramesCount, count);
     }
+    
+    [Test]
+    public void EbayTest()
+    {
+      // ebay seems to embed some active-x(?) component
+      // which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces
+      // Changed the code to release the pUnk.
+      // This test should ensure propper working untill I'm able to 
+      // create a better test.
+      using(new IE(EbayUrl))
+      {
+      }
+    }
+
   }
 }
