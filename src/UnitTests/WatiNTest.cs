@@ -32,6 +32,7 @@ namespace WatiN.UnitTests
     public static Uri FramesetWithinFramesetURI = new Uri(HtmlTestBaseURI, "FramesetWithinFrameset.html");
     public static Uri CrossDomainFramesetURI = new Uri(HtmlTestBaseURI, "CrossDomainFrameset.html");
     public static Uri TestEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
+    public static Uri FormSubmitURI = new Uri(HtmlTestBaseURI, "formsubmit.html");
     public static Uri WatiNURI = new Uri("http://watin.sourceforge.net");
     public static Uri ImagesURI = new Uri(HtmlTestBaseURI,"images.html");
     public static Uri IFramesMainURI = new Uri(HtmlTestBaseURI, "iframes\\main.html");

@@ -1020,15 +1020,9 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ImageTests : WatiNTest
   {
-    private IE ie;
+    private IE ie = new IE(ImagesURI);
 
     private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
-
-    [TestFixtureSetUp]
-    public void Setup()
-    {
-      ie = new IE(ImagesURI);
-    }
     
     [TestFixtureTearDown]
     public void Teardown()
@@ -1092,6 +1086,39 @@ namespace WatiN.UnitTests
       Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedImagesCount, count);
     }
+  }
+  
+  [TestFixture]
+  public class Forms : WatiNTest
+  {
+    IE ie = new IE();
+    
+    [SetUp]
+    public void TestSetup()
+    {
+      ie.GoTo(FormSubmitURI);
+    }
+    
+    [TestFixtureTearDown]
+    public void FixtureTeardown()
+    {
+      ie.Close();
+    }
+    
+    [Test]
+    public void FormSubmit()
+    {
+      ie.Form("Form1").Submit();
 
+      Assert.AreEqual(ie.Uri, MainURI);
+    }
+    
+    [Test]
+    public void FormSubmitBySubmitButton()
+    {
+      ie.Button("submitbutton").Click();
+
+      Assert.AreEqual(ie.Uri, MainURI);
+    }
   }
 }

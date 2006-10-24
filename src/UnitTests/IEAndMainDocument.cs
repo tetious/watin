@@ -108,18 +108,6 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void GoogleFormSubmit()
-    {
-      using (IE ie = new IE(GoogleUrl))
-      {
-        ie.TextField(Find.ByName("q")).TypeText("WatiN");
-        ie.Form(Find.ByName("f")).Submit();
-
-        Assert.IsTrue(ie.ContainsText("WatiN"));
-      }
-    }
-
-    [Test]
     public void ModelessDialog()
     {
       using (IE ie = new IE(MainURI))

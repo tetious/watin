@@ -127,6 +127,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "html\formsubmit.html"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\Frameset.html"
                     BuildAction = "Content"
                 />
