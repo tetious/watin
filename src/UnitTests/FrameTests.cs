@@ -172,7 +172,7 @@ namespace WatiN.UnitTests
     }
   }
   
-  [TestFixture]
+  [TestFixture, Category("InternetConnectionNeeded")]
   public class CrossDomainTests : WatiNTest
   {
     private IE ieframes;
@@ -355,7 +355,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual(expectedFramesCount, count);
     }
     
-    [Test]
+    [Test, Category("InternetConnectionNeeded")]
     public void EbayTest()
     {
       // ebay seems to embed some active-x(?) component

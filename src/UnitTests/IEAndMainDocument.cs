@@ -53,7 +53,7 @@ namespace WatiN.UnitTests
 #endif
     }
     
-    [Test]
+    [Test, Category("InternetConnectionNeeded")]
     public void Google()
     {
       // Instantiate a new DebugLogger to output "user" events to
@@ -480,7 +480,7 @@ namespace WatiN.UnitTests
       }
     }
     
-    [Test]
+    [Test, Category("InternetConnectionNeeded")]
     public void RefreshWithImmediatelyExpiredPage()
     {
       using (IE ie = new IE(GoogleUrl))
