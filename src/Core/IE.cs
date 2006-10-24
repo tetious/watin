@@ -790,8 +790,8 @@ namespace WatiN.Core
 
       try
       {
-        Process.GetProcessById(iePid).Kill(); // force IE to close if needed
-        Debug.WriteLine("IE didn't close by itself, so we explicitly killed it");
+        // Force Internet Explorer instances to close
+        Process.GetProcessById(iePid).Kill(); 
       }
       catch (ArgumentException)
       {

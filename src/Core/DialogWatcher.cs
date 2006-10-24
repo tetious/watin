@@ -677,9 +677,7 @@ namespace WatiN.Core.DialogHandlers
     }
     
     public override bool HandleDialog(Window window)
-    {
-      Debug.WriteLine(Environment.TickCount + " Enter handler: " + window.Title);
-      
+    {      
       if (IsFileUploadDialog(window))
       {
         NativeMethods.SetForegroundWindow(window.Hwnd);
