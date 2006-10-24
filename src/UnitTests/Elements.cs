@@ -744,8 +744,29 @@ namespace WatiN.UnitTests
       textfieldName.Value = value;
       Assert.AreEqual(value,textfieldName.Value, "Value not OK");
       Assert.AreEqual(value,textfieldName.Text, "Text not OK");
+      
+      Assert.AreEqual("Textfield title", textfieldName.ToString(), "Expected Title");
+      Assert.AreEqual("readonlytext", ie.TextField("readonlytext").ToString(), "Expected Id");
+      Assert.AreEqual("disabledtext", ie.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
     }
 
+    [Test]
+    public void TextFieldTypeTextEvents()
+    {
+      using(IE ie1= new IE(TestEventsURI))
+      {
+        Assert.IsFalse(ie1.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
+        Assert.IsFalse(ie1.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
+        Assert.IsFalse(ie1.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
+
+        ie1.TextField("textfieldid").TypeText("test");
+        
+        Assert.IsTrue(ie1.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
+        Assert.IsTrue(ie1.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
+        Assert.IsTrue(ie1.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
+      }
+    }
+    
     [Test]
     public void TextFieldTextAreaElement()
     {
@@ -790,7 +811,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ElementDisabledException),"Element with Id:disabledtext is disabled")]
     public void TextFieldDisabledException()
     {
-      TextField textField = ie.TextField("disabledtext");
+      TextField textField = ie.TextField(Find.ByName("disabledtext"));
       textField.TypeText("This should go wrong");
     }
 
@@ -1058,7 +1079,16 @@ namespace WatiN.UnitTests
   public class FormTests : WatiNTest
   {
     IE ie = new IE();
-        
+    
+    [SetUp]
+    public void TestSetup()
+    {
+      if (ie.Uri != FormSubmitURI)
+      {
+        ie.GoTo(FormSubmitURI);
+      }
+    }
+    
     [TestFixtureTearDown]
     public void FixtureTeardown()
     {
@@ -1068,8 +1098,6 @@ namespace WatiN.UnitTests
     [Test]
     public void FormSubmit()
     {
-      ie.GoTo(FormSubmitURI);
-
       ie.Form("Form1").Submit();
 
       Assert.AreEqual(ie.Uri, MainURI);
@@ -1078,8 +1106,6 @@ namespace WatiN.UnitTests
     [Test]
     public void FormSubmitBySubmitButton()
     {
-      ie.GoTo(FormSubmitURI);
-
       ie.Button("submitbutton").Click();
 
       Assert.AreEqual(ie.Uri, MainURI);
@@ -1088,8 +1114,6 @@ namespace WatiN.UnitTests
     [Test]
     public void Form()
     {
-      ie.GoTo(FormSubmitURI);
-
       Form form = ie.Form("Form2");
       
       Assert.IsInstanceOfType(typeof(ElementsContainer), form);
@@ -1137,8 +1161,6 @@ namespace WatiN.UnitTests
     [Test]
     public void FormToStringWithTitleIdAndName()
     {
-      ie.GoTo(FormSubmitURI);
-      
       Assert.AreEqual("Form title", ie.Form("Form2").ToString(), "Title expected");
       Assert.AreEqual("Form3", ie.Form("Form3").ToString(), "Id expected");
       Assert.AreEqual("form4name", ie.Form(Find.ByName("form4name")).ToString(), "Name expected");

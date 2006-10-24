@@ -23,7 +23,7 @@ function fnOpen()
     </HEAD>
     <body>
         <form id="Form">
-            <input id="name" name="textinput1" type="text" maxLength="200" size="32"> <input id="popupid" onclick="javascript:popupWindow = window.showModelessDialog('popup.html', document)"
+            <input id="name" name="textinput1" type="text" title="Textfield title" maxLength="200" size="32"> <input id="popupid" onclick="javascript:popupWindow = window.showModelessDialog('popup.html', document)"
                 type="button" value="Show modeless dialog" name="popupname"> <input id="modalid" onclick="fnOpen()" type="button" value="Show modal dialog" name="popupmodalname">
             <input id="helloid" onclick="javascript:alert('hello')" type="button" value="Show allert"
                 name="helloname"> <INPUT id="disabledid" type="button" disabled="true" value="disabled" name="disabledname">
@@ -36,7 +36,7 @@ function fnOpen()
             <input type="hidden" value="first"> <input type="hidden" value="second">
         </form>
         <form id="ReadyOnlyDisabledInputs">
-            <input id="readonlytext" type="text" readonly value="readonly"> <input id="disabledtext" disabled type="text" value="disabled">
+            <input id="readonlytext" type="text" readonly value="readonly"> <input name="disabledtext" disabled type="text" value="disabled">
         </form>
         <form id="FormCheckboxes">
             <INPUT id="Checkbox1" type="checkbox" CHECKED value="Effe teste" name="Checkbox1">

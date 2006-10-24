@@ -28,6 +28,21 @@ function ShowAlertDialog() {
      alert('This is an alert!');
 }
 
+function keyDown() {
+    checkbox = document.getElementById("chkKeyDown");
+    checkbox.checked = true;
+    return true
+}
+function keyPress() {
+    checkbox = document.getElementById("chkKeyPress");
+    checkbox.checked = true;
+    return true
+}
+function keyUp() {
+    checkbox = document.getElementById("chkKeyUp");
+    checkbox.checked = true;
+    return true
+}
         </script>
     </head>
     <body>
@@ -40,5 +55,11 @@ function ShowAlertDialog() {
         <P>
             <INPUT id="alertdialogid" onclick="javascript:ShowAlertDialog()" type="button" value="Show alert dialog">
         </P>
+        <p>
+            <input id="textfieldid" type="text" onkeydown="javascript:keyDown()" onkeypress="javascript:keyPress()"
+                onkeyup="javascript:keyUp()" /> <label><input type="checkbox" id="chkKeyDown" />
+                KeyDown</label> <label><input type="checkbox" id="chkKeyPress" /> KeyPress</label>
+            <label><input type="checkbox" id="chkKeyUp" /> KeyUp</label>
+        </p>
     </body>
 </html>
