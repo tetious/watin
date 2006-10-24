@@ -1,12 +1,31 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
     <head>
+        <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
         <title></title>
+        <SCRIPT>
+        function setTitle(src) {
+            src.title="this is the title";
+            return;
+            }
+        </SCRIPT>
     </head>
     <body>
-        <form method="get" action ="main.html" ID="Form1">
+        <form method="get" action="main.html" ID="Form1">
             <p>This is a form. When submitted, it will show main.html</p>
-            <input type=submit id="submitbutton" value="Submit" >
+            <input type="submit" id="submitbutton" value="Submit">
+        </form>
+        <form ID="Form2" title="Form title" name="form2name" style="BACKGROUND-COLOR: aqua">
+            <p>This is a form with an ID, Title and name.</p>
+        </form>
+        <form ID="Form3" name="form3name" style="BACKGROUND-COLOR: green">
+            <p>This is a form with an ID and name.</p>
+        </form>
+        <form name="form4name" style="BACKGROUND-COLOR: lime">
+            <p>This is a form with a name.</p>
+        </form>
+        <form style="BACKGROUND-COLOR: olive">
+            <p>This is a form with no ID, Title or name.</p>
         </form>
     </body>
 </html>
