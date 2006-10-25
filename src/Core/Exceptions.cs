@@ -141,4 +141,8 @@ namespace WatiN.Core.Exceptions
       base("Invalid attribute '" +atributeName + "' for element '" + elementTag +"'" )
     {}
   }
+  
+  public class ReferenceCountException : WatiNException
+  {
+  }
 }

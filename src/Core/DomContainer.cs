@@ -88,6 +88,7 @@ namespace WatiN.Core
     protected void StartDialogWatcher()
     {
       dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+      dialogWatcher.IncreaseReferenceCount();
     }
 
     public DialogWatcher DialogWatcher
@@ -130,6 +131,7 @@ namespace WatiN.Core
     {
       base.Dispose();
       htmlDocument = null;
+      DialogWatcher.DecreaseReferenceCount();
       dialogWatcher = null;
     }
 

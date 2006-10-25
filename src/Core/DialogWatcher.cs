@@ -38,6 +38,7 @@ namespace WatiN.Core.DialogHandlers
     private ArrayList handlers = new ArrayList();
     private Thread watcherThread;
     private bool closeUnhandledDialogs = true;
+    private int referenceCount = 0;
     
     private static ArrayList dialogWatchers = new ArrayList();
     
@@ -87,7 +88,7 @@ namespace WatiN.Core.DialogHandlers
       
       foreach (DialogWatcher dialogWatcher in dialogWatchers)
       {
-        if (!dialogWatcher.ProcessExists)
+        if (!dialogWatcher.IsRunning)
         {
           dialogWatcher.Dispose();
         }
@@ -118,6 +119,38 @@ namespace WatiN.Core.DialogHandlers
       watcherThread.Start();
     }
 
+    /// <summary>
+    /// Increases the reference count of this DialogWatcher instance with 1.
+    /// </summary>
+    public void IncreaseReferenceCount()
+    {
+      referenceCount = ReferenceCount + 1;;
+    }
+    
+    /// <summary>
+    /// Decreases the reference count of this DialogWatcher instance with 1.
+    /// When reference count becomes zero, the Dispose method will be 
+    /// automatically called. This method will throw an <see cref="ReferenceCountException"/>
+    /// if the reference count is zero.
+    /// </summary>
+    public void DecreaseReferenceCount()
+    {
+      
+      if (ReferenceCount > 0)
+      {
+        referenceCount = ReferenceCount - 1;;
+      }
+      else
+      {
+        throw new ReferenceCountException();
+      }      
+
+      if (ReferenceCount == 0)
+      {
+        Dispose();
+      }
+    }
+    
     /// <summary>
     /// Adds the specified handler.
     /// </summary>
@@ -295,6 +328,11 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
+    public int ReferenceCount
+    {
+      get { return referenceCount; }
+    }
+
     private Process getProcess(int processId)
     {
       Process process;
@@ -369,14 +407,17 @@ namespace WatiN.Core.DialogHandlers
       lock (this)
       {
         keepRunning = false;
-        watcherThread.Join();
+        if (IsRunning)
+        {
+          watcherThread.Join();
+        }
         Clear();
       }
     }
 
     #endregion
   }
-  
+
   public interface IDialogHandler
   {
     bool HandleDialog(Window window);

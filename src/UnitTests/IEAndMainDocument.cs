@@ -27,7 +27,6 @@ using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
-using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
@@ -108,7 +107,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void ModelessDialog()
+    public void HTMLDialogModeless()
     {
       using (IE ie = new IE(MainURI))
       {
@@ -590,7 +589,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void HTMLDialog()
+    public void HTMLDialogModal()
     {
       IE ie = new IE(MainURI);
 
@@ -612,68 +611,6 @@ namespace WatiN.UnitTests
       ie.Close();
     }
 
-    [Test]
-    public void HTMLDialogFindByTitle()
-    {
-      HTMLDialogWithFindBy(Find.ByTitle("PopUpTest"), false);
-    }
-
-    [Test]
-    public void HTMLDialogFindByUrl()
-    {
-      HTMLDialogWithFindBy(Find.ByUrl(PopUpURI),false);
-    }
-    
-    [Test]
-    public void HTMLDialogFindByTitleAndWithTimeout()
-    {
-      HTMLDialogWithFindBy(Find.ByTitle("PopUpTest"), true);
-    }
-
-    [Test]
-    public void HTMLDialogFindByUrlAndWithTimeout()
-    {
-      HTMLDialogWithFindBy(Find.ByUrl(PopUpURI),true);
-    }
-    
-    private static void HTMLDialogWithFindBy(Attribute attribute, bool withTimeout)
-    {
-      using (IE ie = new IE(MainURI))
-      {
-        TestHTMLDialog(attribute, withTimeout, ie);
-      }
-    }
-    
-    private static void TestHTMLDialog(Attribute attribute, bool withTimeout, IE ie)
-    {
-      ie.Button("modalid").ClickNoWait();
-
-      HtmlDialog htmlDialog = GetHtmlDialog(attribute, withTimeout, ie);
-
-      Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
-  
-      htmlDialog.Close();
-
-      ie.WaitForComplete();
-    }
-
-    private static HtmlDialog GetHtmlDialog(Attribute attribute, bool withTimeout, IE ie)
-    {
-      if (!withTimeout)
-      {
-        if (attribute is Title)
-        {
-          return ie.HtmlDialog((Title)attribute);
-        }
-        return ie.HtmlDialog((Url)attribute);
-      }
-      if (attribute is Title)
-      {
-        return ie.HtmlDialog((Title)attribute, 10);
-      }
-      return ie.HtmlDialog((Url)attribute, 10);      
-    }
 
     [Test]
     public void HTMLDialogNotFoundException()
@@ -698,15 +635,6 @@ namespace WatiN.UnitTests
           Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
           Assert.AreEqual(expectedMessage, e.Message, "Unexpected exception message");
         }
-      }
-    }
-
-    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void HTMLDialogGettingWithNegativeTimeoutNotAllowed()
-    {
-      using (IE ie = new IE(MainURI))
-      {
-        ie.HtmlDialog(Find.ByUrl(PopUpURI), -1);
       }
     }
     
@@ -754,29 +682,6 @@ namespace WatiN.UnitTests
       ie.ForceClose(); 
     }
     
-    [Test]
-    public void DialogWatcherShouldKeepRunningWhenClosingOneOfTwoInstancesInSameProcess()
-    {
-      IE ie1 = new IE();
-      IE ie2 = new IE();
-      
-      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids should be the same");
-      
-      ie2.Close();
-      
-      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
-      
-      Assert.IsNotNull(dialogWatcher);
-      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId);
-      Assert.IsTrue(dialogWatcher.ProcessExists);
-      Assert.IsTrue(dialogWatcher.IsRunning);
-           
-      ie1.Close();
-      
-      Assert.IsFalse(dialogWatcher.ProcessExists);
-      Assert.IsFalse(dialogWatcher.IsRunning);
-    }
-
     private static void FailIfIEWindowExists(string partialTitle, string testName)
     {
       if (IsIEWindowOpen(partialTitle))
@@ -798,5 +703,198 @@ namespace WatiN.UnitTests
       return true;
     }
   }
+  
+  [TestFixture]
+  public class DialogWatcherTest : WatiNTest
+  {
+    [Test]
+    public void DialogWatcherShouldKeepRunningWhenClosingOneOfTwoInstancesInSameProcess()
+    {      
+      IE ie1 = new IE();
+      IE ie2 = new IE();
+      
+      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids should be the same");
+      
+      ie2.Close();
+      
+      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
+      
+      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
+      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
+           
+      ie1.Close();
+      
+      Assert.IsFalse(dialogWatcher.ProcessExists, "Process should not exist");
+      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+    }
+    
+    [Test]
+    public void DialogWatcherShouldTerminateWhenNoWatiNCoreIEInstancesExistButProcessDoesExist()
+    {
+      // Create running Internet Explorer instance but no longer referenced by 
+      // an instance of WatiN.Core.IE.
+      IE ie = new IE(MainURI);
+      ie.AutoClose = false;
+      int ieProcessId = ie.ProcessID;
+      ie.Dispose();
+      
+      // Create IE instances and see if DialogWatcher behaves as expected
+      IE ie1 = new IE();
+      
+      Assert.AreEqual(ieProcessId, ie1.ProcessID, "ProcessIds ie and ie1 should be the same");
+      
+      IE ie2 = new IE();
+      
+      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids ie1 and ie2 should be the same");
+      
+      ie2.Close();
+      
+      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
+      
+      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
+      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
+           
+      ie1.Close();
+      
+      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist after ie1.close");
+      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+      
+      // Find create but not referenced Internet Explorer instance and close it.
+      ie = IE.AttachToIE(Find.ByUrl(MainURI));
+      ie.Close();
+    }
 
+    [Test]
+    public void DialogWatcherOfIEAndHTMLDialogShouldNotBeNull()
+    {
+      IE ie = new IE(MainURI);
+      
+      Assert.IsNotNull(ie.DialogWatcher, "ie.DialogWatcher should not be null");
+      
+      ie.Button("modalid").ClickNoWait();
+
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
+
+      Assert.IsNotNull(htmlDialog.DialogWatcher, "htmlDialog.DialogWatcher should not be null");
+
+      htmlDialog.Close();
+
+      ie.WaitForComplete();
+      ie.Close();
+    }
+    
+    [Test]
+    public void DialogWatcherShouldKeepRunningWhenClosingHTMLDialog()
+    {
+      IE ie = new IE(MainURI);
+      ie.Button("modalid").ClickNoWait();
+
+      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
+
+      Assert.AreEqual(ie.ProcessID, htmlDialog.ProcessID, "Processids should be the same");
+
+      htmlDialog.Close();
+
+      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
+      
+      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+      Assert.AreEqual(ie.ProcessID, dialogWatcher.ProcessId, "Processids of ie and dialogWatcher should be the same");
+      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
+
+      ie.WaitForComplete();
+      ie.Close();
+      
+      Assert.IsFalse(dialogWatcher.ProcessExists, "Process should not exist");
+      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+    }
+    
+    [Test]
+    public void ThrowReferenceCountException()
+    {
+      IE ie = new IE();
+      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
+      dialogWatcher.DecreaseReferenceCount();
+
+      bool catchedReferenceCountException = false;
+      try
+      {
+        dialogWatcher.DecreaseReferenceCount();
+      }
+      catch(ReferenceCountException)
+      {
+        catchedReferenceCountException = true;
+      }
+    
+      // Prevent ReferenceCountException from happening again
+      dialogWatcher.IncreaseReferenceCount();
+      ie.Close();
+
+      Assert.IsTrue(catchedReferenceCountException);
+    }
+  }
+  
+  [TestFixture]
+  public class HTMLDialogFindByTests : WatiNTest
+  {
+    IE ie = new IE(MainURI);
+
+    [TestFixtureSetUp]
+    public void FixtureSetUp()
+    {
+      ie.Button("modalid").ClickNoWait();
+    }
+
+    [TestFixtureTearDown]
+    public void FixtureTearDown()
+    {
+      foreach (HtmlDialog dialog in ie.HtmlDialogs)
+      {
+        dialog.Close();
+      }
+
+      ie.WaitForComplete();
+      ie.Close();
+    }
+
+    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void HTMLDialogGettingWithNegativeTimeoutNotAllowed()
+    {
+      ie.HtmlDialog(Find.ByUrl(PopUpURI), -1);
+    }
+
+    [Test]
+    public void HTMLDialogFindByTitle()
+    {
+      AssertHTMLDialog(ie.HtmlDialog(Find.ByTitle("PopUpTest")));
+    }
+
+    [Test]
+    public void HTMLDialogFindByUrl()
+    {
+      AssertHTMLDialog(ie.HtmlDialog(Find.ByUrl(PopUpURI)));
+    }
+    
+    [Test]
+    public void HTMLDialogFindByTitleAndWithTimeout()
+    {
+      AssertHTMLDialog(ie.HtmlDialog(Find.ByTitle("PopUpTest"), 10));
+    }
+
+    [Test]
+    public void HTMLDialogFindByUrlAndWithTimeout()
+    {
+      AssertHTMLDialog(ie.HtmlDialog(Find.ByUrl(PopUpURI), 10));
+    }
+    
+    private static void AssertHTMLDialog(HtmlDialog htmlDialog)
+    {
+      Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
+    }
+  }
 }

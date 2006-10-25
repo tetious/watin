@@ -45,6 +45,7 @@ namespace WatiN.Core
     public HtmlDialog(IntPtr windowHandle)
     {
       hwnd = windowHandle;
+      StartDialogWatcher();
     }
 
     public void Close()

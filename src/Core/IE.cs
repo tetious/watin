@@ -748,26 +748,33 @@ namespace WatiN.Core
       if (ie != null)
       {
         Logger.LogAction("Closing browser '" + Title + "'");
-        QuitIE();
+        DisposeAndCloseIE(true);
       }
     }
 
-    private void QuitIE()
+    private void DisposeAndCloseIE(bool closeIE)
     {
       if (ie != null)
       {
-        foreach(HtmlDialog htmlDialog in HtmlDialogs)
+        if (closeIE)
         {
-          htmlDialog.Close();
+          foreach(HtmlDialog htmlDialog in HtmlDialogs)
+          {
+            htmlDialog.Close();
+          }
         }
-
         base.Dispose();
 
-        ie.Quit(); // ask IE to close
-        ie = null;
-        Thread.Sleep(1000); // wait for IE to close by itself
+        if (closeIE)
+        {
+          ie.Quit(); // ask IE to close
+        }
         
-//        DialogHandlers.DialogWatcher.CleanupDialogWatcherCache();
+        ie = null;
+        if (closeIE)
+        {
+          Thread.Sleep(1000); // wait for IE to close by itself
+        }
       }
     }
 
@@ -786,7 +793,7 @@ namespace WatiN.Core
 
       int iePid = ProcessID;
       
-      QuitIE();
+      DisposeAndCloseIE(true);
 
       try
       {
@@ -828,10 +835,7 @@ namespace WatiN.Core
     /// </summary>
     public new void Dispose()
     {
-      if (AutoClose)
-      {
-        Close();
-      }
+      DisposeAndCloseIE(AutoClose);
     }
     #endregion
 
