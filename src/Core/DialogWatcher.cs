@@ -124,7 +124,7 @@ namespace WatiN.Core.DialogHandlers
     /// </summary>
     public void IncreaseReferenceCount()
     {
-      referenceCount = ReferenceCount + 1;;
+      referenceCount++;
     }
     
     /// <summary>
@@ -138,7 +138,7 @@ namespace WatiN.Core.DialogHandlers
       
       if (ReferenceCount > 0)
       {
-        referenceCount = ReferenceCount - 1;;
+        referenceCount--;
       }
       else
       {
@@ -298,8 +298,14 @@ namespace WatiN.Core.DialogHandlers
             NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
             NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
           }
-
-          Thread.Sleep(1000);
+          
+          // Keep DialogWatcher responsive during 1 second sleep period
+          int count = 0;
+          while(keepRunning && count < 5)
+          {
+            Thread.Sleep(200);
+            count++;
+          }
         }
         else
         {
