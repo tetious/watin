@@ -74,7 +74,7 @@ namespace WatiN.Core
     /// </summary>
     protected void StartDialogWatcher()
     {
-      if (dialogWatcher != null)
+      if (dialogWatcher == null)
       {
         dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
         dialogWatcher.IncreaseReferenceCount();
