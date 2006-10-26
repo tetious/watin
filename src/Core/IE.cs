@@ -745,7 +745,7 @@ namespace WatiN.Core
     /// </example>
     public void Close()
     {
-      if (ie != null)
+      if (!IsDisposed())
       {
         Logger.LogAction("Closing browser '" + Title + "'");
         DisposeAndCloseIE(true);
@@ -754,26 +754,32 @@ namespace WatiN.Core
 
     private void DisposeAndCloseIE(bool closeIE)
     {
-      if (ie != null)
+      if (!IsDisposed())
       {
         if (closeIE)
         {
+          // Close all open HTMLDialogs
           foreach(HtmlDialog htmlDialog in HtmlDialogs)
           {
             htmlDialog.Close();
           }
         }
+        
         base.Dispose();
 
         if (closeIE)
         {
-          ie.Quit(); // ask IE to close
+          // Ask IE to close
+          ie.Quit(); 
         }
         
         ie = null;
+        
         if (closeIE)
         {
-          Thread.Sleep(1000); // wait for IE to close by itself
+          // Wait for IE to close to prevent RPC errors when creating
+          // a new WatiN.Core.IE instance.
+          Thread.Sleep(1000); 
         }
       }
     }
@@ -784,7 +790,7 @@ namespace WatiN.Core
     /// </summary>
     public virtual void ForceClose()
     {
-      if (ie == null)
+      if (IsDisposed())
       {
         throw new ObjectDisposedException("Internet Explorer", "The Internet Explorer instance is already disposed. ForceClose can't be performed.");
       }
@@ -806,8 +812,12 @@ namespace WatiN.Core
       }
     }
 
-    /// <exclude />
-    public override IHTMLDocument2 OnGetHtmlDocument()
+    private bool IsDisposed()
+    {
+      return ie == null;
+    }
+
+    internal override IHTMLDocument2 OnGetHtmlDocument()
     {
       return (IHTMLDocument2)ie.Document;
     }

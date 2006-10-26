@@ -54,7 +54,7 @@ namespace WatiN.Core
       NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
     }
 
-    public override IHTMLDocument2 OnGetHtmlDocument()
+    internal override IHTMLDocument2 OnGetHtmlDocument()
     {
       return IEDOMFromhWnd(hwnd);
     }

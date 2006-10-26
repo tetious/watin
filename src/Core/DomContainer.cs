@@ -51,10 +51,7 @@ namespace WatiN.Core
     /// <summary>
     /// This method must be overriden by all sub classes
     /// </summary>
-    public virtual IHTMLDocument2 OnGetHtmlDocument()
-    {
-      throw new NotImplementedException("This method must be overridden by all sub classes");
-    }
+    internal abstract IHTMLDocument2 OnGetHtmlDocument();
 
     /// <summary>
     /// Returns the 'raw' html document for the internet explorer DOM.
@@ -73,24 +70,21 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead. 
+    /// Call this function (from a subclass) as soon as the process is started.
     /// </summary>
-    /// <value>The main document.</value>
-    [Obsolete("The IE.MainDocument.xxx syntax is no longer supported, use IE.xxx instead.")]
-    public Document MainDocument
+    protected void StartDialogWatcher()
     {
-      get
+      if (dialogWatcher != null)
       {
-        return this;
+        dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+        dialogWatcher.IncreaseReferenceCount();
       }
     }
 
-    protected void StartDialogWatcher()
-    {
-      dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
-      dialogWatcher.IncreaseReferenceCount();
-    }
-
+    /// <summary>
+    /// Gets the dialog watcher.
+    /// </summary>
+    /// <value>The dialog watcher.</value>
     public DialogWatcher DialogWatcher
     {
       get
@@ -99,11 +93,19 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Adds the dialog handler.
+    /// </summary>
+    /// <param name="handler">The dialog handler.</param>
     public void AddDialogHandler(IDialogHandler handler)
     {
       DialogWatcher.Add(handler);
     }
 
+    /// <summary>
+    /// Removes the dialog handler.
+    /// </summary>
+    /// <param name="handler">The dialog handler.</param>
     public void RemoveDialogHandler(IDialogHandler handler)
     {
       DialogWatcher.Remove(handler);
@@ -131,8 +133,11 @@ namespace WatiN.Core
     {
       base.Dispose();
       htmlDocument = null;
-      DialogWatcher.DecreaseReferenceCount();
-      dialogWatcher = null;
+      if (dialogWatcher != null)
+      {
+        DialogWatcher.DecreaseReferenceCount();
+        dialogWatcher = null;
+      }
     }
 
     /// <summary>
@@ -146,8 +151,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// This method waits till IE is ready
-    /// processing or the timeout periode has expired. You should
+    /// This method waits till IE is ready processing 
+    /// or the timeout periode has expired. You should
     /// call InitTimeout prior to calling this method.
     /// </summary>
     protected internal void WaitForCompleteOrTimeout()
@@ -231,7 +236,7 @@ namespace WatiN.Core
         }
         catch{}
 
-        document = IsDocumentAvailable(document, "frame");
+        document = IsDocumentAvailable(document, "maindocument");
       }
     }
 
@@ -289,6 +294,10 @@ namespace WatiN.Core
       return document;
     }
 
+    /// <summary>
+    /// Gets the process ID the Internet Explorer or HTMLDialog is running in.
+    /// </summary>
+    /// <value>The process ID.</value>
     public int ProcessID
     {
       get
