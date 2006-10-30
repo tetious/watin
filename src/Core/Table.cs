@@ -110,66 +110,66 @@ namespace WatiN.Core
 
       return null;
     }
-           
+  }
+
+  /// <summary>
+  /// Use this class to find a row which contains a particular value
+  /// in a table cell contained in a table column.
+  /// </summary>
+  public class TableRowFinder : Text
+  {
+    private int columnIndex;
+    private ICompare containsText;
+      
     /// <summary>
-    /// Use this class to find a row which contains a particular value
-    /// in a table cell contained in a table column.
+    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
     /// </summary>
-    public class TableRowFinder : Text
+    /// <param name="findText">The text to find (exact match but case insensitive).</param>
+    /// <param name="inColumn">The column index in which to look for the value.</param>
+    public TableRowFinder(string findText, int inColumn): base(findText)
     {
-      private int columnIndex;
-      private ICompare containsText;
+      columnIndex = inColumn;
+      comparer = new StringEqualsAndCaseInsensitiveComparer(findText);
+      containsText = new StringContainsAndCaseInsensitiveComparer(findText);
+    }
       
-      /// <summary>
-      /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
-      /// </summary>
-      /// <param name="findText">The text to find (exact match but case insensitive).</param>
-      /// <param name="inColumn">The column index in which to look for the value.</param>
-      public TableRowFinder(string findText, int inColumn): base(findText)
-      {
-        columnIndex = inColumn;
-        comparer = new StringEqualsAndCaseInsensitiveComparer(findText);
-        containsText = new StringContainsAndCaseInsensitiveComparer(findText);
-      }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
+    /// </summary>
+    /// <param name="findTextRegex">The regular expression to match with.</param>
+    /// <param name="inColumn">The column index in which to look for the value.</param>
+    public TableRowFinder(Regex findTextRegex, int inColumn): base(findTextRegex)
+    {
+      columnIndex = inColumn;
+      containsText = new AlwaysTrueComparer();
+    }
       
-      /// <summary>
-      /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
-      /// </summary>
-      /// <param name="findTextRegex">The regular expression to match with.</param>
-      /// <param name="inColumn">The column index in which to look for the value.</param>
-      public TableRowFinder(Regex findTextRegex, int inColumn): base(findTextRegex)
-      {
-        columnIndex = inColumn;
-        containsText = new AlwaysTrueComparer();
-      }
-      
-      public override bool Compare(object ihtmlelement)
-      {
-        IHTMLElement element = GetIHTMLElement(ihtmlelement);
+    public override bool Compare(object ihtmlelement)
+    {
+      IHTMLElement element = GetIHTMLElement(ihtmlelement);
 
-        if (IsTextContainedIn(element.innerText))
-        {
-          // Get all elements and filter this for TableCells
-          IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
-          IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
-        
-          return base.Compare(tableCellElements.item(columnIndex, null));
-        }
-        
-        return false;
-      }
-      
-      private class AlwaysTrueComparer : ICompare
+      if (IsTextContainedIn(element.innerText))
       {
-        public bool Compare(string value)
-        {
-          return true;
-        }
+        // Get all elements and filter this for TableCells
+        IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
+        IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
+        
+        return base.Compare(tableCellElements.item(columnIndex, null));
       }
+        
+      return false;
+    }
 
-      public bool IsTextContainedIn(string text)
+    public bool IsTextContainedIn(string text)
+    {
+      return containsText.Compare(text);
+    }
+      
+    private class AlwaysTrueComparer : ICompare
+    {
+      public bool Compare(string value)
       {
-        return containsText.Compare(text);
+        return true;
       }
     }
   }
