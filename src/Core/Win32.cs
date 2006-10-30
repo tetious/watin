@@ -164,7 +164,7 @@ namespace WatiN.Core
     }
 
     [Flags()]
-    public enum tagOLECONTF
+    internal enum tagOLECONTF
     {
       OLECONTF_EMBEDDINGS = 1,
       OLECONTF_LINKS = 2,
@@ -189,7 +189,7 @@ namespace WatiN.Core
     internal static extern int GetClassName( IntPtr handleToWindow, StringBuilder className, int maxClassNameLength );
     
     [DllImport("user32.dll", SetLastError = true)]
-    static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
+    internal static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
     
     [DllImport("user32.dll", SetLastError = true)]
     internal static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className,  IntPtr windowTitle);
@@ -300,7 +300,7 @@ namespace WatiN.Core
     #region ComImport Interfaces
 
     [ComImport, Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IEnumUnknown
+    internal interface IEnumUnknown
     {
       [PreserveSig]
       int Next(
@@ -318,7 +318,7 @@ namespace WatiN.Core
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0000011B-0000-0000-C000-000000000046")]
-    public interface IOleContainer
+    internal interface IOleContainer
     {
       [PreserveSig]
       int ParseDisplayName(
@@ -401,7 +401,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="hwnd">The handle to the window</param>
     /// <returns>Text of the window</returns>
-    public static string GetWindowText(IntPtr hwnd)
+    internal static string GetWindowText(IntPtr hwnd)
     {
       int length = GetWindowTextLength(hwnd) + 1;
       StringBuilder buffer = new StringBuilder(length);
@@ -417,7 +417,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="hwnd">The handle to the window</param>
     /// <returns>Text of the window</returns>
-    public static string GetClassName(IntPtr hwnd)
+    internal static string GetClassName(IntPtr hwnd)
     {
       StringBuilder className = new StringBuilder(255);
       
@@ -430,7 +430,7 @@ namespace WatiN.Core
       return className.ToString();
     }
     
-    public static Int64 GetWindowStyle(IntPtr hwnd)
+    internal static Int64 GetWindowStyle(IntPtr hwnd)
     {
       WINDOWINFO info = new WINDOWINFO();
       info.cbSize = (uint)Marshal.SizeOf(info);
