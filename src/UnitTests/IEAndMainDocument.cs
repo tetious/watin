@@ -51,7 +51,7 @@ namespace WatiN.UnitTests
       Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
     }
-    
+      
     [Test, Category("InternetConnectionNeeded")]
     public void Google()
     {
@@ -211,6 +211,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+        
         AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
       
         ie.AddDialogHandler(alertDialogHandler);
@@ -236,6 +238,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
         SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
       
         ie.AddDialogHandler(dialogHandler);
@@ -254,6 +258,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
         ie.DialogWatcher.CloseUnhandledDialogs = false;      
       
         ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
@@ -280,6 +286,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
         ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
       
         ie.AddDialogHandler(confirmDialogHandler);
@@ -305,6 +313,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
         ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
       
         ie.AddDialogHandler(confirmDialogHandler);
@@ -330,6 +340,8 @@ namespace WatiN.UnitTests
     {
       using(IE ie = new IE(TestEventsURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
         SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler(true);
         ie.AddDialogHandler(dialogHandler);
       
@@ -460,7 +472,7 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(url))
       {
         Assert.AreEqual(MainURI, new Uri(ie.Url));
-        Assert.IsFalse(ie.DialogWatcher.Contains(new LogonDialogHandler("x", "y")), "DialogWatcher shouldn't contain a LogonDialogHandler");
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
       }
       
       Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");

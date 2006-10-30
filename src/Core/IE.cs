@@ -374,7 +374,13 @@ namespace WatiN.Core
 
     private void CreateNewIEAndGoToUri(Uri uri, LogonDialogHandler logonDialogHandler)
     {
-      createNewIE();
+      CheckThreadApartmentStateIsSTA();
+
+      Logger.LogAction("Creating new IE instance");
+
+      MoveMouseToTopLeft();
+
+      InitIEAndStartDialogWatcher(new InternetExplorerClass(), uri);
 
       if (logonDialogHandler != null)
       {
@@ -386,18 +392,7 @@ namespace WatiN.Core
         DialogWatcher.Add(logonDialogHandler);
       }
       
-      GoTo(uri);
-    }
-
-    private void createNewIE()
-    {
-      CheckThreadApartmentStateIsSTA();
-
-      Logger.LogAction("Creating new IE instance");
-
-      MoveMouseToTopLeft();
-
-      InitIEAndStartDialogWatcher(new InternetExplorerClass());
+      WaitForComplete();
     }
 
     private static void CheckThreadApartmentStateIsSTA()
@@ -415,11 +410,23 @@ namespace WatiN.Core
         throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
       }
 #endif
-    } 
-        
+    }
+
     private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer)
     {
-      ie = internetExplorer;      
+      InitIEAndStartDialogWatcher(internetExplorer, null);
+    }
+
+    private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer, Uri uri)
+    {
+      ie = internetExplorer;
+      
+      // Due to UAC in Vista the navigate has to be done
+      // before showing the new Internet Explorer instance
+      if (uri !=null)
+      {
+        navigateTo(uri);
+      }
       ie.Visible = true;
       StartDialogWatcher();
     }
@@ -519,11 +526,16 @@ namespace WatiN.Core
     /// </example>
     public void GoTo(Uri url)
     {
+      navigateTo(url);
+      WaitForComplete();
+    }
+
+    private void navigateTo(Uri url)
+    {
       Logger.LogAction("Navigating to '" + url + "'");
       
       object nil = null;
       ie.Navigate(url.ToString(), ref nil, ref nil, ref nil, ref nil);
-      WaitForComplete();
     }
 
     /// <summary>
