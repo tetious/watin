@@ -28,16 +28,16 @@ w\:* {behavior:url(#default#VML);}
  <o:DocumentProperties>
   <o:Author>J.vanMenen</o:Author>
   <o:LastAuthor>J.vanMenen</o:LastAuthor>
-  <o:Revision>37</o:Revision>
-  <o:TotalTime>224</o:TotalTime>
+  <o:Revision>39</o:Revision>
+  <o:TotalTime>227</o:TotalTime>
   <o:Created>2006-07-11T11:06:00Z</o:Created>
-  <o:LastSaved>2006-11-02T15:01:00Z</o:LastSaved>
+  <o:LastSaved>2006-11-02T16:46:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
   <o:Words>1344</o:Words>
-  <o:Characters>7393</o:Characters>
+  <o:Characters>7396</o:Characters>
   <o:Lines>61</o:Lines>
   <o:Paragraphs>17</o:Paragraphs>
-  <o:CharactersWithSpaces>8720</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>8723</o:CharactersWithSpaces>
   <o:Version>11.8107</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
@@ -147,8 +147,8 @@ div.Section1
 	{page:Section1;}
  /* List Definitions */
  @list l0
-	{mso-list-id:315382309;
-	mso-list-template-ids:118363804;}
+	{mso-list-id:223686729;
+	mso-list-template-ids:1538707738;}
 @list l1
 	{mso-list-id:449973970;
 	mso-list-type:hybrid;
@@ -276,7 +276,7 @@ table.MsoTableGrid
 	mso-bidi-language:#0400;}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="21506">
+ <o:shapedefaults v:ext="edit" spidmax="22530">
   <o:colormenu v:ext="edit" fillcolor="silver"/>
  </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
@@ -513,9 +513,9 @@ mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>In .Net 1.1 the default <span class=SpellE>ApartmentState</span>
 of a Thread is Unknown. A running Thread with this <span class=SpellE>ApartmentState</span>
-can be set to STA or MTA, but only <span class=GramE>once</span>. Trying to set
-the Apartment state of a running Thread from MTA to STA (or vice versa) doesn’t
-have any effect, it remains MTA (or STA).<o:p></o:p></span></p>
+can be set to STA or MTA, but only once. Trying to set the Apartment state of a
+running Thread from MTA to STA (or vice versa) doesn’t have any effect, it
+remains MTA (or STA).<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -586,8 +586,8 @@ lang=EN-GB style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'>
 application</span></b></span><b style='mso-bidi-font-weight:normal'><span
 lang=EN-GB style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span lang=EN-GB style='font-family:Tahoma;mso-ansi-language:
-EN-GB'>When using WatiN from a console or <span class=SpellE>WinForms</span>
+<p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
+mso-ansi-language:EN-GB'>When using WatiN from a console or <span class=SpellE>WinForms</span>
 application, you need to apply the [<span class=SpellE>STAThread</span>]
 attribute to the Main <span class=SpellE>methode</span> (the entry point of the
 application).<o:p></o:p></span></p>
@@ -695,27 +695,38 @@ lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:EN-GB'>.
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<pre style='margin-left:0cm;background:#D9D9D9'><span lang=EN-GB
+<pre style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:
+0cm;margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB
 style='color:black;mso-ansi-language:EN-GB'>[<span class=SpellE><span
 class=GramE>TestFixture</span></span><span class=GramE>(</span><span
 class=SpellE>ApartmentState</span> = <span class=SpellE>ApartmentState.STA</span>)]<o:p></o:p></span></pre><pre
-style='margin-left:0cm;background:#D9D9D9'><span class=GramE><span
-class=code-keyword2><span lang=EN-GB style='mso-ansi-language:EN-GB'>public</span></span></span><span
-lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> class <span
-class=SpellE>WatiNTestFixture</span><o:p></o:p></span></pre><pre
-style='margin-left:0cm;background:#D9D9D9'><span lang=EN-GB style='color:black;
-mso-ansi-language:EN-GB'>{<o:p></o:p></span></pre><pre style='margin-left:0cm;
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span class=GramE><span class=cb11>public</span></span><span
+style='color:black;mso-ansi-language:EN-GB'> </span><span class=cb11>class</span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> <span class=SpellE>WatiNTestFixture</span><o:p></o:p></span></pre><pre
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>{<o:p></o:p></span></pre><pre style='margin-top:0cm;
+margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;margin-bottom:.0001pt;
 background:#D9D9D9'><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>&nbsp;&nbsp; [Test]<o:p></o:p></span></pre><pre
-style='margin-left:0cm;background:#D9D9D9'><span lang=EN-GB style='color:black;
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
 mso-ansi-language:EN-GB'>&nbsp;&nbsp; </span><span class=GramE><span
-class=code-keyword2><span lang=EN-GB style='mso-ansi-language:EN-GB'>public</span></span></span><span
-lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> void <span
-class=SpellE>WatiNTest</span>()<o:p></o:p></span></pre><pre style='margin-left:
-0cm;background:#D9D9D9'><span lang=EN-GB style='color:black;mso-ansi-language:
-EN-GB'>&nbsp;&nbsp; {<o:p></o:p></span></pre><pre style='margin-left:0cm;
-background:#D9D9D9'><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ....<o:p></o:p></span></pre><pre
-style='margin-left:0cm;background:#D9D9D9'><span lang=EN-GB style='color:black;
-mso-ansi-language:EN-GB'>&nbsp;&nbsp; }<o:p></o:p></span></pre>
+class=cb11>public</span></span><span style='color:black;mso-ansi-language:EN-GB'> </span><span
+class=cb11>void</span><span lang=EN-GB style='color:black;mso-ansi-language:
+EN-GB'> <span class=SpellE>WatiNTest</span>()<o:p></o:p></span></pre><pre
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>&nbsp;&nbsp; {<o:p></o:p></span></pre><pre
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ....<o:p></o:p></span></pre><pre
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>&nbsp;&nbsp; }<o:p></o:p></span></pre><pre
+style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
+margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
+mso-ansi-language:EN-GB'>}<o:p></o:p></span></pre>
 
 <p class=MsoNormal style='tab-stops:45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt'><span
 lang=EN-GB style='font-family:Tahoma;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
