@@ -28,16 +28,16 @@ w\:* {behavior:url(#default#VML);}
  <o:DocumentProperties>
   <o:Author>J.vanMenen</o:Author>
   <o:LastAuthor>J.vanMenen</o:LastAuthor>
-  <o:Revision>39</o:Revision>
+  <o:Revision>42</o:Revision>
   <o:TotalTime>227</o:TotalTime>
   <o:Created>2006-07-11T11:06:00Z</o:Created>
-  <o:LastSaved>2006-11-02T16:46:00Z</o:LastSaved>
-  <o:Pages>1</o:Pages>
+  <o:LastSaved>2006-11-02T16:50:00Z</o:LastSaved>
+  <o:Pages>2</o:Pages>
   <o:Words>1344</o:Words>
-  <o:Characters>7396</o:Characters>
+  <o:Characters>7394</o:Characters>
   <o:Lines>61</o:Lines>
   <o:Paragraphs>17</o:Paragraphs>
-  <o:CharactersWithSpaces>8723</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>8721</o:CharactersWithSpaces>
   <o:Version>11.8107</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
@@ -147,8 +147,8 @@ div.Section1
 	{page:Section1;}
  /* List Definitions */
  @list l0
-	{mso-list-id:223686729;
-	mso-list-template-ids:1538707738;}
+	{mso-list-id:148980055;
+	mso-list-template-ids:-239932102;}
 @list l1
 	{mso-list-id:449973970;
 	mso-list-type:hybrid;
@@ -276,7 +276,7 @@ table.MsoTableGrid
 	mso-bidi-language:#0400;}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="22530">
+ <o:shapedefaults v:ext="edit" spidmax="23554">
   <o:colormenu v:ext="edit" fillcolor="silver"/>
  </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
@@ -536,12 +536,12 @@ style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'>Implications<o:
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>Using WatiN works fine in a console or GUI application
-when you apply the [<span class=SpellE>STAThread</span>] attribute to the main <span
-class=SpellE>methode</span> (the sole entry point of the application). This way
-the main Thread runs as STA and all goes well. When using a runner like <span
-class=SpellE>MBUnit</span>, NUnit or any other runner that starts the main
-Thread, your code/<st1:PersonName w:st="on">test</st1:PersonName>s depend upon
-the <span class=SpellE>ApartmentState</span> the runner started with. <o:p></o:p></span></p>
+when you apply the [<span class=SpellE>STAThread</span>] attribute to the main
+method (the sole entry point of the application). This way the main Thread runs
+as STA and all goes well. When using a runner like <span class=SpellE>MBUnit</span>,
+NUnit or any other runner that starts the main Thread, your code/<st1:PersonName
+w:st="on">test</st1:PersonName>s depend upon the <span class=SpellE>ApartmentState</span>
+the runner started with. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -589,8 +589,7 @@ lang=EN-GB style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'><o:p
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>When using WatiN from a console or <span class=SpellE>WinForms</span>
 application, you need to apply the [<span class=SpellE>STAThread</span>]
-attribute to the Main <span class=SpellE>methode</span> (the entry point of the
-application).<o:p></o:p></span></p>
+attribute to the Main method (the entry point of the application).<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-family:Tahoma;mso-ansi-language:
 EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -701,8 +700,10 @@ style='color:black;mso-ansi-language:EN-GB'>[<span class=SpellE><span
 class=GramE>TestFixture</span></span><span class=GramE>(</span><span
 class=SpellE>ApartmentState</span> = <span class=SpellE>ApartmentState.STA</span>)]<o:p></o:p></span></pre><pre
 style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
-margin-bottom:.0001pt;background:#D9D9D9'><span class=GramE><span class=cb11>public</span></span><span
-style='color:black;mso-ansi-language:EN-GB'> </span><span class=cb11>class</span><span
+margin-bottom:.0001pt;background:#D9D9D9'><span class=GramE><span class=cb11><span
+lang=EN-GB style='mso-ansi-language:EN-GB'>public</span></span></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> </span><span
+class=cb11><span lang=EN-GB style='mso-ansi-language:EN-GB'>class</span></span><span
 lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> <span class=SpellE>WatiNTestFixture</span><o:p></o:p></span></pre><pre
 style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
 margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
@@ -712,9 +713,10 @@ background:#D9D9D9'><span lang=EN-GB style='color:black;mso-ansi-language:EN-GB'
 style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
 margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
 mso-ansi-language:EN-GB'>&nbsp;&nbsp; </span><span class=GramE><span
-class=cb11>public</span></span><span style='color:black;mso-ansi-language:EN-GB'> </span><span
-class=cb11>void</span><span lang=EN-GB style='color:black;mso-ansi-language:
-EN-GB'> <span class=SpellE>WatiNTest</span>()<o:p></o:p></span></pre><pre
+class=cb11><span lang=EN-GB style='mso-ansi-language:EN-GB'>public</span></span></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> </span><span
+class=cb11><span lang=EN-GB style='mso-ansi-language:EN-GB'>void</span></span><span
+lang=EN-GB style='color:black;mso-ansi-language:EN-GB'> <span class=SpellE>WatiNTest</span>()<o:p></o:p></span></pre><pre
 style='margin-top:0cm;margin-right:3.7pt;margin-bottom:0cm;margin-left:0cm;
 margin-bottom:.0001pt;background:#D9D9D9'><span lang=EN-GB style='color:black;
 mso-ansi-language:EN-GB'>&nbsp;&nbsp; {<o:p></o:p></span></pre><pre
