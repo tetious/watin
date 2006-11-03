@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "WatiN.UnitTests"
+                AssemblyName = "WatiN.Core.UnitTests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "WatiN.UnitTests"
+                RootNamespace = "WatiN.Core.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

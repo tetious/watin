@@ -241,6 +241,9 @@ namespace WatiN.UnitTests
         Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
         SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+
+        Assert.IsFalse(dialogHandler.HasHandledDialog, "Alert Dialog should not be handled.");
+        Assert.IsNull(dialogHandler.Message, "Message should be null");
       
         ie.AddDialogHandler(dialogHandler);
       
