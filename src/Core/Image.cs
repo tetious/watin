@@ -34,7 +34,7 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) DomElement).src;
+        return ((IHTMLImgElement) HTMLElement).src;
       }
     }
     
@@ -51,7 +51,7 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) DomElement).alt;
+        return ((IHTMLImgElement) HTMLElement).alt;
       }
     }
     
@@ -59,7 +59,7 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) DomElement).name;
+        return ((IHTMLImgElement) HTMLElement).name;
       }
     }
 

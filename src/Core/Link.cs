@@ -31,7 +31,7 @@ namespace WatiN.Core
 
     public string Url
     {
-      get { return ((IHTMLAnchorElement) DomElement).href; }
+      get { return ((IHTMLAnchorElement) HTMLElement).href; }
     }
   }
 }

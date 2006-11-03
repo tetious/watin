@@ -53,7 +53,7 @@ namespace WatiN.Core
 
     private IHTMLInputElement inputElement
     {
-      get { return ((IHTMLInputElement) DomElement); }
+      get { return ((IHTMLInputElement) HTMLElement); }
     }
   }
 }

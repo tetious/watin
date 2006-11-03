@@ -48,7 +48,7 @@ namespace WatiN.Core
 
     private IHTMLElement GetFirstTBody()
     {
-      return (IHTMLElement)((IHTMLTable)DomElement).tBodies.item(0,null);
+      return (IHTMLElement)((IHTMLTable)HTMLElement).tBodies.item(0,null);
     }
 
     /// <summary>

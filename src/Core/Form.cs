@@ -67,7 +67,7 @@ namespace WatiN.Core
     private HTMLFormElement HtmlFormElement
     {
       get {
-        return (HTMLFormElement)DomElement;
+        return (HTMLFormElement)HTMLElement;
       }
     }
   }

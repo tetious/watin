@@ -46,7 +46,7 @@ namespace WatiN.Core
     public Element(DomContainer domContainer, object element)
     {
       this.domContainer = domContainer;
-      DomElement = element;
+      this.element = element;
     }
 
     /// <summary>
@@ -423,31 +423,31 @@ namespace WatiN.Core
 
     private IHTMLElement htmlElement
     {
-      get { return (IHTMLElement) DomElement; }
+      get { return (IHTMLElement) HTMLElement; }
     }
 
     private IHTMLElement2 htmlElement2
     {
-      get { return (IHTMLElement2) DomElement; }
+      get { return (IHTMLElement2) HTMLElement; }
     }
 
     private IHTMLElement3 htmlElement3
     {
-      get { return (IHTMLElement3) DomElement; }
+      get { return (IHTMLElement3) HTMLElement; }
     }
 
     private IHTMLDOMNode domNode
     {
-      get { return (IHTMLDOMNode) DomElement; }
+      get { return (IHTMLDOMNode) HTMLElement; }
     }
 
     /// <summary>
-    /// Gets the DispHtmlBaseElement by casting <see cref="DomElement" />.
+    /// Gets the DispHtmlBaseElement by casting <see cref="HTMLElement" />.
     /// </summary>
     /// <value>The DispHtmlBaseElement.</value>
     protected DispHTMLBaseElement DispHtmlBaseElement
     {
-      get { return (DispHTMLBaseElement) DomElement; }
+      get { return (DispHTMLBaseElement) HTMLElement; }
     }
 
     /// <summary>
@@ -460,13 +460,16 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets or sets the DOM element for this instance.
+    /// Gets the DOM HTML element for this instance as an object. Cast it to 
+    /// the interface you need. Most of the times IHTMLELement, IHTMLElement2
+    /// and IHTMLElement3 are supported but you can also cast it to a more
+    /// specific interface. You should reference MSHTML.dll to cast it to a
+    /// valid type.
     /// </summary>
     /// <value>The DOM element.</value>
-    protected object DomElement
+    public object HTMLElement
     {
       get { return element; }
-      set { element = value; }
     }
 
     /// <summary>

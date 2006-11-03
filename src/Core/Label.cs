@@ -31,12 +31,12 @@ namespace WatiN.Core
 
     public string AccessKey
     {
-      get {return ((IHTMLLabelElement)DomElement).accessKey; }
+      get {return ((IHTMLLabelElement)HTMLElement).accessKey; }
     }
 
     public string For
     {
-      get {return ((IHTMLLabelElement)DomElement).htmlFor; }
+      get {return ((IHTMLLabelElement)HTMLElement).htmlFor; }
     }
   }
 }

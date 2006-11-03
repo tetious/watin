@@ -179,7 +179,7 @@ namespace WatiN.Core
 
     private IHTMLSelectElement selectElement
     {
-      get { return ((IHTMLSelectElement) DomElement); }
+      get { return ((IHTMLSelectElement) HTMLElement); }
     }
 
     /// <summary>
