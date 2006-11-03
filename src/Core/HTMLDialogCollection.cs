@@ -59,7 +59,21 @@ namespace WatiN.Core
 
     public int Length { get { return htmlDialogs.Count; } }
 
-    public HtmlDialog this[int index] { get { return (HtmlDialog)htmlDialogs[index]; } }
+    public HtmlDialog this[int index] 
+    { 
+      get
+      {
+        return GetHTMLDialogByIndex(htmlDialogs, index);
+      } 
+    }
+
+    private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
+    {
+      HtmlDialog htmlDialog = (HtmlDialog)htmlDialogs[index];
+      htmlDialog.WaitForComplete();
+
+      return htmlDialog;
+    }
 
     /// <exclude />
     public Enumerator GetEnumerator() 
@@ -75,11 +89,11 @@ namespace WatiN.Core
     /// <exclude />
     public class Enumerator: IEnumerator 
     {
-      ArrayList children;
+      ArrayList htmlDialogs;
       int index;
-      public Enumerator(ArrayList children) 
+      public Enumerator(ArrayList htmlDialogs) 
       {
-        this.children = children;
+        this.htmlDialogs = htmlDialogs;
         Reset();
       }
 
@@ -91,14 +105,14 @@ namespace WatiN.Core
       public bool MoveNext() 
       {
         ++index;
-        return index < children.Count;
+        return index < htmlDialogs.Count;
       }
 
       public HtmlDialog Current 
       {
         get 
         {
-          return (HtmlDialog)children[index];
+          return GetHTMLDialogByIndex(htmlDialogs, index);
         }
       }
 
