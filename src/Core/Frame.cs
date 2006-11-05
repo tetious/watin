@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 using SHDocVw;
 
@@ -118,6 +119,15 @@ namespace WatiN.Core
       get { return frameId; }
     }
 
+    internal static int GetFrameCountFromHTMLDocument(HTMLDocument htmlDocument)
+    {
+      FrameCountProcessor processor = new FrameCountProcessor(htmlDocument);
+      
+      NativeMethods.EnumIWebBrowser2Interfaces(processor);
+      
+      return processor.FramesCount;
+    }
+
     internal static IWebBrowser2 GetFrameFromHTMLDocument(int frameIndex, HTMLDocument htmlDocument)
     {
       FrameByIndexProcessor processor = new FrameByIndexProcessor(frameIndex, htmlDocument);
@@ -169,6 +179,37 @@ namespace WatiN.Core
     public IWebBrowser2 IWebBrowser2()
     {
       return iWebBrowser2;
+    }
+  }
+  
+  internal class FrameCountProcessor :IWebBrowser2Processor
+  {
+    private HTMLDocument htmlDocument;
+    private int counter = 0;
+    
+    public FrameCountProcessor(HTMLDocument htmlDocument)
+    {
+      this.htmlDocument = htmlDocument;  
+    }
+
+    public int FramesCount
+    {
+      get { return counter; }
+    }
+
+    public HTMLDocument HTMLDocument()
+    {
+      return htmlDocument;
+    }
+
+    public void Process(IWebBrowser2 webBrowser2)
+    {
+      counter++;
+    }
+
+    public bool Continue()
+    {
+      return true;
     }
   }
 }

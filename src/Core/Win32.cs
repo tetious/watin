@@ -365,17 +365,28 @@ namespace WatiN.Core
           // Query Interface pUnk for the IWebBrowser2 interface
           IWebBrowser2 brow = pUnk as IWebBrowser2;
 
-          if (brow != null)
+          try
           {
-            processor.Process(brow);
-                   
-            if (!processor.Continue())
+            if (brow != null)
             {
-              break;
+              processor.Process(brow);
+              if (!processor.Continue())
+              {
+                break;
+              }
+              // free brow
+              Marshal.ReleaseComObject(brow);
             }
-
-            // free brow
-            Marshal.ReleaseComObject(brow);
+          }
+          catch
+          {
+            if (brow != null)
+            {
+              // free brow
+              Marshal.ReleaseComObject(brow);
+            }            
+            // pUnk free
+            Marshal.ReleaseComObject(pUnk);
           }
 
           // pUnk free

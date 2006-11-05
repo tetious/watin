@@ -18,12 +18,14 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Threading;
 using System.Runtime.InteropServices;
 
 using mshtml;
 using SHDocVw;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -159,22 +161,39 @@ namespace WatiN.Core
     {
       WaitWhileMainDocumentNotAvailable(this);
       WaitWhileDocumentStateNotComplete(HtmlDocument);
+      WaitForFramesToComplete(HtmlDocument);
+    }
 
-      int framesCount = HtmlDocument.frames.length;
+    private void WaitForFramesToComplete(IHTMLDocument2 maindocument)
+    {
+      //TODO: This code should also wait for any nested IFrame to complete
+
+      HTMLDocument mainHtmlDocument = (HTMLDocument) maindocument;
+      
+      int framesCount = WatiN.Core.Frame.GetFrameCountFromHTMLDocument(mainHtmlDocument);
+      
       for (int i = 0; i != framesCount; ++i)
       {
-        IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, (HTMLDocument) HtmlDocument);
+        IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, mainHtmlDocument);
         
         if (frame != null)
         {
-          waitWhileIEBusy(frame);
-          waitWhileIEStateNotComplete(frame);
-          
-          IHTMLDocument2 document = WaitWhileFrameDocumentNotAvailable(frame);
-          WaitWhileDocumentStateNotComplete(document);
+          IHTMLDocument2 document;
 
-          // free frame
-          Marshal.ReleaseComObject(frame);
+          try
+          {
+            waitWhileIEBusy(frame);
+            waitWhileIEStateNotComplete(frame);
+            document = WaitWhileFrameDocumentNotAvailable(frame);
+          }
+          finally
+          {
+            // free frame
+            Marshal.ReleaseComObject(frame);
+          }           
+         
+          WaitWhileDocumentStateNotComplete(document);
+          WaitForFramesToComplete(document);
         }
       }
     }
@@ -330,4 +349,62 @@ namespace WatiN.Core
       }
     }
   }
+  
+  internal class WaitForFrameCompleteProcessor : IWebBrowser2Processor
+  {
+    public ArrayList elements;
+    
+    private HTMLDocument htmlDocument;
+    private IHTMLElementCollection frameElements;
+    private int index = 0;
+    private DomContainer ie;
+    
+    public WaitForFrameCompleteProcessor(DomContainer ie, HTMLDocument htmlDocument)
+    {
+      elements = new ArrayList();
+
+      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.FrameTagName);
+      
+      // If the current document doesn't contain FRAME elements, it then
+      // might contain IFRAME elements.
+      if (frameElements.length == 0)
+      {
+        frameElements = (IHTMLElementCollection)htmlDocument.all.tags("IFRAME");
+      }
+
+      this.ie = ie;
+      this.htmlDocument = htmlDocument;  
+    }
+
+    public HTMLDocument HTMLDocument()
+    {
+      return htmlDocument;
+    }
+
+    public void Process(IWebBrowser2 webBrowser2)
+    {
+      // Get the frame element from the parent document
+      IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
+            
+      string frameName = null;
+      string frameId = null;
+
+      if (frameElement != null)
+      {
+        frameId = frameElement.id;
+        frameName = frameElement.getAttribute("name", 0) as string;
+      }
+
+      Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
+      elements.Add(frame);
+                
+      index++;
+    }
+
+    public bool Continue()
+    {
+      return true;
+    }
+  }
+
 }
