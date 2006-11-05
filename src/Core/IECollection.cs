@@ -47,7 +47,7 @@ namespace WatiN.Core
         {}
       }
     }
-
+    
     public int Length 
     { 
       get
@@ -60,8 +60,16 @@ namespace WatiN.Core
     {
       get
       {
-        return (IE)internetExplorers[index];
+        return GetIEByIndex(internetExplorers, index);
       }
+    }
+
+    private static IE GetIEByIndex(ArrayList internetExplorers, int index)
+    {
+      IE ie = (IE)internetExplorers[index];
+      ie.WaitForComplete();
+
+      return ie;
     }
 
     /// <exclude />
@@ -101,7 +109,7 @@ namespace WatiN.Core
       {
         get 
         {
-          return (IE)children[index];
+          return GetIEByIndex(children, index);
         }
       }
 
