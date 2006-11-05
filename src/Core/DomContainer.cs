@@ -166,8 +166,6 @@ namespace WatiN.Core
 
     private void WaitForFramesToComplete(IHTMLDocument2 maindocument)
     {
-      //TODO: This code should also wait for any nested IFrame to complete
-
       HTMLDocument mainHtmlDocument = (HTMLDocument) maindocument;
       
       int framesCount = WatiN.Core.Frame.GetFrameCountFromHTMLDocument(mainHtmlDocument);
