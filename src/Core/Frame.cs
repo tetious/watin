@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using mshtml;
 using SHDocVw;
 

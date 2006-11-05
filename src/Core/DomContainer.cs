@@ -288,9 +288,7 @@ namespace WatiN.Core
           return true;
         }
         catch
-        {
-          Thread.Sleep(500);
-        }
+        {}
       }
 
       return false;
@@ -307,6 +305,7 @@ namespace WatiN.Core
       else if (!IsDocumentReadyStateAvailable(document))
       {
         document = null;
+        Thread.Sleep(500);
       }
       return document;
     }
@@ -329,7 +328,7 @@ namespace WatiN.Core
 
     protected void waitWhileIEStateNotComplete(IWebBrowser2 ie)
     {
-      while (ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE)
+      while (IsIEReadyStateComplete(ie))
       {
         ThrowExceptionWhenTimeout("Internet Explorer state not complete");
 
@@ -337,13 +336,37 @@ namespace WatiN.Core
       }
     }
 
+    private static bool IsIEReadyStateComplete(IWebBrowser2 ie)
+    {
+      try
+      {
+        return ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+
     protected void waitWhileIEBusy(IWebBrowser2 ie)
     {
-      while (ie.Busy)
+      while (IsIEBusy(ie))
       {
         ThrowExceptionWhenTimeout("Internet Explorer busy");
 
         Thread.Sleep(100);
+      }
+    }
+
+    private static bool IsIEBusy(IWebBrowser2 ie)
+    {
+      try
+      {
+        return ie.Busy;
+      }
+      catch
+      {
+        return false;
       }
     }
   }
