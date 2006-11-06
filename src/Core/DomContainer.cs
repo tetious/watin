@@ -37,7 +37,7 @@ namespace WatiN.Core
   public abstract class DomContainer : Document
   {
     private IHTMLDocument2 htmlDocument;
-    private DateTime startWaitForComplete;
+    private SimpleTimer waitForCompleteTimeout;
     private DialogWatcher dialogWatcher;
 
     public DomContainer()
@@ -201,11 +201,12 @@ namespace WatiN.Core
     /// determining a time out. It's set to the current time.
     /// </summary>
     /// <returns></returns>
-    protected internal DateTime InitTimeout()
+    protected internal SimpleTimer InitTimeout()
     {
-      return startWaitForComplete = DateTime.Now;
+      waitForCompleteTimeout = new SimpleTimer(30);
+      return waitForCompleteTimeout;
     }
-
+    
     /// <summary>
     /// This method checks the return value of IsTimedOut. When true, it will
     /// throw a TimeoutException with the timeoutMessage param as message.
@@ -228,7 +229,7 @@ namespace WatiN.Core
     /// return value will be true</returns>
     protected internal bool IsTimedOut()
     {
-      return UtilityClass.IsTimedOut(startWaitForComplete, 30);
+      return waitForCompleteTimeout.Elapsed;
     }
 
     private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)

@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Timers;
 using mshtml;
 
 namespace WatiN.Core
@@ -113,16 +114,38 @@ namespace WatiN.Core
       
 	    return className.Equals(expectedClassName);
 	  }
-
-    /// <summary>
-    /// This method evaluates the time between the <paramref name="startTime" />
-    /// and the current time. If the timespan is more than <paramref name="durationInSeconds" /> seconds,
-    /// the return value will be true.
-    /// </summary>
-    /// <returns><c>true</c> if the timespan is more than <paramref name="durationInSeconds" /> seconds</returns>
-    public static bool IsTimedOut(DateTime startTime, int durationInSeconds)
-	  {
-	    return DateTime.Now.Subtract(startTime).TotalSeconds > durationInSeconds;
-	  }
 	}
+  
+  public class SimpleTimer
+  {
+    Timer clock = null;
+    
+    public SimpleTimer(int timeout)
+    {
+      if (timeout < 0)
+      {
+        throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
+      }
+
+      if (timeout > 0)
+      {
+        clock = new Timer(timeout * 1000);
+        clock.AutoReset = false;
+        clock.Elapsed += new ElapsedEventHandler(ElapsedEvent);
+        clock.Start();
+      }
+    }
+
+    public bool Elapsed
+    {
+      get { return (clock == null); }
+    }
+
+    private void ElapsedEvent(object source, ElapsedEventArgs e)
+    {
+      clock.Stop();
+      clock.Close();
+      clock = null;
+    }
+  }
 }

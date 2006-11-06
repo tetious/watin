@@ -543,11 +543,11 @@ namespace WatiN.UnitTests
         Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);       
       }
     }
-
+    
     [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void AttachToIEWithNegativeTimeoutNotAllowed()
     {
-      IE.AttachToIE(Find.ByTitle("Bogs title"), -1);
+      IE.AttachToIE(Find.ByTitle("Bogus title"), -1);
     }
 
     [Test]

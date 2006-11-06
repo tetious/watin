@@ -433,16 +433,11 @@ namespace WatiN.Core
 
     private static IE findIE(Attribute findBy, int timeout)
     {
-      if (timeout < 0)
-      {
-        throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
-      }
-      
       Logger.LogAction("Busy finding Internet Explorer with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
-      DateTime startTime = DateTime.Now;
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
-      while (NotTimedOut(startTime, timeout))
+      do
       {
         Thread.Sleep(500);
 
@@ -457,37 +452,32 @@ namespace WatiN.Core
 
           string compareValue = string.Empty;
 
-          if (findBy is Url)
+          try
           {
-            try
+            if (findBy is Url)
             {
               compareValue = e.LocationURL;
             }
-            catch
-            {}
-          }
-
-          else if(findBy is Title)
-          {
-            try
+            else if (findBy is Title)
             {
               compareValue = ((HTMLDocument) e.Document).title;
             }
-            catch
-            {}
           }
-
+          catch
+          {}
+          
           if (findBy.Compare(compareValue))
           {
             IE ie = new IE(e);
             ie.WaitForComplete();
-            
+
             return ie;
           }
 
           browserCounter++;
         }
-      }
+      } while (!timeoutTimer.Elapsed);
+
 
       throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }
@@ -941,58 +931,42 @@ namespace WatiN.Core
 
     private HtmlDialog findHtmlDialog(Attribute findBy, int timeout)
     {
-      if (timeout < 0)
-      {
-        throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
-      }
-
       Logger.LogAction("Busy finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
-      DateTime startTime = DateTime.Now;
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
-      while (NotTimedOut(startTime, timeout))
+      do
       {
         Thread.Sleep(500);
 
-        try
+        foreach (HtmlDialog htmlDialog in HtmlDialogs)
         {
-          foreach(HtmlDialog htmlDialog in HtmlDialogs)
-          {
-            string compareValue = string.Empty;
+          string compareValue = string.Empty;
 
+          try
+          {
             if (findBy is Url)
             {
               compareValue = htmlDialog.Url;
             }
-
             else if (findBy is Title)
             {
               compareValue = htmlDialog.Title;
             }
-
-            if (findBy.Compare(compareValue))
-            {
-              htmlDialog.WaitForComplete();
-              return htmlDialog;
-            }
+          }
+          catch
+          {}
+          
+          if (findBy.Compare(compareValue))
+          {
+            htmlDialog.WaitForComplete();
+            return htmlDialog;
           }
         }
-        catch 
-        {
-          // SF 1530859 fix
-          // Accessing the DOM if the HTMLDialog page hasn't been fully loaded 
-          // raises an error. Using WaitForComplete at some point in the search
-          // for a HTMLDialog would be a better option but for now I've implemented 
-          // this catch all.
-        }
-      }
+      } while (!timeoutTimer.Elapsed);
+
 
       throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
-    }
-    
-    private static bool NotTimedOut(DateTime startTime, int durationInSeconds)
-    {
-      return !UtilityClass.IsTimedOut(startTime, durationInSeconds);
     }
   }
 }

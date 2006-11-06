@@ -856,14 +856,14 @@ namespace WatiN.Core.DialogHandlers
     
     public void WaitUntilExists(int waitDurationInSeconds)
     {
-      DateTime startWaitUntilExists = DateTime.Now;
+      SimpleTimer timeoutTimer = new SimpleTimer(waitDurationInSeconds);
 
       bool dialogNotAvailable = !Exists();
       
       while (dialogNotAvailable)
       {
         Thread.Sleep(200);
-        dialogNotAvailable = !UtilityClass.IsTimedOut(startWaitUntilExists, waitDurationInSeconds) & !Exists();
+        dialogNotAvailable = !timeoutTimer.Elapsed & !Exists();
       }
       
       if (dialogNotAvailable)
