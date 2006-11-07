@@ -26,12 +26,18 @@ namespace WatiN.Core
       {
         throw new FileNotFoundException("File does not exist", fileName);
       }
-      
-      DomContainer.AddDialogHandler(new FileUploadDialogHandler(fileName));
-     
-      Click();
-      
-      DomContainer.RemoveDialogHandler(new FileUploadDialogHandler(fileName));
+
+      FileUploadDialogHandler uploadDialogHandler = new FileUploadDialogHandler(fileName);
+      DomContainer.AddDialogHandler(uploadDialogHandler);
+
+      try
+      {
+        Click();
+      }
+      finally
+      {
+        DomContainer.RemoveDialogHandler(uploadDialogHandler);
+      }      
     }
 
     private IHTMLInputFileElement IHTMLInputFileElement

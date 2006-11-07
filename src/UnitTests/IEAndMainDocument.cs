@@ -144,31 +144,33 @@ namespace WatiN.UnitTests
         
         // Create handler for Alert dialogs and register it.
         AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
-        ie.AddDialogHandler(dialogHandler);
+        using(new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+        {
+          Assert.AreEqual(0, dialogHandler.Count);
         
-        Assert.AreEqual(0, dialogHandler.Count);
+          ie.Button("helloid").Click();
+
+          Assert.AreEqual(1, dialogHandler.Count);
+          Assert.AreEqual("hello", dialogHandler.Alerts[0]);
         
-        ie.Button("helloid").Click();
+          // getting alert text
+          Assert.AreEqual("hello", dialogHandler.Pop());
 
-        Assert.AreEqual(1, dialogHandler.Count);
-        Assert.AreEqual("hello", dialogHandler.Alerts[0]);
+          Assert.AreEqual(0, dialogHandler.Count);
         
-        // getting alert text
-        Assert.AreEqual("hello", dialogHandler.Pop());
+          // Test Clear
+          ie.Button("helloid").Click();
 
-        Assert.AreEqual(0, dialogHandler.Count);
+          Assert.AreEqual(1, dialogHandler.Count);
+
+          dialogHandler.Clear();
+
+          Assert.AreEqual(0, dialogHandler.Count);
         
-        // Test Clear
-        ie.Button("helloid").Click();
-
-        Assert.AreEqual(1, dialogHandler.Count);
-
-        dialogHandler.Clear();
-
-        Assert.AreEqual(0, dialogHandler.Count);
-        
-        dialogWatcher = ie.DialogWatcher;
+          dialogWatcher = ie.DialogWatcher;
+        }
       }
+
       Assert.AreEqual(0, dialogWatcher.Count, "DialogWatcher count should be zero after test");
     }
     
@@ -269,22 +271,20 @@ namespace WatiN.UnitTests
         Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
         
         AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+        using(new UseDialogOnce(ie.DialogWatcher, alertDialogHandler))
+        {
+          ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
       
-        ie.AddDialogHandler(alertDialogHandler);
-      
-        ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
-      
-        alertDialogHandler.WaitUntilExists();
+          alertDialogHandler.WaitUntilExists();
         
-        Assert.AreEqual("This is an alert!", alertDialogHandler.Message, "Unexpected message");
+          Assert.AreEqual("This is an alert!", alertDialogHandler.Message, "Unexpected message");
       
-        alertDialogHandler.OKButton.Click();
+          alertDialogHandler.OKButton.Click();
       
-        ie.WaitForComplete();
+          ie.WaitForComplete();
 
-        Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
-
-        ie.RemoveDialogHandler(alertDialogHandler);
+          Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
+        }
       }      
     }
     
@@ -300,15 +300,48 @@ namespace WatiN.UnitTests
         Assert.IsFalse(dialogHandler.HasHandledDialog, "Alert Dialog should not be handled.");
         Assert.IsNull(dialogHandler.Message, "Message should be null");
       
-        ie.AddDialogHandler(dialogHandler);
+        using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+        {
+          ie.Button(Find.ByValue("Show alert dialog")).Click();
       
-        ie.Button(Find.ByValue("Show alert dialog")).Click();
+          Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
+          Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
+        }
+      }      
+    }
+    
+    [Test]
+    public void AlertDialogSimpleJavaDialogHandler2()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      { 
+        SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+ 
+        using(new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+        {
+          ie.Button(Find.ByValue("Show alert dialog")).Click();
+ 
+          Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
+        }
+      }      
+    }
+
+    [Test]
+    public void IEUseOnceDialogHandler()
+    {
+      using(IE ie = new IE(TestEventsURI))
+      {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
+        SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
       
-        ie.RemoveDialogHandler(dialogHandler);
+        using(new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+        {
+          ie.Button(Find.ByValue("Show alert dialog")).Click();
 
-        Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
-        Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
-
+          Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
+          Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
+        }      
       }      
     }
     
@@ -324,19 +357,19 @@ namespace WatiN.UnitTests
         ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
       
         AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
-        ie.AddDialogHandler(alertDialogHandler);
-        
-        alertDialogHandler.WaitUntilExists();
-        
-        Assert.AreEqual("This is an alert!", alertDialogHandler.Message);
-      
-        alertDialogHandler.OKButton.Click();
-      
-        ie.WaitForComplete();
 
-        Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
+        using (new UseDialogOnce(ie.DialogWatcher, alertDialogHandler))
+        {
+          alertDialogHandler.WaitUntilExists();
+        
+          Assert.AreEqual("This is an alert!", alertDialogHandler.Message);
+      
+          alertDialogHandler.OKButton.Click();
+      
+          ie.WaitForComplete();
 
-        ie.RemoveDialogHandler(alertDialogHandler);
+          Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
+        }
       }      
     }
     
@@ -349,21 +382,20 @@ namespace WatiN.UnitTests
 
         ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
       
-        ie.AddDialogHandler(confirmDialogHandler);
+        using(new UseDialogOnce(ie.DialogWatcher, confirmDialogHandler))
+        {
+          ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
       
-        ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
-      
-        confirmDialogHandler.WaitUntilExists();
+          confirmDialogHandler.WaitUntilExists();
         
-        Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
+          Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
       
-        confirmDialogHandler.OKButton.Click();
+          confirmDialogHandler.OKButton.Click();
       
-        ie.WaitForComplete();
+          ie.WaitForComplete();
 
-        Assert.AreEqual("OK", ie.TextField("ReportConfirmResult").Text, "OK button expected.");
-
-        ie.RemoveDialogHandler(confirmDialogHandler);
+          Assert.AreEqual("OK", ie.TextField("ReportConfirmResult").Text, "OK button expected.");
+        }
       }      
     }
     
@@ -376,21 +408,20 @@ namespace WatiN.UnitTests
 
         ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
       
-        ie.AddDialogHandler(confirmDialogHandler);
+        using(new UseDialogOnce(ie.DialogWatcher, confirmDialogHandler))
+        {
+          ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
       
-        ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
-      
-        confirmDialogHandler.WaitUntilExists();
+          confirmDialogHandler.WaitUntilExists();
         
-        Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
+          Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
       
-        confirmDialogHandler.CancelButton.Click();
+          confirmDialogHandler.CancelButton.Click();
       
-        ie.WaitForComplete();
+          ie.WaitForComplete();
 
-        Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
-
-        ie.RemoveDialogHandler(confirmDialogHandler);
+          Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
+        }
       }      
     }
     
@@ -402,15 +433,15 @@ namespace WatiN.UnitTests
         Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
         SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler(true);
-        ie.AddDialogHandler(dialogHandler);
-      
-        ie.Button(Find.ByValue("Show confirm dialog")).Click();
+        using(new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+        {
+          ie.Button(Find.ByValue("Show confirm dialog")).Click();
 
-        ie.RemoveDialogHandler(dialogHandler);
-      
-        Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
-        Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
-        Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
+          Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
+          Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
+          Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
+          
+        }
       }      
     }
 
@@ -967,5 +998,31 @@ namespace WatiN.UnitTests
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
       Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
     }
+  }
+  
+  public class UseDialogOnce : IDisposable
+  {
+    private DialogWatcher dialogWatcher;
+    private IDialogHandler dialogHandler;
+
+    public UseDialogOnce(DialogWatcher dialogWatcher, IDialogHandler dialogHandler)
+    {
+      this.dialogWatcher = dialogWatcher;
+      this.dialogHandler = dialogHandler;
+      
+      dialogWatcher.Add(dialogHandler);
+    }
+
+    #region IDisposable Members
+
+    public void Dispose()
+    {
+      dialogWatcher.Remove(dialogHandler);
+      
+      dialogWatcher = null;
+      dialogHandler = null;
+    }
+
+    #endregion
   }
 }
