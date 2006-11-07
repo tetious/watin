@@ -57,7 +57,7 @@ namespace WatiN.Core
   ///  }
   /// </code>
   /// </example>
-  public class IE : DomContainer, IDisposable
+  public class IE : DomContainer
   {
     const int waitForWindowTime = 60;
 
@@ -399,17 +399,16 @@ namespace WatiN.Core
     {
       
 #if NET11      
-      if (Thread.CurrentThread.ApartmentState != ApartmentState.STA)
-      {
-        throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
-      }
+      // Code for .Net 1.1
+      bool isSTA = (Thread.CurrentThread.ApartmentState == ApartmentState.STA);
 #elif NET20
       // Code for .Net 2.0
-      if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
+      bool isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+#endif
+      if (!isSTA)
       {
         throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
       }
-#endif
     }
 
     private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer)
@@ -760,6 +759,14 @@ namespace WatiN.Core
       {
         if (closeIE)
         {
+
+          //TODO: Since HTMLDialog collection is contains all HTMLDialogs
+          //      within the processId of this IE instance, there might be
+          //      other HTMLDialogs not created by this IE instance. Closing
+          //      also those HTMLDialogs seems not the right.
+          //      So how will we handle this? For now we keep the "old"
+          //      implementation.
+          
           // Close all open HTMLDialogs
           foreach(HtmlDialog htmlDialog in HtmlDialogs)
           {
@@ -767,7 +774,7 @@ namespace WatiN.Core
           }
         }
         
-        base.Dispose();
+        base.Dispose(true);
 
         if (closeIE)
         {
@@ -845,7 +852,7 @@ namespace WatiN.Core
     /// This method must be called by its inheritor to dispose references
     /// to internal resources.
     /// </summary>
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
       DisposeAndCloseIE(AutoClose);
     }

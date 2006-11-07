@@ -112,9 +112,11 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(MainURI))
       {
         ie.Button("popupid").Click();
-        Document dialog = ie.HtmlDialogs[0];
-
-        Assert.AreEqual("47", dialog.TextField("dims").Value);
+        using(Document dialog = ie.HtmlDialogs[0])
+        {
+          string value = dialog.TextField("dims").Value;
+          Assert.AreEqual("47", value);
+        }
       }
     }
     
@@ -134,8 +136,12 @@ namespace WatiN.UnitTests
     [Test]
     public void AlertAndConfirmDialogHandler()
     {
+      DialogWatcher dialogWatcher;
+      
       using (IE ie = new IE(MainURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
+        
         // Create handler for Alert dialogs and register it.
         AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
         ie.AddDialogHandler(dialogHandler);
@@ -160,18 +166,67 @@ namespace WatiN.UnitTests
         dialogHandler.Clear();
 
         Assert.AreEqual(0, dialogHandler.Count);
+        
+        dialogWatcher = ie.DialogWatcher;
       }
+      Assert.AreEqual(0, dialogWatcher.Count, "DialogWatcher count should be zero after test");
     }
     
-    [Test, ExpectedException(typeof(MissingAlertException))]
+    [Test]
+    public void DocumentShouldBeDisposedSoHTMLDialogGetsDisposedAndReferenceCountIsOK()
+    {
+      DialogWatcher dialogWatcher;
+
+      using (IE ie = new IE(MainURI))
+      {
+        Assert.AreEqual(1, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero before test");
+       
+        ie.Button("popupid").Click();
+
+        using(Document document = ie.HtmlDialogs[0])
+        {
+          Assert.AreEqual(2, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count");
+        }
+        
+        dialogWatcher = ie.DialogWatcher;
+      }
+      
+      Assert.AreEqual(0, dialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero after test");
+    }
+    
+    [Test]
     public void MissingAlertException()
     {
       using (IE ie = new IE(MainURI))
       {
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
+
         AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
         ie.DialogWatcher.Add(dialogHandler);
 
-        dialogHandler.Pop();
+        bool failPopUpException = false;
+        string exceptionType = null;
+        try
+        {
+          dialogHandler.Pop();
+          failPopUpException = true;
+        }
+        catch (MissingAlertException)
+        {}
+        catch (Exception e)
+        {
+          exceptionType = e.ToString();
+        }
+        finally
+        {
+          // Cleanup handler
+          ie.RemoveDialogHandler(dialogHandler);
+        }
+
+        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero after test");
+
+        Assert.IsFalse(failPopUpException, "MissingAlertException missing.");
+        Assert.IsNull(exceptionType, "Expected MissingAlertException but was " + exceptionType);
       }
     }
 
@@ -249,10 +304,11 @@ namespace WatiN.UnitTests
       
         ie.Button(Find.ByValue("Show alert dialog")).Click();
       
+        ie.RemoveDialogHandler(dialogHandler);
+
         Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
         Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
 
-        ie.RemoveDialogHandler(dialogHandler);
       }      
     }
     
@@ -349,12 +405,12 @@ namespace WatiN.UnitTests
         ie.AddDialogHandler(dialogHandler);
       
         ie.Button(Find.ByValue("Show confirm dialog")).Click();
+
+        ie.RemoveDialogHandler(dialogHandler);
       
         Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
         Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
         Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
-
-        ie.RemoveDialogHandler(dialogHandler);
       }      
     }
 
@@ -611,7 +667,7 @@ namespace WatiN.UnitTests
       ie.Button("modalid").ClickNoWait();
 
       HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
-  
+      
       Assert.IsInstanceOfType(typeof(DomContainer), htmlDialog);
       
       Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");

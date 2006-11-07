@@ -52,11 +52,11 @@ namespace WatiN.Core
   ///  }
   /// </code>
   /// </example>
-  public abstract class Document : IElementsContainer
+  public abstract class Document : IElementsContainer, IDisposable
   {
     private DomContainer domContainer;
     private IHTMLDocument2 htmlDocument;
-
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Document"/> class.
     /// Mainly used by WatiN internally. You should override HtmlDocument
@@ -80,12 +80,17 @@ namespace WatiN.Core
       this.htmlDocument = htmlDocument;
     }
 
-    internal virtual void Dispose()
+    public void Dispose() 
+    {
+      Dispose(true);
+    }
+
+    protected virtual void Dispose(bool disposing)
     {
       DomContainer = null;
       htmlDocument = null;
     }
-
+    
     /// <summary>
     /// Gives access to the wrapped IHTMLDocument2 interface. This makes it
     /// possible to get even more control of the webpage by using the MSHTML

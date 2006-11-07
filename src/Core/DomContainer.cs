@@ -39,6 +39,7 @@ namespace WatiN.Core
     private IHTMLDocument2 htmlDocument;
     private SimpleTimer waitForCompleteTimeout;
     private DialogWatcher dialogWatcher;
+    private bool disposed = false;
 
     public DomContainer()
     {
@@ -131,20 +132,25 @@ namespace WatiN.Core
     /// This method must be called by its inheritor to dispose references
     /// to internal resources.
     /// </summary>
-    internal override void Dispose()
+    protected override void Dispose(bool disposing)
     {
-      base.Dispose();
-      htmlDocument = null;
-      if (dialogWatcher != null)
+      if (!disposed)
       {
-        DialogWatcher.DecreaseReferenceCount();
-        dialogWatcher = null;
+        htmlDocument = null;
+        if (dialogWatcher != null)
+        {
+          DialogWatcher.DecreaseReferenceCount();
+          dialogWatcher = null;
+        }        
+        disposed = true;
+
+        base.Dispose(true);        
       }
     }
 
     /// <summary>
     /// This method calls InitTimeOut and waits till IE is ready
-    /// processing or the timeout periode has expired.
+    /// processing or the timeout period has expired.
     /// </summary>
     public virtual void WaitForComplete()
     {
@@ -154,7 +160,7 @@ namespace WatiN.Core
 
     /// <summary>
     /// This method waits till IE is ready processing 
-    /// or the timeout periode has expired. You should
+    /// or the timeout period has expired. You should
     /// call InitTimeout prior to calling this method.
     /// </summary>
     protected internal void WaitForCompleteOrTimeout()

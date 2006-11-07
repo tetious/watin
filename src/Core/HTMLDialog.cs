@@ -21,6 +21,7 @@ using System;
 using System.Runtime.InteropServices;
 
 using mshtml;
+using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {
@@ -37,21 +38,25 @@ namespace WatiN.Core
       get { return hwnd; }
     }
 
-    public static bool IsIETridentDlgFrame(IntPtr windowHandle)
-    {
-      return UtilityClass.CompareClassNames(windowHandle, "Internet Explorer_TridentDlgFrame");
-    }
-
     public HtmlDialog(IntPtr windowHandle)
     {
       hwnd = windowHandle;
       StartDialogWatcher();
     }
 
+    protected override void Dispose(bool disposing)
+    {
+      Close();
+    }
+
     public void Close()
     {
-      Dispose();
-      NativeMethods.SendMessage(hwnd, NativeMethods.WM_CLOSE, 0, 0);
+      Window dialog = new Window(hwnd);
+      if (dialog.Visible)
+      {
+        dialog.ForceClose();
+      }
+      base.Dispose(true);
     }
 
     internal override IHTMLDocument2 OnGetHtmlDocument()
@@ -95,6 +100,11 @@ namespace WatiN.Core
         }
       }
       return null;
+    }
+
+    internal static bool IsIETridentDlgFrame(IntPtr hWnd)
+    {
+      return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
     }
 
     private static bool IsIEServerWindow(IntPtr hWnd)
