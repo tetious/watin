@@ -9,9 +9,12 @@
         <meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
         <script language="javascript">
 
-function Button1_onkeydown(element) {
-    report = document.getElementById("Report")
-    report.value = "button.id = " + element.id
+function reportId(element) {
+    report = document.getElementById("Report");
+    report.value = "button.id = " + element.id;
+
+    buttonvalue = document.getElementById("eventButtonValue");
+    buttonvalue.value = window.event.button;
     return true
 }
 
@@ -43,11 +46,18 @@ function keyUp() {
     checkbox.checked = true;
     return true
 }
+ 
+function fnOpen()
+{
+   window.showModalDialog("TestEvents.html", "", "") 
+} 
+
         </script>
     </head>
     <body>
         <P>
-            <INPUT type="button" value="Button without id" onkeydown="return Button1_onkeydown(this)"><INPUT id="Report" type="text" name="Report" style="WIDTH: 456px; HEIGHT: 22px" size="70">
+            <INPUT type="button" value="Button without id" onkeydown="return reportId(this)" onclick="return reportId(this)"><INPUT id="Report" type="text" name="Report" style="WIDTH: 280px; HEIGHT: 22px" size="41">&nbsp;
+            <label>Event.button value <INPUT id="eventButtonValue" type="text" style="WIDTH: 40px; HEIGHT: 22px" size="1"></label>
         </P>
         <P>
             <INPUT id="confirmdialogid" onclick="javascript:ShowConfirmDialog()" type="button" value="Show confirm dialog"><INPUT id="ReportConfirmResult" type="text" style="WIDTH: 432px; HEIGHT: 22px" size="66">
@@ -57,9 +67,11 @@ function keyUp() {
         </P>
         <p>
             <input id="textfieldid" type="text" onkeydown="javascript:keyDown()" onkeypress="javascript:keyPress()"
-                onkeyup="javascript:keyUp()" /> <label><input type="checkbox" id="chkKeyDown" />
-                KeyDown</label> <label><input type="checkbox" id="chkKeyPress" /> KeyPress</label>
-            <label><input type="checkbox" id="chkKeyUp" /> KeyUp</label>
+                onkeyup="javascript:keyUp()"> <label><input type="checkbox" id="chkKeyDown"> KeyDown</label>
+            <label><input type="checkbox" id="chkKeyPress"> KeyPress</label> <label><input type="checkbox" id="chkKeyUp">
+                KeyUp</label>
         </p>
+        <input id="modalid" onclick="fnOpen()" type="button" value="Show this page in modal dialog"
+            name="popupmodalname">
     </body>
 </html>

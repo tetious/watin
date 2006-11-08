@@ -121,11 +121,51 @@ namespace WatiN.Core
     /// <param name="eventName">Name of the event to fire</param>
     public virtual void FireEvent(DispHTMLBaseElement element, string eventName)
     {
-      object dummyEvt = null;
-      object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
+      // TODO: Passing the eventarguments in a new param of type array. This array
+      //       holds 0 or more name/value pairs where the name is a property of the event object
+      //       and the value is the value that's assigned to the property.
+
+      bool removeIdAttribute = false;
+      
+      // If the element has no Id, assign a temporary and unique Id so we can find 
+      // the element within the java code (I know, it's a bit dirty hack)
+      if (element.id == null)
+      {
+        element.id = Guid.NewGuid().ToString();
+        removeIdAttribute = true;
+      }
+
+      // The following commented code should work, but it doesn't. 
+      // The EventObject.button property in the java event handling scripts (in the html page) 
+      // still returns 0 while explicitly set to 1 in the code.
+      // I've searched the internet, but this really should be it.
+      // Since it doesn't work, I came up with this workaround using execScript.
+
+      //      object dummyEvt = null;
+      //      object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
       //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
       //      mouseDownEvent.button = 1;
-      element.FireEvent(eventName, ref parentEvt);
+      //      element.FireEvent(eventName, ref parentEvt);
+
+      // Execute the JScript to fire the event inside the Browser.
+      FireEventOnElementWithJScript(element, eventName);
+
+      // Remove Id attribute if temporary Id was assigned.
+      if (removeIdAttribute)
+      {
+        element.removeAttribute("id", 0);
+      }
+    }
+
+    private void FireEventOnElementWithJScript(DispHTMLBaseElement element, string eventName)
+    {
+      string scriptCode = "var newEvt = document.createEventObject();";
+      scriptCode += "newEvt.button = 1;";
+      scriptCode += "document.getElementById('" + element.id + "').fireEvent('" + eventName + "', newEvt);";
+
+      IHTMLWindow2 window = ((HTMLDocument) element.document).parentWindow;
+
+      window.execScript(scriptCode, "javascript");
     }
 
     /// <summary>
