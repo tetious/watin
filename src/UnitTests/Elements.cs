@@ -1002,6 +1002,27 @@ namespace WatiN.UnitTests
       Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedSpansCount, count);
     }
+    
+    [Test]
+    public void ElementExistsWorkaround()
+    {
+      Assert.IsTrue(ElementExists(ie.Divs, Find.ById("divid")), "mydiv not found");
+      Assert.IsFalse(ElementExists(ie.Buttons, Find.ById("cancel")), "cancel button should not be found");
+    }
+
+    private static bool ElementExists(IEnumerable enumButtons, Core.Attribute findBy)
+    {
+      foreach (Element element in enumButtons)
+      {
+        if(findBy.Compare(element.HTMLElement))
+        {
+          return true;
+        }
+      }
+	    
+      return false;
+    }
+
   }
   
   [TestFixture]

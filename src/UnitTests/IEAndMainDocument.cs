@@ -196,7 +196,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual(0, dialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero after test");
     }
     
-    [Test]
+    [Test, ExpectedException(typeof(MissingAlertException))]
     public void MissingAlertException()
     {
       using (IE ie = new IE(MainURI))
@@ -204,44 +204,24 @@ namespace WatiN.UnitTests
         Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
 
         AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
-        ie.DialogWatcher.Add(dialogHandler);
-
-        bool failPopUpException = false;
-        string exceptionType = null;
-        try
+        using(new UseDialogOnce(ie.DialogWatcher, dialogHandler))
         {
           dialogHandler.Pop();
-          failPopUpException = true;
         }
-        catch (MissingAlertException)
-        {}
-        catch (Exception e)
-        {
-          exceptionType = e.ToString();
-        }
-        finally
-        {
-          // Cleanup handler
-          ie.RemoveDialogHandler(dialogHandler);
-        }
-
-        Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero after test");
-
-        Assert.IsFalse(failPopUpException, "MissingAlertException missing.");
-        Assert.IsNull(exceptionType, "Expected MissingAlertException but was " + exceptionType);
       }
     }
 
     [Test, Ignore()]
     public void LogonDialogTest()
     {
-      IE ie = new IE();
-            
-      ie.DialogWatcher.Add(new LogonDialogHandler(@"username", "password"));
-
-      ie.GoTo("https://www.somesecuresite.com");
-
-      ie.DialogWatcher.Clear();
+      using(IE ie = new IE())
+      {
+        LogonDialogHandler logonDialogHandler = new LogonDialogHandler(@"username", "password");
+        using(new UseDialogOnce(ie.DialogWatcher, logonDialogHandler))
+        {
+          ie.GoTo("https://www.somesecuresite.com");
+        }
+      }
     }
     
 
@@ -613,6 +593,36 @@ namespace WatiN.UnitTests
       }      
     }
 
+    [Test]
+    public void IEExistsByUrl()
+    {
+      Url findByUrl = Find.ByUrl(MainURI);
+      
+      Assert.IsFalse(IE.Exists(findByUrl));
+      
+      using(new IE(MainURI))
+      {
+        Assert.IsTrue(IE.Exists(findByUrl));
+      }
+      
+      Assert.IsFalse(IE.Exists(findByUrl));
+    }
+
+    [Test]
+    public void IEExistsByTitle()
+    {
+      Title findByTitle = Find.ByTitle("Ai");
+      
+      Assert.IsFalse(IE.Exists(findByTitle));
+      
+      using(new IE(MainURI))
+      {
+        Assert.IsTrue(IE.Exists(findByTitle));
+      }
+      
+      Assert.IsFalse(IE.Exists(findByTitle));
+    }
+    
     /// <summary>
     /// Attaches to IE with a zero timeout interval. Allthough the timeout
     /// interval is zero the existing IE instance should be found.
@@ -624,10 +634,11 @@ namespace WatiN.UnitTests
       using(new IE(MainURI))
       {
         DateTime startTime = DateTime.Now;
-        IE.AttachToIE(new Url(MainURI), 0);
-
-        // Should return (within 1 second).
-        Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);       
+        using(IE.AttachToIE(new Url(MainURI), 0))
+        {
+          // Should return (within 1 second).
+          Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);       
+        }
       }
     }
     
@@ -638,17 +649,30 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void AttachToIEByPartialTitleAndByUrl()
+    public void AttachToIEByPartialTitle()
     {
-      FailIfIEWindowExists("Ai", "AttachToIEByPartialTitleAndByUrl");
+      FailIfIEWindowExists("Ai", "AttachToIEByPartialTitle");
 
       using (new IE(MainURI))
       {
-        IE ieMain = IE.AttachToIE(Find.ByTitle("Ai"));
-        Assert.AreEqual(MainURI, ieMain.Uri);
-        
-        ieMain = IE.AttachToIE(Find.ByUrl(MainURI));
-        Assert.AreEqual(MainURI, ieMain.Uri);
+        using(IE ieMainByTitle = IE.AttachToIE(Find.ByTitle("Ai")))
+        {
+          Assert.AreEqual(MainURI, ieMainByTitle.Uri);
+        }
+      }
+    }
+    
+    [Test]
+    public void AttachToIEByUrl()
+    {
+      FailIfIEWindowExists("Ai", "AttachToIEByUrl");
+
+      using (new IE(MainURI))
+      {
+        using(IE ieMainByUri = IE.AttachToIE(Find.ByUrl(MainURI)))
+        {
+          Assert.AreEqual(MainURI, ieMainByUri.Uri);         
+        }
       }
     }
     
@@ -659,8 +683,10 @@ namespace WatiN.UnitTests
 
       using (new IE(MainURI))
       {
-        IE ie = IE.AttachToIE(Find.ByTitle("main"));
-        Assert.AreEqual(MainURI, new Uri(ie.Url));
+        using(IE ie = IE.AttachToIE(Find.ByTitle("main")))
+        {
+          Assert.AreEqual(MainURI, new Uri(ie.Url));
+        }
       }
 
       Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer not closed by IE.Dispose");
@@ -678,7 +704,9 @@ namespace WatiN.UnitTests
       {
         // Time out after timeoutTime seconds
         startTime = DateTime.Now;
-        IE.AttachToIE(Find.ByTitle(ieTitle),timeoutTime);
+        using(IE.AttachToIE(Find.ByTitle(ieTitle),timeoutTime))
+        {}
+        
         Assert.Fail(string.Format("Internet Explorer with title '{0}' should not be found", ieTitle));
       }
       catch (Exception e)
@@ -693,26 +721,22 @@ namespace WatiN.UnitTests
     [Test]
     public void HTMLDialogModal()
     {
-      IE ie = new IE(MainURI);
+      using(IE ie = new IE(MainURI))
+      {
+        ie.Button("modalid").ClickNoWait();
 
-      ie.Button("modalid").ClickNoWait();
-
-      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
+        using(HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+        {
+          Assert.IsInstanceOfType(typeof(DomContainer), htmlDialog);
       
-      Assert.IsInstanceOfType(typeof(DomContainer), htmlDialog);
-      
-      Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-      Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
+          Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+          Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
   
-      htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
-      htmlDialog.Button("hello").Click();
-
-      htmlDialog.Close();
-
-      ie.WaitForComplete();
-      ie.Close();
+          htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
+          htmlDialog.Button("hello").Click();
+        }
+      }
     }
-
 
     [Test]
     public void HTMLDialogNotFoundException()
@@ -769,6 +793,28 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void FireEventAlwaysSetsLeftMouseOnEventObject()
+    {
+      using (IE ie = new IE(TestEventsURI))
+      {
+        // test in standard IE window
+        ie.Button(Find.ByValue("Button without id")).KeyDown();
+        
+        Assert.AreEqual("1", ie.TextField("eventButtonValue").Value, "Event.button not left");
+
+        // test in HTMLDialog window
+        ie.Button("modalid").ClickNoWait();
+        
+        using(HtmlDialog htmlDialog = ie.HtmlDialogs[0])
+        {
+          htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
+        
+          Assert.AreEqual("1", ie.TextField("eventButtonValue").Value, "Event.button not left on modal dialog");
+        }
+      }
+    }
+    
+    [Test]
     public void CallingIEDisposeAfterIECloseShouldNotThrowAnExeption()
     {
       IE ie = new IE(); 
@@ -794,15 +840,10 @@ namespace WatiN.UnitTests
 
     private static bool IsIEWindowOpen(string partialTitle)
     {
-      try
-      {
-        IE.AttachToIE(Find.ByTitle(partialTitle), 1);
-      }
-      catch (IENotFoundException)
-      {
-        return false;
-      }
-      return true;
+      // Give windows some time to do work before checking
+      Thread.Sleep(1000);
+      
+      return IE.Exists(Find.ByTitle(partialTitle));
     }
   }
   
@@ -812,131 +853,133 @@ namespace WatiN.UnitTests
     [Test]
     public void DialogWatcherShouldKeepRunningWhenClosingOneOfTwoInstancesInSameProcess()
     {      
-      IE ie1 = new IE();
-      IE ie2 = new IE();
+      using(IE ie1 = new IE(), ie2 = new IE())
+      {
+        Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids should be the same");
+        
+        DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
       
-      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids should be the same");
+        Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+        Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
+        Assert.AreEqual(2, dialogWatcher.ReferenceCount, "Expected 2 as reference count");
+        Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+        Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");       
+        
+        ie2.Close();
       
-      ie2.Close();
-      
-      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
-      
-      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
-      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
-      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
-      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
-           
-      ie1.Close();
-      
-      Assert.IsFalse(dialogWatcher.ProcessExists, "Process should not exist");
-      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+        Assert.AreEqual(1, dialogWatcher.ReferenceCount, "Expected 1 as reference count");
+        Assert.IsTrue(dialogWatcher.ProcessExists, "Process should still exist");
+        Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should still be running");       
+
+        ie1.Close();
+
+        Assert.AreEqual(0, dialogWatcher.ReferenceCount, "Expected 0 as reference count");
+        Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+      }           
     }
     
     [Test]
     public void DialogWatcherShouldTerminateWhenNoWatiNCoreIEInstancesExistButProcessDoesExist()
     {
+      int ieProcessId;
+      
       // Create running Internet Explorer instance but no longer referenced by 
       // an instance of WatiN.Core.IE.
-      IE ie = new IE(MainURI);
-      ie.AutoClose = false;
-      int ieProcessId = ie.ProcessID;
-      ie.Dispose();
+      using (IE ie = new IE(MainURI))
+      {
+        ie.AutoClose = false;
+        ieProcessId = ie.ProcessID;
+      }
       
       // Create IE instances and see if DialogWatcher behaves as expected
-      IE ie1 = new IE();
+      using(IE ie1 = new IE())
+      {
+        Assert.AreEqual(ieProcessId, ie1.ProcessID, "ProcessIds ie and ie1 should be the same");
       
-      Assert.AreEqual(ieProcessId, ie1.ProcessID, "ProcessIds ie and ie1 should be the same");
+        using(IE ie2 = new IE())
+        {
+          Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids ie1 and ie2 should be the same");
+        }      
       
-      IE ie2 = new IE();
+        DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
       
-      Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "Processids ie1 and ie2 should be the same");
-      
-      ie2.Close();
-      
-      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie1.ProcessID);
-      
-      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
-      Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
-      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
-      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
+        Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+        Assert.AreEqual(ie1.ProcessID, dialogWatcher.ProcessId, "Processids of ie1 and dialogWatcher should be the same");
+        Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+        Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
            
-      ie1.Close();
+        ie1.Close();
       
-      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist after ie1.close");
-      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
-      
-      // Find create but not referenced Internet Explorer instance and close it.
-      ie = IE.AttachToIE(Find.ByUrl(MainURI));
-      ie.Close();
+        Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist after ie1.close");
+        Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+      }      
+
+      // Find created but not referenced Internet Explorer instance and close it.
+      IE.AttachToIE(Find.ByUrl(MainURI)).Close();
     }
 
     [Test]
     public void DialogWatcherOfIEAndHTMLDialogShouldNotBeNull()
     {
-      IE ie = new IE(MainURI);
+      using(IE ie = new IE(MainURI))
+      {
+        Assert.IsNotNull(ie.DialogWatcher, "ie.DialogWatcher should not be null");
       
-      Assert.IsNotNull(ie.DialogWatcher, "ie.DialogWatcher should not be null");
-      
-      ie.Button("modalid").ClickNoWait();
+        ie.Button("modalid").ClickNoWait();
 
-      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
-
-      Assert.IsNotNull(htmlDialog.DialogWatcher, "htmlDialog.DialogWatcher should not be null");
-
-      htmlDialog.Close();
-
-      ie.WaitForComplete();
-      ie.Close();
+        using(HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+        {
+          Assert.IsNotNull(htmlDialog.DialogWatcher, "htmlDialog.DialogWatcher should not be null");
+        }
+      }
     }
     
     [Test]
     public void DialogWatcherShouldKeepRunningWhenClosingHTMLDialog()
     {
-      IE ie = new IE(MainURI);
-      ie.Button("modalid").ClickNoWait();
+      using (IE ie = new IE(MainURI))
+      {
+        ie.Button("modalid").ClickNoWait();
 
-      HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest"));
+        DialogWatcher dialogWatcher;
+        using(HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+        {
+          Assert.AreEqual(ie.ProcessID, htmlDialog.ProcessID, "Processids should be the same");
+          
+          dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
+          Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
+          Assert.AreEqual(ie.ProcessID, dialogWatcher.ProcessId, "Processids of ie and dialogWatcher should be the same");
+          Assert.AreEqual(2, dialogWatcher.ReferenceCount, "Expected 2 as reference count");
+          Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
+          Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");       
+        }
 
-      Assert.AreEqual(ie.ProcessID, htmlDialog.ProcessID, "Processids should be the same");
+        Assert.AreEqual(1, dialogWatcher.ReferenceCount, "Expected 1 as reference count");
+        Assert.IsTrue(dialogWatcher.ProcessExists, "Process should still exist");
+        Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should still be running");
 
-      htmlDialog.Close();
-
-      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
+        ie.WaitForComplete();
+        ie.Close();
       
-      Assert.IsNotNull(dialogWatcher, "dialogWatcher should not be null");
-      Assert.AreEqual(ie.ProcessID, dialogWatcher.ProcessId, "Processids of ie and dialogWatcher should be the same");
-      Assert.IsTrue(dialogWatcher.ProcessExists, "Process should exist");
-      Assert.IsTrue(dialogWatcher.IsRunning, "dialogWatcher should be running");
-
-      ie.WaitForComplete();
-      ie.Close();
-      
-      Assert.IsFalse(dialogWatcher.ProcessExists, "Process should not exist");
-      Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+        Assert.AreEqual(0, dialogWatcher.ReferenceCount, "Expected 0 as reference count");
+        Assert.IsFalse(dialogWatcher.IsRunning, "dialogWatcher should not be running");
+      }
     }
     
-    [Test]
+    [Test, ExpectedException(typeof(ReferenceCountException))]
     public void ThrowReferenceCountException()
     {
-      IE ie = new IE();
-      DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
-      dialogWatcher.DecreaseReferenceCount();
-
-      bool catchedReferenceCountException = false;
-      try
+      using(IE ie = new IE())
       {
+        DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
+        Assert.AreEqual(1, dialogWatcher.ReferenceCount);
+
+        dialogWatcher.DecreaseReferenceCount();
+
+        Assert.AreEqual(0, dialogWatcher.ReferenceCount);
+        
         dialogWatcher.DecreaseReferenceCount();
       }
-      catch(ReferenceCountException)
-      {
-        catchedReferenceCountException = true;
-      }
-    
-      // Prevent ReferenceCountException from happening again
-      dialogWatcher.IncreaseReferenceCount();
-      ie.Close();
-
-      Assert.IsTrue(catchedReferenceCountException);
     }
   }
   

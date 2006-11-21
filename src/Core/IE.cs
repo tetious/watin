@@ -64,7 +64,8 @@ namespace WatiN.Core
     private InternetExplorer ie;
 
     private bool autoClose = true;
-
+    private bool isDisposed = false;
+    
     /// <summary>
     /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
@@ -168,6 +169,26 @@ namespace WatiN.Core
       return findIE(findBy, timeout);
     }
 
+    /// <summary>
+    /// Exists the specified Internet Explorer.
+    /// </summary>
+    /// <param name="findBy">The Url to match with.</param>
+    /// <returns></returns>
+    public static bool Exists(Url findBy)
+    {
+      return (null != findInternetExplorer(findBy));
+    }
+
+    /// <summary>
+    /// Exists the specified Internet Explorer.
+    /// </summary>
+    /// <param name="findBy">The (partial) Title of the IE window to match with</param>
+    /// <returns></returns>
+    public static bool Exists(Title findBy)
+    {
+      return (null != findInternetExplorer(findBy));
+    }
+    
     /// <summary>
     /// Creates a collection of new InternetExplorer objects and associates them with open Internet Explorers.
     /// </summary>
@@ -440,45 +461,57 @@ namespace WatiN.Core
       {
         Thread.Sleep(500);
 
-        ShellWindows allBrowsers = new ShellWindows();
-
-        int browserCount = allBrowsers.Count;
-        int browserCounter = 0;
-
-        while (browserCounter < browserCount)
+        InternetExplorer internetExplorer = findInternetExplorer(findBy);
+        
+        if (internetExplorer != null)
         {
-          InternetExplorer e = (InternetExplorer) allBrowsers.Item(browserCounter);
+          IE ie = new IE(internetExplorer);
+          ie.WaitForComplete();
 
-          string compareValue = string.Empty;
-
-          try
-          {
-            if (findBy is Url)
-            {
-              compareValue = e.LocationURL;
-            }
-            else if (findBy is Title)
-            {
-              compareValue = ((HTMLDocument) e.Document).title;
-            }
-          }
-          catch
-          {}
-          
-          if (findBy.Compare(compareValue))
-          {
-            IE ie = new IE(e);
-            ie.WaitForComplete();
-
-            return ie;
-          }
-
-          browserCounter++;
+          return ie;
         }
       } while (!timeoutTimer.Elapsed);
 
 
       throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
+    }
+
+    private static InternetExplorer findInternetExplorer(Attribute findBy)
+    {
+      ShellWindows allBrowsers = new ShellWindows();
+
+      int browserCount = allBrowsers.Count;
+      int browserCounter = 0;
+
+      while (browserCounter < browserCount)
+      {
+        InternetExplorer internetExplorer = (InternetExplorer) allBrowsers.Item(browserCounter);
+
+        string compareValue = string.Empty;
+
+        try
+        {
+          if (findBy is Url)
+          {
+            compareValue = internetExplorer.LocationURL;
+          }
+          else if (findBy is Title)
+          {
+            compareValue = ((HTMLDocument) internetExplorer.Document).title;
+          }
+        }
+        catch
+        {}
+          
+        if (findBy.Compare(compareValue))
+        {
+          return internetExplorer;
+        }
+
+        browserCounter++;
+      }
+      
+      return null;
     }
 
     private void MoveMouseToTopLeft()
@@ -695,7 +728,7 @@ namespace WatiN.Core
     /// </example>
     public void Close()
     {
-      if (!IsDisposed())
+      if (!isDisposed)
       {
         Logger.LogAction("Closing browser '" + Title + "'");
         DisposeAndCloseIE(true);
@@ -704,9 +737,9 @@ namespace WatiN.Core
 
     private void DisposeAndCloseIE(bool closeIE)
     {
-      if (!IsDisposed())
+      if (!isDisposed)
       {
-        if (closeIE)
+        if (closeIE && IsInternetExplorerStillAvailable())
         {
 
           //TODO: Since HTMLDialog collection is contains all HTMLDialogs
@@ -725,7 +758,7 @@ namespace WatiN.Core
         
         base.Dispose(true);
 
-        if (closeIE)
+        if (closeIE && IsInternetExplorerStillAvailable())
         {
           // Ask IE to close
           ie.Quit(); 
@@ -739,6 +772,8 @@ namespace WatiN.Core
           // a new WatiN.Core.IE instance.
           Thread.Sleep(1000); 
         }
+        
+        isDisposed = true;
       }
     }
 
@@ -748,7 +783,7 @@ namespace WatiN.Core
     /// </summary>
     public virtual void ForceClose()
     {
-      if (IsDisposed())
+      if (isDisposed)
       {
         throw new ObjectDisposedException("Internet Explorer", "The Internet Explorer instance is already disposed. ForceClose can't be performed.");
       }
@@ -770,9 +805,22 @@ namespace WatiN.Core
       }
     }
 
-    private bool IsDisposed()
+
+    private bool IsInternetExplorerStillAvailable()
     {
-      return ie == null;
+      try
+      {
+        // Try a method aor property call to the
+        // ie instance to see of it isn't disposed by 
+        // another IE instance.
+        int hwndDummy = ie.HWND;
+      }
+      catch (COMException)
+      {
+        return false;
+      }
+      
+      return true;
     }
 
     internal override IHTMLDocument2 OnGetHtmlDocument()

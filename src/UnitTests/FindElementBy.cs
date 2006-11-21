@@ -309,9 +309,10 @@ namespace WatiN.UnitTests
         string partialUrl = MainURI.ToString();
         partialUrl = partialUrl.Remove(0, partialUrl.Length - 8);
 
-        IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl));
-        
-        Assert.AreEqual(MainURI, ie.Uri);
+        using(IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl)))
+        {
+          Assert.AreEqual(MainURI, ie.Uri);
+        }
       }
     }   
   }
