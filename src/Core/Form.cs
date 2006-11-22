@@ -31,6 +31,9 @@ namespace WatiN.Core
     public Form(DomContainer ie, HTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)
     {}
 
+    public Form(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
     public void Submit()
     {
       Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");

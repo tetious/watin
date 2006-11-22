@@ -30,6 +30,9 @@ namespace WatiN.Core
 	{
 	  public ElementsContainer(DomContainer ie, object element): base(ie, element) 
 		{}
+	  
+	  public ElementsContainer(DomContainer ie, ElementFinder finder): base(ie, finder) 
+		{}
 
     #region IElementsContainer
 

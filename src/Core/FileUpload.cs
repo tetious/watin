@@ -9,6 +9,9 @@ namespace WatiN.Core
   {
     public FileUpload(DomContainer domContainer, IHTMLInputFileElement inputFileElement): base(domContainer, inputFileElement)
     {}
+    
+    public FileUpload(DomContainer domContainer, ElementFinder finder): base(domContainer, finder)
+    {}
 
     public string FileName
     {

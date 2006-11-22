@@ -35,5 +35,14 @@ namespace WatiN.Core
     /// <param name="inputElement">The input element.</param>
     public CheckBox(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, inputElement)
     {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CheckBox"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The domContainer.</param>
+    /// <param name="finder">The finder.</param>
+    public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
+    {}
   }
 }

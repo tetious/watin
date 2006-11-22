@@ -28,5 +28,8 @@ namespace WatiN.Core
   {
     public TableRow(DomContainer ie, HTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow)
     {}
+    
+    public TableRow(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
   }
 }

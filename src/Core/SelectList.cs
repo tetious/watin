@@ -42,6 +42,15 @@ namespace WatiN.Core
     {}
 
     /// <summary>
+    /// Returns an initialized instance of a SelectList object.
+    /// Mainly used by the collectionclass SelectLists.
+    /// </summary>
+    /// <param name="ie"></param>
+    /// <param name="finder"></param>
+    public SelectList(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    /// <summary>
     /// This method clears the selected items in the select box
     /// </summary>
     public void ClearList()

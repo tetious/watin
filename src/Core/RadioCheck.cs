@@ -31,6 +31,9 @@ namespace WatiN.Core
   {
     public RadioCheck(DomContainer ie, IHTMLInputElement inputElement) : base(ie, (IHTMLElement) inputElement)
     {}
+    
+    public RadioCheck(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
 
     public bool Checked
     {

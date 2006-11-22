@@ -29,6 +29,9 @@ namespace WatiN.Core
     public Link(DomContainer ie, HTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement)
     {}
 
+    public Link(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
     public string Url
     {
       get { return ((IHTMLAnchorElement) HTMLElement).href; }

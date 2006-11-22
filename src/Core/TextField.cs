@@ -31,18 +31,36 @@ namespace WatiN.Core
   /// </summary>
   public class TextField : Element
   {
-    private ITextElement textElement;
+    private ITextElement _textElement;
 
     public TextField(DomContainer ie, HTMLInputElement htmlInputElement) : base(ie, htmlInputElement)
-    {
-      textElement = new TextFieldElement(htmlInputElement);
-    }
+    {}
 
     public TextField(DomContainer ie, HTMLTextAreaElement htmlTextAreaElement) : base(ie, htmlTextAreaElement)
-    {
-      textElement = new TextAreaElement(htmlTextAreaElement);
-    }
+    {}
 
+    public TextField(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    private ITextElement textElement
+    {
+      get
+      {
+        if (_textElement == null)
+        {
+          if (!ElementsSupport.isInputElement(htmlElement.tagName))
+          {
+            _textElement = new TextAreaElement((HTMLTextAreaElement)HTMLElement);
+          }
+          else
+          {
+            _textElement = new TextFieldElement((HTMLInputElement)HTMLElement);
+          }
+        }
+        return _textElement;
+      }
+    }
+    
     public int MaxLength
     {
       get { return textElement.MaxLength; }

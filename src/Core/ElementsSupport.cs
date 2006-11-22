@@ -62,21 +62,11 @@ namespace WatiN.Core
     
     public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      IHTMLElement element = FindFirstElement(InputTagName, InputButtonType, findBy, elements, false);
-      
-      if (element != null)
-      {
-        return new Button(ie, element);
-      }
+      ElementFinder finder = new ElementFinder(InputTagName, InputButtonType, findBy, elements);
+      finder.AddTagType(ButtonTagName, InputNullType);
+      finder.ExceptionMessage = string.Format("{0} ({1}) or {2}", InputTagName, InputButtonType, ButtonTagName);
 
-      element = FindFirstElement(ButtonTagName, InputNullType, findBy, elements, false);
-
-      if (element != null)
-      {
-        return new Button(ie, element);
-      }
-
-      throw new ElementNotFoundException(string.Format("{0} ({1}) or {2}", InputTagName, InputButtonType, ButtonTagName), findBy.AttributeName, findBy.Value);
+      return new Button(ie, finder);
     }
 
     public static ButtonCollection Buttons(DomContainer ie, IHTMLElementCollection elements)
@@ -89,7 +79,7 @@ namespace WatiN.Core
 
     public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new CheckBox(ie, (IHTMLInputElement) FindFirstElement(InputTagName, InputCheckBoxType, findBy, elements, true));
+      return new CheckBox(ie, new ElementFinder(InputTagName, InputCheckBoxType, findBy, elements));
     }
 
     public static CheckBoxCollection CheckBoxes(DomContainer ie, IHTMLElementCollection elements)
@@ -99,7 +89,7 @@ namespace WatiN.Core
     
     public static Element Element(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new ElementsContainer(ie, FindFirstElement(null, InputNullType, findBy, elements, true));
+      return new ElementsContainer(ie, new ElementFinder(null, InputNullType, findBy, elements));
     }
 
     public static ElementCollection Elements(DomContainer ie, IHTMLElementCollection elements)
@@ -109,17 +99,17 @@ namespace WatiN.Core
 
     public static FileUpload FileUpload(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new FileUpload(ie, (IHTMLInputFileElement) FindFirstElement(InputTagName, InputFileType, findBy, elements, true));
+      return new FileUpload(ie, new ElementFinder(InputTagName, InputFileType, findBy, elements));
     }
 
     public static FileUploadCollection FileUploads(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new FileUploadCollection(ie, FindAllElements(InputTagName, InputFileType, elements), null);
+      return new FileUploadCollection(ie, FindAllElements(InputTagName, InputFileType, elements));
     }
     
     public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Form(ie, (HTMLFormElement) FindFirstElement(FormTagName, InputNullType, findBy, elements, true));
+      return new Form(ie, new ElementFinder(FormTagName, InputNullType, findBy, elements));
     }
 
     public static FormCollection Forms(DomContainer ie, IHTMLElementCollection elements)
@@ -129,7 +119,7 @@ namespace WatiN.Core
 
     public static Label Label(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Label(ie, (HTMLLabelElement) FindFirstElement(LabelTagName, InputNullType, findBy, elements, true));
+      return new Label(ie, new ElementFinder(LabelTagName, InputNullType, findBy, elements));
     }
 
     public static LabelCollection Labels(DomContainer ie, IHTMLElementCollection elements)
@@ -139,7 +129,7 @@ namespace WatiN.Core
 
     public static Link Link(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Link(ie, (HTMLAnchorElement) FindFirstElement(LinkTagName, InputNullType, findBy, elements, true));
+      return new Link(ie, new ElementFinder(LinkTagName, InputNullType, findBy, elements));
     }
 
     public static LinkCollection Links(DomContainer ie, IHTMLElementCollection elements)
@@ -149,7 +139,7 @@ namespace WatiN.Core
 
     public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Para(ie, (HTMLParaElement) FindFirstElement(ParaTagName, InputNullType, findBy, elements, true));
+      return new Para(ie, new ElementFinder(ParaTagName, InputNullType, findBy, elements));
     }
 
     public static ParaCollection Paras(DomContainer ie, IHTMLElementCollection elements)
@@ -159,7 +149,7 @@ namespace WatiN.Core
 
     public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new RadioButton(ie, (IHTMLInputElement) FindFirstElement(InputTagName, InputRadioButtonType, findBy, elements, true));
+      return new RadioButton(ie, new ElementFinder(InputTagName, InputRadioButtonType, findBy, elements));
     }
 
     public static RadioButtonCollection RadioButtons(DomContainer ie, IHTMLElementCollection elements)
@@ -169,7 +159,7 @@ namespace WatiN.Core
 
     public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new SelectList(ie, FindFirstElement(SelectListTagName, InputNullType, findBy, elements, true));
+      return new SelectList(ie, new ElementFinder(SelectListTagName, InputNullType, findBy, elements));
     }
 
     public static SelectListCollection SelectLists(DomContainer ie, IHTMLElementCollection elements)
@@ -179,7 +169,7 @@ namespace WatiN.Core
 
     public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Table(ie, (HTMLTable) FindFirstElement(TableTagName, InputNullType, findBy, elements, true));
+      return new Table(ie, new ElementFinder(TableTagName, InputNullType, findBy, elements));
     }
 
     public static TableCollection Tables(DomContainer ie, IHTMLElementCollection elements)
@@ -194,23 +184,12 @@ namespace WatiN.Core
 
     public static TableCell TableCell(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, (HTMLTableCell) FindFirstElement(TableCellTagName, InputNullType, findBy, elements, true));
+      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, findBy, elements));
     }
 
-    /// <summary>
-    /// Finds a TableCell by the n-th occurrence of an id. 
-    /// Occurrence counting is zero based.
-    /// </summary>  
-    /// <example>
-    /// This example will get Text of the third(!) occurrence on the page of a
-    /// TableCell element with "tablecellid" as it's id value. 
-    /// <code>ie.TableCell(new IdAndOccurrence("tablecellid", 2)).Text</code>
-    /// </example>
-    public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elementCollection)
+    public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elements)
     {
-      ArrayList elements = findElementsByAttribute(TableCellTagName, InputNullType, new Id(elementId), elementCollection, false);
-      TableCellCollection collection = new TableCellCollection(ie, elements);
-      return collection[occurrence];
+      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new IdAndOccurrence(elementId,occurrence), elements));
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)
@@ -220,7 +199,7 @@ namespace WatiN.Core
 
     public static TableRow TableRow(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new TableRow(ie, (HTMLTableRow) FindFirstElement(TableRowTagName, InputNullType, findBy, elements, true));
+      return new TableRow(ie, new ElementFinder(TableRowTagName, InputNullType, findBy, elements));
     }
 
     public static TableRowCollection TableRows(DomContainer ie, IHTMLElementCollection elements)
@@ -230,22 +209,11 @@ namespace WatiN.Core
 
     public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      // throwExceptionIfElementNotFound = false
-      IHTMLElement element = FindFirstElement(InputTagName, InputTextFieldType, findBy, elements, false);
+      ElementFinder finder = new ElementFinder(InputTagName, InputTextFieldType, findBy, elements);
+      finder.AddTagType(TextAreaTagName, InputNullType);
+      finder.ExceptionMessage = string.Format("{0} ({1}) or {2}", InputTagName, InputTextFieldType, TextAreaTagName);
       
-      if (element != null)
-      {
-        return new TextField(ie, (HTMLInputElement)element);
-      }
-
-      element = FindFirstElement(TextAreaTagName, InputNullType, findBy, elements, false);
-
-      if (element != null)
-      {
-        return new TextField(ie, (HTMLTextAreaElement)element);
-      }
-
-      throw new ElementNotFoundException(string.Format("{0} ({1}) or {2}", InputTagName, InputTextFieldType, TextAreaTagName), findBy.AttributeName, findBy.Value);
+      return new TextField(ie, finder);
     }
 
     public static TextFieldCollection TextFields(DomContainer ie, IHTMLElementCollection elements)
@@ -258,7 +226,7 @@ namespace WatiN.Core
 
     public static Span Span(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Span(ie, (HTMLSpanElement) FindFirstElement(SpanTagName, InputNullType, findBy, elements, true));
+      return new Span(ie, new ElementFinder(SpanTagName, InputNullType, findBy, elements));
     }
 
     public static SpanCollection Spans(DomContainer ie, IHTMLElementCollection elements)
@@ -268,7 +236,7 @@ namespace WatiN.Core
 
     public static Div Div(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Div(ie, (HTMLDivElement) FindFirstElement(DivTagName, InputNullType, findBy, elements, true));
+      return new Div(ie, new ElementFinder(DivTagName, InputNullType, findBy, elements));
     }
 
     public static DivCollection Divs(DomContainer ie, IHTMLElementCollection elements)
@@ -278,7 +246,7 @@ namespace WatiN.Core
 
     public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Image(ie, (IHTMLImgElement) FindFirstElement(ImageTagName, InputNullType, findBy, elements, true));
+      return new Image(ie, new ElementFinder(ImageTagName, InputNullType, findBy, elements));
     }
 
     public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
@@ -415,10 +383,88 @@ namespace WatiN.Core
       return (IHTMLElementCollection)elements.tags(tagName);
     }
 
-    private static bool isInputElement(string tagName)
+    internal static bool isInputElement(string tagName)
     {
       return String.Compare(tagName, InputTagName, true) == 0;
     }    
+  }
+  
+  public class ElementFinder
+  {
+    private ArrayList tagsToFind = new ArrayList();
+    
+    protected readonly Attribute findBy;
+    protected readonly IHTMLElementCollection elementsCollection;
+
+    private string exceptionMessage = null;
+
+    public ElementFinder(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
+    {
+      this.findBy = findBy;
+      this.elementsCollection = elementsCollection;
+      
+      AddTagType(tagName, inputType);
+    }
+
+    public string ExceptionMessage
+    {
+      get
+      {
+        if (exceptionMessage == null && tagsToFind.Count > 0)
+        {
+          TagType tagType = (TagType)tagsToFind[0];
+          return tagType.tagName;
+        }
+        return exceptionMessage;
+      }
+      set
+      {
+        exceptionMessage = value;
+      }
+    }
+
+    public virtual IHTMLElement FindFirst(bool throwExceptionIfElementNotFound)
+    {
+      IHTMLElement element = findElement();
+
+      if (element == null && throwExceptionIfElementNotFound)
+      {
+        throw new ElementNotFoundException(ExceptionMessage, findBy.AttributeName, findBy.Value);
+      }
+      
+      return element;
+    }
+
+    public void AddTagType(string tagName, string inputType)
+    {
+      tagsToFind.Add(new TagType(tagName, inputType));
+    }
+    
+    private IHTMLElement findElement()
+    {
+      foreach (TagType tagType in tagsToFind)
+      {
+        IHTMLElement element = ElementsSupport.FindFirstElement(tagType.tagName, tagType.inputTypes, findBy, elementsCollection, false);
+        if (element != null)
+        {
+          return element;
+        }
+      }
+      
+      return null;
+    }
+
+    private class TagType
+    {
+      public string tagName;
+      public string inputTypes;
+      
+      public TagType(string tagName, string inputTypes)
+      {
+        this.tagName = tagName;
+        this.inputTypes = inputTypes;
+      }
+    }
   }
 }
 

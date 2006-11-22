@@ -100,5 +100,13 @@ namespace WatiN.UnitTests
       Thread.Sleep(1000);
       Assert.IsTrue(timer.Elapsed);
     }
+    
+    [Test]
+    public void ToStringTests()
+    {
+      Assert.IsEmpty(UtilityClass.ToString(null), "Null should return empty string");
+      Assert.IsEmpty(UtilityClass.ToString(string.Empty), "Empty should return empty string");
+      Assert.AreEqual("test", UtilityClass.ToString("test"), "test should return test");
+    }
   }
 }

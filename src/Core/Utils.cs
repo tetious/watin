@@ -95,6 +95,16 @@ namespace WatiN.Core
       return !IsNullOrEmpty(value);
     }
 
+	  public static string ToString(object theObject)
+	  {
+	    if (theObject == null)
+	    {
+	      return String.Empty;
+	    }
+	    
+	    return theObject.ToString();
+	  }
+	  
     private static IHTMLElementCollection elementCollection(Document document)
     {
       return document.HtmlDocument.all;

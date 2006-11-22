@@ -35,6 +35,7 @@ namespace WatiN.Core
   {
     private DomContainer domContainer;
     private object element;
+    private ElementFinder elementFinder;
     
     private string originalcolor;
 
@@ -47,6 +48,17 @@ namespace WatiN.Core
     {
       this.domContainer = domContainer;
       this.element = element;
+    }
+    
+    /// <summary>
+    /// This constructor is mainly used from within WatiN.
+    /// </summary>
+    /// <param name="domContainer"><see cref="DomContainer"/> this element is located in</param>
+    /// <param name="finder">The finder.</param>
+    public Element(DomContainer domContainer, ElementFinder finder)
+    {
+      this.domContainer = domContainer;
+      elementFinder = finder;
     }
 
     /// <summary>
@@ -421,7 +433,7 @@ namespace WatiN.Core
       }
     }
 
-    private IHTMLElement htmlElement
+    protected IHTMLElement htmlElement
     {
       get { return (IHTMLElement) HTMLElement; }
     }
@@ -469,7 +481,28 @@ namespace WatiN.Core
     /// <value>The DOM element.</value>
     public object HTMLElement
     {
-      get { return element; }
+      get
+      {
+        return getElement(true);
+      }
+    }
+
+    public bool Exists
+    {
+      get
+      {
+        return (null != getElement(false));
+      }
+    }
+
+    protected object getElement(bool throwExceptionIfElementNotFound)
+    {
+      if (element == null)
+      {
+        element = elementFinder.FindFirst(throwExceptionIfElementNotFound);
+      }
+
+      return element;
     }
 
     /// <summary>

@@ -72,6 +72,13 @@ namespace WatiN.UnitTests
     }   
 
     [Test]
+    public void TableExists()
+    {
+      Assert.IsTrue(ie.Table(tableId).Exists);
+      Assert.IsFalse(ie.Table("nonexistingtableid").Exists);
+    }
+
+    [Test]
     public void Table()
     {
       Assert.AreEqual(tableId,  ie.Table(Find.ById(tableId)).Id);
@@ -158,6 +165,13 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TableRowExists()
+    {
+      Assert.IsTrue(ie.TableRow("row0").Exists);
+      Assert.IsFalse(ie.TableRow("nonexistingtr").Exists);
+    }
+
+    [Test]
     public void TableRows()
     {
       // Collection.Length
@@ -186,6 +200,13 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
+    }
+
+    [Test]
+    public void TableCellExists()
+    {
+      Assert.IsTrue(ie.TableCell("td1").Exists);
+      Assert.IsFalse(ie.Table("nonexistingtd1").Exists);
     }
 
     [Test]
@@ -238,7 +259,12 @@ namespace WatiN.UnitTests
     public void ButtonFormInputElement()
     {
       const string popupValue = "Show modeless dialog";
-      Assert.AreEqual(popupValue, ie.Button(Find.ById("popupid")).Value);
+      Button button = ie.Button(Find.ById("popupid"));
+      
+      Assert.IsInstanceOfType(typeof(Element), button);
+      Assert.IsInstanceOfType(typeof(Button), button);
+
+      Assert.AreEqual(popupValue, button.Value);
       Assert.AreEqual(popupValue, ie.Button("popupid").Value);
       Assert.AreEqual(popupValue, ie.Button("popupid").ToString());
       Assert.AreEqual(popupValue, ie.Button(Find.ByName("popupname")).Value);
@@ -247,12 +273,18 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Show allert", helloButton.Value);
       Assert.AreEqual(helloButton.Value, helloButton.Text);
     }
-    
+        
     [Test]
     public void ButtonFormButtonElement()
     {
       const string Value = "Button Element";
-      Assert.AreEqual(Value, ie.Button(Find.ById("buttonelementid")).Value);
+      
+      Button button = ie.Button(Find.ById("buttonelementid"));
+      
+      Assert.IsInstanceOfType(typeof(Element), button);
+      Assert.IsInstanceOfType(typeof(Button), button);
+
+      Assert.AreEqual(Value, button.Value);
       Assert.AreEqual(Value, ie.Button("buttonelementid").Value);
       Assert.AreEqual(Value, ie.Button("buttonelementid").ToString());
       Assert.AreEqual(Value, ie.Button(Find.ByName("buttonelementname")).Value);
@@ -275,7 +307,14 @@ namespace WatiN.UnitTests
     {
       ie.Button("noneexistingbuttonid").Click();
     }
-  
+
+    [Test]
+    public void ButtonExists()
+    {
+      Assert.IsTrue(ie.Button("disabledid").Exists);
+      Assert.IsFalse(ie.Button("noneexistingbuttonid").Exists);
+    }
+
     [Test]
     public void Buttons()
     {
@@ -312,6 +351,13 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(buttonEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFormButtonsCount, count);
+    }
+
+    [Test]
+    public void CheckBoxExists()
+    {
+      Assert.IsTrue(ie.CheckBox("Checkbox1").Exists);
+      Assert.IsFalse(ie.CheckBox("noneexistingCheckbox1id").Exists);
     }
 
     [Test]
@@ -360,6 +406,13 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(3, count);
+    }
+
+    [Test]
+    public void DivExists()
+    {
+      Assert.IsTrue(ie.Div("divid").Exists);
+      Assert.IsFalse(ie.Div("noneexistingdivid").Exists);
     }
 
     [Test]
@@ -415,6 +468,13 @@ namespace WatiN.UnitTests
       CheckBox checkBox = ie.CheckBox("Checkbox21");
       Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
       Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
+    }
+
+    [Test]
+    public void LabelExists()
+    {
+      Assert.IsTrue(ie.Label(Find.ByFor("Checkbox21")).Exists);
+      Assert.IsFalse(ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
     }
 
     [Test]
@@ -485,6 +545,13 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void LinkExists()
+    {
+      Assert.IsTrue(ie.Link("testlinkid").Exists);
+      Assert.IsFalse(ie.Link("nonexistingtestlinkid").Exists);
+    }
+    
+    [Test]
     public void Link()
     {
       Assert.AreEqual(WatiNURI, ie.Link(Find.ById("testlinkid")).Url);
@@ -494,8 +561,8 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Microsoft", ie.Link(Find.ByText("Microsoft")).Text);
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'A' tag containing attribute id with value 'noexistinglinkid'")]
-    public void LinkFindByInvalidEnum()
+    [Test]
+    public void LinkFindNonExistingElementWithoutElementNotFoundException()
     {
       ie.Link(Find.ById("noexistinglinkid"));
     }
@@ -533,6 +600,12 @@ namespace WatiN.UnitTests
       Assert.AreEqual(expectedLinkCount, count);
     }
 
+    [Test]
+    public void SelectListMultipleSelectExists()
+    {
+      Assert.IsTrue(ie.SelectList("Select2").Exists);
+      Assert.IsFalse(ie.SelectList("nonexistingSelect2").Exists);
+    }
 
     [Test]
     public void SelectListMultipleSelect()
@@ -570,6 +643,13 @@ namespace WatiN.UnitTests
       Assert.AreEqual(2,selectList.SelectedItems.Count, "Wrong number of items selected after Select First Listitem");
       Assert.AreEqual("First Listitem",selectList.SelectedItems[0],"First Listitem not selected after Select");
       Assert.AreEqual("Third Listitem",selectList.SelectedItems[1],"Third Listitem not selected after Select");
+    }
+
+    [Test]
+    public void RadioButtonExists()
+    {
+      Assert.IsTrue(ie.RadioButton("Radio1").Exists);
+      Assert.IsFalse(ie.RadioButton("nonexistingRadio1").Exists);
     }
 
     [Test]
@@ -617,6 +697,13 @@ namespace WatiN.UnitTests
       Assert.IsFalse(radiobuttonEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
 
+    }
+
+    [Test]
+    public void SelectListSingleSelectExists()
+    {
+      Assert.IsTrue(ie.SelectList("Select1").Exists);
+      Assert.IsFalse(ie.SelectList("nonexistingSelect1").Exists);
     }
 
     [Test]
@@ -716,6 +803,13 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(selectListEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
+    }
+
+    [Test]
+    public void TextFieldExists()
+    {
+      Assert.IsTrue(ie.TextField("name").Exists);
+      Assert.IsFalse(ie.TextField("nonexistingtextfield").Exists);
     }
 
     [Test]
@@ -861,9 +955,16 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(InvalidAttributException))]
     public void TryFindingElementByInvalidAttribute()
     {
-      ie.TextField(Find.ByCustom("xyz", "value"));
+      ie.TextField(Find.ByCustom("xyz", "value")).Click();
     }
     
+    [Test]
+    public void FileUploadExists()
+    {
+      Assert.IsTrue(ie.FileUpload("upload").Exists);
+      Assert.IsFalse(ie.FileUpload("noneexistingupload").Exists);
+    }
+
     [Test]
     public void FileUpload()
     {
@@ -916,6 +1017,13 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void ParaExists()
+    {
+      Assert.IsTrue(ie.Para("links").Exists);
+      Assert.IsFalse(ie.Para("nonexistinglinks").Exists);
+    }
+    
+    [Test]
     public void Para()
     {
       Para para = ie.Para("links");
@@ -961,6 +1069,13 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void SpanExists()
+    {
+      Assert.IsTrue(ie.Span("spanid1").Exists);
+      Assert.IsFalse(ie.Span("nonexistingspanid1").Exists);
+    }
+
+    [Test]
     public void Span()
     {
       Span Span = ie.Span("spanid1");
@@ -1002,27 +1117,13 @@ namespace WatiN.UnitTests
       Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedSpansCount, count);
     }
-    
+        
     [Test]
-    public void ElementExistsWorkaround()
+    public void ElementExists()
     {
-      Assert.IsTrue(ElementExists(ie.Divs, Find.ById("divid")), "mydiv not found");
-      Assert.IsFalse(ElementExists(ie.Buttons, Find.ById("cancel")), "cancel button should not be found");
+      Assert.IsTrue(ie.Div("divid").Exists);
+      Assert.IsFalse(ie.Button("noneexistingelementid").Exists);
     }
-
-    private static bool ElementExists(IEnumerable enumButtons, Core.Attribute findBy)
-    {
-      foreach (Element element in enumButtons)
-      {
-        if(findBy.Compare(element.HTMLElement))
-        {
-          return true;
-        }
-      }
-	    
-      return false;
-    }
-
   }
   
   [TestFixture]
@@ -1039,6 +1140,13 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void ImageExists()
+    {
+      Assert.IsTrue(ie.Image("Image2").Exists);
+      Assert.IsFalse(ie.Image("nonexistingImage").Exists);
+    }
+
+    [Test]
     public void Image()
     {
       Image image = ie.Image("Image2");
@@ -1050,10 +1158,10 @@ namespace WatiN.UnitTests
     }
     
     // Image shouldn't support Input elements of type image (yet)
-    [Test, ExpectedException(typeof(ElementNotFoundException))]
+    [Test]
     public void InputTypeIsImage()
     {
-      ie.Image("Image4");
+      Assert.IsFalse(ie.Image("Image4").Exists);
     }
     
     [Test]
@@ -1116,6 +1224,13 @@ namespace WatiN.UnitTests
       ie.Close();
     }
     
+    [Test]
+    public void FormExists()
+    {
+      Assert.IsTrue(ie.Form("Form1").Exists);
+      Assert.IsFalse(ie.Form("nonexistingForm").Exists);
+    }
+
     [Test]
     public void FormSubmit()
     {

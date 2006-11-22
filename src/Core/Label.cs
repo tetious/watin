@@ -28,6 +28,9 @@ namespace WatiN.Core
   {
     public Label(DomContainer ie, HTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)
     {}
+    
+    public Label(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
 
     public string AccessKey
     {

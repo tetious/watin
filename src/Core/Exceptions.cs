@@ -55,7 +55,7 @@ namespace WatiN.Core.Exceptions
   public class ElementNotFoundException : WatiNException
   {
     public ElementNotFoundException(string tagName, string attributeName, string value) : 
-      base("Could not find a '" + tagName + "' tag containing attribute " + attributeName + " with value '" + value + "'")
+      base("Could not find a '" + UtilityClass.ToString(tagName) + "' tag containing attribute " + attributeName + " with value '" + value + "'")
     {}
   }
 

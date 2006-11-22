@@ -28,5 +28,8 @@ namespace WatiN.Core
   {
     public Span(DomContainer ie, HTMLSpanElement htmlSpanElement) : base(ie, (IHTMLElement) htmlSpanElement)
     {}
+    
+    public Span(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
   }
 }

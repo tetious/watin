@@ -29,5 +29,8 @@ namespace WatiN.Core
   {
     public RadioButton(DomContainer ie, IHTMLInputElement inputElement) : base(ie, inputElement)
     {}
+    
+    public RadioButton(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
   }
 }

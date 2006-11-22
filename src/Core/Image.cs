@@ -29,21 +29,15 @@ namespace WatiN.Core
   {
     public Image(DomContainer ie, IHTMLImgElement imgElement) : base(ie, (IHTMLElement) imgElement)
     {}
+
+    public Image(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
     
     public string Src
     {
       get
       {
         return ((IHTMLImgElement) HTMLElement).src;
-      }
-    }
-    
-    [Obsolete("The Image.Href syntax is no longer supported, use Image.Src instead.")]
-    public string Href
-    {
-      get
-      {
-        return Src;
       }
     }
     

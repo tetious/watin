@@ -31,6 +31,9 @@ namespace WatiN.Core
   {
     public Table(DomContainer ie, HTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable)
     {}
+    
+    public Table(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
 
     public override TableRowCollection TableRows
     {

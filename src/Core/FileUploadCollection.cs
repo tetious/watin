@@ -30,7 +30,7 @@ namespace WatiN.Core
 	{
 		ArrayList elements;
 		   
-		public FileUploadCollection(DomContainer ie, ArrayList elements, DialogWatcher dialogWatcher) 
+		public FileUploadCollection(DomContainer ie, ArrayList elements) 
 		{
 			this.elements = new ArrayList();
 			
