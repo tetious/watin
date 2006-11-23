@@ -190,7 +190,7 @@ namespace WatiN.Core
 
     /// <summary>
     /// This method calls InitTimeOut and waits till IE is ready
-    /// processing or the timeout period has expired.
+    /// processing or the timeout period (30 seconds) has expired.
     /// </summary>
     public virtual void WaitForComplete()
     {

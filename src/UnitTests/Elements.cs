@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Threading;
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -1123,6 +1124,41 @@ namespace WatiN.UnitTests
     {
       Assert.IsTrue(ie.Div("divid").Exists);
       Assert.IsFalse(ie.Button("noneexistingelementid").Exists);
+    }
+    
+    [Test]
+    public void WaitUntilElementExistsTestElementAlreadyExists()
+    {
+      Button button = ie.Button("disabledid");
+      
+      Assert.IsTrue(button.Exists);
+      button.WaitUntilExists();
+      Assert.IsTrue(button.Exists);
+    }
+    
+    [Test]
+    public void WaitUntilElementExistsElementInjectionAfter3Seconds()
+    {
+      using(IE ie1 = new IE(TestEventsURI))
+      {
+        TextField injectedTextField = ie1.TextField("injectedTextField");
+        
+        Assert.IsFalse(injectedTextField.Exists);
+        
+        ie1.Button("injectElement").ClickNoWait();
+        System.Diagnostics.Debug.WriteLine("Button Clicked");
+
+        injectedTextField.WaitUntilExists();
+
+        Assert.IsTrue(injectedTextField.Exists);
+        Assert.AreEqual("Injection Succeeded", injectedTextField.Text);
+      }
+    }
+    
+    [Test, ExpectedException(typeof(TimeoutException), "Timeout while 'waiting 5 seconds for element to show up.'" )]
+    public void WaitUntilElementExistsTimeOutException()
+    {
+      ie.Button("nonexistingbutton").WaitUntilExists(5);
     }
   }
   

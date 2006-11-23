@@ -52,6 +52,19 @@ function fnOpen()
    window.showModalDialog("TestEvents.html", "", "") 
 } 
 
+function injectElement()
+{
+    sleep(3000);
+    div = document.getElementById("injectElementDiv");
+    div.innerHTML = "<input type=text id=injectedTextField value='Injection Succeeded' />";
+    return true;
+}
+
+function sleep(numberMillis) 
+{ 
+  var dialogScript = "window.setTimeout(" + "function () { window.close(); }, " + numberMillis + ");"; 
+  var result = window.showModalDialog("javascript:document.writeln(" +" '<script>" + dialogScript + "<" + "/script>')"); 
+}
         </script>
     </head>
     <body>
@@ -71,7 +84,12 @@ function fnOpen()
             <label><input type="checkbox" id="chkKeyPress"> KeyPress</label> <label><input type="checkbox" id="chkKeyUp">
                 KeyUp</label>
         </p>
-        <input id="modalid" onclick="fnOpen()" type="button" value="Show this page in modal dialog"
-            name="popupmodalname">
+        <P>
+            <input id="modalid" onclick="fnOpen()" type="button" value="Show this page in modal dialog"
+                name="popupmodalname"></P>
+        <P><INPUT id="injectElement" onclick="injectElement()" type="button" value="Inject element after 3 seconds">
+        </P>
+        <P>&nbsp;</P>
+        <div id="injectElementDiv">Inject Element here to test Element.WaitUntilExists</div>
     </body>
 </html>

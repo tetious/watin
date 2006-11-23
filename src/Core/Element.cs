@@ -21,7 +21,6 @@ using System;
 using System.Threading;
 
 using mshtml;
-
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 
@@ -473,10 +472,10 @@ namespace WatiN.Core
 
     /// <summary>
     /// Gets the DOM HTML element for this instance as an object. Cast it to 
-    /// the interface you need. Most of the times IHTMLELement, IHTMLElement2
-    /// and IHTMLElement3 are supported but you can also cast it to a more
-    /// specific interface. You should reference MSHTML.dll to cast it to a
-    /// valid type.
+    /// the interface you need. Most of the time the object supports IHTMLELement, 
+    /// IHTMLElement2 and IHTMLElement3 but you can also cast it to a more
+    /// specific interface. You should reference the microsoft.MSHTML.dll 
+    /// assembly to cast it to a valid type.
     /// </summary>
     /// <value>The DOM element.</value>
     public object HTMLElement
@@ -487,6 +486,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="Element"/> exists.
+    /// </summary>
+    /// <value><c>true</c> if exists; otherwise, <c>false</c>.</value>
     public bool Exists
     {
       get
@@ -495,7 +498,37 @@ namespace WatiN.Core
       }
     }
 
-    protected object getElement(bool throwExceptionIfElementNotFound)
+    /// <summary>
+    /// Waits until the element exists. Wait will time out after 30 seconds.
+    /// </summary>
+    public void WaitUntilExists()
+    {
+      // Wait 30 seconds max
+      WaitUntilExists(30);
+    }
+    
+    /// <summary>
+    /// Waits until the element exists. Wait will time out after <paramref name="timeout"/> seconds.
+    /// </summary>
+    /// <param name="timeout">The timeout in seconds.</param>
+    public void WaitUntilExists(int timeout)
+    {
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+
+      do
+      {
+        if (Exists)
+        {
+          return;
+        }
+        
+        Thread.Sleep(200);
+      } while (!timeoutTimer.Elapsed);
+      
+      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to show up.", timeout));
+    }
+
+    private object getElement(bool throwExceptionIfElementNotFound)
     {
       if (element == null)
       {
