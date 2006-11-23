@@ -730,7 +730,11 @@ namespace WatiN.Core
     {
       if (!isDisposed)
       {
-        Logger.LogAction("Closing browser '" + Title + "'");
+        if (IsInternetExplorerStillAvailable())
+        {
+          Logger.LogAction("Closing browser '" + Title + "'");
+        }
+        
         DisposeAndCloseIE(true);
       }
     }
@@ -742,18 +746,15 @@ namespace WatiN.Core
         if (closeIE && IsInternetExplorerStillAvailable())
         {
 
-          //TODO: Since HTMLDialog collection is contains all HTMLDialogs
+          //TODO: Since HTMLDialog collection contains all HTMLDialogs
           //      within the processId of this IE instance, there might be
           //      other HTMLDialogs not created by this IE instance. Closing
-          //      also those HTMLDialogs seems not the right.
+          //      also those HTMLDialogs seems not right.
           //      So how will we handle this? For now we keep the "old"
           //      implementation.
           
           // Close all open HTMLDialogs
-          foreach(HtmlDialog htmlDialog in HtmlDialogs)
-          {
-            htmlDialog.Close();
-          }
+          HtmlDialogs.CloseAll();
         }
         
         base.Dispose(true);

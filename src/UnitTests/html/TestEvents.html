@@ -54,16 +54,11 @@ function fnOpen()
 
 function injectElement()
 {
-    sleep(3000);
-    div = document.getElementById("injectElementDiv");
-    div.innerHTML = "<input type=text id=injectedTextField value='Injection Succeeded' />";
-    return true;
-}
-
-function sleep(numberMillis) 
-{ 
-  var dialogScript = "window.setTimeout(" + "function () { window.close(); }, " + numberMillis + ");"; 
-  var result = window.showModalDialog("javascript:document.writeln(" +" '<script>" + dialogScript + "<" + "/script>')"); 
+    window.setTimeout(function() 
+    {
+      div = document.getElementById("injectElementDiv"); 
+      div.innerHTML = "<input type=text id=injectedTextField value='Injection Succeeded' />";
+    }, 3000);
 }
         </script>
     </head>

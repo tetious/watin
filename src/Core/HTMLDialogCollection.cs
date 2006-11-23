@@ -67,6 +67,22 @@ namespace WatiN.Core
       } 
     }
 
+    public void CloseAll()
+    {
+      //TODO: Since HTMLDialog collection contains all HTMLDialogs
+      //      within the processId of this IE instance, there might be
+      //      other HTMLDialogs not created by this IE instance. Closing
+      //      also those HTMLDialogs seems not right.
+      //      So how will we handle this? For now we keep the "old"
+      //      implementation.
+          
+      // Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
+      foreach(HtmlDialog htmlDialog in htmlDialogs)
+      {
+        htmlDialog.Close();
+      }
+    }
+    
     private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
     {
       HtmlDialog htmlDialog = (HtmlDialog)htmlDialogs[index];

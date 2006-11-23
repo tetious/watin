@@ -482,6 +482,16 @@ namespace WatiN.Core
     {
       get
       {
+        if (element == null)
+        {
+          try
+          {
+            WaitUntilExists();
+          }
+          catch(TimeoutException)
+          {}
+        }
+        
         return getElement(true);
       }
     }
@@ -513,19 +523,22 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout in seconds.</param>
     public void WaitUntilExists(int timeout)
     {
-      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
-
-      do
+      if (!Exists)
       {
-        if (Exists)
+        SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+
+        do
         {
-          return;
-        }
+          if (Exists)
+          {
+            return;
+          }
         
-        Thread.Sleep(200);
-      } while (!timeoutTimer.Elapsed);
-      
-      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to show up.", timeout));
+          Thread.Sleep(200);
+        } while (!timeoutTimer.Elapsed);
+
+        throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to show up.", timeout));
+      }      
     }
 
     private object getElement(bool throwExceptionIfElementNotFound)

@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
-using System.Threading;
 using NUnit.Framework;
 
 using WatiN.Core;
@@ -1146,12 +1145,15 @@ namespace WatiN.UnitTests
         Assert.IsFalse(injectedTextField.Exists);
         
         ie1.Button("injectElement").ClickNoWait();
-        System.Diagnostics.Debug.WriteLine("Button Clicked");
 
-        injectedTextField.WaitUntilExists();
+        Assert.IsFalse(injectedTextField.Exists);
+
+        // WatiN should wait until the element exists before
+        // getting the text.
+        string text = injectedTextField.Text;
 
         Assert.IsTrue(injectedTextField.Exists);
-        Assert.AreEqual("Injection Succeeded", injectedTextField.Text);
+        Assert.AreEqual("Injection Succeeded", text);
       }
     }
     
