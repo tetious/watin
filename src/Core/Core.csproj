@@ -120,6 +120,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BaseElementCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Button.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -171,6 +176,11 @@
                 />
                 <File
                     RelPath = "ElementCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ElementFinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

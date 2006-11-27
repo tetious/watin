@@ -347,6 +347,11 @@ namespace WatiN.UnitTests
       Assert.AreEqual("modalid", form.Buttons[1].Id);
       Assert.AreEqual("helloid", form.Buttons[2].Id);
 
+      // Exists
+      Assert.IsTrue(form.Buttons.Exists("modalid"));
+      Assert.IsTrue(form.Buttons.Exists(new Regex("modalid")));
+      Assert.IsFalse(form.Buttons.Exists("nonexistingid"));
+      
       IEnumerable buttonEnumerable = formButtons;
       IEnumerator buttonEnumerator = buttonEnumerable.GetEnumerator();
 
@@ -366,6 +371,15 @@ namespace WatiN.UnitTests
       Assert.AreEqual(expectedFormButtonsCount, count);
     }
 
+    [Test]
+    public void ButtonsFilter()
+    {
+      ButtonCollection buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
+      Assert.AreEqual(2, buttons.Length);
+      Assert.AreEqual("disabledid", buttons[0].Id);
+      Assert.AreEqual("buttonelementid", buttons[1].Id);
+    }
+    
     [Test]
     public void CheckBoxExists()
     {

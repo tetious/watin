@@ -33,10 +33,7 @@ namespace WatiN.Core
   {
     private ITextElement _textElement;
 
-    public TextField(DomContainer ie, HTMLInputElement htmlInputElement) : base(ie, htmlInputElement)
-    {}
-
-    public TextField(DomContainer ie, HTMLTextAreaElement htmlTextAreaElement) : base(ie, htmlTextAreaElement)
+    public TextField(DomContainer ie, IHTMLElement element) : base(ie, element)
     {}
 
     public TextField(DomContainer ie, ElementFinder finder) : base(ie, finder)
@@ -48,13 +45,13 @@ namespace WatiN.Core
       {
         if (_textElement == null)
         {
-          if (!ElementsSupport.isInputElement(htmlElement.tagName))
+          if (ElementFinder.isInputElement(htmlElement.tagName))
           {
-            _textElement = new TextAreaElement((HTMLTextAreaElement)HTMLElement);
+            _textElement = new TextFieldElement((IHTMLInputElement)HTMLElement);
           }
           else
           {
-            _textElement = new TextFieldElement((HTMLInputElement)HTMLElement);
+            _textElement = new TextAreaElement((IHTMLTextAreaElement)HTMLElement);
           }
         }
         return _textElement;
@@ -192,7 +189,7 @@ namespace WatiN.Core
 
     private bool findEvent(string eventName)
     {
-      return (textElement.OuterHtml.IndexOf(eventName) > 0);
+      return (OuterHtml.IndexOf(eventName) > 0);
     }
 
     /// <summary>
@@ -200,8 +197,9 @@ namespace WatiN.Core
     /// </summary>
     private class TextAreaElement : ITextElement
     {
-      private HTMLTextAreaElement htmlTextAreaElement;
-      public TextAreaElement(HTMLTextAreaElement htmlTextAreaElement)
+      private IHTMLTextAreaElement htmlTextAreaElement;
+      
+      public TextAreaElement(IHTMLTextAreaElement htmlTextAreaElement)
       {
         this.htmlTextAreaElement = htmlTextAreaElement;
       }
@@ -235,18 +233,13 @@ namespace WatiN.Core
       {
         get { return htmlTextAreaElement.name; }
       }
-
-      public string OuterHtml
-      {
-        get { return htmlTextAreaElement.outerHTML; }
-      }
     }
 
     private class TextFieldElement : ITextElement
     {
-      private HTMLInputElement inputElement;
+      private IHTMLInputElement inputElement;
 
-      public TextFieldElement(HTMLInputElement htmlInputElement)
+      public TextFieldElement(IHTMLInputElement htmlInputElement)
       {
         inputElement = htmlInputElement;
       }
@@ -279,11 +272,6 @@ namespace WatiN.Core
       public string Name
       {
         get { return inputElement.name; }
-      }
-
-      public string OuterHtml
-      {
-        get { return inputElement.outerHTML; }
       }
     }
   }

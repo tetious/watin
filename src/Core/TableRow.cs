@@ -26,7 +26,7 @@ namespace WatiN.Core
   /// </summary>
   public class TableRow : ElementsContainer
   {
-    public TableRow(DomContainer ie, HTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow)
+    public TableRow(DomContainer ie, IHTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow)
     {}
     
     public TableRow(DomContainer ie, ElementFinder finder) : base(ie, finder)

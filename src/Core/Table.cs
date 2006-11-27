@@ -29,7 +29,7 @@ namespace WatiN.Core
   /// </summary>
   public class Table : ElementsContainer
   {
-    public Table(DomContainer ie, HTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable)
+    public Table(DomContainer ie, IHTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable)
     {}
     
     public Table(DomContainer ie, ElementFinder finder) : base(ie, finder)
@@ -103,12 +103,11 @@ namespace WatiN.Core
     
     public TableRow FindRow(TableRowFinder findBy)
     {
-      IHTMLElementCollection bodyElements = GetBodyElements();
-      IHTMLElement element = ElementsSupport.FindFirstElement(ElementsSupport.TableRowTagName, ElementsSupport.InputNullType, findBy, bodyElements, false);
+      TableRow row = ElementsSupport.TableRow(DomContainer, findBy, GetBodyElements());
       
-      if (element != null)
+      if (row.Exists)
       {
-        return new TableRow(DomContainer,(HTMLTableRow)element);
+        return row;
       }
 
       return null;
@@ -155,7 +154,7 @@ namespace WatiN.Core
       {
         // Get all elements and filter this for TableCells
         IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
-        IHTMLElementCollection tableCellElements = ElementsSupport.getElementCollection(allElements, ElementsSupport.TableCellTagName);
+        IHTMLElementCollection tableCellElements = ElementFinder.getElementCollection(allElements, ElementsSupport.TableCellTagName);
         
         return base.Compare(tableCellElements.item(columnIndex, null));
       }

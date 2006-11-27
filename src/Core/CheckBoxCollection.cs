@@ -25,86 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="CheckBox" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class CheckBoxCollection : IEnumerable
-	{
-		ArrayList elements;
-		
+  public class CheckBoxCollection : BaseElementCollection
+  {
     /// <summary>
     /// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
     /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>    
-		public CheckBoxCollection(DomContainer domContainer, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-
-			foreach (IHTMLInputElement item in elements)
-			{
-        CheckBox v = new CheckBox(domContainer, item);
-        this.elements.Add(v);
-			}
-		}
+    /// <param name="finder">The finder.</param>
+    public CheckBoxCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
     
     /// <summary>
-    /// Gets the length.
+    /// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
+    /// Mainly used by WatiN internally.
     /// </summary>
-    /// <value>The length.</value>
-		public int Length { get { return elements.Count; } }
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public CheckBoxCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
     /// <summary>
     /// Gets the <see cref="CheckBox"/> at the specified index.
     /// </summary>
     /// <value></value>
-		public CheckBox this[int index] { get { return (CheckBox)elements[index]; } }
-
-    /// <exclude />
-		public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-	  
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-
-      /// <exclude />
-      public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-      /// <exclude />
-      public void Reset() 
-			{
-				index = -1;
-			}
-
-      /// <exclude />
-      public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-      /// <exclude />
-      public CheckBox Current 
-			{
-				get 
-				{
-					return (CheckBox)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    public CheckBox this[int index] 
+    {
+      get
+      {
+        return new CheckBox(domContainer,(IHTMLInputElement)elements[index]);
+      } 
+    }
+    
+    public CheckBoxCollection Filter(Attribute findBy)
+    {      
+      return new CheckBoxCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new CheckBox(domContainer, (IHTMLInputElement)element);
+    }
+  }
 }

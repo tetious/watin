@@ -25,73 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="TextField" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class TextFieldCollection : IEnumerable
-	{
-		ArrayList children;
-		
-    public TextFieldCollection(DomContainer ie, ArrayList inputElements, ArrayList textAreaElements) 
+  public class TextFieldCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public TextFieldCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public TextFieldCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
+
+    /// <summary>
+    /// Gets the <see cref="TextField"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public TextField this[int index] 
     {
-      children = new ArrayList();
-
-      foreach (IHTMLInputElement inputElement in inputElements)
+      get
       {
-        TextField v = new TextField(ie, (HTMLInputElement)inputElement);
-        children.Add(v);
-      }
-
-      foreach (IHTMLElement textElement in textAreaElements)
-      {
-        TextField v = new TextField(ie, (HTMLInputElement)textElement);
-        children.Add(v);
-      }
+        return new TextField(domContainer,(IHTMLElement)elements[index]);
+      } 
     }
-
-		public int Length { get { return children.Count; } }
-
-		public TextField this[int index] { get { return (TextField)children[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(children);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public TextField Current 
-			{
-				get 
-				{
-					return (TextField)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    
+    public TextFieldCollection Filter(Attribute findBy)
+    {      
+      return new TextFieldCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new TextField(domContainer, element);
+    }
+  }
 }

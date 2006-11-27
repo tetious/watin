@@ -25,87 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Button" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class ButtonCollection : IEnumerable
-	{
-		ArrayList elements;
-		
+	public class ButtonCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ButtonCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+		public ButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="ButtonCollection"/> class.
     /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="elements">The elements.</param>
-		public ButtonCollection(DomContainer domContainer, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (IHTMLElement inputElement in elements)
-			{
-        Button v = new Button(domContainer, inputElement);
-        this.elements.Add(v);
-			}
-		}
-
-    /// <summary>
-    /// Gets the length.
-    /// </summary>
-    /// <value>The length.</value>
-		public int Length { get { return elements.Count; } }
+		public ButtonCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
     /// <summary>
     /// Gets the <see cref="Button"/> at the specified index.
     /// </summary>
     /// <value></value>
-		public Button this[int index] { get { return (Button)elements[index]; } }
+    public Button this[int index] 
+    {
+      get
+      {
+        return new Button(domContainer,(IHTMLElement)elements[index]);
+      } 
+    }
     
-    /// <exclude />
-		public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-      
-      /// <exclude />
-      public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-      /// <exclude />
-      public void Reset() 
-			{
-				index = -1;
-			}
-
-      /// <exclude />
-      public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-      /// <exclude />
-      public Button Current 
-			{
-				get 
-				{
-					return (Button)children[index];
-				}
-			}
-
-      /// <exclude />
-      object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    public ButtonCollection Filter(Attribute findBy)
+    {      
+      return new ButtonCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Button(domContainer, element);
+    }
+  }
 }

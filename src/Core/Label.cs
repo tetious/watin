@@ -26,7 +26,7 @@ namespace WatiN.Core
   /// </summary>
   public class Label : ElementsContainer
   {
-    public Label(DomContainer ie, HTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)
+    public Label(DomContainer ie, IHTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)
     {}
     
     public Label(DomContainer ie, ElementFinder finder) : base(ie, finder)

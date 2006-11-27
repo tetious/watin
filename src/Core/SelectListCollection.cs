@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="SelectList" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-  public class SelectListCollection : IEnumerable
+  public class SelectListCollection : BaseElementCollection
   {
-    ArrayList elements;
-		
-    public SelectListCollection(DomContainer ie, ArrayList elements) 
-    {
-      this.elements = new ArrayList();
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SelectListCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public SelectListCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SelectListCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public SelectListCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-      foreach (IHTMLElement selectlist in elements)
+    /// <summary>
+    /// Gets the <see cref="SelectList"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public SelectList this[int index] 
+    {
+      get
       {
-        SelectList v = new SelectList(ie, selectlist);
-        this.elements.Add(v);
-      }
+        return new SelectList(domContainer,(IHTMLElement)elements[index]);
+      } 
     }
-
-    public int Length { get { return elements.Count; } }
-
-    public SelectList this[int index] { get { return (SelectList)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-    {
-      return new Enumerator(elements);
+    
+    public SelectListCollection Filter(Attribute findBy)
+    {      
+      return new SelectListCollection(domContainer, DoFilter(findBy));
     }
-
-    IEnumerator IEnumerable.GetEnumerator() 
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
     {
-      return GetEnumerator();
-    }
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-    {
-      ArrayList children;
-      int index;
-      public Enumerator(ArrayList children) 
-      {
-        this.children = children;
-        Reset();
-      }
-
-      public void Reset() 
-      {
-        index = -1;
-      }
-
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < children.Count;
-      }
-
-      public SelectList Current 
-      {
-        get 
-        {
-          return (SelectList)children[index];
-        }
-      }
-
-      object IEnumerator.Current { get { return Current; } }
+      return new SelectList(domContainer, element);
     }
   }
 }

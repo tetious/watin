@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Para" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class ParaCollection : IEnumerable
-	{
-		ArrayList elements;
-		
-		public ParaCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (HTMLParaElement Para in elements)
-			{
-				Para v = new Para(ie, Para);
-				this.elements.Add(v);
-			}
-		}
+  public class ParaCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParaCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public ParaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParaCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public ParaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-		public int Length { get { return elements.Count; } }
-
-		public Para this[int index] { get { return (Para)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Para Current 
-			{
-				get 
-				{
-					return (Para)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    /// <summary>
+    /// Gets the <see cref="Para"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Para this[int index] 
+    {
+      get
+      {
+        return new Para(domContainer,(IHTMLParaElement)elements[index]);
+      } 
+    }
+    
+    public ParaCollection Filter(Attribute findBy)
+    {      
+      return new ParaCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Para(domContainer, (IHTMLParaElement)element);
+    }
+  }
 }

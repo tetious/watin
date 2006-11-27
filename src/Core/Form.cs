@@ -28,7 +28,7 @@ namespace WatiN.Core
   /// </summary>
   public class Form : ElementsContainer
   {
-    public Form(DomContainer ie, HTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)
+    public Form(DomContainer ie, IHTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)
     {}
 
     public Form(DomContainer ie, ElementFinder finder) : base(ie, finder)
@@ -67,10 +67,10 @@ namespace WatiN.Core
       }
     }
 
-    private HTMLFormElement HtmlFormElement
+    private IHTMLFormElement HtmlFormElement
     {
       get {
-        return (HTMLFormElement)HTMLElement;
+        return (IHTMLFormElement)HTMLElement;
       }
     }
   }

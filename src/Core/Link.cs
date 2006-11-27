@@ -26,7 +26,7 @@ namespace WatiN.Core
   /// </summary>
   public class Link : Element
   {
-    public Link(DomContainer ie, HTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement)
+    public Link(DomContainer ie, IHTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement)
     {}
 
     public Link(DomContainer ie, ElementFinder finder) : base(ie, finder)

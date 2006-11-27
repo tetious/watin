@@ -21,71 +21,50 @@ using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
-{  
+{
   /// <summary>
   /// A typed collection of <see cref="Image" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class ImageCollection : IEnumerable
-	{
-		ArrayList elements;
-		   
-		public ImageCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (IHTMLElement inputElement in elements)
+  public class ImageCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public ImageCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public ImageCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
+
+    /// <summary>
+    /// Gets the <see cref="Image"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Image this[int index] 
+    {
+      get
       {
-        Image v = new Image(ie, inputElement);
-			  this.elements.Add(v);
-			}
-		}
-
-		public int Length { get { return elements.Count; } }
-
-		public Image this[int index] { get { return (Image)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Image Current 
-			{
-				get 
-				{
-					return (Image)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+        return new Image(domContainer,(IHTMLElement)elements[index]);
+      } 
+    }
+    
+    public ImageCollection Filter(Attribute findBy)
+    {      
+      return new ImageCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Image(domContainer, element);
+    }
+  }
 }

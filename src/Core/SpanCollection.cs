@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Span" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class SpanCollection : IEnumerable
-	{
-		ArrayList elements;
-		
-		public SpanCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (HTMLSpanElement span in elements)
-			{
-				Span v = new Span(ie, span);
-				this.elements.Add(v);
-			}
-		}
+  public class SpanCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpanCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public SpanCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpanCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public SpanCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-		public int Length { get { return elements.Count; } }
-
-		public Span this[int index] { get { return (Span)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Span Current 
-			{
-				get 
-				{
-					return (Span)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    /// <summary>
+    /// Gets the <see cref="Span"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Span this[int index] 
+    {
+      get
+      {
+        return new Span(domContainer,(IHTMLSpanElement)elements[index]);
+      } 
+    }
+    
+    public SpanCollection Filter(Attribute findBy)
+    {      
+      return new SpanCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Span(domContainer, (IHTMLSpanElement)element);
+    }
+  }
 }

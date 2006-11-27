@@ -23,69 +23,48 @@ using mshtml;
 namespace WatiN.Core
 {
   /// <summary>
-  /// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/>.
+  /// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class FormCollection : IEnumerable
-	{
-		ArrayList elements;
-		    
-		public FormCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
+  public class FormCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FormCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public FormCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FormCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public FormCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-			foreach (HTMLFormElement form in elements)
-			{
-				Form v = new Form(ie, form);
-				this.elements.Add(v);
-			}
-		}
-
-		public int Length { get { return elements.Count; } }
-
-		public Form this[int index] { get { return (Form)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Form Current 
-			{
-				get 
-				{
-					return (Form)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    /// <summary>
+    /// Gets the <see cref="Form"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Form this[int index] 
+    {
+      get
+      {
+        return new Form(domContainer,(IHTMLFormElement)elements[index]);
+      } 
+    }
+    
+    public FormCollection Filter(Attribute findBy)
+    {      
+      return new FormCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Form(domContainer, (IHTMLFormElement)element);
+    }
+  }
 }

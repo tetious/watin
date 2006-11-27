@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="RadioButton" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-  public class RadioButtonCollection : IEnumerable
+  public class RadioButtonCollection : BaseElementCollection
   {
-    ArrayList elements;
-		
-    public RadioButtonCollection(DomContainer ie, ArrayList elements) 
-    {
-      this.elements = new ArrayList();
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public RadioButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public RadioButtonCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-      foreach (IHTMLInputElement item in elements)
+    /// <summary>
+    /// Gets the <see cref="RadioButton"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public RadioButton this[int index] 
+    {
+      get
       {
-        RadioButton v = new RadioButton(ie, item);
-        this.elements.Add(v);
-      }
+        return new RadioButton(domContainer,(IHTMLInputElement)elements[index]);
+      } 
     }
     
-    public int Length { get { return elements.Count; } }
-
-    public RadioButton this[int index] { get { return (RadioButton)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-    {
-      return new Enumerator(elements);
+    public RadioButtonCollection Filter(Attribute findBy)
+    {      
+      return new RadioButtonCollection(domContainer, DoFilter(findBy));
     }
-
-    IEnumerator IEnumerable.GetEnumerator() 
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
     {
-      return GetEnumerator();
-    }
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-    {
-      ArrayList children;
-      int index;
-      public Enumerator(ArrayList children) 
-      {
-        this.children = children;
-        Reset();
-      }
-
-      public void Reset() 
-      {
-        index = -1;
-      }
-
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < children.Count;
-      }
-
-      public RadioButton Current 
-      {
-        get 
-        {
-          return (RadioButton)children[index];
-        }
-      }
-
-      object IEnumerator.Current { get { return Current; } }
+      return new RadioButton(domContainer, (IHTMLInputElement)element);
     }
   }
 }

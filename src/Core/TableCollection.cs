@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Table" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class TableCollection : IEnumerable
-	{
-		ArrayList elements;
-		
-		public TableCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (HTMLTable table in elements)
-			{
-					Table v = new Table(ie, table);
-					this.elements.Add(v);
-			}
-		}
+  public class TableCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public TableCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public TableCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-		public int Length { get { return elements.Count; } }
-
-		public Table this[int index] { get { return (Table)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Table Current 
-			{
-				get 
-				{
-					return (Table)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    /// <summary>
+    /// Gets the <see cref="Table"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Table this[int index] 
+    {
+      get
+      {
+        return new Table(domContainer,(IHTMLTable)elements[index]);
+      } 
+    }
+    
+    public TableCollection Filter(Attribute findBy)
+    {      
+      return new TableCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new Table(domContainer, (IHTMLTable)element);
+    }
+  }
 }

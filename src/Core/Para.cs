@@ -26,7 +26,7 @@ namespace WatiN.Core
   /// </summary>
   public class Para : ElementsContainer
   {
-    public Para(DomContainer ie, HTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement)
+    public Para(DomContainer ie, IHTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement)
     {}
 
     public Para(DomContainer ie, ElementFinder finder) : base(ie, finder)

@@ -25,86 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Div" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-  public class DivCollection : IEnumerable
+  public class DivCollection : BaseElementCollection
   {
-    ArrayList elements;
-		
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DivCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public DivCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="DivCollection"/> class.
     /// Mainly used by WatiN internally.
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="elements">The elements.</param>
-    public DivCollection(DomContainer domContainer, ArrayList elements) 
-    {
-      this.elements = new ArrayList();
-
-      foreach (HTMLDivElement div in elements)
-      {
-        Div v = new Div(domContainer, div);
-        this.elements.Add(v);
-      }
-    }
-
-    /// <summary>
-    /// Gets the length.
-    /// </summary>
-    /// <value>The length.</value>
-    public int Length { get { return elements.Count; } }
+    public DivCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
     /// <summary>
     /// Gets the <see cref="Div"/> at the specified index.
     /// </summary>
     /// <value></value>
-    public Div this[int index] { get { return (Div)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
+    public Div this[int index] 
     {
-      return new Enumerator(elements);
+      get
+      {
+        return new Div(domContainer,(IHTMLDivElement)elements[index]);
+      } 
     }
     
-    IEnumerator IEnumerable.GetEnumerator() 
-    {
-      return GetEnumerator();
+    public DivCollection Filter(Attribute findBy)
+    {      
+      return new DivCollection(domContainer, DoFilter(findBy));
     }
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
     {
-      ArrayList children;
-      int index;
-      
-      /// <exclude />
-      public Enumerator(ArrayList children) 
-      {
-        this.children = children;
-        Reset();
-      }
-
-      /// <exclude />
-      public void Reset() 
-      {
-        index = -1;
-      }
-
-      /// <exclude />
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < children.Count;
-      }
-
-      /// <exclude />
-      public Div Current 
-      {
-        get 
-        {
-          return (Div)children[index];
-        }
-      }
-
-      object IEnumerator.Current { get { return Current; } }
+      return new Div(domContainer, (IHTMLDivElement)element);
     }
   }
 }

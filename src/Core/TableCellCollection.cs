@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="TableCell" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class TableCellCollection : IEnumerable
-	{
-		ArrayList elements;
-		
-		public TableCellCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
+  public class TableCellCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableCellCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public TableCellCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableCellCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public TableCellCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-			foreach(HTMLTableCell tableCell in elements)
-			{
-			  TableCell v = new TableCell(ie, tableCell);
-				this.elements.Add(v);
-			}
-		}
-
-		public int Length { get { return elements.Count; } }
-
-		public TableCell this[int index] { get { return (TableCell)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public TableCell Current 
-			{
-				get 
-				{
-					return (TableCell)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+    /// <summary>
+    /// Gets the <see cref="TableCell"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public TableCell this[int index] 
+    {
+      get
+      {
+        return new TableCell(domContainer,(IHTMLTableCell)elements[index]);
+      } 
+    }
+    
+    public TableCellCollection Filter(Attribute findBy)
+    {      
+      return new TableCellCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new TableCell(domContainer, (IHTMLTableCell)element);
+    }
+  }
 }

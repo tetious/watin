@@ -19,74 +19,52 @@
 
 using System.Collections;
 using mshtml;
-using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
-{  
+{
   /// <summary>
   /// A typed collection of <see cref="FileUpload" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-	public class FileUploadCollection : IEnumerable
-	{
-		ArrayList elements;
-		   
-		public FileUploadCollection(DomContainer ie, ArrayList elements) 
-		{
-			this.elements = new ArrayList();
-			
-      foreach (IHTMLInputFileElement inputElement in elements)
+  public class FileUploadCollection : BaseElementCollection
+  {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public FileUploadCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public FileUploadCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
+
+    /// <summary>
+    /// Gets the <see cref="FileUpload"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public FileUpload this[int index] 
+    {
+      get
       {
-        FileUpload v = new FileUpload(ie, inputElement);
-			  this.elements.Add(v);
-			}
-		}
-
-		public int Length { get { return elements.Count; } }
-
-		public FileUpload this[int index] { get { return (FileUpload)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-		{
-			return new Enumerator(elements);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator() 
-		{
-			return GetEnumerator();
-		}
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-		{
-			ArrayList children;
-			int index;
-			public Enumerator(ArrayList children) 
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset() 
-			{
-				index = -1;
-			}
-
-			public bool MoveNext() 
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public FileUpload Current 
-			{
-				get 
-				{
-					return (FileUpload)children[index];
-				}
-			}
-
-			object IEnumerator.Current { get { return Current; } }
-		}
-	}
+        return new FileUpload(domContainer,(IHTMLInputFileElement)elements[index]);
+      } 
+    }
+    
+    public FileUploadCollection Filter(Attribute findBy)
+    {      
+      return new FileUploadCollection(domContainer, DoFilter(findBy));
+    }
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
+    {
+      return new FileUpload(domContainer, (IHTMLInputFileElement)element);
+    }
+  }
 }

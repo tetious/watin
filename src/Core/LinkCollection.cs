@@ -25,67 +25,46 @@ namespace WatiN.Core
   /// <summary>
   /// A typed collection of <see cref="Link" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
-  public class LinkCollection : IEnumerable
+  public class LinkCollection : BaseElementCollection
   {
-    ArrayList elements;
-		   
-    public LinkCollection(DomContainer ie, ArrayList elements) 
-    {
-      this.elements = new ArrayList();
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LinkCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="finder">The finder.</param>
+    public LinkCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LinkCollection"/> class.
+    /// Mainly used by WatiN internally.
+    /// </summary>
+    /// <param name="domContainer">The DOM container.</param>
+    /// <param name="elements">The elements.</param>
+    public LinkCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
+    {}
 
-      foreach (HTMLAnchorElement link in elements)
+    /// <summary>
+    /// Gets the <see cref="Link"/> at the specified index.
+    /// </summary>
+    /// <value></value>
+    public Link this[int index] 
+    {
+      get
       {
-        Link v = new Link(ie, link);
-        this.elements.Add(v);
-      }
+        return new Link(domContainer,(IHTMLAnchorElement)elements[index]);
+      } 
     }
-
-    public int Length { get { return elements.Count; } }
-
-    public Link this[int index] { get { return (Link)elements[index]; } }
-
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-    {
-      return new Enumerator(elements);
+    
+    public LinkCollection Filter(Attribute findBy)
+    {      
+      return new LinkCollection(domContainer, DoFilter(findBy));
     }
-
-    IEnumerator IEnumerable.GetEnumerator() 
+    
+    private static Element New(DomContainer domContainer, IHTMLElement element)
     {
-      return GetEnumerator();
-    }
-
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-    {
-      ArrayList children;
-      int index;
-      public Enumerator(ArrayList children) 
-      {
-        this.children = children;
-        Reset();
-      }
-
-      public void Reset() 
-      {
-        index = -1;
-      }
-
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < children.Count;
-      }
-
-      public Link Current 
-      {
-        get 
-        {
-          return (Link)children[index];
-        }
-      }
-
-      object IEnumerator.Current { get { return Current; } }
+      return new Link(domContainer, (IHTMLAnchorElement)element);
     }
   }
 }
