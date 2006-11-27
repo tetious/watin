@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using mshtml;
 
 namespace WatiN.Core
@@ -27,7 +26,7 @@ namespace WatiN.Core
   /// </summary>
   public class Image : Element
   {
-    public Image(DomContainer ie, IHTMLImgElement imgElement) : base(ie, (IHTMLElement) imgElement)
+    public Image(DomContainer ie, IHTMLElement imgElement) : base(ie, imgElement)
     {}
 
     public Image(DomContainer ie, ElementFinder finder) : base(ie, finder)
@@ -37,7 +36,8 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) HTMLElement).src;
+        return GetAttributeValue("src");
+//        return ((IHTMLImgElement) HTMLElement).src;
       }
     }
     
@@ -45,7 +45,8 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) HTMLElement).alt;
+        return GetAttributeValue("alt");
+//        return ((IHTMLImgElement) HTMLElement).alt;
       }
     }
     
@@ -53,7 +54,8 @@ namespace WatiN.Core
     {
       get
       {
-        return ((IHTMLImgElement) HTMLElement).name;
+        return GetAttributeValue("name");
+//        return ((IHTMLImgElement) HTMLElement).name;
       }
     }
 

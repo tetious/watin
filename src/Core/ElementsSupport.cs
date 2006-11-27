@@ -53,6 +53,7 @@ namespace WatiN.Core
     public const string InputButtonType = "button submit image reset";
     public const string InputCheckBoxType = "checkbox";
     public const string InputFileType = "file";
+    public const string InputImageType = "image";
     public const string InputRadioButtonType = "radio";
     public const string InputTextFieldType = "text password textarea hidden";
 
@@ -252,12 +253,17 @@ namespace WatiN.Core
 
     public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
-      return new Image(ie, new ElementFinder(ImageTagName, InputNullType, findBy, elements));
+      ElementFinder finder = new ElementFinder(ImageTagName, InputNullType, findBy, elements);
+      finder.AddTagType(InputTagName, InputImageType);
+      return new Image(ie, finder);
     }
 
     public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
     {
-      return new ImageCollection(ie, FindAllElements(ImageTagName, InputNullType, elements));
+      ArrayList imageElements = FindAllElements(ImageTagName, InputNullType, elements);
+      imageElements.AddRange(FindAllElements(InputTagName, InputImageType, elements));
+      
+      return new ImageCollection(ie, imageElements);
     }
 
     public static IHTMLElement FindFirstElement(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection, bool throwExceptionIfElementNotFound)

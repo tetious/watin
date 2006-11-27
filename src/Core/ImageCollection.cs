@@ -33,7 +33,7 @@ namespace WatiN.Core
 		{
 			this.elements = new ArrayList();
 			
-      foreach (IHTMLImgElement inputElement in elements)
+      foreach (IHTMLElement inputElement in elements)
       {
         Image v = new Image(ie, inputElement);
 			  this.elements.Add(v);

@@ -1196,6 +1196,7 @@ namespace WatiN.UnitTests
     private IE ie = new IE(ImagesURI);
 
     private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
+    private Uri watinwebsiteLogoImage = new Uri(HtmlTestBaseURI, "images\\watin.jpg");
     
     [TestFixtureTearDown]
     public void Teardown()
@@ -1207,27 +1208,34 @@ namespace WatiN.UnitTests
     public void ImageExists()
     {
       Assert.IsTrue(ie.Image("Image2").Exists);
+      Assert.IsTrue(ie.Image(new Regex("Image2")).Exists);
       Assert.IsFalse(ie.Image("nonexistingImage").Exists);
     }
 
     [Test]
-    public void Image()
+    public void ImageTag()
     {
       Image image = ie.Image("Image2");
 
+      Assert.AreEqual("img", image.TagName.ToLower(), "Should be image element");
       Assert.AreEqual("Image2", image.Id, "Unexpected id");
       Assert.AreEqual("ImageName2", image.Name, "Unexpected name");
       Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
       Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
     }
     
-    // Image shouldn't support Input elements of type image (yet)
     [Test]
-    public void InputTypeIsImage()
+    public void ImageInputTag()
     {
-      Assert.IsFalse(ie.Image("Image4").Exists);
+      Image image = ie.Image("Image4");
+
+      Assert.AreEqual("input", image.TagName.ToLower(), "Should be input element");
+      Assert.AreEqual("Image4", image.Id, "Unexpected id");
+      Assert.AreEqual("ImageName4", image.Name, "Unexpected name");
+      Assert.AreEqual(watinwebsiteLogoImage, new Uri(image.Src), "Unexpected Src");
+      Assert.AreEqual("WatiN logo in input element of type image", image.Alt, "Unexpected Alt");
     }
-    
+        
     [Test]
     public void ImageReadyStateUninitializedButShouldReturn()
     {
@@ -1237,7 +1245,7 @@ namespace WatiN.UnitTests
     [Test]
     public void Images()
     {
-      const int expectedImagesCount = 3;
+      const int expectedImagesCount = 4;
       Assert.AreEqual(expectedImagesCount, ie.Images.Length, "Unexpected number of Images");
 
       // Collection.Length
@@ -1247,6 +1255,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Image1", ie.Images[0].Id);
       Assert.AreEqual("Image2", ie.Images[1].Id);
       Assert.AreEqual("Image3", ie.Images[2].Id);
+      Assert.AreEqual("Image4", ie.Images[3].Id);
 
       IEnumerable ImageEnumerable = formImages;
       IEnumerator ImageEnumerator = ImageEnumerable.GetEnumerator();
@@ -1292,6 +1301,7 @@ namespace WatiN.UnitTests
     public void FormExists()
     {
       Assert.IsTrue(ie.Form("Form1").Exists);
+      Assert.IsTrue(ie.Form(new Regex("Form1")).Exists);
       Assert.IsFalse(ie.Form("nonexistingForm").Exists);
     }
 
