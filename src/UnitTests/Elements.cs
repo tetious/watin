@@ -168,6 +168,7 @@ namespace WatiN.UnitTests
     public void TableRowExists()
     {
       Assert.IsTrue(ie.TableRow("row0").Exists);
+      Assert.IsTrue(ie.TableRow(new Regex("row0")).Exists);
       Assert.IsFalse(ie.TableRow("nonexistingtr").Exists);
     }
 
@@ -206,9 +207,17 @@ namespace WatiN.UnitTests
     public void TableCellExists()
     {
       Assert.IsTrue(ie.TableCell("td1").Exists);
+      Assert.IsTrue(ie.TableCell(new Regex("td1")).Exists);
       Assert.IsFalse(ie.Table("nonexistingtd1").Exists);
     }
 
+    [Test]
+    public void TableCellByIndexExists()
+    {
+      Assert.IsTrue(ie.TableCell("td1", 0).Exists);
+      Assert.IsTrue(ie.TableCell(new Regex("td1"), 0).Exists);
+      Assert.IsFalse(ie.TableCell("td1", 100).Exists);
+    }
     [Test]
     public void TableCellByIndex()
     {
@@ -272,6 +281,8 @@ namespace WatiN.UnitTests
       Button helloButton = ie.Button("helloid");
       Assert.AreEqual("Show allert", helloButton.Value);
       Assert.AreEqual(helloButton.Value, helloButton.Text);
+      
+      Assert.IsTrue(ie.Button(new Regex("popupid")).Exists);
     }
         
     [Test]
@@ -294,6 +305,8 @@ namespace WatiN.UnitTests
       // but the value attribute seems to return the innertext(!)
       // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
       Assert.AreEqual(Value, ie.Button(Find.ByValue("Button Element")).Value);
+      
+      Assert.IsTrue(ie.Button(new Regex("buttonelementid")).Exists);
     }
 
     [Test, ExpectedException(typeof(ElementDisabledException))]
@@ -357,6 +370,7 @@ namespace WatiN.UnitTests
     public void CheckBoxExists()
     {
       Assert.IsTrue(ie.CheckBox("Checkbox1").Exists);
+      Assert.IsTrue(ie.CheckBox(new Regex("Checkbox1")).Exists);
       Assert.IsFalse(ie.CheckBox("noneexistingCheckbox1id").Exists);
     }
 
@@ -374,6 +388,7 @@ namespace WatiN.UnitTests
 
       checkbox1.Checked = true;
       Assert.IsTrue(checkbox1.Checked, "Should be checked");
+      
     }
 
     [Test]
@@ -412,6 +427,7 @@ namespace WatiN.UnitTests
     public void DivExists()
     {
       Assert.IsTrue(ie.Div("divid").Exists);
+      Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
       Assert.IsFalse(ie.Div("noneexistingdivid").Exists);
     }
 
@@ -474,6 +490,7 @@ namespace WatiN.UnitTests
     public void LabelExists()
     {
       Assert.IsTrue(ie.Label(Find.ByFor("Checkbox21")).Exists);
+      Assert.IsTrue(ie.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
       Assert.IsFalse(ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
     }
 
@@ -548,6 +565,7 @@ namespace WatiN.UnitTests
     public void LinkExists()
     {
       Assert.IsTrue(ie.Link("testlinkid").Exists);
+      Assert.IsTrue(ie.Link(new Regex("testlinkid")).Exists);
       Assert.IsFalse(ie.Link("nonexistingtestlinkid").Exists);
     }
     
@@ -604,6 +622,7 @@ namespace WatiN.UnitTests
     public void SelectListMultipleSelectExists()
     {
       Assert.IsTrue(ie.SelectList("Select2").Exists);
+      Assert.IsTrue(ie.SelectList(new Regex("Select2")).Exists);
       Assert.IsFalse(ie.SelectList("nonexistingSelect2").Exists);
     }
 
@@ -649,6 +668,7 @@ namespace WatiN.UnitTests
     public void RadioButtonExists()
     {
       Assert.IsTrue(ie.RadioButton("Radio1").Exists);
+      Assert.IsTrue(ie.RadioButton(new Regex("Radio1")).Exists);
       Assert.IsFalse(ie.RadioButton("nonexistingRadio1").Exists);
     }
 
@@ -703,6 +723,7 @@ namespace WatiN.UnitTests
     public void SelectListSingleSelectExists()
     {
       Assert.IsTrue(ie.SelectList("Select1").Exists);
+      Assert.IsTrue(ie.SelectList(new Regex("Select1")).Exists);
       Assert.IsFalse(ie.SelectList("nonexistingSelect1").Exists);
     }
 
@@ -809,6 +830,7 @@ namespace WatiN.UnitTests
     public void TextFieldExists()
     {
       Assert.IsTrue(ie.TextField("name").Exists);
+      Assert.IsTrue(ie.TextField(new Regex("name")).Exists);
       Assert.IsFalse(ie.TextField("nonexistingtextfield").Exists);
     }
 
@@ -962,6 +984,7 @@ namespace WatiN.UnitTests
     public void FileUploadExists()
     {
       Assert.IsTrue(ie.FileUpload("upload").Exists);
+      Assert.IsTrue(ie.FileUpload(new Regex("upload")).Exists);
       Assert.IsFalse(ie.FileUpload("noneexistingupload").Exists);
     }
 
@@ -1020,6 +1043,7 @@ namespace WatiN.UnitTests
     public void ParaExists()
     {
       Assert.IsTrue(ie.Para("links").Exists);
+      Assert.IsTrue(ie.Para(new Regex("links")).Exists);
       Assert.IsFalse(ie.Para("nonexistinglinks").Exists);
     }
     
@@ -1072,6 +1096,7 @@ namespace WatiN.UnitTests
     public void SpanExists()
     {
       Assert.IsTrue(ie.Span("spanid1").Exists);
+      Assert.IsTrue(ie.Span(new Regex("spanid1")).Exists);
       Assert.IsFalse(ie.Span("nonexistingspanid1").Exists);
     }
 
@@ -1122,6 +1147,7 @@ namespace WatiN.UnitTests
     public void ElementExists()
     {
       Assert.IsTrue(ie.Div("divid").Exists);
+      Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
       Assert.IsFalse(ie.Button("noneexistingelementid").Exists);
     }
     

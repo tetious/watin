@@ -323,6 +323,11 @@ namespace WatiN.Core
       return Button(Find.ById(elementId));
     }
 
+    public Button Button(Regex elementId)
+    {
+      return Button(Find.ById(elementId));
+    }
+
     /// <summary>
     /// Gets the specified Button by using the given <see cref="Attribute" /> to find the Button.
     /// <seealso cref="Find" />
@@ -396,6 +401,11 @@ namespace WatiN.Core
       return CheckBox(Find.ById(elementId));
     }
 
+    public CheckBox CheckBox(Regex elementId)
+    {
+      return CheckBox(Find.ById(elementId));
+    }
+
     public CheckBox CheckBox(Attribute findBy)
     {
       return ElementsSupport.CheckBox(DomContainer, findBy, elementCollection);
@@ -407,6 +417,11 @@ namespace WatiN.Core
     }
 
     public Element Element(string elementId)
+    {
+      return Element(Find.ById(elementId));
+    }
+
+    public Element Element(Regex elementId)
     {
       return Element(Find.ById(elementId));
     }
@@ -426,6 +441,11 @@ namespace WatiN.Core
       return FileUpload(Find.ById(elementId));
     }
 
+    public FileUpload FileUpload(Regex elementId)
+    {
+      return FileUpload(Find.ById(elementId));
+    }
+
     public FileUpload FileUpload(Attribute findBy)
     {
       return ElementsSupport.FileUpload(DomContainer, findBy, elementCollection);
@@ -437,6 +457,11 @@ namespace WatiN.Core
     }
 
     public Form Form(string elementId)
+    {
+      return Form(Find.ById(elementId));
+    }
+
+    public Form Form(Regex elementId)
     {
       return Form(Find.ById(elementId));
     }
@@ -456,6 +481,11 @@ namespace WatiN.Core
       return Label(Find.ById(elementId));
     }
 
+    public Label Label(Regex elementId)
+    {
+      return Label(Find.ById(elementId));
+    }
+
     public Label Label(Attribute findBy)
     {
       return ElementsSupport.Label(DomContainer, findBy, elementCollection);
@@ -467,6 +497,11 @@ namespace WatiN.Core
     }
 
     public Link Link(string elementId)
+    {
+      return Link(Find.ById(elementId));
+    }
+
+    public Link Link(Regex elementId)
     {
       return Link(Find.ById(elementId));
     }
@@ -486,6 +521,11 @@ namespace WatiN.Core
       return Para(Find.ById(elementId));
     }
 
+    public Para Para(Regex elementId)
+    {
+      return Para(Find.ById(elementId));
+    }
+
     public Para Para(Attribute findBy)
     {
       return ElementsSupport.Para(DomContainer, findBy, elementCollection);
@@ -497,6 +537,11 @@ namespace WatiN.Core
     }
 
     public RadioButton RadioButton(string elementId)
+    {
+      return RadioButton(Find.ById(elementId));
+    }
+
+    public RadioButton RadioButton(Regex elementId)
     {
       return RadioButton(Find.ById(elementId));
     }
@@ -516,6 +561,11 @@ namespace WatiN.Core
       return SelectList(Find.ById(elementId));
     }
 
+    public SelectList SelectList(Regex elementId)
+    {
+      return SelectList(Find.ById(elementId));
+    }
+
     public SelectList SelectList(Attribute findBy)
     {
       return ElementsSupport.SelectList(DomContainer, findBy, elementCollection);
@@ -527,6 +577,11 @@ namespace WatiN.Core
     }
 
     public Table Table(string elementId)
+    {
+      return Table(Find.ById(elementId));
+    }
+
+    public Table Table(Regex elementId)
     {
       return Table(Find.ById(elementId));
     }
@@ -551,6 +606,11 @@ namespace WatiN.Core
       return TableCell(Find.ById(elementId));
     }
 
+    public TableCell TableCell(Regex elementId)
+    {
+      return TableCell(Find.ById(elementId));
+    }
+
     public TableCell TableCell(Attribute findBy)
     {
       return ElementsSupport.TableCell(DomContainer, findBy, elementCollection);
@@ -570,12 +630,22 @@ namespace WatiN.Core
       return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
     }
 
+    public TableCell TableCell(Regex elementId, int occurrence)
+    {
+      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+    }
+
     public TableCellCollection TableCells
     {
       get { return ElementsSupport.TableCells(DomContainer, elementCollection); }
     }
 
     public TableRow TableRow(string elementId)
+    {
+      return TableRow(Find.ById(elementId));
+    }
+
+    public TableRow TableRow(Regex elementId)
     {
       return TableRow(Find.ById(elementId));
     }
@@ -595,6 +665,11 @@ namespace WatiN.Core
       return TextField(Find.ById(elementId));
     }
 
+    public TextField TextField(Regex elementId)
+    {
+      return TextField(Find.ById(elementId));
+    }
+
     public TextField TextField(Attribute findBy)
     {
       return ElementsSupport.TextField(DomContainer, findBy, elementCollection);
@@ -606,6 +681,11 @@ namespace WatiN.Core
     }
 
     public Span Span(string elementId)
+    {
+      return Span(Find.ById(elementId));
+    }
+
+    public Span Span(Regex elementId)
     {
       return Span(Find.ById(elementId));
     }
@@ -625,6 +705,11 @@ namespace WatiN.Core
       return Div(Find.ById(elementId));
     }
 
+    public Div Div(Regex elementId)
+    {
+      return Div(Find.ById(elementId));
+    }
+
     public Div Div(Attribute findBy)
     {
       return ElementsSupport.Div(DomContainer, findBy, elementCollection);
@@ -636,6 +721,11 @@ namespace WatiN.Core
     }
 
     public Image Image(string elementId)
+    {
+      return Image(Find.ById(elementId));
+    }
+
+    public Image Image(Regex elementId)
     {
       return Image(Find.ById(elementId));
     }

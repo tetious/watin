@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 using mshtml;
 
@@ -188,6 +189,11 @@ namespace WatiN.Core
     }
 
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elements)
+    {
+      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new IdAndOccurrence(elementId,occurrence), elements));
+    }
+    
+    public static TableCell TableCell(DomContainer ie, Regex elementId, int occurrence, IHTMLElementCollection elements)
     {
       return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new IdAndOccurrence(elementId,occurrence), elements));
     }
