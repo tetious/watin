@@ -21,6 +21,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="finder">The finder.</param>
+    /// <param name="createElementInstance">The create element instance.</param>
     public BaseElementCollection(DomContainer domContainer, ElementFinder finder, CreateElementInstance createElementInstance) : 
            this(domContainer, (ArrayList)null, createElementInstance)
     {

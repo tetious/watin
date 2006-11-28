@@ -488,7 +488,7 @@ namespace WatiN.Core
           {
             WaitUntilExists();
           }
-          catch(TimeoutException)
+          catch(WatiN.Core.Exceptions.TimeoutException)
           {}
         }
         

@@ -1209,7 +1209,7 @@ namespace WatiN.UnitTests
       }
     }
     
-    [Test, ExpectedException(typeof(TimeoutException), "Timeout while 'waiting 5 seconds for element to show up.'" )]
+    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 5 seconds for element to show up.'" )]
     public void WaitUntilElementExistsTimeOutException()
     {
       ie.Button("nonexistingbutton").WaitUntilExists(5);
