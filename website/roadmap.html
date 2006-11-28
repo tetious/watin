@@ -21,6 +21,8 @@ w\:* {behavior:url(#default#VML);}
 <![endif]-->
 <title>WatiN</title>
 <o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="City"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
  name="place"/>
 <o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
  name="PersonName"/>
@@ -28,16 +30,16 @@ w\:* {behavior:url(#default#VML);}
  <o:DocumentProperties>
   <o:Author>J.vanMenen</o:Author>
   <o:LastAuthor>J.vanMenen</o:LastAuthor>
-  <o:Revision>36</o:Revision>
-  <o:TotalTime>202</o:TotalTime>
+  <o:Revision>41</o:Revision>
+  <o:TotalTime>237</o:TotalTime>
   <o:Created>2006-07-11T11:06:00Z</o:Created>
-  <o:LastSaved>2006-10-30T15:57:00Z</o:LastSaved>
+  <o:LastSaved>2006-11-28T08:57:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>754</o:Words>
-  <o:Characters>4151</o:Characters>
-  <o:Lines>34</o:Lines>
-  <o:Paragraphs>9</o:Paragraphs>
-  <o:CharactersWithSpaces>4896</o:CharactersWithSpaces>
+  <o:Words>671</o:Words>
+  <o:Characters>3696</o:Characters>
+  <o:Lines>30</o:Lines>
+  <o:Paragraphs>8</o:Paragraphs>
+  <o:CharactersWithSpaces>4359</o:CharactersWithSpaces>
   <o:Version>11.8107</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
@@ -398,7 +400,7 @@ table.MsoTableGrid
 	mso-bidi-language:#0400;}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="18434">
+ <o:shapedefaults v:ext="edit" spidmax="19458">
   <o:colormenu v:ext="edit" fillcolor="silver"/>
  </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
@@ -517,10 +519,10 @@ color:#FFCC00;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
-mso-ansi-language:EN-GB'>I’ve been meaning to write a roadmap for WatiN for a while
-now, finally sat down to do this. The releases are both feature and time
-driven. Every new release needs at least one or two major new features before
-it will be released. The release cycle will be 2 month. This gives me:<o:p></o:p></span></p>
+mso-ansi-language:EN-GB'>I’ve been meaning to write a roadmap for WatiN for a
+while now, finally sat down to do this. The releases are both feature and time driven.
+Every new release needs at least one or two major new features before it will
+be released. The release cycle will be 2 month. This gives me:<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l3 level1 lfo2;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
@@ -566,8 +568,8 @@ request tracker</a> on SourceForge.<o:p></o:p></span></p>
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-GB
-style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'>WatiN 0.9.0 (released
-on 31 October 2006)<o:p></o:p></span></b></p>
+style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'>WatiN 0.9.0
+(released on 31 October 2006)<o:p></o:p></span></b></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>Read the release notes <a
@@ -576,164 +578,89 @@ href="releasenotes-0-9-0-4000.html">here</a>.<o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
-color:#999999;mso-ansi-language:EN-GB'>The following features should be in this
-release:<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Improved dialog
-support: <o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l2 level2 lfo4;
-tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>1.<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
-lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;color:#999999;mso-ansi-language:
-EN-GB'>Creating an extensible model for handling IE dialogs. DONE <o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l2 level2 lfo4;
-tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>2.<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
-lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;color:#999999;mso-ansi-language:
-EN-GB'>Add support for Login dialog (thanks to Bruce McLeod for the initial
-implementation). DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l2 level2 lfo4;
-tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>3.<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
-lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;color:#999999;mso-ansi-language:
-EN-GB'>Add improved support for handling Java alert and confirm dialogs in
-addition to the current “search and destroy” implementation. DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l2 level2 lfo4;
-tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>4.<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
-lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;color:#999999;mso-ansi-language:
-EN-GB'>Add support for handling Certificate warning dialog. DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Improved support for
-Cross Domain automation (thanks to Ken Herman for the initial implementation). DONE.<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Support for file
-upload from a webpage. DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Support for <span
-class=SpellE>IFrame</span> element(s) (thanks to Gaurav Jayal for supplying me
-with some good <span class=SpellE>iframe</span> <span class=SpellE>webpages</span>
-to <st1:PersonName w:st="on">test</st1:PersonName> with). DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Support for <span
-class=SpellE>ie.Element</span> and <span class=SpellE>ie.Elements</span> to get
-any element or all elements on a web page. DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Support for
-&lt;button /&gt; tags through <span class=SpellE>ie.Button</span> and <span
-class=SpellE>ie.Buttons</span>. DONE<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l2 level1 lfo4;
-tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
-11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;color:#999999;
-mso-ansi-language:EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'>Supply a WatiN
-fixture that can by used with <a href="http://fitnesse.org/"><span
-style='color:#999999'>FitNesse</span></a>. This fixture is created by Jeff
-Parker and kindly donated to the project. </span><span lang=EN-GB
-style='font-size:11.0pt;font-family:Tahoma;color:#FF9900;mso-ansi-language:
-EN-GB'>POSPONED</span><span lang=EN-GB style='font-size:11.0pt;font-family:
-Tahoma;color:#999999;mso-ansi-language:EN-GB'> </span><span lang=EN-GB
-style='font-size:11.0pt;font-family:Tahoma;color:#FF9900;mso-ansi-language:
-EN-GB'>(until after version 0.9)</span><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;color:#999999;mso-ansi-language:EN-GB'><o:p></o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
-mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
-
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-GB
 style='font-family:Tahoma;color:#99CC00;mso-ansi-language:EN-GB'>WatiN 1.0.0
-(scheduled for the end of this year)<o:p></o:p></span></b></p>
+(scheduled for the end of December 2006)<o:p></o:p></span></b></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>An installer created with WIX (and <span
-class=SpellE>SharpDevelop</span> WIX support in version 2.1). <o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Support for the IE 7 browser. (Note
+that WatiN 0.9 works fine with IE 7). <span style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>A Mock SMTP server for sending
-email to from an application (this requires you can set the SMTP server your
-app under <st1:PersonName w:st="on">test</st1:PersonName> <span class=GramE>send</span>
-the mail to). You can use this Mock SMTP server in your unit, functional or
-acceptance <st1:PersonName w:st="on">test</st1:PersonName>s to verify mail is
-send and to check the To, Cc, Bcc, Subject, Body and Attachment(s). We are
-currently developing this and thought it might be useful to distribute with
-WatiN. <span style='color:#FF9900'>IN PROGRESS</span><o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Support more standard IE dialogs:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l4 level2 lfo6;
+tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>certificate dialog<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l4 level2 lfo6;
+tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>download dialog<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l4 level2 lfo6;
+tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>print dialogs <span
+style='color:#99CC00'>DONE</span> <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l4 level2 lfo6;
+tab-stops:list 72.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>security alert dialog<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>Support for the IE 7 browser. It
-should be released by then. Note that WatiN currently works fine on the IE 7
-RC1 release. <span style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Support for <span class=SpellE>ie.Element</span>(<span
+class=SpellE>findBy</span>).Exists <span style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>Some more support for other IE
-dialogs (like the certificate, download and print dialogs). <o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Support for <span class=SpellE>ie.Element</span>(<span
+class=SpellE>findBy</span>).<span class=SpellE>WaitUntilExists</span> <span
+style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>Screenshot support. <o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Improve support for JAVA injected
+elements by calling <span class=SpellE>WaitUntilExists</span> internally. This
+is a common <span class=GramE>scenarios</span> when <st1:City w:st="on"><st1:place
+ w:st="on">AJAX</st1:place></st1:City> technology is used. <span
+style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
+tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>Support filtering of Element
+collections. <span style='color:#99CC00'>DONE</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
@@ -748,10 +675,23 @@ tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
-font-family:Tahoma;mso-ansi-language:EN-GB'>Supply a WatiN fixture that can by
-used with <a href="http://fitnesse.org/">FitNesse</a>. This fixture is created
-by Jeff Parker and kindly donated to the project. <span style='color:#FF9900'>IN
-PROGRESS</span><o:p></o:p></span></p>
+font-family:Tahoma;mso-ansi-language:EN-GB'>Introduce a parameterization class
+to set things like flashing, time out length etc… <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
+tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>Screenshot support. <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
+tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>An installer created with WIX (and <span
+class=SpellE>SharpDevelop</span> WIX support in version 2.1). <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
@@ -767,13 +707,27 @@ tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
 EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
 font-family:Tahoma;mso-ansi-language:EN-GB'>More unit <st1:PersonName w:st="on">test</st1:PersonName>s.
-<o:p></o:p></span></p>
+<span style='color:#FF9900'>IN PROGRESS</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:18.0pt'><span lang=EN-GB
 style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'>Might be in this release:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l0 level1 lfo8;
+tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>A Mock SMTP server for sending
+email to from an application (this requires you can set the SMTP server your
+app under <st1:PersonName w:st="on">test</st1:PersonName> <span class=GramE>send</span>
+the mail to). You can use this Mock SMTP server in your unit, functional or
+acceptance <st1:PersonName w:st="on">test</st1:PersonName>s to verify mail is
+send and to check the To, Cc, Bcc, Subject, Body and Attachment(s). We are
+currently developing this and thought it might be useful to distribute with
+WatiN. <span style='color:#FF9900'>IN PROGRESS</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l0 level1 lfo8;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
@@ -803,6 +757,24 @@ with WatiN. <br>
 <b style='mso-bidi-font-weight:normal'>UPDATE</b>: Richard Griffin has released
 a prototype of <span class=SpellE>WatiNRecorder</span>++ <a
 href="http://blogs.conchango.com/richardgriffin/archive/2006/10/18/WATiN-web-recorder_2B002B00_-prototype.aspx">here</a>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span class=SpellE><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>WatiNFixture</span></span><span
+lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;mso-ansi-language:EN-GB'>:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo6;
+tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='font-size:
+11.0pt;font-family:Tahoma;mso-fareast-font-family:Tahoma;mso-ansi-language:
+EN-GB'><span style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-GB style='font-size:11.0pt;
+font-family:Tahoma;mso-ansi-language:EN-GB'>Jeff Parker has launched <span
+class=SpellE>WatinFixture</span> as a separate project on SourceForge. You can
+find it <a
+href="-%09Supply%20a%20WatiN%20fixture%20that%20can%20by%20used%20with%20FitNesse.%20This%20fixture%20is%20created%20by%20Jeff%20Parker%20and%20kindly%20donated%20to%20the%20project.%20IN%20PROGRESS"
+target="_blank">here</a>. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='font-size:11.0pt;font-family:Tahoma;
 mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -865,7 +837,7 @@ font-family:Tahoma;mso-ansi-language:EN-GB'>Support Power Shell <o:p></o:p></spa
   lang=EN-US style='font-size:10.0pt;font-family:Tahoma;mso-ansi-language:EN-US'><span
   style='mso-element:field-separator'></span></span><![endif]--><span
   lang=EN-GB style='font-size:10.0pt;font-family:Tahoma;mso-ansi-language:EN-GB;
-  mso-no-proof:yes'>Monday, 30 October 2006</span><!--[if supportFields]><span
+  mso-no-proof:yes'>Tuesday, 28 November 2006</span><!--[if supportFields]><span
   lang=EN-US style='font-size:10.0pt;font-family:Tahoma;mso-ansi-language:EN-US'><span
   style='mso-element:field-end'></span></span><![endif]--><span lang=EN-GB
   style='font-size:10.0pt;font-family:Tahoma;mso-ansi-language:EN-GB'><o:p></o:p></span></p>
