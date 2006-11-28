@@ -372,9 +372,21 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void ButtonsFilter()
+    public void ButtonsFilterOnHTMLElementCollection()
     {
       ButtonCollection buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
+      Assert.AreEqual(2, buttons.Length);
+      Assert.AreEqual("disabledid", buttons[0].Id);
+      Assert.AreEqual("buttonelementid", buttons[1].Id);
+    }
+    
+    [Test]
+    public void ButtonsFilterOnArrayListElements()
+    {
+      ButtonCollection buttons = ie.Buttons;
+      Assert.AreEqual(5, buttons.Length);
+      
+      buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
       Assert.AreEqual(2, buttons.Length);
       Assert.AreEqual("disabledid", buttons[0].Id);
       Assert.AreEqual("buttonelementid", buttons[1].Id);

@@ -86,8 +86,32 @@ namespace WatiN.Core
         return elements;
       }
     }
+    
+    public ArrayList FindAll(Attribute findBy)
+    {
+      if (tagsToFind.Count == 1)
+      {
+        return findElementsByAttribute((TagType)tagsToFind[0], findBy, false);
+      }
+      else 
+      {
+        ArrayList elements = new ArrayList();
+      
+        foreach (TagType tagType in tagsToFind)
+        {
+          elements.AddRange(findElementsByAttribute(tagType, findBy, false));
+        }
+    
+        return elements;
+      }
+    }
 
     private ArrayList findElementsByAttribute(TagType tagType, bool returnAfterFirstMatch)
+    {
+      return findElementsByAttribute(tagType, findBy, returnAfterFirstMatch);
+    }
+    
+    private ArrayList findElementsByAttribute(TagType tagType, Attribute findBy, bool returnAfterFirstMatch)
     {
       // Check arguments
       if (isInputElement(tagType.tagName) && UtilityClass.IsNullOrEmpty(tagType.inputTypes))

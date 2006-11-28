@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Div(domContainer,(IHTMLDivElement)elements[index]);
+        return new Div(domContainer,(IHTMLDivElement)Elements[index]);
       } 
     }
     

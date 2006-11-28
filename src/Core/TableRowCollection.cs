@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new TableRow(domContainer, (IHTMLTableRow)elements[index]);
+        return new TableRow(domContainer, (IHTMLTableRow)Elements[index]);
       } 
     }
     

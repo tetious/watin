@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Span(domContainer,(IHTMLSpanElement)elements[index]);
+        return new Span(domContainer,(IHTMLSpanElement)Elements[index]);
       } 
     }
     

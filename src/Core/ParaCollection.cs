@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Para(domContainer,(IHTMLParaElement)elements[index]);
+        return new Para(domContainer,(IHTMLParaElement)Elements[index]);
       } 
     }
     

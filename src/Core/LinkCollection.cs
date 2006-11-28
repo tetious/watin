@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Link(domContainer,(IHTMLAnchorElement)elements[index]);
+        return new Link(domContainer,(IHTMLAnchorElement)Elements[index]);
       } 
     }
     

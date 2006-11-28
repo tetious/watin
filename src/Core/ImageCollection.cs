@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Image(domContainer,(IHTMLElement)elements[index]);
+        return new Image(domContainer,(IHTMLElement)Elements[index]);
       } 
     }
     

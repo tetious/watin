@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new SelectList(domContainer,(IHTMLElement)elements[index]);
+        return new SelectList(domContainer,(IHTMLElement)Elements[index]);
       } 
     }
     

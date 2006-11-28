@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Label(domContainer,(IHTMLLabelElement)elements[index]);
+        return new Label(domContainer,(IHTMLLabelElement)Elements[index]);
       } 
     }
     

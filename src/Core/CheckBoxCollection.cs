@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new CheckBox(domContainer,(IHTMLInputElement)elements[index]);
+        return new CheckBox(domContainer,(IHTMLInputElement)Elements[index]);
       } 
     }
     

@@ -9,9 +9,11 @@ namespace WatiN.Core
   
   public abstract class BaseElementCollection : IEnumerable
   {
-    protected ArrayList elements;
     protected DomContainer domContainer;
+
+    private ArrayList elements;
     private CreateElementInstance createElementInstance;
+    private ElementFinder finder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -20,8 +22,10 @@ namespace WatiN.Core
     /// <param name="domContainer">The DOM container.</param>
     /// <param name="finder">The finder.</param>
     public BaseElementCollection(DomContainer domContainer, ElementFinder finder, CreateElementInstance createElementInstance) : 
-           this(domContainer, finder.FindAll(), createElementInstance)
-    {}
+           this(domContainer, (ArrayList)null, createElementInstance)
+    {
+      this.finder = finder;
+    }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -41,7 +45,27 @@ namespace WatiN.Core
     /// Gets the length.
     /// </summary>
     /// <value>The length.</value>
-    public int Length { get { return elements.Count; } }
+    public int Length { get { return Elements.Count; } }
+
+    protected ArrayList Elements
+    {
+      get
+      {
+        if (elements == null)
+        {
+          if (finder != null)
+          {
+            elements = finder.FindAll();
+          }
+          else
+          {
+            elements = new ArrayList();
+          }
+        }
+        
+        return elements;
+      }
+    }
 
     public bool Exists(string elementId)
     {
@@ -55,7 +79,7 @@ namespace WatiN.Core
     
     public bool Exists(Attribute findBy)
     {
-      foreach (object element in elements)
+      foreach (object element in Elements)
       {
         if (findBy.Compare(element))
         {
@@ -68,13 +92,28 @@ namespace WatiN.Core
     
     protected ArrayList DoFilter(Attribute findBy)
     {
-      ArrayList returnElements = new ArrayList();
+      ArrayList returnElements;
       
-      foreach (object element in elements)
+      if (elements == null)
       {
-        if (findBy.Compare(element))
+        if (finder != null)
         {
-          returnElements.Add(element);
+          returnElements = finder.FindAll(findBy);
+        }
+        else
+        {
+          returnElements = new ArrayList();
+        }
+      }
+      else
+      {
+        returnElements = new ArrayList();
+        foreach (object element in Elements)
+        {
+          if (findBy.Compare(element))
+          {
+            returnElements.Add(element);
+          }
         }
       }
       
@@ -84,7 +123,7 @@ namespace WatiN.Core
     /// <exclude />
     public Enumerator GetEnumerator() 
     {
-      return new Enumerator(domContainer, elements, createElementInstance);
+      return new Enumerator(domContainer, Elements, createElementInstance);
     }
     
     IEnumerator IEnumerable.GetEnumerator() 

@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new TextField(domContainer,(IHTMLElement)elements[index]);
+        return new TextField(domContainer,(IHTMLElement)Elements[index]);
       } 
     }
     

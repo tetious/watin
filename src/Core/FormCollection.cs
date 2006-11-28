@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Form(domContainer,(IHTMLFormElement)elements[index]);
+        return new Form(domContainer,(IHTMLFormElement)Elements[index]);
       } 
     }
     

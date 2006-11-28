@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new FileUpload(domContainer,(IHTMLInputFileElement)elements[index]);
+        return new FileUpload(domContainer,(IHTMLInputFileElement)Elements[index]);
       } 
     }
     

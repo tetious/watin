@@ -53,7 +53,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new RadioButton(domContainer,(IHTMLInputElement)elements[index]);
+        return new RadioButton(domContainer,(IHTMLInputElement)Elements[index]);
       } 
     }
     
