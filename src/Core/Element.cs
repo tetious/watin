@@ -212,7 +212,7 @@ namespace WatiN.Core
         return null;
       }
 
-      return (string) attribute;
+      return attribute.ToString();
     }
 
     /// <summary>

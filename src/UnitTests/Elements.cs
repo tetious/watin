@@ -1214,8 +1214,16 @@ namespace WatiN.UnitTests
     {
       ie.Button("nonexistingbutton").WaitUntilExists(5);
     }
+    
+    [Test]
+    public void GetAttributeValueOfTypeInt()
+    {
+      string sourceIndex = ie.Button("modalid").GetAttributeValue("sourceIndex");
+      Assert.AreEqual("13", sourceIndex);
+    }
   }
   
+
   [TestFixture]
   public class ImageTests : WatiNTest
   {
