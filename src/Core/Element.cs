@@ -175,7 +175,7 @@ namespace WatiN.Core
     /// <value>The next sibling.</value>
     public Element NextSibling
     {
-      get { return new Element(domContainer, domNode.nextSibling); }
+      get { return new ElementsContainer(domContainer, domNode.nextSibling); }
     }
     
     /// <summary>
@@ -184,7 +184,7 @@ namespace WatiN.Core
     /// <value>The previous sibling.</value>
     public Element PreviousSibling
     {
-      get { return new Element(domContainer, domNode.previousSibling); }
+      get { return new ElementsContainer(domContainer, domNode.previousSibling); }
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ namespace WatiN.Core
     /// <value>The parent.</value>
     public Element Parent
     {
-      get { return new Element(domContainer, domNode.parentNode); }
+      get { return new ElementsContainer(domContainer, domNode.parentNode); }
     }
 
     /// <summary>
