@@ -1221,6 +1221,21 @@ namespace WatiN.UnitTests
       string sourceIndex = ie.Button("modalid").GetAttributeValue("sourceIndex");
       Assert.AreEqual("13", sourceIndex);
     }
+    
+    [Test]
+    public void FindBySourceIndex()
+    {
+      Button button = ie.Button(Find.ByCustom("sourceIndex", "13"));
+      
+      string sourceIndex = button.GetAttributeValue("sourceIndex");
+      Assert.AreEqual("13", sourceIndex);
+    }
+    
+    [Test]
+    public void FindByClassNameNull()
+    {
+      Assert.IsFalse(ie.Button(Find.ByCustom("classname", "nullstring")).Exists);
+    }
   }
   
 

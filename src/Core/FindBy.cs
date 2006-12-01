@@ -279,7 +279,13 @@ namespace WatiN.Core
       {
         throw new InvalidAttributException(attributeName, element.tagName);
       }
-      return (string)attribute;
+
+      if (attribute == null)
+      {
+        return null;
+      }
+      
+      return attribute.ToString();
     }
 
     protected static IHTMLElement GetIHTMLElement(object ihtmlelement)
