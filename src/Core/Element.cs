@@ -207,7 +207,7 @@ namespace WatiN.Core
     {
       object attribute = htmlElement.getAttribute(attributeName, 0);
 
-      if (attribute == DBNull.Value)
+      if (attribute == DBNull.Value || attribute == null)
       {
         return null;
       }
@@ -462,10 +462,10 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the DOM container for this element.
+    /// Gets the DOMcontainer for this element.
     /// </summary>
     /// <value>The DOM container.</value>
-    protected DomContainer DomContainer
+    public DomContainer DomContainer
     {
       get { return domContainer; }
     }

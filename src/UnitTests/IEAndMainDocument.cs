@@ -178,22 +178,23 @@ namespace WatiN.UnitTests
     public void DocumentShouldBeDisposedSoHTMLDialogGetsDisposedAndReferenceCountIsOK()
     {
       DialogWatcher dialogWatcher;
-
+      int ReferenceCount;
+ 
       using (IE ie = new IE(MainURI))
       {
-        Assert.AreEqual(1, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero before test");
-       
+        ReferenceCount = ie.DialogWatcher.ReferenceCount;
+               
         ie.Button("popupid").Click();
 
         using(Document document = ie.HtmlDialogs[0])
         {
-          Assert.AreEqual(2, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count");
+          Assert.AreEqual(ReferenceCount + 1, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count");
         }
         
         dialogWatcher = ie.DialogWatcher;
       }
       
-      Assert.AreEqual(0, dialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero after test");
+      Assert.AreEqual(ReferenceCount - 1, dialogWatcher.ReferenceCount, "DialogWatcher reference count should be zero after test");
     }
     
     [Test, ExpectedException(typeof(MissingAlertException))]

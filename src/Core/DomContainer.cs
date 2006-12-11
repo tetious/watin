@@ -135,18 +135,6 @@ namespace WatiN.Core
         removeIdAttribute = true;
       }
 
-      // The following commented code should work, but it doesn't. 
-      // The EventObject.button property in the java event handling scripts (in the html page) 
-      // still returns 0 while explicitly set to 1 in the code.
-      // I've searched the internet, but this really should be it.
-      // Since it doesn't work, I came up with this workaround using execScript.
-
-      //      object dummyEvt = null;
-      //      object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
-      //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
-      //      mouseDownEvent.button = 1;
-      //      element.FireEvent(eventName, ref parentEvt);
-
       // Execute the JScript to fire the event inside the Browser.
       FireEventOnElementWithJScript(element, eventName);
 
@@ -165,7 +153,21 @@ namespace WatiN.Core
 
       IHTMLWindow2 window = ((HTMLDocument) element.document).parentWindow;
 
-      window.execScript(scriptCode, "javascript");
+      try
+      {
+        window.execScript(scriptCode, "javascript");
+      }
+      catch (UnauthorizedAccessException)
+      {
+        // In a cross domain automation scenario a System.UnauthorizedAccessException 
+        // is thrown. The following code works, but setting the event properties
+        // has no effect so that is left out.
+        object dummyEvt = null;
+        //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
+        //      mouseDownEvent.button = 1;
+        object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
+        element.FireEvent(eventName, ref parentEvt);
+      }
     }
 
     /// <summary>
