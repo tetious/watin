@@ -19,6 +19,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -29,6 +30,50 @@ namespace WatiN.Core
   /// </summary>
   public class Button : Element
   {
+    private static ArrayList buttonTags;
+    
+    public static ArrayList CreateElementTags(string tagnames, string inputtypes)
+    {
+      ArrayList elementTags = new ArrayList();
+      
+      // tagnames not null
+      string[] tags = tagnames.Split(Char.Parse(" "));
+
+      foreach (string tag in tags)
+      {
+        ElementTag elementTag = new ElementTag(tag, inputtypes);
+        elementTags.Add(elementTag);
+      }
+      
+      return elementTags;
+    }
+
+    public static void CheckElement(object htmlElement, ArrayList elementTags)
+    {
+      foreach (ElementTag elementTag in elementTags)
+      {
+        if (elementTag.Compare(htmlElement))
+        {
+          return;      
+        }
+      }
+
+      throw new ArgumentException(String.Format("Expected element {0}", ElementFinder.GetExceptionMessage(elementTags)), "element");
+    }
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (buttonTags == null)
+        {
+          buttonTags = CreateElementTags("input button", "button submit image reset");
+        }
+
+        return buttonTags;
+      }
+    }
+
     /// <summary>
     /// Initialises a new instance of the <see cref="Button"/> class.
     /// Mainly used by WatiN internally.
@@ -46,6 +91,15 @@ namespace WatiN.Core
     /// <param name="finder">The input button or button element.</param>
     public Button(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
     {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Button"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public Button(Element element) : base(element.DomContainer, element.HTMLElement)
+    {
+      CheckElement(element.HTMLElement, ElementTags);
+    }
 
     /// <summary>
     /// The text displayed at the button.

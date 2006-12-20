@@ -86,7 +86,7 @@ namespace WatiN.UnitTests
       Table table = ie.Table(tableId);
       Assert.AreEqual(tableId,  table.Id);
       Assert.AreEqual(tableId,  table.ToString());
-      Assert.AreEqual(2, table.TableRows.Length, "Unexpected number of rows");
+      Assert.AreEqual(3, table.TableRows.Length, "Unexpected number of rows");
 
       TableRow row = table.FindRow("a1",0);
       Assert.IsNotNull(row, "Row with a1 expected");
@@ -101,6 +101,17 @@ namespace WatiN.UnitTests
       Assert.IsNull(row, "No row with c1 expected");
     }
 
+    [Test]
+    public void TableFindRowShouldIgnoreTHtagsInTBody()
+    {
+      Table table = ie.Table(tableId);
+      Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
+      
+      TableRow row = table.FindRow(new Regex("a"), 0);
+      Assert.IsNotNull(row, "row expected");
+      Assert.AreEqual("a1", row.TableCells[0].Text);
+    }
+  
     [Test]
     public void TableFindRowWithTextIgnoreCase()
     {
@@ -178,11 +189,11 @@ namespace WatiN.UnitTests
       // Collection.Length
       TableRowCollection rows = ie.Table("table1").TableRows;
       
-      Assert.AreEqual(2, rows.Length);
+      Assert.AreEqual(3, rows.Length);
 
       // Collection items by index
-      Assert.AreEqual("row0", rows[0].Id);
-      Assert.AreEqual("row1", rows[1].Id);
+      Assert.AreEqual("row0", rows[1].Id);
+      Assert.AreEqual("row1", rows[2].Id);
 
       IEnumerable rowEnumerable = rows;
       IEnumerator rowEnumerator = rowEnumerable.GetEnumerator();
@@ -200,7 +211,7 @@ namespace WatiN.UnitTests
       }
       
       Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
-      Assert.AreEqual(2, count);
+      Assert.AreEqual(3, count);
     }
 
     [Test]
@@ -230,7 +241,7 @@ namespace WatiN.UnitTests
     public void TableCells()
     {
       // Collection.Length
-      TableCellCollection cells = ie.Table("table1").TableRows[0].TableCells;
+      TableCellCollection cells = ie.Table("table1").TableRows[1].TableCells;
       
       Assert.AreEqual(2, cells.Length);
 
@@ -262,6 +273,13 @@ namespace WatiN.UnitTests
     {
       Button helloButton = ie.Button("helloid");
       Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
+    }
+    
+    [Test]
+    public void GetNullAttribute()
+    {
+      Button helloButton = ie.Button("helloid");
+      Assert.IsNull(helloButton.GetAttributeValue("title"));
     }
 
     [Test]
@@ -328,6 +346,29 @@ namespace WatiN.UnitTests
       Assert.IsFalse(ie.Button("noneexistingbuttonid").Exists);
     }
 
+    [Test]
+    public void ButtonFromInputElement()
+    {
+      Element element = ie.Element("disabledid");
+      Button button = new Button(element);
+      Assert.AreEqual("disabledid", button.Id);
+    }
+
+    [Test]
+    public void ButtonFromButtonElement()
+    {
+      Element element = ie.Element("buttonelementid");
+      Button button = new Button(element);
+      Assert.AreEqual("buttonelementid", button.Id);
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void ButtonFromElementArgumentException()
+    {
+      Element element = ie.Element("Checkbox1");
+      new Button(element);
+    }
+    
     [Test]
     public void Buttons()
     {
@@ -1323,6 +1364,15 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedImagesCount, count);
+    }
+    
+    [Test]
+    public void ButtonFromInputImage()
+    {
+      Button button = ie.Button(Find.BySrc(new Regex("images/watin.jpg")));
+      
+      Assert.IsTrue(button.Exists, "Button should exist");
+      Assert.AreEqual("Image4", button.Id, "Unexpected id");
     }
   }
   

@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Text.RegularExpressions;
 using mshtml;
 
@@ -50,12 +49,12 @@ namespace WatiN.Core
 
 	  public Button Button(Attribute findBy)
     {
-      return ElementsSupport.Button(DomContainer, findBy, elementCollection);
+      return new Button(DomContainer, ElementFinder.ButtonFinder(findBy, elementCollection));
     }
   
     public ButtonCollection Buttons
     {
-      get { return ElementsSupport.Buttons(DomContainer, elementCollection); }
+      get { return new ButtonCollection(DomContainer, ElementFinder.ButtonFinder(null, elementCollection)); }
     }
 
     public CheckBox CheckBox(string elementId)

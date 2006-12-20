@@ -21,8 +21,6 @@ using System.Text.RegularExpressions;
 
 using mshtml;
 
-using WatiN.Core.Exceptions;
-
 namespace WatiN.Core
 {
   /// <summary>
@@ -58,24 +56,7 @@ namespace WatiN.Core
     /// Prevent creating an instance of this class (contains only static members)
     /// </summary>
     private ElementsSupport(){}
-    
-    public static Button Button(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
-    {
-      ElementFinder finder = new ElementFinder(InputTagName, InputButtonType, findBy, elements);
-      finder.AddTagType(ButtonTagName, InputNullType);
-      finder.ExceptionMessage = string.Format("{0} ({1}) or {2}", InputTagName, InputButtonType, ButtonTagName);
-
-      return new Button(ie, finder);
-    }
-
-    public static ButtonCollection Buttons(DomContainer ie, IHTMLElementCollection elements)
-    {
-      ElementFinder finder = new ElementFinder(InputTagName, InputButtonType, elements);
-      finder.AddTagType(ButtonTagName, InputNullType);
-
-      return new ButtonCollection(ie, finder);
-    }
-
+        
     public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new CheckBox(ie, new ElementFinder(InputTagName, InputCheckBoxType, findBy, elements));
@@ -214,8 +195,7 @@ namespace WatiN.Core
     public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       ElementFinder finder = new ElementFinder(InputTagName, InputTextFieldType, findBy, elements);
-      finder.AddTagType(TextAreaTagName, InputNullType);
-      finder.ExceptionMessage = string.Format("{0} ({1}) or {2}", InputTagName, InputTextFieldType, TextAreaTagName);
+      finder.AddElementTag(TextAreaTagName, InputNullType);
       
       return new TextField(ie, finder);
     }
@@ -223,7 +203,7 @@ namespace WatiN.Core
     public static TextFieldCollection TextFields(DomContainer ie, IHTMLElementCollection elements)
     {
       ElementFinder finder = new ElementFinder(InputTagName, InputTextFieldType, elements);
-      finder.AddTagType(TextAreaTagName, InputNullType);
+      finder.AddElementTag(TextAreaTagName, InputNullType);
       
       return new TextFieldCollection(ie, finder);
     }
@@ -251,7 +231,7 @@ namespace WatiN.Core
     public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       ElementFinder finder = new ElementFinder(ImageTagName, InputNullType, findBy, elements);
-      finder.AddTagType(InputTagName, InputImageType);
+      finder.AddElementTag(InputTagName, InputImageType);
       
       return new Image(ie, finder);
     }
@@ -259,7 +239,7 @@ namespace WatiN.Core
     public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
     {
       ElementFinder finder = new ElementFinder(ImageTagName, InputNullType, elements);
-      finder.AddTagType(InputTagName, InputImageType);
+      finder.AddElementTag(InputTagName, InputImageType);
       
       return new ImageCollection(ie, finder);
     }

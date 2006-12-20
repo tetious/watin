@@ -8,46 +8,67 @@ namespace WatiN.Core
 {
   public class ElementFinder
   {
+    public static ElementFinder ButtonFinder(Attribute findBy, IHTMLElementCollection elements)
+    {
+      return new ElementFinder(Button.ElementTags, findBy, elements);
+    }
+
     private ArrayList tagsToFind = new ArrayList();
     
     protected readonly Attribute findBy;
     protected readonly IHTMLElementCollection elementsCollection;
 
-    private string exceptionMessage = null;
-
+    public ElementFinder(ArrayList elementTags, Attribute findBy, IHTMLElementCollection elementsCollection)
+    {
+      if (findBy == null)
+      {
+        this.findBy = new NoAttributeCompare();
+      }
+      else
+      {
+        this.findBy = findBy;
+      }
+      
+      this.elementsCollection = elementsCollection;
+      
+      tagsToFind = elementTags;
+    }
+    
+    public ElementFinder(ArrayList elementTags, IHTMLElementCollection elementsCollection) : this(elementTags, null, elementsCollection)
+    {}
+    
     public ElementFinder(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
       this.findBy = findBy;
       this.elementsCollection = elementsCollection;
       
-      AddTagType(tagName, inputType);
+      AddElementTag(tagName, inputType);
     }
     
     public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, new NoAttributeCompare(), elementsCollection)
     {}
 
-    public string ExceptionMessage
+    internal static string GetExceptionMessage(ArrayList elementTags)
     {
-      get
+      string message = String.Empty;
+
+      foreach (ElementTag elementTag in elementTags)
       {
-        if (exceptionMessage == null && tagsToFind.Count > 0)
+        if (message.Length > 0)
         {
-          TagType tagType = (TagType)tagsToFind[0];
-          return tagType.tagName;
+          message = message + " or ";
         }
-        return exceptionMessage;
+        message = message + elementTag.ToString();
       }
-      set
-      {
-        exceptionMessage = value;
-      }
+
+      return message;
     }
 
     public virtual IHTMLElement FindFirst(bool throwExceptionIfElementNotFound)
     {      
-      foreach (TagType tagType in tagsToFind)
+      foreach (ElementTag elementTag in tagsToFind)
       {
-        ArrayList elements = findElementsByAttribute(tagType, true);
+        ArrayList elements = findElementsByAttribute(elementTag, findBy, true);
 
         if (elements.Count > 0)
         {
@@ -57,78 +78,53 @@ namespace WatiN.Core
 
       if (throwExceptionIfElementNotFound)
       {
-        throw new ElementNotFoundException(ExceptionMessage, findBy.AttributeName, findBy.Value);
+        throw new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value);
       }
       
       return null;
     }
 
-    public void AddTagType(string tagName, string inputType)
+    public void AddElementTag(string tagName, string inputType)
     {
-      tagsToFind.Add(new TagType(tagName, inputType));
+      tagsToFind.Add(new ElementTag(tagName, inputType));
     }
     
     public ArrayList FindAll()
     {
-      if (tagsToFind.Count == 1)
-      {
-        return findElementsByAttribute((TagType)tagsToFind[0], false);
-      }
-      else 
-      {
-        ArrayList elements = new ArrayList();
-      
-        foreach (TagType tagType in tagsToFind)
-        {
-          elements.AddRange(findElementsByAttribute(tagType, false));
-        }
-    
-        return elements;
-      }
+      return FindAll(findBy);
     }
     
     public ArrayList FindAll(Attribute findBy)
     {
       if (tagsToFind.Count == 1)
       {
-        return findElementsByAttribute((TagType)tagsToFind[0], findBy, false);
+        return findElementsByAttribute((ElementTag)tagsToFind[0], findBy, false);
       }
       else 
       {
         ArrayList elements = new ArrayList();
       
-        foreach (TagType tagType in tagsToFind)
+        foreach (ElementTag elementTag in tagsToFind)
         {
-          elements.AddRange(findElementsByAttribute(tagType, findBy, false));
+          elements.AddRange(findElementsByAttribute(elementTag, findBy, false));
         }
     
         return elements;
       }
     }
-
-    private ArrayList findElementsByAttribute(TagType tagType, bool returnAfterFirstMatch)
-    {
-      return findElementsByAttribute(tagType, findBy, returnAfterFirstMatch);
-    }
     
-    private ArrayList findElementsByAttribute(TagType tagType, Attribute findBy, bool returnAfterFirstMatch)
+    private ArrayList findElementsByAttribute(ElementTag elementTag, Attribute findBy, bool returnAfterFirstMatch)
     {
-      // Check arguments
-      if (isInputElement(tagType.tagName) && UtilityClass.IsNullOrEmpty(tagType.inputTypes))
-      {
-        throw new ArgumentNullException("inputType", "inputType must be set when tagName is 'input'");
-      }
-
       // Get elements with the tagname from the page
       ArrayList children = new ArrayList();
-      IHTMLElementCollection elements = getElementCollection(elementsCollection, tagType.tagName);
+      IHTMLElementCollection elements = elementTag.GetElementCollection(elementsCollection);
 
       // Loop through each element and evaluate
       foreach (IHTMLElement element in elements)
       {
-        waitUntilElementReadyStateIsComplete(element, tagType.tagName);
+        waitUntilElementReadyStateIsComplete(element);
 
-        if (doCompare(element, findBy, tagType.inputTypes))
+        if (findBy.Compare(element) && elementTag.Compare(element))
         {
           children.Add(element);
           if (returnAfterFirstMatch)
@@ -141,41 +137,14 @@ namespace WatiN.Core
       return children;
     }
 
-    private static bool doCompare(IHTMLElement element, Attribute findBy, string inputType)
-    {
-      if (findBy.Compare(element))
-      {
-        return inputType == null ? true : isInputOfType(element, inputType);
-      }
-      
-      return false;
-    }
-
-    private static bool isInputOfType(IHTMLElement element, string inputType)
-    {
-      IHTMLInputElement inputElement = element as IHTMLInputElement;
-      
-      if (inputElement != null)
-      {
-        string inputElementType = inputElement.type.ToLower();
-      
-        if (inputType.ToLower().IndexOf(inputElementType) >= 0)
-        {
-          return true;
-        }
-      }
-      
-      return false;
-    }
-
-    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element, string tagName)
+    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)
     {
       //TODO: See if this method could be dropped, it seems to give
-      //      more troubles (uninitialized state of elements)
+      //      more trouble (uninitialized state of elements)
       //      then benefits (I just introduced this method to be on 
       //      the save side)
       
-      if (String.Compare(tagName, "img", true) == 0)
+      if (String.Compare(element.tagName, "img", true) == 0)
       {
         return;
       }
@@ -203,31 +172,98 @@ namespace WatiN.Core
       }
     }
 
-    internal static IHTMLElementCollection getElementCollection(IHTMLElementCollection elements, string tagName)
-    {
-      if (tagName == null)
-      {
-        return elements;
-      }
-      
-      return (IHTMLElementCollection)elements.tags(tagName);
-    }
-
     internal static bool isInputElement(string tagName)
     {
       return String.Compare(tagName, ElementsSupport.InputTagName, true) == 0;
     }
-    
-    private class TagType
-    {
-      public string tagName;
-      public string inputTypes;
+  }
+
+  internal class ElementTag
+  {
+    public readonly string TagName;
+    public readonly string InputTypes;
+    public readonly bool IsInputElement = false;
       
-      public TagType(string tagName, string inputTypes)
+    public ElementTag(string tagName, string inputTypes)
+    {
+      TagName = tagName;
+      IsInputElement = ElementFinder.isInputElement(tagName);
+        
+      // Check arguments
+      if (IsInputElement)
       {
-        this.tagName = tagName;
-        this.inputTypes = inputTypes;
+        if (UtilityClass.IsNullOrEmpty(inputTypes))
+        {
+          throw new ArgumentNullException("inputTypes", String.Format("inputTypes must be set when tagName is '{0}'", tagName));
+        }
+          
+        InputTypes = inputTypes.ToLower();
       }
+    }
+      
+    public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
+    {
+      if (TagName == null)
+      {
+        return elements;
+      }
+      
+      return (IHTMLElementCollection)elements.tags(TagName);
+    }
+
+    public bool Compare(object element)
+    {
+      return Compare((IHTMLElement)element);
+    }
+      
+    public bool Compare(IHTMLElement element)
+    {
+      if (CompareTagName(element))
+      {
+        if (IsInputElement)
+        {
+          return CompareAgainstInputTypes(element);
+        }
+        else
+        {
+          return true;
+        }
+      }
+        
+      return false;
+    }
+
+    public override string ToString()
+    {
+      if (IsInputElement)
+      {
+        return String.Format("{0} ({1})", TagName.ToUpper(), InputTypes);
+      }
+      return TagName.ToUpper();
+    }
+
+    private bool CompareTagName(IHTMLElement element)
+    {
+      if (TagName == null)
+      {
+        return true;
+      }
+        
+      return String.Compare(TagName, element.tagName, true) == 0;
+    }
+
+    private bool CompareAgainstInputTypes(IHTMLElement element)
+    {
+      IHTMLInputElement inputElement = (IHTMLInputElement)element;
+      
+      string inputElementType = inputElement.type.ToLower();
+    
+      if (InputTypes.IndexOf(inputElementType) >= 0)
+      {
+        return true;
+      }
+      
+      return false;
     }
   }
 }
