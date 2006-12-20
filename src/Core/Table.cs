@@ -154,9 +154,12 @@ namespace WatiN.Core
       {
         // Get all elements and filter this for TableCells
         IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
-        IHTMLElementCollection tableCellElements = ElementFinder.getElementCollection(allElements, ElementsSupport.TableCellTagName);
+        IHTMLElementCollection tableCellElements = (IHTMLElementCollection)allElements.tags(ElementsSupport.TableCellTagName);
         
-        return base.Compare(tableCellElements.item(columnIndex, null));
+        if (tableCellElements.length - 1 >= columnIndex)
+        {
+          return base.Compare(tableCellElements.item(columnIndex, null));
+        }
       }
         
       return false;
