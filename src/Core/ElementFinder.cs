@@ -214,17 +214,17 @@ namespace WatiN.Core
     public bool Compare(object element)
     {
       IHTMLElement ihtmlElement = element as IHTMLElement;
-      
-      if (ihtmlElement == null)
-      {
-        return false;
-      }
-      
+            
       return Compare(ihtmlElement);
     }
       
     public bool Compare(IHTMLElement element)
     {
+      if (element == null)
+      {
+        return false;
+      }
+      
       if (CompareTagName(element))
       {
         if (IsInputElement)
