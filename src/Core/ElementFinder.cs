@@ -178,7 +178,7 @@ namespace WatiN.Core
     }
   }
 
-  internal class ElementTag
+  public class ElementTag
   {
     public readonly string TagName;
     public readonly string InputTypes;
@@ -213,7 +213,14 @@ namespace WatiN.Core
 
     public bool Compare(object element)
     {
-      return Compare((IHTMLElement)element);
+      IHTMLElement ihtmlElement = element as IHTMLElement;
+      
+      if (ihtmlElement == null)
+      {
+        return false;
+      }
+      
+      return Compare(ihtmlElement);
     }
       
     public bool Compare(IHTMLElement element)

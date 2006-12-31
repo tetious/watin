@@ -967,9 +967,9 @@ namespace WatiN.UnitTests
       }
     }
     
-    [Test, ExpectedException(typeof(ReferenceCountException))]
+    [Test]
     public void ThrowReferenceCountException()
-    {
+    {    
       using(IE ie = new IE())
       {
         DialogWatcher dialogWatcher = DialogWatcher.GetDialogWatcherFromCache(ie.ProcessID);
@@ -978,8 +978,22 @@ namespace WatiN.UnitTests
         dialogWatcher.DecreaseReferenceCount();
 
         Assert.AreEqual(0, dialogWatcher.ReferenceCount);
-        
-        dialogWatcher.DecreaseReferenceCount();
+      
+        try
+        {
+          dialogWatcher.DecreaseReferenceCount();
+          Assert.Fail("ReferenceCountException expected");
+        }
+        catch(ReferenceCountException)
+        {}
+        catch
+        {
+          Assert.Fail("ReferenceCountException expected");
+        }
+        finally
+        {
+          dialogWatcher.IncreaseReferenceCount();
+        }
       }
     }
   }

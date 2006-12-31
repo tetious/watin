@@ -565,4 +565,22 @@ namespace WatiN.UnitTests
       Assert.AreEqual("WatiN.Core.UriComparer compares with: http://watin.sourceforge.net/", comparer.ToString());
     }
   }
+  
+  [TestFixture]
+  public class ElementTagTests
+  {
+    [Test]
+    public void CompareNullShouldReturnFalse()
+    {
+      ElementTag elementTag = new ElementTag("tagname", "");
+      Assert.IsFalse(elementTag.Compare(null));
+    }
+    
+    [Test]
+    public void CompareObjectNotImplementingIHTMLElementShouldReturnFalse()
+    {
+      ElementTag elementTag = new ElementTag("tagname", "");
+      Assert.IsFalse(elementTag.Compare(new object()));
+    }
+  }
 }
