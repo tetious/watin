@@ -63,6 +63,7 @@
                 <include name="${unittests.source.dir}\*.cs"/>
             </sources>
             <references>
+                <include name="${pia.dir}\Microsoft.mshtml.dll"/>
                 <include name="${bin.dir}\${core.assembly.name}"/>
                 <include name="${path.nunit.framework.dll}\nunit.framework.dll"/>
                 <include name="System.dll"/>
