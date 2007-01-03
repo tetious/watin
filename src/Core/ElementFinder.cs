@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading;
 using mshtml;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -119,12 +120,16 @@ namespace WatiN.Core
       ArrayList children = new ArrayList();
       IHTMLElementCollection elements = elementTag.GetElementCollection(elementsCollection);
 
+      ElementAttributeBag attributeBag = new ElementAttributeBag();
+      
       // Loop through each element and evaluate
       foreach (IHTMLElement element in elements)
       {
         waitUntilElementReadyStateIsComplete(element);
 
-        if (findBy.Compare(element) && elementTag.Compare(element))
+        attributeBag.IHTMLElement = element;
+        
+        if (findBy.Compare(attributeBag) && elementTag.Compare(element))
         {
           children.Add(element);
           if (returnAfterFirstMatch)
@@ -175,6 +180,48 @@ namespace WatiN.Core
     internal static bool isInputElement(string tagName)
     {
       return String.Compare(tagName, ElementsSupport.InputTagName, true) == 0;
+    }
+  }
+
+  public class ElementAttributeBag : IAttributeBag
+  {
+    private IHTMLElement element = null;
+    
+    public ElementAttributeBag()
+    {}
+    
+    public ElementAttributeBag(IHTMLElement element)
+    {
+      IHTMLElement = element;
+    }
+    
+    public IHTMLElement IHTMLElement
+    {
+      get
+      {
+        return element;
+      }
+      set 
+      { 
+        element = value;
+      }
+    }
+
+    public string GetValue(string attributename)
+    {
+      object attribute = element.getAttribute(attributename, 0);
+
+      if (attribute == DBNull.Value)
+      {
+        throw new InvalidAttributException(attributename, element.tagName);
+      }
+
+      if (attribute == null)
+      {
+        return null;
+      }
+      
+      return attribute.ToString();
     }
   }
 

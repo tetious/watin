@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 using SHDocVw;
 
@@ -28,7 +29,7 @@ namespace WatiN.Core
   /// <summary>
   /// This class provides specialized functionality for a Frame or IFrame.
   /// </summary>
-  public class Frame : Document
+  public class Frame : Document, IAttributeBag
   {
     private string frameName = string.Empty;
     private string frameId = string.Empty;
@@ -81,24 +82,7 @@ namespace WatiN.Core
     {
       foreach (Frame frame in frames)
       {
-        string compareValue = string.Empty;
-
-        if (findBy is Name)
-        {
-          compareValue = frame.Name;
-        }
-
-        else if(findBy is Url)
-        {
-          compareValue = frame.Url;
-        }
-
-        else if(findBy is Id)
-        {
-          compareValue = frame.Id;
-        }
-
-        if (findBy.Compare(compareValue))
+        if (findBy.Compare(frame))
         {
           // Return
           return frame;
@@ -141,6 +125,27 @@ namespace WatiN.Core
       frameName = name;
       frameId = id;
     }
+    #region IAttributeBag Members
+
+    public string GetValue(string attributename)
+    {
+      switch(attributename.ToLower())
+      {
+        case "name":
+          return Name;
+        case "url":
+          return Url;
+        case "href":
+          return Url;
+        case "id":
+          return Id;
+        default:
+          throw new InvalidAttributException(attributename, "Frame or IFrame");
+      }
+    }
+
+    
+    #endregion
   }
     
   internal class FrameByIndexProcessor :IWebBrowser2Processor

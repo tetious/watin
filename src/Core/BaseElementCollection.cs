@@ -80,9 +80,12 @@ namespace WatiN.Core
     
     public bool Exists(Attribute findBy)
     {
-      foreach (object element in Elements)
+      ElementAttributeBag attributeBag = new ElementAttributeBag();
+      
+      foreach (IHTMLElement element in Elements)
       {
-        if (findBy.Compare(element))
+        attributeBag.IHTMLElement = element;
+        if (findBy.Compare(attributeBag))
         {
           return true;
         }
@@ -109,9 +112,13 @@ namespace WatiN.Core
       else
       {
         returnElements = new ArrayList();
-        foreach (object element in Elements)
+        ElementAttributeBag attributeBag = new ElementAttributeBag();
+        
+        foreach (IHTMLElement element in Elements)
         {
-          if (findBy.Compare(element))
+          attributeBag.IHTMLElement = element;
+          
+          if (findBy.Compare(attributeBag))
           {
             returnElements.Add(element);
           }

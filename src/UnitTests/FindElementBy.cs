@@ -18,9 +18,11 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using Attribute=WatiN.Core.Attribute;
 
@@ -29,19 +31,25 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class FindElementBy : WatiNTest
   {
+    const string href = "href";
+
     [Test]
     public void FindByFor()
     {
+      const string htmlfor = "htmlfor";
+
       For value = Find.ByFor("foridvalue");
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "For class should inherit Attribute class" );
 
-      Assert.AreEqual("htmlfor", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(htmlfor, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("foridvalue", value.Value, "Wrong value");
       
       Regex regex = new Regex("^id");
       value = Find.ByFor(regex);
-      Assert.IsTrue(value.Compare("idvalue"), "Regex ^id should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(htmlfor, "idvalue");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex ^id should match");
     }
 
     [Test]
@@ -51,12 +59,15 @@ namespace WatiN.UnitTests
 
       Assert.IsInstanceOfType(typeof(Attribute), value, "Id class should inherit Attribute class" );
 
-      Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
+      const string id = "id";
+      Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
       
       Regex regex = new Regex("lue$");
       value = Find.ById(regex);
-      Assert.IsTrue(value.Compare("idvalue"), "Regex lue$ should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(id, "idvalue");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
     }
     
     [Test]
@@ -66,12 +77,15 @@ namespace WatiN.UnitTests
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Name class should inherit Attribute class" );
 
-      Assert.AreEqual("name", value.AttributeName, "Wrong attributename");
+      const string name = "name";
+      Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("namevalue", value.Value, "Wrong value");
       
       Regex regex = new Regex("lue$");
       value = Find.ByName(regex);
-      Assert.IsTrue(value.Compare("namevalue"), "Regex lue$ should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(name, "namevalue");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
     }
 
     [Test]
@@ -81,12 +95,15 @@ namespace WatiN.UnitTests
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Text class should inherit Attribute class" );
 
-      Assert.AreEqual("innertext", value.AttributeName, "Wrong attributename");
+      const string innertext = "innertext";
+      Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("textvalue", value.Value, "Wrong value");
       
       Regex regex = new Regex("lue$");
       value = Find.ByText(regex);
-      Assert.IsTrue(value.Compare("textvalue"), "Regex lue$ should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(innertext, "textvalue");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
     }
 
     [Test]
@@ -115,14 +132,23 @@ namespace WatiN.UnitTests
     
     private static void AssertUrlValue(Url value)
     {
-      Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
-      Assert.IsTrue(value.Compare(WatiNURI.ToString()), "Should match WatiN url");
+      
+      TestAttributeBag attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
+
+      Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
       Assert.IsTrue(value.Compare(WatiNURI), "Should match WatiN uri");
-      Assert.IsFalse(value.Compare("http://www.microsoft.com"), "Shouldn't match Microsoft");
+
+      attributeBag = new TestAttributeBag(href, "http://www.microsoft.com");
+      Assert.IsFalse(value.Compare(attributeBag), "Shouldn't match Microsoft");
       Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
-      Assert.IsFalse(value.Compare(null), "Null should not match");
-      Assert.IsFalse(value.Compare(String.Empty), "Null should not match");
+      
+      attributeBag = new TestAttributeBag(href, null);
+      Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
+
+      attributeBag = new TestAttributeBag(href, String.Empty);
+      Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
     }
 
     [Test]
@@ -130,7 +156,9 @@ namespace WatiN.UnitTests
     {
       Regex regex = new Regex("^http://watin");
       Url value = Find.ByUrl(regex);
-      Assert.IsTrue(value.Compare("http://watin.sourceforge.net"), "Regex ^http://watin should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(href, "http://watin.sourceforge.net");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex ^http://watin should match");
     }
 
     [Test, ExpectedException(typeof(UriFormatException))]
@@ -143,76 +171,100 @@ namespace WatiN.UnitTests
     public void FindByUrlInvalidCompare()
     {
       Url value = Find.ByUrl(WatiNURI.ToString());
-      value.Compare("watin.sourceforge.net");
+      TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge.net");
+
+      value.Compare(attributeBag);
     }
 
     [Test]
     public void FindByTitle()
     {
+      const string title = "title";
+
       Title value = Find.ByTitle("titlevalue");
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Title class should inherit Attribute class" );
 
-      Assert.AreEqual("title", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
       
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should match");
       
-      Assert.IsFalse(value.Compare(String.Empty), "Empty should not match");
-      Assert.IsFalse(value.Compare(null), "Null should not match");
+      TestAttributeBag attributeBag = new TestAttributeBag(title, String.Empty);
+      Assert.IsFalse(value.Compare(attributeBag), "Empty should not match");
+
+      attributeBag = new TestAttributeBag(title, null);
+      Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
       
+      attributeBag = new TestAttributeBag(title, "titlevalue");
+ 
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
+
       value = Find.ByTitle("titl");
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match titl");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match titl");
       
       value = Find.ByTitle("tItL");
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match tItL");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match tItL");
 
       value = Find.ByTitle("lev");
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match lev");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match lev");
       
       value = Find.ByTitle("alue");
-      Assert.IsTrue(value.Compare("titlevalue"), "Compare should partial match alue");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match alue");
 
-      value = Find.ByTitle("titlevalue");
-      Assert.IsFalse(value.Compare("title"), "Compare should not match title");
-      
       Regex regex = new Regex("^titl");
       value = Find.ByTitle(regex);
-      Assert.IsTrue(value.Compare("titlevalue"), "Regex ^titl should match");
+      Assert.IsTrue(value.Compare(attributeBag), "Regex ^titl should match");
+      
+      value = Find.ByTitle("titlevalue");
+      attributeBag = new TestAttributeBag(title, "title");
+
+      Assert.IsFalse(value.Compare(attributeBag), "Compare should not match title");
+      
     }
 
     [Test]
     public void FindByValue()
     {
+      const string valueAttrib = "value";
+
       Value value = Find.ByValue("valuevalue");
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Value class should inherit Attribute class" );
 
-      Assert.AreEqual("value", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
       Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
       
       Regex regex = new Regex("lue$");
       value = Find.ByValue(regex);
-      Assert.IsTrue(value.Compare("valuevalue"), "Regex lue$ should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(valueAttrib, "valuevalue");
+      
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
     }
 
     [Test]
     public void FindBySrc()
     {
+      const string src = "src";
+
       Src value = Find.BySrc("image.gif");
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Src class should inherit Attribute class" );
 
-      Assert.AreEqual("src", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("image.gif", value.Value, "Wrong value");
       
-      Assert.IsFalse(value.Compare("/images/image.gif"), "Should not match /images/image.gif");
-      Assert.IsTrue(value.Compare("image.gif"), "Should match image.gif");
+      TestAttributeBag attributeBag = new TestAttributeBag(src, "/images/image.gif");
+      Assert.IsFalse(value.Compare(attributeBag), "Should not match /images/image.gif");
+
+      attributeBag = new TestAttributeBag(src, "image.gif");
+      Assert.IsTrue(value.Compare(attributeBag), "Should match image.gif");
       
       Regex regex = new Regex("image.gif$");
       value = Find.BySrc(regex);
-      Assert.IsTrue(value.Compare("/images/image.gif"), "Regex image.gif$ should match");
+      attributeBag = new TestAttributeBag(src, "/images/image.gif");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex image.gif$ should match");
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -264,28 +316,31 @@ namespace WatiN.UnitTests
       new Attribute(string.Empty,string.Empty);
     }
     
-    [Test, ExpectedException(typeof(ArgumentException))]
-    public void AttributeCompareObject()
-    {
-      Attribute attribute = new Attribute("test", "value");
-      attribute.Compare(new object());
-    }
-    
     [Test]
     public void FindByCustom()
     {
-      Attribute value = Find.ByCustom("id","idvalue");
-      Assert.AreEqual("id", value.AttributeName, "Wrong attributename");
+      const string id = "id";
+      Attribute value = Find.ByCustom(id,"idvalue");
+      Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
       
-      Assert.IsTrue(value.Compare("idvalue"), "Compare should match");
-      Assert.IsFalse(value.Compare("id"), "Compare should not partial match id");
-      Assert.IsFalse(value.Compare("val"), "Compare should not partial match val");
-      Assert.IsFalse(value.Compare("value"), "Compare should not partial match value");
+      TestAttributeBag attributeBag = new TestAttributeBag(id, "idvalue");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
+
+      attributeBag = new TestAttributeBag(id, "id");
+      Assert.IsFalse(value.Compare(attributeBag), "Compare should not partial match id");
+
+      attributeBag = new TestAttributeBag(id, "val");
+      Assert.IsFalse(value.Compare(attributeBag), "Compare should not partial match val");
+
+      attributeBag = new TestAttributeBag(id, "value");
+      Assert.IsFalse(value.Compare(attributeBag), "Compare should not partial match value");
       
       Regex regex = new Regex("lue$");
-      value = Find.ByCustom("id", regex);
-      Assert.IsTrue(value.Compare("idvalue"), "Regex lue$ should match");
+      value = Find.ByCustom(id, regex);
+      attributeBag = new TestAttributeBag(id, "idvalue");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
     }
 
     [Test]
@@ -295,14 +350,19 @@ namespace WatiN.UnitTests
       
       Assert.IsInstanceOfType(typeof(Url), value, "ElementUrlPartialValue class should inherit Url class" );
 
-      Assert.AreEqual("href", value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("watin.sourceforge", value.Value, "Wrong value");
       
-      Assert.IsTrue(value.Compare("watin.sourceforge"), "Compare should match");
+      TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge");
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
       
       value = new ElementUrlPartialValue("watin.sourceforge");
-      Assert.IsTrue(value.Compare(WatiNURI.ToString()), "Compare should partial match title");      
-      Assert.IsFalse(value.Compare("www.microsoft.com"), "Compare should not match title");
+
+      attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match title");      
+
+      attributeBag = new TestAttributeBag(href, "www.microsoft.com");
+      Assert.IsFalse(value.Compare(attributeBag), "Compare should not match title");
 
       using (new IE(MainURI))
       {
@@ -581,6 +641,127 @@ namespace WatiN.UnitTests
     {
       ElementTag elementTag = new ElementTag("tagname", "");
       Assert.IsFalse(elementTag.Compare(new object()));
+    }
+  }
+  
+  [TestFixture]
+  public class FindByMultipleAttributes
+  {
+    [Test]
+    public void AndTrue()
+    {
+      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
+      attributeBag.Add("value", "Cancel");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void AndFalseFirst()
+    {
+      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
+      attributeBag.Add("value", "Cancel");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void AndFalseSecond()
+    {
+      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
+      attributeBag.Add("value", "OK");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void OrFirstTrue()
+    {
+      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void OrSecondTrue()
+    {
+      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void OrFalse()
+    {
+      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+       
+    [Test]
+    public void AndOr()
+    {
+      Attribute findByNames = Find.ByName("X").Or(Find.ByName("Y"));
+      Attribute findBy = Find.ByValue("Cancel").And(findByNames);
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
+      attributeBag.Add("value", "Cancel");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void AndOrThroughOperatorOverloads()
+    {
+      Attribute findBy = Find.ByName("X") & Find.ByValue("Cancel") | (Find.ByName("Z") & Find.ByValue("Cancel"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      attributeBag.Add("value", "OK");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+  }
+  
+  public class TestAttributeBag : IAttributeBag
+  {
+    #region IAttributeBag Members
+
+    public ArrayList attributeValues = new ArrayList();
+
+    public TestAttributeBag(string attributeName, string value)
+    {
+      Add(attributeName, value);
+    }
+
+    public void Add(string attributeName, string value)
+    {
+      AttributeValue attributeValue = new AttributeValue();
+      attributeValue.Name = attributeName;
+      attributeValue.Value = value;
+      
+      attributeValues.Add(attributeValue);
+    }
+    
+    public string GetValue(string attributename)
+    {
+      foreach (AttributeValue attributeValue in attributeValues)
+      {
+        if (String.Compare(attributeValue.Name, attributename, true) == 0)
+        {
+          return attributeValue.Value;
+        }
+      }
+      
+      throw new InvalidAttributException(attributename, "MockAttributeBag");
+    }
+
+    #endregion
+    
+    public class AttributeValue
+    {
+      public string Name = null;
+      public string Value = null;
     }
   }
 }

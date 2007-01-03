@@ -29,6 +29,7 @@ using SHDocVw;
 using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -483,29 +484,15 @@ namespace WatiN.Core
       int browserCount = allBrowsers.Count;
       int browserCounter = 0;
 
+      IEAttributeBag attributeBag = new IEAttributeBag();
+      
       while (browserCounter < browserCount)
       {
-        InternetExplorer internetExplorer = (InternetExplorer) allBrowsers.Item(browserCounter);
+        attributeBag.InternetExplorer = (InternetExplorer) allBrowsers.Item(browserCounter);
 
-        string compareValue = string.Empty;
-
-        try
+        if (findBy.Compare(attributeBag))
         {
-          if (findBy is Url)
-          {
-            compareValue = internetExplorer.LocationURL;
-          }
-          else if (findBy is Title)
-          {
-            compareValue = ((HTMLDocument) internetExplorer.Document).title;
-          }
-        }
-        catch
-        {}
-          
-        if (findBy.Compare(compareValue))
-        {
-          return internetExplorer;
+          return attributeBag.InternetExplorer;
         }
 
         browserCounter++;
@@ -811,7 +798,7 @@ namespace WatiN.Core
     {
       try
       {
-        // Try a method aor property call to the
+        // Call a property of the
         // ie instance to see of it isn't disposed by 
         // another IE instance.
         int hwndDummy = ie.HWND;
@@ -945,24 +932,8 @@ namespace WatiN.Core
         Thread.Sleep(500);
 
         foreach (HtmlDialog htmlDialog in HtmlDialogs)
-        {
-          string compareValue = string.Empty;
-
-          try
-          {
-            if (findBy is Url)
-            {
-              compareValue = htmlDialog.Url;
-            }
-            else if (findBy is Title)
-            {
-              compareValue = htmlDialog.Title;
-            }
-          }
-          catch
-          {}
-          
-          if (findBy.Compare(compareValue))
+        {          
+          if (findBy.Compare(htmlDialog))
           {
             htmlDialog.WaitForComplete();
             return htmlDialog;
@@ -972,6 +943,51 @@ namespace WatiN.Core
 
 
       throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
+    }
+  }
+
+  public class IEAttributeBag: IAttributeBag
+  {
+    private InternetExplorer internetExplorer = null;
+
+    public InternetExplorer InternetExplorer
+    {
+      get
+      {
+        return internetExplorer;
+      }
+      set
+      {
+        internetExplorer = value;
+      }
+    }
+
+    public string GetValue(string attributename)
+    {
+      string value = null;
+
+      if (attributename.ToLower().Equals("href"))
+      {
+        try
+        {
+          value = InternetExplorer.LocationURL;
+        }
+        catch{}
+      }
+      else if (attributename.ToLower().Equals("title"))
+      {
+        try
+        {
+          value = ((HTMLDocument) InternetExplorer.Document).title;
+        }
+        catch{}
+      }
+      else
+      {
+        throw new InvalidAttributException(attributename, "IE");
+      }
+      
+      return value;
     }
   }
 }

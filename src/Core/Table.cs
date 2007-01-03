@@ -146,9 +146,9 @@ namespace WatiN.Core
       containsText = new AlwaysTrueComparer();
     }
       
-    public override bool Compare(object ihtmlelement)
+    public override bool Compare(IAttributeBag attributeBag)
     {
-      IHTMLElement element = GetIHTMLElement(ihtmlelement);
+      IHTMLElement element = ((ElementAttributeBag)attributeBag).IHTMLElement;
 
       if (IsTextContainedIn(element.innerText))
       {
@@ -158,7 +158,8 @@ namespace WatiN.Core
         
         if (tableCellElements.length - 1 >= columnIndex)
         {
-          return base.Compare(tableCellElements.item(columnIndex, null));
+          IHTMLElement tableCell = (IHTMLElement)tableCellElements.item(columnIndex, null);
+          return base.Compare(new ElementAttributeBag(tableCell));
         }
       }
         

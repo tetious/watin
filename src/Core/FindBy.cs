@@ -19,8 +19,6 @@
 
 using System;
 using System.Text.RegularExpressions;
-using mshtml;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core;
 
@@ -33,6 +31,11 @@ namespace WatiN.Core.Interfaces
   public interface ICompare
   {
     bool Compare(string value);
+  }
+  
+  public interface IAttributeBag
+  {
+    string GetValue(string attributename);
   }
 }
 
@@ -193,6 +196,18 @@ namespace WatiN.Core
     private string attributeName;
     private string valueToLookFor;
     protected ICompare comparer;
+    protected Attribute andAttribute;
+    protected Attribute orAttribute;
+
+    public static Attribute operator & (Attribute first, Attribute second) 
+    {
+      return first.And(second);
+    }
+    
+    public static Attribute operator | (Attribute first, Attribute second) 
+    {
+      return first.Or(second);
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Attribute"/> class.
@@ -242,61 +257,41 @@ namespace WatiN.Core
     {
       get { return valueToLookFor; }
     }
-
+   
     /// <summary>
     /// This methode implements an exact match comparison. If you want
     /// different behaviour, inherit this class or one of its subclasses and 
     /// override Compare with a specific implementation.
     /// </summary>
-    /// <param name="value">Value to compare with</param>
+    /// <param name="attributeBag">Value to compare with</param>
     /// <returns><c>true</c> if the searched for value equals the given value</returns>
-    public virtual bool Compare(string value)
-    {
-      return comparer.Compare(value);
+    public virtual bool Compare(IAttributeBag attributeBag)
+    {     
+      bool returnValue = comparer.Compare(attributeBag.GetValue(attributeName));
+      
+      if (returnValue && andAttribute != null)
+      {
+        returnValue = andAttribute.Compare(attributeBag);
+      }
+      
+      if (returnValue == false && orAttribute != null)
+      {
+        returnValue = orAttribute.Compare(attributeBag);
+      }
+
+      return returnValue;
     }
     
-    /// <summary>
-    /// This methode implements an exact match comparison. If you want
-    /// different behaviour, inherit this class or one of its subclasses and 
-    /// override Compare with a specific implementation.
-    /// </summary>
-    /// <param name="ihtmlelement">IHTMLElement to compare against</param>
-    /// <returns><c>true</c> if the searched for value equals the given value</returns>
-    public virtual bool Compare(object ihtmlelement)
+    public Attribute And(Attribute attribute)
     {
-      IHTMLElement element = GetIHTMLElement(ihtmlelement);
-
-      string attribute = GetAttribute(element, attributeName);
-
-      return Compare(attribute);
+      andAttribute = attribute;
+      return this;
     }
-
-    protected string GetAttribute(IHTMLElement element, string attributeName)
+    
+    public Attribute Or(Attribute attribute)
     {
-      object attribute = element.getAttribute(attributeName, 0);
-
-      if (attribute == DBNull.Value)
-      {
-        throw new InvalidAttributException(attributeName, element.tagName);
-      }
-
-      if (attribute == null)
-      {
-        return null;
-      }
-      
-      return attribute.ToString();
-    }
-
-    protected static IHTMLElement GetIHTMLElement(object ihtmlelement)
-    {
-      IHTMLElement element = ihtmlelement as IHTMLElement;
-      
-      if (element == null)
-      {
-        throw new ArgumentException("Object should be of type mshtml.IHTMLElement", "ihtmlelement");
-      }
-      return element;
+      orAttribute = attribute;
+      return this;
     }
 
     public override string ToString()
@@ -324,17 +319,12 @@ namespace WatiN.Core
   /// This class is only used in the ElementsSupport Class to 
   /// create a collection of all elements.
   /// </summary>
-  internal class NoAttributeCompare : Attribute
+  internal class AlwaysTrueAttribute : Attribute
   {
-    public NoAttributeCompare() : base("noAttribute", "")
+    public AlwaysTrueAttribute() : base("noAttribute", "")
     {}
     
-    public override bool Compare(string value)
-    {
-      return true;
-    }
-    
-    public override bool Compare(object ihtmlelement)
+    public override bool Compare(IAttributeBag attributeBag)
     {
       return true;
     }
@@ -368,54 +358,52 @@ namespace WatiN.Core
   }
  
   /// <summary>
-  /// Class to find an element by the n-th occurrence of an id. Occurrence counting
-  /// is zero based.
+  /// Class to find an element by the n-th occurrence.
+  /// Occurrence counting is zero based. If you combine <see cref="Occurrence"/> with
+  /// other <see cref="Attribute"/> classes, always start with <see cref="Occurrence"/>
+  /// as shown in the following example.  
   /// </summary>  
   /// <example>
-  /// This example will get the third(!) occurrence on the page of a
-  /// link element with "testlinkid" as it's id value. 
-  /// <code>ie.Link(new IdAndOccurrence("testlinkid", 2)).Url</code>
+  /// This example will get the second occurrence on the page of a
+  /// link element with "linkname" as it's name value. 
+  /// <code>ie.Link(new Occurrence(1).And(Find.ByName("linkname"))</code>
+  /// You could also consider filtering the Links collection and getting
+  /// the second item in the collection, like this:
+  /// <code>ie.Links.Filter(Find.ByName("linkname"))[1]</code>
   /// </example>
-  public class IdAndOccurrence : Id
+  public class Occurrence : Attribute
   {
     private int occurrence;
     private int counter = -1;
     
-    public IdAndOccurrence(string id, int occurrence) : base(id)
-    {
-      this.occurrence = occurrence;
-    }
-
-    public IdAndOccurrence(Regex regex, int occurrence) : base(regex)
+    public Occurrence(int occurrence) : base("occurence","")
     {
       this.occurrence = occurrence;
     }
     
-    public int Occurrence
+    public override bool Compare(IAttributeBag attributeBag)
     {
-      get
-      {
-        return occurrence;
-      }
-    }
-    
-    public override bool Compare(string value)
-    {
-      bool baseCompare = base.Compare(value);
+      bool returnValue = true;
       
-      if (baseCompare)
+      if (andAttribute != null)
+      {
+        returnValue = andAttribute.Compare(attributeBag);
+      }
+      
+      if (returnValue == false && orAttribute != null)
+      {
+        returnValue = orAttribute.Compare(attributeBag);
+      }
+
+      if (returnValue)
       {
         counter++;
       }
-
-      if (baseCompare & counter == occurrence)
-      {
-        return true;
-      }
       
-      return false;
+      return counter == occurrence;
     }
   }
+  
   /// <summary>
   /// Class to find an element by it's name.
   /// </summary>

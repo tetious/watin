@@ -169,12 +169,12 @@ namespace WatiN.Core
 
     public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new IdAndOccurrence(elementId,occurrence), elements));
+      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new Occurrence(occurrence).And(new Id(elementId)), elements));
     }
     
     public static TableCell TableCell(DomContainer ie, Regex elementId, int occurrence, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new IdAndOccurrence(elementId,occurrence), elements));
+      return new TableCell(ie, new ElementFinder(TableCellTagName, InputNullType, new Occurrence(occurrence).And(new Id(elementId)), elements));
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)

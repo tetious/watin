@@ -720,7 +720,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void HTMLDialogModal()
+    public void HTMLDialogModalByTitle()
     {
       using(IE ie = new IE(MainURI))
       {
@@ -735,6 +735,21 @@ namespace WatiN.UnitTests
   
           htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
           htmlDialog.Button("hello").Click();
+        }
+      }
+    }
+    
+    [Test]
+    public void HTMLDialogModalByUrl()
+    {
+      using(IE ie = new IE(MainURI))
+      {
+        ie.Button("modalid").ClickNoWait();
+
+        using(HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+        {     
+          Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+          Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
         }
       }
     }

@@ -22,6 +22,8 @@ using System.Runtime.InteropServices;
 
 using mshtml;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -29,7 +31,7 @@ namespace WatiN.Core
   /// This is the main class to access a webpage within a modal or modeles
   /// HTML dialog.
   /// </summary>
-  public class HtmlDialog : DomContainer
+  public class HtmlDialog : DomContainer, IAttributeBag
 	{
     private IntPtr hwnd = IntPtr.Zero;
 
@@ -110,6 +112,34 @@ namespace WatiN.Core
     private static bool IsIEServerWindow(IntPtr hWnd)
     {
       return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
+    }
+
+    public string GetValue(string attributename)
+    {
+      string value = null;
+
+      if (attributename.ToLower().Equals("href"))
+      {
+        try
+        {
+          value = Url;
+        }
+        catch{}
+      }
+      else if (attributename.ToLower().Equals("title"))
+      {
+        try
+        {
+          value = Title;
+        }
+        catch{}
+      }
+      else
+      {
+        throw new InvalidAttributException(attributename, "HTMLDialog");
+      }
+      
+      return value;
     }
 	}
 }
