@@ -83,6 +83,19 @@ namespace WatiN.Core
       }
     }
     
+    public bool Exists(Attribute findBy)
+    {
+      foreach (HtmlDialog htmlDialog in htmlDialogs)
+      {
+        if (findBy.Compare(htmlDialog))
+        {
+          return true;
+        }
+      }
+      
+      return false;
+    }
+
     private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
     {
       HtmlDialog htmlDialog = (HtmlDialog)htmlDialogs[index];

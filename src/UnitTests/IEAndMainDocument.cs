@@ -748,6 +748,23 @@ namespace WatiN.UnitTests
         }
       }
     }
+    
+    [Test]
+    public void HTMLDialogsExists()
+    {
+      using(IE ie = new IE(MainURI))
+      {
+
+        Url findBy = Find.ByUrl(PopUpURI);
+        Assert.IsFalse(ie.HtmlDialogs.Exists(findBy));
+
+        ie.Button("modalid").ClickNoWait();
+
+        Thread.Sleep(1000);
+
+        Assert.IsTrue(ie.HtmlDialogs.Exists(findBy));
+      }
+    }
 
     [Test]
     public void HTMLDialogNotFoundException()
