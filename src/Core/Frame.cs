@@ -17,7 +17,6 @@
 
 #endregion Copyright
 
-using System;
 using mshtml;
 using SHDocVw;
 
@@ -52,28 +51,8 @@ namespace WatiN.Core
     /// a Frame. A FrameNotFoundException will be thrown if the Frame isn't found.
     /// </summary>
     /// <param name="frames">Collection of frames to find the frame in</param>
-    /// <param name="findBy">The name of the frame</param>
-    public static Frame Find(FrameCollection frames, Name findBy)
-    {
-      return findFrame(frames, findBy);
-    }
-    /// <summary>
-    /// This constructor will mainly be used by Document.Frame to find
-    /// a Frame. A FrameNotFoundException will be thrown if the Frame isn't found.
-    /// </summary>
-    /// <param name="frames">Collection of frames to find the frame in</param>
-    /// <param name="findBy">The Url of the Frame html page</param>
-    public static Frame Find(FrameCollection frames, Url findBy)
-    {
-      return findFrame(frames, findBy);
-    }
-    /// <summary>
-    /// This constructor will mainly be used by Document.Frame to find
-    /// a Frame. A FrameNotFoundException will be thrown if the Frame isn't found.
-    /// </summary>
-    /// <param name="frames">Collection of frames to find the frame in</param>
-    /// <param name="findBy">The Id of the Frame</param>
-    public static Frame Find(FrameCollection frames, Id findBy)
+    /// <param name="findBy">The <see cref="Attribute"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
+    public static Frame Find(FrameCollection frames, Attribute findBy)
     {
       return findFrame(frames, findBy);
     }

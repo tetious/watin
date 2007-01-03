@@ -68,55 +68,13 @@ namespace WatiN.Core
     private bool isDisposed = false;
     
     /// <summary>
-    /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
+    /// Attach to an existing Internet Explorer. Currenly Find.ByUrl and Find.ByTitle 
+    /// are supported.
+    /// When using Find.ByUrl, if multiple Internet Explorer windows have the same or partially 
+    /// the same Title, the first match will be returned. 
+    /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The Url to find.</param>
-    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
-    /// Url, the first match will be returned. </returns>
-    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-    /// IENotFoundException will be throw if an Internet Explorer window with the given Url isn't found within 30 seconds.
-    /// </exception>
-    /// <example>
-    /// Assuming you have http://www.example.com open in an Internet Explorer window,
-    /// this example will search for this Internet Explorer window and Attach to it so you
-    /// can start manipulating the page.
-    /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
-    /// </code>
-    /// </example>
-    public static IE AttachToIE(Url findBy)
-    {
-      return findIE(findBy, waitForWindowTime);
-    }
-
-    /// <summary>
-    /// Attach to an existing Internet Explorer by it's Url. The attached Internet Explorer will be closed after destroying the IE instance.
-    /// </summary>
-    /// <param name="findBy">The Url to find.</param>
-    /// <param name="timeout">The number of seconds to wait before attach times out</param>
-    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
-    /// Url, the first match will be returned. </returns>
-    /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-    /// IENotFoundException will be throw if an Internet Explorer window with the given Url isn't found within the specified <paramref name = "timeout" />.
-    /// </exception>
-    /// <example>
-    /// Assuming you have http://www.example.com open in an Internet Explorer window,
-    /// this example will search for this Internet Explorer window and Attach to it so you
-    /// can start manipulating the page.
-    /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrl("http://www.example.com"));
-    /// </code>
-    /// </example>
-    public static IE AttachToIE(Url findBy, int timeout)
-    {
-      return findIE(findBy, timeout);
-    }
-    
-    /// <summary>
-    /// Attach to an existing Internet Explorer by it's title. If multiple Internet Explorer windows have the same or partially 
-    /// the same Title, the first match will be returned. The attached Internet Explorer will be closed after destroying the IE instance.
-    /// </summary>
-    /// <param name="findBy">The (partial) Title of the IE window to find</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
     /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
     /// Url, the first match will be returned. </returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -136,16 +94,19 @@ namespace WatiN.Core
     /// </code>
     /// </example>
 
-    public static IE AttachToIE(Title findBy)
+    public static IE AttachToIE(Attribute findBy)
     {
       return findIE(findBy, waitForWindowTime);
     }
 
     /// <summary>
-    /// Attach to an existing Internet Explorer by it's title. If multiple Internet Explorer windows have the same or partially 
-    /// the same Title, the first match will be returned. The attached Internet Explorer will be closed after destroying the IE instance.
+    /// Attach to an existing Internet Explorer. Currenly Find.ByUrl and Find.ByTitle 
+    /// are supported.
+    /// When using Find.ByUrl, if multiple Internet Explorer windows have the same or partially 
+    /// the same Title, the first match will be returned. 
+    /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The (partial) Title of the IE window to find</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
     /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
     /// Url, the first match will be returned. </returns>
@@ -158,37 +119,28 @@ namespace WatiN.Core
     /// This example will search for this Internet Explorer window and Attach to it so you
     /// can start manipulating the page 
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Example"));
+    /// IE ieGoogle = IE.AttachToIE(Find.ByTitle("Example"));
     /// </code>
-    /// A parial match should also work
+    /// A parial match will also work
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Exa"));
+    /// IE ieGoogle = IE.AttachToIE(Find.ByTitle("Exa"));
     /// </code>
     /// </example>
-    public static IE AttachToIE(Title findBy, int timeout)
+    public static IE AttachToIE(Attribute findBy, int timeout)
     {
       return findIE(findBy, timeout);
     }
 
     /// <summary>
-    /// Exists the specified Internet Explorer.
+    /// Does the specified Internet Explorer exist.
     /// </summary>
-    /// <param name="findBy">The Url to match with.</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
     /// <returns></returns>
-    public static bool Exists(Url findBy)
+    public static bool Exists(Attribute findBy)
     {
       return (null != findInternetExplorer(findBy));
     }
 
-    /// <summary>
-    /// Exists the specified Internet Explorer.
-    /// </summary>
-    /// <param name="findBy">The (partial) Title of the IE window to match with</param>
-    /// <returns></returns>
-    public static bool Exists(Title findBy)
-    {
-      return (null != findInternetExplorer(findBy));
-    }
     
     /// <summary>
     /// Creates a collection of new InternetExplorer objects and associates them with open Internet Explorers.
@@ -884,39 +836,22 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Find a HtmlDialog by it's Url.
+    /// Find a HtmlDialog by an attribute. Currently 
+    /// Find.ByUrl and Find.ByTitle are supported.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
-    public HtmlDialog HtmlDialog(Url findBy)
+    public HtmlDialog HtmlDialog(Attribute findBy)
     {
       return findHtmlDialog(findBy, waitForWindowTime);
     }
 
     /// <summary>
-    /// Find a HtmlDialog by it's title.
-    /// </summary>
-    /// <param name="findBy">The Title of the html page</param>
-    public HtmlDialog HtmlDialog(Title findBy)
-    {
-      return findHtmlDialog(findBy, waitForWindowTime);
-    }
-
-    /// <summary>
-    /// Find a HtmlDialog by it's Url within the given <paramref name="timeout" /> period.
+    /// Find a HtmlDialog by an attribute within the given <paramref name="timeout" /> period.
+    /// Currently Find.ByUrl and Find.ByTitle are supported.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HtmlDialog HtmlDialog(Url findBy, int timeout)
-    {
-      return findHtmlDialog(findBy, timeout);
-    }
-
-    /// <summary>
-    /// Find a HtmlDialog by it's Title within the given <paramref name="timeout" /> period.
-    /// </summary>
-    /// <param name="findBy">The Title of the html page</param>
-    /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HtmlDialog HtmlDialog(Title findBy, int timeout)
+    public HtmlDialog HtmlDialog(Attribute findBy, int timeout)
     {
       return findHtmlDialog(findBy, timeout);
     }

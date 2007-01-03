@@ -250,35 +250,25 @@ namespace WatiN.Core
     }
     
     /// <summary>
+    /// Gets the specified frame by it's id.
+    /// </summary>
+    /// <param name="id">The regular expression to match with the id of the frame.</param>
+    /// <exception cref="FrameNotFoundException">Thrown if the given <paramref name="id" /> isn't found.</exception>
+    public Frame Frame(Regex id)
+    {
+      return Frame(Find.ById(id));
+    }
+    
+    /// <summary>
     /// Gets the specified frame by it's name.
     /// </summary>
     /// <param name="findBy">The name of the frame.</param>
     /// <exception cref="FrameNotFoundException">Thrown if the given name isn't found.</exception>
-    public Frame Frame(Name findBy)
+    public Frame Frame(Attribute findBy)
     {
       return Core.Frame.Find(Frames, findBy);
     }
-    
-    /// <summary>
-    /// Gets the specified frame by it's Url.
-    /// </summary>
-    /// <param name="findBy">The Url of the frame.</param>
-    /// <exception cref="FrameNotFoundException">Thrown if the given Url isn't found.</exception>
-    public Frame Frame(Url findBy)
-    {
-      return Core.Frame.Find(Frames, findBy);
-    }
-    
-    /// <summary>
-    /// Gets the specified frame by it's id.
-    /// </summary>
-    /// <param name="findBy">The id of the frame.</param>
-    /// <exception cref="FrameNotFoundException">Thrown if the given id isn't found.</exception>
-    public Frame Frame(Id findBy)
-    {
-      return Core.Frame.Find(Frames, findBy);
-    }
-
+        
     /// <summary>
     /// Gets a typed collection of <see cref="WatiN.Core.Frame"/> opend within this <see cref="Document"/>.
     /// </summary>

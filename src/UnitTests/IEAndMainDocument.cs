@@ -27,6 +27,7 @@ using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
@@ -597,8 +598,17 @@ namespace WatiN.UnitTests
     [Test]
     public void IEExistsByUrl()
     {
-      Url findByUrl = Find.ByUrl(MainURI);
-      
+      IEExistsAsserts(Find.ByUrl(MainURI));
+    }
+
+    [Test]
+    public void IEExistsByTitle()
+    {
+      IEExistsAsserts(Find.ByTitle("Ai"));
+    }
+
+    private static void IEExistsAsserts(Attribute findByUrl)
+    {
       Assert.IsFalse(IE.Exists(findByUrl));
       
       using(new IE(MainURI))
@@ -609,21 +619,6 @@ namespace WatiN.UnitTests
       Assert.IsFalse(IE.Exists(findByUrl));
     }
 
-    [Test]
-    public void IEExistsByTitle()
-    {
-      Title findByTitle = Find.ByTitle("Ai");
-      
-      Assert.IsFalse(IE.Exists(findByTitle));
-      
-      using(new IE(MainURI))
-      {
-        Assert.IsTrue(IE.Exists(findByTitle));
-      }
-      
-      Assert.IsFalse(IE.Exists(findByTitle));
-    }
-    
     /// <summary>
     /// Attaches to IE with a zero timeout interval. Allthough the timeout
     /// interval is zero the existing IE instance should be found.
