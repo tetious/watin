@@ -18,11 +18,10 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using Attribute=WatiN.Core.Attribute;
 
@@ -725,9 +724,7 @@ namespace WatiN.UnitTests
   
   public class TestAttributeBag : IAttributeBag
   {
-    #region IAttributeBag Members
-
-    public ArrayList attributeValues = new ArrayList();
+    public NameValueCollection attributeValues = new NameValueCollection();
 
     public TestAttributeBag(string attributeName, string value)
     {
@@ -736,32 +733,12 @@ namespace WatiN.UnitTests
 
     public void Add(string attributeName, string value)
     {
-      AttributeValue attributeValue = new AttributeValue();
-      attributeValue.Name = attributeName;
-      attributeValue.Value = value;
-      
-      attributeValues.Add(attributeValue);
+      attributeValues.Add(attributeName.ToLower(), value);
     }
     
     public string GetValue(string attributename)
     {
-      foreach (AttributeValue attributeValue in attributeValues)
-      {
-        if (String.Compare(attributeValue.Name, attributename, true) == 0)
-        {
-          return attributeValue.Value;
-        }
-      }
-      
-      throw new InvalidAttributException(attributename, "MockAttributeBag");
-    }
-
-    #endregion
-    
-    public class AttributeValue
-    {
-      public string Name = null;
-      public string Value = null;
+      return attributeValues.Get(attributename.ToLower());
     }
   }
 }
