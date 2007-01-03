@@ -23,7 +23,7 @@ namespace WatiN.Core
     {
       if (findBy == null)
       {
-        this.findBy = new NoAttributeCompare();
+        this.findBy = new AlwaysTrueAttribute();
       }
       else
       {
@@ -46,7 +46,7 @@ namespace WatiN.Core
       AddElementTag(tagName, inputType);
     }
     
-    public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, new NoAttributeCompare(), elementsCollection)
+    public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, new AlwaysTrueAttribute(), elementsCollection)
     {}
 
     internal static string GetExceptionMessage(ArrayList elementTags)
