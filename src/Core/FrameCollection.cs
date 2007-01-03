@@ -45,6 +45,19 @@ namespace WatiN.Core
 
     public Frame this[int index] { get { return (Frame)elements[index]; } }
 
+    public bool Exists(Attribute findBy)
+    {
+      foreach (Frame frame in elements)
+      {
+        if (findBy.Compare(frame))
+        {
+          // Return
+          return true;
+        }
+      }
+      
+      return false;
+    }
     /// <exclude />
     public Enumerator GetEnumerator() 
     {

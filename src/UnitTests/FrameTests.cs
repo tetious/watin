@@ -69,6 +69,13 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void FramesCollectionExists()
+    {
+      Assert.IsTrue(ie.Frames.Exists(Find.ByName("contents")));
+      Assert.IsFalse(ie.Frames.Exists(Find.ByName("nonexisting")));
+    }
+    
+    [Test]
     public void ContentsFrame()
     {
       Frame contentsFrame = ie.Frame(Find.ByName("contents"));
