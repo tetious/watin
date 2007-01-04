@@ -32,7 +32,14 @@ namespace WatiN.Core
       
       this.elementsCollection = elementsCollection;
       
-      tagsToFind = elementTags;
+      if (elementTags != null)
+      {
+        tagsToFind = elementTags;
+      }
+      else
+      {
+        AddElementTag(null, null);
+      }
     }
     
     public ElementFinder(ArrayList elementTags, IHTMLElementCollection elementsCollection) : this(elementTags, null, elementsCollection)
@@ -231,6 +238,9 @@ namespace WatiN.Core
     public readonly string InputTypes;
     public readonly bool IsInputElement = false;
       
+    public ElementTag(string tagName) : this(tagName, null)
+    {}
+    
     public ElementTag(string tagName, string inputTypes)
     {
       TagName = tagName;
@@ -315,6 +325,19 @@ namespace WatiN.Core
       if (InputTypes.IndexOf(inputElementType) >= 0)
       {
         return true;
+      }
+      
+      return false;
+    }
+
+    public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
+    {
+      foreach (ElementTag elementTag in elementTags)
+      {
+        if (elementTag.Compare(element))
+        {
+          return true;      
+        }
       }
       
       return false;

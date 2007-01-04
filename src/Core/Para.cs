@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -26,10 +27,33 @@ namespace WatiN.Core
   /// </summary>
   public class Para : ElementsContainer
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("p"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public Para(DomContainer ie, IHTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement)
     {}
 
     public Para(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+    
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Para"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public Para(Element element) : base(element, ElementTags)
     {}
   }
 }

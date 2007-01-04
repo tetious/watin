@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -26,10 +27,34 @@ namespace WatiN.Core
   /// </summary>
   public class TableCell : ElementsContainer
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("td"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public TableCell(DomContainer ie, IHTMLTableCell htmlTableCell) : base(ie, (IHTMLElement) htmlTableCell)
     {}
 
     public TableCell(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
+    
+    /// <summary>
+    /// Initialises a new instance of the <see cref="TableCell"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public TableCell(Element element) : base(element, ElementTags)
+    {}
+
   }
 }

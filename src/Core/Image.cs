@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -26,12 +27,36 @@ namespace WatiN.Core
   /// </summary>
   public class Image : Element
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("img"));
+          elementTags.Add(new ElementTag("input", "image"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public Image(DomContainer ie, IHTMLElement imgElement) : base(ie, imgElement)
     {}
 
     public Image(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
     
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Image"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public Image(Element element) : base(element, ElementTags)
+    {}
+
     public string Src
     {
       get

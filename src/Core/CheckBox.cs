@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -27,6 +28,22 @@ namespace WatiN.Core
   /// </summary>
   public class CheckBox : RadioCheck
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("input", "checkbox"));
+        }
+
+        return elementTags;
+      }
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CheckBox"/> class.
     /// Mainly used by WatiN internally.
@@ -43,6 +60,13 @@ namespace WatiN.Core
     /// <param name="domContainer">The domContainer.</param>
     /// <param name="finder">The finder.</param>
     public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
+    {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="CheckBox"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public CheckBox(Element element) : base(element, ElementTags)
     {}
   }
 }

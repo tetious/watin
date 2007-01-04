@@ -30,47 +30,20 @@ namespace WatiN.Core
   /// </summary>
   public class Button : Element
   {
-    private static ArrayList buttonTags;
+    private static ArrayList elementTags;
     
-    public static ArrayList CreateElementTags(string tagnames, string inputtypes)
-    {
-      ArrayList elementTags = new ArrayList();
-      
-      // tagnames not null
-      string[] tags = tagnames.Split(Char.Parse(" "));
-
-      foreach (string tag in tags)
-      {
-        ElementTag elementTag = new ElementTag(tag, inputtypes);
-        elementTags.Add(elementTag);
-      }
-      
-      return elementTags;
-    }
-
-    public static void CheckElement(object htmlElement, ArrayList elementTags)
-    {
-      foreach (ElementTag elementTag in elementTags)
-      {
-        if (elementTag.Compare(htmlElement))
-        {
-          return;      
-        }
-      }
-
-      throw new ArgumentException(String.Format("Expected element {0}", ElementFinder.GetExceptionMessage(elementTags)), "element");
-    }
-
     public static ArrayList ElementTags
     {
       get
       {
-        if (buttonTags == null)
+        if (elementTags == null)
         {
-          buttonTags = CreateElementTags("input button", "button submit image reset");
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("input", "button submit image reset"));
+          elementTags.Add(new ElementTag("button"));
         }
 
-        return buttonTags;
+        return elementTags;
       }
     }
 
@@ -96,10 +69,8 @@ namespace WatiN.Core
     /// Initialises a new instance of the <see cref="Button"/> class based on <paramref name="element"/>.
     /// </summary>
     /// <param name="element">The element.</param>
-    public Button(Element element) : base(element.DomContainer, element.HTMLElement)
-    {
-      CheckElement(element.HTMLElement, ElementTags);
-    }
+    public Button(Element element) : base(element, ElementTags)
+    {}
 
     /// <summary>
     /// The text displayed at the button.

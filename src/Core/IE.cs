@@ -870,12 +870,10 @@ namespace WatiN.Core
         {          
           if (findBy.Compare(htmlDialog))
           {
-            htmlDialog.WaitForComplete();
             return htmlDialog;
           }
         }
       } while (!timeoutTimer.Elapsed);
-
 
       throw new HtmlDialogNotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }

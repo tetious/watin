@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -26,6 +27,22 @@ namespace WatiN.Core
   /// </summary>
   public class Div : ElementsContainer
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("div"));
+        }
+
+        return elementTags;
+      }
+    }
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="Div"/> class.
     /// Mainly used by WatiN internally.
@@ -43,5 +60,13 @@ namespace WatiN.Core
     /// <param name="finder">The HTML div element.</param>
     public Div(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
     {}
+ 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Div"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public Div(Element element) : base(element, ElementTags)
+    {}
+
   }
 }

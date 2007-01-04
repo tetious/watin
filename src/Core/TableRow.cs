@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -26,10 +27,34 @@ namespace WatiN.Core
   /// </summary>
   public class TableRow : ElementsContainer
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("tr"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public TableRow(DomContainer ie, IHTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow)
     {}
     
     public TableRow(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
+ 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="TableRow"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public TableRow(Element element) : base(element, ElementTags)
+    {}
+
   }
 }

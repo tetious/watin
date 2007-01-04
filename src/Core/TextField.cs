@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 using WatiN.Core.Exceptions;
@@ -31,12 +32,36 @@ namespace WatiN.Core
   /// </summary>
   public class TextField : Element
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("input", "text password textarea hidden"));
+          elementTags.Add(new ElementTag("textarea"));
+        }
+
+        return elementTags;
+      }
+    }
+
     private ITextElement _textElement;
 
     public TextField(DomContainer ie, IHTMLElement element) : base(ie, element)
     {}
 
     public TextField(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="TextField"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public TextField(Element element) : base(element, ElementTags)
     {}
 
     private ITextElement textElement

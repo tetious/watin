@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 using WatiN.Core.Logging;
@@ -33,6 +34,14 @@ namespace WatiN.Core
     {}
     
     public RadioCheck(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="RadioCheck"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    /// <param name="elementTags">The element tags the element should match with.</param>
+    public RadioCheck(Element element, ArrayList elementTags) : base(element, elementTags)
     {}
 
     public bool Checked

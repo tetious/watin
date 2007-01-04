@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 namespace WatiN.Core
@@ -27,10 +28,34 @@ namespace WatiN.Core
   /// </summary>
   public class RadioButton : RadioCheck
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("input", "radio"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public RadioButton(DomContainer ie, IHTMLInputElement inputElement) : base(ie, inputElement)
     {}
     
     public RadioButton(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
+    
+    /// <summary>
+    /// Initialises a new instance of the <see cref="RadioButton"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public RadioButton(Element element) : base(element, ElementTags)
+    {}
+
   }
 }

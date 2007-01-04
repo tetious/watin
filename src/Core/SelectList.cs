@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using mshtml;
@@ -32,6 +33,22 @@ namespace WatiN.Core
   /// </summary>
   public class SelectList : Element
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("select"));
+        }
+
+        return elementTags;
+      }
+    }
+
     /// <summary>
     /// Returns an initialized instance of a SelectList object.
     /// Mainly used by the collectionclass SelectLists.
@@ -48,6 +65,13 @@ namespace WatiN.Core
     /// <param name="ie"></param>
     /// <param name="finder"></param>
     public SelectList(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="SelectList"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public SelectList(Element element) : base(element, ElementTags)
     {}
 
     /// <summary>

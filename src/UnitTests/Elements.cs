@@ -72,6 +72,21 @@ namespace WatiN.UnitTests
     }   
 
     [Test]
+    public void TableElementTags()
+    {
+      Assert.AreEqual(1, Table.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("table",((ElementTag) Table.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void TableFromElement()
+    {
+      Element element = ie.Element(tableId);  
+      Table table = new Table(element);
+      Assert.AreEqual(tableId, table.Id);
+    }
+
+    [Test]
     public void TableExists()
     {
       Assert.IsTrue(ie.Table(tableId).Exists);
@@ -79,7 +94,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void Table()
+    public void TableTest()
     {
       Assert.AreEqual(tableId,  ie.Table(Find.ById(tableId)).Id);
       
@@ -176,6 +191,21 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TableRowElementTags()
+    {
+      Assert.AreEqual(1, TableRow.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("tr",((ElementTag) TableRow.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void TableRowFromElement()
+    {
+      Element element = ie.Element("row0");  
+      TableRow tableRow = new TableRow(element);
+      Assert.AreEqual("row0", tableRow.Id);
+    }
+
+    [Test]
     public void TableRowExists()
     {
       Assert.IsTrue(ie.TableRow("row0").Exists);
@@ -212,6 +242,21 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(3, count);
+    }
+
+    [Test]
+    public void TableCellElementTags()
+    {
+      Assert.AreEqual(1, TableCell.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("td",((ElementTag) TableCell.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void TableCellFromElement()
+    {
+      Element element = ie.Element("td1");  
+      TableCell tableCell = new TableCell(element);
+      Assert.AreEqual("td1", tableCell.Id);
     }
 
     [Test]
@@ -284,6 +329,15 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void ButtonElementTags()
+    {
+      Assert.AreEqual(2, Button.ElementTags.Count, "2 elementtags expected");
+      Assert.AreEqual("input",((ElementTag) Button.ElementTags[0]).TagName);
+      Assert.AreEqual("button submit image reset",((ElementTag) Button.ElementTags[0]).InputTypes);
+      Assert.AreEqual("button",((ElementTag) Button.ElementTags[1]).TagName);
+    }
+    
+    [Test]
     public void ButtonFormInputElement()
     {
       const string popupValue = "Show modeless dialog";
@@ -343,7 +397,11 @@ namespace WatiN.UnitTests
     [Test]
     public void ButtonExists()
     {
+      // Test <input type=button />
       Assert.IsTrue(ie.Button("disabledid").Exists);
+      // Test <Button />
+      Assert.IsTrue(ie.Button("buttonelementid").Exists);
+
       Assert.IsFalse(ie.Button("noneexistingbuttonid").Exists);
     }
 
@@ -435,6 +493,22 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void CheckBoxElementTags()
+    {
+      Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("input",((ElementTag) CheckBox.ElementTags[0]).TagName);
+      Assert.AreEqual("checkbox",((ElementTag) CheckBox.ElementTags[0]).InputTypes);
+    }
+
+    [Test]
+    public void CheckBoxFromElement()
+    {
+      Element element = ie.Element("Checkbox1");  
+      CheckBox checkBox = new CheckBox(element);
+      Assert.AreEqual("Checkbox1", checkBox.Id);
+    }
+    
+    [Test]
     public void CheckBoxExists()
     {
       Assert.IsTrue(ie.CheckBox("Checkbox1").Exists);
@@ -443,7 +517,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void CheckBox()
+    public void CheckBoxTest()
     {
       CheckBox checkbox1 = ie.CheckBox("Checkbox1");
 
@@ -492,6 +566,21 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void DivElementTags()
+    {
+      Assert.AreEqual(1, Div.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("div",((ElementTag) Div.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void DivFromElement()
+    {
+      Element element = ie.Element("divid");  
+      Div div = new Div(element);
+      Assert.AreEqual("divid", div.Id);
+    }
+    
+    [Test]
     public void DivExists()
     {
       Assert.IsTrue(ie.Div("divid").Exists);
@@ -500,7 +589,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void Div()
+    public void DivTest()
     {
       Assert.AreEqual("divid", ie.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
       Assert.AreEqual("divid", ie.Div("divid").Id, "Find Div by ie.Div()");
@@ -552,6 +641,21 @@ namespace WatiN.UnitTests
       CheckBox checkBox = ie.CheckBox("Checkbox21");
       Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
       Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
+    }
+
+    [Test]
+    public void LabelElementTags()
+    {
+      Assert.AreEqual(1, Label.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("label",((ElementTag) Label.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void LabelFromElement()
+    {
+      Element element = ie.Element(Find.ByFor("Checkbox21"));  
+      Label label = new Label(element);
+      Assert.AreEqual("Checkbox21", label.For);
     }
 
     [Test]
@@ -630,6 +734,21 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void LinkElementTags()
+    {
+      Assert.AreEqual(1, Link.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("a",((ElementTag) Link.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void LinkFromElement()
+    {
+      Element element = ie.Element("testlinkid");  
+      Link link = new Link(element);
+      Assert.AreEqual("testlinkid", link.Id);
+    }
+
+    [Test]
     public void LinkExists()
     {
       Assert.IsTrue(ie.Link("testlinkid").Exists);
@@ -638,7 +757,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void Link()
+    public void LinkTest()
     {
       Assert.AreEqual(WatiNURI, ie.Link(Find.ById("testlinkid")).Url);
       Assert.AreEqual(WatiNURI, ie.Link("testlinkid").Url);
@@ -684,6 +803,21 @@ namespace WatiN.UnitTests
       
       Assert.IsFalse(linksEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedLinkCount, count);
+    }
+
+    [Test]
+    public void SelectListElementTags()
+    {
+      Assert.AreEqual(1, SelectList.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("select",((ElementTag) SelectList.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void SelectListFromElement()
+    {
+      Element element = ie.Element("Select2");  
+      SelectList selectList = new SelectList(element);
+      Assert.AreEqual("Select2", selectList.Id);
     }
 
     [Test]
@@ -733,6 +867,22 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void RadioButtonElementTags()
+    {
+      Assert.AreEqual(1, RadioButton.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("input",((ElementTag) RadioButton.ElementTags[0]).TagName);
+      Assert.AreEqual("radio",((ElementTag) RadioButton.ElementTags[0]).InputTypes);
+    }
+
+    [Test]
+    public void RadioButtonFromElement()
+    {
+      Element element = ie.Element("Radio1");  
+      RadioButton radioButton = new RadioButton(element);
+      Assert.AreEqual("Radio1", radioButton.Id);
+    }
+
+    [Test]
     public void RadioButtonExists()
     {
       Assert.IsTrue(ie.RadioButton("Radio1").Exists);
@@ -741,7 +891,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void RadioButton()
+    public void RadioButtonTest()
     {
       RadioButton RadioButton1 = ie.RadioButton("Radio1");
 
@@ -895,6 +1045,31 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TextFieldElementTags()
+    {
+      Assert.AreEqual(2, TextField.ElementTags.Count, "2 elementtags expected");
+      Assert.AreEqual("input",((ElementTag) TextField.ElementTags[0]).TagName);
+      Assert.AreEqual("text password textarea hidden",((ElementTag) TextField.ElementTags[0]).InputTypes);
+      Assert.AreEqual("textarea",((ElementTag) TextField.ElementTags[1]).TagName);
+    }
+
+    [Test]
+    public void TextFieldFromElementInput()
+    {
+      Element element = ie.Element("name");  
+      TextField textField = new TextField(element);
+      Assert.AreEqual("name", textField.Id);
+    }
+    
+    [Test]
+    public void TextFieldFromElementTextArea()
+    {
+      Element element = ie.Element("Textarea1");  
+      TextField textField = new TextField(element);
+      Assert.AreEqual("Textarea1", textField.Id);
+    }
+
+    [Test]
     public void TextFieldExists()
     {
       Assert.IsTrue(ie.TextField("name").Exists);
@@ -903,7 +1078,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void TextField()
+    public void TextFieldTest()
     {
       const string value = "Hello world!";
       const string appendValue = " This is WatiN!";
@@ -1049,6 +1224,22 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void FileUploadElementTags()
+    {
+      Assert.AreEqual(1, FileUpload.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("input",((ElementTag) FileUpload.ElementTags[0]).TagName);
+      Assert.AreEqual("file",((ElementTag) FileUpload.ElementTags[0]).InputTypes);
+    }
+
+    [Test]
+    public void FileUploadFromElement()
+    {
+      Element element = ie.Element("upload");  
+      FileUpload fileUpload = new FileUpload(element);
+      Assert.AreEqual("upload", fileUpload.Id);
+    }
+
+    [Test]
     public void FileUploadExists()
     {
       Assert.IsTrue(ie.FileUpload("upload").Exists);
@@ -1057,7 +1248,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void FileUpload()
+    public void FileUploadTest()
     {
       FileUpload fileUpload = ie.FileUpload("upload");
       
@@ -1108,6 +1299,21 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void ParaElementTags()
+    {
+      Assert.AreEqual(1, Para.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("p",((ElementTag) Para.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void ParaFromElement()
+    {
+      Element element = ie.Element("links");  
+      Para para = new Para(element);
+      Assert.AreEqual("links", para.Id);
+    }
+
+    [Test]
     public void ParaExists()
     {
       Assert.IsTrue(ie.Para("links").Exists);
@@ -1116,7 +1322,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void Para()
+    public void ParaTest()
     {
       Para para = ie.Para("links");
       
@@ -1169,7 +1375,22 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void Span()
+    public void SpanElementTags()
+    {
+      Assert.AreEqual(1, Span.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("span",((ElementTag) Span.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void SpanFromElement()
+    {
+      Element element = ie.Element("spanid1");  
+      Span span = new Span(element);
+      Assert.AreEqual("spanid1", span.Id);
+    }
+
+    [Test]
+    public void SpanTest()
     {
       Span Span = ie.Span("spanid1");
       
@@ -1262,7 +1483,7 @@ namespace WatiN.UnitTests
     {
       string sourceIndex = ie.Button("modalid").GetAttributeValue("sourceIndex");
       Assert.AreEqual("13", sourceIndex);
-    }
+    } 
     
     [Test]
     public void FindBySourceIndex()
@@ -1295,6 +1516,34 @@ namespace WatiN.UnitTests
       ie.Close();
     }
     
+    [Test]
+    public void ImageElementTags()
+    {
+      Assert.AreEqual(2, Image.ElementTags.Count, "2 elementtags expected");
+      Assert.AreEqual("img",((ElementTag) Image.ElementTags[0]).TagName);
+      Assert.AreEqual("input",((ElementTag) Image.ElementTags[1]).TagName);
+      Assert.AreEqual("image",((ElementTag) Image.ElementTags[1]).InputTypes);
+    }
+
+    [Test]
+    public void ImageFromElementInput()
+    {
+      AssertImageFromElement("Image4");
+    }
+
+    [Test]
+    public void ImageFromElementImage()
+    {
+      AssertImageFromElement("Image2");
+    }
+
+    private void AssertImageFromElement(string id)
+    {
+      Element element = ie.Element(id);  
+      Image image = new Image(element);
+      Assert.AreEqual(id, image.Id);
+    }
+
     [Test]
     public void ImageExists()
     {
@@ -1398,6 +1647,21 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void FormElementTags()
+    {
+      Assert.AreEqual(1, Form.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("form",((ElementTag) Form.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void ImageFromElementImage()
+    {
+      Element element = ie.Element("Form1");  
+      Form form = new Form(element);
+      Assert.AreEqual("Form1", form.Id);
+    }
+
+    [Test]
     public void FormExists()
     {
       Assert.IsTrue(ie.Form("Form1").Exists);
@@ -1422,7 +1686,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void Form()
+    public void FormTest()
     {
       Form form = ie.Form("Form2");
       

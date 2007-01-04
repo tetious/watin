@@ -17,6 +17,7 @@
 
 #endregion Copyright
 
+using System.Collections;
 using mshtml;
 
 using WatiN.Core.Logging;
@@ -28,10 +29,33 @@ namespace WatiN.Core
   /// </summary>
   public class Form : ElementsContainer
   {
+    private static ArrayList elementTags;
+
+    public static ArrayList ElementTags
+    {
+      get
+      {
+        if (elementTags == null)
+        {
+          elementTags = new ArrayList();
+          elementTags.Add(new ElementTag("form"));
+        }
+
+        return elementTags;
+      }
+    }
+
     public Form(DomContainer ie, IHTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)
     {}
 
     public Form(DomContainer ie, ElementFinder finder) : base(ie, finder)
+    {}
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Form"/> class based on <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    public Form(Element element) : base(element, ElementTags)
     {}
 
     public void Submit()

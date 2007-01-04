@@ -18,6 +18,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Threading;
 
 using mshtml;
@@ -58,6 +59,24 @@ namespace WatiN.Core
     {
       this.domContainer = domContainer;
       elementFinder = finder;
+    }
+    
+    /// <summary>
+    /// This constructor is mainly used from within WatiN.
+    /// </summary>
+    /// <param name="element">The element.</param>
+    /// <param name="elementTags">The element tags the element should match with.</param>
+    public Element(Element element, ArrayList elementTags)
+    {
+      if (ElementTag.IsValidElement(element.htmlElement, elementTags))
+      {
+        domContainer = element.domContainer;
+        this.element = element.HTMLElement;
+      }
+      else
+      {
+        throw new ArgumentException(String.Format("Expected element {0}", ElementFinder.GetExceptionMessage(elementTags)), "element");
+      }
     }
 
     /// <summary>
