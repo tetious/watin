@@ -229,6 +229,7 @@ namespace WatiN.UnitTests
       Assert.IsTrue(ie.TableCell(new Regex("td1"), 0).Exists);
       Assert.IsFalse(ie.TableCell("td1", 100).Exists);
     }
+    
     [Test]
     public void TableCellByIndex()
     {

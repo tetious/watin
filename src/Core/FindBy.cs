@@ -376,31 +376,32 @@ namespace WatiN.Core
     private int occurrence;
     private int counter = -1;
     
-    public Occurrence(int occurrence) : base("occurence","")
+    public Occurrence(int occurrence) : base("occurence", occurrence.ToString())
     {
       this.occurrence = occurrence;
     }
     
     public override bool Compare(IAttributeBag attributeBag)
     {
-      bool returnValue = true;
+      bool resultAnd = false;
+      bool resultOr = false;
       
       if (andAttribute != null)
       {
-        returnValue = andAttribute.Compare(attributeBag);
-      }
-      
-      if (returnValue == false && orAttribute != null)
-      {
-        returnValue = orAttribute.Compare(attributeBag);
+        resultAnd = andAttribute.Compare(attributeBag);
       }
 
-      if (returnValue)
+      if (resultAnd || andAttribute == null)
       {
         counter++;
       }
       
-      return counter == occurrence;
+      if (orAttribute != null && resultAnd == false)
+      {
+        resultOr = orAttribute.Compare(attributeBag);
+      }
+      
+      return (counter == occurrence) || resultOr;
     }
   }
   

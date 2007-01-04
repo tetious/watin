@@ -720,6 +720,82 @@ namespace WatiN.UnitTests
       attributeBag.Add("value", "OK");
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
+    
+    [Test]
+    public void Occurence0()
+    {
+      Attribute findBy = new Occurrence(0);
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void Occurence2()
+    {
+      Attribute findBy = new Occurrence(2);
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsTrue(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void OccurenceAndTrue()
+    {
+      Attribute findBy = new Occurrence(1).And(Find.ByName("Z"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void OccurenceOr()
+    {
+      Attribute findBy = new Occurrence(2).Or(Find.ByName("Z"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+      
+      attributeBag = new TestAttributeBag("name", "y");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void OccurenceAndFalse()
+    {
+      Attribute findBy = new Occurrence(1).And(Find.ByName("Y"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void OccurenceAndOrWithOrTrue()
+    {
+      Attribute findBy = new Occurrence(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+    
+    [Test]
+    public void OccurenceAndOrWithAndTrue()
+    {
+      Attribute findBy = new Occurrence(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsTrue(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
   }
   
   public class TestAttributeBag : IAttributeBag
