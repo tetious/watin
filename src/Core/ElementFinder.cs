@@ -128,6 +128,7 @@ namespace WatiN.Core
       IHTMLElementCollection elements = elementTag.GetElementCollection(elementsCollection);
 
       ElementAttributeBag attributeBag = new ElementAttributeBag();
+      attributeBag.IgnoreInvalidAttributes = (elementTag.TagName == null);
       
       // Loop through each element and evaluate
       foreach (IHTMLElement element in elements)
@@ -193,7 +194,8 @@ namespace WatiN.Core
   public class ElementAttributeBag : IAttributeBag
   {
     private IHTMLElement element = null;
-    
+    private bool ignoreInvalidAttributes = false;
+
     public ElementAttributeBag()
     {}
     
@@ -220,6 +222,11 @@ namespace WatiN.Core
 
       if (attribute == DBNull.Value)
       {
+        if (ignoreInvalidAttributes)
+        {
+          return null;
+        }
+        
         throw new InvalidAttributException(attributename, element.tagName);
       }
 
@@ -229,6 +236,18 @@ namespace WatiN.Core
       }
       
       return attribute.ToString();
+    }
+
+    public bool IgnoreInvalidAttributes
+    {
+      set
+      {
+        ignoreInvalidAttributes = value;
+      }
+      get
+      {
+        return ignoreInvalidAttributes;
+      }
     }
   }
 

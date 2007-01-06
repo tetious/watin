@@ -26,7 +26,7 @@ namespace WatiN.Core
   /// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
   /// </summary>
   public class ElementCollection : BaseElementCollection
-  {
+  {    
     /// <summary>
     /// Initializes a new instance of the <see cref="ElementCollection"/> class.
     /// Mainly used by WatiN internally.
@@ -44,6 +44,14 @@ namespace WatiN.Core
     /// <param name="elements">The elements.</param>
     public ElementCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
     {}
+
+    protected override bool IgnoreInvalidAttributes
+    {
+      get
+      {
+        return true;
+      }
+    }
 
     /// <summary>
     /// Gets the <see cref="Element"/> at the specified index.

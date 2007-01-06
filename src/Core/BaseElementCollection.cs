@@ -10,7 +10,7 @@ namespace WatiN.Core
   public abstract class BaseElementCollection : IEnumerable
   {
     protected DomContainer domContainer;
-
+    
     private ArrayList elements;
     private CreateElementInstance createElementInstance;
     private ElementFinder finder;
@@ -68,6 +68,11 @@ namespace WatiN.Core
       }
     }
 
+    protected virtual bool IgnoreInvalidAttributes
+    {
+      get { return false; }
+    }
+
     public bool Exists(string elementId)
     {
       return Exists(new Id(elementId));
@@ -81,6 +86,7 @@ namespace WatiN.Core
     public bool Exists(Attribute findBy)
     {
       ElementAttributeBag attributeBag = new ElementAttributeBag();
+      attributeBag.IgnoreInvalidAttributes = IgnoreInvalidAttributes;
       
       foreach (IHTMLElement element in Elements)
       {
@@ -113,6 +119,7 @@ namespace WatiN.Core
       {
         returnElements = new ArrayList();
         ElementAttributeBag attributeBag = new ElementAttributeBag();
+        attributeBag.IgnoreInvalidAttributes = IgnoreInvalidAttributes;
         
         foreach (IHTMLElement element in Elements)
         {

@@ -643,6 +643,62 @@ namespace WatiN.UnitTests
       Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
     }
 
+    [Test, ExpectedException(typeof(InvalidAttributException))]
+    public void ButtonFindByAndOthersShouldThrowInvalidAttributeException()
+    {
+      Button button = ie.Button(Find.ByFor("Checkbox21"));
+      Assert.IsFalse(button.Exists);
+    }
+    
+    [Test]
+    public void ElementFindByShouldNeverThrowInvalidAttributeException()
+    {
+      Element element = ie.Element(Find.ByFor("Checkbox21"));
+      Assert.IsTrue(element.Exists);
+    }
+
+    [Test]
+    public void ElementCollectionExistsShouldNeverThrowInvalidAttributeException()
+    {
+      Assert.IsTrue(ie.Elements.Exists(Find.ByFor("Checkbox21")));
+    }
+    
+    [Test, ExpectedException(typeof(InvalidAttributException))]
+    public void ButtonCollectionExistsAndOthersShouldThrowInvalidAttributeException()
+    {
+      Assert.IsFalse(ie.Buttons.Exists(Find.ByFor("Checkbox21")));
+    }
+    
+    [Test]
+    public void ElementCollectionFilterShouldNeverThrowInvalidAttributeException()
+    {
+      ElementCollection elements = ie.Elements.Filter(Find.ByFor("Checkbox21"));
+      Assert.AreEqual(1, elements.Length);
+    }
+    
+    [Test, ExpectedException(typeof(InvalidAttributException))]
+    public void ButtonCollectionFilterAndOthersShouldThrowInvalidAttributeException()
+    {
+      ButtonCollection buttons = ie.Buttons.Filter(Find.ByFor("Checkbox21"));
+      Assert.AreEqual(1, buttons.Length);
+    }
+
+    [Test]
+    public void ElementCollectionSecondFilterShouldNeverThrowInvalidAttributeException()
+    {
+      ElementCollection elements = ie.Elements.Filter(Find.ById("testlinkid"));
+      ElementCollection elements2 = elements.Filter(Find.ByFor("Checkbox21"));
+      Assert.AreEqual(0, elements2.Length);
+    }
+    
+    [Test]
+    public void ButtonCollectionSecondFilterAndOthersShouldThrowInvalidAttributeException()
+    {
+      ButtonCollection buttons = ie.Buttons.Filter(Find.ById("testlinkid"));
+      ButtonCollection buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
+      Assert.AreEqual(0, buttons2.Length);
+    }
+    
     [Test]
     public void LabelElementTags()
     {
@@ -653,7 +709,7 @@ namespace WatiN.UnitTests
     [Test]
     public void LabelFromElement()
     {
-      Element element = ie.Element(Find.ByFor("Checkbox21"));  
+      Element element = ie.Element(Find.ByFor("Checkbox21"));
       Label label = new Label(element);
       Assert.AreEqual("Checkbox21", label.For);
     }
