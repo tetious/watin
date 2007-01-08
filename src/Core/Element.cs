@@ -664,7 +664,17 @@ namespace WatiN.Core
     {
       get { return GetAttributeValue("height"); }
     }
-    
+
+    public string CssText
+    {
+      get { return GetAttributeValue("csstext"); }
+    }
+
+    public override string ToString()
+    {
+      return CssText;
+    }
+
     /// <summary>
     /// This methode can be used if the attribute isn't available as a property of
     /// of this <see cref="Style"/> class.

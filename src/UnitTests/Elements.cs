@@ -1815,6 +1815,8 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ElementStyleTests : WatiNTest
   {
+    const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
+
     IE ie = new IE();
     TextField element;
     
@@ -1837,7 +1839,19 @@ namespace WatiN.UnitTests
     [Test]
     public void GetAttributeValueStyleAsString()
     {
-      Assert.AreEqual("COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; BACKGROUND-COLOR: blue", element.GetAttributeValue("style"));
+      Assert.AreEqual(style, element.GetAttributeValue("style"));
+    }
+
+    [Test]
+    public void ElementStyleToStringReturnsCssText()
+    {
+      Assert.AreEqual(style, element.Style.ToString());
+    }
+
+    [Test]
+    public void ElementStyleCssText()
+    {
+      Assert.AreEqual(style, element.Style.CssText);
     }
     
     [Test, ExpectedException(typeof(ArgumentNullException))]
