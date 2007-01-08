@@ -1,7 +1,7 @@
-#region WatiN Copyright (C) 2006 Jeroen van Menen
+#region WatiN Copyright (C) 2006 - 2007 Jeroen van Menen
 
 // WatiN (Web Application Testing In dotNet)
-// Copyright (C) 2006 Jeroen van Menen
+// Copyright (C) 2006 - 2007 Jeroen van Menen
 //
 // This library is free software; you can redistribute it and/or modify it under the terms of the GNU 
 // Lesser General Public License as published by the Free Software Foundation; either version 2.1 of 
@@ -44,7 +44,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.9.5.4000")]
+[assembly: AssemblyVersion("1.0.0.1001")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
