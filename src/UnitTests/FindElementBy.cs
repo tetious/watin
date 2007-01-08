@@ -20,7 +20,10 @@
 using System;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using mshtml;
 using NUnit.Framework;
+using NUnit.Mocks;
+
 using WatiN.Core;
 using WatiN.Core.Interfaces;
 using Attribute=WatiN.Core.Attribute;
@@ -795,6 +798,29 @@ namespace WatiN.UnitTests
       Assert.IsFalse(findBy.Compare(attributeBag));
       Assert.IsTrue(findBy.Compare(attributeBag));
       Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+  }
+  
+  [TestFixture]
+  public class ElementAttributeBagTests
+  {
+    [Test]
+    public void StyleAttributeShouldReturnAsString()
+    {
+      const string cssText = "COLOR: white; FONT-STYLE: italic";
+
+      DynamicMock mockIStyle = new DynamicMock(typeof(IHTMLStyle));
+      mockIStyle.ExpectAndReturn("get_cssText", cssText);
+
+      DynamicMock mockIHtmlElement = new DynamicMock(typeof(IHTMLElement));
+      mockIHtmlElement.ExpectAndReturn("get_style", mockIStyle.MockInstance);
+
+      ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement)mockIHtmlElement.MockInstance);
+      
+      Assert.AreEqual(cssText, attributeBag.GetValue("style"));
+
+      mockIHtmlElement.Verify();
+      mockIStyle.Verify();
     }
   }
   

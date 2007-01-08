@@ -322,10 +322,24 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void GetNullAttribute()
+    public void GetValidButUndefiniedAttribute()
     {
       Button helloButton = ie.Button("helloid");
       Assert.IsNull(helloButton.GetAttributeValue("title"));
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void GetAttributeValueOfNullThrowsArgumentNullException()
+    {
+      Button helloButton = ie.Button("helloid");
+      Assert.IsNull(helloButton.GetAttributeValue(null));
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void GetAttributeValueOfEmptyStringThrowsArgumentNullException()
+    {
+      Button helloButton = ie.Button("helloid");
+      Assert.IsNull(helloButton.GetAttributeValue(String.Empty));
     }
 
     [Test]
@@ -1690,7 +1704,7 @@ namespace WatiN.UnitTests
     [SetUp]
     public void TestSetup()
     {
-      if (ie.Uri != FormSubmitURI)
+      if (!ie.Uri.Equals(FormSubmitURI))
       {
         ie.GoTo(FormSubmitURI);
       }
@@ -1795,6 +1809,107 @@ namespace WatiN.UnitTests
       Assert.AreEqual("Form3", ie.Form("Form3").ToString(), "Id expected");
       Assert.AreEqual("form4name", ie.Form(Find.ByName("form4name")).ToString(), "Name expected");
       Assert.AreEqual("This is a form with no ID, Title or name.", ie.Forms[4].ToString(), "Text expected");
+    }
+  }
+  
+  [TestFixture]
+  public class ElementStyleTests : WatiNTest
+  {
+    IE ie = new IE();
+    TextField element;
+    
+    [SetUp]
+    public void TestSetup()
+    {
+      if (!ie.Uri.Equals(MainURI))
+      {
+        ie.GoTo(MainURI);
+        element = ie.TextField("Textarea1");
+      }
+    }
+    
+    [TestFixtureTearDown]
+    public void FixtureTeardown()
+    {
+      ie.Close();
+    }
+    
+    [Test]
+    public void GetAttributeValueStyleAsString()
+    {
+      Assert.AreEqual("COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; BACKGROUND-COLOR: blue", element.GetAttributeValue("style"));
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void GetAttributeValueOfNullThrowsArgumenNullException()
+    {
+      element.Style.GetAttributeValue(null);
+    }
+    
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void GetAttributeValueOfEmptyStringThrowsArgumenNullException()
+    {
+      element.Style.GetAttributeValue(String.Empty);
+    }
+    
+    [Test]
+    public void GetAttributeValueBackgroundColor()
+    {
+      Assert.AreEqual("blue", element.Style.GetAttributeValue("BackgroundColor"));
+    }
+    
+    [Test]
+    public void GetAttributeValueBackgroundColorByOriginalHTMLattribname()
+    {
+      Assert.AreEqual("blue", element.Style.GetAttributeValue("background-color"));
+    }
+    
+    [Test]
+    public void GetAttributeValueOfUndefiniedButValidAttribute()
+    {
+      Assert.IsNull(element.Style.GetAttributeValue("cursor"));
+    }
+    
+    [Test]
+    public void GetAttributeValueOfUndefiniedAndInvalidAttribute()
+    {
+      Assert.IsNull(element.Style.GetAttributeValue("nonexistingattrib"));
+    }
+    
+    [Test]
+    public void BackgroundColor()
+    {
+      Assert.AreEqual("blue", element.Style.BackgroundColor);
+    }
+    
+    [Test]
+    public void Color()
+    {
+      Assert.AreEqual("white", element.Style.Color);
+    }
+
+    [Test]
+    public void FontFamily()
+    {
+      Assert.AreEqual("Arial", element.Style.FontFamily);
+    }
+
+    [Test]
+    public void FontSize()
+    {
+      Assert.AreEqual("12px", element.Style.FontSize);
+    }
+
+    [Test]
+    public void FontStyle()
+    {
+      Assert.AreEqual("italic", element.Style.FontStyle);
+    }
+
+    [Test]
+    public void Height()
+    {
+      Assert.AreEqual("50px", element.Style.Height);
     }
   }
 }

@@ -215,6 +215,14 @@ namespace WatiN.Core
       get { return new ElementsContainer(domContainer, domNode.parentNode); }
     }
 
+    public Style Style
+    {
+      get
+      {
+        return new Style(htmlElement.style);
+      }
+    }
+    
     /// <summary>
     /// This methode can be used if the attribute isn't available as a property of
     /// Element or a subclass of Element.
@@ -224,6 +232,16 @@ namespace WatiN.Core
     /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
     public string GetAttributeValue(string attributeName)
     {
+      if (UtilityClass.IsNullOrEmpty(attributeName))
+      {
+        throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
+      }
+      
+      if (string.Compare(attributeName, "style", true) == 0 )
+      {
+        return htmlElement.style.cssText;
+      }
+      
       object attribute = htmlElement.getAttribute(attributeName, 0);
 
       if (attribute == DBNull.Value || attribute == null)
@@ -577,6 +595,103 @@ namespace WatiN.Core
     public void WaitForComplete()
     {
       domContainer.WaitForComplete();
+    }
+  }
+
+  public class Style
+  {
+    private IHTMLStyle style;
+    
+    public Style(IHTMLStyle style)
+    {
+      this.style = style;
+    }
+    
+    /// <summary>
+    /// Retrieves the color of the text of the element.
+    /// Visit http://msdn.microsoft.com/workshop/author/dhtml/reference/colors/colors_name.asp
+    /// for a full list of supported RGB colors and their names.
+    /// </summary>
+    /// <value>The color of the text.</value>
+    public string Color
+    {
+      get { return GetAttributeValue("color"); }
+    }
+    
+    /// <summary>
+    /// Retrieves the color behind the content of the element.
+    /// Visit http://msdn.microsoft.com/workshop/author/dhtml/reference/colors/colors_name.asp
+    /// for a full list of supported RGB colors and their names.
+    /// </summary>
+    /// <value>The color of the background.</value>
+    public string BackgroundColor
+    {
+      get { return GetAttributeValue("backgroundcolor"); }
+    }
+
+    /// <summary>
+    /// Retrieves the name of the font used for text in the element.
+    /// </summary>
+    /// <value>The font family.</value>
+    public string FontFamily
+    {
+      get { return GetAttributeValue("fontfamily"); }
+    }
+    
+    /// <summary>
+    /// Retrieves a value that indicates the font size used for text in the element. 
+    /// </summary>
+    /// <value>The size of the font.</value>
+    public string FontSize
+    {
+      get { return GetAttributeValue("fontsize"); }
+    }
+
+    /// <summary>
+    /// Retrieves the font style of the element as italic, normal, or oblique.
+    /// </summary>
+    /// <value>The fount style.</value>
+    public string FontStyle
+    {
+      get { return GetAttributeValue("fontstyle"); }
+    }
+
+    /// <summary>
+    /// Retrieves the height of the element.
+    /// </summary>
+    /// <value>The height of the element.</value>
+    public string Height
+    {
+      get { return GetAttributeValue("height"); }
+    }
+    
+    /// <summary>
+    /// This methode can be used if the attribute isn't available as a property of
+    /// of this <see cref="Style"/> class.
+    /// </summary>
+    /// <param name="attributeName">The attribute name. This could be different then named in
+    /// the HTML. It should be the name of the property exposed by IE on it's style object.</param>
+    /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
+    public string GetAttributeValue(string attributeName)
+    {
+      if (UtilityClass.IsNullOrEmpty(attributeName))
+      {
+        throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
+      }
+      
+      if (attributeName.IndexOf(Char.Parse("-")) > 0 )
+      {
+        attributeName = attributeName.Replace("-", "");
+      }
+      
+      object attribute = style.getAttribute(attributeName, 0);
+
+      if (attribute == DBNull.Value || attribute == null)
+      {
+        return null;
+      }
+
+      return attribute.ToString();
     }
   }
 }

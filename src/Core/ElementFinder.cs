@@ -218,6 +218,11 @@ namespace WatiN.Core
 
     public string GetValue(string attributename)
     {
+      if (string.Compare(attributename, "style", true) == 0 )
+      {
+        return element.style.cssText;
+      }
+
       object attribute = element.getAttribute(attributename, 0);
 
       if (attribute == DBNull.Value)

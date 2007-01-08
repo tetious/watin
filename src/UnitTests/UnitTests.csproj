@@ -85,6 +85,11 @@
                     HintPath = "..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
                     AssemblyFolderKey = "hklm\primary interop assemblies"
                 />
+                <Reference
+                    Name = "nunit.mocks"
+                    AssemblyName = "nunit.mocks"
+                    HintPath = "..\..\lib\Net\1.1\nunit.mocks.dll"
+                />
             </References>
         </Build>
         <Files>
