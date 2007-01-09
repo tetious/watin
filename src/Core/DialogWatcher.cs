@@ -37,7 +37,7 @@ namespace WatiN.Core.DialogHandlers
     private bool keepRunning = true;
     private ArrayList handlers = new ArrayList();
     private Thread watcherThread;
-    private bool closeUnhandledDialogs = true;
+    private bool closeUnhandledDialogs = IE.Settings.AutoCloseDialogs;
     private int referenceCount = 0;
     
     private static ArrayList dialogWatchers = new ArrayList();
@@ -248,6 +248,7 @@ namespace WatiN.Core.DialogHandlers
 
     /// <summary>
     /// Gets or sets a value indicating whether unhandled dialogs should be closed automaticaly.
+    /// The initial value is set to the value of <paramref name="IE.Settings.AutoCloseDialogs" />.
     /// </summary>
     /// <value>
     /// 	<c>true</c> if unhandled dialogs should be closed automaticaly; otherwise, <c>false</c>.

@@ -34,10 +34,12 @@ namespace WatiN.UnitTests
   {
     private IE ie;
     const string tableId = "table1";
-
+    private Settings defaultSettings;
+    
     [TestFixtureSetUp]
-    public void Setup()
+    public void FixtureSetup()
     {
+      defaultSettings = IE.Settings.Clone();
       ie = new IE(MainURI);
     }
 
@@ -47,6 +49,12 @@ namespace WatiN.UnitTests
       ie.Close();
     }
 
+    [SetUp]
+    public void TestSetUp()
+    {
+      IE.Settings = defaultSettings.Clone();
+    }
+    
     [Test]
     public void IEIsIE()
     {
@@ -405,6 +413,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ElementNotFoundException), "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
     public void ButtonElementNotFoundException()
     {
+      IE.Settings.WaitUntilExistsTimeOut = 1;
       ie.Button("noneexistingbuttonid").Click();
     }
 
@@ -1247,6 +1256,7 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
     public void TextFieldElementNotFoundException()
     {
+      IE.Settings.WaitUntilExistsTimeOut = 1;
       ie.TextField("noneexistingtextfieldid").TypeText("");
     }
     
@@ -1523,6 +1533,8 @@ namespace WatiN.UnitTests
     [Test]
     public void WaitUntilElementExistsElementInjectionAfter3Seconds()
     {
+      Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+
       using(IE ie1 = new IE(TestEventsURI))
       {
         TextField injectedTextField = ie1.TextField("injectedTextField");
@@ -1542,10 +1554,10 @@ namespace WatiN.UnitTests
       }
     }
     
-    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 5 seconds for element to show up.'" )]
+    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 1 seconds for element to show up.'" )]
     public void WaitUntilElementExistsTimeOutException()
     {
-      ie.Button("nonexistingbutton").WaitUntilExists(5);
+      ie.Button("nonexistingbutton").WaitUntilExists(1);
     }
     
     [Test]

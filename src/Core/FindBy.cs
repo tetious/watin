@@ -541,6 +541,8 @@ namespace WatiN.Core
 
   /// <summary>
   /// Class to find an element, Internet Explorer window or HTML Dialog by it's title.
+  /// If multiple Internet Explorer windows have the same or partially 
+  /// the same Title, the first match will be returned.
   /// </summary>
   /// <example>
   /// <code>IE ie = IE.AttachToIE(new Title("WatiN Home Page"))</code>

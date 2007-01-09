@@ -181,6 +181,7 @@ namespace WatiN.Core
         return;
       }
       
+      //TODO: replace with SimpleTimer
       DateTime startTime = DateTime.Now;
       
       // Wait if the readystate of an element is BETWEEN

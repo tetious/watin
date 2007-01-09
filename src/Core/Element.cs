@@ -416,11 +416,20 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Flashes this element.
+    /// Flashes this element 5 times.
     /// </summary>
     public void Flash()
     {
-      for (int counter = 0; counter < 5; counter++)
+      Flash(5);
+    }
+    
+    /// <summary>
+    /// Flashes this element the specified number of flashes.
+    /// </summary>
+    /// <param name="numberOfFlashes">The number of flashes.</param>
+    public void Flash(int numberOfFlashes)
+    {
+      for (int counter = 0; counter < numberOfFlashes; counter++)
       {
         Highlight(true);
         Thread.Sleep(250);
@@ -435,36 +444,38 @@ namespace WatiN.Core
     /// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
     protected void Highlight(bool doHighlight)
     {
-      if (doHighlight)
+      if (IE.Settings.HighLightElement)
       {
-        try
+        if (doHighlight)
         {
-          originalcolor = (string)htmlElement.style.backgroundColor;
-          htmlElement.style.backgroundColor = "yellow";
-        }
-        catch
-        {
-          originalcolor = null;
-        }
-      }
-      else
-      {
-        try
-        {
-          if (originalcolor != null)
+          try
           {
-            htmlElement.style.backgroundColor = originalcolor;
+            originalcolor = (string)htmlElement.style.backgroundColor;
+            htmlElement.style.backgroundColor = IE.Settings.HighLightColor;
           }
-          else
+          catch
           {
-            htmlElement.style.backgroundColor = "";
+            originalcolor = null;
           }
         }
-
-        catch {}
-        finally
+        else
         {
-          originalcolor = null;
+          try
+          {
+            if (originalcolor != null)
+            {
+              htmlElement.style.backgroundColor = originalcolor;
+            }
+            else
+            {
+              htmlElement.style.backgroundColor = "";
+            }
+          }
+          catch {}
+          finally
+          {
+            originalcolor = null;
+          }
         }
       }
     }
@@ -547,11 +558,12 @@ namespace WatiN.Core
 
     /// <summary>
     /// Waits until the element exists. Wait will time out after 30 seconds.
+    /// To change the default time out, set <see cref="IE.Settings.WaitUntilExistsTimeOut"/>
     /// </summary>
     public void WaitUntilExists()
     {
       // Wait 30 seconds max
-      WaitUntilExists(30);
+      WaitUntilExists(IE.Settings.WaitUntilExistsTimeOut);
     }
     
     /// <summary>
@@ -591,6 +603,7 @@ namespace WatiN.Core
     /// <summary>
     /// Waits till the page load is complete. This should only be used on rare occasions
     /// because WatiN calls this function for you when it handles events (like Click etc..)
+    /// To change the default time out, set <see cref="IE.Settings.WaitForCompleteTimeOut"/>
     /// </summary>
     public void WaitForComplete()
     {

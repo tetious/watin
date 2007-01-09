@@ -35,8 +35,212 @@ using WatiN.Core.Logging;
 namespace WatiN.Core
 {
   /// <summary>
-  /// This is the main class to access a webpage and all it's elements
-  /// in Internet Explorer
+  /// This class is used to define the default settings used by WatiN. 
+  /// Use <c>IE.Settings</c> to access or change these settings.
+  /// </summary>
+  /// <example>
+  /// The following example shows you how to change the default time out which is used
+  /// by the AttachtToIE(findBy) method to attach to an already existing Internet Explorer window 
+  /// or to an Internet Explorer window that will show up within 60 seconds after calling
+  /// the AttachToIE(findBy) method.
+  /// <code>
+  /// public void AttachToIEExample()
+  /// {
+  ///   // Change de default time out from 30 to 60 seconds.
+  ///   IE.Settings.AttachToIETimeOut = 60;
+  /// 
+  ///   // Now start Internet Explorer manually and type 
+  ///   // http://watin.sourceforge.net in the navigation bar.
+  /// 
+  ///   // Now Attach to an existing Internet Explorer window
+  ///   IE ie = IE.AttachToIE(Find.ByTitle("WatiN");
+  /// 
+  ///   System.Diagnostics.Debug.WriteLine(ie.Url);
+  /// }
+  /// </code>
+  /// When you frequently want to change these settings you could also create
+  /// two or more instances of the Settings class, set the desired defaults 
+  /// and set the settings class to IE.Settings.
+  /// <code>
+  /// public void ChangeSettings()
+  /// {
+  ///   IE.Settings = LongTimeOut();
+  ///   
+  ///   // Do something here that requires more time then the defaults
+  /// 
+  ///   IE.Settings = ShortTimeOut();
+  /// 
+  ///   // Do something here if you want a short time out to get
+  ///   // the exception quickly incase the item isn't found.  
+  /// }
+  /// 
+  /// public Settings LongTimeOut()
+  /// {
+  ///   Settings settings = new Settings();
+  /// 
+  ///   settings.AttachToIETimeOut = 60;
+  ///   settings.WaitUntilExistsTimeOut = 60;
+  ///   settings.WaitForCompleteTimeOut = 60;
+  /// 
+  ///   return settings;
+  /// }
+  /// 
+  /// public Settings ShortTimeOut()
+  /// {
+  ///   Settings settings = new Settings();
+  /// 
+  ///   settings.AttachToIETimeOut = 5;
+  ///   settings.WaitUntilExistsTimeOut = 5;
+  ///   settings.WaitForCompleteTimeOut = 5;
+  /// 
+  ///   return settings;
+  /// }
+  /// </code>
+  /// </example>
+  public class Settings
+  {
+    private struct settingsStruct
+    {
+      public int attachToIETimeOut;
+      public int waitUntilExistsTimeOut;
+      public int waitForCompleteTimeOut;
+      public bool highLightElement;
+      public string highLightColor;
+      public bool autoCloseDialogs;
+    }
+    
+    private settingsStruct settings;
+
+    public Settings()
+    {
+      SetDefaults();
+    }
+
+    private Settings(settingsStruct settings)
+    {
+      this.settings = settings;
+    }
+
+    /// <summary>
+    /// Resets this instance to the initial defaults.
+    /// </summary>
+    public void Reset()
+    {
+      SetDefaults();      
+    }
+    
+    /// <summary>
+    /// Clones this instance.
+    /// </summary>
+    /// <returns></returns>
+    public Settings Clone()
+    {
+      return new Settings(settings);
+    }
+    
+    private void SetDefaults()
+    {
+      settings = new settingsStruct();
+      settings.attachToIETimeOut = 30;
+      settings.waitUntilExistsTimeOut = 30;
+      settings.waitForCompleteTimeOut = 30;
+      settings.highLightElement = true;
+      settings.highLightColor = "yellow";
+      settings.autoCloseDialogs = true;
+    }
+
+    /// <summary>
+    /// Get or set the default time out used when calling IE ie = IE.AttachToIE(findBy).
+    /// The initial value is 30 seconds. Setting the time out to a negative value will
+    /// throw a <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
+    public int AttachToIETimeOut
+    {
+      get { return settings.attachToIETimeOut; }
+      set
+      {
+        IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
+        settings.attachToIETimeOut = value;
+      }
+    }
+
+    /// <summary>
+    /// Get or set the default time out used when calling Element.WaitUntilExists().
+    /// The initial value is 30 seconds. Setting the time out to a negative value will
+    /// throw a <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
+    public int WaitUntilExistsTimeOut
+    {
+      get { return settings.waitUntilExistsTimeOut; }
+      set
+      {
+        IfValueLessThenZeroThrowArgumentOutOfRangeException(value);        
+        settings.waitUntilExistsTimeOut = value;
+      }
+    }
+
+    /// <summary>
+    /// Get or set the default time out used when calling ie.WaitForComplete().
+    /// The initial value is 30 seconds. Setting the time out to a negative value will
+    /// throw a <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
+    public int WaitForCompleteTimeOut
+    {
+      get { return settings.waitForCompleteTimeOut; }
+      set
+      {
+        IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
+        settings.waitForCompleteTimeOut = value;
+      }
+    }
+
+    /// <summary>
+    /// Turn highlighting of elements by WatiN on (<c>true</c>) or off (<c>false</c>).
+    /// Highlighting of an element is done when WatiN fires an event on an
+    /// element or executes a methode (like TypeText).
+    /// </summary>
+    public bool HighLightElement
+    {
+      get { return settings.highLightElement; }
+      set { settings.highLightElement = value; }
+    }
+
+    /// <summary>
+    /// Set or get the color to highlight elements. Will be used if
+    /// HighLightElement is set to <c>true</c>.
+    /// Visit http://msdn.microsoft.com/workshop/author/dhtml/reference/colors/colors_name.asp
+    /// for a full list of supported RGB colors and their names.
+    /// </summary>
+    public string HighLightColor
+    {
+      get { return settings.highLightColor; }
+      set { settings.highLightColor = value; }
+    }
+
+    /// <summary>
+    /// Turn auto closing of dialogs on (<c>true</c>) or off (<c>false</c>).
+    /// You need to set this value before creating or attaching to any 
+    /// Internet Explorer to have effect.
+    /// </summary>
+    public bool AutoCloseDialogs
+    {
+      get { return settings.autoCloseDialogs; }
+      set { settings.autoCloseDialogs = value; }
+    }
+    
+    private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
+    {
+      if (value < 0 )
+      {
+        throw new ArgumentOutOfRangeException("value", "time out should be 0 seconds or more.");
+      }
+    }
+  }
+  
+  /// <summary>
+  /// This is the main class to access a webpage in Internet Explorer to 
+  /// get to all the elements and (i)frames on the page.
+  /// 
   /// </summary>
   /// <example>
   /// The following example creates a new Internet Explorer instances and navigates to
@@ -60,70 +264,82 @@ namespace WatiN.Core
   /// </example>
   public class IE : DomContainer
   {
-    const int waitForWindowTime = 60;
-
     private InternetExplorer ie;
 
     private bool autoClose = true;
     private bool isDisposed = false;
+    private static Settings settings = new Settings();
+
+    public static Settings Settings
+    {
+      set
+      {
+        if (value == null)
+        {
+          throw new ArgumentNullException("value");
+        }
+        
+        settings = value;
+      }
+      get { return settings; }
+    }
     
     /// <summary>
-    /// Attach to an existing Internet Explorer. Currenly Find.ByUrl and Find.ByTitle 
-    /// are supported.
-    /// When using Find.ByUrl, if multiple Internet Explorer windows have the same or partially 
-    /// the same Title, the first match will be returned. 
+    /// Attach to an existing Internet Explorer. 
+    /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
-    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
-    /// Url, the first match will be returned. </returns>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find 
+    /// (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
+    /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-    /// IENotFoundException will be throw if an Internet Explorer window with the given Title isn't found within 30 seconds.
+    /// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
+    /// To change this default, set <see cref="IE.Settings.AttachToIETimeOut"/>
     /// </exception>
     /// <example>
-    /// Assuming you have an Internet Explorer window open with a titel "Example" (this 
-    /// will show as "Example - Microsoft Internet Explorer" in the titlebar).
-    /// This example will search for this Internet Explorer window and Attach to it so you
-    /// can start manipulating the page 
+    /// The following example searches for an Internet Exlorer instance with "Example"
+    /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+    /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+    /// can be used to test the Example page.
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Example"));
+    /// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
     /// </code>
-    /// A parial match should also work
+    /// A partial match should also work
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByUrlTitle("Exa"));
+    /// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
     /// </code>
     /// </example>
 
     public static IE AttachToIE(Attribute findBy)
     {
-      return findIE(findBy, waitForWindowTime);
+      return findIE(findBy, Settings.AttachToIETimeOut);
     }
 
     /// <summary>
-    /// Attach to an existing Internet Explorer. Currenly Find.ByUrl and Find.ByTitle 
-    /// are supported.
-    /// When using Find.ByUrl, if multiple Internet Explorer windows have the same or partially 
-    /// the same Title, the first match will be returned. 
+    /// Attach to an existing Internet Explorer. 
+    /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find 
+    /// (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
-    /// <returns>An instance of IE. If multiple Internet Explorer windows have the same 
-    /// Url, the first match will be returned. </returns>
+    /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-    /// IENotFoundException will be throw if an Internet Explorer window with the given Title isn't found within the specified <paramref name = "timeout" />.
+    /// IENotFoundException will be thrown if an Internet Explorer window with the given 
+    /// <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
     /// </exception>
     /// <example>
-    /// Assuming you have an Internet Explorer window open with a titel "Example" (this 
-    /// will show as "Example - Microsoft Internet Explorer" in the titlebar).
-    /// This example will search for this Internet Explorer window and Attach to it so you
-    /// can start manipulating the page 
+    /// The following example searches for an Internet Exlorer instance with "Example"
+    /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+    /// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+    /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+    /// can be used to test the Example page.
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByTitle("Example"));
+    /// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"), 60);
     /// </code>
-    /// A parial match will also work
+    /// A partial match should also work
     /// <code>
-    /// IE ieGoogle = IE.AttachToIE(Find.ByTitle("Exa"));
+    /// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
     /// </code>
     /// </example>
     public static IE AttachToIE(Attribute findBy, int timeout)
@@ -134,22 +350,20 @@ namespace WatiN.Core
     /// <summary>
     /// Does the specified Internet Explorer exist.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (Find.ByUrl and Find.ByTitle are supported)</param>
-    /// <returns></returns>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
+    /// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Attribute"/>. Otherwise it returns <c>false</c>. </returns>
     public static bool Exists(Attribute findBy)
     {
       return (null != findInternetExplorer(findBy));
     }
-
     
     /// <summary>
-    /// Creates a collection of new InternetExplorer objects and associates them with open Internet Explorers.
+    /// Creates a collection of new IE instances associated with open Internet Explorer windows.
     /// </summary>
     /// <example>
-    /// This code snippet illustrates the use of this method:
-    /// <code>IECollection InternetExplorers = IE.InternetExplorers</code>
-    /// The following code gives the same result:
-    /// <code>IECollection InternetExplorers = new IECollection</code>
+    /// This code snippet illustrates the use of this method to found out the number of open
+    /// Internet Explorer windows.
+    /// <code>int IECount = IE.InternetExplorers.Length;</code>
     /// </example>
     public static IECollection InternetExplorers()
     {
@@ -157,10 +371,10 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Opens a new Internet Explorer with the Url pointing at a blank page. 
+    /// Opens a new Internet Explorer with a blank page. 
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the openend Internet Explorer will also be closed.
+    /// instance is destroyed the created Internet Explorer window will also be closed.
     /// </note>
     /// </summary>
     /// <remarks>
@@ -194,7 +408,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the opened Internet Explorer will also be closed.
+    /// instance is destroyed the created Internet Explorer window will also be closed.
     /// </note>
     /// </summary>
     /// <param name="url">The URL te open</param>
@@ -211,7 +425,7 @@ namespace WatiN.Core
     /// {
     ///    public class WatiNWebsite
     ///    {
-    ///      public WatiNWebsite()
+    ///      public OpenWatiNWebsite()
     ///      {
     ///        IE ie = new IE("http://watin.sourceforge.net");
     ///      }
@@ -227,7 +441,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
     /// <note>
     /// When the <see cref="WatiN.Core.IE" />
-    /// instance is destroyed the opened Internet Explorer will also be closed.
+    /// instance is destroyed the created Internet Explorer window will also be closed.
     /// </note>
     /// </summary>
     /// <param name="uri">The Uri te open</param>
@@ -245,7 +459,7 @@ namespace WatiN.Core
     /// {
     ///    public class WatiNWebsite
     ///    {
-    ///      public WatiNWebsite()
+    ///      public OpenWatiNWebsite()
     ///      {
     ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"));
     ///      }
@@ -262,7 +476,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
     /// </summary>
     /// <param name="url">The Url te open</param>
-    /// <param name="logonDialogHandler">A class  instanciated with the logon credentials.</param>
+    /// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
     /// </remarks>
@@ -294,7 +508,7 @@ namespace WatiN.Core
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
     /// </summary>
     /// <param name="uri">The Uri te open</param>
-    /// <param name="logonDialogHandler">A class  instanciated with the logon credentials.</param>
+    /// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
     /// <remarks>
     /// You could also use one of the overloaded constructors.
     /// </remarks>
@@ -333,14 +547,11 @@ namespace WatiN.Core
     {
       CheckThreadApartmentStateIsSTA();
 
-      InternetExplorer internetExplorer;
-      try
+      InternetExplorer internetExplorer = shDocVwInternetExplorer as InternetExplorer;
+      
+      if(shDocVwInternetExplorer == null)
       {
-        internetExplorer = (InternetExplorer) shDocVwInternetExplorer;
-      }
-      catch(InvalidCastException)
-      {
-        throw new ArgumentException("SHDocVwInternetExplorer needs to be of type SHDocVw.InternetExplorer");
+        throw new ArgumentException("SHDocVwInternetExplorer needs to be of type Interop.SHDocVw.InternetExplorer");
       }
 
       InitIEAndStartDialogWatcher(internetExplorer);
@@ -772,6 +983,7 @@ namespace WatiN.Core
     /// Waits till the webpage, it's frames and all it's elements are loaded. This
     /// function is called by WatiN after each action (like clicking a link) so you
     /// should have to use this function on rare occasions.
+    /// To change the default time out, set <see cref="IE.Settings.WaitForCompleteTimeOut"/>
     /// </summary>
     public override void WaitForComplete()
     {
@@ -842,7 +1054,7 @@ namespace WatiN.Core
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     public HtmlDialog HtmlDialog(Attribute findBy)
     {
-      return findHtmlDialog(findBy, waitForWindowTime);
+      return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
     }
 
     /// <summary>
