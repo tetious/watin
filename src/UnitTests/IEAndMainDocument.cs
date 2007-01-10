@@ -1218,5 +1218,24 @@ namespace WatiN.UnitTests
       Assert.AreEqual(30, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
       Assert.AreEqual(30, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
     }
+    
+    [Test]
+    public void IESettingsShouldReturnDefaults()
+    {
+      Assert.IsNotNull((IE.Settings), "Should not be null");
+      
+      AssertDefaults(IE.Settings);
+    }
+    
+    [Test]
+    public void SetIESettings()
+    {
+      Settings settings = new Settings();
+      Assert.AreNotEqual(111, IE.Settings.AttachToIETimeOut);
+      settings.AttachToIETimeOut = 111;
+      
+      IE.Settings = settings;
+      Assert.AreEqual(111, IE.Settings.AttachToIETimeOut);
+    }
   }
 }
