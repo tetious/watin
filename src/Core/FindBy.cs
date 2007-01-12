@@ -458,6 +458,36 @@ namespace WatiN.Core
     public Text(Regex regex) : base(attributeName, regex)
     {}
   }
+  
+  /// <summary>
+  /// Class to find an element by it's style property color.
+  /// </summary>
+  /// The following code examples show how to use this class.
+  /// <example>
+  /// <code>ie.Span(new StyleAttribute("color", "red"))</code>
+  /// or use
+  /// <code>ie.Span(Find.ByStyle("color", "red"))</code>
+  /// </example>
+  public class StyleAttribute : Attribute
+  {
+    private const string attributeName = "style.";
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Text"/> class.
+    /// </summary>
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="value">The value it should match.</param>
+    public StyleAttribute(string styleAttributeName, string value) : base(attributeName + styleAttributeName, value)
+    {}
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Text"/> class.
+    /// </summary>
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="regex">The regex.</param>
+    public StyleAttribute(string styleAttributeName, Regex regex) : base(attributeName + styleAttributeName, regex)
+    {}
+  }
 
   /// <summary>
   /// Class to find a label element placed for an element.
@@ -865,6 +895,31 @@ namespace WatiN.Core
     public static Attribute ByCustom(string attributeName, Regex regex)
     {
       return new Attribute(attributeName, regex);
+    }
+
+    /// <summary>
+    /// Find an element by a style attribute.
+    /// </summary>
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="value">The exact matching value of the attribute.</param>
+    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <example>
+    /// 	<code>ie.Span(Find.ByStyle("background-color", "red"))</code>
+    /// </example>
+    public static StyleAttribute ByStyle(string styleAttributeName, string value)
+    {
+      return new StyleAttribute(styleAttributeName, value);
+    }
+    
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="value">Regular expression to find a matching value of the given style attribute.</param>
+    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <example>
+    /// 	<code>ie.Link(Find.ByStyle("font-family", new Regex("pattern goes here")))</code>
+    /// </example>
+    public static StyleAttribute ByStyle(string styleAttributeName, Regex value)
+    {
+      return new StyleAttribute(styleAttributeName, value);
     }
   } 
 }

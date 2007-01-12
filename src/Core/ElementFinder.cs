@@ -243,7 +243,16 @@ namespace WatiN.Core
         return element.style.cssText;
       }
 
-      object attribute = element.getAttribute(attributename, 0);
+      object attribute;
+      
+      if (attributename.ToLower().StartsWith("style."))
+      {
+        attribute = Style.GetAttributeValue(attributename.Substring(6), element.style); 
+      }
+      else
+      {
+        attribute = element.getAttribute(attributename, 0);
+      }
 
       if (attribute == DBNull.Value)
       {

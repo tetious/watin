@@ -1239,3 +1239,5 @@ namespace WatiN.UnitTests
     }
   }
 }
+// TODO: Add unittest to see if Settings properties are used in code.
+// TODO: Add unittest to assert Element.GetAttributeValue("style")

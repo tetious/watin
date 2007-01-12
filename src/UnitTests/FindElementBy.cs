@@ -109,6 +109,25 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void FindByStyle()
+    {
+      const string attributeName = "background-color";
+      StyleAttribute value = Find.ByStyle(attributeName,"red");
+      
+      Assert.IsInstanceOfType(typeof(Attribute), value, "StyleAttribute class should inherit Attribute class" );
+
+      const string fullAttributeName = "style.background-color";
+      Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
+      Assert.AreEqual("red", value.Value, "Wrong value");
+      
+      Regex regex = new Regex("een$");
+      value = Find.ByStyle(attributeName, regex);
+      TestAttributeBag attributeBag = new TestAttributeBag(fullAttributeName, "green");
+
+      Assert.IsTrue(value.Compare(attributeBag), "Regex een$ should match");
+    }
+
+    [Test]
     public void FindByUrl()
     {
       string url = WatiNURI.ToString();
@@ -818,6 +837,26 @@ namespace WatiN.UnitTests
       ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement)mockIHtmlElement.MockInstance);
       
       Assert.AreEqual(cssText, attributeBag.GetValue("style"));
+
+      mockIHtmlElement.Verify();
+      mockIStyle.Verify();
+    }
+    
+    [Test]
+    public void StyleDotStyleAttributeNameShouldReturnStyleAttribute()
+    {
+      const string styleAttributeValue = "white";
+      const string styleAttributeName = "color";
+
+      DynamicMock mockIStyle = new DynamicMock(typeof(IHTMLStyle));
+      mockIStyle.ExpectAndReturn("getAttribute", styleAttributeValue, styleAttributeName, 0);
+
+      DynamicMock mockIHtmlElement = new DynamicMock(typeof(IHTMLElement));
+      mockIHtmlElement.ExpectAndReturn("get_style", mockIStyle.MockInstance);
+
+      ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement)mockIHtmlElement.MockInstance);
+      
+      Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
 
       mockIHtmlElement.Verify();
       mockIStyle.Verify();

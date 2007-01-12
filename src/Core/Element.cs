@@ -116,10 +116,10 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the text of this element (and the text of all the elements contained
+    /// Gets the innertext of this element (and the innertext of all the elements contained
     /// in this element).
     /// </summary>
-    /// <value>The text.</value>
+    /// <value>The innertext.</value>
     public virtual string Text
     {
       get { return htmlElement.innerText; }
@@ -701,13 +701,8 @@ namespace WatiN.Core
       {
         throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
       }
-      
-      if (attributeName.IndexOf(Char.Parse("-")) > 0 )
-      {
-        attributeName = attributeName.Replace("-", "");
-      }
-      
-      object attribute = style.getAttribute(attributeName, 0);
+
+      object attribute = GetAttributeValue(attributeName, style);
 
       if (attribute == DBNull.Value || attribute == null)
       {
@@ -715,6 +710,16 @@ namespace WatiN.Core
       }
 
       return attribute.ToString();
+    }
+
+    internal static object GetAttributeValue(string attributeName, IHTMLStyle style)
+    {
+      if (attributeName.IndexOf(Char.Parse("-")) > 0 )
+      {
+        attributeName = attributeName.Replace("-", "");
+      }
+
+      return style.getAttribute(attributeName, 0);
     }
   }
 }
