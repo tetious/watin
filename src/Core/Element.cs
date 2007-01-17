@@ -557,7 +557,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Waits until the element exists. Wait will time out after 30 seconds.
+    /// Waits until the element exists or will time out after 30 seconds.
     /// To change the default time out, set <see cref="IE.Settings.WaitUntilExistsTimeOut"/>
     /// </summary>
     public void WaitUntilExists()
