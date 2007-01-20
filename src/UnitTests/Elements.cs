@@ -1157,6 +1157,16 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TextFieldTypTextShouldHandleNewLineInputCorrect()
+    {
+      TextField textfieldName = ie.TextField("Textarea1");
+      string textWithNewLine = "Line1" + Environment.NewLine + "Line2";
+      
+      textfieldName.TypeText(textWithNewLine);
+      Assert.AreEqual(textWithNewLine, textfieldName.Value);
+    }
+
+    [Test]
     public void TextFieldTest()
     {
       const string value = "Hello world!";

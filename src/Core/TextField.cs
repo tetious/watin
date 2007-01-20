@@ -119,6 +119,8 @@ namespace WatiN.Core
       if (!Enabled) { throw new ElementDisabledException(ToString()); }
       if (ReadOnly) { throw new ElementReadOnlyException(ToString()); }
       
+      value = value.Replace(System.Environment.NewLine, "\r");
+
       Highlight(true);
       Focus();
       if (!append) Select();
