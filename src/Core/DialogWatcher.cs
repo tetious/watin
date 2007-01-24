@@ -732,8 +732,10 @@ namespace WatiN.Core.DialogHandlers
     {      
       if (IsFileUploadDialog(window))
       {
-        NativeMethods.SetForegroundWindow(window.Hwnd);
-        NativeMethods.SetActiveWindow(window.Hwnd);
+        IntPtr usernameControlHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "Edit");
+
+        NativeMethods.SetForegroundWindow(usernameControlHandle);
+        NativeMethods.SetActiveWindow(usernameControlHandle);
 
         System.Windows.Forms.SendKeys.SendWait(fileName + "{ENTER}");
         return true;
