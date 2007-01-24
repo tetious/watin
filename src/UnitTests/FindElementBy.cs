@@ -673,19 +673,24 @@ namespace WatiN.UnitTests
     {
       Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
-      TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
-      attributeBag.Add("value", "Cancel");
-      Assert.IsTrue(findBy.Compare(attributeBag));
+      DynamicMock mockIAttributeBag = new DynamicMock(typeof(IAttributeBag));
+      mockIAttributeBag.ExpectAndReturn("GetValue", "X", "name");
+      mockIAttributeBag.ExpectAndReturn("GetValue", "Cancel", "value");
+
+      Assert.IsTrue(findBy.Compare((IAttributeBag)mockIAttributeBag.MockInstance));
+      mockIAttributeBag.Verify();
     }
 
     [Test]
-    public void AndFalseFirst()
+    public void AndFalseFirstSoSecondPartShouldNotBeEvaluated()
     {
       Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
-      TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
-      attributeBag.Add("value", "Cancel");
-      Assert.IsFalse(findBy.Compare(attributeBag));
+      DynamicMock mockIAttributeBag = new DynamicMock(typeof(IAttributeBag));
+      mockIAttributeBag.ExpectAndReturn("GetValue", "Y", "name");
+
+      Assert.IsFalse(findBy.Compare((IAttributeBag)mockIAttributeBag.MockInstance));
+      mockIAttributeBag.Verify();
     }
 
     [Test]
