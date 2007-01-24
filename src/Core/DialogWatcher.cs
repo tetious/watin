@@ -616,8 +616,12 @@ namespace WatiN.Core.DialogHandlers
     {
       if (IsLogonDialog(window))
       {
-        NativeMethods.SetForegroundWindow(window.Hwnd);
-        NativeMethods.SetActiveWindow(window.Hwnd);
+        // Find Handle of the "Frame" and then the combo username entry box inside the frame
+        IntPtr inputFrameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
+        IntPtr usernameControlHandle = NativeMethods.GetChildWindowHwnd(inputFrameHandle, "ComboBoxEx32");
+
+        NativeMethods.SetActiveWindow(usernameControlHandle);
+        NativeMethods.SetForegroundWindow(usernameControlHandle);
 
         System.Windows.Forms.SendKeys.SendWait(userName + "{TAB}");
         Thread.Sleep(500);
