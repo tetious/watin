@@ -22,10 +22,11 @@ using System.Text.RegularExpressions;
 using System.Threading;
 
 using NUnit.Framework;
-
+using NUnit.Mocks;
 using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using Attribute=WatiN.Core.Attribute;
 
@@ -1236,6 +1237,38 @@ namespace WatiN.UnitTests
       
       IE.Settings = settings;
       Assert.AreEqual(111, IE.Settings.AttachToIETimeOut);
+    }
+  }
+
+  [TestFixture]
+  public class LoggerTests
+  {
+    [Test]
+    public void SettingLogWriterToNullShouldReturnNoLogClass()
+    {
+      Logger.LogWriter = null;
+      Assert.IsInstanceOfType(typeof(NoLog), Logger.LogWriter);
+    }
+
+    [Test]
+    public void SettingLogWriterShouldReturnThatLogWriter()
+    {
+      Logger.LogWriter = new DebugLogWriter();
+      Assert.IsInstanceOfType(typeof(DebugLogWriter), Logger.LogWriter);
+    }
+
+    [Test]
+    public void LogActionShoulCallLogActionOnLogWriterInstance()
+    {
+      const string Message = "Call LogAction on mock";
+      
+      DynamicMock mockILogWriter = new DynamicMock(typeof(ILogWriter));
+      mockILogWriter.Expect("LogAction", Message);
+
+      Logger.LogWriter = (ILogWriter) mockILogWriter.MockInstance;
+      Logger.LogAction(Message);
+
+      mockILogWriter.Verify();
     }
   }
 }

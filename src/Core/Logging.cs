@@ -41,10 +41,7 @@ namespace WatiN.Core.Logging
     /// <param name="message">The message.</param>
     public static void LogAction(string message)
     {
-      if (mLogWriter != null)
-      {
-        LogWriter.LogAction(message);
-      }
+      LogWriter.LogAction(message);
     }
 
     /// <summary>
@@ -55,6 +52,10 @@ namespace WatiN.Core.Logging
     {
       get
       {
+        if (mLogWriter == null)
+        {
+          mLogWriter = new NoLog();
+        }
         return mLogWriter;
       }
       set
@@ -62,8 +63,19 @@ namespace WatiN.Core.Logging
         mLogWriter = value;
       }
     }
+
   }
   
+  public class NoLog : ILogWriter
+  {
+    #region ILogWriter Members
+
+    public void LogAction(string message)
+    {}
+
+    #endregion
+  }
+
   /// <summary>
   /// This logger class writes it's output to the debug window.
   /// </summary>
