@@ -1,0 +1,40 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{71E25CBF-074E-4B15-A42C-22D23BB3CEBF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>package</OutputType>
+    <RootNamespace>WatiN.setup</RootNamespace>
+    <OutputName>WatiN.setup</OutputName>
+    <WixToolPath Condition=" '$(WixToolPath)' == '' ">$(SharpDevelopBinPath)\Tools\Wix</WixToolPath>
+    <ToolPath Condition=" '$(ToolPath)' == '' ">$(WixToolPath)</ToolPath>
+    <WixMSBuildExtensionsPath Condition=" '$(WixMSBuildExtensionsPath)' == '' ">$(SharpDevelopBinPath)\Tools\Wix</WixMSBuildExtensionsPath>
+    <LocalizedStringFile>..\..\..\..\..\..\Program Files\SharpDevelop\2.1\bin\Tools\Wix\WixUI_en-us.wxl</LocalizedStringFile>
+    <DefineConstants>var.distdir=C:\TAdev\WatiN\trunk\build\net-1.1\dist\;var.productname=WatiN 0.9.5 for .Net 1.1;var.productversion=0.9.5.4000</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="files.wxs" />
+    <Compile Include="Setup.wxs" />
+    <None Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="WixTasks">
+      <HintPath>..\..\..\..\..\..\Program Files\SharpDevelop\2.1\bin\Tools\Wix\WixTasks.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <WixLibrary Include="..\..\..\..\..\..\Program Files\SharpDevelop\2.1\bin\Tools\Wix\wixui.wixlib" />
+  </ItemGroup>
+  <Import Project="$(WixMSBuildExtensionsPath)\wix.targets" />
+</Project>

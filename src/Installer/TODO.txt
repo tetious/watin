@@ -1,0 +1,6 @@
+Make WatiN available in references dialog (without registering it into the GAC)
+- info: http://software.gurock.com/postings/integrating-assemblies-into-visual-studio-and-delphi/54/
+
+Make installer merge WatiN msdn help with Visual Studio help so WatiN help can be accessed from 
+within Visual Studio.
+

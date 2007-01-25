@@ -1,0 +1,175 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Fragment Id="FilesFragment">
+		<DirectoryRef Id="TARGETDIR">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLDIR" Name="WatiN">
+					<Directory Id="NewDirectory" LongName="0.9.5-Net-1.1" Name="095net11">
+						<Component Guid="1F5AC040-AFDE-4C2E-A53C-EFCFF16B1D2F" Id="LicenseTxt" DiskId="1">
+							<File Source="$(var.distdir)License.txt" Name="License.txt" Id="License.txt" Vital="yes" />
+						</Component>
+						<Component Guid="558AAF09-4747-4E61-9329-9F3C32A19A0A" Id="ReadmeTxt" DiskId="1">
+							<File Source="$(var.distdir)Readme.txt" Name="Readme.txt" Id="Readme.txt" />
+						</Component>
+						<Component Guid="4EA46262-7CC3-40AC-8650-930BEF2632FE" Id="ReleaseHistoryTxt" DiskId="1">
+							<File Source="$(var.distdir)ReleaseHistory.txt" Name="RELEAS_1.TXT" Id="ReleaseHistory.txt" LongName="ReleaseHistory.txt" />
+						</Component>
+						<Component Guid="02BCCF5B-DE87-4F93-BA5C-D8C4339DB271" Id="WatiNChm" DiskId="1">
+							<File Source="$(var.distdir)WatiN.chm" Name="WatiN.chm" Id="WatiN.chm" />
+						</Component>
+						<Directory Id="bin" Name="bin">
+							<Component Guid="78A823DB-871D-4AA5-B6BC-966BDDF215F6" Id="Microsoft.mshtmlDll" DiskId="1">
+								<File Source="$(var.distdir)bin\Microsoft.mshtml.dll" Name="MICROS_1.DLL" Id="Microsoft.mshtml.dll" LongName="Microsoft.mshtml.dll" Assembly=".net" AssemblyApplication="Microsoft.mshtml.dll" AssemblyManifest="Microsoft.mshtml.dll" KeyPath="yes" Vital="yes" />
+							</Component>
+							<Component Guid="BC78D455-C134-4D1A-AD9C-EFC9FD1ECE3E" Id="Interop.SHDocVwDll" DiskId="1">
+								<File Source="$(var.distdir)bin\Interop.SHDocVw.dll" Name="INTERO_1.DLL" Id="Interop.SHDocVw.dll" LongName="Interop.SHDocVw.dll" Assembly=".net" AssemblyApplication="Interop.SHDocVw.dll" AssemblyManifest="Interop.SHDocVw.dll" KeyPath="yes" Vital="yes" />
+							</Component>
+							<Component Guid="A7585AAA-FD73-4596-AA16-7CAB6F619C9C" Id="WatiN.CoreDll" DiskId="1">
+								<File Source="$(var.distdir)bin\WatiN.Core.dll" Name="WATINC_1.DLL" Id="WatiN.Core.dll" LongName="WatiN.Core.dll" Assembly=".net" AssemblyApplication="WatiN.Core.dll" AssemblyManifest="WatiN.Core.dll" KeyPath="yes" Vital="yes" />
+							</Component>
+							<Component Guid="54106FFC-B558-46EE-BD14-E06E2C6D52E1" Id="WatiN.Core.UnitTestsDll" DiskId="1">
+								<File Source="$(var.distdir)bin\WatiN.Core.UnitTests.dll" Name="WATINC_2.DLL" Id="WatiN.Core.UnitTests.dll" LongName="WatiN.Core.UnitTests.dll" Assembly=".net" AssemblyApplication="WatiN.Core.UnitTests.dll" AssemblyManifest="WatiN.Core.UnitTests.dll" KeyPath="yes" />
+							</Component>
+							<Component Guid="A37BD5B1-82FC-4D9F-A033-A93C9A5B5390" Id="WatiN.Core.UnitTests.dllConfig" DiskId="1">
+								<File Source="$(var.distdir)bin\WatiN.Core.UnitTests.dll.config" Name="WATINC_1.CON" Id="WatiN.Core.UnitTests.dll.config" LongName="WatiN.Core.UnitTests.dll.config" />
+							</Component>
+							<Directory Id="binhtml" Name="html">
+								<Component Guid="0D7542BA-4551-418A-AD14-1766A8485560" Id="binhtml" DiskId="1">
+									<File Source="$(var.distdir)bin\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="CrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />
+									<File Source="$(var.distdir)bin\html\formsubmit.html" Name="FORMSU_1.HTM" Id="formsubmit.html" LongName="formsubmit.html" />
+									<File Source="$(var.distdir)bin\html\Frameset.html" Name="FRAMESET.HTM" Id="Frameset.html" LongName="Frameset.html" />
+									<File Source="$(var.distdir)bin\html\FramesetWithinFrameset.html" Name="FRAMES_1.HTM" Id="FramesetWithinFrameset.html" LongName="FramesetWithinFrameset.html" />
+									<File Source="$(var.distdir)bin\html\images.html" Name="IMAGES.HTM" Id="images.html" LongName="images.html" />
+									<File Source="$(var.distdir)bin\html\Index.html" Name="INDEX.HTM" Id="Index.html" LongName="Index.html" />
+									<File Source="$(var.distdir)bin\html\main.html" Name="MAIN.HTM" Id="main.html" LongName="main.html" />
+									<File Source="$(var.distdir)bin\html\popup.html" Name="POPUP.HTM" Id="popup.html" LongName="popup.html" />
+									<File Source="$(var.distdir)bin\html\TestEvents.html" Name="TESTEV_1.HTM" Id="TestEvents.html" LongName="TestEvents.html" />
+								</Component>
+								<Directory Id="biniframes" Name="iframes">
+									<Component Guid="3A5AB06C-1652-4636-A083-2590E311C03A" Id="binhtmliframes" DiskId="1">
+										<File Source="$(var.distdir)bin\html\iframes\leftpage.html" Name="LEFTPAGE.HTM" Id="leftpage.html" LongName="leftpage.html" />
+										<File Source="$(var.distdir)bin\html\iframes\main.html" Name="MAIN.HTM" Id="iframes.main.html" LongName="main.html" />
+										<File Source="$(var.distdir)bin\html\iframes\middlepage.html" Name="MIDDLE_1.HTM" Id="middlepage.html" LongName="middlepage.html" />
+										<File Source="$(var.distdir)bin\html\iframes\rightpage.html" Name="RIGHTP_1.HTM" Id="rightpage.html" LongName="rightpage.html" />
+									</Component>
+								</Directory>
+								<Directory Id="binimages" Name="images">
+									<Component Guid="A4AFC6B8-B833-4F94-A11D-F87707BF934E" Id="binhtmlimages" DiskId="1">
+										<File Source="$(var.distdir)bin\html\images\watin.jpg" Name="watin.jpg" Id="watin.jpg" />
+										<File Source="$(var.distdir)bin\html\images\watinwebsite.jpg" Name="WATINW_1.JPG" Id="watinwebsite.jpg" LongName="watinwebsite.jpg" />
+									</Component>
+								</Directory>
+							</Directory>
+						</Directory>
+						<Directory Id="src" Name="src">
+							<Component Guid="128AB123-D98F-48EC-A5CC-6DFD911B8A5A" Id="WatiNSln" DiskId="1">
+								<File Source="$(var.distdir)src\WatiN.sln" Name="WatiN.sln" Id="WatiN.sln" />
+							</Component>
+							<Directory Id="Core" Name="Core">
+								<Component Guid="DD7B6772-5EBD-4BB2-A3AC-7F5B5E49317F" Id="CoreSource" DiskId="1">
+									<File Source="$(var.distdir)src\Core\AssemblyInfo.cs" Name="ASSEMB_1.CS" Id="AssemblyInfo.cs" LongName="AssemblyInfo.cs" />
+									<File Source="$(var.distdir)src\Core\BaseElementCollection.cs" Name="BASEEL_1.CS" Id="BaseElementCollection.cs" LongName="BaseElementCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Button.cs" Name="Button.cs" Id="Button.cs" />
+									<File Source="$(var.distdir)src\Core\ButtonCollection.cs" Name="BUTTON_1.CS" Id="ButtonCollection.cs" LongName="ButtonCollection.cs" />
+									<File Source="$(var.distdir)src\Core\CheckBox.cs" Name="CheckBox.cs" Id="CheckBox.cs" />
+									<File Source="$(var.distdir)src\Core\CheckBoxCollection.cs" Name="CHECKB_1.CS" Id="CheckBoxCollection.cs" LongName="CheckBoxCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Core.csproj" Name="CORE.CSP" Id="Core.csproj" LongName="Core.csproj" />
+									<File Source="$(var.distdir)src\Core\DialogWatcher.cs" Name="DIALOG_1.CS" Id="DialogWatcher.cs" LongName="DialogWatcher.cs" />
+									<File Source="$(var.distdir)src\Core\Div.cs" Name="Div.cs" Id="Div.cs" />
+									<File Source="$(var.distdir)src\Core\DivCollection.cs" Name="DIVCOL_1.CS" Id="DivCollection.cs" LongName="DivCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Document.cs" Name="Document.cs" Id="Document.cs" />
+									<File Source="$(var.distdir)src\Core\DomContainer.cs" Name="DOMCON_1.CS" Id="DomContainer.cs" LongName="DomContainer.cs" />
+									<File Source="$(var.distdir)src\Core\Element.cs" Name="Element.cs" Id="Element.cs" />
+									<File Source="$(var.distdir)src\Core\ElementCollection.cs" Name="ELEMEN_1.CS" Id="ElementCollection.cs" LongName="ElementCollection.cs" />
+									<File Source="$(var.distdir)src\Core\ElementFinder.cs" Name="ELEMEN_2.CS" Id="ElementFinder.cs" LongName="ElementFinder.cs" />
+									<File Source="$(var.distdir)src\Core\ElementsContainer.cs" Name="ELEMEN_3.CS" Id="ElementsContainer.cs" LongName="ElementsContainer.cs" />
+									<File Source="$(var.distdir)src\Core\ElementsSupport.cs" Name="ELEMEN_4.CS" Id="ElementsSupport.cs" LongName="ElementsSupport.cs" />
+									<File Source="$(var.distdir)src\Core\Exceptions.cs" Name="EXCEPT_1.CS" Id="Exceptions.cs" LongName="Exceptions.cs" />
+									<File Source="$(var.distdir)src\Core\FileUpload.cs" Name="FILEUP_1.CS" Id="FileUpload.cs" LongName="FileUpload.cs" />
+									<File Source="$(var.distdir)src\Core\FileUploadCollection.cs" Name="FILEUP_2.CS" Id="FileUploadCollection.cs" LongName="FileUploadCollection.cs" />
+									<File Source="$(var.distdir)src\Core\FindBy.cs" Name="FindBy.cs" Id="FindBy.cs" />
+									<File Source="$(var.distdir)src\Core\Form.cs" Name="Form.cs" Id="Form.cs" />
+									<File Source="$(var.distdir)src\Core\FormCollection.cs" Name="FORMCO_1.CS" Id="FormCollection.cs" LongName="FormCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Frame.cs" Name="Frame.cs" Id="Frame.cs" />
+									<File Source="$(var.distdir)src\Core\FrameCollection.cs" Name="FRAMEC_1.CS" Id="FrameCollection.cs" LongName="FrameCollection.cs" />
+									<File Source="$(var.distdir)src\Core\HTMLDialog.cs" Name="HTMLDI_1.CS" Id="HTMLDialog.cs" LongName="HTMLDialog.cs" />
+									<File Source="$(var.distdir)src\Core\HTMLDialogCollection.cs" Name="HTMLDI_2.CS" Id="HTMLDialogCollection.cs" LongName="HTMLDialogCollection.cs" />
+									<File Source="$(var.distdir)src\Core\IE.cs" Name="IE.cs" Id="IE.cs" />
+									<File Source="$(var.distdir)src\Core\IECollection.cs" Name="IECOLL_1.CS" Id="IECollection.cs" LongName="IECollection.cs" />
+									<File Source="$(var.distdir)src\Core\IElementsContainer.cs" Name="IELEME_1.CS" Id="IElementsContainer.cs" LongName="IElementsContainer.cs" />
+									<File Source="$(var.distdir)src\Core\Image.cs" Name="Image.cs" Id="Image.cs" />
+									<File Source="$(var.distdir)src\Core\ImageCollection.cs" Name="IMAGEC_1.CS" Id="ImageCollection.cs" LongName="ImageCollection.cs" />
+									<File Source="$(var.distdir)src\Core\ITextElement.cs" Name="ITEXTE_1.CS" Id="ITextElement.cs" LongName="ITextElement.cs" />
+									<File Source="$(var.distdir)src\Core\Label.cs" Name="Label.cs" Id="Label.cs" />
+									<File Source="$(var.distdir)src\Core\LabelCollection.cs" Name="LABELC_1.CS" Id="LabelCollection.cs" LongName="LabelCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Link.cs" Name="Link.cs" Id="Link.cs" />
+									<File Source="$(var.distdir)src\Core\LinkCollection.cs" Name="LINKCO_1.CS" Id="LinkCollection.cs" LongName="LinkCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Logging.cs" Name="Logging.cs" Id="Logging.cs" />
+									<File Source="$(var.distdir)src\Core\Para.cs" Name="Para.cs" Id="Para.cs" />
+									<File Source="$(var.distdir)src\Core\ParaCollection.cs" Name="PARACO_1.CS" Id="ParaCollection.cs" LongName="ParaCollection.cs" />
+									<File Source="$(var.distdir)src\Core\RadioButton.cs" Name="RADIOB_1.CS" Id="RadioButton.cs" LongName="RadioButton.cs" />
+									<File Source="$(var.distdir)src\Core\RadioButtonCollection.cs" Name="RADIOB_2.CS" Id="RadioButtonCollection.cs" LongName="RadioButtonCollection.cs" />
+									<File Source="$(var.distdir)src\Core\RadioCheck.cs" Name="RADIOC_1.CS" Id="RadioCheck.cs" LongName="RadioCheck.cs" />
+									<File Source="$(var.distdir)src\Core\SelectList.cs" Name="SELECT_1.CS" Id="SelectList.cs" LongName="SelectList.cs" />
+									<File Source="$(var.distdir)src\Core\SelectListCollection.cs" Name="SELECT_2.CS" Id="SelectListCollection.cs" LongName="SelectListCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Span.cs" Name="Span.cs" Id="Span.cs" />
+									<File Source="$(var.distdir)src\Core\SpanCollection.cs" Name="SPANCO_1.CS" Id="SpanCollection.cs" LongName="SpanCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Table.cs" Name="Table.cs" Id="Table.cs" />
+									<File Source="$(var.distdir)src\Core\TableCell.cs" Name="TABLEC_1.CS" Id="TableCell.cs" LongName="TableCell.cs" />
+									<File Source="$(var.distdir)src\Core\TableCellCollection.cs" Name="TABLEC_2.CS" Id="TableCellCollection.cs" LongName="TableCellCollection.cs" />
+									<File Source="$(var.distdir)src\Core\TableCollection.cs" Name="TABLEC_3.CS" Id="TableCollection.cs" LongName="TableCollection.cs" />
+									<File Source="$(var.distdir)src\Core\TableRow.cs" Name="TableRow.cs" Id="TableRow.cs" />
+									<File Source="$(var.distdir)src\Core\TableRowCollection.cs" Name="TABLER_1.CS" Id="TableRowCollection.cs" LongName="TableRowCollection.cs" />
+									<File Source="$(var.distdir)src\Core\TableSectionCollection.cs" Name="TABLES_1.CS" Id="TableSectionCollection.cs" LongName="TableSectionCollection.cs" />
+									<File Source="$(var.distdir)src\Core\TextField.cs" Name="TEXTFI_1.CS" Id="TextField.cs" LongName="TextField.cs" />
+									<File Source="$(var.distdir)src\Core\TextFieldCollection.cs" Name="TEXTFI_2.CS" Id="TextFieldCollection.cs" LongName="TextFieldCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Utils.cs" Name="Utils.cs" Id="Utils.cs" />
+									<File Source="$(var.distdir)src\Core\Win32.cs" Name="Win32.cs" Id="Win32.cs" />
+								</Component>
+							</Directory>
+							<Directory Id="UnitTests" Name="UnitTest" LongName="UnitTests">
+								<Component Guid="8045498F-4A16-493C-BA94-5FB4BEBA0B28" Id="UnitTestsSource" DiskId="1">
+									<File Source="$(var.distdir)src\UnitTests\AssemblyInfo.cs" Name="ASSEMB_1.CS" Id="UnitTests.AssemblyInfo.cs" LongName="AssemblyInfo.cs" />
+									<File Source="$(var.distdir)src\UnitTests\Elements.cs" Name="Elements.cs" Id="Elements.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FindElementBy.cs" Name="FINDEL_1.CS" Id="FindElementBy.cs" LongName="FindElementBy.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FrameTests.cs" Name="FRAMET_1.CS" Id="FrameTests.cs" LongName="FrameTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\IEAndMainDocument.cs" Name="IEANDM_1.CS" Id="IEAndMainDocument.cs" LongName="IEAndMainDocument.cs" />
+									<File Source="$(var.distdir)src\UnitTests\UnitTests.csproj" Name="UNITTE_1.CSP" Id="UnitTests.csproj" LongName="UnitTests.csproj" />
+									<File Source="$(var.distdir)src\UnitTests\Utils.cs" Name="Utils.cs" Id="UnitTests.Utils.cs" />
+									<File Source="$(var.distdir)src\UnitTests\WatiN.Core.UnitTests.dll.config" Name="WATINC_1.CON" Id="UnitTests.WatiN.Core.UnitTests.dll.config" LongName="WatiN.Core.UnitTests.dll.config" />
+									<File Source="$(var.distdir)src\UnitTests\WatiNTest.cs" Name="WATINT_1.CS" Id="WatiNTest.cs" LongName="WatiNTest.cs" />
+								</Component>
+								<Directory Id="html" Name="html">
+									<Component Guid="BC27B511-C0C8-4C22-A333-FAB5ADC1E6F2" Id="UnitTestsHTML" DiskId="1">
+										<File Source="$(var.distdir)src\UnitTests\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="html.CrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\formsubmit.html" Name="FORMSU_1.HTM" Id="html.formsubmit.html" LongName="formsubmit.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Frameset.html" Name="FRAMESET.HTM" Id="html.Frameset.html" LongName="Frameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\FramesetWithinFrameset.html" Name="FRAMES_1.HTM" Id="html.FramesetWithinFrameset.html" LongName="FramesetWithinFrameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\images.html" Name="IMAGES.HTM" Id="html.images.html" LongName="images.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Index.html" Name="INDEX.HTM" Id="html.Index.html" LongName="Index.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\main.html" Name="MAIN.HTM" Id="html.main.html" LongName="main.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\popup.html" Name="POPUP.HTM" Id="html.popup.html" LongName="popup.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\TestEvents.html" Name="TESTEV_1.HTM" Id="html.TestEvents.html" LongName="TestEvents.html" />
+									</Component>
+									<Directory Id="iframes" Name="iframes">
+										<Component Guid="B907AE90-C171-44BE-A916-4A6D08945EE4" Id="UnitTestsHTMLIframes" DiskId="1">
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\leftpage.html" Name="LEFTPAGE.HTM" Id="iframes.leftpage.html" LongName="leftpage.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\main.html" Name="MAIN.HTM" Id="iframes.main1.html" LongName="main.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\middlepage.html" Name="MIDDLE_1.HTM" Id="iframes.middlepage.html" LongName="middlepage.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\rightpage.html" Name="RIGHTP_1.HTM" Id="iframes.rightpage.html" LongName="rightpage.html" />
+										</Component>
+									</Directory>
+									<Directory Id="images" Name="images">
+										<Component Guid="7A588571-FA8D-4C02-B105-F1BC8957B119" Id="UnitTestsHTMLImages" DiskId="1">
+											<File Source="$(var.distdir)src\UnitTests\html\images\watin.jpg" Name="watin.jpg" Id="images.watin.jpg" />
+											<File Source="$(var.distdir)src\UnitTests\html\images\watinwebsite.jpg" Name="WATINW_1.JPG" Id="images.watinwebsite.jpg" LongName="watinwebsite.jpg" />
+										</Component>
+									</Directory>
+								</Directory>
+							</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</DirectoryRef>
+	</Fragment>
+</Wix>
