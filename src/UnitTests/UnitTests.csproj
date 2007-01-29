@@ -90,6 +90,16 @@
                     AssemblyName = "nunit.mocks"
                     HintPath = "..\..\lib\Net\1.1\nunit.mocks.dll"
                 />
+                <Reference
+                    Name = "NAnt.Core"
+                    AssemblyName = "NAnt.Core"
+                    HintPath = "..\..\tools\NAnt\NAnt.Core.dll"
+                />
+                <Reference
+                    Name = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
+                    AssemblyName = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
+                    HintPath = "..\..\tools\WiX\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll"
+                />
             </References>
         </Build>
         <Files>

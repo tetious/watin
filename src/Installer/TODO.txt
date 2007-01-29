@@ -4,3 +4,9 @@ Make WatiN available in references dialog (without registering it into the GAC)
 Make installer merge WatiN msdn help with Visual Studio help so WatiN help can be accessed from 
 within Visual Studio.
 
+Make the product/package guid and productversion different for the .Net 1.1 and 2.0 versions. 
+- info at http://www.tramontana.co.hu/wix/lesson4.php
+
+Add the posibillity to change the install directory.
+
+Change images used in setup

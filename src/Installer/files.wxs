@@ -3,7 +3,7 @@
 		<DirectoryRef Id="TARGETDIR">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLDIR" Name="WatiN">
-					<Directory Id="NewDirectory" LongName="0.9.5-Net-1.1" Name="095net11">
+					<Directory Id="NewDirectory" LongName="$(var.installdir.longname)" Name="$(var.installdir.name)" >
 						<Component Guid="1F5AC040-AFDE-4C2E-A53C-EFCFF16B1D2F" Id="LicenseTxt" DiskId="1">
 							<File Source="$(var.distdir)License.txt" Name="License.txt" Id="License.txt" Vital="yes" />
 						</Component>

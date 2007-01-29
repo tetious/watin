@@ -23,14 +23,18 @@
     <property name="unittests.config.name"          value="${unittests.assembly.name}.config" />
     <property name="unittests.config.file"          value="${unittests.source.dir}\${unittests.config.name}" />
 	<property name="unittests.htmlfiles.dir"        value="${unittests.source.dir}\html" />
+    <property name="unittests.run"				    value="true" readonly="false" overwrite="true"  />
     
     <property name="shdocvw.namespace"              value="SHDocVw" />
     <property name="shdocvw.assembly.name"          value="Interop.SHDocVw.dll" />
     <property name="shdocvw.typlib"                 value="${system32.dir}\shdocvw.dll" />
 
+	<property name="installer.source.dir"           value="${source.dir}\Installer\" />
+
 	<property name="tools.dir"                      value="${base.dir}\tools" />
 	<property name="ncoverexplorer.console.file"	value="${tools.dir}\NCoverExplorer\NCoverExplorer.Console.exe" />
 	<property name="ncover.console.file"	        value="${tools.dir}\NCover\NCover.Console.exe" />
+    <property name="wix.dir"                        value="${tools.dir}\WiX" />
     
 	<!-- User targets -->
 	<target name="clean" description="Delete Automated Build artifacts">
@@ -57,6 +61,7 @@
             </nowarn>
         </csc>
         <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
+        <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
         <csc debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
             <sources>
@@ -66,6 +71,7 @@
                 <include name="${pia.dir}\Microsoft.mshtml.dll"/>
                 <include name="${bin.dir}\${core.assembly.name}"/>
                 <include name="${path.nunit.framework.dll}\nunit.framework.dll"/>
+                <include name="${path.nunit.framework.dll}\nunit.mocks.dll"/>
                 <include name="System.dll"/>
             </references>
         </csc>
@@ -75,6 +81,7 @@
 
     <target name="set-net-1.1-version">
         <property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
+        <property name="net.framework.fullname"         value=".Net 1.1" />
         <property name="project.properties.define"      value="NET11" />
 	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
        	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-1.1-bin\nunit-console.exe" />
@@ -84,6 +91,7 @@
 
     <target name="set-net-2.0-version">
     	<property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
+        <property name="net.framework.fullname"         value=".Net 2.0" />
         <property name="project.properties.define"      value="NET20" />
 	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\2.0" />
        	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
@@ -97,7 +105,7 @@
         <property name="bin.dir" 			            value="${build.dir}\bin" />
         <property name="reports.dir" 			        value="${build.dir}\test-reports" />
 	    <property name="distribution.dir"               value="${build.dir}\dist" />
-	    
+	    <property name="installer.wixobj.dir"           value="${build.dir}\wixobj\" />
 	    <property name="coverage.xml.output.file" 		value="${reports.dir}\Coverage.xml" />
   	    
   	    <property name="unittests.htmlfiles.todir"      value="${bin.dir}\html"/>
@@ -126,21 +134,21 @@
 	<target name="run-unit-tests">
 		<mkdir dir="${reports.dir}" />
 		
-		<exec
+		<exec if="${unittests.run}"
 		    program="${path::get-file-name(path.nunit.console)}" basedir="${path::get-directory-name(path.nunit.console)}" workingdir="${path::get-directory-name(unittest.assembly.file)}">
 			<arg value="${unittest.assembly.file}" />
 			<arg value="/xml:${unittest.xml.output.file}" />
 		</exec>
 	</target>
 	
-	<target name="run-unit-tests-with-coverage">
+	<target name="run-unit-tests-with-coverage" >
 		<mkdir dir="${reports.dir}" />
 		
 		<exec program="regsvr32" workingdir="${path::get-directory-name(ncover.console.file)}" commandline="/s CoverLib.dll" />
 		
 		<!-- This runs NUnit through NCover.org version 1.3, giving coverage results. 
 			If you don't want to use NCover, delete this 'exec' instance, and use the plain NUnit one below -->
-		<exec 
+		<exec if="${unittests.run}"
 			program="${ncover.console.file}" 
 			workingdir="${path::get-directory-name(unittest.assembly.file)}">
 			<arg value="/w" />
@@ -281,6 +289,41 @@
 			</fileset>
 		</zip>
 	</target>
+	
+	<target name="installer" descripton="Creates the WatiN installer with WiX" >
+
+        <loadtasks assembly="${wix.dir}\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll" />
+        
+   		<mkdir dir="${installer.wixobj.dir}" />
+		<copy file="${installer.source.dir}\License.rtf" todir="${installer.wixobj.dir}" />
+
+        <property name="extension" value="${string::replace(nant.settings.currentframework, '.', '')}" />
+        <property name="extension" value="${string::replace(extension, 'net-', 'n')}" />
+        <property name="installer.installdir.name" value="${core.assembly.buildmajorminor}.${extension}" />
+        <property name="installer.file.name" value="${project.name}-${core.assembly.version}-${nant.settings.currentframework}.msi" />
+
+	    <candle out="${installer.wixobj.dir}" exedir="${wix.dir}" >
+            <defines>
+                <define name="var.distdir" value="${distribution.dir}\" />
+                <define name="var.productname" value="${project.name} ${core.assembly.buildmajorminor} for ${net.framework.fullname} " />
+                <define name="var.productversion" value="${core.assembly.version}" />
+                <define name="var.installdir.longname" value="${core.assembly.buildmajorminor}-${nant.settings.currentframework}" />
+                <define name="var.installdir.name" value="${installer.installdir.name}" />
+            </defines>
+            <sources basedir="${installer.source.dir}">
+                <include name="Setup.wxs" />
+                <include name="files.wxs" />
+            </sources>
+        </candle>
+
+        <light exedir="${wix.dir}" out="${build.dir}/${installer.file.name}" locfile="${wix.dir}/WixUI_en-us.wxl" rebuild="true">
+            <sources basedir="${installer.wixobj.dir}">
+                <include name="Setup.wixobj" />
+                <include name="files.wixobj" />
+                <include name="${wix.dir}/wixui.wixlib" />
+            </sources>
+        </light>
+	</target>
 
 	<target name="full" description="Compiles, tests, and produces distributions">
 	    <call target="full-net-1.1" />
@@ -294,6 +337,7 @@
 	    <call target="run-unit-tests-with-coverage" />
 	    <call target="ndoc" />
 	    <call target="dist" />
+	    <call target="installer"  />
 	</target>
 	    
 	<target name="full-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">
@@ -303,6 +347,7 @@
 	    <call target="run-unit-tests" />
 	    <call target="ndoc" />
 	    <call target="dist" />
+	    <call target="installer"  />
 	</target>
 
 </project>

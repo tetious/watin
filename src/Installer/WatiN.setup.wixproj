@@ -10,7 +10,7 @@
     <ToolPath Condition=" '$(ToolPath)' == '' ">$(WixToolPath)</ToolPath>
     <WixMSBuildExtensionsPath Condition=" '$(WixMSBuildExtensionsPath)' == '' ">$(SharpDevelopBinPath)\Tools\Wix</WixMSBuildExtensionsPath>
     <LocalizedStringFile>..\..\..\..\..\..\Program Files\SharpDevelop\2.1\bin\Tools\Wix\WixUI_en-us.wxl</LocalizedStringFile>
-    <DefineConstants>var.distdir=C:\TAdev\WatiN\trunk\build\net-1.1\dist\;var.productname=WatiN 0.9.5 for .Net 1.1;var.productversion=0.9.5.4000</DefineConstants>
+    <DefineConstants>var.distdir=C:\TAdev\WatiN\trunk\build\net-1.1\dist\;var.productname=WatiN 0.9.5 for .Net 1.1;var.productversion=0.9.5.4000;var.installdir.longname=0.9.5-net-1.1;var.installdir.name=095n11</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>

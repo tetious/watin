@@ -24,7 +24,7 @@
 		<UIRef Id="WixUI_FeatureTree"/>
 		<!-- Features to install -->   
 		<Feature Id="Complete" Level="1" Title="Complete" Description="All features." Display="expand">    
-			<Feature Id="Binaries" Level="1" Title="WatiN binaries" Description="Installs all required WatiN binaries." TypicalDefault="install" Display="expand">     
+			<Feature Id="Binaries" Level="1" Title="WatiN binaries" Description="Installs all required WatiN binaries. They will be installed in a version specific folder in the WatiN subfolder of the program files folder." TypicalDefault="install" Display="expand">     
 				<ComponentRef Id="LicenseTxt"/>     
 				<ComponentRef Id="ReadmeTxt"/>     
 				<ComponentRef Id="WatiN.CoreDll"/>     
