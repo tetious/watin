@@ -621,7 +621,10 @@ namespace WatiN.Core.DialogHandlers
         IntPtr usernameControlHandle = NativeMethods.GetChildWindowHwnd(inputFrameHandle, "ComboBoxEx32");
 
         NativeMethods.SetActiveWindow(usernameControlHandle);
+        Thread.Sleep(50);
+
         NativeMethods.SetForegroundWindow(usernameControlHandle);
+        Thread.Sleep(50);
 
         System.Windows.Forms.SendKeys.SendWait(userName + "{TAB}");
         Thread.Sleep(500);
