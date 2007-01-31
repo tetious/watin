@@ -56,5 +56,24 @@ namespace WatiN.Core
     public TableRow(Element element) : base(element, ElementTags)
     {}
 
+    public Table ParentTable
+    {
+      get
+      {
+        Element parentElement = Parent;
+        
+        while (!ElementTag.IsValidElement(parentElement.HTMLElement, Core.Table.ElementTags))
+        {
+          parentElement = parentElement.Parent;
+        }
+ 
+        if (parentElement != null)
+        {
+          return new Table(parentElement);
+        }
+
+        return null;
+      }
+    }
   }
 }

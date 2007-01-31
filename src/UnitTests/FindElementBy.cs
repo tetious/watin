@@ -22,7 +22,6 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using mshtml;
 using NUnit.Framework;
-using NUnit.Mocks;
 
 using WatiN.Core;
 using WatiN.Core.Interfaces;
@@ -30,6 +29,9 @@ using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
+  using System.Collections;
+  using Rhino.Mocks;
+
   [TestFixture]
   public class FindElementBy : WatiNTest
   {
@@ -93,7 +95,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FindByText()
     {
-      Text value = Find.ByText("textvalue");
+      Core.Text value = Find.ByText("textvalue");
       
       Assert.IsInstanceOfType(typeof(Attribute), value, "Text class should inherit Attribute class" );
 
@@ -410,7 +412,7 @@ namespace WatiN.UnitTests
 
     public override string Value
     {
-       get { return url; }
+      get { return url; }
     }
   }
   
@@ -663,22 +665,46 @@ namespace WatiN.UnitTests
       ElementTag elementTag = new ElementTag("tagname", "");
       Assert.IsFalse(elementTag.Compare(new object()));
     }
+
+    [Test]
+    public void IsValidElementWithNullElementShouldReturnFalse()
+    {
+      Assert.IsFalse(ElementTag.IsValidElement(null, new ArrayList()));
+    }
+
+    [Test]
+    public void IsValidElementWithObjectNotImplementingIHTMLElementShouldReturnFalse()
+    {
+      Assert.IsFalse(ElementTag.IsValidElement(new object(), new ArrayList()));
+    }
   }
   
   [TestFixture]
   public class FindByMultipleAttributes
   {
+    MockRepository mocks;
+    IAttributeBag mockAttributeBag;
+
+    [SetUp]
+    public void Setup()
+    {
+      mocks = new MockRepository();
+      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+    }
+
     [Test]
     public void AndTrue()
     {
       Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
-      DynamicMock mockIAttributeBag = new DynamicMock(typeof(IAttributeBag));
-      mockIAttributeBag.ExpectAndReturn("GetValue", "X", "name");
-      mockIAttributeBag.ExpectAndReturn("GetValue", "Cancel", "value");
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("X");
+      Expect.Call(mockAttributeBag.GetValue("value")).Return("Cancel");
+      
+      mocks.ReplayAll();
 
-      Assert.IsTrue(findBy.Compare((IAttributeBag)mockIAttributeBag.MockInstance));
-      mockIAttributeBag.Verify();
+      Assert.IsTrue(findBy.Compare(mockAttributeBag));
+
+      mocks.VerifyAll();
     }
 
     [Test]
@@ -686,11 +712,13 @@ namespace WatiN.UnitTests
     {
       Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
-      DynamicMock mockIAttributeBag = new DynamicMock(typeof(IAttributeBag));
-      mockIAttributeBag.ExpectAndReturn("GetValue", "Y", "name");
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("Y");
 
-      Assert.IsFalse(findBy.Compare((IAttributeBag)mockIAttributeBag.MockInstance));
-      mockIAttributeBag.Verify();
+      mocks.ReplayAll();
+
+      Assert.IsFalse(findBy.Compare(mockAttributeBag));
+
+      mocks.VerifyAll();
     }
 
     [Test]
@@ -828,23 +856,37 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ElementAttributeBagTests
   {
+    MockRepository mocks;
+    IHTMLStyle mockHTMLStyle;
+    IHTMLElement mockHTMLElement;
+
+    [SetUp]
+    public void SetUp()
+    {
+      mocks = new MockRepository();
+      mockHTMLStyle = (IHTMLStyle) mocks.CreateMock(typeof (IHTMLStyle));
+      mockHTMLElement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      mocks.VerifyAll();
+    }
+
     [Test]
     public void StyleAttributeShouldReturnAsString()
     {
       const string cssText = "COLOR: white; FONT-STYLE: italic";
 
-      DynamicMock mockIStyle = new DynamicMock(typeof(IHTMLStyle));
-      mockIStyle.ExpectAndReturn("get_cssText", cssText);
+      Expect.Call(mockHTMLStyle.cssText).Return(cssText);
+      Expect.Call(mockHTMLElement.style).Return(mockHTMLStyle);
 
-      DynamicMock mockIHtmlElement = new DynamicMock(typeof(IHTMLElement));
-      mockIHtmlElement.ExpectAndReturn("get_style", mockIStyle.MockInstance);
+      mocks.ReplayAll();
 
-      ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement)mockIHtmlElement.MockInstance);
+      ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
       
       Assert.AreEqual(cssText, attributeBag.GetValue("style"));
-
-      mockIHtmlElement.Verify();
-      mockIStyle.Verify();
     }
     
     [Test]
@@ -853,18 +895,14 @@ namespace WatiN.UnitTests
       const string styleAttributeValue = "white";
       const string styleAttributeName = "color";
 
-      DynamicMock mockIStyle = new DynamicMock(typeof(IHTMLStyle));
-      mockIStyle.ExpectAndReturn("getAttribute", styleAttributeValue, styleAttributeName, 0);
+      Expect.Call(mockHTMLStyle.getAttribute(styleAttributeName,0)).Return(styleAttributeValue);
+      Expect.Call(mockHTMLElement.style).Return(mockHTMLStyle);
 
-      DynamicMock mockIHtmlElement = new DynamicMock(typeof(IHTMLElement));
-      mockIHtmlElement.ExpectAndReturn("get_style", mockIStyle.MockInstance);
+      mocks.ReplayAll();
 
-      ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement)mockIHtmlElement.MockInstance);
+      ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
       
       Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
-
-      mockIHtmlElement.Verify();
-      mockIStyle.Verify();
     }
   }
   

@@ -17,14 +17,14 @@
 
 #endregion Copyright
 
-using System;
-using System.Text.RegularExpressions;
-using mshtml;
-using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core
 {
+  using mshtml;
+  using System;
+  using System.Text.RegularExpressions;
+  using WatiN.Core.Interfaces;
+  using WatiN.Core.Exceptions;
+
   /// <summary>
   /// This class gives access to all contained elements of the webpage or the
   /// frames within this webpage.
@@ -56,15 +56,17 @@ namespace WatiN.Core
   {
     private DomContainer domContainer;
     private IHTMLDocument2 htmlDocument;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Document"/> class.
     /// Mainly used by WatiN internally. You should override HtmlDocument
     /// and set DomContainer before accessing any method or property of 
     /// this class.
     /// </summary>
-    public Document(){}
-    
+    public Document()
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Document"/> class.
     /// Mainly used by WatiN internally.
@@ -80,7 +82,7 @@ namespace WatiN.Core
       this.htmlDocument = htmlDocument;
     }
 
-    public void Dispose() 
+    public void Dispose()
     {
       Dispose(true);
     }
@@ -90,7 +92,7 @@ namespace WatiN.Core
       DomContainer = null;
       htmlDocument = null;
     }
-    
+
     /// <summary>
     /// Gives access to the wrapped IHTMLDocument2 interface. This makes it
     /// possible to get even more control of the webpage by using the MSHTML
@@ -99,10 +101,7 @@ namespace WatiN.Core
     /// <value>The HTML document.</value>
     public virtual IHTMLDocument2 HtmlDocument
     {
-      get
-      {
-        return htmlDocument;
-      }
+      get { return htmlDocument; }
     }
 
     /// <summary>
@@ -111,10 +110,7 @@ namespace WatiN.Core
     /// <value>The HTML.</value>
     public string Html
     {
-      get
-      {
-        return HtmlDocument.body.outerHTML;
-      }
+      get { return HtmlDocument.body.outerHTML; }
     }
 
     /// <summary>
@@ -146,7 +142,7 @@ namespace WatiN.Core
     {
       get { return new Uri(HtmlDocument.url); }
     }
-    
+
     /// <summary>
     /// Returns the url, as displayed in the address bar of the browser, of the currently
     /// displayed web page.
@@ -176,34 +172,34 @@ namespace WatiN.Core
     {
       get { return HtmlDocument.url; }
     }
-    
+
     /// <summary>
     /// Determines whether the text inside the HTML Body element contains the given <paramref name="text" />.
     /// </summary>
     /// <param name="text">The text.</param>
     /// <returns>
-    /// 	<c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
+    ///     <c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
     /// </returns>
     public bool ContainsText(string text)
     {
       string innertext = HtmlDocument.body.innerText;
-      
+
       if (innertext == null) return false;
 
       return (innertext.IndexOf(text) >= 0);
     }
-    
+
     /// <summary>
     /// Determines whether the text inside the HTML Body element contains the given <paramref name="regex" />.
     /// </summary>
     /// <param name="regex">The regular expression to match with.</param>
     /// <returns>
-    /// 	<c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
+    ///     <c>true</c> if the specified text is contained in <see cref="Html"/>; otherwise, <c>false</c>.
     /// </returns>
     public bool ContainsText(Regex regex)
     {
       string innertext = HtmlDocument.body.innerText;
-      
+
       if (innertext == null) return false;
 
       return (regex.Match(innertext).Success);
@@ -248,7 +244,7 @@ namespace WatiN.Core
     {
       return Frame(Find.ById(id));
     }
-    
+
     /// <summary>
     /// Gets the specified frame by it's id.
     /// </summary>
@@ -258,7 +254,7 @@ namespace WatiN.Core
     {
       return Frame(Find.ById(id));
     }
-    
+
     /// <summary>
     /// Gets the specified frame by it's name.
     /// </summary>
@@ -268,16 +264,13 @@ namespace WatiN.Core
     {
       return Core.Frame.Find(Frames, findBy);
     }
-        
+
     /// <summary>
     /// Gets a typed collection of <see cref="WatiN.Core.Frame"/> opend within this <see cref="Document"/>.
     /// </summary>
     public FrameCollection Frames
     {
-      get
-      {
-        return new FrameCollection(DomContainer, HtmlDocument);
-      }
+      get { return new FrameCollection(DomContainer, HtmlDocument); }
     }
 
     #region IElementsContainer
@@ -647,7 +640,7 @@ namespace WatiN.Core
 
     public TableRowCollection TableRows
     {
-      get { return ElementsSupport.TableRows(DomContainer,elementCollection); }
+      get { return ElementsSupport.TableRows(DomContainer, elementCollection); }
     }
 
     public TextField TextField(string elementId)
@@ -729,14 +722,12 @@ namespace WatiN.Core
     {
       get { return ElementsSupport.Images(DomContainer, elementCollection); }
     }
+
     #endregion
 
     private IHTMLElementCollection elementCollection
     {
-      get
-      {
-        return HtmlDocument.all;
-      }
+      get { return HtmlDocument.all; }
     }
 
     protected DomContainer DomContainer

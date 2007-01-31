@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 
 using NUnit.Framework;
-using NUnit.Mocks;
 using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
@@ -32,6 +31,8 @@ using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
+  using Rhino.Mocks;
+
   [TestFixture]
   public class IeTests : WatiNTest
   {
@@ -228,23 +229,23 @@ namespace WatiN.UnitTests
     }
     
 
-//    [Test]
-//    public void DialogTestSpike3()
-//    {
-//      IE ie = new IE("http://www.ergens.nl");
-//      
-//      ie.ExpectConfirmDialog;
-//      
-//      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
-//      
-//      ConfirmDialog confirmDialog = ie.ConfirmDialog;
-//      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
-//      Assert.AreEqual("This is a message.", confirmDialog.Message);
-//      
-//      confirmDialog.OKButton.Click();
-//      
-//      ie.Close();
-//    }
+    //    [Test]
+    //    public void DialogTestSpike3()
+    //    {
+    //      IE ie = new IE("http://www.ergens.nl");
+    //      
+    //      ie.ExpectConfirmDialog;
+    //      
+    //      ie.Button(Find.ByText("Show confirm dialog")).ClickNoWait();
+    //      
+    //      ConfirmDialog confirmDialog = ie.ConfirmDialog;
+    //      Assert.AreEqual("Microsoft Internet Explorer", confirmDialog.Title);
+    //      Assert.AreEqual("This is a message.", confirmDialog.Message);
+    //      
+    //      confirmDialog.OKButton.Click();
+    //      
+    //      ie.Close();
+    //    }
 
     [Test]
     public void AlertDialogHandler()
@@ -1243,6 +1244,18 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class LoggerTests
   {
+    const string LogMessage = "Call LogAction on mock";
+
+    MockRepository mocks;
+    ILogWriter mockLogWriter;
+
+    [SetUp]
+    public void SetUp()
+    {
+      mocks = new MockRepository();
+      mockLogWriter = (ILogWriter) mocks.CreateMock(typeof (ILogWriter));
+    }
+
     [Test]
     public void SettingLogWriterToNullShouldReturnNoLogClass()
     {
@@ -1260,15 +1273,27 @@ namespace WatiN.UnitTests
     [Test]
     public void LogActionShoulCallLogActionOnLogWriterInstance()
     {
-      const string Message = "Call LogAction on mock";
-      
-      DynamicMock mockILogWriter = new DynamicMock(typeof(ILogWriter));
-      mockILogWriter.Expect("LogAction", Message);
+      mockLogWriter.LogAction(LogMessage);
 
-      Logger.LogWriter = (ILogWriter) mockILogWriter.MockInstance;
-      Logger.LogAction(Message);
+      mocks.ReplayAll();
 
-      mockILogWriter.Verify();
+      Logger.LogWriter = mockLogWriter;
+      Logger.LogAction(LogMessage);
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void LogActionShoulCallLogActionOnLogWriterInstance2()
+    {
+      Logger.LogWriter = mockLogWriter;
+      mockLogWriter.LogAction(LogMessage);
+
+      mocks.ReplayAll();
+
+      Logger.LogAction(LogMessage);
+
+      mocks.VerifyAll();
     }
   }
 }

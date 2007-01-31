@@ -383,8 +383,15 @@ namespace WatiN.Core
       return false;
     }
 
+    public static bool IsValidElement(object element, ArrayList elementTags)
+    {
+      return IsValidElement(element as IHTMLElement, elementTags);
+    }
+
     public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
     {
+      if (element == null) return false;
+
       foreach (ElementTag elementTag in elementTags)
       {
         if (elementTag.Compare(element))

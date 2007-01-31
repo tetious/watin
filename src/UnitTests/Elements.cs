@@ -29,6 +29,9 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.UnitTests
 {
+  using mshtml;
+  using Rhino.Mocks;
+
   [TestFixture]
   public class Elements : WatiNTest
   {
@@ -99,6 +102,14 @@ namespace WatiN.UnitTests
     {
       Assert.IsTrue(ie.Table(tableId).Exists);
       Assert.IsFalse(ie.Table("nonexistingtableid").Exists);
+    }
+
+    [Test]
+    public void TableRowGetParentTable()
+    {
+      TableRow tableRow = ie.TableRow("row0");
+      Assert.IsInstanceOfType(typeof(Table), tableRow.ParentTable, "Should be a Table Type");
+      Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
     }
 
     [Test]
@@ -289,6 +300,21 @@ namespace WatiN.UnitTests
       // accessing several occurences with equal id
       Assert.AreEqual("a1", ie.TableCell("td1", 0).Text);
       Assert.AreEqual("b1", ie.TableCell("td1", 1).Text);
+    }
+
+    [Test]
+    public void TableCellGetParentTableRow()
+    {
+      TableCell tableCell = ie.TableCell(Find.ByText("b1"));
+      Assert.IsInstanceOfType(typeof(TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
+      Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
+    }
+
+    [Test]
+    public void TableCellCellIndex()
+    {
+      Assert.AreEqual(0, ie.TableCell(Find.ByText("b1")).CellIndex);
+      Assert.AreEqual(1, ie.TableCell(Find.ByText("b2")).CellIndex);
     }
 
     [Test]
@@ -1946,6 +1972,55 @@ namespace WatiN.UnitTests
     public void Height()
     {
       Assert.AreEqual("50px", element.Style.Height);
+    }
+  }
+
+  [TestFixture]
+  public class ElementTests
+  {
+    MockRepository mocks;
+    IHTMLDOMNode node;
+    Element element;
+
+    [SetUp]
+    public void Setup()
+    {
+      mocks = new MockRepository();
+      node = (IHTMLDOMNode) mocks.CreateMock(typeof (IHTMLDOMNode));
+      element = new Element(null, node);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void ElementParentShouldReturnWhenRootElement()
+    {
+      Expect.Call(node.parentNode).Return(null);
+      mocks.ReplayAll();
+
+      Assert.IsNull(element.Parent);
+    }
+
+    [Test]
+    public void ElementPreviousSiblingShouldReturnWhenFirstSibling()
+    {
+      Expect.Call(node.previousSibling).Return(null);
+      mocks.ReplayAll();
+
+      Assert.IsNull(element.PreviousSibling);
+    }
+
+    [Test]
+    public void ElementNextSiblingShouldReturnWhenLastSibling()
+    {
+      Expect.Call(node.nextSibling).Return(null);
+      mocks.ReplayAll();
+
+      Assert.IsNull(element.NextSibling);
     }
   }
 }

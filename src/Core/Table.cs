@@ -59,6 +59,12 @@ namespace WatiN.Core
     public Table(Element element) : base(element, ElementTags)
     {}
 
+	/// <summary>
+	/// Returns all rows in the first TBODY section of a table. If no
+	/// explicit sections are defined in the table (like THEAD, TBODY 
+	/// and/or TFOOT sections), it will return all the rows in the table.
+	/// </summary>
+	/// <value>The table rows.</value>
     public override TableRowCollection TableRows
     {
       get 
@@ -79,7 +85,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Finds te first row that matches findText in inColumn. If no match is found, null is returned.
+    /// Finds te first row that matches findText in inColumn defined as a TD html element.
+    /// If no match is found, null is returned.
     /// </summary>
     /// <param name="findText">The text to find.</param>
     /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -94,7 +101,8 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Finds te first row that matches findTextRegex in inColumn. If no match is found, null is returned.
+    /// Finds te first row that matches findTextRegex in inColumn defined as a TD html element.
+    /// If no match is found, null is returned.
     /// </summary>
     /// <param name="findTextRegex">The regular expression the cell text must match.</param>
     /// <param name="inColumn">Index of the column to find the text in.</param>

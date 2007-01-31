@@ -56,5 +56,32 @@ namespace WatiN.Core
     public TableCell(Element element) : base(element, ElementTags)
     {}
 
+    public TableRow ParentTableRow
+    {
+      get
+      {
+        Element parentElement = Parent;
+				
+        while (!ElementTag.IsValidElement(parentElement.HTMLElement, Core.TableRow.ElementTags))
+        {
+          parentElement = parentElement.Parent;
+        }
+ 
+        if (parentElement != null)
+        {
+          return new TableRow(parentElement);
+        }
+
+        return null;
+      }
+    }
+
+    public int CellIndex
+    {
+      get
+      {
+        return int.Parse(GetAttributeValue("cellindex"));
+      }
+    }
   }
 }

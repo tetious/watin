@@ -194,7 +194,14 @@ namespace WatiN.Core
     /// <value>The next sibling.</value>
     public Element NextSibling
     {
-      get { return new ElementsContainer(domContainer, domNode.nextSibling); }
+      get
+      {
+        if (domNode.nextSibling != null)
+        {
+          return new ElementsContainer(domContainer, domNode.nextSibling);
+        }
+        return null;
+      }
     }
     
     /// <summary>
@@ -203,7 +210,14 @@ namespace WatiN.Core
     /// <value>The previous sibling.</value>
     public Element PreviousSibling
     {
-      get { return new ElementsContainer(domContainer, domNode.previousSibling); }
+      get
+      {
+        if (domNode.previousSibling != null)
+        {
+          return new ElementsContainer(domContainer, domNode.previousSibling);
+        }
+        return null;
+      }
     }
 
     /// <summary>
@@ -212,7 +226,14 @@ namespace WatiN.Core
     /// <value>The parent.</value>
     public Element Parent
     {
-      get { return new ElementsContainer(domContainer, domNode.parentNode); }
+      get
+      {
+        if (domNode.parentNode != null)
+        {
+          return new ElementsContainer(domContainer, domNode.parentNode);
+        }
+        return null;
+      }
     }
 
     public Style Style
@@ -572,7 +593,7 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout in seconds.</param>
     public void WaitUntilExists(int timeout)
     {
-      if (!Exists)
+      if (!Exists && elementFinder != null)
       {
         SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
@@ -592,7 +613,7 @@ namespace WatiN.Core
 
     private object getElement(bool throwExceptionIfElementNotFound)
     {
-      if (element == null)
+      if (element == null && elementFinder != null)
       {
         element = elementFinder.FindFirst(throwExceptionIfElementNotFound);
       }
