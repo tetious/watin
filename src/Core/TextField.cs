@@ -26,6 +26,8 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System;
+
   /// <summary>
   /// This class provides specialized functionality for a HTML input element of type 
   /// text password textarea hidden and for a HTML textarea element.
@@ -119,7 +121,10 @@ namespace WatiN.Core
       if (!Enabled) { throw new ElementDisabledException(ToString()); }
       if (ReadOnly) { throw new ElementReadOnlyException(ToString()); }
       
-      value = value.Replace(System.Environment.NewLine, "\r");
+      if (value != null)
+      {
+        value = value.Replace(Environment.NewLine, "\r");
+      }
 
       Highlight(true);
       Focus();
