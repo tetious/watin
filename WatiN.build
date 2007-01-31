@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
+<project name="WatiN" default="full-net-2.0" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
 
     <property name="project.name"                   value="WatiN" />
     
@@ -45,6 +45,7 @@
         <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
         
         <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
+        
         <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
             <sources>
                 <include name="${core.source.dir}\*.cs"/>
@@ -60,6 +61,7 @@
                 <warning number="1591" />
             </nowarn>
         </csc>
+        
         <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
         <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
@@ -70,11 +72,13 @@
             <references>
                 <include name="${pia.dir}\Microsoft.mshtml.dll"/>
                 <include name="${bin.dir}\${core.assembly.name}"/>
-                <include name="${path.nunit.framework.dll}\nunit.framework.dll"/>
-                <include name="${path.nunit.framework.dll}\nunit.mocks.dll"/>
+                <include name="${libraries.dir}\nunit.framework.dll"/>
+                <include name="${libraries.dir}\Rhino.Mocks.dll"/>
                 <include name="System.dll"/>
             </references>
         </csc>
+        
+        <copy file="${libraries.dir}\Rhino.Mocks.dll" todir="${bin.dir}" />
         
         <call target="copy-testdata" />
     </target>
@@ -83,7 +87,7 @@
         <property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
         <property name="net.framework.fullname"         value=".Net 1.1" />
         <property name="project.properties.define"      value="NET11" />
-	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\1.1" />
+	    <property name="libraries.dir"                  value="${base.dir}\lib\Net\1.1" />
        	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-1.1-bin\nunit-console.exe" />
         
         <call target="init-properties"  />
@@ -93,7 +97,7 @@
     	<property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
         <property name="net.framework.fullname"         value=".Net 2.0" />
         <property name="project.properties.define"      value="NET20" />
-	    <property name="path.nunit.framework.dll"       value="${base.dir}\lib\Net\2.0" />
+	    <property name="libraries.dir"                  value="${base.dir}\lib\Net\2.0" />
        	<property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
 
         <call target="init-properties"  />
