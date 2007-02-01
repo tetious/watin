@@ -311,6 +311,17 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TableCellGetTypedParent()
+    {
+      TableCell tableCell = ie.TableCell(Find.ByText("b1"));
+
+      Assert.IsInstanceOfType(typeof(TableRow), tableCell.Parent, "Should be a TableRow Type");
+
+      TableRow row = (TableRow) tableCell.Parent;
+      Assert.AreEqual("row1", row.Id, "Unexpected id");
+    }
+
+    [Test]
     public void TableCellCellIndex()
     {
       Assert.AreEqual(0, ie.TableCell(Find.ByText("b1")).CellIndex);
@@ -1987,6 +1998,7 @@ namespace WatiN.UnitTests
     {
       mocks = new MockRepository();
       node = (IHTMLDOMNode) mocks.CreateMock(typeof (IHTMLDOMNode));
+      
       element = new Element(null, node);
     }
 
@@ -1997,7 +2009,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void ElementParentShouldReturnWhenRootElement()
+    public void ElementParentShouldReturnNullWhenRootElement()
     {
       Expect.Call(node.parentNode).Return(null);
       mocks.ReplayAll();

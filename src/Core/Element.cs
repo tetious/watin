@@ -27,6 +27,8 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System.Reflection;
+
   /// <summary>
   /// This is the base class for all other element types in this project, like
   /// Button, Checkbox etc.. It provides common functionality to all these elements
@@ -196,9 +198,10 @@ namespace WatiN.Core
     {
       get
       {
-        if (domNode.nextSibling != null)
+        IHTMLElement nextSibling = domNode.nextSibling as IHTMLElement;
+        if (nextSibling != null)
         {
-          return new ElementsContainer(domContainer, domNode.nextSibling);
+          return GetTypedElement(nextSibling, domContainer);
         }
         return null;
       }
@@ -212,9 +215,10 @@ namespace WatiN.Core
     {
       get
       {
-        if (domNode.previousSibling != null)
+        IHTMLElement previousSibling = domNode.previousSibling as IHTMLElement;
+        if (previousSibling != null)
         {
-          return new ElementsContainer(domContainer, domNode.previousSibling);
+          return GetTypedElement(previousSibling, domContainer);
         }
         return null;
       }
@@ -228,9 +232,10 @@ namespace WatiN.Core
     {
       get
       {
-        if (domNode.parentNode != null)
+        IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
+        if (parentNode != null)
         {
-          return new ElementsContainer(domContainer, domNode.parentNode);
+          return GetTypedElement(parentNode, domContainer);
         }
         return null;
       }
@@ -629,6 +634,36 @@ namespace WatiN.Core
     public void WaitForComplete()
     {
       domContainer.WaitForComplete();
+    }
+
+    internal static Element GetTypedElement(IHTMLElement element, DomContainer domContainer)
+    {
+      Assembly assembly = Assembly.Load("WatiN.Core");
+
+      Element returnElement = new ElementsContainer(domContainer, element);
+
+      foreach (Type type in assembly.GetTypes())
+      {
+        if (type.IsSubclassOf(typeof(Element)))
+        {
+          PropertyInfo property = type.GetProperty("ElementTags");
+          if (property != null)
+          {
+            ArrayList elementTags = (ArrayList)property.GetValue(type, new object[0]);
+
+            if (ElementTag.IsValidElement(element, elementTags))
+            {
+              ConstructorInfo constructor = type.GetConstructor(new Type[] {typeof (Element)});
+              if (constructor != null)
+              {
+                returnElement = (Element)constructor.Invoke(new object[] {returnElement});
+              }
+            }
+          }
+        }
+      }
+
+      return returnElement;
     }
   }
 
