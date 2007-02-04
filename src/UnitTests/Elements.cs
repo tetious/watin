@@ -108,6 +108,7 @@ namespace WatiN.UnitTests
     public void TableRowGetParentTable()
     {
       TableRow tableRow = ie.TableRow("row0");
+      Assert.IsInstanceOfType(typeof(TableBody), tableRow.Parent, "Parent should be a TableBody Type");
       Assert.IsInstanceOfType(typeof(Table), tableRow.ParentTable, "Should be a Table Type");
       Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
     }
@@ -308,17 +309,6 @@ namespace WatiN.UnitTests
       TableCell tableCell = ie.TableCell(Find.ByText("b1"));
       Assert.IsInstanceOfType(typeof(TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
       Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
-    }
-
-    [Test]
-    public void TableCellGetTypedParent()
-    {
-      TableCell tableCell = ie.TableCell(Find.ByText("b1"));
-
-      Assert.IsInstanceOfType(typeof(TableRow), tableCell.Parent, "Should be a TableRow Type");
-
-      TableRow row = (TableRow) tableCell.Parent;
-      Assert.AreEqual("row1", row.Id, "Unexpected id");
     }
 
     [Test]
@@ -2018,6 +2008,33 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void ElementParentReturningTypedParent()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      string tagname = ((ElementTag) TableRow.ElementTags[0]).TagName;
+
+      Expect.Call(node.parentNode).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return(tagname).Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(TableRow), element.Parent);
+    }
+
+    [Test]
+    public void ElementParentReturnsElementsContainerForUnknowElement()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(ElementsContainer), element.Parent);
+    }
+
+    [Test]
     public void ElementPreviousSiblingShouldReturnWhenFirstSibling()
     {
       Expect.Call(node.previousSibling).Return(null);
@@ -2027,12 +2044,67 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void ElementPreviousSiblingReturningTypedParent()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      string tagname = ((ElementTag) Link.ElementTags[0]).TagName;
+
+      Expect.Call(node.previousSibling).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return(tagname).Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(Link), element.PreviousSibling);
+    }
+
+    [Test]
+    public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.previousSibling).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(ElementsContainer), element.PreviousSibling);
+    }
+
+    [Test]
     public void ElementNextSiblingShouldReturnWhenLastSibling()
     {
       Expect.Call(node.nextSibling).Return(null);
       mocks.ReplayAll();
 
       Assert.IsNull(element.NextSibling);
+    }
+
+    [Test]
+    public void ElementNextSiblingReturningTypedParent()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement), typeof(IHTMLInputElement));
+      ElementTag inputTextField = (ElementTag) TextField.ElementTags[0];
+
+      Expect.Call(node.nextSibling).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return(inputTextField.TagName).Repeat.Any();
+      Expect.Call(((IHTMLInputElement)parentNode).type).Return(inputTextField.InputTypes).Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(TextField), element.NextSibling);
+    }
+
+    [Test]
+    public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
+    {
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.nextSibling).Return(parentNode);
+      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof(ElementsContainer), element.NextSibling);
     }
   }
 }
