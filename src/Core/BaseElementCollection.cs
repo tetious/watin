@@ -5,7 +5,6 @@ using mshtml;
 namespace WatiN.Core
 {
   public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
-  public delegate Element CreateElementCollectionInstance(DomContainer domContainer, ArrayList elements);
   
   public abstract class BaseElementCollection : IEnumerable
   {
