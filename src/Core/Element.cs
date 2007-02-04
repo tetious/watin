@@ -201,7 +201,7 @@ namespace WatiN.Core
         IHTMLElement nextSibling = domNode.nextSibling as IHTMLElement;
         if (nextSibling != null)
         {
-          return GetTypedElement(nextSibling, domContainer);
+          return GetTypedElement(domContainer, nextSibling);
         }
         return null;
       }
@@ -218,7 +218,7 @@ namespace WatiN.Core
         IHTMLElement previousSibling = domNode.previousSibling as IHTMLElement;
         if (previousSibling != null)
         {
-          return GetTypedElement(previousSibling, domContainer);
+          return GetTypedElement(domContainer, previousSibling);
         }
         return null;
       }
@@ -226,8 +226,30 @@ namespace WatiN.Core
 
     /// <summary>
     /// Gets the parent element of this element.
+    /// If the parent type is known you can cast it to that type.
     /// </summary>
     /// <value>The parent.</value>
+    /// <example>
+    /// The following example shows you how to use the parent property.
+    /// Assume your web page contains a bit of html that looks something
+    /// like this:
+    /// 
+    /// div
+    ///   a id="watinlink" href="http://watin.sourceforge.net" /
+    ///   a href="http://sourceforge.net/projects/watin" /
+    /// /div
+    /// div
+    ///   a id="watinfixturelink" href="http://watinfixture.sourceforge.net" /
+    ///   a href="http://sourceforge.net/projects/watinfixture" /
+    /// /div
+    /// Now you want to click on the second link of the watin project. Using the 
+    /// parent property the code to do this would be:
+    /// 
+    /// <code>
+    /// Div watinDiv = (Div) ie.Link("watinlink").Parent;
+    /// watinDiv.Links[1].Click();
+    /// </code>
+    /// </example>
     public Element Parent
     {
       get
@@ -235,7 +257,7 @@ namespace WatiN.Core
         IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
         if (parentNode != null)
         {
-          return GetTypedElement(parentNode, domContainer);
+          return GetTypedElement(domContainer, parentNode);
         }
         return null;
       }
@@ -636,7 +658,7 @@ namespace WatiN.Core
       domContainer.WaitForComplete();
     }
 
-    internal static Element GetTypedElement(IHTMLElement element, DomContainer domContainer)
+    internal static Element GetTypedElement(DomContainer domContainer, IHTMLElement element)
     {
       Assembly assembly = Assembly.Load("WatiN.Core");
 
@@ -649,7 +671,7 @@ namespace WatiN.Core
           PropertyInfo property = type.GetProperty("ElementTags");
           if (property != null)
           {
-            ArrayList elementTags = (ArrayList)property.GetValue(type, new object[0]);
+            ArrayList elementTags = (ArrayList)property.GetValue(type, null);
 
             if (ElementTag.IsValidElement(element, elementTags))
             {
@@ -657,6 +679,7 @@ namespace WatiN.Core
               if (constructor != null)
               {
                 returnElement = (Element)constructor.Invoke(new object[] {returnElement});
+                break;
               }
             }
           }
