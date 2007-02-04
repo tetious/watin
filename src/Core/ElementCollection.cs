@@ -61,7 +61,7 @@ namespace WatiN.Core
     {
       get
       {
-        return new Element(domContainer, Elements[index]);
+        return New(domContainer, (IHTMLElement) Elements[index]);
       } 
     }
     
@@ -72,7 +72,7 @@ namespace WatiN.Core
     
     private static Element New(DomContainer domContainer, IHTMLElement element)
     {
-      return new Element(domContainer, element);
+      return Element.GetTypedElement(domContainer, element);
     }
   }
 }
