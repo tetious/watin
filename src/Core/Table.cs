@@ -84,6 +84,8 @@ namespace WatiN.Core
       return (IHTMLElement)((IHTMLTable)HTMLElement).tBodies.item(0,null);
     }
 
+    
+
     /// <summary>
     /// Finds te first row that matches findText in inColumn defined as a TD html element.
     /// If no match is found, null is returned.

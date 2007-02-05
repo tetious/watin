@@ -350,6 +350,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TableBody.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TableBodyCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TableCell.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

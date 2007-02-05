@@ -93,6 +93,11 @@ namespace WatiN.Core.Interfaces
     TableRow TableRow(Regex elementId);
     TableRow TableRow(Attribute findBy);
     TableRowCollection TableRows { get; }
+
+    TableBody TableBody(string elementId);
+    TableBody TableBody(Regex elementId);
+    TableBody TableBody(Attribute findBy);
+    TableBodyCollection TableBodies { get; }
     
     TextField TextField(string elementId);
     TextField TextField(Regex elementId);

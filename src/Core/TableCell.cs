@@ -61,17 +61,16 @@ namespace WatiN.Core
       get
       {
         Element parentElement = Parent;
-				
-        while (!ElementTag.IsValidElement(parentElement.HTMLElement, Core.TableRow.ElementTags))
+        
+        while (parentElement != null)
         {
+          if (parentElement is TableRow)
+          {
+            return (TableRow)parentElement;
+          }
           parentElement = parentElement.Parent;
         }
  
-        if (parentElement != null)
-        {
-          return new TableRow(parentElement);
-        }
-
         return null;
       }
     }

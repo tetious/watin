@@ -23,7 +23,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
+    using System;
+
+    /// <summary>
   /// Summary description for SubElements.
   /// </summary>
   public sealed class ElementsSupport
@@ -156,6 +158,7 @@ namespace WatiN.Core
     {
       return new TableCollection(ie, new ElementFinder(Core.Table.ElementTags, elements));
     }
+      
 
 //    public static TableSectionCollection TableSections(IDomContainer ie, IHTMLElementCollection elements)
 //    {
@@ -191,8 +194,17 @@ namespace WatiN.Core
     {
       return new TableRowCollection(ie, new ElementFinder(Core.TableRow.ElementTags, elements));
     }
+      public static TableBody TableBody(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+      {
+          return new TableBody(ie, new ElementFinder(Core.TableBody.ElementTags, findBy, elements));
+      }
 
-    public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static TableBodyCollection TableBodies(DomContainer ie, IHTMLElementCollection elements)
+    {
+        return new TableBodyCollection(ie, new ElementFinder(Core.TableBody.ElementTags, elements));
+    }
+
+      public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
     {
       return new TextField(ie, new ElementFinder(Core.TextField.ElementTags, findBy, elements));
     }
@@ -231,6 +243,8 @@ namespace WatiN.Core
     {
       return new ImageCollection(ie, new ElementFinder(Core.Image.ElementTags, elements));
     }
+
+      
   }
 }
 

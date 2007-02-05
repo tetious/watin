@@ -223,15 +223,11 @@ namespace WatiN.Core
       get
       {
         IHTMLElement activeElement = HtmlDocument.activeElement;
-
-        if (activeElement == null)
+        if (activeElement != null)
         {
-          return null;
+          return Core.Element.GetTypedElement(domContainer, activeElement);
         }
-        else
-        {
-          return new Element(domContainer, HtmlDocument.activeElement);
-        }
+        return null;
       }
     }
 
@@ -577,6 +573,26 @@ namespace WatiN.Core
     public TableCollection Tables
     {
       get { return ElementsSupport.Tables(DomContainer, elementCollection); }
+    }
+
+    public TableBody TableBody (string elementId)
+    {
+      return TableBody(Find.ById(elementId));
+    }
+
+    public TableBody TableBody(Regex elementId)
+    {
+      return TableBody(Find.ById(elementId));
+    }
+
+    public TableBody TableBody(Attribute findBy)
+    {
+      return ElementsSupport.TableBody(DomContainer,findBy, elementCollection);
+    }
+
+    public TableBodyCollection TableBodies
+    {
+      get { return ElementsSupport.TableBodies(DomContainer, elementCollection); }
     }
 
     //    public TableSectionCollection TableSections
