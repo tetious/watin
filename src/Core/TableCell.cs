@@ -56,6 +56,10 @@ namespace WatiN.Core
     public TableCell(Element element) : base(element, ElementTags)
     {}
 
+    /// <summary>
+    /// Gets the parent <see cref="TableRow"/> of this <see cref="TableCell"/>.
+    /// </summary>
+    /// <value>The parent table row.</value>
     public TableRow ParentTableRow
     {
       get
@@ -75,7 +79,11 @@ namespace WatiN.Core
       }
     }
 
-    public int CellIndex
+    /// <summary>
+    /// Gets the index of the <see cref="TableCell"/> in the <see cref="TableCellCollection"/> of the parent <see cref="TableRow"/>.
+    /// </summary>
+    /// <value>The index of the cell.</value>
+    public int Index
     {
       get
       {
