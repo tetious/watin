@@ -314,8 +314,8 @@ namespace WatiN.UnitTests
     [Test]
     public void TableCellCellIndex()
     {
-      Assert.AreEqual(0, ie.TableCell(Find.ByText("b1")).CellIndex);
-      Assert.AreEqual(1, ie.TableCell(Find.ByText("b2")).CellIndex);
+      Assert.AreEqual(0, ie.TableCell(Find.ByText("b1")).Index);
+      Assert.AreEqual(1, ie.TableCell(Find.ByText("b2")).Index);
     }
 
     [Test]
