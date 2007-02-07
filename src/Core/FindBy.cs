@@ -112,6 +112,11 @@ namespace WatiN.Core
       
       return (String.Compare(value, valueToCompareWith, true) == 0);
     }
+
+    public override string ToString()
+    {
+      return valueToCompareWith;
+    }
   }
   
   /// <summary>

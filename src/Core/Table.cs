@@ -183,6 +183,7 @@ namespace WatiN.Core
     /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
+    /// <param name="inColumn">The column index in which to look for the value.</param>
     public TableRowFinder(ICompare comparer, int inColumn) : base(comparer)
     {
       columnIndex = inColumn;

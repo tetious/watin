@@ -432,7 +432,7 @@ namespace WatiN.Core
     {
       get
       {
-        return (IHTMLElementCollection)((IHTMLElement)HTMLElement).all;
+        return (IHTMLElementCollection)htmlElement.all;
       }
     }
   }
