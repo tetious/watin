@@ -451,15 +451,29 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Fires the specified <paramref name="eventName"/> on this element.
+    /// Fires the specified <paramref name="eventName"/> on this element
+    /// and waits for it to complete.
     /// </summary>
     public void FireEvent(string eventName)
+    {
+      fireEvent(eventName, true);
+    }
+
+    /// <summary>
+    /// Only fires the specified <paramref name="eventName"/> on this element.
+    /// </summary>
+    public void FireEventNoWait(string eventName)
+    {
+      fireEvent(eventName, false);
+    }
+
+    private void fireEvent(string eventName, bool waitForComplete)
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
       Highlight(true);
       domContainer.FireEvent(DispHtmlBaseElement, eventName);
-      WaitForComplete();
+      if (waitForComplete) {WaitForComplete();}
       Highlight(false);
     }
 
