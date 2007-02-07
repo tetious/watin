@@ -300,6 +300,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Option.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OptionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Para.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

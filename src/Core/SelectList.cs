@@ -28,6 +28,8 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System.Globalization;
+
   /// <summary>
   /// This class provides specialized functionality for a HTML select element.
   /// </summary>
@@ -75,27 +77,21 @@ namespace WatiN.Core
     {}
 
     /// <summary>
-    /// This method clears the selected items in the select box
+    /// This method clears the selected items in the select box and wait for the 
+    /// onchange event to complete after the list is cleared
     /// </summary>
     public void ClearList()
     {
       Logger.LogAction("Clearing selection(s) in " + GetType().Name + " '" + Id + "'");
 
-      bool wait = false;
-      int numberOfOptions = selectElement.length;
-
-      for (int index = 0; index < numberOfOptions; index++)
+      OptionCollection options = Options.Filter(GetIsSelectedAttribute());
+      
+      foreach (Option option in options)
       {
-        IHTMLOptionElement option = GetOptionElement(index);
-
-        if (option.selected)
-        {
-          option.selected = false;
-          wait = true;
-        }
+        option.ClearNoWait();
       }
 
-      if (wait)
+      if (options.Length > 0)
       {
         WaitForComplete();
       }
@@ -115,9 +111,9 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting '" + text + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(text, true);
+      SelectByTextOrValue(GetTextAttribute(text));
     }
-    
+
     /// <summary>
     /// This method selects an item by text using the supplied regular expression.
     /// Raises NoValueFoundException if the specified value is not found.
@@ -127,7 +123,7 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(new RegexComparer(regex), true);
+      SelectByTextOrValue(Find.ByText(regex));
     }
 
     /// <summary>
@@ -139,7 +135,7 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting item with value '" + value + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(value, false);
+      SelectByTextOrValue(new Value(new StringEqualsAndCaseInsensitiveComparer(value)));
     }
     
     /// <summary>
@@ -151,68 +147,7 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(new RegexComparer(regex), false);
-    }
-
-    private void SelectByTextOrValue(string textOrValue, bool selectByText)
-    {
-      try
-      {
-        SelectByTextOrValue(new StringEqualsAndCaseInsensitiveComparer(textOrValue), selectByText);
-      }
-      catch (SelectListItemNotFoundException)
-      {
-        throw new SelectListItemNotFoundException(textOrValue);
-      }
-    }
-
-    private void SelectByTextOrValue(ICompare comparer, bool selectByText)
-    {
-      bool optionFound = false;
-      bool wait = false;
-      int numberOfOptions = selectElement.length;
-      
-      for (int index = 0; (optionFound == false) && (index < numberOfOptions) ; index++)
-      {
-        IHTMLOptionElement option = GetOptionElement(index);
-
-        string compareValueOrText;
-
-        if (selectByText) 
-        { compareValueOrText = option.text; }
-        else 
-        { compareValueOrText = option.value; }
-
-        if (comparer.Compare(compareValueOrText))
-        {
-          if (option.selected)
-          {
-            optionFound = true;
-          }
-          else
-          {
-            option.selected = true;
-            FireEvent("onchange");
-            optionFound = true;
-            wait = true;
-          }
-        }
-      }
-
-      if (!optionFound)
-      {
-        throw new SelectListItemNotFoundException("Using " + comparer.ToString()) ;
-      }
-      
-      if (wait)
-      {
-        WaitForComplete();
-      }
-    }
-
-    private IHTMLSelectElement selectElement
-    {
-      get { return ((IHTMLSelectElement) HTMLElement); }
+      SelectByTextOrValue(Find.ByValue(regex));
     }
 
     /// <summary>
@@ -224,27 +159,79 @@ namespace WatiN.Core
       get
       {
         StringCollection items = new StringCollection();
-        int numberOfOptions = selectElement.length;
 
-        for (int index = 0; index < numberOfOptions; index++)
+        foreach (Option option in Options)
         {
-          IHTMLOptionElement option = GetOptionElement(index);
-
-          items.Add(option.text);
+          items.Add(option.Text);
         }
 
         return items;
       }
     }
-
-    private IHTMLOptionElement GetOptionElement(int index)
+    
+    /// <summary>
+    /// Options the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns></returns>
+    public Option Option(string text)
     {
-      // Despite the fact that item(object name, object index) is the defenition,
-      // item(null,index) always returns the fist item in the array.
-      // item(index,null) seems to return the expected item at the given index.
-      return ((IHTMLOptionElement) selectElement.item(index, null));
+      return Option(GetTextAttribute(text));
     }
 
+    /// <summary>
+    /// Options the specified text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns></returns>
+    public Option Option(Regex text)
+    {
+      return Option(Find.ByText(text));
+    }
+
+    /// <summary>
+    /// Options the specified find by.
+    /// </summary>
+    /// <param name="findBy">The find by.</param>
+    /// <returns></returns>
+    public Option Option(Attribute findBy)
+    {
+      return ElementsSupport.Option(DomContainer, findBy, (IHTMLElementCollection) htmlElement.all);
+    }
+
+    /// <summary>
+    /// Returns all the <see cref="Core.Option"/> elements in the <see cref="SelectList"/>.
+    /// </summary>
+    public OptionCollection Options
+    {
+      get
+      {
+        return ElementsSupport.Options(DomContainer, (IHTMLElementCollection)htmlElement.all);
+      }
+    }
+    
+    /// <summary>
+    /// Returns the selected option(s) in an array list.
+    /// </summary>
+    public ArrayList SelectedOptions
+    {
+      get
+      {
+        ArrayList items = new ArrayList();
+
+        OptionCollection options = Options.Filter(GetIsSelectedAttribute());
+        foreach (Option option in options)
+        {
+          if (option.Selected)
+          {
+            items.Add(option);
+          }
+        }
+
+        return items;
+      }
+    }
+    
     /// <summary>
     /// Returns the selected item(s) as an array.
     /// </summary>
@@ -254,20 +241,21 @@ namespace WatiN.Core
       {
         StringCollection items = new StringCollection();
 
-        for (int index = 0; index < selectElement.length; index++)
+        OptionCollection options = Options.Filter(GetIsSelectedAttribute());
+        foreach (Option option in options)
         {
-          IHTMLOptionElement option = GetOptionElement(index);
-
-          if (option.selected)
-          {
-            items.Add(option.text);
-          }
+          items.Add(option.Text);
         }
 
         return items;
       }
-    }    
-    
+    }
+
+    private static Attribute GetIsSelectedAttribute()
+    {
+      return new Attribute("selected", true.ToString());
+    }
+
     /// <summary>
     /// Returns the first selected item in the selectlist. There might by more.
     /// Use SelectedItems to get a StringCollection of all selected items.
@@ -277,14 +265,27 @@ namespace WatiN.Core
     {
       get
       {
-        for (int index = 0; index < selectElement.length; index++)
-        {
-          IHTMLOptionElement option = GetOptionElement(index);
+        Option option = SelectedOption;
+        if (option == null) return null;
+        
+        return option.Text;
+      }
+    }
 
-          if (option.selected)
-          {
-            return option.text;
-          }
+    /// <summary>
+    /// Returns the first selected option in the selectlist. There might by more.
+    /// Use SelectedOptions to get an ArrayList of all selected options.
+    /// When there's no option selected, the return value will be null.
+    /// </summary>
+    public Option SelectedOption
+    {
+      get
+      {
+        Option option = Option(GetIsSelectedAttribute());
+
+        if (option.Exists)
+        {
+          return option;
         }
 
         return null;
@@ -293,7 +294,32 @@ namespace WatiN.Core
 
     public bool HasSelectedItems
     {
-      get { return (SelectedItem != null); }
+      get { return SelectedOption != null; }
+    }
+
+    private IHTMLSelectElement selectElement
+    {
+      get { return ((IHTMLSelectElement) HTMLElement); }
+    }
+
+    private void SelectByTextOrValue(Attribute findBy)
+    {
+      OptionCollection options = Options.Filter(findBy);
+      
+      foreach (Option option in options)
+      {
+        option.Select();
+      }
+
+      if (options.Length == 0)
+      {
+        throw new SelectListItemNotFoundException(findBy.Value) ;
+      }
+    }
+
+    private static Text GetTextAttribute(string text)
+    {
+      return new Text(new StringEqualsAndCaseInsensitiveComparer(text));
     }
   }
 }

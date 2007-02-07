@@ -30,30 +30,10 @@ namespace WatiN.Core
   /// </summary>
   public sealed class ElementsSupport
   {
-    public const string ButtonTagName = "BUTTON";
-    public const string DivTagName = "DIV";
-    public const string FormTagName = "FORM";
     public const string FrameTagName = "FRAME";
-    public const string ImageTagName = "IMG";
     public const string InputTagName = "INPUT";
-    public const string LabelTagName = "LABEL";
-    public const string LinkTagName = "A";
-    public const string ParaTagName = "P";
-    public const string SelectListTagName = "SELECT";
-    public const string SpanTagName = "SPAN";
-    public const string TableTagName = "TABLE";
     public const string TableCellTagName = "TD";
-    public const string TableRowTagName = "TR";
-    public const string TextAreaTagName = "TEXTAREA";
-
-    public const string InputNullType = null;
-    public const string InputButtonType = "button submit image reset";
-    public const string InputCheckBoxType = "checkbox";
-    public const string InputFileType = "file";
-    public const string InputImageType = "image";
-    public const string InputRadioButtonType = "radio";
-    public const string InputTextFieldType = "text password textarea hidden";
-
+    
     /// <summary>
     /// Prevent creating an instance of this class (contains only static members)
     /// </summary>
@@ -117,6 +97,16 @@ namespace WatiN.Core
     public static LinkCollection Links(DomContainer ie, IHTMLElementCollection elements)
     {
       return new LinkCollection(ie, new ElementFinder(Core.Link.ElementTags, elements));
+    }
+
+    public static Option Option(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    {
+      return new Option(ie, new ElementFinder(Core.Option.ElementTags, findBy, elements));
+    }
+
+    public static OptionCollection Options(DomContainer ie, IHTMLElementCollection elements)
+    {
+      return new OptionCollection(ie, new ElementFinder(Core.Option.ElementTags, elements));
     }
 
     public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)

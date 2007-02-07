@@ -860,6 +860,17 @@ namespace WatiN.UnitTests
       ie.ForceClose(); 
     }
     
+    [Test]
+    public void SecurityAlertDialogHandler()
+    {
+      using(IE ie = new IE("http://sourceforge.net"))
+      {
+        ie.AddDialogHandler(new SecurityAlertDialogHandler());
+        ie.Link(Find.ByText("Log in")).Click();
+        Assert.IsTrue(ie.ContainsText("Log in to SourceForge.net"));
+      }
+    }
+
     private static void FailIfIEWindowExists(string partialTitle, string testName)
     {
       if (IsIEWindowOpen(partialTitle))
@@ -876,7 +887,8 @@ namespace WatiN.UnitTests
       return IE.Exists(Find.ByTitle(partialTitle));
     }
   }
-  
+
+
   [TestFixture]
   public class DialogWatcherTest : WatiNTest
   {
