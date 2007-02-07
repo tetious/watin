@@ -162,10 +162,9 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findText">The text to find (exact match but case insensitive).</param>
     /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(string findText, int inColumn): base(findText)
+    public TableRowFinder(string findText, int inColumn): base(new StringEqualsAndCaseInsensitiveComparer(findText))
     {
       columnIndex = inColumn;
-      comparer = new StringEqualsAndCaseInsensitiveComparer(findText);
       containsText = new StringContainsAndCaseInsensitiveComparer(findText);
     }
       
@@ -179,7 +178,17 @@ namespace WatiN.Core
       columnIndex = inColumn;
       containsText = new AlwaysTrueComparer();
     }
-      
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public TableRowFinder(ICompare comparer, int inColumn) : base(comparer)
+    {
+      columnIndex = inColumn;
+      containsText = new AlwaysTrueComparer();
+    }
+  
     public override bool Compare(IAttributeBag attributeBag)
     {
       IHTMLElement element = ((ElementAttributeBag)attributeBag).IHTMLElement;
