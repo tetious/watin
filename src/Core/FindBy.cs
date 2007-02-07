@@ -181,6 +181,22 @@ namespace WatiN.Core
       return GetType().ToString() + " compares with: " + uriToCompareWith.ToString();
     }
   }
+
+  public class BoolComparer : ICompare
+  {
+    private StringComparer comparer;
+
+    public BoolComparer(bool value)
+    {
+      comparer = new StringComparer(value.ToString());
+    }
+
+    public bool Compare(string value)
+    {
+      return comparer.Compare(value);
+    }
+  }
+
   
   /// <summary>
   /// This is the base class for finding elements by a specified attribute. Use
@@ -229,6 +245,17 @@ namespace WatiN.Core
     {
       CheckArgumentNotNull("regex", regex);
       Init(attributeName, regex.ToString(), new RegexComparer(regex));
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Attribute"/> class.
+    /// </summary>
+    /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
+    /// <param name="comparer">The comparer.</param>
+    public Attribute(string attributeName, ICompare comparer)
+    {
+      CheckArgumentNotNull("comparer", comparer);
+      Init(attributeName, comparer.ToString(), comparer);
     }
 
     private void Init(string attributeName, string value, ICompare comparerInstance)
@@ -355,6 +382,13 @@ namespace WatiN.Core
     /// <param regex="regex">The regular expression to match with.</param>
     public Id(Regex regex) : base(attributeName, regex)
     {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Id"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Id(ICompare comparer) : base(attributeName, comparer)
+    {}
   }
  
   /// <summary>
@@ -430,6 +464,13 @@ namespace WatiN.Core
     /// <param regex="regex">The regular expression to match with.</param>
     public Name(Regex regex) : base(attributeName, regex)
     {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Name"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Name(ICompare comparer) : base(attributeName, comparer)
+    {}
   }
 
   /// <summary>
@@ -456,6 +497,13 @@ namespace WatiN.Core
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Text(Regex regex) : base(attributeName, regex)
+    {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Text"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Text(ICompare comparer) : base(attributeName, comparer)
     {}
   }
   
@@ -486,6 +534,13 @@ namespace WatiN.Core
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="regex">The regex.</param>
     public StyleAttribute(string styleAttributeName, Regex regex) : base(attributeName + styleAttributeName, regex)
+    {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StyleAttribute"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public StyleAttribute(string styleAttributeName, ICompare comparer) : base(attributeName + styleAttributeName, comparer)
     {}
   }
 
@@ -520,6 +575,13 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
     public For(Element element) : base(attributeName, element.Id)
+    {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="For"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public For(ICompare comparer) : base(attributeName, comparer)
     {}
   }
 
@@ -557,6 +619,13 @@ namespace WatiN.Core
     {
       comparer = new UriComparer(uri);
     }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Url"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Url(ICompare comparer) : base(attributeName, comparer)
+    {}
 
     /// <summary>
     /// Compares the specified Uri.
@@ -598,6 +667,13 @@ namespace WatiN.Core
     /// <param regex="regex">The regular expression to match with.</param>
     public Title(Regex regex) : base(attributeName, regex)
     {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Title"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Title(ICompare comparer) : base(attributeName, comparer)
+    {}
   }
 
   /// <summary>
@@ -625,6 +701,13 @@ namespace WatiN.Core
     /// <param regex="regex">The regular expression to match with.</param>
     public Value(Regex regex) : base(attributeName, regex)
     {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Value"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Value(ICompare comparer) : base(attributeName, comparer)
+    {}
   }
 
   /// <summary>
@@ -651,6 +734,13 @@ namespace WatiN.Core
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Src(Regex regex) : base(attributeName, regex)
+    {}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Src"/> class.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    public Src(ICompare comparer) : base(attributeName, comparer)
     {}
   }
 

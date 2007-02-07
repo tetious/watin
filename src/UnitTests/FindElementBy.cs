@@ -66,12 +66,29 @@ namespace WatiN.UnitTests
       const string id = "id";
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
-      
-      Regex regex = new Regex("lue$");
-      value = Find.ById(regex);
-      TestAttributeBag attributeBag = new TestAttributeBag(id, "idvalue");
+    }
 
-      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
+    [Test]
+    public void IdWithRegexAndComparer()
+    {
+      MockRepository mocks = new MockRepository();
+      ICompare comparer = (ICompare) mocks.CreateMock(typeof(ICompare));
+      IAttributeBag attributeBag = (IAttributeBag) mocks.CreateMock(typeof(IAttributeBag));
+
+      Expect.Call(attributeBag.GetValue("id")).Return("idvalue");
+      
+      Expect.Call(attributeBag.GetValue("id")).Return("MyMockComparer");
+      Expect.Call(comparer.Compare("MyMockComparer")).Return(true);
+      
+      mocks.ReplayAll();
+
+      Id value = Find.ById(new Regex("lue$"));
+      Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match.");
+
+      // See if mocked comparer is used. VerifyAll will check this
+      new Id(comparer).Compare(attributeBag);
+
+      mocks.VerifyAll();
     }
     
     [Test]
