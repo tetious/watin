@@ -794,8 +794,8 @@ namespace WatiN.Core.DialogHandlers
     public bool IsFileUploadDialog(Window window)
     {
       // "96CC20C4" is valid for Windows XP, Win 2000 and Win 2003
-      // and probably Vista
-      bool returnValue = (window.StyleInHex == "96CC20C4");
+      // "96CC02C4" is valid for Windows Vista
+      bool returnValue = (window.StyleInHex == "96CC20C4") || (window.StyleInHex == "96CC02C4");
       return returnValue;
     }
   }
