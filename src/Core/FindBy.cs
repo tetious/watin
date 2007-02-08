@@ -41,6 +41,8 @@ namespace WatiN.Core.Interfaces
 
 namespace WatiN.Core
 {
+  using WatiN.Core.Exceptions;
+
   /// <summary>
   /// Class that supports an exact comparison of two string values.
   /// </summary>
@@ -216,11 +218,14 @@ namespace WatiN.Core
   {
     private string attributeName;
     private string valueToLookFor;
+    private bool busyComparing = false;
+
     protected ICompare comparer;
     protected Attribute andAttribute;
     protected Attribute orAttribute;
     protected Attribute lastAddedAttribute;
     protected Attribute lastAddedOrAttribute;
+    
 
     // This makes the Find.ByName() & Find.ByCustom() syntax possible
     // and is needed for the && operator
@@ -316,7 +321,24 @@ namespace WatiN.Core
     /// <param name="attributeBag">Value to compare with</param>
     /// <returns><c>true</c> if the searched for value equals the given value</returns>
     public virtual bool Compare(IAttributeBag attributeBag)
-    {     
+    {
+      LockCompare();
+      bool returnValue;
+      
+      try
+      {
+        returnValue = doCompare(attributeBag);
+      }
+      finally
+      {
+        UnLockCompare();
+      }
+
+      return returnValue;
+    }
+
+    private bool doCompare(IAttributeBag attributeBag)
+    {
       bool returnValue = comparer.Compare(attributeBag.GetValue(attributeName));
       
       if (returnValue && andAttribute != null)
@@ -328,10 +350,25 @@ namespace WatiN.Core
       {
         returnValue = orAttribute.Compare(attributeBag);
       }
-
       return returnValue;
     }
-    
+
+    private void UnLockCompare()
+    {
+      busyComparing = false;
+    }
+
+    private void LockCompare()
+    {
+      if (busyComparing)
+      {
+        UnLockCompare();
+        throw new ReEntryException(this);
+      }
+      
+      busyComparing = true;
+    }
+
     public Attribute And(Attribute attribute)
     {
       if (andAttribute == null)

@@ -31,6 +31,7 @@ namespace WatiN.UnitTests
 {
   using System.Collections;
   using Rhino.Mocks;
+  using WatiN.Core.Exceptions;
 
   [TestFixture]
   public class FindElementBy : WatiNTest
@@ -920,6 +921,19 @@ namespace WatiN.UnitTests
       Assert.IsTrue(findBy.Compare(attributeBag));
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
+
+    [Test, ExpectedException(typeof(ReEntryException))]
+    public void RecusiveCallExceptionExpected()
+    {
+      Attribute findBy = Find.ByCustom("tag", "value");
+      findBy.Or(findBy);
+
+      Expect.Call(mockAttributeBag.GetValue("tag")).Return("val").Repeat.AtLeastOnce();
+
+      mocks.ReplayAll();
+      findBy.Compare(mockAttributeBag);
+      mocks.VerifyAll();
+    }
   }
 
   [TestFixture]
@@ -1005,6 +1019,7 @@ namespace WatiN.UnitTests
 //      return false;
 //    }
   }
+
   [TestFixture]
   public class EvenMoreComplexMultipleAttributes
   {
@@ -1072,22 +1087,6 @@ namespace WatiN.UnitTests
 
       mocks.VerifyAll();
     }
-
-//    [Test]
-//    public void testAndOr()
-//    {
-//      Assert.IsTrue(EchoBoolean(1) && EchoBoolean(5) && EchoBoolean(3) || EchoBoolean(2) && EchoBoolean(6));
-//    }
-//
-//    public bool EchoBoolean(int value)
-//    {
-//      System.Diagnostics.Debug.WriteLine(value.ToString());
-//      if (value==1) return true;
-//      if (value==2) return true;
-//      if (value==3) return true;
-//      if (value==4) return true;
-//      return false;
-//    }
   }
   
   [TestFixture]
