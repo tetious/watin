@@ -1078,6 +1078,8 @@ namespace WatiN.UnitTests
     [Test]
     public void TextFieldTextAreaElement()
     {
+      ie.GoTo(ie.Uri);
+
       const string value = "Hello world!";
       const string appendValue = " This is WatiN!";
       TextField textfieldName = ie.TextField("Textarea1");
@@ -2165,5 +2167,7 @@ namespace WatiN.UnitTests
     }
   }
 }
+
+
 
 
