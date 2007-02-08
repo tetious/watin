@@ -219,15 +219,33 @@ namespace WatiN.Core
     protected ICompare comparer;
     protected Attribute andAttribute;
     protected Attribute orAttribute;
+    protected Attribute lastAddedAttribute;
+    protected Attribute lastAddedOrAttribute;
 
+    // This makes the Find.ByName() & Find.ByCustom() syntax possible
+    // and is needed for the && operator
     public static Attribute operator & (Attribute first, Attribute second) 
     {
       return first.And(second);
     }
     
+    // This makes the Find.ByName() | Find.ByCustom() syntax possible
+    // and is needed for the || operator
     public static Attribute operator | (Attribute first, Attribute second) 
     {
       return first.Or(second);
+    }
+
+    // This makes the Find.ByName() && Find.ByCustom() syntax possible
+    public static bool operator true (Attribute attribute) 
+    {
+      return false;
+    }
+
+    // This makes the Find.ByName() || Find.ByCustom() syntax possible
+    public static bool operator false (Attribute attribute) 
+    {
+      return false;
     }
 
     /// <summary>
@@ -316,13 +334,34 @@ namespace WatiN.Core
     
     public Attribute And(Attribute attribute)
     {
-      andAttribute = attribute;
+      if (andAttribute == null)
+      {
+        andAttribute = attribute;
+      }
+      else
+      {
+        lastAddedAttribute.And(attribute);
+      }
+
+      lastAddedAttribute = attribute;
+
       return this;
     }
     
     public Attribute Or(Attribute attribute)
     {
-      orAttribute = attribute;
+      if (orAttribute == null)
+      {
+        orAttribute = attribute;
+      }
+      else
+      {
+        lastAddedOrAttribute.Or(attribute);
+      }
+
+      lastAddedOrAttribute = attribute;
+      lastAddedAttribute = attribute;
+
       return this;
     }
 
@@ -417,6 +456,11 @@ namespace WatiN.Core
     
     public Occurrence(int occurrence) : base("occurence", occurrence.ToString())
     {
+      if (occurrence < 0 )
+      {
+        throw new ArgumentOutOfRangeException("occurrence", occurrence, "Should be zero or more.");
+      }
+
       this.occurrence = occurrence;
     }
     

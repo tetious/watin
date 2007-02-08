@@ -793,6 +793,12 @@ namespace WatiN.UnitTests
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
     
+    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void OccurrenceShouldNotAcceptNegativeValue()
+    {
+      new Occurrence(-1);
+    }
+
     [Test]
     public void Occurence0()
     {
@@ -849,6 +855,52 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void TrueAndOccurence()
+    {
+      Attribute findBy = Find.ByName("Z").And(new Occurrence(1));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsTrue(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void FalseAndOccurence()
+    {
+      Attribute findBy = Find.ByName("Y").And(new Occurrence(1));
+
+      TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
+      Assert.IsFalse(findBy.Compare(attributeBag));
+      Assert.IsFalse(findBy.Compare(attributeBag));
+    }
+
+    [Test]
+    public void TrueAndOccurenceAndTrue()
+    {
+      Attribute findBy = Find.ByName("Z").And(new Occurrence(1)).And(Find.ByValue("text"));
+
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
+      Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
+
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
+      Expect.Call(mockAttributeBag.GetValue("value")).Return("some other text");
+      
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("Y");
+      
+      Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
+      Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
+      
+      mocks.ReplayAll();
+
+      Assert.IsFalse(findBy.Compare(mockAttributeBag));
+      Assert.IsFalse(findBy.Compare(mockAttributeBag));
+      Assert.IsFalse(findBy.Compare(mockAttributeBag));
+      Assert.IsTrue(findBy.Compare(mockAttributeBag));
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
     public void OccurenceAndOrWithOrTrue()
     {
       Attribute findBy = new Occurrence(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
@@ -868,6 +920,174 @@ namespace WatiN.UnitTests
       Assert.IsTrue(findBy.Compare(attributeBag));
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
+  }
+
+  [TestFixture]
+  public class ComplexMultipleAttributes
+  {
+    MockRepository mocks;
+    IAttributeBag mockAttributeBag;
+
+    Attribute findBy1;
+    Attribute findBy2;
+    Attribute findBy3;
+    Attribute findBy4;
+    Attribute findBy5;
+    
+    Attribute findBy;
+
+    [SetUp]
+    public void Setup()
+    {
+      mocks = new MockRepository();
+      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+      findBy = null;
+
+      findBy1 = Find.ByCustom("1", "true");
+      findBy2 = Find.ByCustom("2", "true");
+      findBy3 = Find.ByCustom("3", "true");
+      findBy4 = Find.ByCustom("4", "true");
+      findBy5 = Find.ByCustom("5", "true");
+    }
+
+    [Test]
+    public void WithoutBrackets()
+    {
+      findBy = findBy1.And(findBy2).And(findBy3).Or(findBy4).And(findBy5);
+    }
+
+    [Test]
+    public void WithBrackets()
+    {
+      findBy = findBy1.And(findBy2.And(findBy3)).Or(findBy4.And(findBy5));
+    }
+
+    [Test]
+    public void WithBracketsOperators1()
+    {
+      findBy = findBy1 & findBy2 & findBy3 | findBy4 & findBy5;
+    }
+
+    [Test]
+    public void WithBracketsOperators2()
+    {
+      findBy = findBy1 && findBy2 && findBy3 || findBy4 && findBy5;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      Expect.Call(mockAttributeBag.GetValue("1")).Return("true");
+      Expect.Call(mockAttributeBag.GetValue("2")).Return("false");
+      Expect.Call(mockAttributeBag.GetValue("4")).Return("true");
+      Expect.Call(mockAttributeBag.GetValue("5")).Return("false");
+
+      mocks.ReplayAll();
+
+      Assert.IsFalse(findBy.Compare(mockAttributeBag));
+
+      mocks.VerifyAll();
+    }
+
+//    [Test]
+//    public void testAndOr()
+//    {
+//      Assert.IsTrue(EchoBoolean(1) && EchoBoolean(5) && EchoBoolean(3) || EchoBoolean(2) && EchoBoolean(6));
+//    }
+//
+//    public bool EchoBoolean(int value)
+//    {
+//      System.Diagnostics.Debug.WriteLine(value.ToString());
+//      if (value==1) return true;
+//      if (value==2) return true;
+//      if (value==3) return true;
+//      if (value==4) return true;
+//      return false;
+//    }
+  }
+  [TestFixture]
+  public class EvenMoreComplexMultipleAttributes
+  {
+    MockRepository mocks;
+    IAttributeBag mockAttributeBag;
+
+    Attribute findBy1;
+    Attribute findBy2;
+    Attribute findBy3;
+    Attribute findBy4;
+    Attribute findBy5;
+    Attribute findBy6;
+    Attribute findBy7;
+    Attribute findBy8;
+    Attribute findBy;
+
+    [SetUp]
+    public void Setup()
+    {
+      mocks = new MockRepository();
+      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+      findBy = null;
+
+      findBy1 = Find.ByCustom("1", "true");
+      findBy2 = Find.ByCustom("2", "true");
+      findBy3 = Find.ByCustom("3", "true");
+      findBy4 = Find.ByCustom("4", "true");
+      findBy5 = Find.ByCustom("5", "true");
+      findBy6 = Find.ByCustom("6", "true");
+      findBy7 = Find.ByCustom("7", "true");
+      findBy8 = Find.ByCustom("8", "true");
+    }
+
+    [Test]
+    public void WithOperators()
+    {
+      findBy = findBy1 & findBy2 & findBy3 | findBy4 & findBy5 & findBy6 | findBy7 & findBy8;
+    }
+
+    [Test]
+    public void WithoutBrackets()
+    {
+      findBy = findBy1.And(findBy2).And(findBy3).Or(findBy4).And(findBy5).And(findBy6).Or(findBy7).And(findBy8);
+    }
+
+    [Test]
+    public void WithBrackets()
+    {
+      findBy = findBy1.And(findBy2.And(findBy3)).Or(findBy4.And(findBy5.And(findBy6))).Or(findBy7.And(findBy8));
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      Expect.Call(mockAttributeBag.GetValue("1")).Return("true");
+      Expect.Call(mockAttributeBag.GetValue("2")).Return("false");
+      Expect.Call(mockAttributeBag.GetValue("4")).Return("true");
+      Expect.Call(mockAttributeBag.GetValue("5")).Return("false");
+      Expect.Call(mockAttributeBag.GetValue("7")).Return("true");
+      Expect.Call(mockAttributeBag.GetValue("8")).Return("true");
+
+      mocks.ReplayAll();
+
+      Assert.IsTrue(findBy.Compare(mockAttributeBag));
+
+      mocks.VerifyAll();
+    }
+
+//    [Test]
+//    public void testAndOr()
+//    {
+//      Assert.IsTrue(EchoBoolean(1) && EchoBoolean(5) && EchoBoolean(3) || EchoBoolean(2) && EchoBoolean(6));
+//    }
+//
+//    public bool EchoBoolean(int value)
+//    {
+//      System.Diagnostics.Debug.WriteLine(value.ToString());
+//      if (value==1) return true;
+//      if (value==2) return true;
+//      if (value==3) return true;
+//      if (value==4) return true;
+//      return false;
+//    }
   }
   
   [TestFixture]
