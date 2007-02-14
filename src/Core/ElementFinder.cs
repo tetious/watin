@@ -40,15 +40,7 @@ namespace WatiN.Core
 
     public ElementFinder(ArrayList elementTags, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
-      if (findBy == null)
-      {
-        this.findBy = new AlwaysTrueAttribute();
-      }
-      else
-      {
-        this.findBy = findBy;
-      }
-      
+      this.findBy = getFindBy(findBy);
       this.elementsCollection = elementsCollection;
       
       if (elementTags != null)
@@ -60,36 +52,20 @@ namespace WatiN.Core
         AddElementTag(null, null);
       }
     }
-    
+
     public ElementFinder(ArrayList elementTags, IHTMLElementCollection elementsCollection) : this(elementTags, null, elementsCollection)
     {}
     
     public ElementFinder(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
     {
-      this.findBy = findBy;
+      this.findBy = getFindBy(findBy);
       this.elementsCollection = elementsCollection;
       
       AddElementTag(tagName, inputType);
     }
     
-    public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, new AlwaysTrueAttribute(), elementsCollection)
+    public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, null, elementsCollection)
     {}
-
-    internal static string GetExceptionMessage(ArrayList elementTags)
-    {
-      string message = String.Empty;
-
-      foreach (ElementTag elementTag in elementTags)
-      {
-        if (message.Length > 0)
-        {
-          message = message + " or ";
-        }
-        message = message + elementTag.ToString();
-      }
-
-      return message;
-    }
 
     public virtual IHTMLElement FindFirst(bool throwExceptionIfElementNotFound)
     {      
@@ -139,7 +115,16 @@ namespace WatiN.Core
         return elements;
       }
     }
-    
+
+    private static Attribute getFindBy(Attribute findBy)
+    {
+      if (findBy == null)
+      {
+        return new AlwaysTrueAttribute();
+      }
+      return findBy;
+    }
+
     private ArrayList findElementsByAttribute(ElementTag elementTag, Attribute findBy, bool returnAfterFirstMatch)
     {
       // Get elements with the tagname from the page
@@ -176,33 +161,48 @@ namespace WatiN.Core
       //      then benefits (I just introduced this method to be on 
       //      the save side)
       
-      if (String.Compare(element.tagName, "img", true) == 0)
+      if (ElementTag.IsValidElement(element, Image.ElementTags))
       {
         return;
       }
-      
-      //TODO: replace with SimpleTimer
-      DateTime startTime = DateTime.Now;
       
       // Wait if the readystate of an element is BETWEEN
       // Uninitialized and Complete. If it's uninitialized,
       // it's quite probable that it will never reach Complete.
       // Like for elements that could not load an image or ico
-      // or some other bits not part of the HTML page.
-      int readyState = ((IHTMLElement2)element).readyStateValue;
-      while (readyState != 0 && readyState !=4)
-      { 
-        if(DateTime.Now.Subtract(startTime).Seconds <= 30)
+      // or some other bits not part of the HTML page.     
+      SimpleTimer timeoutTimer = new SimpleTimer(30);
+
+      do
+      {
+        int readyState = ((IHTMLElement2)element).readyStateValue;
+
+        if (readyState == 0 || readyState == 4)
         {
-          Thread.Sleep(100);
-        }
-        else
-        {
-          throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
+          return;
         }
 
-        readyState = ((IHTMLElement2)element).readyStateValue;
+        Thread.Sleep(100);
+
+      } while (!timeoutTimer.Elapsed);
+
+      throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
+    }
+
+    internal static string GetExceptionMessage(ArrayList elementTags)
+    {
+      string message = String.Empty;
+
+      foreach (ElementTag elementTag in elementTags)
+      {
+        if (message.Length > 0)
+        {
+          message = message + " or ";
+        }
+        message = message + elementTag.ToString();
       }
+
+      return message;
     }
 
     internal static bool isInputElement(string tagName)
