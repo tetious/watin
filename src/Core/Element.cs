@@ -620,7 +620,7 @@ namespace WatiN.Core
 
     /// <summary>
     /// Waits until the element exists or will time out after 30 seconds.
-    /// To change the default time out, set <see cref="IE.Settings.WaitUntilExistsTimeOut"/>
+    /// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitUntilExistsTimeOut"/>
     /// </summary>
     public void WaitUntilExists()
     {
@@ -665,7 +665,7 @@ namespace WatiN.Core
     /// <summary>
     /// Waits till the page load is complete. This should only be used on rare occasions
     /// because WatiN calls this function for you when it handles events (like Click etc..)
-    /// To change the default time out, set <see cref="IE.Settings.WaitForCompleteTimeOut"/>
+    /// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitForCompleteTimeOut"/>
     /// </summary>
     public void WaitForComplete()
     {

@@ -193,7 +193,7 @@ namespace WatiN.Core
     /// <summary>
     /// This method calls InitTimeOut and waits till IE is ready
     /// processing or the timeout period (30 seconds) has expired.
-    /// To change the default time out, set <see cref="IE.Settings.WaitForCompleteTimeOut"/>
+    /// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitForCompleteTimeOut"/>
     /// </summary>
     public virtual void WaitForComplete()
     {
