@@ -912,15 +912,12 @@ namespace WatiN.Core.DialogHandlers
     {
       SimpleTimer timeoutTimer = new SimpleTimer(waitDurationInSeconds);
 
-      bool dialogNotAvailable = !Exists();
-      
-      while (dialogNotAvailable)
+      while (!Exists() && !timeoutTimer.Elapsed)
       {
         Thread.Sleep(200);
-        dialogNotAvailable = !timeoutTimer.Elapsed & !Exists();
       }
       
-      if (dialogNotAvailable)
+      if (!Exists())
       {
         throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
       }

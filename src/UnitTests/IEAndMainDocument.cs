@@ -260,13 +260,13 @@ namespace WatiN.UnitTests
           ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
       
           alertDialogHandler.WaitUntilExists();
-        
-          Assert.AreEqual("This is an alert!", alertDialogHandler.Message, "Unexpected message");
-      
+
+          string message = alertDialogHandler.Message;
           alertDialogHandler.OKButton.Click();
       
           ie.WaitForComplete();
 
+          Assert.AreEqual("This is an alert!", message, "Unexpected message");
           Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
         }
       }      
@@ -345,13 +345,13 @@ namespace WatiN.UnitTests
         using (new UseDialogOnce(ie.DialogWatcher, alertDialogHandler))
         {
           alertDialogHandler.WaitUntilExists();
-        
-          Assert.AreEqual("This is an alert!", alertDialogHandler.Message);
-      
+
+          string message = alertDialogHandler.Message;
           alertDialogHandler.OKButton.Click();
       
           ie.WaitForComplete();
 
+          Assert.AreEqual("This is an alert!", message, "Unexpected message");
           Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
         }
       }      
@@ -371,13 +371,13 @@ namespace WatiN.UnitTests
           ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
       
           confirmDialogHandler.WaitUntilExists();
-        
-          Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
-      
+
+          string message = confirmDialogHandler.Message;
           confirmDialogHandler.OKButton.Click();
       
           ie.WaitForComplete();
 
+          Assert.AreEqual("Do you want to do xyz?", message, "Unexpected message");
           Assert.AreEqual("OK", ie.TextField("ReportConfirmResult").Text, "OK button expected.");
         }
       }      
@@ -397,13 +397,13 @@ namespace WatiN.UnitTests
           ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
       
           confirmDialogHandler.WaitUntilExists();
-        
-          Assert.AreEqual("Do you want to do xyz?", confirmDialogHandler.Message);
-      
+
+          string message = confirmDialogHandler.Message;
           confirmDialogHandler.CancelButton.Click();
       
           ie.WaitForComplete();
 
+          Assert.AreEqual("Do you want to do xyz?", message, "Unexpected message");
           Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
         }
       }      
