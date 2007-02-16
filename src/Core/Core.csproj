@@ -355,6 +355,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Style.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Table.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
