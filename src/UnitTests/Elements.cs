@@ -683,21 +683,20 @@ namespace WatiN.UnitTests
       Assert.IsAssignableFrom(typeof(ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
 
       Assert.IsNotNull(element,  "Element not found");
+      
+      // check behavior for standard attribute
       Assert.AreEqual(tableId, element.GetAttributeValue("id"), "GetAttributeValue id failed");
+      // check behavior for non existing attribute
       Assert.IsNull(element.GetAttributeValue("watin"), "GetAttributeValue watin should return null");
+      // check behavior for custom attribute
+      Assert.AreEqual("myvalue",element.GetAttributeValue("myattribute"), "GetAttributeValue myattribute should return myvalue");
+      
       Assert.AreEqual("table", element.TagName.ToLower(), "Invalid tagname");
 
       // Textbefore and TextAfter tests
       CheckBox checkBox = ie.CheckBox("Checkbox21");
       Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
       Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
-    }
-
-    [Test, ExpectedException(typeof(InvalidAttributException))]
-    public void ButtonFindByAndOthersShouldThrowInvalidAttributeException()
-    {
-      Button button = ie.Button(Find.ByFor("Checkbox21"));
-      Assert.IsFalse(button.Exists);
     }
     
     [Test]
@@ -708,31 +707,18 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void ButtonAndOthersFindByShouldNeverThrowInvalidAttributeException()
+    {
+      Button button = ie.Button(Find.ByCustom("noattribute", "novalue"));
+      Assert.IsFalse(button.Exists);
+    }
+
+    [Test]
     public void ElementCollectionExistsShouldNeverThrowInvalidAttributeException()
     {
       Assert.IsTrue(ie.Elements.Exists(Find.ByFor("Checkbox21")));
     }
-    
-    [Test, ExpectedException(typeof(InvalidAttributException))]
-    public void ButtonCollectionExistsAndOthersShouldThrowInvalidAttributeException()
-    {
-      Assert.IsFalse(ie.Buttons.Exists(Find.ByFor("Checkbox21")));
-    }
-    
-    [Test]
-    public void ElementCollectionFilterShouldNeverThrowInvalidAttributeException()
-    {
-      ElementCollection elements = ie.Elements.Filter(Find.ByFor("Checkbox21"));
-      Assert.AreEqual(1, elements.Length);
-    }
-    
-    [Test, ExpectedException(typeof(InvalidAttributException))]
-    public void ButtonCollectionFilterAndOthersShouldThrowInvalidAttributeException()
-    {
-      ButtonCollection buttons = ie.Buttons.Filter(Find.ByFor("Checkbox21"));
-      Assert.AreEqual(1, buttons.Length);
-    }
-
+            
     [Test]
     public void ElementCollectionSecondFilterShouldNeverThrowInvalidAttributeException()
     {
@@ -1169,10 +1155,10 @@ namespace WatiN.UnitTests
       Assert.AreEqual(1, count);
     }
     
-    [Test, ExpectedException(typeof(InvalidAttributException))]
-    public void TryFindingElementByInvalidAttribute()
+    [Test]
+    public void FindingElementByCustomAttribute()
     {
-      ie.TextField(Find.ByCustom("xyz", "value")).Click();
+      Assert.IsTrue(ie.Table(Find.ByCustom("myattribute", "myvalue")).Exists);
     }
     
     [Test]
@@ -1423,6 +1409,38 @@ namespace WatiN.UnitTests
 
         Assert.IsTrue(injectedTextField.Exists);
         Assert.AreEqual("Injection Succeeded", text);
+      }
+    }
+
+    [Test]
+    public void WaitUntilElementNolongerExistsElementRemovedAfter3Seconds()
+    {
+      Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+
+      using(IE ie1 = new IE(TestEventsURI))
+      {
+        TextField textfieldToRemove = ie1.TextField("textFieldToRemove");
+        
+        Assert.IsTrue(textfieldToRemove.Exists);
+//        Assert.IsNotNull(textfieldToRemove.Style.Display);
+
+//        ElementCollection elements = ie.Elements.Filter(Find.ByCustom("sourceindex","0"));
+//
+//        foreach (Element element in elements)
+//        {
+//          System.Diagnostics.Debug.WriteLine(element.OuterHtml);
+//        }
+//        ie.Element(Find.ByCustom("sourceindex","0"))
+
+        ie1.Button("removeElement").ClickNoWait();
+
+        Assert.IsTrue(textfieldToRemove.Exists);
+
+        System.Diagnostics.Debug.WriteLine(textfieldToRemove.Text);
+        
+        textfieldToRemove.WaitUntilRemoved();
+
+        Assert.IsFalse(textfieldToRemove.Exists);
       }
     }
     

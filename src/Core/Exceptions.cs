@@ -26,21 +26,9 @@ namespace WatiN.Core.Exceptions
   /// </summary>
   public class WatiNException : Exception
   {
-    private string message = "";
-
-    public WatiNException() : base()
-    {
-    }
-
-    public WatiNException(string message) : base()
-    {
-      this.message = message;
-    }
-
-    public override string Message
-    {
-      get { return message; }
-    }
+    public WatiNException() : base() {}
+    public WatiNException(string message) : base(message) {}
+    public WatiNException(string message, Exception innerexception) : base(message, innerexception) {}
   }
 
   /// <summary>
@@ -55,8 +43,17 @@ namespace WatiN.Core.Exceptions
   public class ElementNotFoundException : WatiNException
   {
     public ElementNotFoundException(string tagName, string attributeName, string value) : 
-      base("Could not find a '" + UtilityClass.ToString(tagName) + "' tag containing attribute " + attributeName + " with value '" + value + "'")
+      base(createMessage(attributeName, tagName, value))
     {}
+
+    public ElementNotFoundException(string tagName, string attributeName, string value, Exception innerexception) : 
+      base(createMessage(attributeName, tagName, value), innerexception)
+    {}
+
+    private static string createMessage(string attributeName, string tagName, string value)
+    {
+      return "Could not find a '" + UtilityClass.ToString(tagName) + "' tag containing attribute " + attributeName + " with value '" + value + "'";
+    }
   }
 
   /// <summary>

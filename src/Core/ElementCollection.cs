@@ -45,14 +45,6 @@ namespace WatiN.Core
     public ElementCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
     {}
 
-    protected override bool IgnoreInvalidAttributes
-    {
-      get
-      {
-        return true;
-      }
-    }
-
     /// <summary>
     /// Gets the <see cref="Element"/> at the specified index.
     /// </summary>

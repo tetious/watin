@@ -1260,6 +1260,19 @@ namespace WatiN.UnitTests
 
     MockRepository mocks;
     ILogWriter mockLogWriter;
+    private ILogWriter originalLogWriter;
+
+    [TestFixtureSetUp]
+    public void FixtureSetUp()
+    {
+      originalLogWriter = Logger.LogWriter;
+    }
+
+    [TestFixtureTearDown]
+    public void FixtureTearDown()
+    {
+      Logger.LogWriter = originalLogWriter;
+    }
 
     [SetUp]
     public void SetUp()

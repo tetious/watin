@@ -60,6 +60,24 @@ function injectElement()
       div.innerHTML = "<input type=text id=injectedTextField value='Injection Succeeded' />";
     }, 3000);
 }
+
+function removeElement1()
+{
+    window.setTimeout(function() 
+    {
+      div = document.getElementById("textFieldToRemoveDiv"); 
+      div.innerHTML = "";
+    }, 3000);
+}
+
+function removeElement()
+{
+    window.setTimeout(function() 
+    {
+      div = document.getElementById("textFieldToRemoveDiv"); 
+      div.removeNode(true);
+    }, 3000);
+}
         </script>
     </head>
     <body>
@@ -86,5 +104,9 @@ function injectElement()
         </P>
         <P>&nbsp;</P>
         <div id="injectElementDiv">Inject Element here to test Element.WaitUntilExists</div>
+        <P><INPUT id="removeElement" onclick="removeElement()" type="button" value="Remove element after 3 seconds">
+        </P>
+        <P>&nbsp;</P>
+        <div id="textFieldToRemoveDiv"><input type=text id=textFieldToRemove value='Element to be removed'/></div>
     </body>
 </html>

@@ -48,19 +48,17 @@ namespace WatiN.Core
     /// <param name="element">The element</param>
     public Element(DomContainer domContainer, object element)
     {
-      this.domContainer = domContainer;
-      this.element = element;
+      init(domContainer, element, null);
     }
     
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
     /// <param name="domContainer"><see cref="DomContainer"/> this element is located in</param>
-    /// <param name="finder">The finder.</param>
-    public Element(DomContainer domContainer, ElementFinder finder)
+    /// <param name="elementFinder">The element finder.</param>
+    public Element(DomContainer domContainer, ElementFinder elementFinder)
     {
-      this.domContainer = domContainer;
-      elementFinder = finder;
+      init(domContainer, null, elementFinder);
     }
     
     /// <summary>
@@ -72,13 +70,19 @@ namespace WatiN.Core
     {
       if (ElementTag.IsValidElement(element.htmlElement, elementTags))
       {
-        domContainer = element.domContainer;
-        this.element = element.HTMLElement;
+        init(element.domContainer, element.element, element.elementFinder);
       }
       else
       {
         throw new ArgumentException(String.Format("Expected element {0}", ElementFinder.GetExceptionMessage(elementTags)), "element");
       }
+    }
+
+    private void init(DomContainer domContainer, object element, ElementFinder elementFinder)
+    {
+      this.domContainer = domContainer;
+      this.element = element;
+      this.elementFinder = elementFinder;
     }
 
     /// <summary>
@@ -614,7 +618,34 @@ namespace WatiN.Core
     {
       get
       {
-        return (null != getElement(false));
+        object elementExists = getElement(false);
+
+        if (elementExists == null)
+        {
+          return false;
+        }
+
+        try
+        {
+          if(((IHTMLElement)elementExists).sourceIndex < 0)
+          {
+            return false;
+          }
+
+          IHTMLElement htmlElementExists = elementExists as IHTMLElement;
+          if(htmlElementExists != null && htmlElementExists.offsetParent == null)
+//            && htmlElementExists.offsetHeight == 0 && htmlElementExists.offsetLeft == 0 
+//            && htmlElementExists.offsetTop == 0 && htmlElementExists.offsetWidth == 0)
+          {
+            return false;
+          }
+        }
+        catch
+        {
+          return false;
+        }
+
+        return true;
       }
     }
 
@@ -636,20 +667,47 @@ namespace WatiN.Core
     {
       if (!Exists && elementFinder != null)
       {
-        SimpleTimer timeoutTimer = new SimpleTimer(timeout);
-
-        do
-        {
-          if (Exists)
-          {
-            return;
-          }
-        
-          Thread.Sleep(200);
-        } while (!timeoutTimer.Elapsed);
-
-        throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to show up.", timeout));
+        waitUntil(timeout, true);
       }      
+    }
+
+    /// <summary>
+    /// Waits until the element no longer exists or will time out after 30 seconds.
+    /// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitUntilExistsTimeOut"/>
+    /// </summary>
+    public void WaitUntilRemoved()
+    {
+      // Wait 30 seconds max
+      WaitUntilRemoved(IE.Settings.WaitUntilExistsTimeOut);
+    }
+    
+    /// <summary>
+    /// Waits until the element no longer exists. Wait will time out after <paramref name="timeout"/> seconds.
+    /// </summary>
+    /// <param name="timeout">The timeout in seconds.</param>
+    public void WaitUntilRemoved(int timeout)
+    {
+      if (Exists)
+      {
+        waitUntil(timeout, false);
+      }      
+    }
+
+    private void waitUntil(int timeout, bool waitUntilExists)
+    {
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+
+      do
+      {
+        if (Exists == waitUntilExists)
+        {
+          return;
+        }
+        
+        Thread.Sleep(200);
+      } while (!timeoutTimer.Elapsed);
+
+      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
     }
 
     private object getElement(bool throwExceptionIfElementNotFound)
@@ -657,6 +715,11 @@ namespace WatiN.Core
       if (element == null && elementFinder != null)
       {
         element = elementFinder.FindFirst();
+
+        if (element == null && throwExceptionIfElementNotFound)
+        {
+          throw elementFinder.CreateElementNotFoundException();
+        }
       }
 
       return element;

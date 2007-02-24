@@ -67,6 +67,11 @@ namespace WatiN.Core
     public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, null, elementsCollection)
     {}
 
+    public virtual IHTMLElement FindFirst()
+    {            
+      return FindFirst(false);
+    }
+
     public virtual IHTMLElement FindFirst(bool throwExceptionIfElementNotFound)
     {      
       foreach (ElementTag elementTag in tagsToFind)
@@ -81,10 +86,20 @@ namespace WatiN.Core
 
       if (throwExceptionIfElementNotFound)
       {
-        throw new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value);
+        throw CreateElementNotFoundException();
       }
       
       return null;
+    }
+
+    internal ElementNotFoundException CreateElementNotFoundException()
+    {
+      return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value);
+    }
+
+    internal ElementNotFoundException CreateElementNotFoundException(Exception innerexception)
+    {
+      return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value, innerexception);
     }
 
     public void AddElementTag(string tagName, string inputType)
@@ -132,7 +147,6 @@ namespace WatiN.Core
       IHTMLElementCollection elements = elementTag.GetElementCollection(elementsCollection);
 
       ElementAttributeBag attributeBag = new ElementAttributeBag();
-      attributeBag.IgnoreInvalidAttributes = (elementTag.TagName == null);
       
       // Loop through each element and evaluate
       foreach (IHTMLElement element in elements)
@@ -214,7 +228,6 @@ namespace WatiN.Core
   public class ElementAttributeBag : IAttributeBag
   {
     private IHTMLElement element = null;
-    private bool ignoreInvalidAttributes = false;
 
     public ElementAttributeBag()
     {}
@@ -256,32 +269,15 @@ namespace WatiN.Core
 
       if (attribute == DBNull.Value)
       {
-        if (ignoreInvalidAttributes)
-        {
-          return null;
-        }
-        
-        throw new InvalidAttributException(attributename, element.tagName);
+        return null;
       }
-
+        
       if (attribute == null)
       {
         return null;
       }
       
       return attribute.ToString();
-    }
-
-    public bool IgnoreInvalidAttributes
-    {
-      set
-      {
-        ignoreInvalidAttributes = value;
-      }
-      get
-      {
-        return ignoreInvalidAttributes;
-      }
     }
   }
 

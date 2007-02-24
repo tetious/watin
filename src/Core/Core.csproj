@@ -356,6 +356,7 @@
                 />
                 <File
                     RelPath = "Style.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
