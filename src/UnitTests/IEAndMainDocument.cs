@@ -807,16 +807,15 @@ namespace WatiN.UnitTests
       using (IE ie = new IE(TestEventsURI))
       {
         TextField report = ie.TextField("Report");
-        Assert.IsNull(report.Text, "Report not empty");
-        
         Button button = ie.Button(Find.ByValue("Button without id"));
+        
         Assert.IsNull(button.Id, "Button id not null before click event");
+        Assert.IsNull(report.Text, "Report not empty");
         
         button.KeyDown();
         
         Assert.IsNotNull(report.Text, "No keydown event fired (report is empty )");
-        StringAssert.StartsWith("button.id = ", report.Text, "Report should start with 'button.id = '");
-        Assert.Greater(report.Text.Length, "button.id = ".Length, "No assigned id report");
+        Assert.AreEqual("button.id = ", report.Text, "Report should start with 'button.id = '");
         
         Assert.IsNull(button.Id, "Button id not null after click event");
       }

@@ -125,31 +125,12 @@ namespace WatiN.Core
       //       holds 0 or more name/value pairs where the name is a property of the event object
       //       and the value is the value that's assigned to the property.
 
-      bool removeIdAttribute = false;
-      
-      // If the element has no Id, assign a temporary and unique Id so we can find 
-      // the element within the java code (I know, it's a bit dirty hack)
-      if (element.id == null)
-      {
-        element.id = Guid.NewGuid().ToString();
-        removeIdAttribute = true;
-      }
-
       // Execute the JScript to fire the event inside the Browser.
-      FireEventOnElementWithJScript(element, eventName);
-
-      // Remove Id attribute if temporary Id was assigned.
-      if (removeIdAttribute)
-      {
-        element.removeAttribute("id", 0);
-      }
-    }
-
-    private void FireEventOnElementWithJScript(DispHTMLBaseElement element, string eventName)
-    {
       string scriptCode = "var newEvt = document.createEventObject();";
       scriptCode += "newEvt.button = 1;";
-      scriptCode += "document.getElementById('" + element.id + "').fireEvent('" + eventName + "', newEvt);";
+      scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
+
+      System.Diagnostics.Debug.WriteLine(scriptCode);
 
       IHTMLWindow2 window = ((HTMLDocument) element.document).parentWindow;
 
