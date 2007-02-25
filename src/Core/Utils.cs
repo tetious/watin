@@ -23,7 +23,9 @@ using mshtml;
 
 namespace WatiN.Core
 {
-	/// <summary>
+  using System.Collections;
+
+  /// <summary>
 	/// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
 	/// </summary>
 	public sealed class UtilityClass
@@ -123,6 +125,19 @@ namespace WatiN.Core
 	    string className = NativeMethods.GetClassName(hWnd);
       
 	    return className.Equals(expectedClassName);
+	  }
+
+    internal static ArrayList IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
+	  {
+	    ArrayList elements = new ArrayList();
+	    int length = elementCollection.length;
+
+      for(int index = 0; index < length; index++)
+      {
+        elements.Add(elementCollection.item(index, null));
+      }
+
+	    return elements;
 	  }
 	}
   

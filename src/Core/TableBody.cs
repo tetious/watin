@@ -19,11 +19,19 @@ namespace WatiN.Core
     {
     }
 
+    /// <summary>
+    /// Returns the table rows of this table body (not including table rows 
+    /// from tables nested in this table body).
+    /// </summary>
+    /// <value>The table rows.</value>
     public override TableRowCollection TableRows
     {
       get
       {
-        return ElementsSupport.TableRows(DomContainer, ((IHTMLTableSection) htmlElement).rows);
+        IHTMLTableSection htmlBody = (IHTMLTableSection) HTMLElement;
+        IHTMLElementCollection rows2 = htmlBody.rows;
+
+        return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(rows2));
       }
     }
 

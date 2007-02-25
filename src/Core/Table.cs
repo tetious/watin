@@ -74,6 +74,22 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Returns the table body sections of this table (not including table body sections 
+    /// from tables nested in this table).
+    /// </summary>
+    /// <value>The table bodies.</value>
+    public override TableBodyCollection TableBodies
+    {
+      get
+      {
+        IHTMLTable htmlTable = (IHTMLTable) HTMLElement;
+        IHTMLElementCollection tbodies = htmlTable.tBodies;
+        
+        return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(tbodies));
+      }
+    }
+
     private IHTMLElementCollection GetBodyElements()
     {
       return (IHTMLElementCollection)(GetFirstTBody().all);

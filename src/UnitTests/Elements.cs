@@ -56,6 +56,10 @@ namespace WatiN.UnitTests
     public void TestSetUp()
     {
       IE.Settings = defaultSettings.Clone();
+      if(!ie.Uri.Equals(MainURI))
+      {
+        ie.GoTo(MainURI);
+      }
     }
     
     [Test]
@@ -95,6 +99,30 @@ namespace WatiN.UnitTests
       Element element = ie.Element(tableId);  
       Table table = new Table(element);
       Assert.AreEqual(tableId, table.Id);
+    }
+
+    [Test]
+    public void TableTableBodiesExcludesBodiesFromNestedTables()
+    {
+      ie.GoTo(new Uri(HtmlTestBaseURI, "Tables.html"));
+
+      TableBodyCollection tableBodies = ie.Table("Table1").TableBodies;
+      Assert.AreEqual(2, tableBodies.Length, "Unexpected number of tbodies");
+      Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
+      Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
+    }
+
+    [Test]
+    public void TableBodyExcludesRowsFromNestedTables()
+    {
+      ie.GoTo(new Uri(HtmlTestBaseURI, "Tables.html"));
+
+      TableBody tableBody = ie.Table("Table1").TableBodies[0];
+
+      Assert.AreEqual(1, tableBody.Tables.Length, "Expected nested table");
+      Assert.AreEqual(2, tableBody.TableRows.Length, "Expected 2 rows");
+      Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
+      Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
     }
 
     [Test]
@@ -1422,15 +1450,6 @@ namespace WatiN.UnitTests
         TextField textfieldToRemove = ie1.TextField("textFieldToRemove");
         
         Assert.IsTrue(textfieldToRemove.Exists);
-//        Assert.IsNotNull(textfieldToRemove.Style.Display);
-
-//        ElementCollection elements = ie.Elements.Filter(Find.ByCustom("sourceindex","0"));
-//
-//        foreach (Element element in elements)
-//        {
-//          System.Diagnostics.Debug.WriteLine(element.OuterHtml);
-//        }
-//        ie.Element(Find.ByCustom("sourceindex","0"))
 
         ie1.Button("removeElement").ClickNoWait();
 

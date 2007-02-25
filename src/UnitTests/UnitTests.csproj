@@ -176,6 +176,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "html\Tables.html"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\TestEvents.html"
                     BuildAction = "Content"
                 />
