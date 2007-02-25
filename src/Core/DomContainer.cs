@@ -130,9 +130,7 @@ namespace WatiN.Core
       scriptCode += "newEvt.button = 1;";
       scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
 
-      System.Diagnostics.Debug.WriteLine(scriptCode);
-
-      IHTMLWindow2 window = ((HTMLDocument) element.document).parentWindow;
+      IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
 
       try
       {
