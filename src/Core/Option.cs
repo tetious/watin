@@ -3,10 +3,17 @@ namespace WatiN.Core
   using System.Collections;
   using mshtml;
 
+  /// <summary>
+  /// This class provides specialized functionality for a HTML option element.
+  /// </summary>
   public class Option : Element
   {
     private static ArrayList elementTags;
 
+    /// <summary>
+    /// Gets the element tags supported by this element
+    /// </summary>
+    /// <value>The element tags.</value>
     public static ArrayList ElementTags
     {
       get
@@ -21,14 +28,24 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Option"/> class.
+    /// </summary>
+    /// <param name="ie">The ie.</param>
+    /// <param name="optionElement">The option element.</param>
     public Option(DomContainer ie, IHTMLOptionElement optionElement) : base(ie, optionElement)
     {}
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Option"/> class.
+    /// </summary>
+    /// <param name="ie">The ie.</param>
+    /// <param name="finder">The finder.</param>
     public Option(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
     
     /// <summary>
-    /// Initialises a new instance of the <see cref="Span"/> class based on <paramref name="element"/>.
+    /// Initialises a new instance of the <see cref="Option"/> class based on <paramref name="element"/>.
     /// </summary>
     /// <param name="element">The element.</param>
     public Option(Element element) : base(element, ElementTags)

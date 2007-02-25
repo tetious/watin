@@ -23,13 +23,10 @@ using System.Text.RegularExpressions;
 using mshtml;
 
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
-  using System.Globalization;
-
   /// <summary>
   /// This class provides specialized functionality for a HTML select element.
   /// </summary>
@@ -37,6 +34,10 @@ namespace WatiN.Core
   {
     private static ArrayList elementTags;
 
+    /// <summary>
+    /// Gets the element tags supported by this element
+    /// </summary>
+    /// <value>Arraylist with ElementTag instances.</value>
     public static ArrayList ElementTags
     {
       get
@@ -55,17 +56,17 @@ namespace WatiN.Core
     /// Returns an initialized instance of a SelectList object.
     /// Mainly used by the collectionclass SelectLists.
     /// </summary>
-    /// <param name="ie"></param>
-    /// <param name="htmlSelectElement"></param>
+    /// <param name="ie">The <see cref="DomContainer"/> the element is in.</param>
+    /// <param name="htmlSelectElement">The HTML select element.</param>
     public SelectList(DomContainer ie, IHTMLElement htmlSelectElement) : base(ie, htmlSelectElement)
     {}
 
     /// <summary>
-    /// Returns an initialized instance of a SelectList object.
-    /// Mainly used by the collectionclass SelectLists.
+    /// Returns an instance of a SelectList object.
+    /// Mainly used internally.
     /// </summary>
-    /// <param name="ie"></param>
-    /// <param name="finder"></param>
+    /// <param name="ie">The <see cref="DomContainer"/> the element is in.</param>
+    /// <param name="finder">The element finder to use.</param>
     public SelectList(DomContainer ie, ElementFinder finder) : base(ie, finder)
     {}
 
@@ -77,7 +78,7 @@ namespace WatiN.Core
     {}
 
     /// <summary>
-    /// This method clears the selected items in the select box and wait for the 
+    /// This method clears the selected items in the select box and waits for the 
     /// onchange event to complete after the list is cleared
     /// </summary>
     public void ClearList()
@@ -97,6 +98,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="SelectList"/> allows multiple select.
+    /// </summary>
+    /// <value><c>true</c> if multiple; otherwise, <c>false</c>.</value>
     public bool Multiple
     {
       get { return selectElement.multiple; }
@@ -106,7 +111,7 @@ namespace WatiN.Core
     /// This method selects an item by text.
     /// Raises NoValueFoundException if the specified value is not found.
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="text">The text.</param>
     public void Select(string text)
     {
       Logger.LogAction("Selecting '" + text + "' in " + GetType().Name + " '" + Id + "'");
@@ -118,7 +123,7 @@ namespace WatiN.Core
     /// This method selects an item by text using the supplied regular expression.
     /// Raises NoValueFoundException if the specified value is not found.
     /// </summary>
-    /// <param name="regex"></param>
+    /// <param name="regex">The regex.</param>
     public void Select(Regex regex)
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
@@ -130,7 +135,7 @@ namespace WatiN.Core
     /// Selects an item in a select box, by value.
     /// Raises NoValueFoundException if the specified value is not found.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The value.</param>
     public void SelectByValue(string value)
     {
       Logger.LogAction("Selecting item with value '" + value + "' in " + GetType().Name + " '" + Id + "'");
@@ -142,7 +147,7 @@ namespace WatiN.Core
     /// Selects an item in a select box by value using the supplied regular expression.
     /// Raises NoValueFoundException if the specified value is not found.
     /// </summary>
-    /// <param name="regex"></param>
+    /// <param name="regex">The regex.</param>
     public void SelectByValue(Regex regex)
     {
       Logger.LogAction("Selecting text using regular expresson '" + regex.ToString() + "' in " + GetType().Name + " '" + Id + "'");
@@ -170,29 +175,29 @@ namespace WatiN.Core
     }
     
     /// <summary>
-    /// Options the specified text.
+    /// Returns the <see cref="Options" /> which matches the specified <paramref name="text"/>.
     /// </summary>
     /// <param name="text">The text.</param>
-    /// <returns></returns>
+    /// <returns><see cref="Options" /></returns>
     public Option Option(string text)
     {
       return Option(GetTextAttribute(text));
     }
 
     /// <summary>
-    /// Options the specified text.
+    /// Returns the <see cref="Options" /> which matches the specified <paramref name="text"/>.
     /// </summary>
     /// <param name="text">The text.</param>
-    /// <returns></returns>
+    /// <returns><see cref="Options" /></returns>
     public Option Option(Regex text)
     {
       return Option(Find.ByText(text));
     }
 
     /// <summary>
-    /// Options the specified find by.
+    /// Returns the <see cref="Options" /> which matches the specified <paramref name="findBy"/>.
     /// </summary>
-    /// <param name="findBy">The find by.</param>
+    /// <param name="findBy">The find by to use.</param>
     /// <returns></returns>
     public Option Option(Attribute findBy)
     {
@@ -233,7 +238,7 @@ namespace WatiN.Core
     }
     
     /// <summary>
-    /// Returns the selected item(s) as an array.
+    /// Returns the selected item(s) in a <see cref="StringCollection"/>.
     /// </summary>
     public StringCollection SelectedItems
     {
@@ -251,13 +256,8 @@ namespace WatiN.Core
       }
     }
 
-    private static Attribute GetIsSelectedAttribute()
-    {
-      return new Attribute("selected", true.ToString());
-    }
-
     /// <summary>
-    /// Returns the first selected item in the selectlist. There might by more.
+    /// Returns the first selected item in the selectlist. Other items may be selected.
     /// Use SelectedItems to get a StringCollection of all selected items.
     /// When there's no item selected, the return value will be null.
     /// </summary>
@@ -273,7 +273,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the first selected option in the selectlist. There might by more.
+    /// Returns the first selected option in the selectlist. Other options may be selected.
     /// Use SelectedOptions to get an ArrayList of all selected options.
     /// When there's no option selected, the return value will be null.
     /// </summary>
@@ -292,14 +292,20 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this instance has selected items.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if this instance has selected items; otherwise, <c>false</c>.
+    /// </value>
     public bool HasSelectedItems
     {
       get { return SelectedOption != null; }
     }
 
-    private IHTMLSelectElement selectElement
+    private static Attribute GetIsSelectedAttribute()
     {
-      get { return ((IHTMLSelectElement) HTMLElement); }
+      return new Attribute("selected", true.ToString());
     }
 
     private void SelectByTextOrValue(Attribute findBy)
@@ -320,6 +326,11 @@ namespace WatiN.Core
     private static Text GetTextAttribute(string text)
     {
       return new Text(new StringEqualsAndCaseInsensitiveComparer(text));
+    }
+
+    private IHTMLSelectElement selectElement
+    {
+      get { return ((IHTMLSelectElement) HTMLElement); }
     }
   }
 }
