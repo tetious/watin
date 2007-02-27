@@ -1040,6 +1040,16 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Find an element by its index.
+    /// </summary>
+    /// <param name="index">The index.</param>
+    /// <returns></returns>
+    public static Index ByIndex(int index)
+    {
+      return new Index(index);
+    }
+
+    /// <summary>
     /// Find an element by its name.
     /// </summary>
     /// <param name="name">Name to find.</param>
