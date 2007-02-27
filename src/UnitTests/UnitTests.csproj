@@ -86,11 +86,6 @@
                     AssemblyFolderKey = "hklm\primary interop assemblies"
                 />
                 <Reference
-                    Name = "NAnt.Core"
-                    AssemblyName = "NAnt.Core"
-                    HintPath = "..\..\tools\NAnt\NAnt.Core.dll"
-                />
-                <Reference
                     Name = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
                     AssemblyName = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
                     HintPath = "..\..\tools\WiX\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll"
