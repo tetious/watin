@@ -1295,7 +1295,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void LogActionShoulCallLogActionOnLogWriterInstance()
+    public void LogActionShouldCallLogActionOnLogWriterInstance()
     {
       mockLogWriter.LogAction(LogMessage);
 
