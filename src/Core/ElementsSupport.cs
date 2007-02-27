@@ -160,14 +160,14 @@ namespace WatiN.Core
       return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, findBy, elements));
     }
 
-    public static TableCell TableCell(DomContainer ie, string elementId, int occurrence, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, string elementId, int index, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Occurrence(occurrence).And(new Id(elementId)), elements));
+      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
     }
     
-    public static TableCell TableCell(DomContainer ie, Regex elementId, int occurrence, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, Regex elementId, int index, IHTMLElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Occurrence(occurrence).And(new Id(elementId)), elements));
+      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)

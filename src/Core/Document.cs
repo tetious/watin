@@ -595,11 +595,6 @@ namespace WatiN.Core
       get { return ElementsSupport.TableBodies(DomContainer, elementCollection); }
     }
 
-    //    public TableSectionCollection TableSections
-    //    {
-    //      get { return SubElementsSupport.TableSections(ie, elementCollection); }
-    //    }
-
     public TableCell TableCell(string elementId)
     {
       return TableCell(Find.ById(elementId));
@@ -616,22 +611,22 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Finds a TableCell by the n-th occurrence of an id. 
-    /// Occurrence counting is zero based.
+    /// Finds a TableCell by the n-th index of an id. 
+    /// index counting is zero based.
     /// </summary>  
     /// <example>
-    /// This example will get Text of the third(!) occurrence on the page of a
+    /// This example will get Text of the third(!) index on the page of a
     /// TableCell element with "tablecellid" as it's id value. 
-    /// <code>ie.TableCell(new IdAndOccurrence("tablecellid", 2)).Text</code>
+    /// <code>ie.TableCell("tablecellid", 2).Text</code>
     /// </example>
-    public TableCell TableCell(string elementId, int occurrence)
+    public TableCell TableCell(string elementId, int index)
     {
-      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, elementId, index, elementCollection);
     }
 
-    public TableCell TableCell(Regex elementId, int occurrence)
+    public TableCell TableCell(Regex elementId, int index)
     {
-      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, elementId, index, elementCollection);
     }
 
     public TableCellCollection TableCells

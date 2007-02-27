@@ -602,32 +602,30 @@ namespace WatiN.Core
   }
  
   /// <summary>
-  /// Class to find an element by the n-th occurrence.
-  /// Occurrence counting is zero based. If you combine <see cref="Occurrence"/> with
-  /// other <see cref="Attribute"/> classes, always start with <see cref="Occurrence"/>
-  /// as shown in the following example.  
+  /// Class to find an element by the n-th index.
+  /// Index counting is zero based.
   /// </summary>  
   /// <example>
-  /// This example will get the second occurrence on the page of a
-  /// link element with "linkname" as it's name value. 
-  /// <code>ie.Link(new Occurrence(1).And(Find.ByName("linkname"))</code>
+  /// This example will get the second link of the collection of links
+  /// which have "linkname" as their name value. 
+  /// <code>ie.Link(new Index(1) &amp;&amp; Find.ByName("linkname"))</code>
   /// You could also consider filtering the Links collection and getting
   /// the second item in the collection, like this:
   /// <code>ie.Links.Filter(Find.ByName("linkname"))[1]</code>
   /// </example>
-  public class Occurrence : Attribute
+  public class Index : Attribute
   {
-    private int occurrence;
+    private int index;
     private int counter = -1;
     
-    public Occurrence(int occurrence) : base("occurence", occurrence.ToString())
+    public Index(int index) : base("index", index.ToString())
     {
-      if (occurrence < 0 )
+      if (index < 0 )
       {
-        throw new ArgumentOutOfRangeException("occurrence", occurrence, "Should be zero or more.");
+        throw new ArgumentOutOfRangeException("index", index, "Should be zero or more.");
       }
 
-      this.occurrence = occurrence;
+      this.index = index;
     }
     
     public override bool Compare(IAttributeBag attributeBag)
@@ -661,7 +659,7 @@ namespace WatiN.Core
         base.UnLockCompare();
       }      
 
-      return (counter == occurrence) || resultOr;
+      return (counter == index) || resultOr;
     }
   }
   

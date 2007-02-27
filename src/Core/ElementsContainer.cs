@@ -284,22 +284,22 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Finds a TableCell by the n-th occurrence of an id. 
-    /// Occurrence counting is zero based.
+    /// Finds a TableCell by the n-th index of an id. 
+    /// index counting is zero based.
     /// </summary>  
     /// <example>
-    /// This example will get Text of the third(!) occurrence on the page of a
-    /// TableCell element with "tablecellid" as it's id value. 
-    /// <code>ie.TableCell(new IdAndOccurrence("tablecellid", 2)).Text</code>
+    /// This example will get the Text of the third(!) tablecell 
+    /// with "tablecellid" as it's id value. 
+    /// <code>ie.TableCell("tablecellid", 2).Text</code>
     /// </example>
-    public TableCell TableCell(string elementId, int occurrence)
+    public TableCell TableCell(string elementId, int index)
     {
-      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, elementId, index, elementCollection);
     }
 
-    public TableCell TableCell(Regex elementId, int occurrence)
+    public TableCell TableCell(Regex elementId, int index)
     {
-      return ElementsSupport.TableCell(DomContainer, elementId, occurrence, elementCollection);
+      return ElementsSupport.TableCell(DomContainer, elementId, index, elementCollection);
     }
 
     public TableCellCollection TableCells

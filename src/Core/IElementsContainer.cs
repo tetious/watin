@@ -85,8 +85,8 @@ namespace WatiN.Core.Interfaces
     TableCell TableCell(string elementId);
     TableCell TableCell(Regex elementId);
     TableCell TableCell(Attribute findBy);
-    TableCell TableCell(string elementId, int occurrence);
-    TableCell TableCell(Regex elementId, int occurrence);
+    TableCell TableCell(string elementId, int index);
+    TableCell TableCell(Regex elementId, int index);
     TableCellCollection TableCells { get; }
 
     TableRow TableRow(string elementId);

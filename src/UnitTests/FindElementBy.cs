@@ -797,13 +797,13 @@ namespace WatiN.UnitTests
     [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void OccurrenceShouldNotAcceptNegativeValue()
     {
-      new Occurrence(-1);
+      new Index(-1);
     }
 
     [Test]
     public void Occurence0()
     {
-      Attribute findBy = new Occurrence(0);
+      Attribute findBy = new Index(0);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -813,7 +813,7 @@ namespace WatiN.UnitTests
     [Test]
     public void Occurence2()
     {
-      Attribute findBy = new Occurrence(2);
+      Attribute findBy = new Index(2);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -825,7 +825,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndTrue()
     {
-      Attribute findBy = new Occurrence(1).And(Find.ByName("Z"));
+      Attribute findBy = new Index(1).And(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -835,7 +835,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceOr()
     {
-      Attribute findBy = new Occurrence(2).Or(Find.ByName("Z"));
+      Attribute findBy = new Index(2).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -848,7 +848,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndFalse()
     {
-      Attribute findBy = new Occurrence(1).And(Find.ByName("Y"));
+      Attribute findBy = new Index(1).And(Find.ByName("Y"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -858,7 +858,7 @@ namespace WatiN.UnitTests
     [Test]
     public void TrueAndOccurence()
     {
-      Attribute findBy = Find.ByName("Z").And(new Occurrence(1));
+      Attribute findBy = Find.ByName("Z").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -868,7 +868,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FalseAndOccurence()
     {
-      Attribute findBy = Find.ByName("Y").And(new Occurrence(1));
+      Attribute findBy = Find.ByName("Y").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -878,7 +878,7 @@ namespace WatiN.UnitTests
     [Test]
     public void TrueAndOccurenceAndTrue()
     {
-      Attribute findBy = Find.ByName("Z").And(new Occurrence(1)).And(Find.ByValue("text"));
+      Attribute findBy = Find.ByName("Z").And(new Index(1)).And(Find.ByValue("text"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
@@ -904,7 +904,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndOrWithOrTrue()
     {
-      Attribute findBy = new Occurrence(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -913,7 +913,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndOrWithAndTrue()
     {
-      Attribute findBy = new Occurrence(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
       Assert.IsFalse(findBy.Compare(attributeBag));
