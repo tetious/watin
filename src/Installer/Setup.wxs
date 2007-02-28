@@ -1,53 +1,44 @@
 <?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-	<Product Id="E1BD806A-F26E-4659-B179-C6D3553D0FD7"
-		Name="$(var.productname)"
-		Language="1033"
-		Version="$(var.productversion)"
-		Manufacturer="Jeroen van Menen">
-		<Package Id="9EF68903-59F5-45DC-B51D-A7AC160F2B1C"
-			Description="$(var.productname)"
-			Comments= "For more info and the latests version visit http://watin.sourceforge.net"
-			InstallerVersion="200"
-			Compressed="yes"
-		/>
-	 <!--  Extra info in the Add or Remove Programs Entrie -->
-		<Property Id='ARPURLINFOABOUT'>http://watin.sourceforge.net</Property>
-		<Property Id='ARPURLUPDATEINFO'>http://sourceforge.net/project/showfiles.php?group_id=167632</Property>
-
-	 <!--  Source media for the installation.   Specifies a single cab file to be embedded in the installer's .msi.  -->
-	  <Media Id="1" Cabinet="contents.cab" EmbedCab="yes" CompressionLevel="high"/>
-	 <!-- Installation directory and files are defined in Files.wxs -->   
-		<Directory Id="TARGETDIR" Name="SourceDir"/>
-	 <!-- Use Wix UI library -->   
-		<Property Id="WIXUI_INSTALDIR">INSTALLDIR</Property>   
-		<UIRef Id="WixUI_FeatureTree"/>
-		<!-- Features to install -->   
-		<Feature Id="Complete" Level="1" Title="Complete" Description="All features." Display="expand">    
-			<Feature Id="Binaries" Level="1" Title="WatiN binaries" Description="Installs all required WatiN binaries. They will be installed in a version specific folder in the WatiN subfolder of the program files folder." TypicalDefault="install" Display="expand">     
-				<ComponentRef Id="LicenseTxt"/>     
-				<ComponentRef Id="ReadmeTxt"/>     
-				<ComponentRef Id="WatiN.CoreDll"/>     
-				<ComponentRef Id="WatiN.Core.UnitTestsDll"/>     
-				<ComponentRef Id="WatiN.Core.UnitTests.dllConfig"/>     
-				<ComponentRef Id="Microsoft.mshtmlDll"/>    
-				<ComponentRef Id="Interop.SHDocVwDll"/>
-				<ComponentRef Id="binhtml"/>
-				<ComponentRef Id="binhtmliframes"/>
-				<ComponentRef Id="binhtmlimages"/>
-			</Feature>   
-			<Feature Id="Documentation" Title="Documentation" Description="Installs the WatiN API documenation." Level="1">     
-				<ComponentRef Id="WatiNChm"/>     
-				<ComponentRef Id="ReleaseHistoryTxt"/>     
-			</Feature>   
-			<Feature Id="SourceCode" Title="Source code" Description="Installs the WatiN.Core and WatiN.UnitTests source code." Level="1000">     
-				<ComponentRef Id="WatiNSln"/>     
-				<ComponentRef Id="CoreSource"/>     
-				<ComponentRef Id="UnitTestsSource"/>     
-				<ComponentRef Id="UnitTestsHTML"/>     
-				<ComponentRef Id="UnitTestsHTMLIframes"/>     
-				<ComponentRef Id="UnitTestsHTMLImages"/>     
-			</Feature>   
-		</Feature>
-	</Product>
+<Wix>
+  <Product Id="50106716-1D85-405D-A6D5-879D4BDB3493" Name="$(var.productname)" Language="1033" Version="$(var.productversion)" Manufacturer="Jeroen van Menen">
+    <Package Id="7B21C790-1141-4306-9FED-0AF9243694B3" Description="$(var.productname)" Comments="For more info and the latests version visit http://watin.sourceforge.net" InstallerVersion="200" Compressed="yes" />
+    <!--  Extra info in the Add or Remove Programs Entrie -->
+    <Property Id="ARPURLINFOABOUT">http://watin.sourceforge.net</Property>
+    <Property Id="ARPURLUPDATEINFO">http://sourceforge.net/project/showfiles.php?group_id=167632</Property>
+    <!--  Source media for the installation.   Specifies a single cab file to be embedded in the installer's .msi.  -->
+    <Media Id="1" Cabinet="contents.cab" EmbedCab="yes" CompressionLevel="high" />
+    <!-- Installation directory and files are defined in Files.wxs -->
+    <Directory Id="TARGETDIR" Name="SourceDir" />
+    <!-- Use Wix UI library -->
+    <Property Id="WIXUI_INSTALDIR">INSTALLDIR</Property>
+    <UIRef Id="WixUI_FeatureTree" />
+    <!-- Features to install -->
+    <Feature Id="Complete" Level="1" Title="Complete" Description="All features." Display="expand">
+      <Feature Id="Binaries" Level="1" Title="WatiN binaries" Description="Installs all required WatiN binaries. They will be installed in a version specific folder in the WatiN subfolder of the program files folder." TypicalDefault="install" Display="expand">
+        <ComponentRef Id="LicenseTxt" />
+        <ComponentRef Id="ReadmeTxt" />
+        <ComponentRef Id="WatiN.CoreDll" />
+        <ComponentRef Id="WatiN.Core.UnitTestsDll" />
+        <ComponentRef Id="WatiN.Core.UnitTests.dllConfig" />
+        <ComponentRef Id="Microsoft.mshtmlDll" />
+        <ComponentRef Id="Rhino.MocksDll" />
+        <ComponentRef Id="Interop.SHDocVwDll" />
+        <ComponentRef Id="binhtml" />
+        <ComponentRef Id="binhtmliframes" />
+        <ComponentRef Id="binhtmlimages" />
+      </Feature>
+      <Feature Id="Documentation" Title="Documentation" Description="Installs the WatiN API documenation." Level="1">
+        <ComponentRef Id="WatiNChm" />
+        <ComponentRef Id="ReleaseHistoryTxt" />
+      </Feature>
+      <Feature Id="SourceCode" Title="Source code" Description="Installs the WatiN.Core and WatiN.UnitTests source code." Level="1000">
+        <ComponentRef Id="WatiNSln" />
+        <ComponentRef Id="CoreSource" />
+        <ComponentRef Id="UnitTestsSource" />
+        <ComponentRef Id="UnitTestsHTML" />
+        <ComponentRef Id="UnitTestsHTMLIframes" />
+        <ComponentRef Id="UnitTestsHTMLImages" />
+      </Feature>
+    </Feature>
+  </Product>
 </Wix>

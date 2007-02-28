@@ -3,7 +3,7 @@
 		<DirectoryRef Id="TARGETDIR">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLDIR" Name="WatiN">
-					<Directory Id="NewDirectory" LongName="$(var.installdir.longname)" Name="$(var.installdir.name)" >
+					<Directory Id="NewDirectory" LongName="$(var.installdir.longname)" Name="$(var.installdir.name)">
 						<Component Guid="1F5AC040-AFDE-4C2E-A53C-EFCFF16B1D2F" Id="LicenseTxt" DiskId="1">
 							<File Source="$(var.distdir)License.txt" Name="License.txt" Id="License.txt" Vital="yes" />
 						</Component>
@@ -42,6 +42,7 @@
 									<File Source="$(var.distdir)bin\html\Index.html" Name="INDEX.HTM" Id="Index.html" LongName="Index.html" />
 									<File Source="$(var.distdir)bin\html\main.html" Name="MAIN.HTM" Id="main.html" LongName="main.html" />
 									<File Source="$(var.distdir)bin\html\popup.html" Name="POPUP.HTM" Id="popup.html" LongName="popup.html" />
+									<File Source="$(var.distdir)bin\html\Tables.html" Name="TABLES.HTM" Id="Tables.html" LongName="Tables.html" />
 									<File Source="$(var.distdir)bin\html\TestEvents.html" Name="TESTEV_1.HTM" Id="TestEvents.html" LongName="TestEvents.html" />
 								</Component>
 								<Directory Id="biniframes" Name="iframes">
@@ -59,6 +60,9 @@
 									</Component>
 								</Directory>
 							</Directory>
+							<Component Guid="A1CD1995-6B3B-4D8D-B8E4-4742170C7624" Id="Rhino.MocksDll" DiskId="1">
+								<File Source="$(var.distdir)bin\Rhino.Mocks.dll" Name="RHINOM_1.DLL" Id="Rhino.Mocks.dll" LongName="Rhino.Mocks.dll" Assembly=".net" AssemblyApplication="Rhino.Mocks.dll" AssemblyManifest="Rhino.Mocks.dll" KeyPath="yes" />
+							</Component>
 						</Directory>
 						<Directory Id="src" Name="src">
 							<Component Guid="128AB123-D98F-48EC-A5CC-6DFD911B8A5A" Id="WatiNSln" DiskId="1">
@@ -124,6 +128,10 @@
 									<File Source="$(var.distdir)src\Core\TextFieldCollection.cs" Name="TEXTFI_2.CS" Id="TextFieldCollection.cs" LongName="TextFieldCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Utils.cs" Name="Utils.cs" Id="Utils.cs" />
 									<File Source="$(var.distdir)src\Core\Win32.cs" Name="Win32.cs" Id="Win32.cs" />
+									<File Source="$(var.distdir)src\Core\TableBodyCollection.cs" Name="TABLEB_1.CS" Id="TableBodyCollection.cs" LongName="TableBodyCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Option.cs" Name="Option.cs" Id="Option.cs" />
+									<File Source="$(var.distdir)src\Core\OptionCollection.cs" Name="OPTION_1.CS" Id="OptionCollection.cs" LongName="OptionCollection.cs" />
+									<File Source="$(var.distdir)src\Core\TableBody.cs" Name="TABLEB_2.CS" Id="TableBody.cs" LongName="TableBody.cs" />
 								</Component>
 							</Directory>
 							<Directory Id="UnitTests" Name="UnitTest" LongName="UnitTests">
@@ -148,6 +156,7 @@
 										<File Source="$(var.distdir)src\UnitTests\html\Index.html" Name="INDEX.HTM" Id="html.Index.html" LongName="Index.html" />
 										<File Source="$(var.distdir)src\UnitTests\html\main.html" Name="MAIN.HTM" Id="html.main.html" LongName="main.html" />
 										<File Source="$(var.distdir)src\UnitTests\html\popup.html" Name="POPUP.HTM" Id="html.popup.html" LongName="popup.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Tables.html" Name="TABLES.HTM" Id="html.Tables.html" LongName="Tables.html" />
 										<File Source="$(var.distdir)src\UnitTests\html\TestEvents.html" Name="TESTEV_1.HTM" Id="html.TestEvents.html" LongName="TestEvents.html" />
 									</Component>
 									<Directory Id="iframes" Name="iframes">

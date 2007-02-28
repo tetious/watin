@@ -10,3 +10,6 @@ Make the product/package guid and productversion different for the .Net 1.1 and 
 Add the posibillity to change the install directory.
 
 Change images used in setup
+
+Place this line back and handle the schema with xmlpoke nant task to change guids
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
