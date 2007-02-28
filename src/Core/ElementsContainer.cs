@@ -317,7 +317,7 @@ namespace WatiN.Core
       return TableRow(Find.ById(elementId));
     }
 
-    public TableRow TableRow(Attribute findBy)
+    public virtual TableRow TableRow(Attribute findBy)
     {
       return ElementsSupport.TableRow(DomContainer, findBy, elementCollection);
     }

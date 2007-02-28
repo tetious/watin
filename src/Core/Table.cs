@@ -63,14 +63,14 @@ namespace WatiN.Core
 	/// Returns all rows in the first TBODY section of a table. If no
 	/// explicit sections are defined in the table (like THEAD, TBODY 
 	/// and/or TFOOT sections), it will return all the rows in the table.
+	/// This method also returns rows from nested tables.
 	/// </summary>
 	/// <value>The table rows.</value>
     public override TableRowCollection TableRows
     {
       get 
       {
-        IHTMLElementCollection bodyElements = GetBodyElements();
-        return ElementsSupport.TableRows(DomContainer, bodyElements); 
+        return ElementsSupport.TableRows(DomContainer, GetBodyElements()); 
       }
     }
 
@@ -83,10 +83,7 @@ namespace WatiN.Core
     {
       get
       {
-        IHTMLTable htmlTable = (IHTMLTable) HTMLElement;
-        IHTMLElementCollection tbodies = htmlTable.tBodies;
-        
-        return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(tbodies));
+        return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HTMLTable.tBodies));
       }
     }
 
@@ -97,10 +94,13 @@ namespace WatiN.Core
 
     private IHTMLElement GetFirstTBody()
     {
-      return (IHTMLElement)((IHTMLTable)HTMLElement).tBodies.item(0,null);
+      return (IHTMLElement)HTMLTable.tBodies.item(0,null);
     }
 
-    
+    private IHTMLTable HTMLTable
+    {
+      get { return (IHTMLTable) HTMLElement; }
+    }
 
     /// <summary>
     /// Finds te first row that matches findText in inColumn defined as a TD html element.

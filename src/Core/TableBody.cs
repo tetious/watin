@@ -28,12 +28,21 @@ namespace WatiN.Core
     {
       get
       {
-        IHTMLTableSection htmlBody = (IHTMLTableSection) HTMLElement;
-        IHTMLElementCollection rows2 = htmlBody.rows;
-
-        return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(rows2));
+        return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows));
       }
     }
+
+    /// <summary>
+    /// Returns the table row in this table body (not including table rows 
+    /// from tables nested in this table body).
+    /// </summary>
+    /// <param name="findBy">The find by.</param>
+    /// <returns></returns>
+    public override TableRow TableRow(Attribute findBy)
+    {
+      return ElementsSupport.TableRow(DomContainer, findBy, HtmlBody.rows);
+    }
+
 
     public static ArrayList ElementTags
     {
@@ -47,6 +56,11 @@ namespace WatiN.Core
 
         return elementTags;
       }
+    }
+
+    private IHTMLTableSection HtmlBody
+    {
+      get { return (IHTMLTableSection) HTMLElement; }
     }
   }
 }
