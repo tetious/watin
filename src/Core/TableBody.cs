@@ -20,7 +20,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the table rows of this table body (not including table rows 
+    /// Returns the table rows belonging to this table body (not including table rows 
     /// from tables nested in this table body).
     /// </summary>
     /// <value>The table rows.</value>
@@ -33,7 +33,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the table row in this table body (not including table rows 
+    /// Returns the table row belonging to this table body (not including table rows 
     /// from tables nested in this table body).
     /// </summary>
     /// <param name="findBy">The find by.</param>

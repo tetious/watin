@@ -75,7 +75,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Returns the table body sections of this table (not including table body sections 
+    /// Returns the table body sections belonging to this table (not including table body sections 
     /// from tables nested in this table).
     /// </summary>
     /// <value>The table bodies.</value>
@@ -85,6 +85,17 @@ namespace WatiN.Core
       {
         return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HTMLTable.tBodies));
       }
+    }
+
+    /// <summary>
+    /// Returns the table body section belonging to this table (not including table body sections 
+    /// from tables nested in this table).
+    /// </summary>
+    /// <param name="findBy">The find by.</param>
+    /// <returns></returns>
+    public override TableBody TableBody(Attribute findBy)
+    {
+      return ElementsSupport.TableBody(DomContainer, findBy, HTMLTable.tBodies);
     }
 
     private IHTMLElementCollection GetBodyElements()

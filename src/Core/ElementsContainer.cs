@@ -337,7 +337,7 @@ namespace WatiN.Core
       return TableBody(Find.ById(elementId));
     }
 
-    public TableBody TableBody(Attribute findBy)
+    public virtual TableBody TableBody(Attribute findBy)
     {
       return ElementsSupport.TableBody(DomContainer, findBy, elementCollection);
     }
