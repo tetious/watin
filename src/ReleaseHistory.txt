@@ -1,3 +1,17 @@
+WatiN 1.0.0.4000 (1 March, 2007)
+
+This release adds may new features like using multiple attributes to search for an element, full support for the Style attribute, casting an Element instance to a more specialized element type, support for changing the default settings used by WatiN, added support for tbody elements and improvements to SelectList and Table. 
+
+For the full release notes visit http://watin.sourceforge.net/releasenotes-1-0-0-4000.html
+
+-------------------------------
+WatiN 0.9.5.4000 (31 December, 2006)
+
+This release adds new features to support testing of websites which make use of AJAX technology. Many other feature requests and bug fixes are included as well.
+
+For the full release notes visit http://watin.sourceforge.net/releasenotes-0-9-5-4000.html
+
+-------------------------------
 WatiN 0.9.0.4000 (31 October, 2006)
 
 ** Changes in general **
