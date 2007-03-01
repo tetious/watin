@@ -86,11 +86,6 @@
                     AssemblyFolderKey = "hklm\primary interop assemblies"
                 />
                 <Reference
-                    Name = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
-                    AssemblyName = "Microsoft.Tools.WindowsInstallerXml.NAntTasks"
-                    HintPath = "..\..\tools\WiX\Microsoft.Tools.WindowsInstallerXml.NAntTasks.dll"
-                />
-                <Reference
                     Name = "Rhino.Mocks"
                     AssemblyName = "Rhino.Mocks"
                     HintPath = "..\..\..\..\..\Program Files\rhino-mocks\2.9.6-net-1.1\Rhino.Mocks.dll"
