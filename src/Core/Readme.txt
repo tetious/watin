@@ -6,7 +6,7 @@ on a Windows platform, expressed in any .Net language.
 Visit http://watin.sourcefoge.net for more information and to download the latest version. 
 
 * License
-WatiN is LGPL licensed so before using WatiN please read the license.txt so you know
+WatiN is Apache License 2.0 licensed so before using WatiN please read the license.txt so you know
 the terms and conditions for using and modifying WatiN.
 
 * Pre requisits

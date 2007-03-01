@@ -108,6 +108,8 @@
 									<File Source="$(var.distdir)src\Core\Link.cs" Name="Link.cs" Id="Link.cs" />
 									<File Source="$(var.distdir)src\Core\LinkCollection.cs" Name="LINKCO_1.CS" Id="LinkCollection.cs" LongName="LinkCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Logging.cs" Name="Logging.cs" Id="Logging.cs" />
+									<File Source="$(var.distdir)src\Core\Option.cs" Name="Option.cs" Id="Option.cs" />
+									<File Source="$(var.distdir)src\Core\OptionCollection.cs" Name="OPTION_1.CS" Id="OptionCollection.cs" LongName="OptionCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Para.cs" Name="Para.cs" Id="Para.cs" />
 									<File Source="$(var.distdir)src\Core\ParaCollection.cs" Name="PARACO_1.CS" Id="ParaCollection.cs" LongName="ParaCollection.cs" />
 									<File Source="$(var.distdir)src\Core\RadioButton.cs" Name="RADIOB_1.CS" Id="RadioButton.cs" LongName="RadioButton.cs" />
@@ -117,7 +119,10 @@
 									<File Source="$(var.distdir)src\Core\SelectListCollection.cs" Name="SELECT_2.CS" Id="SelectListCollection.cs" LongName="SelectListCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Span.cs" Name="Span.cs" Id="Span.cs" />
 									<File Source="$(var.distdir)src\Core\SpanCollection.cs" Name="SPANCO_1.CS" Id="SpanCollection.cs" LongName="SpanCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Style.cs" Name="Style.cs" Id="Style.cs" />
 									<File Source="$(var.distdir)src\Core\Table.cs" Name="Table.cs" Id="Table.cs" />
+									<File Source="$(var.distdir)src\Core\TableBody.cs" Name="TABLEB_2.CS" Id="TableBody.cs" LongName="TableBody.cs" />
+									<File Source="$(var.distdir)src\Core\TableBodyCollection.cs" Name="TABLEB_1.CS" Id="TableBodyCollection.cs" LongName="TableBodyCollection.cs" />
 									<File Source="$(var.distdir)src\Core\TableCell.cs" Name="TABLEC_1.CS" Id="TableCell.cs" LongName="TableCell.cs" />
 									<File Source="$(var.distdir)src\Core\TableCellCollection.cs" Name="TABLEC_2.CS" Id="TableCellCollection.cs" LongName="TableCellCollection.cs" />
 									<File Source="$(var.distdir)src\Core\TableCollection.cs" Name="TABLEC_3.CS" Id="TableCollection.cs" LongName="TableCollection.cs" />
@@ -128,10 +133,6 @@
 									<File Source="$(var.distdir)src\Core\TextFieldCollection.cs" Name="TEXTFI_2.CS" Id="TextFieldCollection.cs" LongName="TextFieldCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Utils.cs" Name="Utils.cs" Id="Utils.cs" />
 									<File Source="$(var.distdir)src\Core\Win32.cs" Name="Win32.cs" Id="Win32.cs" />
-									<File Source="$(var.distdir)src\Core\TableBodyCollection.cs" Name="TABLEB_1.CS" Id="TableBodyCollection.cs" LongName="TableBodyCollection.cs" />
-									<File Source="$(var.distdir)src\Core\Option.cs" Name="Option.cs" Id="Option.cs" />
-									<File Source="$(var.distdir)src\Core\OptionCollection.cs" Name="OPTION_1.CS" Id="OptionCollection.cs" LongName="OptionCollection.cs" />
-									<File Source="$(var.distdir)src\Core\TableBody.cs" Name="TABLEB_2.CS" Id="TableBody.cs" LongName="TableBody.cs" />
 								</Component>
 							</Directory>
 							<Directory Id="UnitTests" Name="UnitTest" LongName="UnitTests">

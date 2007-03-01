@@ -400,11 +400,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "TableSectionCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "TextField.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
