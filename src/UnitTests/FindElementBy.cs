@@ -562,7 +562,7 @@ namespace WatiN.UnitTests
     {
       StringEqualsAndCaseInsensitiveComparer comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
       
-      Assert.AreEqual("WatiN.Core.StringEqualsAndCaseInsensitiveComparer compares with: A test value", comparer.ToString());
+      Assert.AreEqual("A test value", comparer.ToString());
     }
   }
   

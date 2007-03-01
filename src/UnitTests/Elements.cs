@@ -2193,14 +2193,16 @@ namespace WatiN.UnitTests
     [Test]
     public void OptionsInMultiSelectList()
     {
+      ie.GoTo(MainURI);
+
       SelectList selectList = ie.SelectList("Select2");
       
-      Assert.IsFalse(selectList.Option("Third Listitem").Selected);
+      Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected");
       selectList.Option("Third Listitem").Select();
-      Assert.IsTrue(selectList.Option("Third Listitem").Selected);
+      Assert.IsTrue(selectList.Option("Third Listitem").Selected, "Third listitem is not selected");
       selectList.Option("Third Listitem").Clear();
       ie.WaitForComplete();
-      Assert.IsFalse(selectList.Option("Third Listitem").Selected);
+      Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected #2");
     }
   }
 }

@@ -362,7 +362,7 @@ namespace WatiN.UnitTests
       Assert.AreEqual(expectedFramesCount, count);
     }
     
-    [Test, Category("InternetConnectionNeeded")]
+    [Test, Ignore("An Ebay IFrame never reaches complete status"), Category("InternetConnectionNeeded")]
     public void EbayTest()
     {
       // ebay seems to embed some active-x(?) component
