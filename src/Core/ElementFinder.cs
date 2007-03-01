@@ -25,6 +25,11 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class is mainly used internally by WatiN to find elements in
+  /// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
+  /// the given <see cref="Attribute"/>.
+  /// </summary>
   public class ElementFinder
   {
     public static ElementFinder ButtonFinder(Attribute findBy, IHTMLElementCollection elements)
@@ -224,6 +229,9 @@ namespace WatiN.Core
     }
   }
 
+  /// <summary>
+  /// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="Attribute.Compare"/>.
+  /// </summary>
   public class ElementAttributeBag : IAttributeBag
   {
     private IHTMLElement element = null;
@@ -280,6 +288,10 @@ namespace WatiN.Core
     }
   }
 
+  /// <summary>
+  /// This class is mainly used by WatiN internally and defines 
+  /// the supported html tags for inheritors of <see cref="Element"/>.
+  /// </summary>
   public class ElementTag
   {
     public readonly string TagName;

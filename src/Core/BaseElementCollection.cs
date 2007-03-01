@@ -22,8 +22,16 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This delegate is mainly used by <see cref="BaseElementCollection"/> to 
+  /// delegate the creation of a specialized element type. 
+  /// </summary>
   public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
   
+  /// <summary>
+  /// This class is mainly used by Watin internally as the base class for all 
+  /// of the element collections.
+  /// </summary>
   public abstract class BaseElementCollection : IEnumerable
   {
     protected DomContainer domContainer;

@@ -1090,6 +1090,9 @@ namespace WatiN.Core
     }
   }
 
+  /// <summary>
+  /// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="Attribute.Compare"/>.
+  /// </summary>
   public class IEAttributeBag: IAttributeBag
   {
     private InternetExplorer internetExplorer = null;

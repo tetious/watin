@@ -150,7 +150,7 @@ namespace WatiN.Core
   }
   
   /// <summary>
-  /// Class that supports compares a <see cref="Uri"/> instance with a string value.
+  /// Class that supports comparing a <see cref="Uri"/> instance with a string value.
   /// </summary>
   public class UriComparer :ICompare
   {
@@ -188,6 +188,9 @@ namespace WatiN.Core
     }
   }
 
+  /// <summary>
+  /// Class that supports comparing a <see cref="bool"/> instance with a string value.
+  /// </summary>
   public class BoolComparer : ICompare
   {
     private StringComparer comparer;

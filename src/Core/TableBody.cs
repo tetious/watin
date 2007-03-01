@@ -21,6 +21,9 @@ namespace WatiN.Core
   using System.Collections;
   using mshtml;
 
+  /// <summary>
+  /// This class provides specialized functionality for a HTML tbody element. 
+  /// </summary>
   public class TableBody : ElementsContainer
   {
     private static ArrayList elementTags;

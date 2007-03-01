@@ -21,6 +21,9 @@ namespace WatiN.Core
   using System.Collections;
   using mshtml;
 
+  /// <summary>
+  /// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
+  /// </summary>
   public class TableBodyCollection:BaseElementCollection
   {
     public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))

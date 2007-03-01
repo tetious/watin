@@ -24,6 +24,10 @@ using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {
+  /// <summary>
+  /// This class provides specialized functionality for a HTML input element 
+  /// of type file. 
+  /// </summary>
   public class FileUpload : Element
   {
     private static ArrayList elementTags;
