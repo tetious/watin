@@ -128,7 +128,6 @@
 									<File Source="$(var.distdir)src\Core\TableCollection.cs" Name="TABLEC_3.CS" Id="TableCollection.cs" LongName="TableCollection.cs" />
 									<File Source="$(var.distdir)src\Core\TableRow.cs" Name="TableRow.cs" Id="TableRow.cs" />
 									<File Source="$(var.distdir)src\Core\TableRowCollection.cs" Name="TABLER_1.CS" Id="TableRowCollection.cs" LongName="TableRowCollection.cs" />
-									<File Source="$(var.distdir)src\Core\TableSectionCollection.cs" Name="TABLES_1.CS" Id="TableSectionCollection.cs" LongName="TableSectionCollection.cs" />
 									<File Source="$(var.distdir)src\Core\TextField.cs" Name="TEXTFI_1.CS" Id="TextField.cs" LongName="TextField.cs" />
 									<File Source="$(var.distdir)src\Core\TextFieldCollection.cs" Name="TEXTFI_2.CS" Id="TextFieldCollection.cs" LongName="TextFieldCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Utils.cs" Name="Utils.cs" Id="Utils.cs" />
