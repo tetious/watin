@@ -1,3 +1,5 @@
+<?xml version="1.0" ?>
+
 <!--
 Copyright 2006-2007 Jeroen van Menen
 
@@ -13,8 +15,6 @@ Copyright 2006-2007 Jeroen van Menen
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
-<?xml version="1.0" ?>
 
 <project name="WatiN" default="full" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
 
@@ -222,7 +222,7 @@ Copyright 2006-2007 Jeroen van Menen
                     <property name="HtmlHelpName" value="${core.helpfile.name}" />
                     <property name="Title" value="${project.name} ${core.assembly.version} Documentation (generated with NDoc)" />
                     <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006" />
+                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006-2007" />
                     <property name="Preliminary" value="True" />
                     <property name="CleanIntermediates" value="True" />
                 </documenter>
