@@ -227,6 +227,25 @@ namespace WatiN.UnitTests
       }
     }
     
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void LogonDialogWithUserNameNullShouldThrowArgumentNullException()
+    {
+      new LogonDialogHandler(null, "pwd");
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void LogonDialogWithUserNameStringEmptyShouldThrowArgumentNullException()
+    {
+      new LogonDialogHandler(String.Empty, "pwd");
+    }
+
+    [Test]
+    public void LogonDialogValidConstructorArguments()
+    {
+      new LogonDialogHandler("username", "pwd");
+      new LogonDialogHandler("username", "");
+      new LogonDialogHandler("username", null);
+    }
 
     //    [Test]
     //    public void DialogTestSpike3()
