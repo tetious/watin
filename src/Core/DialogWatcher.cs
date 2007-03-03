@@ -600,15 +600,22 @@ namespace WatiN.Core.DialogHandlers
     /// <summary>
     /// Initializes a new instance of the <see cref="LogonDialogHandler"/> class.
     /// </summary>
-    /// <param name="userName">Name of the user.</param>
-    /// <param name="password">The password.</param>
+    /// <param name="userName">Name of the user. Is required.</param>
+    /// <param name="password">The password. If no password is required, it can be left blank (<c>null</c> or </c>String.Empty</c>). </param>
     public LogonDialogHandler(string userName, string password)
     {
       checkArgument("Username must be specified", userName, "username");
-      checkArgument("Password must be specified", password, "password");
 
       this.userName = userName;
-      this.password = password;
+      
+      if (password == null)
+      {
+        this.password = String.Empty;
+      }
+      else
+      {
+        this.password = password;
+      }
     }
 
     public override bool HandleDialog(Window window)
