@@ -438,13 +438,17 @@ namespace WatiN.Core.DialogHandlers
       this.hwnd = hwnd;
     }
     
-    public IntPtr Hwnd
-    {
-      get
-      {
-        return hwnd;
-      }
-    }
+	  public IntPtr Hwnd
+	  {
+		  get
+		  {
+			  return hwnd;
+		  }
+		  set
+		  {
+			  hwnd = value;
+		  }
+	  }
     
     public string Title
     {
@@ -994,6 +998,154 @@ namespace WatiN.Core.DialogHandlers
     {
       return 2;
     }
+  }
+
+	public enum FileDownloadOption {Run,Save,Open,Cancel}
+  public class FileDownloadHandler : BaseDialogHandler
+  {
+	  internal Window window;
+	  private bool hasHandledDialog = false;
+	  private FileDownloadOption option = FileDownloadOption.Open;
+	  public string SaveFilename = "";
+
+	  public FileDownloadHandler()
+	  {
+		  IE.Settings.AutoCloseDialogs = false;
+	  }
+
+	  public FileDownloadHandler(FileDownloadOption Option)
+	  {
+		  IE.Settings.AutoCloseDialogs = false;
+		  this.option = Option;
+	  }
+
+	  public bool HasHandledDialog
+	  {
+		  get { return hasHandledDialog; }
+	  }
+
+	  public bool IsFileDownloadDialog(Window window)
+	  {
+		  if (window.StyleInHex==("94C80AC4"))
+		  {
+			  this.window = window;
+			  return true;
+		  }
+
+		  return false;
+	  }
+
+	  public bool IsDownloadProgressDialog(Window window)
+	  {
+		  if (window.StyleInHex==("9CCA0BC4"))
+		  {
+			  this.window = window;
+			  return true;
+		  }
+
+		  return false;
+	  }
+
+	  public override bool HandleDialog(Window window)
+	  {
+		  if (!hasHandledDialog && IsFileDownloadDialog(window))
+		  {
+			  Debug.WriteLine("Starting Download");
+			  
+			  int ButtonValue = 0;
+			  switch (option)
+			  {
+				  case FileDownloadOption.Run: ButtonValue=4426; break;
+				  case FileDownloadOption.Open: ButtonValue=4426; break;
+				  case FileDownloadOption.Save: ButtonValue=4427; break;
+				  case FileDownloadOption.Cancel: ButtonValue=2; break;
+			  }
+
+			  WinButton btn = new WinButton(ButtonValue,window.Hwnd);
+			  btn.Click();
+
+			  hasHandledDialog = true;
+
+			  this.window.Hwnd = NativeMethods.GetParent(window.Hwnd);
+
+			  return true;
+		  }
+		  else if (IsDownloadProgressDialog(window))
+		  {
+			  Debug.WriteLine("Downloading");
+		  }
+		  else if (IsFileSaveDialog(window))
+		  {
+			  Debug.WriteLine("Saving Download");
+			  HandleDownload(window);
+		  }
+
+		  return false;
+	  }
+
+	  private void HandleDownload(Window window)
+	  {      
+		  IntPtr usernameControlHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "Edit");
+
+		  NativeMethods.SetForegroundWindow(usernameControlHandle);
+		  NativeMethods.SetActiveWindow(usernameControlHandle);
+
+		  System.Windows.Forms.SendKeys.SendWait(SaveFilename + "{ENTER}");
+	  }
+
+	  public bool IsFileSaveDialog(Window window)
+	  {
+		  // "96CC20C4" is valid for Windows XP, Win 2000 and Win 2003
+		  // "96CC02C4" is valid for Windows Vista
+		  bool returnValue = (window.StyleInHex == "96CC20C4") || (window.StyleInHex == "96CC02C4");
+		  return returnValue;
+	  }
+
+	  public bool Exists()
+	  {
+		  if (window == null) return false;
+		  bool result = window.Exists() && window.Visible;
+		  return result;
+	  }
+
+	  /// <summary>
+	  /// Wait until the download progress window does not exist
+	  /// </summary>
+	  /// <param name="waitDurationInSeconds">duration in seconds to wait</param>
+	  public void WaitUntilCompleted(int waitDurationInSeconds)
+	  {
+		  SimpleTimer timeoutTimer = new SimpleTimer(waitDurationInSeconds);
+
+		  while (Exists() && !timeoutTimer.Elapsed)
+		  {
+			  Thread.Sleep(200);
+		  }
+      
+		  if (Exists())
+		  {
+			  throw new WatiNException(string.Format("Still downloading after {0} seconds.", waitDurationInSeconds.ToString()));
+		  }
+	  }
+
+	  /// <summary>
+	  /// Wait until the save/open/run dialog opens.
+	  /// This exists because some web servers are slower to start a file than others.
+	  /// </summary>
+	  /// <param name="waitDurationInSeconds">duration in seconds to wait</param>
+	  public void WaitUntilHandled(int waitDurationInSeconds)
+	  {
+		  SimpleTimer timeoutTimer = new SimpleTimer(waitDurationInSeconds);
+
+		  while (!hasHandledDialog && !timeoutTimer.Elapsed)
+		  {
+			  Thread.Sleep(200);
+		  }
+      
+		  if (!hasHandledDialog)
+		  {
+			  throw new WatiNException(string.Format("Has not shown dialog after {0} seconds.", waitDurationInSeconds.ToString()));
+		  }
+	  }
   }
   
   public class SimpleJavaDialogHandler : BaseDialogHandler

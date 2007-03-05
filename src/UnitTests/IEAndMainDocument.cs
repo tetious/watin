@@ -53,6 +53,61 @@ namespace WatiN.UnitTests
       Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
     }
+
+	[Test]
+	public void DownloadOpen()
+	{
+		WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Open);
+
+		IE ie = new IE();
+		ie.AddDialogHandler(dhdl);
+		ie.WaitForComplete();
+		ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.zip");
+
+		dhdl.WaitUntilHandled(5);
+		dhdl.WaitUntilCompleted(20);
+		ie.Close();
+	}
+
+	  [Test]
+	  public void DownloadSave()
+	  {
+		  WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Save);
+		  dhdl.SaveFilename = @"c:\temp\test.zip";
+		  System.IO.File.Delete(dhdl.SaveFilename);
+		  System.IO.Directory.CreateDirectory(@"c:\temp\");
+
+		  IE ie = new IE();
+		  ie.AddDialogHandler(dhdl);
+		  //ie.WaitForComplete();
+		  ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.msi");
+		  
+		  // window has to stay open to open the download
+		  
+		  dhdl.WaitUntilHandled(5);
+		  dhdl.WaitUntilCompleted(20);
+
+		  ie.Close();
+
+		  if (!System.IO.File.Exists(dhdl.SaveFilename))
+		  {
+			  Assert.Fail("Downloaded (intended) file does not exist");
+		  }
+	  }
+
+	  [Test]
+	  public void DownloadRun()
+	  {
+		  WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Run);
+		  IE ie = new IE();
+		  ie.AddDialogHandler(dhdl);
+		  ie.WaitForComplete();
+		  ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.msi");
+
+		  dhdl.WaitUntilHandled(5);
+		  dhdl.WaitUntilCompleted(20);
+		  ie.Close();
+	  }
       
     [Test, Category("InternetConnectionNeeded")]
     public void Google()

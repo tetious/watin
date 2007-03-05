@@ -288,6 +288,9 @@ namespace WatiN.Core
     [DllImport("User32.dll")]
     internal static extern int GetWindowThreadProcessId(IntPtr window, out int processId);
 
+    [DllImport("User32.dll")]
+	internal static extern IntPtr GetParent(IntPtr hwnd);
+
     #endregion DllImport User32
 
     [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
