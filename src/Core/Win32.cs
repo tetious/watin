@@ -45,6 +45,9 @@ namespace WatiN.Core
 
     internal const Int32 SMTO_ABORTIFHUNG = 2;
     internal const int BM_CLICK = 245;
+    internal const int WM_ACTIVATE = 6;
+    internal const int MA_ACTIVATE = 1;
+
 
     #endregion Constants
 

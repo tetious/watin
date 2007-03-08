@@ -30,6 +30,7 @@ using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.UnitTests
 {
+  using System.IO;
   using Rhino.Mocks;
 
   [TestFixture]
@@ -62,37 +63,43 @@ namespace WatiN.UnitTests
 		IE ie = new IE();
 		ie.AddDialogHandler(dhdl);
 		ie.WaitForComplete();
-		ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.zip");
+		ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
 
-		dhdl.WaitUntilHandled(5);
-		dhdl.WaitUntilCompleted(20);
+		dhdl.WaitUntilFileDownloadDialogIsHandled(5);
+		dhdl.WaitUntilDownloadCompleted(20);
 		ie.Close();
 	}
 
 	  [Test]
 	  public void DownloadSave()
 	  {
-		  WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Save);
-		  dhdl.SaveFilename = @"c:\temp\test.zip";
-		  System.IO.File.Delete(dhdl.SaveFilename);
-		  System.IO.Directory.CreateDirectory(@"c:\temp\");
+		  FileInfo file = new FileInfo(@"c:\temp\test.zip");
+      file.Directory.Create();
+      file.Delete();
 
-		  IE ie = new IE();
-		  ie.AddDialogHandler(dhdl);
-		  //ie.WaitForComplete();
-		  ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.msi");
-		  
-		  // window has to stay open to open the download
-		  
-		  dhdl.WaitUntilHandled(5);
-		  dhdl.WaitUntilCompleted(20);
+      FileDownloadHandler fileDownloadHandler = new FileDownloadHandler(FileDownloadOption.Save);
+      fileDownloadHandler.SaveFilename = file.FullName;
 
-		  ie.Close();
-
-		  if (!System.IO.File.Exists(dhdl.SaveFilename))
+		  using(IE ie = new IE())
 		  {
-			  Assert.Fail("Downloaded (intended) file does not exist");
+		    try
+		    {
+		      ie.DialogWatcher.CloseUnhandledDialogs = false;
+		      ie.AddDialogHandler(fileDownloadHandler);
+
+//		      ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
+          ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
+		  
+		      fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(15);
+		      fileDownloadHandler.WaitUntilDownloadCompleted(200);
+		    }
+		    finally
+		    {
+          ie.DialogWatcher.CloseUnhandledDialogs = true;
+		    }
 		  }
+
+      Assert.IsTrue(file.Exists, file.FullName + " file does not exist after download");
 	  }
 
 	  [Test]
@@ -102,10 +109,10 @@ namespace WatiN.UnitTests
 		  IE ie = new IE();
 		  ie.AddDialogHandler(dhdl);
 		  ie.WaitForComplete();
-		  ie.GoTo("http://easynews.dl.sourceforge.net/sourceforge/watin/WatiN-1.0.0.4000-net-2.0.msi");
+		  ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
 
-		  dhdl.WaitUntilHandled(5);
-		  dhdl.WaitUntilCompleted(20);
+		  dhdl.WaitUntilFileDownloadDialogIsHandled(5);
+		  dhdl.WaitUntilDownloadCompleted(20);
 		  ie.Close();
 	  }
       
