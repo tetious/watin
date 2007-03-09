@@ -23,6 +23,8 @@ using mshtml;
 namespace WatiN.Core
 {
   using System.Collections;
+  using WatiN.Core.Interfaces;
+  using WatiN.Core.Logging;
 
   /// <summary>
 	/// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
@@ -34,39 +36,81 @@ namespace WatiN.Core
     /// </summary>
     private UtilityClass(){}
 
+    /// <summary>
+    /// Dumps all element ids to <see cref="DebugLogWriter"/>
+    /// </summary>
+    /// <param name="document">The document.</param>
     public static void DumpElements(Document document)
     {
-      System.Diagnostics.Debug.WriteLine("Dump:");
+      DumpElements(document, new DebugLogWriter());
+    }
+
+    /// <summary>
+    /// Dumps the element ids.
+    /// </summary>
+    /// <param name="document">The document.</param>
+    /// <param name="logWriter">The log writer.</param>
+    public static void DumpElements(Document document, ILogWriter logWriter)
+    {
+      logWriter.LogAction("Dump:");
       IHTMLElementCollection elements = elementCollection(document);
       foreach (IHTMLElement e in elements)
       {
-        System.Diagnostics.Debug.WriteLine("id = " + e.id);
+        logWriter.LogAction("id = " + e.id);
       }
     }
 
+    /// <summary>
+    /// Dumps the elements with HTML source to <see cref="DebugLogWriter"/>
+    /// </summary>
+    /// <param name="document">The document.</param>
     public static void DumpElementsWithHtmlSource(Document document)
     {
-      System.Diagnostics.Debug.WriteLine("Dump:==================================================");
+      DumpElementsWithHtmlSource(document, new DebugLogWriter());
+    }
+
+    /// <summary>
+    /// Dumps the elements with HTML source.
+    /// </summary>
+    /// <param name="document">The document.</param>
+    /// <param name="logWriter">The log writer.</param>
+    public static void DumpElementsWithHtmlSource(Document document, ILogWriter logWriter)
+    {
+      logWriter.LogAction("Dump:==================================================");
       IHTMLElementCollection elements = elementCollection(document);
       foreach (IHTMLElement e in elements)
       {
-        System.Diagnostics.Debug.WriteLine("------------------------- " + e.id);
-        System.Diagnostics.Debug.WriteLine(e.outerHTML);
+        logWriter.LogAction("------------------------- " + e.id);
+        logWriter.LogAction(e.outerHTML);
       }
     }
 
-    public static void ShowFrames(Document document)
+    /// <summary>
+    /// Dumps frame info to <see cref="DebugLogWriter"/>
+    /// </summary>
+    /// <param name="document">The document.</param>
+    public static void DumpFrames(Document document)
+    {
+      DumpFrames(document, new DebugLogWriter());
+    }
+
+    /// <summary>
+    /// Dumps frame info.
+    /// </summary>
+    /// <param name="document">The document.</param>
+    /// <param name="logWriter">The log writer.</param>
+    public static void DumpFrames(Document document, ILogWriter logWriter)
     {
       FrameCollection frames = document.Frames;
 
-      System.Diagnostics.Debug.WriteLine("There are " + frames.Length.ToString() + " Frames", "WatiN");
+      logWriter.LogAction("There are " + frames.Length.ToString() + " Frames");
       
       int index = 0;
       foreach(Frame frame in frames)
       {
-        System.Diagnostics.Debug.Write("Frame index: " + index.ToString());
-        System.Diagnostics.Debug.Write(" name: " + frame.Name);
-        System.Diagnostics.Debug.WriteLine(" scr: " + frame.Url);
+        logWriter.LogAction("Frame index: " + index.ToString());
+        logWriter.LogAction(" name: " + frame.Name);
+        logWriter.LogAction(" scr: " + frame.Url);
         
         index++;
       }
@@ -96,6 +140,12 @@ namespace WatiN.Core
       return !IsNullOrEmpty(value);
     }
 
+    /// <summary>
+    /// Returns the sring value of the <paramref name="theObject" />
+    /// and returns an empty string if <paramref name="theObject" /> is <c>null</c>
+    /// </summary>
+    /// <param name="theObject">The object.</param>
+    /// <returns></returns>
 	  public static string ToString(object theObject)
 	  {
 	    if (theObject == null)
@@ -126,6 +176,11 @@ namespace WatiN.Core
 	    return className.Equals(expectedClassName);
 	  }
 
+    /// <summary>
+    /// Converts the HTML element collection to an array list.
+    /// </summary>
+    /// <param name="elementCollection">The element collection.</param>
+    /// <returns>an array list with all the elements found in the element collection</returns>
     internal static ArrayList IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
 	  {
 	    ArrayList elements = new ArrayList();
@@ -163,6 +218,10 @@ namespace WatiN.Core
   {
     Timer clock = null;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SimpleTimer"/> class.
+    /// </summary>
+    /// <param name="timeout">The timeout.</param>
     public SimpleTimer(int timeout)
     {
       if (timeout < 0)
@@ -179,6 +238,10 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="SimpleTimer"/> is elapsed.
+    /// </summary>
+    /// <value><c>true</c> if elapsed; otherwise, <c>false</c>.</value>
     public bool Elapsed
     {
       get { return (clock == null); }
