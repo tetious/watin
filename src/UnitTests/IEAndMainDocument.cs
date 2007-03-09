@@ -77,8 +77,7 @@ namespace WatiN.UnitTests
       file.Directory.Create();
       file.Delete();
 
-      FileDownloadHandler fileDownloadHandler = new FileDownloadHandler(FileDownloadOption.Save);
-      fileDownloadHandler.SaveFilename = file.FullName;
+      FileDownloadHandler fileDownloadHandler = new FileDownloadHandler(file.FullName);
 
 		  using(IE ie = new IE())
 		  {

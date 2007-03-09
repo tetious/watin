@@ -130,7 +130,7 @@ namespace WatiN.UnitTests
     [Test]
     public void ShowFrames()
     {
-      UtilityClass.ShowFrames(ie);
+      UtilityClass.DumpFrames(ie);
     }
     
     private static void AssertFindFrame
