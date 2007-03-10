@@ -81,21 +81,13 @@ namespace WatiN.UnitTests
 
 		  using(IE ie = new IE())
 		  {
-		    try
-		    {
-		      ie.DialogWatcher.CloseUnhandledDialogs = false;
-		      ie.AddDialogHandler(fileDownloadHandler);
+		    ie.AddDialogHandler(fileDownloadHandler);
 
-//		      ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
-          ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
-		  
-		      fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(15);
-		      fileDownloadHandler.WaitUntilDownloadCompleted(200);
-		    }
-		    finally
-		    {
-          ie.DialogWatcher.CloseUnhandledDialogs = true;
-		    }
+		    ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
+//        ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
+		
+		    fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(15);
+		    fileDownloadHandler.WaitUntilDownloadCompleted(200);
 		  }
 
       Assert.IsTrue(file.Exists, file.FullName + " file does not exist after download");
@@ -1115,8 +1107,54 @@ namespace WatiN.UnitTests
         }
       }
     }
+
+    [Test]
+    public void ExceptionsInDialogHandlersShouldBeLoggedAndNeglected()
+    {
+      MockRepository mocks = new MockRepository();
+
+      //Make the mocks
+      ILogWriter mockLogWriter = (ILogWriter) mocks.CreateMock(typeof (ILogWriter));
+      IDialogHandler buggyDialogHandler = (IDialogHandler) mocks.CreateMock(typeof (IDialogHandler));
+      IDialogHandler nextDialogHandler = (IDialogHandler) mocks.CreateMock(typeof (IDialogHandler));
+      Window dialog = (Window) mocks.DynamicMock(typeof (Window), IntPtr.Zero);
+      
+      // Handle window does check if window IsDialog and Visible
+      Expect.Call(dialog.IsDialog()).Return(true);
+      Expect.Call(dialog.Visible).Return(true);
+
+      // If this HandleDialog is called throw an exception
+      Expect.Call(buggyDialogHandler.HandleDialog(dialog)).Throw(new Exception());
+      // Expect Logger will be called with the exception text and stack trace
+      mockLogWriter.LogAction("");
+      LastCall.Constraints(Text.Like("Exception was thrown while DialogWatcher called HandleDialog:"));
+      mockLogWriter.LogAction("");
+      LastCall.Constraints(Text.StartsWith("System.Exception:"));
+      // Expect the next dialogHandler will be called even do an exception
+      // has been thrown by the previous handler
+      Expect.Call(nextDialogHandler.HandleDialog(dialog)).Return(true);
+
+      mocks.ReplayAll();
+
+      // Set Logger
+      Logger.LogWriter = mockLogWriter;
+      
+      // Add dialogHandlers
+      DialogWatcher dialogWatcher = new DialogWatcher(0);
+      dialogWatcher.Add(buggyDialogHandler);
+      dialogWatcher.Add(nextDialogHandler);
+
+      Assert.IsNull(dialogWatcher.LastException, "LastException should be null");
+
+      // Call HandleDialog
+      dialogWatcher.HandleWindow(dialog);
+
+      Assert.IsNotNull(dialogWatcher.LastException, "LastException should not be null");
+      
+      mocks.VerifyAll();
+    }
   }
-  
+
   [TestFixture]
   public class HTMLDialogFindByTests : WatiNTest
   {

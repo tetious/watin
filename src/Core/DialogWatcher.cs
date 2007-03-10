@@ -42,7 +42,8 @@ namespace WatiN.Core.DialogHandlers
     private int referenceCount = 0;
     
     private static ArrayList dialogWatchers = new ArrayList();
-    
+    private Exception lastException;
+
     /// <summary>
     /// Gets the dialog watcher for the specified process. It creates
     /// a new instance if no dialog watcher for the specified process 
@@ -108,7 +109,7 @@ namespace WatiN.Core.DialogHandlers
     /// instead.
     /// </summary>
     /// <param name="ieProcessId">The ie process id.</param>
-    internal DialogWatcher(int ieProcessId)
+    public DialogWatcher(int ieProcessId)
     {
       this.ieProcessId = ieProcessId;
       
@@ -367,10 +368,24 @@ namespace WatiN.Core.DialogHandlers
     }
 
     /// <summary>
-    /// Handles the window.
+    /// Get the last stored exception thrown by a dialog handler while 
+    /// calling the <see cref="IDialogHandler.HandleDialog"/> method of the
+    /// dialog handler.
+    /// </summary>
+    /// <value>The last exception.</value>
+    public Exception LastException
+    {
+      get { return lastException; }
+    }
+
+    /// <summary>
+    /// If the window is a dialog and visible, it will be passed to
+    /// the registered dialog handlers. I none if these can handle
+    /// it, it will be closed if <see cref="CloseUnhandledDialogs"/>
+    /// is <c>true</c>.
     /// </summary>
     /// <param name="window">The window.</param>
-    private void HandleWindow(Window window)
+    public void HandleWindow(Window window)
     {
       if (window.IsDialog())
       {
@@ -388,9 +403,19 @@ namespace WatiN.Core.DialogHandlers
         {
           foreach (IDialogHandler dialogHandler in handlers)
           {
-            if (dialogHandler.HandleDialog(window))
+            try
             {
-              return;
+              if (dialogHandler.HandleDialog(window))
+              {
+                return;
+              }
+            }
+            catch (Exception e)
+            {
+              lastException = e;
+
+              Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog:");
+              Logger.LogAction(e.ToString());
             }
           }
 
@@ -440,7 +465,7 @@ namespace WatiN.Core.DialogHandlers
       this.hwnd = hwnd;
     }
     
-	  public IntPtr Hwnd
+	  public virtual IntPtr Hwnd
 	  {
 		  get
 		  {
@@ -448,7 +473,7 @@ namespace WatiN.Core.DialogHandlers
 		  }
 	  }
     
-    public IntPtr ParentHwnd
+    public virtual IntPtr ParentHwnd
     {
       get
       {
@@ -456,7 +481,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public string Title
+    public virtual string Title
     {
       get
       {
@@ -464,7 +489,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public string ClassName
+    public virtual string ClassName
     {
       get
       {
@@ -472,14 +497,14 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public Int64 Style
+    public virtual Int64 Style
     {
       get
       {
         return NativeMethods.GetWindowStyle(Hwnd);
       }
     }
-    public string StyleInHex
+    public virtual string StyleInHex
     {
       get
       {
@@ -487,22 +512,22 @@ namespace WatiN.Core.DialogHandlers
       }
     }
     
-    public bool IsDialog()
+    public virtual bool IsDialog()
     {
       return (ClassName == "#32770");
     }
 
-    public void ForceClose()
+    public virtual void ForceClose()
     {
       NativeMethods.SendMessage(Hwnd, NativeMethods.WM_CLOSE, 0, 0);
     }
     
-    public bool Exists()
+    public virtual bool Exists()
     {
       return NativeMethods.IsWindow(Hwnd);
     }
     
-    public bool Visible
+    public virtual bool Visible
     {
       get
       {
@@ -510,12 +535,12 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    public void ToFront()
+    public virtual void ToFront()
     {
       NativeMethods.SetForegroundWindow(Hwnd);
     }
 
-    public void SetActivate()
+    public virtual void SetActivate()
     {
       NativeMethods.SetActiveWindow(Hwnd);
     }
