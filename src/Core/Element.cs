@@ -27,6 +27,7 @@ using WatiN.Core.Logging;
 namespace WatiN.Core
 {
   using System.Reflection;
+  using System.Text.RegularExpressions;
 
   /// <summary>
   /// This is the base class for all other element types in this project, like
@@ -666,7 +667,7 @@ namespace WatiN.Core
     {
       if (!Exists && elementFinder != null)
       {
-        waitUntil(timeout, true);
+        waitUntilExistsOrNot(timeout, true);
       }      
     }
 
@@ -688,11 +689,91 @@ namespace WatiN.Core
     {
       if (Exists)
       {
-        waitUntil(timeout, false);
+        waitUntilExistsOrNot(timeout, false);
       }      
     }
 
-    private void waitUntil(int timeout, bool waitUntilExists)
+    /// <summary>
+    /// Waits until the given <paramref name="attributename" /> matches <paramref name="expectedValue" />.
+    /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
+    /// </summary>
+    /// <param name="attributename">The attributename.</param>
+    /// <param name="expectedValue">The expected value.</param>
+    public void WaitUntil(string attributename, string expectedValue)
+    {
+      WaitUntil(attributename, expectedValue, IE.Settings.WaitUntilExistsTimeOut);
+    }
+
+    /// <summary>
+    /// Waits until the given <paramref name="attributename" /> matches <paramref name="expectedValue" />.
+    /// Wait will time out after <paramref name="timeout"/> seconds.
+    /// </summary>
+    /// <param name="attributename">The attributename.</param>
+    /// <param name="expectedValue">The expected value.</param>
+    /// <param name="timeout">The timeout.</param>
+    public void WaitUntil(string attributename, string expectedValue, int timeout)
+    {
+      WaitUntil(new Attribute(attributename, expectedValue), timeout);
+    }
+
+    /// <summary>
+    /// Waits until the given <paramref name="attributename" /> matches <paramref name="expectedValue" />.
+    /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
+    /// </summary>
+    /// <param name="attributename">The attributename.</param>
+    /// <param name="expectedValue">The expected value.</param>
+    public void WaitUntil(string attributename, Regex expectedValue)
+    {
+      WaitUntil(attributename, expectedValue, IE.Settings.WaitUntilExistsTimeOut);
+    }
+
+    /// <summary>
+    /// Waits until the given <paramref name="attributename" /> matches <paramref name="expectedValue" />.
+    /// Wait will time out after <paramref name="timeout"/> seconds.
+    /// </summary>
+    /// <param name="attributename">The attributename.</param>
+    /// <param name="expectedValue">The expected value.</param>
+    /// <param name="timeout">The timeout.</param>
+    public void WaitUntil(string attributename, Regex expectedValue, int timeout)
+    {
+      WaitUntil(new Attribute(attributename, expectedValue), timeout);
+    }
+
+    /// <summary>
+    /// Waits until the given <paramref name="attribute" /> matches.
+    /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
+    /// </summary>
+    /// <param name="attribute">The attribute.</param>
+    public void WaitUntil(Attribute attribute)
+    {
+      WaitUntil(attribute, IE.Settings.WaitUntilExistsTimeOut);
+    }
+
+    /// <summary>
+    /// Waits until the given <paramref name="attribute" /> matches.
+    /// </summary>
+    /// <param name="attribute">The attribute.</param>
+    /// <param name="timeout">The timeout.</param>
+    public void WaitUntil(Attribute attribute, int timeout)
+    {
+      ElementAttributeBag attributeBag = new ElementAttributeBag(htmlElement);
+
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+
+      do
+      {
+        if (attribute.Compare(attributeBag))
+        {
+          return;
+        }
+        
+        Thread.Sleep(200);
+      } while (!timeoutTimer.Elapsed);
+
+      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attribute.AttributeName, attribute.Value));
+    }
+
+    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
     {
       SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 

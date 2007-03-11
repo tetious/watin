@@ -1440,7 +1440,7 @@ namespace WatiN.UnitTests
     }
 
     [Test]
-    public void WaitUntilElementNolongerExistsElementRemovedAfter3Seconds()
+    public void WaitUntilElementRemovedAfter3Seconds()
     {
       Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
@@ -1469,10 +1469,64 @@ namespace WatiN.UnitTests
     }
     
     [Test]
+    public void WaitUntil()
+    {
+      MockRepository mocks = new MockRepository();
+
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+      
+      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.Twice();
+      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(false).Repeat.Twice();
+
+      mocks.ReplayAll();
+
+      Element element = new Element(null, htmlelement);
+
+      Assert.AreEqual(true.ToString(), element.GetAttributeValue("disabled"));
+
+      // calls htmlelement.getAttribute twice (ones true and once false is returned)
+      element.WaitUntil(new Core.Attribute("disabled", false.ToString()), 1);
+
+      Assert.AreEqual(false.ToString(), element.GetAttributeValue("disabled"));
+
+      mocks.VerifyAll();
+    }
+
+    [Test, ExpectedException(typeof(TimeoutException), "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
+    public void WaitUntilTimesOut()
+    {
+      MockRepository mocks = new MockRepository();
+
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+      
+      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.AtLeastOnce();
+
+      mocks.ReplayAll();
+
+      Element element = new Element(null, htmlelement);
+
+      Assert.AreEqual(true.ToString(), element.GetAttributeValue("disabled"));
+
+      // calls htmlelement.getAttribute twice (ones true and once false is returned)
+      element.WaitUntil(new Core.Attribute("disabled", false.ToString()), 1);
+    }
+
+    [Test]
     public void GetAttributeValueOfTypeInt()
     {
-      string sourceIndex = ie.Button("modalid").GetAttributeValue("sourceIndex");
-      Assert.AreEqual("13", sourceIndex);
+      MockRepository mocks = new MockRepository();
+
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+      
+      Expect.Call(htmlelement.getAttribute("sourceIndex", 0)).Return(13);
+
+      mocks.ReplayAll();
+
+      Element element = new Element(null, htmlelement);
+
+      Assert.AreEqual("13", element.GetAttributeValue("sourceIndex"));
+
+      mocks.VerifyAll();
     } 
     
     [Test]
@@ -1485,7 +1539,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void FindByClassNameNull()
+    public void FindByShouldPassEvenIfAttributeValueOfHTMLELementIsNull()
     {
       Assert.IsFalse(ie.Button(Find.ByCustom("classname", "nullstring")).Exists);
     }
