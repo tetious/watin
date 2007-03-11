@@ -201,9 +201,9 @@ namespace WatiN.Core
 
     private void doKeyPress(string value)
     {
-      bool doKeydown = findEvent("onkeydown");
-      bool doKeyPress = findEvent("onkeypress");
-      bool doKeyUp = findEvent("onkeyup");
+      bool doKeydown = ShouldEventBeFired(htmlElement.onkeydown);
+      bool doKeyPress = ShouldEventBeFired(htmlElement.onkeypress);
+      bool doKeyUp = ShouldEventBeFired(htmlElement.onkeyup);
 
       for (int i = 0; i < value.Length; i++)
       {
@@ -218,9 +218,9 @@ namespace WatiN.Core
       }
     }
 
-    private bool findEvent(string eventName)
+    private bool ShouldEventBeFired(Object value)
     {
-      return (OuterHtml.IndexOf(eventName) > 0);
+      return (value != DBNull.Value);
     }
 
     /// <summary>
