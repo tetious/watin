@@ -962,6 +962,20 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class DialogWatcherTest : WatiNTest
   {
+    ILogWriter saveLoggerInstance;
+
+    [SetUp]
+    public void SetUp()
+    {
+      saveLoggerInstance = Logger.LogWriter;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      Logger.LogWriter = saveLoggerInstance;
+    }
+
     [Test]
     public void DialogWatcherShouldKeepRunningWhenClosingOneOfTwoInstancesInSameProcess()
     {      

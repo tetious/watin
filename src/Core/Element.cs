@@ -596,7 +596,7 @@ namespace WatiN.Core
     {
       get
       {
-        if (element == null)
+        if (!ElementAvailable())
         {
           try
           {
@@ -614,7 +614,7 @@ namespace WatiN.Core
     /// Gets a value indicating whether this <see cref="Element"/> exists.
     /// </summary>
     /// <value><c>true</c> if exists; otherwise, <c>false</c>.</value>
-    public bool Exists
+    public virtual bool Exists
     {
       get
       {
@@ -665,10 +665,7 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout in seconds.</param>
     public void WaitUntilExists(int timeout)
     {
-      if (!Exists && elementFinder != null)
-      {
-        waitUntilExistsOrNot(timeout, true);
-      }      
+      waitUntilExistsOrNot(timeout, true);
     }
 
     /// <summary>
@@ -687,10 +684,7 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout in seconds.</param>
     public void WaitUntilRemoved(int timeout)
     {
-      if (Exists)
-      {
-        waitUntilExistsOrNot(timeout, false);
-      }      
+      waitUntilExistsOrNot(timeout, false);
     }
 
     /// <summary>
@@ -756,43 +750,90 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout.</param>
     public void WaitUntil(Attribute attribute, int timeout)
     {
+      Exception lastException;
+
       ElementAttributeBag attributeBag = new ElementAttributeBag(htmlElement);
 
       SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
       do
       {
-        if (attribute.Compare(attributeBag))
+        lastException = null;
+
+        try
         {
-          return;
+          if (attribute.Compare(attributeBag))
+          {
+            return;
+          }
         }
-        
+        catch (Exception e)
+        {
+          lastException = e;
+        }        
+
         Thread.Sleep(200);
       } while (!timeoutTimer.Elapsed);
 
-      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attribute.AttributeName, attribute.Value));
+      ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attribute.AttributeName, attribute.Value));
+    }
+
+    private static void ThrowTimeOutException(Exception lastException, string message)
+    {
+      if (lastException != null)
+      {
+        throw new WatiN.Core.Exceptions.TimeoutException(message, lastException);
+      }
+      else
+      {
+        throw new WatiN.Core.Exceptions.TimeoutException(message);
+      }
     }
 
     private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
     {
-      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+      // Does it make sense to go into the do loop?
+      if (waitUntilExists)
+      {
+        if(ElementAvailable()) { return; }
+        else if(elementFinder == null)
+        {
+          throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
+        }
+      }
+      else
+      {
+        if (!ElementAvailable()) { return; }
+      }
 
+      Exception lastException;
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+      
       do
       {
-        if (Exists == waitUntilExists)
+        lastException = null;
+        
+        try
         {
-          return;
+          if (Exists == waitUntilExists)
+          {
+            return;
+          }
+        }
+        catch (Exception e)
+        {
+          lastException = e;
         }
         
         Thread.Sleep(200);
       } while (!timeoutTimer.Elapsed);
 
-      throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
+      ThrowTimeOutException(lastException,string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));    
     }
 
     private object getElement(bool throwExceptionIfElementNotFound)
     {
-      if (element == null && elementFinder != null)
+      if (!ElementAvailable() && elementFinder != null)
       {
         element = elementFinder.FindFirst();
 
@@ -803,6 +844,11 @@ namespace WatiN.Core
       }
 
       return element;
+    }
+
+    private bool ElementAvailable()
+    {
+      return element != null;
     }
 
     /// <summary>

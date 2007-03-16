@@ -124,6 +124,8 @@ namespace WatiN.Core.Exceptions
   {
     public TimeoutException(string value) : base("Timeout while '" + value + "'")
     {}
+    public TimeoutException(string value, Exception innerException) : base("Timeout while '" + value + "'", innerException)
+    {}
   }
   
   /// <summary>

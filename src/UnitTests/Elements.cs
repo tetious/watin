@@ -1492,6 +1492,101 @@ namespace WatiN.UnitTests
       mocks.VerifyAll();
     }
 
+    [Test]
+    public void WaitUntilExistsShouldIgnoreExceptionsDuringWait()
+    {
+      MockRepository mocks = new MockRepository();
+
+      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+
+      Expect.Call(finder.FindFirst()).Return(null).Repeat.Times(5);
+      Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("")).Repeat.Times(4);
+      Expect.Call(finder.FindFirst()).Return(htmlelement);
+
+      Expect.Call(htmlelement.sourceIndex).Return(100);
+      Expect.Call(htmlelement.offsetParent).Return(htmlelement);
+      Expect.Call(htmlelement.innerText).Return("succeeded");
+      
+      mocks.ReplayAll();
+
+      Element element = new Element(null, finder);
+
+      Assert.AreEqual("succeeded", element.Text);
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void WaitUntilExistsTimeOutExceptionInnerExceptionNotSetToLastExceptionThrown()
+    {
+      MockRepository mocks = new MockRepository();
+
+      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+
+      Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
+      Expect.Call(finder.FindFirst()).Return(null).Repeat.AtLeastOnce();
+      
+      mocks.ReplayAll();
+
+      Element element = new Element(null, finder);
+
+      try
+      {
+        element.WaitUntilExists(1);
+      }
+      catch (TimeoutException e)
+      {
+        Assert.IsNull(e.InnerException, "Unexpected innerexception");
+      }
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void WaitUntilExistsTimeOutExceptionInnerExceptionSetToLastExceptionThrown()
+    {
+      MockRepository mocks = new MockRepository();
+
+      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+
+      Expect.Call(finder.FindFirst()).Throw(new Exception(""));
+      Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("mockUnauthorizedAccessException")).Repeat.AtLeastOnce();
+
+      mocks.ReplayAll();
+
+      Element element = new Element(null, finder);
+
+      try
+      {
+        element.WaitUntilExists(1);
+      }
+      catch (TimeoutException e)
+      {
+        Assert.IsInstanceOfType(typeof(UnauthorizedAccessException), e.InnerException, "Unexpected innerexception");
+        Assert.AreEqual("mockUnauthorizedAccessException", e.InnerException.Message);
+      }
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void WaitUntilExistsShouldReturnImmediatelyIfElementIsSet()
+    {
+      MockRepository mocks = new MockRepository();
+
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+      Element mockElement = (Element) mocks.DynamicMock(typeof (Element), null, htmlelement);
+
+      Expect.Call(mockElement.Exists).Repeat.Never();
+      
+      mocks.ReplayAll();
+
+      mockElement.WaitUntilExists(3);
+
+      mocks.VerifyAll();
+    }
+
     [Test, ExpectedException(typeof(TimeoutException), "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
     public void WaitUntilTimesOut()
     {
