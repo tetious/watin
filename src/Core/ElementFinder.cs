@@ -159,7 +159,7 @@ namespace WatiN.Core
 
         attributeBag.IHTMLElement = element;
         
-        if (findBy.Compare(attributeBag) && elementTag.Compare(element))
+        if (elementTag.Compare(element) && findBy.Compare(attributeBag))
         {
           children.Add(element);
           if (returnAfterFirstMatch)

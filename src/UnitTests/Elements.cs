@@ -1628,9 +1628,14 @@ namespace WatiN.UnitTests
     public void FindBySourceIndex()
     {
       Button button = ie.Button(Find.ByCustom("sourceIndex", "13"));
-      
-      string sourceIndex = button.GetAttributeValue("sourceIndex");
-      Assert.AreEqual("13", sourceIndex);
+
+      Assert.AreEqual("13", button.GetAttributeValue("sourceIndex"));
+    }
+
+    [Test]
+    public void FindByIndex()
+    {
+      Assert.AreEqual("popupid", ie.Button(Find.ByIndex(0)).Id);
     }
     
     [Test]
