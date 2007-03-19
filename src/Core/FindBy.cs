@@ -129,7 +129,7 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports matching a regular expression with a string value.
   /// </summary>
-  public class RegexComparer :BaseComparer
+  public class RegexComparer : BaseComparer
   {
     private Regex regexToUse;
     
@@ -158,7 +158,7 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports comparing a <see cref="Uri"/> instance with a string value.
   /// </summary>
-  public class UriComparer :BaseComparer
+  public class UriComparer : BaseComparer
   {
     private Uri uriToCompareWith;
     
@@ -197,19 +197,10 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports comparing a <see cref="bool"/> instance with a string value.
   /// </summary>
-  public class BoolComparer : BaseComparer
+  public class BoolComparer : StringEqualsAndCaseInsensitiveComparer
   {
-    private StringComparer comparer;
-
-    public BoolComparer(bool value)
-    {
-      comparer = new StringComparer(value.ToString());
-    }
-
-    public override bool Compare(string value)
-    {
-      return comparer.Compare(value);
-    }
+    public BoolComparer(bool value) : base(value.ToString())
+    {}
   }
 
   

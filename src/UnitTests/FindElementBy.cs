@@ -522,6 +522,34 @@ namespace WatiN.UnitTests
   }
   
   [TestFixture]
+  public class BoolComparerTests
+  {
+    [Test]
+    public void CompareToTrue()
+    {
+      ICompare comparer = new BoolComparer(true);
+
+      Assert.IsTrue(comparer.Compare(true.ToString()), "true.ToString()");
+      Assert.IsTrue(comparer.Compare("true"), "true");
+      Assert.IsTrue(comparer.Compare("True"), "True");
+      Assert.IsFalse(comparer.Compare("false"), "false");
+      Assert.IsFalse(comparer.Compare("some other string"), "some other string");
+    }
+
+    [Test]
+    public void CompareToFalse()
+    {
+      ICompare comparer = new BoolComparer(false);
+
+      Assert.IsTrue(comparer.Compare(false.ToString()), "false.ToString()");
+      Assert.IsTrue(comparer.Compare("false"), "false");
+      Assert.IsTrue(comparer.Compare("False"), "False");
+      Assert.IsFalse(comparer.Compare("true"), "true");
+      Assert.IsFalse(comparer.Compare("some other string"), "some other string");
+    }
+  }
+
+  [TestFixture]
   public class StringEqualsAndCaseInsensitiveComparerTests
   {
     [Test]
