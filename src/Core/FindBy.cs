@@ -42,10 +42,18 @@ namespace WatiN.Core
 {
   using WatiN.Core.Exceptions;
 
+  public abstract class BaseComparer : ICompare
+  {
+    public virtual bool Compare(string value)
+    {
+      return false;
+    }
+  }
+
   /// <summary>
   /// Class that supports an exact comparison of two string values.
   /// </summary>
-  public class StringComparer : ICompare
+  public class StringComparer : BaseComparer
   {
     protected string valueToCompareWith;
     
@@ -58,7 +66,7 @@ namespace WatiN.Core
       valueToCompareWith = value;
     }
     
-    public virtual bool Compare(string value)
+    public override bool Compare(string value)
     {
       if (value != null && valueToCompareWith.Equals(value))
       {
@@ -78,10 +86,8 @@ namespace WatiN.Core
   /// </summary>
   public class StringContainsAndCaseInsensitiveComparer : StringComparer
   {
-    public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
-    {
-      valueToCompareWith = value.ToLower();
-    }
+    public StringContainsAndCaseInsensitiveComparer(string value) : base(value.ToLower())
+    {}
     
     public override bool Compare(string value)
     {
@@ -123,7 +129,7 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports matching a regular expression with a string value.
   /// </summary>
-  public class RegexComparer :ICompare
+  public class RegexComparer :BaseComparer
   {
     private Regex regexToUse;
     
@@ -136,7 +142,7 @@ namespace WatiN.Core
       regexToUse = regex;
     }
     
-    public bool Compare(string value)
+    public override bool Compare(string value)
     {
       if (value == null) return false;
       
@@ -152,7 +158,7 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports comparing a <see cref="Uri"/> instance with a string value.
   /// </summary>
-  public class UriComparer :ICompare
+  public class UriComparer :BaseComparer
   {
     private Uri uriToCompareWith;
     
@@ -165,7 +171,7 @@ namespace WatiN.Core
       uriToCompareWith = uri;
     }
     
-    public bool Compare(string value)
+    public override bool Compare(string value)
     {
       if (UtilityClass.IsNullOrEmpty(value)) return false;
       
@@ -191,7 +197,7 @@ namespace WatiN.Core
   /// <summary>
   /// Class that supports comparing a <see cref="bool"/> instance with a string value.
   /// </summary>
-  public class BoolComparer : ICompare
+  public class BoolComparer : BaseComparer
   {
     private StringComparer comparer;
 
@@ -200,7 +206,7 @@ namespace WatiN.Core
       comparer = new StringComparer(value.ToString());
     }
 
-    public bool Compare(string value)
+    public override bool Compare(string value)
     {
       return comparer.Compare(value);
     }
