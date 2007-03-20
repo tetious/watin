@@ -1236,23 +1236,36 @@ namespace WatiN.UnitTests
 
     public UseDialogOnce(DialogWatcher dialogWatcher, IDialogHandler dialogHandler)
     {
+    	if(dialogWatcher == null)
+    	{
+    		throw new ArgumentNullException("dialogWatcher");
+    	}
+    	
+    	if(dialogHandler == null)
+    	{
+    		throw new ArgumentNullException("dialogHandler");
+    	}
+    	
       this.dialogWatcher = dialogWatcher;
       this.dialogHandler = dialogHandler;
       
       dialogWatcher.Add(dialogHandler);
     }
 
-    #region IDisposable Members
-
-    public void Dispose()
-    {
-      dialogWatcher.Remove(dialogHandler);
-      
-      dialogWatcher = null;
-      dialogHandler = null;
-    }
-
-    #endregion
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+			return;
+		}
+		
+		protected virtual void Dispose(bool managedAndNative)
+		{
+			dialogWatcher.Remove(dialogHandler);
+			
+			dialogWatcher = null;
+			dialogHandler = null;
+		}    
   }
   
   [TestFixture]
