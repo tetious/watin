@@ -1535,7 +1535,7 @@ namespace WatiN.UnitTests
       {
         element.WaitUntilExists(1);
       }
-      catch (TimeoutException e)
+      catch (WatiN.Core.Exceptions.TimeoutException e)
       {
         Assert.IsNull(e.InnerException, "Unexpected innerexception");
       }
@@ -1561,7 +1561,7 @@ namespace WatiN.UnitTests
       {
         element.WaitUntilExists(1);
       }
-      catch (TimeoutException e)
+      catch (WatiN.Core.Exceptions.TimeoutException e)
       {
         Assert.IsInstanceOfType(typeof(UnauthorizedAccessException), e.InnerException, "Unexpected innerexception");
         Assert.AreEqual("mockUnauthorizedAccessException", e.InnerException.Message);
@@ -1587,7 +1587,7 @@ namespace WatiN.UnitTests
       mocks.VerifyAll();
     }
 
-    [Test, ExpectedException(typeof(TimeoutException), "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
+    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
     public void WaitUntilTimesOut()
     {
       MockRepository mocks = new MockRepository();
