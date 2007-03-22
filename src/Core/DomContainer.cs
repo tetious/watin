@@ -368,7 +368,7 @@ namespace WatiN.Core
     {
       try
       {
-        return ie.ReadyState !=  tagREADYSTATE.READYSTATE_COMPLETE;
+        return ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE;
       }
       catch
       {
@@ -397,63 +397,5 @@ namespace WatiN.Core
         return false;
       }
     }
-  }
-  
-  internal class WaitForFrameCompleteProcessor : IWebBrowser2Processor
-  {
-    public ArrayList elements;
-    
-    private HTMLDocument htmlDocument;
-    private IHTMLElementCollection frameElements;
-    private int index = 0;
-    private DomContainer ie;
-    
-    public WaitForFrameCompleteProcessor(DomContainer ie, HTMLDocument htmlDocument)
-    {
-      elements = new ArrayList();
-
-      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.FrameTagName);
-      
-      // If the current document doesn't contain FRAME elements, it then
-      // might contain IFRAME elements.
-      if (frameElements.length == 0)
-      {
-        frameElements = (IHTMLElementCollection)htmlDocument.all.tags("IFRAME");
-      }
-
-      this.ie = ie;
-      this.htmlDocument = htmlDocument;  
-    }
-
-    public HTMLDocument HTMLDocument()
-    {
-      return htmlDocument;
-    }
-
-    public void Process(IWebBrowser2 webBrowser2)
-    {
-      // Get the frame element from the parent document
-      IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
-            
-      string frameName = null;
-      string frameId = null;
-
-      if (frameElement != null)
-      {
-        frameId = frameElement.id;
-        frameName = frameElement.getAttribute("name", 0) as string;
-      }
-
-      Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
-      elements.Add(frame);
-                
-      index++;
-    }
-
-    public bool Continue()
-    {
-      return true;
-    }
-  }
-
+  }  
 }
