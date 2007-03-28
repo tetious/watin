@@ -86,8 +86,10 @@ namespace WatiN.Core
   /// </summary>
   public class StringContainsAndCaseInsensitiveComparer : StringComparer
   {
-    public StringContainsAndCaseInsensitiveComparer(string value) : base(value.ToLower())
-    {}
+    public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
+    {
+      valueToCompareWith = value.ToLower();
+    }
     
     public override bool Compare(string value)
     {
