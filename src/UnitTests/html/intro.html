@@ -1,0 +1,14 @@
+<form id="TheForm" action="theApp.html" method=get>
+Waiting 5 seconds...
+</form>
+
+<script language=javascript>
+
+function CallNextPage()
+{
+    document.forms[0].submit();
+}
+
+setTimeout('CallNextPage()',5000);
+
+</script>

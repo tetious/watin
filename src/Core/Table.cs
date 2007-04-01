@@ -24,6 +24,8 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System;
+
   /// <summary>
   /// This class provides specialized functionality for a HTML table element.
   /// </summary>
@@ -69,7 +71,7 @@ namespace WatiN.Core
     {
       get 
       {
-        return ElementsSupport.TableRows(DomContainer, GetBodyElements()); 
+        return ElementsSupport.TableRows(DomContainer, TableBodies[0]); 
       }
     }
 
@@ -94,12 +96,7 @@ namespace WatiN.Core
     /// <returns></returns>
     public override TableBody TableBody(Attribute findBy)
     {
-      return ElementsSupport.TableBody(DomContainer, findBy, HTMLTable.tBodies);
-    }
-
-    private IHTMLElementCollection GetBodyElements()
-    {
-      return (IHTMLElementCollection)(GetFirstTBody().all);
+      return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this) );
     }
 
     private IHTMLElement GetFirstTBody()
@@ -163,7 +160,7 @@ namespace WatiN.Core
     
     public TableRow FindRow(TableRowFinder findBy)
     {
-      TableRow row = ElementsSupport.TableRow(DomContainer, findBy, GetBodyElements());
+      TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
       
       if (row.Exists)
       {
@@ -171,6 +168,44 @@ namespace WatiN.Core
       }
 
       return null;
+    }
+
+    public abstract class TableElementCollectionsBase : IElementCollection
+    {
+      protected Table table;
+
+      public TableElementCollectionsBase(Table table)
+      {
+        this.table = table;
+      }
+
+      public abstract IHTMLElementCollection Elements { get; }
+    }
+
+    public class TBodies : TableElementCollectionsBase
+    {
+      public TBodies(Table table) : base(table) {}
+
+      public override IHTMLElementCollection Elements
+      {
+        get
+        {
+          return table.HTMLTable.tBodies;
+        }
+      }
+    }
+
+    public class ElementsInFirstTBody : TableElementCollectionsBase
+    {
+      public ElementsInFirstTBody(Table table): base(table) {}
+
+      public override IHTMLElementCollection Elements
+      {
+        get
+        {
+          return (IHTMLElementCollection)table.GetFirstTBody().all;
+        }
+      }
     }
   }
 

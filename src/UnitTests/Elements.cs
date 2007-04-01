@@ -755,7 +755,7 @@ namespace WatiN.UnitTests
     }
     
     [Test]
-    public void ButtonCollectionSecondFilterAndOthersShouldThrowInvalidAttributeException()
+    public void ButtonCollectionSecondFilterAndOthersShouldNeverThrowInvalidAttributeException()
     {
       ButtonCollection buttons = ie.Buttons.Filter(Find.ById("testlinkid"));
       ButtonCollection buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
@@ -1423,12 +1423,15 @@ namespace WatiN.UnitTests
       using(IE ie1 = new IE(TestEventsURI))
       {
         TextField injectedTextField = ie1.TextField("injectedTextField");
-        
+        TextField injectedDivTextField = ie1.Div("seconddiv").TextField("injectedTextField");
+ 
         Assert.IsFalse(injectedTextField.Exists);
+        Assert.IsFalse(injectedDivTextField.Exists);
         
         ie1.Button("injectElement").ClickNoWait();
 
         Assert.IsFalse(injectedTextField.Exists);
+        Assert.IsFalse(injectedDivTextField.Exists);
 
         // WatiN should wait until the element exists before
         // getting the text.
@@ -1436,6 +1439,7 @@ namespace WatiN.UnitTests
 
         Assert.IsTrue(injectedTextField.Exists);
         Assert.AreEqual("Injection Succeeded", text);
+        Assert.IsTrue(injectedDivTextField.Exists);
       }
     }
 
@@ -1447,18 +1451,22 @@ namespace WatiN.UnitTests
       using(IE ie1 = new IE(TestEventsURI))
       {
         TextField textfieldToRemove = ie1.TextField("textFieldToRemove");
-        
+        TextFieldCollection textfields = ie1.TextFields;
+
+        Assert.AreEqual("textFieldToRemove", textfields[4].Id);
+
         Assert.IsTrue(textfieldToRemove.Exists);
+        Assert.IsTrue(textfields[4].Exists);
 
         ie1.Button("removeElement").ClickNoWait();
 
         Assert.IsTrue(textfieldToRemove.Exists);
+        Assert.IsTrue(textfields[4].Exists);
 
-        System.Diagnostics.Debug.WriteLine(textfieldToRemove.Text);
-        
         textfieldToRemove.WaitUntilRemoved();
 
         Assert.IsFalse(textfieldToRemove.Exists);
+        Assert.IsFalse(textfields[4].Exists);
       }
     }
     
@@ -1497,15 +1505,13 @@ namespace WatiN.UnitTests
     {
       MockRepository mocks = new MockRepository();
 
-      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+      ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), null, null);
       IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
 
       Expect.Call(finder.FindFirst()).Return(null).Repeat.Times(5);
       Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("")).Repeat.Times(4);
-      Expect.Call(finder.FindFirst()).Return(htmlelement);
+      Expect.Call(finder.FindFirst()).Return(htmlelement).Repeat.Once();
 
-      Expect.Call(htmlelement.sourceIndex).Return(100);
-      Expect.Call(htmlelement.offsetParent).Return(htmlelement);
       Expect.Call(htmlelement.innerText).Return("succeeded");
       
       mocks.ReplayAll();
@@ -1531,14 +1537,19 @@ namespace WatiN.UnitTests
 
       Element element = new Element(null, finder);
 
+      WatiN.Core.Exceptions.TimeoutException timeoutException = null;
+
       try
       {
         element.WaitUntilExists(1);
       }
       catch (WatiN.Core.Exceptions.TimeoutException e)
       {
-        Assert.IsNull(e.InnerException, "Unexpected innerexception");
+        timeoutException = e;
       }
+      
+      Assert.IsNotNull(timeoutException, "TimeoutException not thrown");
+      Assert.IsNull(timeoutException.InnerException, "Unexpected innerexception");
 
       mocks.VerifyAll();
     }
@@ -1557,16 +1568,21 @@ namespace WatiN.UnitTests
 
       Element element = new Element(null, finder);
 
+      WatiN.Core.Exceptions.TimeoutException timeoutException = null;
+
       try
       {
         element.WaitUntilExists(1);
       }
       catch (WatiN.Core.Exceptions.TimeoutException e)
       {
-        Assert.IsInstanceOfType(typeof(UnauthorizedAccessException), e.InnerException, "Unexpected innerexception");
-        Assert.AreEqual("mockUnauthorizedAccessException", e.InnerException.Message);
+        timeoutException = e;
       }
 
+      Assert.IsNotNull(timeoutException, "TimeoutException not thrown");
+      Assert.IsInstanceOfType(typeof(UnauthorizedAccessException), timeoutException.InnerException, "Unexpected innerexception");
+      Assert.AreEqual("mockUnauthorizedAccessException", timeoutException.InnerException.Message);
+      
       mocks.VerifyAll();
     }
 
@@ -1604,6 +1620,18 @@ namespace WatiN.UnitTests
 
       // calls htmlelement.getAttribute twice (ones true and once false is returned)
       element.WaitUntil(new Core.Attribute("disabled", false.ToString()), 1);
+    }
+
+    [Test]
+    public void TextFieldShouldBeFoundAfterRedirect()
+    {
+      ie.GoTo(new Uri(HtmlTestBaseURI, "intro.html"));
+
+      Assert.IsFalse(ie.TextField("TheTextBox").Exists);
+
+      ie.TextField("TheTextBox").WaitUntilExists(10);
+
+      Assert.IsTrue(ie.TextField("TheTextBox").Exists);
     }
 
     [Test]

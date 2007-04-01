@@ -18,8 +18,10 @@
 
 namespace WatiN.Core
 {
+  using System;
   using System.Collections;
   using mshtml;
+  using WatiN.Core.Interfaces;
 
   /// <summary>
   /// This class provides specialized functionality for a HTML tbody element. 
@@ -61,7 +63,7 @@ namespace WatiN.Core
     /// <returns></returns>
     public override TableRow TableRow(Attribute findBy)
     {
-      return ElementsSupport.TableRow(DomContainer, findBy, HtmlBody.rows);
+      return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
     }
 
 
@@ -82,6 +84,24 @@ namespace WatiN.Core
     private IHTMLTableSection HtmlBody
     {
       get { return (IHTMLTableSection) HTMLElement; }
+    }
+
+    public class Rows : IElementCollection
+    {
+      private TableBody tableBody;
+
+      public Rows(TableBody tableBody)
+      {
+        this.tableBody = tableBody;
+      }
+
+      public IHTMLElementCollection Elements
+      {
+        get
+        {
+          return tableBody.HtmlBody.rows;
+        }
+      }
     }
   }
 }

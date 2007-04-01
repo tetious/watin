@@ -57,7 +57,7 @@ function injectElement()
     window.setTimeout(function() 
     {
       div = document.getElementById("injectElementDiv"); 
-      div.innerHTML = "<input type=text id=injectedTextField value='Injection Succeeded' />";
+      div.innerHTML = "<div id='seconddiv'><input type=text id=injectedTextField value='Injection Succeeded' /></div>";
     }, 3000);
 }
 

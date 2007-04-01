@@ -603,10 +603,12 @@ namespace WatiN.Core
             WaitUntilExists();
           }
           catch(WatiN.Core.Exceptions.TimeoutException)
-          {}
+          {
+            throw elementFinder.CreateElementNotFoundException();
+          }
         }
-        
-        return getElement(true);
+
+        return element;
       }
     }
 
@@ -618,31 +620,37 @@ namespace WatiN.Core
     {
       get
       {
-        object elementExists = getElement(false);
+        object elementExists = getElement();
 
         if (elementExists == null)
         {
           return false;
         }
 
-        try
+        // These checks are only necessary if element field
+        // is set during the construction of an ElementCollection
+        // or a more specialized element collection (like TextFieldCollection)
+        if (elementFinder == null)
         {
-          if(((IHTMLElement)elementExists).sourceIndex < 0)
+          try
           {
-            return false;
-          }
+            if(((IHTMLElement)elementExists).sourceIndex < 0)
+            {
+              return false;
+            }
 
-          IHTMLElement htmlElementExists = elementExists as IHTMLElement;
-          if(htmlElementExists != null && htmlElementExists.offsetParent == null)
+            IHTMLElement htmlElementExists = elementExists as IHTMLElement;
+            if(htmlElementExists != null && htmlElementExists.offsetParent == null)
 //            && htmlElementExists.offsetHeight == 0 && htmlElementExists.offsetLeft == 0 
 //            && htmlElementExists.offsetTop == 0 && htmlElementExists.offsetWidth == 0)
+            {
+              return false;
+            }
+          }
+          catch
           {
             return false;
           }
-        }
-        catch
-        {
-          return false;
         }
 
         return true;
@@ -831,19 +839,23 @@ namespace WatiN.Core
       ThrowTimeOutException(lastException,string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));    
     }
 
-    private object getElement(bool throwExceptionIfElementNotFound)
+    protected object getElement()
     {
-      if (!ElementAvailable() && elementFinder != null)
-      {
-        element = elementFinder.FindFirst();
-
-        if (element == null && throwExceptionIfElementNotFound)
-        {
-          throw elementFinder.CreateElementNotFoundException();
-        }
-      }
+      element = findElement(element, elementFinder);
 
       return element;
+    }
+
+    private object findElement(object element, ElementFinder elementFinder)
+    {
+      object returnElement = element;
+
+      if (elementFinder != null)
+      {
+        returnElement = elementFinder.FindFirst();
+      }
+
+      return returnElement;
     }
 
     private bool ElementAvailable()

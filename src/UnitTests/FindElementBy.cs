@@ -29,6 +29,7 @@ using Attribute=WatiN.Core.Attribute;
 namespace WatiN.UnitTests
 {
   using System.Collections;
+  using System.Diagnostics;
   using Rhino.Mocks;
   using WatiN.Core.Exceptions;
 
@@ -536,6 +537,18 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare("some other string"), "some other string");
     }
 
+    [Test]
+    public void CompareToNull()
+    {
+      Assert.IsFalse(new BoolComparer(false).Compare(null), "null");
+    }
+
+    [Test]
+    public void CompareToStringEmpty()
+    {
+      Assert.IsFalse(new BoolComparer(false).Compare(String.Empty), String.Empty);
+    }
+    
     [Test]
     public void CompareToFalse()
     {
@@ -1188,4 +1201,45 @@ namespace WatiN.UnitTests
       return attributeValues.Get(attributename.ToLower());
     }
   }
+
+  [TestFixture]
+  public class ElementFinderTests
+  {
+    [Test]
+    public void FindFirstShoudlReturnNullIfIHTMLCollectionIsNull()
+    {
+      ElementFinder finder = new ElementFinder("input", "text", null);
+
+      Assert.IsNull(finder.FindFirst());
+    }
+
+    [Test]
+    public void FindAllShouldReturnEmptyArrayListIfIHTMLCollectionIsNull()
+    {
+      ElementFinder finder = new ElementFinder("input", "text", null);
+
+      Assert.AreEqual(0, finder.FindAll().Count);
+    }
+  }
+
+//  public class ContraintSyntaxTest
+//  {
+//    public void Test1()
+//    {
+//      IE ie = new IE();
+//
+//      ie.Link(Find.ByCustom("disabled", Is.True));
+//      ie.Link(Find.ByCustom("disabled", Is.False));
+//
+//      ie.Link(Find.ByCustom("disabled", Is.GreaterThan() && Is.LessThan()));
+//
+//      ie.Button(Find.ByText(Text.Contains("something")));
+//      ie.Button(Find.ByText(Text.StartsWith("something")));
+//      ie.Button(Find.ByText(Text.EndsWith("something")));
+//      ie.Button(Find.ByText(Text.Like("something")));
+//
+//      ie.Button(Find.ByName(Text.StartsWith("something")));
+//
+//    }
+//  }
 }

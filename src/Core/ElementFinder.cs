@@ -23,6 +23,14 @@ using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
+namespace WatiN.Core.Interfaces
+{
+  public interface IElementCollection
+  {
+    IHTMLElementCollection Elements{ get; }
+  }
+}
+
 namespace WatiN.Core
 {
   /// <summary>
@@ -32,7 +40,7 @@ namespace WatiN.Core
   /// </summary>
   public class ElementFinder
   {
-    public static ElementFinder ButtonFinder(Attribute findBy, IHTMLElementCollection elements)
+    public static ElementFinder ButtonFinder(Attribute findBy, IElementCollection elements)
     {
       return new ElementFinder(Button.ElementTags, findBy, elements);
     }
@@ -40,12 +48,12 @@ namespace WatiN.Core
     private ArrayList tagsToFind = new ArrayList();
     
     protected readonly Attribute findBy;
-    protected readonly IHTMLElementCollection elementsCollection;
+    protected readonly IElementCollection elementCollection;
 
-    public ElementFinder(ArrayList elementTags, Attribute findBy, IHTMLElementCollection elementsCollection)
+    public ElementFinder(ArrayList elementTags, Attribute findBy, IElementCollection elementCollection)
     {
       this.findBy = getFindBy(findBy);
-      this.elementsCollection = elementsCollection;
+      this.elementCollection = elementCollection;
       
       if (elementTags != null)
       {
@@ -57,18 +65,18 @@ namespace WatiN.Core
       }
     }
 
-    public ElementFinder(ArrayList elementTags, IHTMLElementCollection elementsCollection) : this(elementTags, null, elementsCollection)
+    public ElementFinder(ArrayList elementTags, IElementCollection elementCollection) : this(elementTags, null, elementCollection)
     {}
     
-    public ElementFinder(string tagName, string inputType, Attribute findBy, IHTMLElementCollection elementsCollection)
+    public ElementFinder(string tagName, string inputType, Attribute findBy, IElementCollection elementCollection)
     {
       this.findBy = getFindBy(findBy);
-      this.elementsCollection = elementsCollection;
+      this.elementCollection = elementCollection;
       
       AddElementTag(tagName, inputType);
     }
     
-    public ElementFinder(string tagName, string inputType, IHTMLElementCollection elementsCollection): this(tagName, inputType, null, elementsCollection)
+    public ElementFinder(string tagName, string inputType, IElementCollection elementCollection): this(tagName, inputType, null, elementCollection)
     {}
 
     public virtual IHTMLElement FindFirst()
@@ -148,23 +156,26 @@ namespace WatiN.Core
     {
       // Get elements with the tagname from the page
       ArrayList children = new ArrayList();
-      IHTMLElementCollection elements = elementTag.GetElementCollection(elementsCollection);
+      IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
 
-      ElementAttributeBag attributeBag = new ElementAttributeBag();
-      
-      // Loop through each element and evaluate
-      foreach (IHTMLElement element in elements)
+      if (elements != null)
       {
-        waitUntilElementReadyStateIsComplete(element);
-
-        attributeBag.IHTMLElement = element;
-        
-        if (elementTag.Compare(element) && findBy.Compare(attributeBag))
+        ElementAttributeBag attributeBag = new ElementAttributeBag();
+      
+        // Loop through each element and evaluate
+        foreach (IHTMLElement element in elements)
         {
-          children.Add(element);
-          if (returnAfterFirstMatch)
+          waitUntilElementReadyStateIsComplete(element);
+
+          attributeBag.IHTMLElement = element;
+        
+          if (elementTag.Compare(element) && findBy.Compare(attributeBag))
           {
-            return children;
+            children.Add(element);
+            if (returnAfterFirstMatch)
+            {
+              return children;
+            }
           }
         }
       }
@@ -320,10 +331,9 @@ namespace WatiN.Core
       
     public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
     {
-      if (TagName == null)
-      {
-        return elements;
-      }
+      if (elements == null) return null;
+        
+      if (TagName == null) return elements;
       
       return (IHTMLElementCollection)elements.tags(TagName);
     }

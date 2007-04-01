@@ -26,6 +26,9 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System;
+  using WatiN.Core.Interfaces;
+
   /// <summary>
   /// This class provides specialized functionality for a HTML select element.
   /// </summary>
@@ -200,7 +203,7 @@ namespace WatiN.Core
     /// <returns></returns>
     public Option Option(Attribute findBy)
     {
-      return ElementsSupport.Option(DomContainer, findBy, (IHTMLElementCollection) htmlElement.all);
+      return ElementsSupport.Option(DomContainer, findBy, new ElementCollection(this));
     }
 
     /// <summary>
@@ -210,7 +213,7 @@ namespace WatiN.Core
     {
       get
       {
-        return ElementsSupport.Options(DomContainer, (IHTMLElementCollection)htmlElement.all);
+        return ElementsSupport.Options(DomContainer, new ElementCollection(this));
       }
     }
     
@@ -330,6 +333,24 @@ namespace WatiN.Core
     private IHTMLSelectElement selectElement
     {
       get { return ((IHTMLSelectElement) HTMLElement); }
+    }
+
+    public class ElementCollection : IElementCollection
+    {
+      private SelectList selectlist;
+
+      public ElementCollection(SelectList selectList)
+      {
+        selectlist = selectList;
+      }
+
+      public IHTMLElementCollection Elements
+      {
+        get
+        {
+          return (IHTMLElementCollection) selectlist.htmlElement.all;
+        }
+      }
     }
   }
 }

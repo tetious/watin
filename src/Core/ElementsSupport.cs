@@ -23,8 +23,9 @@ using mshtml;
 namespace WatiN.Core
 {
     using System;
+    using WatiN.Core.Interfaces;
 
-    /// <summary>
+  /// <summary>
   /// Summary description for SubElements.
   /// </summary>
   public sealed class ElementsSupport
@@ -38,197 +39,198 @@ namespace WatiN.Core
     /// </summary>
     private ElementsSupport(){}
         
-    public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new CheckBox(ie, new ElementFinder(Core.CheckBox.ElementTags, findBy, elements));
     }
 
-    public static CheckBoxCollection CheckBoxes(DomContainer ie, IHTMLElementCollection elements)
+    public static CheckBoxCollection CheckBoxes(DomContainer ie, IElementCollection elements)
     {
       return new CheckBoxCollection(ie, new ElementFinder(Core.CheckBox.ElementTags, elements));
     }
     
-    public static Element Element(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Element Element(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new ElementsContainer(ie, new ElementFinder(null, findBy, elements));
     }
 
-    public static ElementCollection Elements(DomContainer ie, IHTMLElementCollection elements)
+    public static ElementCollection Elements(DomContainer ie, IElementCollection elements)
     {
       return new ElementCollection(ie, new ElementFinder(null, elements));
     }
 
-    public static FileUpload FileUpload(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static FileUpload FileUpload(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new FileUpload(ie, new ElementFinder(Core.FileUpload.ElementTags, findBy, elements));
     }
 
-    public static FileUploadCollection FileUploads(DomContainer ie, IHTMLElementCollection elements)
+    public static FileUploadCollection FileUploads(DomContainer ie, IElementCollection elements)
     {
       return new FileUploadCollection(ie, new ElementFinder(Core.FileUpload.ElementTags, elements));
     }
     
-    public static Form Form(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Form Form(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Form(ie, new ElementFinder(Core.Form.ElementTags, findBy, elements));
     }
 
-    public static FormCollection Forms(DomContainer ie, IHTMLElementCollection elements)
+    public static FormCollection Forms(DomContainer ie, IElementCollection elements)
     {
       return new FormCollection(ie, new ElementFinder(Core.Form.ElementTags, elements));
     }
 
-    public static Label Label(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Label Label(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Label(ie, new ElementFinder(Core.Label.ElementTags, findBy, elements));
     }
 
-    public static LabelCollection Labels(DomContainer ie, IHTMLElementCollection elements)
+    public static LabelCollection Labels(DomContainer ie, IElementCollection elements)
     {
       return new LabelCollection(ie, new ElementFinder(Core.Label.ElementTags, elements));
     }
 
-    public static Link Link(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Link Link(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Link(ie, new ElementFinder(Core.Link.ElementTags, findBy, elements));
     }
 
-    public static LinkCollection Links(DomContainer ie, IHTMLElementCollection elements)
+    public static LinkCollection Links(DomContainer ie, IElementCollection elements)
     {
       return new LinkCollection(ie, new ElementFinder(Core.Link.ElementTags, elements));
     }
 
-    public static Option Option(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Option Option(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Option(ie, new ElementFinder(Core.Option.ElementTags, findBy, elements));
     }
 
-    public static OptionCollection Options(DomContainer ie, IHTMLElementCollection elements)
+    public static OptionCollection Options(DomContainer ie, IElementCollection elements)
     {
       return new OptionCollection(ie, new ElementFinder(Core.Option.ElementTags, elements));
     }
 
-    public static Para Para(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Para Para(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Para(ie, new ElementFinder(Core.Para.ElementTags, findBy, elements));
     }
 
-    public static ParaCollection Paras(DomContainer ie, IHTMLElementCollection elements)
+    public static ParaCollection Paras(DomContainer ie, IElementCollection elements)
     {
       return new ParaCollection(ie, new ElementFinder(Core.Para.ElementTags, elements));
     }
 
-    public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static RadioButton RadioButton(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new RadioButton(ie, new ElementFinder(Core.RadioButton.ElementTags, findBy, elements));
     }
 
-    public static RadioButtonCollection RadioButtons(DomContainer ie, IHTMLElementCollection elements)
+    public static RadioButtonCollection RadioButtons(DomContainer ie, IElementCollection elements)
     {
       return new RadioButtonCollection(ie, new ElementFinder(Core.RadioButton.ElementTags, elements));
     }
 
-    public static SelectList SelectList(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static SelectList SelectList(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new SelectList(ie, new ElementFinder(Core.SelectList.ElementTags, findBy, elements));
     }
 
-    public static SelectListCollection SelectLists(DomContainer ie, IHTMLElementCollection elements)
+    public static SelectListCollection SelectLists(DomContainer ie, IElementCollection elements)
     {
       return new SelectListCollection(ie, new ElementFinder(Core.SelectList.ElementTags, elements));
     }
 
-    public static Table Table(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Table Table(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Table(ie, new ElementFinder(Core.Table.ElementTags, findBy, elements));
     }
 
-    public static TableCollection Tables(DomContainer ie, IHTMLElementCollection elements)
+    public static TableCollection Tables(DomContainer ie, IElementCollection elements)
     {
       return new TableCollection(ie, new ElementFinder(Core.Table.ElementTags, elements));
     }
       
 
-//    public static TableSectionCollection TableSections(IDomContainer ie, IHTMLElementCollection elements)
+//    public static TableSectionCollection TableSections(IDomContainer ie, IElementCollection elements)
 //    {
 //      return new TableSectionCollection(ie, elements);
 //    }
 
-    public static TableCell TableCell(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, findBy, elements));
     }
 
-    public static TableCell TableCell(DomContainer ie, string elementId, int index, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, string elementId, int index, IElementCollection elements)
     {
       return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
     }
     
-    public static TableCell TableCell(DomContainer ie, Regex elementId, int index, IHTMLElementCollection elements)
+    public static TableCell TableCell(DomContainer ie, Regex elementId, int index, IElementCollection elements)
     {
       return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
     }
 
-    public static TableCellCollection TableCells(DomContainer ie, IHTMLElementCollection elements)
+    public static TableCellCollection TableCells(DomContainer ie, IElementCollection elements)
     {
       return new TableCellCollection(ie, new ElementFinder(Core.TableCell.ElementTags, elements));
     }
 
-    public static TableRow TableRow(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static TableRow TableRow(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new TableRow(ie, new ElementFinder(Core.TableRow.ElementTags, findBy, elements));
     }
 
-    public static TableRowCollection TableRows(DomContainer ie, IHTMLElementCollection elements)
+    public static TableRowCollection TableRows(DomContainer ie, IElementCollection elements)
     {
       return new TableRowCollection(ie, new ElementFinder(Core.TableRow.ElementTags, elements));
     }
-      public static TableBody TableBody(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
-      {
-          return new TableBody(ie, new ElementFinder(Core.TableBody.ElementTags, findBy, elements));
-      }
 
-    public static TableBodyCollection TableBodies(DomContainer ie, IHTMLElementCollection elements)
+    public static TableBody TableBody(DomContainer ie, Attribute findBy, IElementCollection elements)
+    {
+        return new TableBody(ie, new ElementFinder(Core.TableBody.ElementTags, findBy, elements));
+    }
+
+    public static TableBodyCollection TableBodies(DomContainer ie, IElementCollection elements)
     {
         return new TableBodyCollection(ie, new ElementFinder(Core.TableBody.ElementTags, elements));
     }
 
-      public static TextField TextField(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static TextField TextField(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new TextField(ie, new ElementFinder(Core.TextField.ElementTags, findBy, elements));
     }
 
-    public static TextFieldCollection TextFields(DomContainer ie, IHTMLElementCollection elements)
+    public static TextFieldCollection TextFields(DomContainer ie, IElementCollection elements)
     {
       return new TextFieldCollection(ie, new ElementFinder(Core.TextField.ElementTags, elements));
     }
 
-    public static Span Span(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Span Span(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Span(ie, new ElementFinder(Core.Span.ElementTags, findBy, elements));
     }
 
-    public static SpanCollection Spans(DomContainer ie, IHTMLElementCollection elements)
+    public static SpanCollection Spans(DomContainer ie, IElementCollection elements)
     {
       return new SpanCollection(ie, new ElementFinder(Core.Span.ElementTags, elements));
     }
 
-    public static Div Div(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Div Div(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Div(ie, new ElementFinder(Core.Div.ElementTags, findBy, elements));
     }
 
-    public static DivCollection Divs(DomContainer ie, IHTMLElementCollection elements)
+    public static DivCollection Divs(DomContainer ie, IElementCollection elements)
     {
       return new DivCollection(ie, new ElementFinder(Core.Div.ElementTags, elements));
     }
 
-    public static Image Image(DomContainer ie, Attribute findBy, IHTMLElementCollection elements)
+    public static Image Image(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new Image(ie, new ElementFinder(Core.Image.ElementTags, findBy, elements));
     }
 
-    public static ImageCollection Images(DomContainer ie, IHTMLElementCollection elements)
+    public static ImageCollection Images(DomContainer ie, IElementCollection elements)
     {
       return new ImageCollection(ie, new ElementFinder(Core.Image.ElementTags, elements));
     }
