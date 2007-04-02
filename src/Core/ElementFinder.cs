@@ -52,6 +52,8 @@ namespace WatiN.Core
 
     public ElementFinder(ArrayList elementTags, Attribute findBy, IElementCollection elementCollection)
     {
+      if (elementCollection == null) { throw new ArgumentNullException("elementCollection"); }
+
       this.findBy = getFindBy(findBy);
       this.elementCollection = elementCollection;
       
@@ -70,6 +72,8 @@ namespace WatiN.Core
     
     public ElementFinder(string tagName, string inputType, Attribute findBy, IElementCollection elementCollection)
     {
+      if (elementCollection == null) { throw new ArgumentNullException("elementCollection"); }
+
       this.findBy = getFindBy(findBy);
       this.elementCollection = elementCollection;
       

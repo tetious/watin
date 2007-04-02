@@ -1505,7 +1505,8 @@ namespace WatiN.UnitTests
     {
       MockRepository mocks = new MockRepository();
 
-      ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), null, null);
+      IElementCollection elementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+      ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), null, elementCollection);
       IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
 
       Expect.Call(finder.FindFirst()).Return(null).Repeat.Times(5);
@@ -1528,7 +1529,8 @@ namespace WatiN.UnitTests
     {
       MockRepository mocks = new MockRepository();
 
-      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+      IElementCollection elementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+      ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), null, elementCollection);
 
       Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
       Expect.Call(finder.FindFirst()).Return(null).Repeat.AtLeastOnce();
@@ -1559,7 +1561,8 @@ namespace WatiN.UnitTests
     {
       MockRepository mocks = new MockRepository();
 
-      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, null);
+      IElementCollection elementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+      ElementFinder finder = (ElementFinder) mocks.DynamicMock(typeof (ElementFinder), null, elementCollection);
 
       Expect.Call(finder.FindFirst()).Throw(new Exception(""));
       Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("mockUnauthorizedAccessException")).Repeat.AtLeastOnce();

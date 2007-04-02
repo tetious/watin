@@ -1205,10 +1205,29 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ElementFinderTests
   {
+    MockRepository mocks;
+    IElementCollection mockElementCollection;
+
+    [SetUp]
+    public void SetUp()
+    {
+      mocks = new MockRepository();
+      mockElementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+
+      Expect.Call(mockElementCollection.Elements).Return(null);
+
+      mocks.ReplayAll();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      mocks.VerifyAll();
+    }
     [Test]
     public void FindFirstShoudlReturnNullIfIHTMLCollectionIsNull()
     {
-      ElementFinder finder = new ElementFinder("input", "text", null);
+      ElementFinder finder = new ElementFinder("input", "text", mockElementCollection);
 
       Assert.IsNull(finder.FindFirst());
     }
@@ -1216,7 +1235,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FindAllShouldReturnEmptyArrayListIfIHTMLCollectionIsNull()
     {
-      ElementFinder finder = new ElementFinder("input", "text", null);
+      ElementFinder finder = new ElementFinder("input", "text", mockElementCollection);
 
       Assert.AreEqual(0, finder.FindAll().Count);
     }
