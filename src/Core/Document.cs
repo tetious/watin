@@ -181,7 +181,11 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(string text)
     {
-      string innertext = HtmlDocument.body.innerText;
+      IHTMLElement body = HtmlDocument.body;
+      
+      if (body == null) return false;
+
+      string innertext = body.innerText;
 
       if (innertext == null) return false;
 
