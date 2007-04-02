@@ -109,7 +109,14 @@ namespace WatiN.Core
     /// <value>The HTML.</value>
     public string Html
     {
-      get { return HtmlDocument.body.outerHTML; }
+      get
+      {
+        IHTMLElement body = HtmlDocument.body;
+        
+        if (body == null) return null;
+
+        return body.outerHTML;
+      }
     }
 
     /// <summary>
@@ -201,7 +208,11 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(Regex regex)
     {
-      string innertext = HtmlDocument.body.innerText;
+      IHTMLElement body = HtmlDocument.body;
+      
+      if (body == null) return false;
+
+      string innertext = body.innerText;
 
       if (innertext == null) return false;
 
