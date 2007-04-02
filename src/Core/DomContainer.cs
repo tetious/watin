@@ -28,6 +28,8 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+  using WatiN.Core.Exceptions;
+
   /// <summary>
   /// This class hosts functionality for classes which are an entry point
   /// to a document and its elements and/or frames. Currently implemented
@@ -129,13 +131,12 @@ namespace WatiN.Core
       scriptCode += "newEvt.button = 1;";
       scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
 
-      IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
 
       try
       {
-        window.execScript(scriptCode, "javascript");
+        RunScript(scriptCode);
       }
-      catch (UnauthorizedAccessException)
+      catch (RunScriptException)
       {
         // In a cross domain automation scenario a System.UnauthorizedAccessException 
         // is thrown. The following code works, but setting the event properties
@@ -145,6 +146,33 @@ namespace WatiN.Core
         //      mouseDownEvent.button = 1;
         object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
         element.FireEvent(eventName, ref parentEvt);
+      }
+    }
+
+    /// <summary>
+    /// Runs the javascript code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The javascript code.</param>
+    public void RunScript(string scriptCode)
+    {
+      RunScript(scriptCode, "javascript");
+    }
+
+    /// <summary>
+    /// Runs the script code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The script code.</param>
+    /// <param name="language">The language.</param>
+    public void RunScript(string scriptCode, string language)
+    {
+      try
+      {
+        IHTMLWindow2 window = htmlDocument.parentWindow;
+        window.execScript(scriptCode, language);
+      }
+      catch (Exception ex)
+      {
+        throw new WatiN.Core.Exceptions.RunScriptException(ex);
       }
     }
 

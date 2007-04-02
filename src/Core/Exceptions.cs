@@ -154,4 +154,14 @@ namespace WatiN.Core.Exceptions
       return string.Format("The compare methode of an Attribute class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' searching for '{1}' in attribute '{2}'.", attribute.GetType().ToString(), attribute.Value, attribute.AttributeName);
     }
   }
+
+  /// <summary>
+  /// Thrown if a (java) script failed to run. The innerexception returns the actual exception.
+  /// </summary>
+  public class RunScriptException : WatiNException
+  {
+    public RunScriptException(Exception innerException) : base("RunScript failed", innerException)
+    {}
+  }
+
 }
