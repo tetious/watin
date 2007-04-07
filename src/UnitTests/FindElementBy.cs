@@ -563,6 +563,49 @@ namespace WatiN.UnitTests
   }
 
   [TestFixture]
+  public class NotAttributeTests
+  {
+    MockRepository mocks;
+    Attribute attribute;
+    IAttributeBag attributeBag;
+
+    [SetUp]
+    public void Setup()
+    {
+      mocks = new MockRepository();
+      attribute = (Attribute) mocks.DynamicMock(typeof(Attribute),"fake","");
+      attributeBag = (IAttributeBag) mocks.DynamicMock(typeof(IAttributeBag));
+
+      SetupResult.For(attribute.Compare(null)).IgnoreArguments().Return(false);
+      mocks.ReplayAll();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void NotTest()
+    {
+      Not not = new Not(attribute);
+      Assert.IsTrue(not.Compare(attributeBag));
+    }
+
+    [Test]
+    public void AttributeOperatorNotOverload()
+    {
+      Attribute attributenot = !attribute;
+
+      Assert.IsInstanceOfType(typeof(Not), attributenot, "Expected Not instance");
+      Assert.IsTrue(attributenot.Compare(attributeBag));
+    }
+  }
+
+
+
+  [TestFixture]
   public class StringEqualsAndCaseInsensitiveComparerTests
   {
     [Test]
@@ -1206,15 +1249,15 @@ namespace WatiN.UnitTests
   public class ElementFinderTests
   {
     MockRepository mocks;
-    IElementCollection mockElementCollection;
+    IElementCollection stubElementCollection;
 
     [SetUp]
     public void SetUp()
     {
       mocks = new MockRepository();
-      mockElementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+      stubElementCollection = (IElementCollection) mocks.DynamicMock(typeof (IElementCollection));
 
-      Expect.Call(mockElementCollection.Elements).Return(null);
+      SetupResult.For(stubElementCollection.Elements).Return(null);
 
       mocks.ReplayAll();
     }
@@ -1224,18 +1267,19 @@ namespace WatiN.UnitTests
     {
       mocks.VerifyAll();
     }
+
     [Test]
-    public void FindFirstShoudlReturnNullIfIHTMLCollectionIsNull()
+    public void FindFirstShoudlReturnNullIfIElementCollectionIsNull()
     {
-      ElementFinder finder = new ElementFinder("input", "text", mockElementCollection);
+      ElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
 
       Assert.IsNull(finder.FindFirst());
     }
 
     [Test]
-    public void FindAllShouldReturnEmptyArrayListIfIHTMLCollectionIsNull()
+    public void FindAllShouldReturnEmptyArrayListIfIElementCollectionIsNull()
     {
-      ElementFinder finder = new ElementFinder("input", "text", mockElementCollection);
+      ElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
 
       Assert.AreEqual(0, finder.FindAll().Count);
     }
@@ -1259,6 +1303,13 @@ namespace WatiN.UnitTests
 //
 //      ie.Button(Find.ByName(Text.StartsWith("something")));
 //
-//    }
+//      ie.Button(With.Text.That.Contains("something")));
+//      ie.Button(With.ID.That.StartsWith("something")));
+//      ie.Button(Find.ByText(Text.EndsWith("something")));
+//      ie.Button(Find.ByText(Text.Like("something")));
+//
+//      ie.Button(Find.ByName(Text.StartsWith("something")));
+
+  //    }
 //  }
 }

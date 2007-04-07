@@ -254,6 +254,11 @@ namespace WatiN.Core
       return false;
     }
 
+    public static Attribute operator ! (Attribute attribute)
+    {
+      return new Not(attribute);
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Attribute"/> class.
     /// </summary>
@@ -374,8 +379,19 @@ namespace WatiN.Core
     /// <param name="attributeBag">The attribute bag.</param>
     protected virtual bool doCompare(IAttributeBag attributeBag)
     {
-      bool returnValue = comparer.Compare(attributeBag.GetValue(attributeName));
-      
+      return EvaluateAndOrAttributes(attributeBag, comparer.Compare(attributeBag.GetValue(attributeName)));
+    }
+
+    /// <summary>
+    /// Evaluates the and or attributes.
+    /// </summary>
+    /// <param name="attributeBag">The attribute bag.</param>
+    /// <param name="skipAndEvaluation">if set to <c>true</c> [skip and evaluation].</param>
+    /// <returns></returns>
+    protected bool EvaluateAndOrAttributes(IAttributeBag attributeBag, bool skipAndEvaluation)
+    {
+      bool returnValue = !skipAndEvaluation;
+
       if (returnValue && andAttribute != null)
       {
         returnValue = andAttribute.Compare(attributeBag);
@@ -385,6 +401,7 @@ namespace WatiN.Core
       {
         returnValue = orAttribute.Compare(attributeBag);
       }
+
       return returnValue;
     }
 
@@ -550,6 +567,38 @@ namespace WatiN.Core
       {
         throw new ArgumentNullException(argumentName, "Null is not allowed.");
       }
+    }
+  }
+
+  public class Not : Attribute
+  {
+    Attribute attribute;
+
+    public Not(Attribute attribute) : base("not", string.Empty)
+    {
+      if (attribute ==  null)
+      {
+        throw new ArgumentNullException("attribute");
+      }
+        
+      this.attribute = attribute;
+    }
+
+    public override bool Compare(IAttributeBag attributeBag)
+    {
+      bool result;
+      LockCompare();
+  
+      try
+      {
+        result = !(attribute.Compare(attributeBag));
+      }
+      finally
+      {
+        UnLockCompare();
+      }      
+  
+      return result;
     }
   }
 
