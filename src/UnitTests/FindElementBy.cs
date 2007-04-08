@@ -29,7 +29,6 @@ using Attribute=WatiN.Core.Attribute;
 namespace WatiN.UnitTests
 {
   using System.Collections;
-  using System.Diagnostics;
   using Rhino.Mocks;
   using WatiN.Core.Exceptions;
 
