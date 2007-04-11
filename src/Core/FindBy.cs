@@ -386,11 +386,11 @@ namespace WatiN.Core
     /// Evaluates the and or attributes.
     /// </summary>
     /// <param name="attributeBag">The attribute bag.</param>
-    /// <param name="skipAndEvaluation">if set to <c>true</c> [skip and evaluation].</param>
+    /// <param name="initialReturnValue">if set to <c>false</c> it will skip the And evaluation.</param>
     /// <returns></returns>
-    protected bool EvaluateAndOrAttributes(IAttributeBag attributeBag, bool skipAndEvaluation)
+    protected bool EvaluateAndOrAttributes(IAttributeBag attributeBag, bool initialReturnValue)
     {
-      bool returnValue = !skipAndEvaluation;
+      bool returnValue = initialReturnValue;
 
       if (returnValue && andAttribute != null)
       {
