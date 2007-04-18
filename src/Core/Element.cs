@@ -760,7 +760,7 @@ namespace WatiN.Core
     {
       Exception lastException;
 
-      ElementAttributeBag attributeBag = new ElementAttributeBag(htmlElement);
+      ElementAttributeBag attributeBag = new ElementAttributeBag();
 
       SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
@@ -770,9 +770,18 @@ namespace WatiN.Core
 
         try
         {
-          if (attribute.Compare(attributeBag))
+          // Calling Exists will refresh the reference to the html element
+          // so the compare is against the current html element (and not 
+          // against some cached reference.
+          if (Exists)
           {
-            return;
+            attributeBag.IHTMLElement = htmlElement;
+            
+            if (attribute.Compare(attributeBag))
+            {
+              return;
+            }
+            
           }
         }
         catch (Exception e)

@@ -1482,20 +1482,39 @@ namespace WatiN.UnitTests
       MockRepository mocks = new MockRepository();
 
       IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
-      
-      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.Twice();
-      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(false).Repeat.Twice();
+
+      SetupResult.For(htmlelement.sourceIndex).Return(1);
+      SetupResult.For(htmlelement.offsetParent).Return(htmlelement);
+
+      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.Once();
+      Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(false).Repeat.Once();
 
       mocks.ReplayAll();
 
       Element element = new Element(null, htmlelement);
 
-      Assert.AreEqual(true.ToString(), element.GetAttributeValue("disabled"));
-
       // calls htmlelement.getAttribute twice (ones true and once false is returned)
-      element.WaitUntil(new Core.Attribute("disabled", false.ToString()), 1);
+      element.WaitUntil(new Core.Attribute("disabled", new BoolComparer(false)), 1);
 
-      Assert.AreEqual(false.ToString(), element.GetAttributeValue("disabled"));
+      mocks.VerifyAll();
+    }
+
+    [Test]
+    public void WaitUntilShouldCallExistsToForceRefreshOfHtmlElement()
+    {
+      MockRepository mocks = new MockRepository();
+
+      IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+
+      SetupResult.For(htmlelement.getAttribute("disabled", 0)).Return(false);
+
+      Element element = (Element) mocks.DynamicMock(typeof (Element), null, htmlelement);
+
+      Expect.Call(element.Exists).Return(true);
+
+      mocks.ReplayAll();
+
+      element.WaitUntil(new Core.Attribute("disabled", new BoolComparer(false)), 1);
 
       mocks.VerifyAll();
     }
