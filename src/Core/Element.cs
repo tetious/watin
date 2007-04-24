@@ -627,32 +627,6 @@ namespace WatiN.Core
           return false;
         }
 
-        // These checks are only necessary if element field
-        // is set during the construction of an ElementCollection
-        // or a more specialized element collection (like TextFieldCollection)
-        if (elementFinder == null)
-        {
-          try
-          {
-            if(((IHTMLElement)elementExists).sourceIndex < 0)
-            {
-              return false;
-            }
-
-            IHTMLElement htmlElementExists = elementExists as IHTMLElement;
-            if(htmlElementExists != null && htmlElementExists.offsetParent == null)
-//            && htmlElementExists.offsetHeight == 0 && htmlElementExists.offsetLeft == 0 
-//            && htmlElementExists.offsetTop == 0 && htmlElementExists.offsetWidth == 0)
-            {
-              return false;
-            }
-          }
-          catch
-          {
-            return false;
-          }
-        }
-
         return true;
       }
     }
@@ -848,23 +822,98 @@ namespace WatiN.Core
       ThrowTimeOutException(lastException,string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));    
     }
 
-    protected object getElement()
+    /// <summary>
+    /// Call this method to make sure the cached reference to the html element on the web page
+    /// is refreshed on the next call you make to a property or method of this element.
+    /// When you want to check if an element still <see cref="Exists"/> you don't need 
+    /// to call the <see cref="Refresh"/> method since <see cref="Exists"/> calls it internally.
+    /// </summary>
+    /// <example>
+    /// The following code shows in which situation you can make use of the refresh mode.
+    /// The code selects an option of a selectlist and then checks if this option
+    /// is selected.
+    /// <code>
+    /// SelectList select = ie.SelectList(id);
+    /// 
+    /// // Lets assume calling Select causes a postback, 
+    /// // which would invalidate the reference to the html selectlist.
+    /// select.Select(val);
+    /// 
+    /// // Refresh will clear the cached reference to the html selectlist.
+    /// select.Refresh(); 
+    /// 
+    /// // B.t.w. executing:
+    /// // select = ie.SelectList(id); 
+    /// // would have the same effect as calling: 
+    /// // select.Refresh().
+    /// 
+    /// // Assert against a freshly fetched reference to the html selectlist.
+    /// Assert.AreEqual(val, select.SelectedItem);
+    /// </code>
+    /// If you need to use refresh on an element retrieved from a collection of elements you 
+    /// need to rewrite your code a bit.
+    /// <code>
+    /// SelectList select = ie.Spans[1].SelectList(id);
+    /// select.Refresh(); // this will not have the expected effect
+    /// </code>
+    /// Rewrite your code as follows:
+    /// <code>
+    /// SelectList select = ie.Span(Find.ByIndex(1)).SelectList(id);
+    /// select.Refresh(); // this will have the expected effect
+    /// </code>
+    /// </example>
+    public void Refresh()
     {
-      element = findElement(element, elementFinder);
-
-      return element;
-    }
-
-    private object findElement(object element, ElementFinder elementFinder)
-    {
-      object returnElement = element;
-
       if (elementFinder != null)
       {
-        returnElement = elementFinder.FindFirst();
+        element = null;
+      }
+    }
+
+    /// <summary>
+    /// Calls <see cref="Refresh"/> and returns the element.
+    /// </summary>
+    /// <returns></returns>
+    protected object getElement()
+    {
+      if (elementFinder != null)
+      {
+        element = elementFinder.FindFirst();
+      }
+      else
+      {
+        // This will set element to null if some specific properties are
+        // a certain value. These values indicate that the element is no longer
+        // on the/a valid web page.
+        // These checks are only necessary if element field
+        // is set during the construction of an ElementCollection
+        // or a more specialized element collection (like TextFieldCollection)
+        IHTMLElement ihtmlElement = element as IHTMLElement;
+
+        if (ihtmlElement != null)
+        {
+          try
+          {
+            if(ihtmlElement.sourceIndex < 0)
+            {
+              element = null;
+            }
+            else
+            {
+              if(ihtmlElement.offsetParent == null)
+              {
+                element = null;
+              }
+            }
+          }
+          catch
+          {
+            element = null;
+          }
+        }
       }
 
-      return returnElement;
+      return element;
     }
 
     private bool ElementAvailable()

@@ -2181,6 +2181,29 @@ namespace WatiN.UnitTests
 
       Assert.IsInstanceOfType(typeof(ElementsContainer), element.NextSibling);
     }
+
+    [Test]
+    public void ElementRefresh()
+    {
+      IElementCollection elementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+      ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), new ArrayList(), null, elementCollection);
+      IHTMLElement ihtmlElement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+
+      Expect.Call(finder.FindFirst()).Return(ihtmlElement).Repeat.Twice();
+      SetupResult.For(ihtmlElement.tagName).Return("mockedtag");
+
+      mocks.ReplayAll();
+
+      Element element = new Element(null, finder);
+      
+      Assert.AreEqual("mockedtag", element.TagName);
+
+      element.Refresh();
+
+      Assert.AreEqual("mockedtag", element.TagName);
+
+      mocks.VerifyAll();
+    }
   }
 
   [TestFixture]
