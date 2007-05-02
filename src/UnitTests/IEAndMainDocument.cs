@@ -56,8 +56,8 @@ namespace WatiN.UnitTests
 #endif
     }
 
-	[Test]
-	public void DownloadOpen()
+    [Test, Category("InternetConnectionNeeded")]
+    public void DownloadOpen()
 	{
 		WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Open);
 
@@ -71,8 +71,8 @@ namespace WatiN.UnitTests
 		ie.Close();
 	}
 
-	  [Test]
-	  public void DownloadSave()
+    [Test, Category("InternetConnectionNeeded")]
+    public void DownloadSave()
 	  {
 		  FileInfo file = new FileInfo(@"c:\temp\test.zip");
       file.Directory.Create();
@@ -94,8 +94,8 @@ namespace WatiN.UnitTests
       Assert.IsTrue(file.Exists, file.FullName + " file does not exist after download");
 	  }
 
-	  [Test]
-	  public void DownloadRun()
+    [Test, Category("InternetConnectionNeeded")]
+    public void DownloadRun()
 	  {
 		  WatiN.Core.DialogHandlers.FileDownloadHandler dhdl = new WatiN.Core.DialogHandlers.FileDownloadHandler(WatiN.Core.DialogHandlers.FileDownloadOption.Run);
 		  IE ie = new IE();
@@ -946,7 +946,7 @@ namespace WatiN.UnitTests
       ie.ForceClose(); 
     }
     
-    [Test]
+    [Test, Category("InternetConnectionNeeded")]
     public void SecurityAlertDialogHandler()
     {
       IE.Settings.WaitForCompleteTimeOut = 60;
