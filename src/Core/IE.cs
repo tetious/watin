@@ -288,8 +288,8 @@ namespace WatiN.Core
     /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find 
-    /// (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
     /// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
@@ -319,8 +319,8 @@ namespace WatiN.Core
     /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find 
-    /// (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -349,7 +349,8 @@ namespace WatiN.Core
     /// <summary>
     /// Does the specified Internet Explorer exist.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find (<see cref="Url"/> and <see cref="Title"/> are supported)</param>
+    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
     /// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Attribute"/>. Otherwise it returns <c>false</c>. </returns>
     public static bool Exists(Attribute findBy)
     {
@@ -1111,9 +1112,10 @@ namespace WatiN.Core
 
     public string GetValue(string attributename)
     {
+      string name = attributename.ToLower();
       string value = null;
-
-      if (attributename.ToLower().Equals("href"))
+      
+      if (name.Equals("href"))
       {
         try
         {
@@ -1121,11 +1123,19 @@ namespace WatiN.Core
         }
         catch{}
       }
-      else if (attributename.ToLower().Equals("title"))
+      else if (name.Equals("title"))
       {
         try
         {
           value = ((HTMLDocument) InternetExplorer.Document).title;
+        }
+        catch{}
+      }
+      else if (name.Equals("hwnd"))
+      {
+        try
+        {
+          value = InternetExplorer.HWND.ToString();
         }
         catch{}
       }

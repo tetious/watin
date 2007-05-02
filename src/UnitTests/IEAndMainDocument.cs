@@ -669,6 +669,21 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void IEExistsByHWND()
+    {
+      string hwnd = "0";
+      Assert.IsFalse(IE.Exists(Find.ByCustom("hwnd", hwnd)), "hwnd = 0 should not be found");
+      
+      using(IE ie = new IE(MainURI))
+      {
+        hwnd = ie.hWnd.ToString();
+        Assert.IsTrue(IE.Exists(Find.ByCustom("hwnd", hwnd)), "hwnd of ie instance should be found");
+      }
+      
+      Assert.IsFalse(IE.Exists(Find.ByCustom("hwnd", hwnd)), "hwnd of closed ie instance should not be found");
+    }
+
+    [Test]
     public void IEExistsByUrl()
     {
       IEExistsAsserts(Find.ByUrl(MainURI));
