@@ -40,6 +40,7 @@ namespace WatiN.UnitTests
     public void Setup()
     {
       Logger.LogWriter = new DebugLogWriter();
+      IE.Settings.Reset();
     }
 
     [Test]
@@ -948,6 +949,8 @@ namespace WatiN.UnitTests
     [Test]
     public void SecurityAlertDialogHandler()
     {
+      IE.Settings.WaitForCompleteTimeOut = 60;
+
       using(IE ie = new IE("http://sourceforge.net"))
       {
         ie.AddDialogHandler(new SecurityAlertDialogHandler());
