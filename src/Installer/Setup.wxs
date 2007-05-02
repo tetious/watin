@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Wix>
-  <Product Id="0BAD3066-6D3D-4833-A633-E587A70E52ED" Name="$(var.productname)" Language="1033" Version="$(var.productversion)" Manufacturer="Jeroen van Menen">
-    <Package Id="676D7ED4-6F35-4ADF-8B12-3DF7A9CEC499" Description="$(var.productname)" Comments="For more info and the latests version visit http://watin.sourceforge.net" InstallerVersion="200" Compressed="yes" />
+  <Product Id="45FAAB85-AE66-4D2E-9ADD-5684A23C5118" Name="$(var.productname)" Language="1033" Version="$(var.productversion)" Manufacturer="Jeroen van Menen">
+    <Package Id="8C725124-B2AA-4441-B877-367A95E50798" Description="$(var.productname)" Comments="For more info and the latests version visit http://watin.sourceforge.net" InstallerVersion="200" Compressed="yes" />
     <!--  Extra info in the Add or Remove Programs Entrie -->
     <Property Id="ARPURLINFOABOUT">http://watin.sourceforge.net</Property>
     <Property Id="ARPURLUPDATEINFO">http://sourceforge.net/project/showfiles.php?group_id=167632</Property>

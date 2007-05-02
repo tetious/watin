@@ -1,3 +1,10 @@
+WatiN 1.1.0.4000 (2 May 2007)
+
+This release adds some new features and many bugfixes. You can now use the not operator when searching for an element, automate the  SaveAs dialog, and WaitUntil some attribute of an element has some value. Most of the development time has been put into fixing bugs reported by users. Thanks to all who contributed to this release!
+
+For the full release notes visit http://watin.sourceforge.net/releasenotes-1-1-0-4000.html
+
+-------------------------------
 WatiN 1.0.0.4000 (1 March, 2007)
 
 This release adds may new features like using multiple attributes to search for an element, full support for the Style attribute, casting an Element instance to a more specialized element type, support for changing the default settings used by WatiN, added support for tbody elements and improvements to SelectList and Table. 
