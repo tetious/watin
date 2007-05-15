@@ -23,6 +23,7 @@ using mshtml;
 namespace WatiN.Core
 {
   using System.Collections;
+  using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
   using WatiN.Core.Logging;
 
@@ -193,6 +194,68 @@ namespace WatiN.Core
 
 	    return elements;
 	  }
+
+    /// <summary>
+    /// Runs the javascript code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The javascript code.</param>
+    public static void RunScript(string scriptCode, IHTMLWindow2 window)
+    {
+      RunScript(scriptCode, "javascript", window);
+    }
+
+    /// <summary>
+    /// Runs the script code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The script code.</param>
+    /// <param name="language">The language.</param>
+    public static void RunScript(string scriptCode, string language, IHTMLWindow2 window)
+    {
+      try
+      {
+        window.execScript(scriptCode, language);
+      }
+      catch (Exception ex)
+      {
+        throw new WatiN.Core.Exceptions.RunScriptException(ex);
+      }
+    }
+
+    /// <summary>
+    /// Fires the given event on the given element.
+    /// </summary>
+    /// <param name="element">Element to fire the event on</param>
+    /// <param name="eventName">Name of the event to fire</param>
+    public static void FireEvent(DispHTMLBaseElement element, string eventName)
+    {
+      // TODO: Passing the eventarguments in a new param of type array. This array
+      //       holds 0 or more name/value pairs where the name is a property of the event object
+      //       and the value is the value that's assigned to the property.
+
+      // Execute the JScript to fire the event inside the Browser.
+      string scriptCode = "var newEvt = document.createEventObject();";
+      scriptCode += "newEvt.button = 1;";
+      scriptCode += "newEvt.srcElement = document.getElementById('" + element.uniqueID + "');";
+      scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
+
+      try
+      {
+        IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
+        RunScript(scriptCode, window);
+      }
+      catch (RunScriptException)
+      {
+        // In a cross domain automation scenario a System.UnauthorizedAccessException 
+        // is thrown. The following code works, but setting the event properties
+        // has no effect so that is left out.
+        object dummyEvt = null;
+        //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
+        //      mouseDownEvent.button = 1;
+        object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
+        element.FireEvent(eventName, ref parentEvt);
+      }
+    }
+
 	}
   
   /// <summary>
