@@ -1,0 +1,1367 @@
+<font face="Arial" size="1">
+
+<html>
+<head>
+<title>Changes in watin.core from v1 (Version 1.1.4322.2032)<br> to v2 (Version 1.1.4322.2032)</title>
+
+<style type="text/css">
+dt      { font-weight: Bold; }
+.big    { font-size: 150%; font-weight: Bold; }
+.small  { font-size:  75%; font-weight: Normal; }
+.endNav { font-size:  75%; font-weight: Normal; margin: 20; }
+</style>
+
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<h2><center>Changes in WatiN.Core from 1.0.0.4000<br> to 1.1.0.4000</center></h2>
+
+
+<table width="90%" align="center" border="1" cellspacing="0" bordercolor="A0000" style=background-color: #F0F0F0; border-style: solid;>
+<thead>
+ <tr>
+  <th width="50%" align="left">Removed</td>
+  <th width="50%" align="left">Added</td>
+ </tr>
+</thead>
+<tbody>
+
+ <tr>
+  <a name="WatiN.Core Attribute"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: System.Object">WatiN.Core.Attribute</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core BaseComparer"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core BaseComparer</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public abstract class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.BaseComparer</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: protected <b>BaseComparer</b> ()</font></li>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">bool</span> <b>Equals</b> (<span title="System">object</span> <i>obj</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected virtual <span title="System">void</span> <b>Finalize</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">int</span> <b>GetHashCode</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public <span title="System">Type</span> <b>GetType</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected <span title="System">object</span> <b>MemberwiseClone</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">string</span> <b>ToString</b> ()</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core BoolComparer"><td colspan="2" align="center" style="font:100%;"><b><font color='B0000'>WatiN.Core BoolComparer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.BoolComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: WatiN.Core.StringEqualsAndCaseInsensitiveComparer; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.BoolComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Field: protected <span title="System">string</span> <b>valueToCompareWith</b></font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Button"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.Button</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core CheckBox"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.RadioCheck">WatiN.Core.CheckBox</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Div"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Div</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Div</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Div</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core DomContainer"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core DomContainer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public abstract class <b><span title="Base Type: WatiN.Core.Document; Interfaces: WatiN.Core.Interfaces.IElementsContainer, System.IDisposable">WatiN.Core.DomContainer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public abstract class <b><span title="Base Type: WatiN.Core.Document; Interfaces: WatiN.Core.Interfaces.IElementsContainer, System.IDisposable, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.DomContainer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>, <span title="System">string</span> <i>language</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Element"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: System.Object">WatiN.Core.Element</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core ElementFinder"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: System.Object">WatiN.Core.ElementFinder</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="B0000">Constructor: public <b>ElementFinder</b> (<span title="System.Collections">ArrayList</span> <i>elementTags</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elementsCollection</i>)</font></li>
+    <li><font color="B0000">Constructor: public <b>ElementFinder</b> (<span title="System.Collections">ArrayList</span> <i>elementTags</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elementsCollection</i>)</font></li>
+    <li><font color="B0000">Constructor: public <b>ElementFinder</b> (<span title="System">string</span> <i>tagName</i>, <span title="System">string</span> <i>inputType</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elementsCollection</i>)</font></li>
+    <li><font color="B0000">Constructor: public <b>ElementFinder</b> (<span title="System">string</span> <i>tagName</i>, <span title="System">string</span> <i>inputType</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elementsCollection</i>)</font></li>
+    <li><font color="B0000">Field: protected readonly <span title="mshtml">IHTMLElementCollection</span> <b>elementsCollection</b></font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">ElementFinder</span> <b>ButtonFinder</b> (<span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>ElementFinder</b> (<span title="System.Collections">ArrayList</span> <i>elementTags</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elementCollection</i>)</font></li>
+    <li><font color="black">Constructor: public <b>ElementFinder</b> (<span title="System.Collections">ArrayList</span> <i>elementTags</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elementCollection</i>)</font></li>
+    <li><font color="black">Constructor: public <b>ElementFinder</b> (<span title="System">string</span> <i>tagName</i>, <span title="System">string</span> <i>inputType</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elementCollection</i>)</font></li>
+    <li><font color="black">Constructor: public <b>ElementFinder</b> (<span title="System">string</span> <i>tagName</i>, <span title="System">string</span> <i>inputType</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elementCollection</i>)</font></li>
+    <li><font color="black">Field: protected readonly <span title="WatiN.Core.Interfaces">IElementCollection</span> <b>elementCollection</b></font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">ElementFinder</span> <b>ButtonFinder</b> (<span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core ElementsContainer"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core ElementsContainer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.ElementsContainer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.ElementsContainer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core ElementsSupport"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public sealed class <b><span title="Base Type: System.Object">WatiN.Core.ElementsSupport</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">CheckBox</span> <b>CheckBox</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">CheckBoxCollection</span> <b>CheckBoxes</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Div</span> <b>Div</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">DivCollection</span> <b>Divs</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Element</span> <b>Element</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">ElementCollection</span> <b>Elements</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">FileUpload</span> <b>FileUpload</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">FileUploadCollection</span> <b>FileUploads</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Form</span> <b>Form</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">FormCollection</span> <b>Forms</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Image</span> <b>Image</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">ImageCollection</span> <b>Images</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Label</span> <b>Label</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">LabelCollection</span> <b>Labels</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Link</span> <b>Link</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">LinkCollection</span> <b>Links</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Option</span> <b>Option</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">OptionCollection</span> <b>Options</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Para</span> <b>Para</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">ParaCollection</span> <b>Paras</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">RadioButton</span> <b>RadioButton</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">RadioButtonCollection</span> <b>RadioButtons</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">SelectList</span> <b>SelectList</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">SelectListCollection</span> <b>SelectLists</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Span</span> <b>Span</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">SpanCollection</span> <b>Spans</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">Table</span> <b>Table</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableBodyCollection</span> <b>TableBodies</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableBody</span> <b>TableBody</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="System">string</span> <i>elementId</i>, <span title="System">int</span> <i>index</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>elementId</i>, <span title="System">int</span> <i>index</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableCellCollection</span> <b>TableCells</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableRow</span> <b>TableRow</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableRowCollection</span> <b>TableRows</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TableCollection</span> <b>Tables</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TextField</span> <b>TextField</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="B0000">Method: public static <span title="WatiN.Core">TextFieldCollection</span> <b>TextFields</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="mshtml">IHTMLElementCollection</span> <i>elements</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public static <span title="WatiN.Core">CheckBox</span> <b>CheckBox</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">CheckBoxCollection</span> <b>CheckBoxes</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Div</span> <b>Div</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">DivCollection</span> <b>Divs</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Element</span> <b>Element</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">ElementCollection</span> <b>Elements</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">FileUpload</span> <b>FileUpload</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">FileUploadCollection</span> <b>FileUploads</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Form</span> <b>Form</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">FormCollection</span> <b>Forms</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Image</span> <b>Image</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">ImageCollection</span> <b>Images</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Label</span> <b>Label</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">LabelCollection</span> <b>Labels</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Link</span> <b>Link</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">LinkCollection</span> <b>Links</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Option</span> <b>Option</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">OptionCollection</span> <b>Options</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Para</span> <b>Para</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">ParaCollection</span> <b>Paras</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">RadioButton</span> <b>RadioButton</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">RadioButtonCollection</span> <b>RadioButtons</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">SelectList</span> <b>SelectList</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">SelectListCollection</span> <b>SelectLists</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Span</span> <b>Span</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">SpanCollection</span> <b>Spans</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">Table</span> <b>Table</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableBodyCollection</span> <b>TableBodies</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableBody</span> <b>TableBody</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="System">string</span> <i>elementId</i>, <span title="System">int</span> <i>index</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>elementId</i>, <span title="System">int</span> <i>index</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableCell</span> <b>TableCell</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableCellCollection</span> <b>TableCells</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableRow</span> <b>TableRow</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableRowCollection</span> <b>TableRows</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TableCollection</span> <b>Tables</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TextField</span> <b>TextField</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core">attribute</span> <i>findBy</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+    <li><font color="black">Method: public static <span title="WatiN.Core">TextFieldCollection</span> <b>TextFields</b> (<span title="WatiN.Core">DomContainer</span> <i>ie</i>, <span title="WatiN.Core.Interfaces">IElementCollection</span> <i>elements</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core FileUpload"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.FileUpload</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core For"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.For</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Form"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Form</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Form</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Form</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core HtmlDialog"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core HtmlDialog</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.DomContainer; Interfaces: WatiN.Core.Interfaces.IAttributeBag; WatiN.Core.Interfaces.IElementsContainer, System.IDisposable">WatiN.Core.HtmlDialog</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.DomContainer; Interfaces: WatiN.Core.Interfaces.IAttributeBag; WatiN.Core.Interfaces.IElementsContainer, System.IDisposable, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.HtmlDialog</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DomContainer">(i)</i></font>: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DomContainer">(i)</i></font>: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>, <span title="System">string</span> <i>language</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Id"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Id</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core IE"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core IE</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.DomContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, System.IDisposable">WatiN.Core.IE</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.DomContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, System.IDisposable, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.IE</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DomContainer">(i)</i></font>: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DomContainer">(i)</i></font>: public <span title="System">void</span> <b>RunScript</b> (<span title="System">string</span> <i>scriptCode</i>, <span title="System">string</span> <i>language</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Image"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.Image</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Index"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Index</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Label"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Label</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Label</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Label</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Link"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.Link</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Name"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Name</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Not"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Not</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Not</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>Not</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core">attribute</span> <b>andAttribute</b></font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core.Interfaces">ICompare</span> <b>comparer</b></font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core">attribute</span> <b>lastAddedAttribute</b></font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core">attribute</span> <b>lastAddedOrAttribute</b></font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core">attribute</span> <b>orAttribute</b></font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: public <span title="WatiN.Core">attribute</span> <b>And</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method: public override <span title="System">bool</span> <b>Compare</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected virtual <span title="System">bool</span> <b>doCompare</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">bool</span> <b>Equals</b> (<span title="System">object</span> <i>obj</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected virtual <span title="System">void</span> <b>Finalize</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">int</span> <b>GetHashCode</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public <span title="System">Type</span> <b>GetType</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected virtual <span title="System">void</span> <b>LockCompare</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected <span title="System">object</span> <b>MemberwiseClone</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: public <span title="WatiN.Core">attribute</span> <b>Or</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: public virtual <span title="System">string</span> <b>ToString</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected virtual <span title="System">void</span> <b>UnLockCompare</b> ()</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>AttributeName</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>Value</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Option"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.Option</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Para"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Para</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Para</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Para</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core RadioButton"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.RadioCheck">WatiN.Core.RadioButton</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core RadioCheck"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.RadioCheck</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core RegexComparer"><td colspan="2" align="center" style="font:100%;"><b><font color='B0000'>WatiN.Core RegexComparer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.RegexComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: WatiN.Core.BaseComparer; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.RegexComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public override <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core SelectList"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.SelectList</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Nested Type: public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.IElementCollection">ElementCollection</span></b><br></font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Span"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Span</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Span</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Span</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Src"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Src</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core StringComparer"><td colspan="2" align="center" style="font:100%;"><b><font color='B0000'>WatiN.Core StringComparer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.StringComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: WatiN.Core.BaseComparer; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.StringComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public override <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core StyleAttribute"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.StyleAttribute</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Table"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core Table</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.Table</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.Table</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Nested Type: public class <b><span title="Base Type: WatiN.Core.Table+TableElementCollectionsBase; Interfaces: WatiN.Core.Interfaces.IElementCollection">ElementsInFirstTBody</span></b><br></font></li>
+    <li><font color="black">Nested Type: public abstract class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.IElementCollection">TableElementCollectionsBase</span></b><br></font></li>
+    <li><font color="black">Nested Type: public class <b><span title="Base Type: WatiN.Core.Table+TableElementCollectionsBase; Interfaces: WatiN.Core.Interfaces.IElementCollection">TBodies</span></b><br></font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TableBody"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core TableBody</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.TableBody</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.TableBody</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Nested Type: public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.IElementCollection">Rows</span></b><br></font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TableCell"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core TableCell</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.TableCell</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.TableCell</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TableElementCollectionsBase"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core TableElementCollectionsBase</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public abstract class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.IElementCollection">WatiN.Core.TableElementCollectionsBase</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>TableElementCollectionsBase</b> (<span title="WatiN.Core">Table</span> <i>table</i>)</font></li>
+    <li><font color="black">Field: protected <span title="WatiN.Core">Table</span> <b>table</b></font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">bool</span> <b>Equals</b> (<span title="System">object</span> <i>obj</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected virtual <span title="System">void</span> <b>Finalize</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">int</span> <b>GetHashCode</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public <span title="System">Type</span> <b>GetType</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected <span title="System">object</span> <b>MemberwiseClone</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">string</span> <b>ToString</b> ()</font></li>
+    <li><font color="black">Property: abstract <span title="mshtml">IHTMLElementCollection</span> <b>Elements</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TableRow"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core TableRow</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer">WatiN.Core.TableRow</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.ElementsContainer; Interfaces: WatiN.Core.Interfaces.IElementsContainer, WatiN.Core.Interfaces.IElementCollection">WatiN.Core.TableRow</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TableRowFinder"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Text">WatiN.Core.TableRowFinder</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Text"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Text</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core TextField"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Element">WatiN.Core.TextField</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: protected <span title="System">object</span> <b>getElement</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>Refresh</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System">string</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="System">string</span> <i>attributename</i>, <span title="System.Text.RegularExpressions">Regex</span> <i>expectedValue</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Element">(i)</i></font>: public <span title="System">void</span> <b>WaitUntil</b> (<span title="WatiN.Core">attribute</span> <i>attribute</i>, <span title="System">int</span> <i>timeout</i>)</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Exists</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Title"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Title</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core UriComparer"><td colspan="2" align="center" style="font:100%;"><b><font color='B0000'>WatiN.Core UriComparer</font> () </b></td>
+ </tr>
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: System.Object; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.UriComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+  <td width="50%" align="left"><font color='B0000'>public class <b><span title="Base Type: WatiN.Core.BaseComparer; Interfaces: WatiN.Core.Interfaces.ICompare">WatiN.Core.UriComparer</span></b></font>
+  <br><font color=blue size=2>(Please hover your mouse over the type to see the inheritance signatures)</font></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public override <span title="System">bool</span> <b>Compare</b> (<span title="System">string</span> <i>value</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Url"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Url</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core UtilityClass"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public sealed class <b><span title="Base Type: System.Object">WatiN.Core.UtilityClass</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="B0000">Method: public static <span title="System">void</span> <b>ShowFrames</b> (<span title="WatiN.Core">Document</span> <i>document</i>)</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public static <span title="System">void</span> <b>DumpElements</b> (<span title="WatiN.Core">Document</span> <i>document</i>, <span title="WatiN.Core.Interfaces">ILogWriter</span> <i>logWriter</i>)</font></li>
+    <li><font color="black">Method: public static <span title="System">void</span> <b>DumpElementsWithHtmlSource</b> (<span title="WatiN.Core">Document</span> <i>document</i>, <span title="WatiN.Core.Interfaces">ILogWriter</span> <i>logWriter</i>)</font></li>
+    <li><font color="black">Method: public static <span title="System">void</span> <b>DumpFrames</b> (<span title="WatiN.Core">Document</span> <i>document</i>)</font></li>
+    <li><font color="black">Method: public static <span title="System">void</span> <b>DumpFrames</b> (<span title="WatiN.Core">Document</span> <i>document</i>, <span title="WatiN.Core.Interfaces">ILogWriter</span> <i>logWriter</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core Value"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Attribute">WatiN.Core.Value</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.Attribute">(i)</i></font>: protected <span title="System">bool</span> <b>EvaluateAndOrAttributes</b> (<span title="WatiN.Core.Interfaces">IAttributeBag</span> <i>attributeBag</i>, <span title="System">bool</span> <i>initialReturnValue</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.DialogHandlers DialogWatcher"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: System.Object; Interfaces: System.IDisposable">WatiN.Core.DialogHandlers.DialogWatcher</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>DialogWatcher</b> (<span title="System">int</span> <i>ieProcessId</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>HandleWindow</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>window</i>)</font></li>
+    <li><font color="black">Property: <span title="System">Exception</span> <b>LastException</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.DialogHandlers FileDownloadHandler"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core.DialogHandlers FileDownloadHandler</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.DialogHandlers.BaseDialogHandler; Interfaces: WatiN.Core.DialogHandlers.IDialogHandler">WatiN.Core.DialogHandlers.FileDownloadHandler</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>FileDownloadHandler</b> (<span title="System">string</span> <i>filename</i>)</font></li>
+    <li><font color="black">Constructor: public <b>FileDownloadHandler</b> (<span title="WatiN.Core.DialogHandlers">FileDownloadOption</span> <i>option</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DialogHandlers.BaseDialogHandler">(i)</i></font>: public virtual <span title="System">bool</span> <b>Equals</b> (<span title="System">object</span> <i>obj</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>Exists</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>dialog</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>ExistsOrNull</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>dialog</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected virtual <span title="System">void</span> <b>Finalize</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="WatiN.Core.DialogHandlers.BaseDialogHandler">(i)</i></font>: public virtual <span title="System">int</span> <b>GetHashCode</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public <span title="System">Type</span> <b>GetType</b> ()</font></li>
+    <li><font color="black">Method: public override <span title="System">bool</span> <b>HandleDialog</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>window</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>IsDownloadProgressDialog</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>window</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>IsFileDownloadDialog</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>window</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>IsFileSaveDialog</b> (<span title="WatiN.Core.DialogHandlers">Window</span> <i>window</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected <span title="System">object</span> <b>MemberwiseClone</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">string</span> <b>ToString</b> ()</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntilDownloadCompleted</b> (<span title="System">int</span> <i>waitDurationInSeconds</i>)</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>WaitUntilFileDownloadDialogIsHandled</b> (<span title="System">int</span> <i>waitDurationInSeconds</i>)</font></li>
+    <li><font color="black">Property: <span title="System">bool</span> <b>HasHandledFileDownloadDialog</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">string</span> <b>SaveAsFilename</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name=" FileDownloadOption"><td colspan="2" align="center" style="font:100%;"><b><font color='black'> FileDownloadOption</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public sealed enum <b><span title="Base Type: System.Enum; Interfaces: System.IComparable, System.IFormattable, System.IConvertible">WatiN.Core.DialogHandlers.FileDownloadOption</span>
+<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspRun = 0,
+<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSave = 1,
+<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspOpen = 2,
+<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCancel = 3,
+<br></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">--> NONE <--
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.DialogHandlers Window"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: System.Object">WatiN.Core.DialogHandlers.Window</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>Exists</b> ()</font></li>
+    <li><font color="black">Method: public <span title="System">void</span> <b>ForceClose</b> ()</font></li>
+    <li><font color="black">Method: public <span title="System">bool</span> <b>IsDialog</b> ()</font></li>
+    <li><font color="black">Property: <span title="System">string</span> <b>ClassName</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">IntPtr</span> <b>Hwnd</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">long</span> <b>Style</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">string</span> <b>StyleInHex</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">string</span> <b>Title</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System">bool</span> <b>Visible</b> { public get; }</font></li>
+   </ul>
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>Exists</b> ()</font></li>
+    <li><font color="black">Method: public virtual <span title="System">void</span> <b>ForceClose</b> ()</font></li>
+    <li><font color="black">Method: public virtual <span title="System">bool</span> <b>IsDialog</b> ()</font></li>
+    <li><font color="black">Method: public virtual <span title="System">void</span> <b>SetActivate</b> ()</font></li>
+    <li><font color="black">Method: public virtual <span title="System">void</span> <b>ToFront</b> ()</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>ClassName</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">IntPtr</span> <b>Hwnd</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">IntPtr</span> <b>ParentHwnd</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">long</span> <b>Style</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>StyleInHex</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>Title</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">bool</span> <b>Visible</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.Exceptions RunScriptException"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core.Exceptions RunScriptException</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public class <b><span title="Base Type: WatiN.Core.Exceptions.WatiNException; Interfaces: System.Runtime.Serialization.ISerializable">WatiN.Core.Exceptions.RunScriptException</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>RunScriptException</b> (<span title="System">Exception</span> <i>innerException</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">bool</span> <b>Equals</b> (<span title="System">object</span> <i>obj</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected virtual <span title="System">void</span> <b>Finalize</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Exception">(i)</i></font>: public virtual <span title="System">Exception</span> <b>GetBaseException</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public virtual <span title="System">int</span> <b>GetHashCode</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Exception">(i)</i></font>: public virtual <span title="System">void</span> <b>GetObjectData</b> (<span title="System.Runtime.Serialization">SerializationInfo</span> <i>info</i>, <span title="System.Runtime.Serialization">StreamingContext</span> <i>context</i>)</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: public <span title="System">Type</span> <b>GetType</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Object">(i)</i></font>: protected <span title="System">object</span> <b>MemberwiseClone</b> ()</font></li>
+    <li><font color="black">Method <font color="Blue"><i title="System.Exception">(i)</i></font>: public virtual <span title="System">string</span> <b>ToString</b> ()</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>HelpLink</b> { public get; public set; }</font></li>
+    <li><font color="black">Property: protected <span title="System">int</span> <b>HResult</b> { }</font></li>
+    <li><font color="black">Property: <span title="System">Exception</span> <b>InnerException</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>Message</b> { public get; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>Source</b> { public get; public set; }</font></li>
+    <li><font color="black">Property: virtual <span title="System">string</span> <b>StackTrace</b> { public get; }</font></li>
+    <li><font color="black">Property: <span title="System.Reflection">MethodBase</span> <b>TargetSite</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.Exceptions TimeoutException"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>public class <b><span title="Base Type: WatiN.Core.Exceptions.WatiNException; Interfaces: System.Runtime.Serialization.ISerializable">WatiN.Core.Exceptions.TimeoutException</span></b></font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Constructor: public <b>TimeoutException</b> (<span title="System">string</span> <i>value</i>, <span title="System">Exception</span> <i>innerException</i>)</font></li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <a name="WatiN.Core.Interfaces IElementCollection"><td colspan="2" align="center" style="font:100%;"><b><font color='black'>WatiN.Core.Interfaces IElementCollection</font> () </b></td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">n/a
+  </td>
+  <td width="50%" align="left"><font color='black'>public interface <b><span title="Base Type: none">WatiN.Core.Interfaces.IElementCollection</span></b></font>
+  </td>
+ </tr>
+
+ <tr bgcolor="#F0F0F0">
+  <td width="50%" align="left">--> NONE <--
+  </td>
+  <td width="50%" align="left">
+   <ul>
+    <li><font color="black">Property: <span title="mshtml">IHTMLElementCollection</span> <b>Elements</b> { public get; }</font></li>
+   </ul>
+  </td>
+ </tr>
+
+</tbody>
+</table>
+
+<p class="endNav"><font size=2><a href="#top">Top</a> &bull; <a href="..\APIChangesv1tov2.html" target=_top>Summary</a></font></p>
+
+</body>
+</html>
+

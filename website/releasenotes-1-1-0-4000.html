@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+
+  <title>WatiN Documentation</title>
+  <meta content="http://schemas.microsoft.com/intellisense/ie5" name=
+  "vs_targetSchema" />
+  <meta content="Information architecture, Web Design, Web Standards."
+  name="Description" />
+  <meta content=
+  "watin, test, C#, web, .Net, framework, html, dom, watir" name=
+  "Keywords" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=iso-8859-1" />
+  <meta content="Global" name="Distribution" />
+  <meta content="Jeroen van Menen" name="Author" />
+  <meta content="index,follow" name="Robots" />
+  <link href="images/BrightSide.css" type="text/css" rel=
+  "stylesheet" />
+</head>
+
+<body>
+  <!-- wrap starts here -->
+
+  <div id="wrap">
+    <div id="header">
+      <h1 id="logo"><span class="green"><font color=
+      "#6297BC">WatiN</font></span></h1>
+
+      <h2 id="slogan">Web Application Testing In .Net</h2>
+
+      <form class="searchform" action="#" method="post">
+        <p><input class="textbox" type="text" name="search_query" />
+        <input class="button" type="submit" value="Search" name=
+        "search" /></p>
+      </form><!-- Menu Tabs -->
+
+      <ul>
+        <li><a href="index.html"><span>Home</span></a></li>
+
+        <li><a href=
+        "http://sourceforge.net/project/showfiles.php?group_id=167632"><span>
+        Downloads</span></a></li>
+
+        <li id="current"><a href=
+        "documentation.html"><span>Documentation</span></a></li>
+
+        <li><a href="contribute.html"><span>Contribute</span></a></li>
+
+        <li><a href="support.html"><span>Support</span></a></li>
+
+        <li><a href=
+        "http://sourceforge.net/export/rss2_project.php?group_id=167632">
+        <span>RSS</span></a></li>
+      </ul>
+    </div><!-- content-wrap starts here -->
+
+    <div id="content-wrap">
+      <div id="main">
+        <h1>Releasenotes <span class="green">WatiN</span>
+        1.1.0.4000</h1>
+
+        <p>This page contains the release notes for WatiN 1.1.0.4000,
+        released on 2 May 2006.</p>
+
+        <p>You can <strong>download</strong> this release <a href=
+        "http://sourceforge.net/project/showfiles.php?group_id=167632"
+        target="_blank">here</a>.</p><br>
+
+        <h1>Changes <span class="green">in</span> general</h1>
+
+        <p>
+		<strong>Added FileDownloadHandler</strong><br>
+		Added support for handling file download and the Save As dialog. Following is an example
+		on how to use this new handler. Thanks to Daaron Dwyer for the initial implementation!
+		</p>
+		<p>
+		<code>
+		  using(IE ie = new IE(someUrlToGoTo))<br>
+		  {<br>
+	      &nbsp;FileDownloadHandler fileDownloadHandler = new <strong>FileDownloadHandler(fullFileName)</strong>;<br>
+		  &nbsp;ie.AddDialogHandler(fileDownloadHandler);<br>
+		<br>
+		  &nbsp;ie.Link("startDownloadLinkId").Click();<br>
+		<br>
+		  &nbsp;fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(15);<br>
+		  &nbsp;fileDownloadHandler.WaitUntilDownloadCompleted(200);<br>
+		  }<br>
+		</code>
+		</p><br>
+
+        <p><strong>Improved AJAX support</strong><br>
+		To better support testing of AJAX enabled websites, this release adds some
+		more options to your toolbox.</p>
+		<p>
+		A new method is added that will wait until some
+		attribute has a certain value. This might be handy in situations where you need
+		to wait until a value of an element gets updated.</p>
+		<p>
+		Element.WaitUntil(Attribute, timeout) has four overloads accepting 
+		an attributename, expectedvalue (string/Regex) and a timeout. 
+		Following are some examples on how to use this new feature:</p>
+		<p>
+        <code>
+		// Wait until some textfield is enabled<br>
+		textfield.<strong>WaitUntil</strong>(&quot;disable&quot;, false.ToSting, 10);<br>
+        // Wait until some textfield is visible and enabled<br>
+		textfield.<strong>WaitUntil</strong>(new Attribute(&quot;visibile&quot;, new
+        BoolComparer(true)) &amp;&amp; new
+        Attribute(&quot;disabled&quot;, new
+        BoolComparer(false)));<br>
+		</code></p><br>
+
+        <p>A Refresh method is also added. Calling this method will
+        clear the cached reference to the wrapped html element (caching is done
+		to speed up performance when calling multiple properties and methods
+		on the same element). 
+		So when the next time a property or method of the element is called,
+        WatiN will first retrieve a fresh reference to the html element.
+        Using this Refresh method can be handy in some postback scenario&#39;s.</p><br>
+		<p>
+		<code>
+        SelectList select = ie.SelectList(id);<br>
+    <br>
+	    // Lets assume calling Select causes a postback, <br>
+	    // which would invalidate the reference to the html selectlist.<br>
+	    select.Select(val);<br>
+	    <br>
+        // Refresh will clear the cached reference to the html selectlist.<br>
+	    select.<strong>Refresh()</strong>; <br>
+	    <br>
+	    // Assert against a freshly fetched reference to the html selectlist.<br>
+	    Assert.AreEqual(val, select.SelectedItem);<br>
+		</code>
+		</p>
+        <p>A third change to better support testing of AJAX websites has been made
+		to the way elements are retrieved from the webpage. Due to this improvement
+		two problems have been solved:</p>
+		<p><ul>
+		<li><span>Calling Exists on an element within an element that
+        doesn&#39;t (jet) exist is now supported, adding even more
+        support for AJAX scenarios in which a hierarchy of html
+        elements is added to a page by some javascript. Example:
+        <code>
+		Assert.IsFalse(ie.Div(&quot;doesNotExistJet&quot;).TextField(&quot;textField1&quot;).Exists);
+		</code></span>
+        <li><span>If a page redirect has happend, WatiN no longer
+        keeps searching in the html element collection of the old page. A
+        fresh element collection is fetched (from the currently displayed page)
+        every time WatiN is searching for an element on a
+        page or when your code calls one of the Element.WaitUntil... methods. 
+		Thanks to Francis Vaundry for supplying some unit tests
+        and html files.</span></li>
+		</ul>
+		</p>
+        <p>The last change regarding AJAX support has been made to the
+		<strong>WaitUntil...</strong> methods. These methods now ignore
+        exceptions during the wait, making it less vulnerable for UnauthorisedExceptions
+        thrown by the DOM if an element is in the DOM but not ready to
+        by accessed. During the Wait time this should be ignored. The
+        TimeoutException&#39;s innerexception is set if an element
+        could not be found due to an exception throw during the last
+        search cycle in the WaitUntil method.</p><br>
+
+        <p><strong>Added support for the not operator</strong><br>
+		When searching for an element or a collection of elements you might
+		want to filter on elements which don't have an attribute with some value.
+		Like returning all buttons which haven't set there class name to some value.</p>
+		<p>
+		The following code waits until the url of the image is not equal to a certain
+        value: 
+		<code>
+        // using the ! overload on Attribute class<br>
+        ie.Image(&quot;image1&quot;).WaitUntil(!Find.BySrc(&quot;http://website/firstimage.jpg&quot;));<br>
+		<br>
+		// using the Not class<br>
+		ie.Image(&quot;image1&quot;).WaitUntil(new
+        Not(Find.BySrc(&quot;http://website/firstimage.jpg&quot;)));<br>
+		</code>
+		</p>
+		
+        <p><strong>Finding an IE instance by its window handle</strong><br>
+        Added support for finding an Internet Explorer instance by it window handle (hwnd).
+		</p>
+		<p>
+		<code>
+		IE ie = IE.AttachToIE(<strong>Find.ByCustom(&quot;hwnd&quot;, windowHandle)</strong>);<br>
+        bool ieExist = IE.Exists(<strong>Find.ByCustom(&quot;hwnd&quot;,windowHandle)</strong>)
+		</code></p><br>
+
+        <p><strong>Run a JScript</strong><br>
+		A RunScript method has been added to the IE object. This makes it easier
+		to run a JScript inside the browser. Thanks to Daaron Dwyer for the initial implementation!
+        </p>
+		<p>
+		<code>
+		ie.RunScript(yourJScriptOrVBScriptGoesHere);
+		</code>
+        </p><br>
+
+        <p><strong>Improved eventhandler detection</strong><br>
+		Changed the way WatiN determines if an eventhandler is attached to
+		an event of an element. Previous versions of WatiN parsed the 
+		HTML of the element. When eventhandlers where attached by
+		some java code not part of the innerhtml of the element, WatiN decided
+		no eventhandlers were registered. WatiN now looks at the DOM properties
+		for these events which solves this problem. This fix is most noticable when
+		using TextField.TypeText() where WatiN fires onkeydown and onkeyup events
+		if eventhandlers are attached.
+        </p><br>
+
+        <p><strong>Renamed ShowFrames to DumpFrames</strong><br>
+		Renamed ShowFrames to DumpFrames. All Dump* methods now have an
+        overload which accepts an object implementing ILogWriter. This
+        makes it possible to log the dump to something else then the
+        debug window.</p><br>
+
+        <p><strong>Improved stability of DialogHandler</strong><br>
+		Added try/catch around the call to IDialogHandler.HandleDialog method implemented by
+        dialogHandlers. If an exception occurs during this call it will
+        be catched, logged through Logger.LogAction and stored in
+        lastException property of the DialogWatcher. This makes it possible to test for exceptions
+        throw by dialoghandlers. Excpetions thrown by dialoghandlers will 
+		no longer interrupt the working of DialogWatcher.</p><br>
+
+        <p><strong>Added a BaseComparer class</strong><br>
+		Added a BaseComparer class. It is abstract, implements
+        ICompare and makes the Compare method virtual.</p><br>
+
+        <h1>API <span class="green">Changes</span></h1>
+
+        <p>See <a href="api-changes-1-0-0-to-1-1-0.html" target=
+        "_blank">this page</a> for a full list of all the API changes
+        between version 1.0.0.4000 and 1.1.0.4000</p><br>
+
+        <h1>SourceForge <span class="green">Trackers</span></h1>
+
+        <p><strong>Added Feature requests:</strong></p>
+
+        <p>1582780 Add support for filedownload<br>
+        1670210 Add greater support for javascript calls<br>
+        1678512 Add Element.WaitUntil(attributename, expectedvalue,
+        timeout)<br>
+        1708830 IE.AttachToIE(Find.ByHandle(....<br></p><br>
+
+        <p><strong>Fixed Bugs:</strong></p>
+
+        <p>1672606 LogonDialogHandler throws exception if pwd =
+        blank<br>
+        1681737 WaitUntilExists doesn&#39;t ignore exceptions during
+        the wait.<br>
+        1681742 Find.ByIndex doesn&#39;t seem to work with input
+        elements<br>
+        1684003 WaitUntilExist timesout if a redirect occurs during
+        wait.<br>
+        xxxxxxx ContainsText should return false if Document.body is
+        null.<br>
+        <br></p>
+      </div>
+      <div id="rightbar">
+        <div id="sidebar">
+          <h1>Quick <span class="green">Links</span></h1>
+
+          <ul class="sidemenu">
+            <li><a href=
+            "http://sourceforge.net/project/showfiles.php?group_id=167632"
+            target="_blank">Download</a></li>
+
+            <li><a href="gettingstarted.html">Getting started</a></li>
+
+            <li><a href="apartmentstateinfo.html">STA
+            ApartmentState</a></li>
+
+            <li><a href="htmlelementmapping.html">HTML mapping
+            list</a></li>
+
+            <li><a href="roadmap.html">Roadmap</a></li>
+
+            <li><a href="faq.html">FAQ</a></li>
+          </ul>
+        </div>
+      </div><!-- content-wrap ends here -->
+    </div><!-- footer starts here -->
+
+    <div id="footer">
+      <div class="footer-left" style="WIDTH: 50%; HEIGHT: 37px">
+        <p class="align-left">© 2007 <strong>Jeroen van Menen</strong>
+        | Design by <a href=
+        "http://www.styleshout.com/">styleshout</a></p>
+      </div>
+
+      <div class="footer-right" style="WIDTH: 40%; HEIGHT: 54px">
+        <p class="align-right"><a href=
+        "index.html">Home</a>&#160;|&#160; <a href=
+        "http://sourceforge.net/projects/watin/">WatiN on
+        SourceForge</a>&#160;|&#160; <a href=
+        "http://sourceforge.net/export/rss2_project.php?group_id=167632">
+        RSS Feed</a>s</p>
+
+        <p class="align-right"><a href=
+        "http://sourceforge.net"><img border="0" width="125" height=
+        "37" id="_x0000_i1025" src=
+        "http://sflogo.sourceforge.net/sflogo.php?group_id=167632&amp;type=2"
+        alt="SourceForge.net Logo" name="_x0000_i1025" /></a></p>
+      </div>
+    </div><!-- footer ends here -->
+    <!-- wrap ends here -->
+  </div>
+</body>
+</html>
