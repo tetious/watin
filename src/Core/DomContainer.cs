@@ -114,67 +114,6 @@ namespace WatiN.Core
     {
       DialogWatcher.Remove(handler);
     }
-    
-    /// <summary>
-    /// Fires the given event on the given element.
-    /// </summary>
-    /// <param name="element">Element to fire the event on</param>
-    /// <param name="eventName">Name of the event to fire</param>
-    public virtual void FireEvent(DispHTMLBaseElement element, string eventName)
-    {
-      // TODO: Passing the eventarguments in a new param of type array. This array
-      //       holds 0 or more name/value pairs where the name is a property of the event object
-      //       and the value is the value that's assigned to the property.
-
-      // Execute the JScript to fire the event inside the Browser.
-      string scriptCode = "var newEvt = document.createEventObject();";
-      scriptCode += "newEvt.button = 1;";
-      scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
-
-
-      try
-      {
-        RunScript(scriptCode);
-      }
-      catch (RunScriptException)
-      {
-        // In a cross domain automation scenario a System.UnauthorizedAccessException 
-        // is thrown. The following code works, but setting the event properties
-        // has no effect so that is left out.
-        object dummyEvt = null;
-        //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
-        //      mouseDownEvent.button = 1;
-        object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
-        element.FireEvent(eventName, ref parentEvt);
-      }
-    }
-
-    /// <summary>
-    /// Runs the javascript code in IE.
-    /// </summary>
-    /// <param name="scriptCode">The javascript code.</param>
-    public void RunScript(string scriptCode)
-    {
-      RunScript(scriptCode, "javascript");
-    }
-
-    /// <summary>
-    /// Runs the script code in IE.
-    /// </summary>
-    /// <param name="scriptCode">The script code.</param>
-    /// <param name="language">The language.</param>
-    public void RunScript(string scriptCode, string language)
-    {
-      try
-      {
-        IHTMLWindow2 window = htmlDocument.parentWindow;
-        window.execScript(scriptCode, language);
-      }
-      catch (Exception ex)
-      {
-        throw new WatiN.Core.Exceptions.RunScriptException(ex);
-      }
-    }
 
     /// <summary>
     /// This method must be called by its inheritor to dispose references

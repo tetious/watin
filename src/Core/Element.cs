@@ -476,7 +476,7 @@ namespace WatiN.Core
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
       Highlight(true);
-      domContainer.FireEvent(DispHtmlBaseElement, eventName);
+      UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
       if (waitForComplete) {WaitForComplete();}
       Highlight(false);
     }

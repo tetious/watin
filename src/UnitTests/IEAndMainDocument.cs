@@ -1399,12 +1399,10 @@ namespace WatiN.UnitTests
       Assert.AreEqual(30, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
     }
     
-    [Test]
-    public void IESettingsShouldReturnDefaults()
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void IESettingsSetToNullShouldThrowArgumentNullException()
     {
-      Assert.IsNotNull((IE.Settings), "Should not be null");
-      
-      AssertDefaults(IE.Settings);
+      IE.Settings = null;
     }
     
     [Test]

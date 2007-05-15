@@ -778,5 +778,34 @@ namespace WatiN.Core
         throw new ArgumentNullException(name);
       }
     }
+
+    /// <summary>
+    /// Runs the javascript code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The javascript code.</param>
+    public void RunScript(string scriptCode)
+    {
+      RunScript(scriptCode, "javascript");
+    }
+
+    /// <summary>
+    /// Runs the script code in IE.
+    /// </summary>
+    /// <param name="scriptCode">The script code.</param>
+    /// <param name="language">The language.</param>
+    public void RunScript(string scriptCode, string language)
+    {
+      UtilityClass.RunScript(scriptCode, "javascript", htmlDocument.parentWindow);
+    }
+
+    /// <summary>
+    /// Fires the given event on the given element.
+    /// </summary>
+    /// <param name="element">Element to fire the event on</param>
+    /// <param name="eventName">Name of the event to fire</param>
+    public virtual void FireEvent(DispHTMLBaseElement element, string eventName)
+    {
+      UtilityClass.FireEvent(element, eventName);
+    }
   }
 }

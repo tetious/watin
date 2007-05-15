@@ -1087,6 +1087,26 @@ namespace WatiN.UnitTests
         Assert.IsTrue(ie1.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
       }
     }
+
+    [Test]
+    public void TextFieldTypeTextEventsInFrame()
+    {
+      using(IE ie1= new IE(FramesetURI))
+      {
+        Frame frame = ie1.Frames[1];
+        frame.RunScript("window.document.location.href='TestEvents.html';");
+
+        Assert.IsFalse(frame.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
+        Assert.IsFalse(frame.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
+        Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
+
+        frame.TextField("textfieldid").TypeText("test");
+        
+        Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
+        Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
+        Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
+      }
+    }
     
     [Test]
     public void TextFieldTextAreaElement()
