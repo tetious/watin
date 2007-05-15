@@ -18,17 +18,14 @@
 
 using System.Text.RegularExpressions;
 
-using mshtml;
-
 namespace WatiN.Core
 {
-    using System;
     using WatiN.Core.Interfaces;
 
   /// <summary>
   /// Summary description for SubElements.
   /// </summary>
-  public sealed class ElementsSupport
+  public class ElementsSupport
   {
     public const string FrameTagName = "FRAME";
     public const string InputTagName = "INPUT";
