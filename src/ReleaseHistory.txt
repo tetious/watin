@@ -1,3 +1,8 @@
+WatiN 1.1.1.4000 (15 May 2007)
+
+This is a hotfix release and fixes SF Bug 1718162: js error when using TypeText method of a TextField in frame. http://sourceforge.net/tracker/index.php?func=detail&aid=1718162&group_id=167632&atid=843727
+
+-------------------------------
 WatiN 1.1.0.4000 (2 May 2007)
 
 This release adds some new features and many bugfixes. You can now use the not operator when searching for an element, automate the  SaveAs dialog, and WaitUntil some attribute of an element has some value. Most of the development time has been put into fixing bugs reported by users. Thanks to all who contributed to this release!
