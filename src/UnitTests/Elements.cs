@@ -1466,6 +1466,8 @@ namespace WatiN.UnitTests
     [Test]
     public void WaitUntilElementRemovedAfter3Seconds()
     {
+      const int indexTextFieldToRemove = 5;
+
       Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
       using(IE ie1 = new IE(TestEventsURI))
@@ -1473,20 +1475,20 @@ namespace WatiN.UnitTests
         TextField textfieldToRemove = ie1.TextField("textFieldToRemove");
         TextFieldCollection textfields = ie1.TextFields;
 
-        Assert.AreEqual("textFieldToRemove", textfields[4].Id);
+        Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
 
         Assert.IsTrue(textfieldToRemove.Exists);
-        Assert.IsTrue(textfields[4].Exists);
+        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
 
         ie1.Button("removeElement").ClickNoWait();
 
         Assert.IsTrue(textfieldToRemove.Exists);
-        Assert.IsTrue(textfields[4].Exists);
+        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
 
         textfieldToRemove.WaitUntilRemoved();
 
         Assert.IsFalse(textfieldToRemove.Exists);
-        Assert.IsFalse(textfields[4].Exists);
+        Assert.IsFalse(textfields[indexTextFieldToRemove].Exists);
       }
     }
     

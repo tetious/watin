@@ -23,6 +23,7 @@ using mshtml;
 namespace WatiN.Core
 {
   using System.Collections;
+  using System.Text;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
   using WatiN.Core.Logging;
@@ -233,15 +234,15 @@ namespace WatiN.Core
       //       and the value is the value that's assigned to the property.
 
       // Execute the JScript to fire the event inside the Browser.
-      string scriptCode = "var newEvt = document.createEventObject();";
-      scriptCode += "newEvt.button = 1;";
-      scriptCode += "newEvt.srcElement = document.getElementById('" + element.uniqueID + "');";
-      scriptCode += "document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);";
+      StringBuilder scriptCode = new StringBuilder();
+      scriptCode.Append("var newEvt = document.createEventObject();");
+      scriptCode.Append("newEvt.button = 1;");
+      scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
 
       try
       {
         IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
-        RunScript(scriptCode, window);
+        RunScript(scriptCode.ToString(), window);
       }
       catch (RunScriptException)
       {

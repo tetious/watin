@@ -930,7 +930,29 @@ namespace WatiN.UnitTests
         {
           htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
         
-          Assert.AreEqual("1", ie.TextField("eventButtonValue").Value, "Event.button not left on modal dialog");
+          Assert.AreEqual("1", htmlDialog.TextField("eventButtonValue").Value, "Event.button not left on modal dialog");
+        }
+      }
+    }
+
+    [Test]
+    public void FireEventAlwaysSetsSrcElementOnEventObject()
+    {
+      using (IE ie = new IE(TestEventsURI))
+      {
+        // test in standard IE window
+        ie.Button(Find.ByValue("Button without id")).KeyDown();
+        
+        Assert.AreEqual("Button without id", ie.TextField("eventScrElement").Value, "Unexpected Event.scrElement.value");
+
+        // test in HTMLDialog window
+        ie.Button("modalid").ClickNoWait();
+        
+        using(HtmlDialog htmlDialog = ie.HtmlDialogs[0])
+        {
+          htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
+        
+          Assert.AreEqual("Button without id", htmlDialog.TextField("eventScrElement").Value, "Unexpected Event.scrElement.value");
         }
       }
     }

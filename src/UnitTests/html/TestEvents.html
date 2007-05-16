@@ -13,8 +13,12 @@ function reportId(element) {
     report = document.getElementById("Report");
     report.value = "button.id = " + element.id;
 
-    buttonvalue = document.getElementById("eventButtonValue");
-    buttonvalue.value = window.event.button;
+    buttonValue = document.getElementById("eventButtonValue");
+    buttonValue.value = window.event.button;
+    
+    scrElement = document.getElementById("eventScrElement");
+    scrElement.value = window.event.srcElement.value;
+    
     return true
 }
 
@@ -84,6 +88,7 @@ function removeElement()
         <P>
             <INPUT type="button" value="Button without id" onkeydown="return reportId(this)" onclick="return reportId(this)"><INPUT id="Report" type="text" name="Report" style="WIDTH: 280px; HEIGHT: 22px" size="41">&nbsp;
             <label>Event.button value <INPUT id="eventButtonValue" type="text" style="WIDTH: 40px; HEIGHT: 22px" size="1"></label>
+            <label>Event.scrElement.uniqueid value <INPUT id="eventScrElement" type="text" style="WIDTH: 40px; HEIGHT: 22px" size="1" NAME="Text1"></label>
         </P>
         <P>
             <INPUT id="confirmdialogid" onclick="javascript:ShowConfirmDialog()" type="button" value="Show confirm dialog"><INPUT id="ReportConfirmResult" type="text" style="WIDTH: 432px; HEIGHT: 22px" size="66">
