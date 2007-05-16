@@ -218,8 +218,14 @@
                         all it&#8217;s tests in STA mode by default.</p>
                     <br>
 					<p><a name="testdriven"></a><strong>Using WatiN and TestDriven.Net in VS 2003 and VS 2005.</strong></p>
-                    <p>No special tricks needed. <a href="http://www.testdriven.net/" target="_blank">TestDriven.Net</a>
-                        runs all it&#8217;s tests in STA mode by default.</p>
+                    <p>No special tricks needed. <a href="http://www.testdriven.net/" target="_blank">TestDriven.Net</a> runs all it&#8217;s tests in STA mode by default. <br>
+					When TestDriven.Net invokes MbUnit tests, MbUnit overrides the ApartmentState, setting it to MTA by default. So you do need to specify the ApartmentState in the fixture attribute:</p>
+<p><code>
+[TestFixture(ApartmentState = ApartmentState.STA)]
+</p></code>
+<p>
+See also <a href="#mbunit">using WatiN and MBUnit</a>.
+</p>
                     <br>
 					<p><a name="sharpdevelop"></a><strong>Using WatiN and SharpDevelop&#8217;s NUnit test runner.</strong></p>
                     <p>As of SharpDevelop 2.1 Beta 3, running test in STA mode is supported. By default 
