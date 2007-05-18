@@ -17,19 +17,15 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Threading;
 using System.Runtime.InteropServices;
 
 using mshtml;
 using SHDocVw;
 using WatiN.Core.DialogHandlers;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-  using WatiN.Core.Exceptions;
-
   /// <summary>
   /// This class hosts functionality for classes which are an entry point
   /// to a document and its elements and/or frames. Currently implemented
@@ -176,7 +172,9 @@ namespace WatiN.Core
           {
             waitWhileIEBusy(frame);
             waitWhileIEStateNotComplete(frame);
-            document = WaitWhileFrameDocumentNotAvailable(frame);
+            WaitWhileFrameDocumentNotAvailable(frame);
+
+            document = (IHTMLDocument2)frame.Document;
           }
           finally
           {
@@ -238,36 +236,46 @@ namespace WatiN.Core
 
     private void WaitWhileMainDocumentNotAvailable(DomContainer domContainer)
     {
-      IHTMLDocument2 document = null;
-
-      while(document == null)
+      while (!IsDocumentReadyStateAvailable(GetDomContainerDocument(domContainer)))
       {
-        try
-        {
-          document = domContainer.HtmlDocument;
-        }
-        catch{}
+        ThrowExceptionWhenTimeout("waiting for main document becoming available");
 
-        document = IsDocumentAvailable(document, "maindocument");
+        Thread.Sleep(100);
       }
     }
 
-    private IHTMLDocument2 WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
+    private void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
     {
-      IHTMLDocument2 document = null;
-
-      while (document == null)
+      while (!IsDocumentReadyStateAvailable(GetFrameDocument(frame)))
       {
-        try
-        {
-          document = frame.Document as IHTMLDocument2;
-        }
-        catch{}
+        ThrowExceptionWhenTimeout("waiting for frame document becoming available");
 
-        document = IsDocumentAvailable(document, "frame");
+        Thread.Sleep(100);
       }
+    }
 
-      return document;
+    private static IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
+    {
+      try
+      {
+        return frame.Document as IHTMLDocument2;
+      }
+      catch
+      {
+        return null;
+      }
+    }
+
+    private static IHTMLDocument2 GetDomContainerDocument(DomContainer domContainer)
+    {
+      try
+      {
+        return domContainer.HtmlDocument;
+      }
+      catch
+      {
+        return null;
+      }
     }
 
     private static bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
@@ -279,7 +287,7 @@ namespace WatiN.Core
         // to do further processing seems to solve this problem.
         try
         {
-          string readyState = ((HTMLDocument)document).readyState;
+          string readyState = document.readyState;
           return true;
         }
         catch
@@ -287,22 +295,6 @@ namespace WatiN.Core
       }
 
       return false;
-    }
-
-    private IHTMLDocument2 IsDocumentAvailable(IHTMLDocument2 document, string documentType)
-    {
-      if (document == null)
-      {
-        ThrowExceptionWhenTimeout(String.Format("waiting for {0} document becoming available", documentType));
-          
-        Thread.Sleep(100);
-      }
-      else if (!IsDocumentReadyStateAvailable(document))
-      {
-        document = null;
-        Thread.Sleep(500);
-      }
-      return document;
     }
 
     /// <summary>
