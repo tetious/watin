@@ -200,6 +200,7 @@ namespace WatiN.Core
     /// Runs the javascript code in IE.
     /// </summary>
     /// <param name="scriptCode">The javascript code.</param>
+    /// <param name="window">The parent window of the document.</param>
     public static void RunScript(string scriptCode, IHTMLWindow2 window)
     {
       RunScript(scriptCode, "javascript", window);
@@ -210,6 +211,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="scriptCode">The script code.</param>
     /// <param name="language">The language.</param>
+    /// <param name="window">The parent window of the document.</param>
     public static void RunScript(string scriptCode, string language, IHTMLWindow2 window)
     {
       try
