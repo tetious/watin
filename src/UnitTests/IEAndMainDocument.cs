@@ -568,6 +568,31 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void NewIEInSameProcess()
+    {
+      using (IE ie1 = new IE())
+      {
+        using (IE ie2 = new IE())
+        {
+          Assert.AreEqual(ie1.ProcessID, ie2.ProcessID);
+        }
+      }            
+    }
+
+    [Test]
+    public void NewIEInNewProcess()
+    {
+      using (IE ie1 = new IE())
+      {
+        using (IE ie2 = new IE(true))
+        {
+          Assert.IsNotNull(ie2, "create ie in new process returned null");
+          Assert.AreNotEqual(ie1.ProcessID, ie2.ProcessID, "process id problem");
+        }
+      }            
+    }
+
+    [Test]
     public void NewIE()
     {
       using (IE ie = new IE())
@@ -976,7 +1001,7 @@ namespace WatiN.UnitTests
     [Test, Category("InternetConnectionNeeded")]
     public void SecurityAlertDialogHandler()
     {
-      IE.Settings.WaitForCompleteTimeOut = 60;
+      IE.Settings.WaitForCompleteTimeOut = 120;
 
       using(IE ie = new IE("http://sourceforge.net"))
       {

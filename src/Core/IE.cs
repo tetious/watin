@@ -401,7 +401,42 @@ namespace WatiN.Core
     /// </example>
     public IE()
     {
-      CreateNewIEAndGoToUri(new Uri("about:blank"), null);
+      CreateNewIEAndGoToUri(new Uri("about:blank"), null, false);
+    }
+
+    /// <summary>
+    /// Opens a new Internet Explorer with a blank page. 
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the created Internet Explorer window will also be closed.
+    /// </note>
+    /// </summary>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        IE ie = new IE();
+    ///        ie.GoTo("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(bool createInNewProcess)
+    {
+      CreateNewIEAndGoToUri(new Uri("about:blank"), null, createInNewProcess);
     }
 
     /// <summary>
@@ -435,8 +470,44 @@ namespace WatiN.Core
     /// </example>
     public IE(string url)
     {
-      CreateNewIEAndGoToUri(new Uri(url), null);
+      CreateNewIEAndGoToUri(new Uri(url), null, false);
     }
+
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the created Internet Explorer window will also be closed.
+    /// </note>
+    /// </summary>
+    /// <param name="url">The URL te open</param>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public OpenWatiNWebsite()
+    ///      {
+    ///        IE ie = new IE("http://watin.sourceforge.net");
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(string url, bool createInNewProcess)
+    {
+      CreateNewIEAndGoToUri(new Uri(url), null, createInNewProcess);
+    }
+
     /// <summary>
     /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
     /// <note>
@@ -469,7 +540,43 @@ namespace WatiN.Core
     /// </example>
     public IE(Uri uri)
     {
-      CreateNewIEAndGoToUri(uri, null);
+      CreateNewIEAndGoToUri(uri, null, false);
+    }
+
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
+    /// <note>
+    /// When the <see cref="WatiN.Core.IE" />
+    /// instance is destroyed the created Internet Explorer window will also be closed.
+    /// </note>
+    /// </summary>
+    /// <param name="uri">The Uri te open</param>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge.
+    /// <code>
+    /// using System;
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public OpenWatiNWebsite()
+    ///      {
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"));
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(Uri uri, bool createInNewProcess)
+    {
+      CreateNewIEAndGoToUri(uri, null, createInNewProcess);
     }
     
     /// <summary>
@@ -501,7 +608,40 @@ namespace WatiN.Core
     /// </example>
     public IE(string url, LogonDialogHandler logonDialogHandler)
     {
-      CreateNewIEAndGoToUri(new Uri(url), logonDialogHandler);
+      CreateNewIEAndGoToUri(new Uri(url), logonDialogHandler, false);
+    }
+
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
+    /// </summary>
+    /// <param name="url">The Url te open</param>
+    /// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE("http://watin.sourceforge.net", logon);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(string url, LogonDialogHandler logonDialogHandler, bool createInNewProcess)
+    {
+      CreateNewIEAndGoToUri(new Uri(url), logonDialogHandler, createInNewProcess);
     }
     
     /// <summary>
@@ -533,7 +673,39 @@ namespace WatiN.Core
     /// </example>
     public IE(Uri uri, LogonDialogHandler logonDialogHandler)
     {
-      CreateNewIEAndGoToUri(uri, logonDialogHandler);
+      CreateNewIEAndGoToUri(uri, logonDialogHandler, false);
+    }
+    /// <summary>
+    /// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
+    /// </summary>
+    /// <param name="uri">The Uri te open</param>
+    /// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded constructors.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public IE(Uri uri, LogonDialogHandler logonDialogHandler, bool createInNewProcess)
+    {
+      CreateNewIEAndGoToUri(uri, logonDialogHandler, createInNewProcess);
     }
     
     /// <summary>
@@ -557,15 +729,23 @@ namespace WatiN.Core
       InitIEAndStartDialogWatcher(internetExplorer);
     }
 
-    private void CreateNewIEAndGoToUri(Uri uri, LogonDialogHandler logonDialogHandler)
+    private void CreateNewIEAndGoToUri(Uri uri, LogonDialogHandler logonDialogHandler, bool createInNewProcess)
     {
       CheckThreadApartmentStateIsSTA();
 
-      Logger.LogAction("Creating new IE instance");
 
       MoveMouseToTopLeft();
 
-      InitIEAndStartDialogWatcher(new InternetExplorerClass(), uri);
+      if (createInNewProcess)
+      {
+        Logger.LogAction("Creating new IE instance in a new process");
+        InitIEAndStartDialogWatcher(CreateIEInNewProcess(), uri);
+      }
+      else
+      {
+        Logger.LogAction("Creating new IE instance");
+        InitIEAndStartDialogWatcher(new InternetExplorerClass(), uri);
+      }
 
       if (logonDialogHandler != null)
       {
@@ -578,6 +758,32 @@ namespace WatiN.Core
       }
       
       WaitForComplete();
+    }
+
+    private InternetExplorer CreateIEInNewProcess()
+    {
+      Process m_Proc = Process.Start("IExplore.exe","about:blank");
+
+      const int timeout = 5000;
+      SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+
+      do
+      {
+        m_Proc.Refresh();
+        int mainWindowHandle = (int) m_Proc.MainWindowHandle;
+
+        if (mainWindowHandle != 0 )
+        {
+          return findInternetExplorer(new Attribute("hwnd", mainWindowHandle.ToString()), settings.AttachToIETimeOut);
+        }
+        else
+        {
+          Thread.Sleep(500);
+        }
+
+      } while (!timeoutTimer.Elapsed);
+
+      throw new IENotFoundException("hwnd", "0", timeout);
     }
 
     private static void CheckThreadApartmentStateIsSTA()
@@ -617,6 +823,21 @@ namespace WatiN.Core
 
     private static IE findIE(Attribute findBy, int timeout)
     {
+      InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
+        
+      if (internetExplorer != null)
+      {
+        IE ie = new IE(internetExplorer);
+        ie.WaitForComplete();
+
+        return ie;
+      }
+
+      throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
+    }
+
+    private static InternetExplorer findInternetExplorer(Attribute findBy, int timeout)
+    {
       Logger.LogAction("Busy finding Internet Explorer with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
       SimpleTimer timeoutTimer = new SimpleTimer(timeout);
@@ -629,15 +850,11 @@ namespace WatiN.Core
         
         if (internetExplorer != null)
         {
-          IE ie = new IE(internetExplorer);
-          ie.WaitForComplete();
-
-          return ie;
+          return internetExplorer;
         }
       } while (!timeoutTimer.Elapsed);
 
-
-      throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
+      return null;
     }
 
     private static InternetExplorer findInternetExplorer(Attribute findBy)
