@@ -357,63 +357,70 @@ namespace WatiN.Core
         int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
         Marshal.ThrowExceptionForHR(hr);
 
-        try
+        if(eu != null)
         {
-          object pUnk;
-          int fetched;
-          const int MAX_FETCH_COUNT = 1;
-
-          // get the first embedded object
-          // pUnk alloc
-          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-          Marshal.ThrowExceptionForHR(hr);
-
-          while (hr == 0)
-          {
-            // Query Interface pUnk for the IWebBrowser2 interface
-            IWebBrowser2 brow = pUnk as IWebBrowser2;
-
-            try
-            {
-              if (brow != null)
-              {
-                processor.Process(brow);
-                if (!processor.Continue())
-                {
-                  break;
-                }
-                // free brow
-                Marshal.ReleaseComObject(brow);
+	        try
+	        {
+	          object pUnk;
+	          int fetched;
+	          const int MAX_FETCH_COUNT = 1;
+	
+	          // get the first embedded object
+	          // pUnk alloc
+	          hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+	          Marshal.ThrowExceptionForHR(hr);
+	
+	          while (hr == 0)
+	          {
+	            // Query Interface pUnk for the IWebBrowser2 interface
+	            IWebBrowser2 brow = pUnk as IWebBrowser2;
+	
+	            try
+	            {
+	              if (brow != null)
+	              {
+	                processor.Process(brow);
+	                if (!processor.Continue())
+	                {
+	                  break;
+	                }
+	                // free brow
+	                ReleaseComObjectButIgnoreNull(brow);
+	              }
+	            }
+	            catch
+	            {
+	             // free brow
+                ReleaseComObjectButIgnoreNull(brow);
+                ReleaseComObjectButIgnoreNull(pUnk);	            
               }
-            }
-            catch
-            {
-              if (brow != null)
-              {
-                // free brow
-                Marshal.ReleaseComObject(brow);
-              }            
-              // pUnk free
-              Marshal.ReleaseComObject(pUnk);
-            }
 
-            // pUnk free
-            Marshal.ReleaseComObject(pUnk);
-
-            // get the next embedded object
-            // pUnk alloc
-            hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-            Marshal.ThrowExceptionForHR(hr);
-          }
-        }
-        finally
-        {
-          // eu free
-          Marshal.ReleaseComObject(eu);
+	            // pUnk free
+	            ReleaseComObjectButIgnoreNull(pUnk);	            
+	
+	            // get the next embedded object
+	            // pUnk alloc
+	            hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+	            Marshal.ThrowExceptionForHR(hr);
+	          }
+	        }
+	        finally
+	        {
+	          // eu free
+	          ReleaseComObjectButIgnoreNull(eu);
+	        }
         }
       }
     }
 
+    public static void ReleaseComObjectButIgnoreNull(object comObject)
+    {
+    	if (comObject != null)
+    	{
+    		Marshal.ReleaseComObject(comObject);
+    	}
+    }
+    
     /// <summary>
     /// This method incapsulates all the details of getting
     /// the full length text in a StringBuffer and returns
