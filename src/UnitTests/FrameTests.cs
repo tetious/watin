@@ -97,6 +97,13 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void FrameHTMLShouldNotReturnParentHTML()
+    {
+      Frame contentsFrame = ie.Frame(Find.ByName("contents"));
+      Assert.AreNotEqual(ie.Html, contentsFrame.Html, "Html should be from the frame page.");
+    }
+
+    [Test]
     public void Frames()
     {
       const int expectedFramesCount = 2;
@@ -133,9 +140,7 @@ namespace WatiN.UnitTests
       UtilityClass.DumpFrames(ie);
     }
     
-    private static void AssertFindFrame
-      
-      (IE ie, Attribute findBy, string expectedFrameName)
+    private static void AssertFindFrame(IE ie, Attribute findBy, string expectedFrameName)
     {
       Frame frame = null;
       if (findBy is Url)

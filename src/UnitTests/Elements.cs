@@ -1080,11 +1080,14 @@ namespace WatiN.UnitTests
         Assert.IsFalse(ie1.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
         Assert.IsFalse(ie1.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
 
-        ie1.TextField("textfieldid").TypeText("test");
+        const string text = "test";
+        ie1.TextField("textfieldid").TypeText(text);
         
         Assert.IsTrue(ie1.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
         Assert.IsTrue(ie1.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
         Assert.IsTrue(ie1.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
+        
+        Assert.AreEqual(text, ie1.TextField("txtKeycodeId").Value, "KeyUp event expected");
       }
     }
 
