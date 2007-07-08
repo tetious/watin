@@ -733,7 +733,6 @@ namespace WatiN.Core
     {
       CheckThreadApartmentStateIsSTA();
 
-
       MoveMouseToTopLeft();
 
       if (createInNewProcess)

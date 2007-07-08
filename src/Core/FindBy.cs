@@ -163,23 +163,38 @@ namespace WatiN.Core
   public class UriComparer : BaseComparer
   {
     private Uri uriToCompareWith;
-    
+    private bool _ignoreQuery = false;
+
+    /// <summary>
+    /// Constructor, querystring will not be ignored in comparisons.
+    /// </summary>
+    /// <param name="uri">Uri for comparison.</param>
     public UriComparer(Uri uri)
+      : this(uri, false)
+    { }
+
+    /// <summary>
+    /// Constructor, querystring can be ignored or not ignored in comparisons.
+    /// </summary>
+    /// <param name="uri">Uri for comparison.</param>
+    /// <param name="ignoreQuery">Set to true to ignore querystrings in comparison.</param>
+    public UriComparer(Uri uri, bool ignoreQuery)
     {
       if (uri == null)
       {
-        throw new ArgumentNullException("uri");        
+        throw new ArgumentNullException("uri");
       }
       uriToCompareWith = uri;
+      _ignoreQuery = ignoreQuery;
     }
-    
+
     public override bool Compare(string value)
     {
       if (UtilityClass.IsNullOrEmpty(value)) return false;
-      
+
       return Compare(new Uri(value));
     }
-    
+
     /// <summary>
     /// Compares the specified Uri.
     /// </summary>
@@ -187,9 +202,26 @@ namespace WatiN.Core
     /// <returns><c>true</c> when equal; otherwise <c>false</c></returns>
     public bool Compare(Uri url)
     {
-      return uriToCompareWith.Equals(url);
+      if (!_ignoreQuery)
+      {
+        // compare without modification
+        return uriToCompareWith.Equals(url);
+      }
+      else
+      {
+        // trim querystrings
+        string trimmedUrl = TrimQueryString(url);
+        string trimmedCompareUrl = TrimQueryString(uriToCompareWith);
+        // compare trimmed urls.
+        return (string.Compare(trimmedUrl, trimmedCompareUrl, true) == 0);
+      }
     }
-    
+
+    private static string TrimQueryString(Uri url)
+    {
+      return url.ToString().Split('?')[0];
+    }
+
     public override string ToString()
     {
       return GetType().ToString() + " compares with: " + uriToCompareWith.ToString();
@@ -879,6 +911,16 @@ namespace WatiN.Core
     public Url(string url) : this(new Uri(url))
     {}
     
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Url"/> class.
+    /// </summary>
+    /// <param name="url">The (well-formed) URL to find.</param>
+    /// <param name="ignoreQuery">Set to true to ignore querystring when comparing.</param>
+    public Url(string url, bool ignoreQuery)
+      : this(new Uri(url), ignoreQuery)
+    { }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
@@ -890,9 +932,19 @@ namespace WatiN.Core
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
     /// <param name="uri">The URL to find.</param>
-    public Url(Uri uri) : base(attributeName, uri.ToString())
+    public Url(Uri uri)
+      : this(uri, false)
+    { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Url"/> class.
+    /// </summary>
+    /// <param name="uri">The URL to find.</param>
+    /// <param name="ignoreQuery">Set to true to ignore querystring when comparing.</param>
+    public Url(Uri uri, bool ignoreQuery)
+      : base(attributeName, uri.ToString())
     {
-      comparer = new UriComparer(uri);
+      comparer = new UriComparer(uri, ignoreQuery);
     }
 
     /// <summary>
@@ -1157,6 +1209,17 @@ namespace WatiN.Core
     {
       return new Url(url);
     }
+
+    /// <param name="url">The well-formed url to find.</param>
+    /// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
+    /// <returns><see cref="Url" /></returns>
+    /// <example>
+    /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net", true)).Url</code>
+    /// </example>
+    public static Url ByUrl(string url, bool ignoreQuery)
+    {
+      return new Url(url, ignoreQuery);
+    }
     
     /// <param name="uri">The uri to find.</param>
     /// <returns><see cref="Url" /></returns>
@@ -1167,7 +1230,18 @@ namespace WatiN.Core
     {
       return new Url(uri);
     }
-    
+
+    /// <param name="uri">The uri to find.</param>
+    /// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
+    /// <returns><see cref="Url" /></returns>
+    /// <example>
+    /// <code>ie.Link(Find.ByUrl(new Uri("watin.sourceforge.net", true))).Url</code>
+    /// </example>
+    public static Url ByUrl(Uri uri, bool ignoreQuery)
+    {
+      return new Url(uri, ignoreQuery);
+    }
+
     /// <param name="regex">Regular expression to find a matching Url.</param>
     /// <returns><see cref="Url" /></returns>
     /// <example>

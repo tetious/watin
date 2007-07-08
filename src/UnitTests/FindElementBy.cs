@@ -151,9 +151,14 @@ namespace WatiN.UnitTests
     {
       string url = WatiNURI.ToString();
       Url value = Find.ByUrl(url);
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Url class should inherit Attribute class" );
 
+      Assert.IsInstanceOfType(typeof (Attribute), value, "Url class should inherit Attribute class");
+      AssertUrlValue(value);
+      
+      // make sure overload also works
+      value = Find.ByUrl(url, true);
+
+      Assert.IsInstanceOfType(typeof (Attribute), value, "Url class should inherit Attribute class");
       AssertUrlValue(value);
     }
 
@@ -161,12 +166,18 @@ namespace WatiN.UnitTests
     public void FindingEmptyUrlNotAllowed()
     {
       new Url(String.Empty);
+
+      new Url(String.Empty, true);
     }
     
     [Test]
     public void FindByUri()
     {
       Url value = new Url(WatiNURI);
+      AssertUrlValue(value);
+
+      // make sure the ignore querystring constructer also works.
+      value = new Url(WatiNURI, true);
       AssertUrlValue(value);
     }
     
@@ -725,7 +736,34 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare(new Uri("file://html/main.html")), "Uri: Something completely different should not match");
       Assert.IsFalse(comparer.Compare((Uri)null), "Uri: null should not match");
     }
-    
+
+    [Test]
+    public void IgnoreQueryStringCompareWithQueryStringInValueToBeFound()
+    {
+      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net/here.aspx?query"), true);
+
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/here.aspx"), "Uri: Match ignoring querystring.");
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/here.aspx?query"),
+                    "Uri: Match ignoring querystring (include querystring in compare).");
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/here.aspx?badquery"),
+                    "Uri: Match ignoring querystring (include non-matching querystring).");
+      Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net"),
+                     "Uri: Match incorrectly when ignoring querystring.");
+      Assert.IsFalse(comparer.Compare("http://www.something.completely.different.net"),
+                     "Uri: Match incorrectly when ignoring querystring.");    
+    }
+
+    [Test]
+    public void IgnoreQueryStringCompareWithNoQueryStringInValueToBeFound()
+    {
+      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"),true);
+
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/"), "Same site should match");
+
+      Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net/here.aspx?query"), "Should ignore query string");
+      Assert.IsFalse(comparer.Compare("http://www.microsoft.com/"), "Should ignore completely different site");
+    }
+
     [Test, ExpectedException(typeof(ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
