@@ -26,6 +26,7 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System.Collections.Specialized;
   using System.Reflection;
   using System.Text.RegularExpressions;
 
@@ -399,11 +400,31 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Does a keydown on this element.
+    /// </summary>
+    public void KeyDown(char character)
+    {
+      FireEvent("onKeyDown", GetKeyCodeEventProperty(character));
+    }
+
+    /// <summary>
     /// Does a keyspress on this element.
     /// </summary>
     public void KeyPress()
     {
       FireEvent("onKeyPress");
+    }
+
+    public void KeyPress(char character)
+    {
+      FireEvent("onKeyPress", GetKeyCodeEventProperty(character));
+    }
+
+    private static NameValueCollection GetKeyCodeEventProperty(char character)
+    {
+      NameValueCollection eventProperties = new NameValueCollection(1);
+      eventProperties.Add("keyCode",((int)character).ToString());
+      return eventProperties;
     }
 
     /// <summary>
@@ -413,6 +434,16 @@ namespace WatiN.Core
     {
       FireEvent("onKeyUp");
     }
+
+    /// <summary>
+    /// Does a keyup on this element.
+    /// </summary>
+    /// <param name="character">The character.</param>
+    public void KeyUp(char character)
+    {
+      FireEvent("onKeyUp", GetKeyCodeEventProperty(character));
+    }
+
 
     /// <summary>
     /// Fires the blur event on this element.
@@ -458,9 +489,22 @@ namespace WatiN.Core
     /// Fires the specified <paramref name="eventName"/> on this element
     /// and waits for it to complete.
     /// </summary>
+    /// <param name="eventName">Name of the event.</param>
     public void FireEvent(string eventName)
     {
-      fireEvent(eventName, true);
+      fireEvent(eventName, true, null);
+    }
+
+    /// <summary>
+    /// Fires the event. The <paramref name="eventProperties" /> collection
+    /// can be used to set values of the event object in the browser to 
+    /// full fill the needs of javascript attached to the event handler.
+    /// </summary>
+    /// <param name="eventName">Name of the event.</param>
+    /// <param name="eventProperties">The event properties that need to be set.</param>
+    public void FireEvent(string eventName, NameValueCollection eventProperties)
+    {
+      fireEvent(eventName, true, eventProperties);
     }
 
     /// <summary>
@@ -468,15 +512,24 @@ namespace WatiN.Core
     /// </summary>
     public void FireEventNoWait(string eventName)
     {
-      fireEvent(eventName, false);
+      fireEvent(eventName, false, null);
     }
 
-    private void fireEvent(string eventName, bool waitForComplete)
+    private void fireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
     {
       if (!Enabled) { throw new ElementDisabledException(Id); }
 
       Highlight(true);
-      UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
+
+      if (eventProperties == null)
+      {
+        UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
+      }
+      else
+      {
+        UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
+      }
+
       if (waitForComplete) {WaitForComplete();}
       Highlight(false);
     }

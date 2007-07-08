@@ -210,11 +210,14 @@ namespace WatiN.Core
         //TODO: Make typing speed a variable
         //        Thread.Sleep(0); 
 
-        setValue(Value + value.Substring(i, 1));
+        string subString = value.Substring(i, 1);
+        char character = char.Parse(subString);
+        
+        setValue(Value + subString);
 
-        if (doKeydown) { KeyDown(); }
-        if (doKeyPress) { KeyPress(); }
-        if (doKeyUp) { KeyUp(); }
+        if (doKeydown) { KeyDown(character); }
+        if (doKeyPress) { KeyPress(character); }
+        if (doKeyUp) { KeyUp(character); }
       }
     }
 

@@ -23,6 +23,7 @@ using mshtml;
 namespace WatiN.Core
 {
   using System.Collections;
+  using System.Collections.Specialized;
   using System.Text;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
@@ -231,6 +232,20 @@ namespace WatiN.Core
     /// <param name="eventName">Name of the event to fire</param>
     public static void FireEvent(DispHTMLBaseElement element, string eventName)
     {
+      NameValueCollection collection = new NameValueCollection();
+      collection.Add("button","1");
+
+      FireEvent(element, eventName, collection);
+    }
+
+    /// <summary>
+    /// Fires the given event on the given element.
+    /// </summary>
+    /// <param name="element">Element to fire the event on</param>
+    /// <param name="eventName">Name of the event to fire</param>
+    /// <param name="eventObjectProperties">The event object properties.</param>
+    public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
+    {
       // TODO: Passing the eventarguments in a new param of type array. This array
       //       holds 0 or more name/value pairs where the name is a property of the event object
       //       and the value is the value that's assigned to the property.
@@ -238,7 +253,16 @@ namespace WatiN.Core
       // Execute the JScript to fire the event inside the Browser.
       StringBuilder scriptCode = new StringBuilder();
       scriptCode.Append("var newEvt = document.createEventObject();");
-      scriptCode.Append("newEvt.button = 1;");
+
+      for (int index = 0; index < eventObjectProperties.Count; index++)
+      {
+        scriptCode.Append("newEvt.");
+        scriptCode.Append(eventObjectProperties.GetKey(index));
+        scriptCode.Append(" = ");
+        scriptCode.Append(eventObjectProperties.GetValues(index)[0]);
+        scriptCode.Append(";");
+      }
+
       scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
 
       try
@@ -249,12 +273,21 @@ namespace WatiN.Core
       catch (RunScriptException)
       {
         // In a cross domain automation scenario a System.UnauthorizedAccessException 
-        // is thrown. The following code works, but setting the event properties
-        // has no effect so that is left out.
+        // is thrown. The following code doesn't seem to have any effect,
+        // but maybe someday MicroSoft fixes the issue... so I wrote the code anyway.
         object dummyEvt = null;
-        //      IHTMLEventObj2 mouseDownEvent = (IHTMLEventObj2)parentEvt;
-        //      mouseDownEvent.button = 1;
         object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
+        
+        IHTMLEventObj2 eventObj = (IHTMLEventObj2)parentEvt;
+
+        for (int index = 0; index < eventObjectProperties.Count; index++)
+        {
+          string property = eventObjectProperties.GetKey(index);
+          string value = eventObjectProperties.GetValues(index)[0];
+
+          eventObj.setAttribute(property, value, 0);
+        }
+
         element.FireEvent(eventName, ref parentEvt);
       }
     }
