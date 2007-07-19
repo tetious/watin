@@ -94,6 +94,7 @@ Copyright 2006-2007 Jeroen van Menen
             </references>
         </csc>
         
+        <copy file="${libraries.dir}\nunit.framework.dll" todir="${bin.dir}" />
         <copy file="${libraries.dir}\Rhino.Mocks.dll" todir="${bin.dir}" />
         
         <call target="copy-testdata" />
