@@ -16,26 +16,24 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
-using mshtml;
-using NUnit.Framework;
-
-using WatiN.Core;
-using WatiN.Core.Interfaces;
-using Attribute=WatiN.Core.Attribute;
-
 namespace WatiN.UnitTests
 {
+  using System;
   using System.Collections;
+  using System.Collections.Specialized;
+  using System.Text.RegularExpressions;
+  using mshtml;
   using Rhino.Mocks;
+  using NUnit.Framework;
+  using WatiN.Core;
   using WatiN.Core.Exceptions;
+  using WatiN.Core.Interfaces;
+  using Is=NUnit.Framework.SyntaxHelpers.Is;
 
   [TestFixture]
   public class FindElementBy : WatiNTest
   {
-    const string href = "href";
+    private const string href = "href";
 
     [Test]
     public void FindByFor()
@@ -43,17 +41,20 @@ namespace WatiN.UnitTests
       const string htmlfor = "htmlfor";
 
       For value = Find.ByFor("foridvalue");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "For class should inherit Attribute class" );
 
-      Assert.AreEqual(htmlfor, value.AttributeName, "Wrong attributename");
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "For class should inherit Attribute class");
+
+      Assert.That(value.AttributeName, Is.EqualTo(htmlfor), "Wrong attributename");
       Assert.AreEqual("foridvalue", value.Value, "Wrong value");
-      
+
       Regex regex = new Regex("^id");
       value = Find.ByFor(regex);
       TestAttributeBag attributeBag = new TestAttributeBag(htmlfor, "idvalue");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex ^id should match");
+
+      value = Find.ByFor(new StringContainsAndCaseInsensitiveComparer("VAl"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
@@ -61,25 +62,29 @@ namespace WatiN.UnitTests
     {
       Id value = Find.ById("idvalue");
 
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Id class should inherit Attribute class" );
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Id class should inherit Attribute class");
 
       const string id = "id";
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
+
+      TestAttributeBag attributeBag = new TestAttributeBag("id", "idvalue");
+      value = Find.ById(new StringContainsAndCaseInsensitiveComparer("Val"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
     public void IdWithRegexAndComparer()
     {
       MockRepository mocks = new MockRepository();
-      ICompare comparer = (ICompare) mocks.CreateMock(typeof(ICompare));
-      IAttributeBag attributeBag = (IAttributeBag) mocks.CreateMock(typeof(IAttributeBag));
+      ICompare comparer = (ICompare) mocks.CreateMock(typeof (ICompare));
+      IAttributeBag attributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
 
       Expect.Call(attributeBag.GetValue("id")).Return("idvalue");
-      
+
       Expect.Call(attributeBag.GetValue("id")).Return("MyMockComparer");
       Expect.Call(comparer.Compare("MyMockComparer")).Return(true);
-      
+
       mocks.ReplayAll();
 
       Id value = Find.ById(new Regex("lue$"));
@@ -90,60 +95,70 @@ namespace WatiN.UnitTests
 
       mocks.VerifyAll();
     }
-    
+
     [Test]
     public void FindByName()
     {
       Name value = Find.ByName("namevalue");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Name class should inherit Attribute class" );
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Name class should inherit Attribute class");
 
       const string name = "name";
       Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("namevalue", value.Value, "Wrong value");
-      
+
       Regex regex = new Regex("lue$");
       value = Find.ByName(regex);
       TestAttributeBag attributeBag = new TestAttributeBag(name, "namevalue");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
+
+      value = Find.ByName(new StringContainsAndCaseInsensitiveComparer("eVAl"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
     public void FindByText()
     {
       Core.Text value = Find.ByText("textvalue");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Text class should inherit Attribute class" );
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Text class should inherit Attribute class");
 
       const string innertext = "innertext";
       Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("textvalue", value.Value, "Wrong value");
-      
+
       Regex regex = new Regex("lue$");
       value = Find.ByText(regex);
       TestAttributeBag attributeBag = new TestAttributeBag(innertext, "textvalue");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
+
+      value = Find.ByText(new StringContainsAndCaseInsensitiveComparer("tVal"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+
     }
 
     [Test]
     public void FindByStyle()
     {
       const string attributeName = "background-color";
-      StyleAttribute value = Find.ByStyle(attributeName,"red");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "StyleAttribute class should inherit Attribute class" );
+      StyleAttribute value = Find.ByStyle(attributeName, "red");
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "StyleAttribute class should inherit Attribute class");
 
       const string fullAttributeName = "style.background-color";
       Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("red", value.Value, "Wrong value");
-      
+
       Regex regex = new Regex("een$");
       value = Find.ByStyle(attributeName, regex);
       TestAttributeBag attributeBag = new TestAttributeBag(fullAttributeName, "green");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex een$ should match");
+
+      value = Find.ByStyle(attributeName, new StringContainsAndCaseInsensitiveComparer("rEe"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
@@ -152,24 +167,28 @@ namespace WatiN.UnitTests
       string url = WatiNURI.ToString();
       Url value = Find.ByUrl(url);
 
-      Assert.IsInstanceOfType(typeof (Attribute), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Url class should inherit Attribute class");
       AssertUrlValue(value);
-      
+
       // make sure overload also works
       value = Find.ByUrl(url, true);
 
-      Assert.IsInstanceOfType(typeof (Attribute), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Url class should inherit Attribute class");
       AssertUrlValue(value);
+
+      TestAttributeBag attributeBag = new TestAttributeBag("href", url);
+      value = Find.ByUrl(new StringContainsAndCaseInsensitiveComparer("/watin.Sour"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
-    [Test, ExpectedException(typeof(UriFormatException))]
+    [Test, ExpectedException(typeof (UriFormatException))]
     public void FindingEmptyUrlNotAllowed()
     {
       new Url(String.Empty);
 
       new Url(String.Empty, true);
     }
-    
+
     [Test]
     public void FindByUri()
     {
@@ -180,12 +199,12 @@ namespace WatiN.UnitTests
       value = new Url(WatiNURI, true);
       AssertUrlValue(value);
     }
-    
+
     private static void AssertUrlValue(Url value)
     {
       Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
-      
+
       TestAttributeBag attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
 
       Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
@@ -194,7 +213,7 @@ namespace WatiN.UnitTests
       attributeBag = new TestAttributeBag(href, "http://www.microsoft.com");
       Assert.IsFalse(value.Compare(attributeBag), "Shouldn't match Microsoft");
       Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
-      
+
       attributeBag = new TestAttributeBag(href, null);
       Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
 
@@ -212,13 +231,13 @@ namespace WatiN.UnitTests
       Assert.IsTrue(value.Compare(attributeBag), "Regex ^http://watin should match");
     }
 
-    [Test, ExpectedException(typeof(UriFormatException))]
+    [Test, ExpectedException(typeof (UriFormatException))]
     public void FindByUrlInvalidParam()
     {
       Find.ByUrl("www.xyz.nl");
     }
 
-    [Test, ExpectedException(typeof(UriFormatException))]
+    [Test, ExpectedException(typeof (UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
       Url value = Find.ByUrl(WatiNURI.ToString());
@@ -233,44 +252,47 @@ namespace WatiN.UnitTests
       const string title = "title";
 
       Title value = Find.ByTitle("titlevalue");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Title class should inherit Attribute class" );
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Title class should inherit Attribute class");
 
       Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
-      
-      
+
+
       TestAttributeBag attributeBag = new TestAttributeBag(title, String.Empty);
       Assert.IsFalse(value.Compare(attributeBag), "Empty should not match");
 
       attributeBag = new TestAttributeBag(title, null);
       Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
-      
+
       attributeBag = new TestAttributeBag(title, "titlevalue");
- 
+
       Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
 
       value = Find.ByTitle("titl");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match titl");
-      
+
       value = Find.ByTitle("tItL");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match tItL");
 
       value = Find.ByTitle("lev");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match lev");
-      
+
       value = Find.ByTitle("alue");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match alue");
 
       Regex regex = new Regex("^titl");
       value = Find.ByTitle(regex);
       Assert.IsTrue(value.Compare(attributeBag), "Regex ^titl should match");
-      
+
       value = Find.ByTitle("titlevalue");
       attributeBag = new TestAttributeBag(title, "title");
 
       Assert.IsFalse(value.Compare(attributeBag), "Compare should not match title");
-      
+
+      attributeBag = new TestAttributeBag(title, "title");
+      value = Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("iTl"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
@@ -279,18 +301,21 @@ namespace WatiN.UnitTests
       const string valueAttrib = "value";
 
       Value value = Find.ByValue("valuevalue");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Value class should inherit Attribute class" );
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Value class should inherit Attribute class");
 
       Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
       Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
-      
+
       Regex regex = new Regex("lue$");
       value = Find.ByValue(regex);
       TestAttributeBag attributeBag = new TestAttributeBag(valueAttrib, "valuevalue");
-      
+
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
+
+      value = Find.ByValue(new StringContainsAndCaseInsensitiveComparer("eVal"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
@@ -299,82 +324,85 @@ namespace WatiN.UnitTests
       const string src = "src";
 
       Src value = Find.BySrc("image.gif");
-      
-      Assert.IsInstanceOfType(typeof(Attribute), value, "Src class should inherit Attribute class" );
+
+      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Src class should inherit Attribute class");
 
       Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("image.gif", value.Value, "Wrong value");
-      
+
       TestAttributeBag attributeBag = new TestAttributeBag(src, "/images/image.gif");
       Assert.IsFalse(value.Compare(attributeBag), "Should not match /images/image.gif");
 
       attributeBag = new TestAttributeBag(src, "image.gif");
       Assert.IsTrue(value.Compare(attributeBag), "Should match image.gif");
-      
+
       Regex regex = new Regex("image.gif$");
       value = Find.BySrc(regex);
       attributeBag = new TestAttributeBag(src, "/images/image.gif");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex image.gif$ should match");
+
+      value = Find.BySrc(new StringContainsAndCaseInsensitiveComparer("es/Im"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullAttribute()
     {
-      new Attribute(null,"idvalue");
+      new Core.Attribute(null, "idvalue");
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullValue()
     {
-      new Attribute("id",(string)null);
+      new Core.Attribute("id", (string) null);
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNulls()
     {
-      new Attribute(null,(string)null);
+      new Core.Attribute(null, (string) null);
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullRegex()
     {
-      new Attribute("id",(Regex)null);
+      new Core.Attribute("id", (Regex) null);
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullsRegex()
     {
-      new Attribute(null,(Regex)null);
+      new Core.Attribute(null, (Regex) null);
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithEmptyAttribute()
     {
-      new Attribute(string.Empty,"idvalue");
+      new Core.Attribute(string.Empty, "idvalue");
     }
 
     [Test]
     public void NewAttributeWithEmptyValue()
     {
-      Attribute attribute = new Attribute("id",string.Empty);
+      Core.Attribute attribute = new Core.Attribute("id", string.Empty);
       Assert.IsEmpty(attribute.Value);
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithEmpties()
     {
-      new Attribute(string.Empty,string.Empty);
+      new Core.Attribute(string.Empty, string.Empty);
     }
-    
+
     [Test]
     public void FindByCustom()
     {
       const string id = "id";
-      Attribute value = Find.ByCustom(id,"idvalue");
+      Core.Attribute value = Find.ByCustom(id, "idvalue");
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
-      
+
       TestAttributeBag attributeBag = new TestAttributeBag(id, "idvalue");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
 
@@ -386,31 +414,34 @@ namespace WatiN.UnitTests
 
       attributeBag = new TestAttributeBag(id, "value");
       Assert.IsFalse(value.Compare(attributeBag), "Compare should not partial match value");
-      
+
       Regex regex = new Regex("lue$");
       value = Find.ByCustom(id, regex);
       attributeBag = new TestAttributeBag(id, "idvalue");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
+
+      value = Find.ByCustom(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
+      Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
     [Test]
     public void ElementUrlPartialValue()
     {
       ElementUrlPartialValue value = new ElementUrlPartialValue("watin.sourceforge");
-      
-      Assert.IsInstanceOfType(typeof(Url), value, "ElementUrlPartialValue class should inherit Url class" );
+
+      Assert.IsInstanceOfType(typeof (Url), value, "ElementUrlPartialValue class should inherit Url class");
 
       Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("watin.sourceforge", value.Value, "Wrong value");
-      
+
       TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge");
       Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
-      
+
       value = new ElementUrlPartialValue("watin.sourceforge");
 
       attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
-      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match title");      
+      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match title");
 
       attributeBag = new TestAttributeBag(href, "www.microsoft.com");
       Assert.IsFalse(value.Compare(attributeBag), "Compare should not match title");
@@ -420,12 +451,12 @@ namespace WatiN.UnitTests
         string partialUrl = MainURI.ToString();
         partialUrl = partialUrl.Remove(0, partialUrl.Length - 8);
 
-        using(IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl)))
+        using (IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl)))
         {
           Assert.AreEqual(MainURI, ie.Uri);
         }
       }
-    }   
+    }
   }
 
   public class ElementUrlPartialValue : Url
@@ -434,7 +465,7 @@ namespace WatiN.UnitTests
 
     public ElementUrlPartialValue(string url) : base("http://www.fakeurl.com")
     {
-      this.url = url;  
+      this.url = url;
       comparer = new StringContainsAndCaseInsensitiveComparer(url);
     }
 
@@ -443,7 +474,7 @@ namespace WatiN.UnitTests
       get { return url; }
     }
   }
-  
+
   [TestFixture]
   public class StringComparerTests
   {
@@ -451,9 +482,9 @@ namespace WatiN.UnitTests
     public void ConstructorWithValue()
     {
       ICompare comparer = new WatiN.Core.StringComparer("A test value");
-      
+
       Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
-      
+
       Assert.IsFalse(comparer.Compare("a test Value"), "Match should be case sensitive");
       Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
       Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
@@ -461,33 +492,33 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
       new WatiN.Core.StringComparer(null);
     }
-    
+
     [Test]
     public void ConstuctorWithStringEmpty()
     {
       ICompare comparer = new WatiN.Core.StringComparer(String.Empty);
-      
+
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
-      
+
       Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
+
     [Test]
     public void ToStringTest()
     {
       WatiN.Core.StringComparer comparer = new WatiN.Core.StringComparer("A test value");
-      
+
       Assert.AreEqual("WatiN.Core.StringComparer compares with: A test value", comparer.ToString());
     }
   }
-  
+
   [TestFixture]
   public class StringContainsAndCaseInsensitiveComparerTests
   {
@@ -495,43 +526,44 @@ namespace WatiN.UnitTests
     public void ConstructorWithValue()
     {
       ICompare comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
-      
+
       Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
       Assert.IsTrue(comparer.Compare("a test Value"), "Case should be ignored");
       Assert.IsTrue(comparer.Compare("A test value 2"), "Exact match plus more should pass.");
-      
+
       Assert.IsFalse(comparer.Compare("test"), "A part of the Value should not match");
       Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
       new StringContainsAndCaseInsensitiveComparer(null);
     }
-    
+
     [Test]
     public void ConstuctorWithStringEmpty()
     {
       ICompare comparer = new StringContainsAndCaseInsensitiveComparer(String.Empty);
-      
+
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
-      
+
       Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
+
     [Test]
     public void ToStringTest()
     {
       StringContainsAndCaseInsensitiveComparer comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
-      
-      Assert.AreEqual("WatiN.Core.StringContainsAndCaseInsensitiveComparer compares with: a test value", comparer.ToString());
+
+      Assert.AreEqual("WatiN.Core.StringContainsAndCaseInsensitiveComparer compares with: a test value",
+                      comparer.ToString());
     }
   }
-  
+
   [TestFixture]
   public class BoolComparerTests
   {
@@ -558,7 +590,7 @@ namespace WatiN.UnitTests
     {
       Assert.IsFalse(new BoolComparer(false).Compare(String.Empty), String.Empty);
     }
-    
+
     [Test]
     public void CompareToFalse()
     {
@@ -575,16 +607,16 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class NotAttributeTests
   {
-    MockRepository mocks;
-    Attribute attribute;
-    IAttributeBag attributeBag;
+    private MockRepository mocks;
+    private Core.Attribute attribute;
+    private IAttributeBag attributeBag;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
-      attribute = (Attribute) mocks.DynamicMock(typeof(Attribute),"fake","");
-      attributeBag = (IAttributeBag) mocks.DynamicMock(typeof(IAttributeBag));
+      attribute = (Core.Attribute) mocks.DynamicMock(typeof (Core.Attribute), "fake", "");
+      attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
 
       SetupResult.For(attribute.Compare(null)).IgnoreArguments().Return(false);
       mocks.ReplayAll();
@@ -606,13 +638,12 @@ namespace WatiN.UnitTests
     [Test]
     public void AttributeOperatorNotOverload()
     {
-      Attribute attributenot = !attribute;
+      Core.Attribute attributenot = !attribute;
 
-      Assert.IsInstanceOfType(typeof(Not), attributenot, "Expected Not instance");
+      Assert.IsInstanceOfType(typeof (Not), attributenot, "Expected Not instance");
       Assert.IsTrue(attributenot.Compare(attributeBag));
     }
   }
-
 
 
   [TestFixture]
@@ -622,43 +653,43 @@ namespace WatiN.UnitTests
     public void ConstructorWithValue()
     {
       ICompare comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
-      
-      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");      
+
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
       Assert.IsTrue(comparer.Compare("a test Value"), "Match should be case insensitive");
-      
+
       Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
       Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
       Assert.IsFalse(comparer.Compare("completely different"), "Something completely different should not match");
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
       new StringEqualsAndCaseInsensitiveComparer(null);
     }
-    
+
     [Test]
     public void ConstuctorWithStringEmpty()
     {
       ICompare comparer = new StringEqualsAndCaseInsensitiveComparer(String.Empty);
-      
+
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
-      
+
       Assert.IsFalse(comparer.Compare(" "), "None Empty string should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
+
     [Test]
     public void ToStringTest()
     {
       StringEqualsAndCaseInsensitiveComparer comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
-      
+
       Assert.AreEqual("A test value", comparer.ToString());
     }
   }
-  
+
   [TestFixture]
   public class RegexComparerTests
   {
@@ -666,9 +697,9 @@ namespace WatiN.UnitTests
     public void ConstructorWithValue()
     {
       ICompare comparer = new RegexComparer(new Regex("^A test value$"));
-      
-      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");      
-      
+
+      Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
+
       Assert.IsFalse(comparer.Compare("a test Value"), "Match should be case sensitive");
       Assert.IsFalse(comparer.Compare("A test value 2"), "Exact match plus more should not pass.");
       Assert.IsFalse(comparer.Compare("test"), "Partial match should not match");
@@ -676,33 +707,33 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
       new RegexComparer(null);
     }
-    
+
     [Test]
     public void ConstuctorWithStringEmpty()
     {
       ICompare comparer = new RegexComparer(new Regex(String.Empty));
-      
+
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
       Assert.IsTrue(comparer.Compare(" "), "Any string should not match");
-      
+
       Assert.IsFalse(comparer.Compare(null), "null should not match");
     }
-    
+
     [Test]
     public void ToStringTest()
     {
       RegexComparer comparer = new RegexComparer(new Regex("^A test value$"));
-      
+
       Assert.AreEqual("WatiN.Core.RegexComparer matching against: ^A test value$", comparer.ToString());
     }
   }
-  
+
   [TestFixture]
   public class UriComparerTests
   {
@@ -710,31 +741,34 @@ namespace WatiN.UnitTests
     public void ConstructorWithValueAndStringCompare()
     {
       ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
-      
+
       // String Compare
-      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net"), "Exact match should pass.");      
+      Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net"), "Exact match should pass.");
       Assert.IsTrue(comparer.Compare("HTTP://watin.Sourceforge.net"), "Match should not be case sensitive");
 
-      Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net/index.html"), "Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net/index.html"),
+                     "Exact match plus more should not pass.");
       Assert.IsFalse(comparer.Compare("http://watin"), "Partial match should not match");
       Assert.IsFalse(comparer.Compare("file://html/main.html"), "Something completely different should not match");
       Assert.IsFalse(comparer.Compare(String.Empty), "String.Empty should not match");
       Assert.IsFalse(comparer.Compare(null), "String: null should not match");
     }
-    
+
     [Test]
     public void ConstructorWithValueAndUriCompare()
     {
       UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
-      
+
       // Uri Compare
-      Assert.IsTrue(comparer.Compare(new Uri("http://watin.sourceforge.net")), "Uri: Exact match should pass.");      
+      Assert.IsTrue(comparer.Compare(new Uri("http://watin.sourceforge.net")), "Uri: Exact match should pass.");
       Assert.IsTrue(comparer.Compare(new Uri("HTTP://watin.Sourceforge.net")), "Uri: Match should not be case sensitive");
 
-      Assert.IsFalse(comparer.Compare(new Uri("http://watin.sourceforge.net/index.html")), "Uri: Exact match plus more should not pass.");
+      Assert.IsFalse(comparer.Compare(new Uri("http://watin.sourceforge.net/index.html")),
+                     "Uri: Exact match plus more should not pass.");
       Assert.IsFalse(comparer.Compare(new Uri("http://watin")), "Uri: Partial match should not match");
-      Assert.IsFalse(comparer.Compare(new Uri("file://html/main.html")), "Uri: Something completely different should not match");
-      Assert.IsFalse(comparer.Compare((Uri)null), "Uri: null should not match");
+      Assert.IsFalse(comparer.Compare(new Uri("file://html/main.html")),
+                     "Uri: Something completely different should not match");
+      Assert.IsFalse(comparer.Compare((Uri) null), "Uri: null should not match");
     }
 
     [Test]
@@ -750,13 +784,13 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare("http://watin.sourceforge.net"),
                      "Uri: Match incorrectly when ignoring querystring.");
       Assert.IsFalse(comparer.Compare("http://www.something.completely.different.net"),
-                     "Uri: Match incorrectly when ignoring querystring.");    
+                     "Uri: Match incorrectly when ignoring querystring.");
     }
 
     [Test]
     public void IgnoreQueryStringCompareWithNoQueryStringInValueToBeFound()
     {
-      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"),true);
+      UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"), true);
 
       Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/"), "Same site should match");
 
@@ -764,29 +798,29 @@ namespace WatiN.UnitTests
       Assert.IsFalse(comparer.Compare("http://www.microsoft.com/"), "Should ignore completely different site");
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
       new UriComparer(null);
     }
-    
-    [Test, ExpectedException(typeof(UriFormatException))]
+
+    [Test, ExpectedException(typeof (UriFormatException))]
     public void StringCompareOnlyExceptsValidUrl()
     {
       ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
 
       comparer.Compare("watin");
     }
-    
+
     [Test]
     public void ToStringTest()
     {
       UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
-      
+
       Assert.AreEqual("WatiN.Core.UriComparer compares with: http://watin.sourceforge.net/", comparer.ToString());
     }
   }
-  
+
   [TestFixture]
   public class ElementTagTests
   {
@@ -796,7 +830,7 @@ namespace WatiN.UnitTests
       ElementTag elementTag = new ElementTag("tagname", "");
       Assert.IsFalse(elementTag.Compare(null));
     }
-    
+
     [Test]
     public void CompareObjectNotImplementingIHTMLElementShouldReturnFalse()
     {
@@ -816,28 +850,28 @@ namespace WatiN.UnitTests
       Assert.IsFalse(ElementTag.IsValidElement(new object(), new ArrayList()));
     }
   }
-  
+
   [TestFixture]
   public class FindByMultipleAttributes
   {
-    MockRepository mocks;
-    IAttributeBag mockAttributeBag;
+    private MockRepository mocks;
+    private IAttributeBag mockAttributeBag;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
-      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+      mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
     }
 
     [Test]
     public void AndTrue()
     {
-      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("X");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("Cancel");
-      
+
       mocks.ReplayAll();
 
       Assert.IsTrue(findBy.Compare(mockAttributeBag));
@@ -848,7 +882,7 @@ namespace WatiN.UnitTests
     [Test]
     public void AndFalseFirstSoSecondPartShouldNotBeEvaluated()
     {
-      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Y");
 
@@ -862,7 +896,7 @@ namespace WatiN.UnitTests
     [Test]
     public void AndFalseSecond()
     {
-      Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       attributeBag.Add("value", "OK");
@@ -872,49 +906,49 @@ namespace WatiN.UnitTests
     [Test]
     public void OrFirstTrue()
     {
-      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void OrSecondTrue()
     {
-      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void OrFalse()
     {
-      Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
-       
+
     [Test]
     public void AndOr()
     {
-      Attribute findByNames = Find.ByName("X").Or(Find.ByName("Y"));
-      Attribute findBy = Find.ByValue("Cancel").And(findByNames);
+      Core.Attribute findByNames = Find.ByName("X").Or(Find.ByName("Y"));
+      Core.Attribute findBy = Find.ByValue("Cancel").And(findByNames);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       attributeBag.Add("value", "Cancel");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void AndOrThroughOperatorOverloads()
     {
-      Attribute findBy = Find.ByName("X") & Find.ByValue("Cancel") | (Find.ByName("Z") & Find.ByValue("Cancel"));
+      Core.Attribute findBy = Find.ByName("X") & Find.ByValue("Cancel") | (Find.ByName("Z") & Find.ByValue("Cancel"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       attributeBag.Add("value", "OK");
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
-    
-    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+
+    [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
     public void OccurrenceShouldNotAcceptNegativeValue()
     {
       new Index(-1);
@@ -923,17 +957,17 @@ namespace WatiN.UnitTests
     [Test]
     public void Occurence0()
     {
-      Attribute findBy = new Index(0);
+      Core.Attribute findBy = new Index(0);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void Occurence2()
     {
-      Attribute findBy = new Index(2);
+      Core.Attribute findBy = new Index(2);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -941,11 +975,11 @@ namespace WatiN.UnitTests
       Assert.IsTrue(findBy.Compare(attributeBag));
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void OccurenceAndTrue()
     {
-      Attribute findBy = new Index(1).And(Find.ByName("Z"));
+      Core.Attribute findBy = new Index(1).And(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -955,11 +989,11 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceOr()
     {
-      Attribute findBy = new Index(2).Or(Find.ByName("Z"));
+      Core.Attribute findBy = new Index(2).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
-      
+
       attributeBag = new TestAttributeBag("name", "y");
       Assert.IsFalse(findBy.Compare(attributeBag));
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -968,7 +1002,7 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndFalse()
     {
-      Attribute findBy = new Index(1).And(Find.ByName("Y"));
+      Core.Attribute findBy = new Index(1).And(Find.ByName("Y"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -978,7 +1012,7 @@ namespace WatiN.UnitTests
     [Test]
     public void TrueAndOccurence()
     {
-      Attribute findBy = Find.ByName("Z").And(new Index(1));
+      Core.Attribute findBy = Find.ByName("Z").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -988,7 +1022,7 @@ namespace WatiN.UnitTests
     [Test]
     public void FalseAndOccurence()
     {
-      Attribute findBy = Find.ByName("Y").And(new Index(1));
+      Core.Attribute findBy = Find.ByName("Y").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -998,19 +1032,19 @@ namespace WatiN.UnitTests
     [Test]
     public void TrueAndOccurenceAndTrue()
     {
-      Attribute findBy = Find.ByName("Z").And(new Index(1)).And(Find.ByValue("text"));
+      Core.Attribute findBy = Find.ByName("Z").And(new Index(1)).And(Find.ByValue("text"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("some other text");
-      
+
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Y");
-      
+
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
-      
+
       mocks.ReplayAll();
 
       Assert.IsFalse(findBy.Compare(mockAttributeBag));
@@ -1024,16 +1058,16 @@ namespace WatiN.UnitTests
     [Test]
     public void OccurenceAndOrWithOrTrue()
     {
-      Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      Core.Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
-    
+
     [Test]
     public void OccurenceAndOrWithAndTrue()
     {
-      Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      Core.Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1042,10 +1076,10 @@ namespace WatiN.UnitTests
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
 
-    [Test, ExpectedException(typeof(ReEntryException))]
+    [Test, ExpectedException(typeof (ReEntryException))]
     public void RecusiveCallExceptionExpected()
     {
-      Attribute findBy = Find.ByCustom("tag", "value");
+      Core.Attribute findBy = Find.ByCustom("tag", "value");
       findBy.Or(findBy);
 
       Expect.Call(mockAttributeBag.GetValue("tag")).Return("val").Repeat.AtLeastOnce();
@@ -1059,22 +1093,22 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ComplexMultipleAttributes
   {
-    MockRepository mocks;
-    IAttributeBag mockAttributeBag;
+    private MockRepository mocks;
+    private IAttributeBag mockAttributeBag;
 
-    Attribute findBy1;
-    Attribute findBy2;
-    Attribute findBy3;
-    Attribute findBy4;
-    Attribute findBy5;
-    
-    Attribute findBy;
+    private Core.Attribute findBy1;
+    private Core.Attribute findBy2;
+    private Core.Attribute findBy3;
+    private Core.Attribute findBy4;
+    private Core.Attribute findBy5;
+
+    private Core.Attribute findBy;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
-      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+      mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
       findBy = null;
 
       findBy1 = Find.ByCustom("1", "true");
@@ -1143,24 +1177,24 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class EvenMoreComplexMultipleAttributes
   {
-    MockRepository mocks;
-    IAttributeBag mockAttributeBag;
+    private MockRepository mocks;
+    private IAttributeBag mockAttributeBag;
 
-    Attribute findBy1;
-    Attribute findBy2;
-    Attribute findBy3;
-    Attribute findBy4;
-    Attribute findBy5;
-    Attribute findBy6;
-    Attribute findBy7;
-    Attribute findBy8;
-    Attribute findBy;
+    private Core.Attribute findBy1;
+    private Core.Attribute findBy2;
+    private Core.Attribute findBy3;
+    private Core.Attribute findBy4;
+    private Core.Attribute findBy5;
+    private Core.Attribute findBy6;
+    private Core.Attribute findBy7;
+    private Core.Attribute findBy8;
+    private Core.Attribute findBy;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
-      mockAttributeBag = (IAttributeBag)mocks.CreateMock(typeof(IAttributeBag));
+      mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
       findBy = null;
 
       findBy1 = Find.ByCustom("1", "true");
@@ -1208,13 +1242,13 @@ namespace WatiN.UnitTests
       mocks.VerifyAll();
     }
   }
-  
+
   [TestFixture]
   public class ElementAttributeBagTests
   {
-    MockRepository mocks;
-    IHTMLStyle mockHTMLStyle;
-    IHTMLElement mockHTMLElement;
+    private MockRepository mocks;
+    private IHTMLStyle mockHTMLStyle;
+    private IHTMLElement mockHTMLElement;
 
     [SetUp]
     public void SetUp()
@@ -1241,27 +1275,27 @@ namespace WatiN.UnitTests
       mocks.ReplayAll();
 
       ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
-      
+
       Assert.AreEqual(cssText, attributeBag.GetValue("style"));
     }
-    
+
     [Test]
     public void StyleDotStyleAttributeNameShouldReturnStyleAttribute()
     {
       const string styleAttributeValue = "white";
       const string styleAttributeName = "color";
 
-      Expect.Call(mockHTMLStyle.getAttribute(styleAttributeName,0)).Return(styleAttributeValue);
+      Expect.Call(mockHTMLStyle.getAttribute(styleAttributeName, 0)).Return(styleAttributeValue);
       Expect.Call(mockHTMLElement.style).Return(mockHTMLStyle);
 
       mocks.ReplayAll();
 
       ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
-      
+
       Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
     }
   }
-  
+
   public class TestAttributeBag : IAttributeBag
   {
     public NameValueCollection attributeValues = new NameValueCollection();
@@ -1275,7 +1309,7 @@ namespace WatiN.UnitTests
     {
       attributeValues.Add(attributeName.ToLower(), value);
     }
-    
+
     public string GetValue(string attributename)
     {
       return attributeValues.Get(attributename.ToLower());
@@ -1285,8 +1319,8 @@ namespace WatiN.UnitTests
   [TestFixture]
   public class ElementFinderTests
   {
-    MockRepository mocks;
-    IElementCollection stubElementCollection;
+    private MockRepository mocks;
+    private IElementCollection stubElementCollection;
 
     [SetUp]
     public void SetUp()

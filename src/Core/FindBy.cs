@@ -16,11 +16,6 @@
 
 #endregion Copyright
 
-using System;
-using System.Text.RegularExpressions;
-using WatiN.Core.Interfaces;
-using WatiN.Core;
-
 namespace WatiN.Core.Interfaces
 {
   /// <summary>
@@ -31,7 +26,7 @@ namespace WatiN.Core.Interfaces
   {
     bool Compare(string value);
   }
-  
+
   public interface IAttributeBag
   {
     string GetValue(string attributename);
@@ -40,7 +35,10 @@ namespace WatiN.Core.Interfaces
 
 namespace WatiN.Core
 {
+  using System;
+  using System.Text.RegularExpressions;
   using WatiN.Core.Exceptions;
+  using WatiN.Core.Interfaces;
 
   public abstract class BaseComparer : ICompare
   {
@@ -56,31 +54,31 @@ namespace WatiN.Core
   public class StringComparer : BaseComparer
   {
     protected string valueToCompareWith;
-    
+
     public StringComparer(string value)
     {
       if (value == null)
       {
-        throw new ArgumentNullException("value");        
+        throw new ArgumentNullException("value");
       }
       valueToCompareWith = value;
     }
-    
+
     public override bool Compare(string value)
     {
       if (value != null && valueToCompareWith.Equals(value))
       {
         return true;
-      }      
+      }
       return false;
     }
- 
+
     public override string ToString()
     {
       return GetType().ToString() + " compares with: " + valueToCompareWith;
     }
   }
-  
+
   /// <summary>
   /// Class that supports a simple matching of two strings.
   /// </summary>
@@ -90,35 +88,36 @@ namespace WatiN.Core
     {
       valueToCompareWith = value.ToLower();
     }
-    
+
     public override bool Compare(string value)
     {
       if (value == null)
       {
         return false;
       }
-      
+
       if (valueToCompareWith == String.Empty & value != String.Empty)
       {
         return false;
       }
-      
+
       return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
     }
   }
-  
+
   /// <summary>
   /// Class that supports a simple matching of two strings.
   /// </summary>
   public class StringEqualsAndCaseInsensitiveComparer : StringComparer
-  {    
+  {
     public StringEqualsAndCaseInsensitiveComparer(string value) : base(value)
-    {}
-    
+    {
+    }
+
     public override bool Compare(string value)
     {
       if (value == null) return false;
-      
+
       return (String.Compare(value, valueToCompareWith, true) == 0);
     }
 
@@ -127,36 +126,36 @@ namespace WatiN.Core
       return valueToCompareWith;
     }
   }
-  
+
   /// <summary>
   /// Class that supports matching a regular expression with a string value.
   /// </summary>
   public class RegexComparer : BaseComparer
   {
     private Regex regexToUse;
-    
+
     public RegexComparer(Regex regex)
     {
       if (regex == null)
       {
-        throw new ArgumentNullException("regex");        
+        throw new ArgumentNullException("regex");
       }
       regexToUse = regex;
     }
-    
+
     public override bool Compare(string value)
     {
       if (value == null) return false;
-      
+
       return regexToUse.IsMatch(value);
     }
-    
+
     public override string ToString()
     {
       return GetType().ToString() + " matching against: " + regexToUse.ToString();
     }
   }
-  
+
   /// <summary>
   /// Class that supports comparing a <see cref="Uri"/> instance with a string value.
   /// </summary>
@@ -169,9 +168,9 @@ namespace WatiN.Core
     /// Constructor, querystring will not be ignored in comparisons.
     /// </summary>
     /// <param name="uri">Uri for comparison.</param>
-    public UriComparer(Uri uri)
-      : this(uri, false)
-    { }
+    public UriComparer(Uri uri) : this(uri, false)
+    {
+    }
 
     /// <summary>
     /// Constructor, querystring can be ignored or not ignored in comparisons.
@@ -200,7 +199,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="url">The Uri.</param>
     /// <returns><c>true</c> when equal; otherwise <c>false</c></returns>
-    public bool Compare(Uri url)
+    public virtual bool Compare(Uri url)
     {
       if (!_ignoreQuery)
       {
@@ -234,10 +233,11 @@ namespace WatiN.Core
   public class BoolComparer : StringEqualsAndCaseInsensitiveComparer
   {
     public BoolComparer(bool value) : base(value.ToString())
-    {}
+    {
+    }
   }
 
-  
+
   /// <summary>
   /// This is the base class for finding elements by a specified attribute. Use
   /// this class or one of it's subclasses to implement your own comparison logic.
@@ -258,35 +258,35 @@ namespace WatiN.Core
     protected Attribute orAttribute;
     protected Attribute lastAddedAttribute;
     protected Attribute lastAddedOrAttribute;
-    
+
 
     // This makes the Find.ByName() & Find.ByCustom() syntax possible
     // and is needed for the && operator
-    public static Attribute operator & (Attribute first, Attribute second) 
+    public static Attribute operator &(Attribute first, Attribute second)
     {
       return first.And(second);
     }
-    
+
     // This makes the Find.ByName() | Find.ByCustom() syntax possible
     // and is needed for the || operator
-    public static Attribute operator | (Attribute first, Attribute second) 
+    public static Attribute operator |(Attribute first, Attribute second)
     {
       return first.Or(second);
     }
 
     // This makes the Find.ByName() && Find.ByCustom() syntax possible
-    public static bool operator true (Attribute attribute) 
+    public static bool operator true(Attribute attribute)
     {
       return false;
     }
 
     // This makes the Find.ByName() || Find.ByCustom() syntax possible
-    public static bool operator false (Attribute attribute) 
+    public static bool operator false(Attribute attribute)
     {
       return false;
     }
 
-    public static Attribute operator ! (Attribute attribute)
+    public static Attribute operator !(Attribute attribute)
     {
       return new Not(attribute);
     }
@@ -350,7 +350,7 @@ namespace WatiN.Core
     {
       get { return valueToLookFor; }
     }
-   
+
     /// <summary>
     /// This methode implements an exact match comparison. If you want
     /// different behaviour, inherit this class or one of its subclasses and 
@@ -392,7 +392,7 @@ namespace WatiN.Core
     {
       LockCompare();
       bool returnValue;
-      
+
       try
       {
         returnValue = doCompare(attributeBag);
@@ -428,7 +428,7 @@ namespace WatiN.Core
       {
         returnValue = andAttribute.Compare(attributeBag);
       }
-      
+
       if (returnValue == false && orAttribute != null)
       {
         returnValue = orAttribute.Compare(attributeBag);
@@ -490,7 +490,7 @@ namespace WatiN.Core
         UnLockCompare();
         throw new ReEntryException(this);
       }
-      
+
       busyComparing = true;
     }
 
@@ -533,7 +533,7 @@ namespace WatiN.Core
 
       return this;
     }
-    
+
     /// <summary>
     /// Adds the specified attribute to the Or Attribute chain of a multiple <see cref="Attribute"/>
     /// element search. When calling Or or using the | or || operators, WatiN will always use
@@ -585,7 +585,7 @@ namespace WatiN.Core
     {
       return Value;
     }
-          
+
     private static void CheckArgumentNotNullOrEmpty(string argumentName, string argumentValue)
     {
       if (UtilityClass.IsNullOrEmpty(argumentValue))
@@ -593,6 +593,7 @@ namespace WatiN.Core
         throw new ArgumentNullException(argumentName, "Null and Empty are not allowed.");
       }
     }
+
     private static void CheckArgumentNotNull(string argumentName, object argumentValue)
     {
       if (argumentValue == null)
@@ -604,15 +605,15 @@ namespace WatiN.Core
 
   public class Not : Attribute
   {
-    Attribute attribute;
+    private Attribute attribute;
 
     public Not(Attribute attribute) : base("not", string.Empty)
     {
-      if (attribute ==  null)
+      if (attribute == null)
       {
         throw new ArgumentNullException("attribute");
       }
-        
+
       this.attribute = attribute;
     }
 
@@ -620,7 +621,7 @@ namespace WatiN.Core
     {
       bool result;
       LockCompare();
-  
+
       try
       {
         result = !(attribute.Compare(attributeBag));
@@ -628,8 +629,8 @@ namespace WatiN.Core
       finally
       {
         UnLockCompare();
-      }      
-  
+      }
+
       return result;
     }
   }
@@ -641,14 +642,15 @@ namespace WatiN.Core
   internal class AlwaysTrueAttribute : Attribute
   {
     public AlwaysTrueAttribute() : base("noAttribute", "")
-    {}
-    
+    {
+    }
+
     public override bool Compare(IAttributeBag attributeBag)
     {
       return true;
     }
   }
-  
+
   /// <summary>
   /// Class to find an element by it's id.
   /// </summary>  
@@ -666,23 +668,26 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="id">The id to find.</param>
     public Id(string id) : base(attributeName, id)
-    {}
-    
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Id"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Id(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Id"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Id(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
- 
+
   /// <summary>
   /// Class to find an element by the n-th index.
   /// Index counting is zero based.
@@ -699,17 +704,17 @@ namespace WatiN.Core
   {
     private int index;
     private int counter = -1;
-    
+
     public Index(int index) : base("index", index.ToString())
     {
-      if (index < 0 )
+      if (index < 0)
       {
         throw new ArgumentOutOfRangeException("index", index, "Should be zero or more.");
       }
 
       this.index = index;
     }
-    
+
     public override bool Compare(IAttributeBag attributeBag)
     {
       base.LockCompare();
@@ -720,7 +725,7 @@ namespace WatiN.Core
       {
         bool resultAnd = false;
         resultOr = false;
-      
+
         if (andAttribute != null)
         {
           resultAnd = andAttribute.Compare(attributeBag);
@@ -730,7 +735,7 @@ namespace WatiN.Core
         {
           counter++;
         }
-      
+
         if (orAttribute != null && resultAnd == false)
         {
           resultOr = orAttribute.Compare(attributeBag);
@@ -739,12 +744,12 @@ namespace WatiN.Core
       finally
       {
         base.UnLockCompare();
-      }      
+      }
 
       return (counter == index) || resultOr;
     }
   }
-  
+
   /// <summary>
   /// Class to find an element by it's name.
   /// </summary>
@@ -762,21 +767,24 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="name">The name to find.</param>
     public Name(string name) : base(attributeName, name)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Name"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Name(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Name"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Name(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
 
   /// <summary>
@@ -796,23 +804,26 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="text">The text to find.</param>
     public Text(string text) : base(attributeName, text)
-    {}
-    
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Text"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Text(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Text"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Text(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
-  
+
   /// <summary>
   /// Class to find an element by it's style property color.
   /// </summary>
@@ -832,23 +843,27 @@ namespace WatiN.Core
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="value">The value it should match.</param>
     public StyleAttribute(string styleAttributeName, string value) : base(attributeName + styleAttributeName, value)
-    {}
-    
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Text"/> class.
     /// </summary>
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="regex">The regex.</param>
     public StyleAttribute(string styleAttributeName, Regex regex) : base(attributeName + styleAttributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StyleAttribute"/> class.
     /// </summary>
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="comparer">The comparer.</param>
-    public StyleAttribute(string styleAttributeName, ICompare comparer) : base(attributeName + styleAttributeName, comparer)
-    {}
+    public StyleAttribute(string styleAttributeName, ICompare comparer)
+      : base(attributeName + styleAttributeName, comparer)
+    {
+    }
   }
 
   /// <summary>
@@ -868,28 +883,32 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="forId">For id to find.</param>
     public For(string forId) : base(attributeName, forId)
-    {}
-    
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="For"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public For(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="For"/> class.
     /// </summary>
     /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
     public For(Element element) : base(attributeName, element.Id)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="For"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public For(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
 
   /// <summary>
@@ -909,40 +928,40 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="url">The (well-formed) URL to find.</param>
     public Url(string url) : this(new Uri(url))
-    {}
-    
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
     /// <param name="url">The (well-formed) URL to find.</param>
     /// <param name="ignoreQuery">Set to true to ignore querystring when comparing.</param>
-    public Url(string url, bool ignoreQuery)
-      : this(new Uri(url), ignoreQuery)
-    { }
+    public Url(string url, bool ignoreQuery) : this(new Uri(url), ignoreQuery)
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Url(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
     /// <param name="uri">The URL to find.</param>
-    public Url(Uri uri)
-      : this(uri, false)
-    { }
+    public Url(Uri uri) : this(uri, false)
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Url"/> class.
     /// </summary>
     /// <param name="uri">The URL to find.</param>
     /// <param name="ignoreQuery">Set to true to ignore querystring when comparing.</param>
-    public Url(Uri uri, bool ignoreQuery)
-      : base(attributeName, uri.ToString())
+    public Url(Uri uri, bool ignoreQuery) : base(attributeName, uri.ToString())
     {
       comparer = new UriComparer(uri, ignoreQuery);
     }
@@ -952,7 +971,8 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Url(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
 
     /// <summary>
     /// Compares the specified Uri.
@@ -961,7 +981,7 @@ namespace WatiN.Core
     /// <returns><c>true</c> when equal; otherwise <c>false</c></returns>
     public bool Compare(Uri uri)
     {
-      return ((UriComparer)comparer).Compare(uri);
+      return ((UriComparer) comparer).Compare(uri);
     }
   }
 
@@ -987,20 +1007,22 @@ namespace WatiN.Core
     {
       comparer = new StringContainsAndCaseInsensitiveComparer(title);
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Title"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Title(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Title"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Title(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
 
   /// <summary>
@@ -1020,21 +1042,24 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="value">The value to find.</param>
     public Value(string value) : base(attributeName, value)
-    {}
-    
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Value"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Value(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Value"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Value(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
 
   /// <summary>
@@ -1054,21 +1079,24 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="name">The exact src to find.</param>
     public Src(string name) : base(attributeName, name)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Src"/> class.
     /// </summary>
     /// <param regex="regex">The regular expression to match with.</param>
     public Src(Regex regex) : base(attributeName, regex)
-    {}
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Src"/> class.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     public Src(ICompare comparer) : base(attributeName, comparer)
-    {}
+    {
+    }
   }
 
   /// <summary>
@@ -1080,8 +1108,10 @@ namespace WatiN.Core
     /// <summary>
     /// Prevent creating an instance of this class (contains only static members)
     /// </summary>
-    private Find(){}
-    
+    private Find()
+    {
+    }
+
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.
     /// </summary>
@@ -1094,7 +1124,7 @@ namespace WatiN.Core
     {
       return new For(forId);
     }
-    
+
     /// <param name="regex">Regular expression to find the matching Id of the element
     ///  the label is linked with.</param>
     /// <returns><see cref="For" /></returns>
@@ -1105,7 +1135,7 @@ namespace WatiN.Core
     {
       return new For(regex);
     }
-    
+
     /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
     /// <returns><see cref="For" /></returns>
     /// <example>
@@ -1118,13 +1148,24 @@ namespace WatiN.Core
       return new For(element);
     }
 
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="For"/></returns>
+    /// <example>
+    /// 	<code>
+    /// Label label = ie.Label(Find.ByFor(new StringContainsAndCaseInsensitiveComparer("optionbuttonid")));</code>
+    /// </example>
+    public static For ByFor(ICompare comparer)
+    {
+      return new For(comparer);
+    }
+
     /// <summary>
     /// Find an element by its id.
     /// </summary>
     /// <param name="id">Element id to find.</param>
     /// <returns><see cref="Id" /></returns>
     /// <example>
-    /// <code>ie.Link(Find.ByLink("testlinkid")).Url</code>
+    /// <code>ie.Link(Find.ById("testlinkid")).Url</code>
     /// </example>
     public static Id ById(string id)
     {
@@ -1134,11 +1175,21 @@ namespace WatiN.Core
     /// <param name="regex">Regular expression to find a matching Id.</param>
     /// <returns><see cref="Id" /></returns>
     /// <example>
-    /// <code>ie.Link(Find.ByLink(new Regex("pattern goes here"))).Url</code>
+    /// <code>ie.Link(Find.ById(new Regex("pattern goes here"))).Url</code>
     /// </example>
     public static Id ById(Regex regex)
     {
       return new Id(regex);
+    }
+
+    /// <param name="compare">The compare.</param>
+    /// <returns><see cref="Id"/></returns>
+    /// <example>
+    /// 	<code>Link link = ie.Link(Find.ById(new StringContainsAndCaseInsensitiveComparer("linkId1")));</code>
+    /// </example>
+    public static Id ById(ICompare compare)
+    {
+      return new Id(compare);
     }
 
     /// <summary>
@@ -1173,7 +1224,19 @@ namespace WatiN.Core
     {
       return new Name(regex);
     }
-        
+    /// <summary>
+    /// Bies the name.
+    /// </summary>
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Name"/></returns>
+    /// <example>
+    /// 	<code>ie.Link(Find.ByName(new StringContainsAndCaseInsensitiveComparer("linkname")))).Url</code>
+    /// </example>
+    public static Name ByName(ICompare comparer)
+    {
+      return new Name(comparer);
+    }
+
     /// <summary>
     /// Find an element by its (inner) text
     /// </summary>
@@ -1186,7 +1249,7 @@ namespace WatiN.Core
     {
       return new Text(text);
     }
-    
+
     /// <param name="regex">Regular expression to find a matching Text.</param>
     /// <returns><see cref="Text" /></returns>
     /// <example>
@@ -1195,6 +1258,16 @@ namespace WatiN.Core
     public static Text ByText(Regex regex)
     {
       return new Text(regex);
+    }
+
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Text"/></returns>
+    /// <example>
+    /// 	<code>Link link = ie.Link(Find.ByText(new StringContainsAndCaseInsensitiveComparer("my li"))).Url</code>
+    /// </example>
+    public static Text ByText(ICompare comparer)
+    {
+      return new Text(comparer);
     }
 
     /// <summary>
@@ -1220,7 +1293,7 @@ namespace WatiN.Core
     {
       return new Url(url, ignoreQuery);
     }
-    
+
     /// <param name="uri">The uri to find.</param>
     /// <returns><see cref="Url" /></returns>
     /// <example>
@@ -1252,6 +1325,16 @@ namespace WatiN.Core
       return new Url(regex);
     }
 
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Url"/></returns>
+    /// <example>
+    /// 	<code>ie.Link(Find.ByUrl(new UriComparer(uri, ignoreQuery))).Url</code>
+    /// </example>
+    public static Url ByUrl(ICompare comparer)
+    {
+      return new Url(comparer);
+    }
+
     /// <summary>
     /// Find an element, frame, IE instance or HTMLDialog by its Title.
     /// </summary>
@@ -1273,6 +1356,16 @@ namespace WatiN.Core
     public static Title ByTitle(Regex regex)
     {
       return new Title(regex);
+    }
+
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Title"/></returns>
+    /// <example>
+    /// 	<code>IE ie = IE.AttachToIE(Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("part of the title")));</code>
+    /// </example>
+    public static Title ByTitle(ICompare comparer)
+    {
+      return new Title(comparer);
     }
 
     /// <summary>
@@ -1298,6 +1391,16 @@ namespace WatiN.Core
       return new Value(regex);
     }
 
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Value"/></returns>
+    /// <example>
+    /// 	<code>ie.Button(Find.ByValue(new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
+    /// </example>
+    public static Value ByValue(ICompare comparer)
+    {
+      return new Value(comparer);
+    }
+
     /// <summary>
     /// Find an <see cref="Image"/> by its source (src) attribute.
     /// </summary>
@@ -1321,6 +1424,16 @@ namespace WatiN.Core
       return new Src(regex);
     }
 
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="Src"/></returns>
+    /// <example>
+    /// 	<code>Image image = ie.Image(Find.BySrc(new StringContainsAndCaseInsensitiveComparer("watin/sourceforge")));</code>
+    /// </example>
+    public static Src BySrc(ICompare comparer)
+    {
+      return new Src(comparer);
+    }
+
     /// <summary>
     /// Find an element by an attribute.
     /// </summary>
@@ -1334,7 +1447,7 @@ namespace WatiN.Core
     {
       return new Attribute(attributeName, value);
     }
-    
+
     /// <param name="attributeName">The attribute to compare the value with.</param>
     /// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
     /// <returns><see cref="Attribute" /></returns>
@@ -1344,6 +1457,17 @@ namespace WatiN.Core
     public static Attribute ByCustom(string attributeName, Regex regex)
     {
       return new Attribute(attributeName, regex);
+    }
+
+    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="comparer">The comparer to be used.</param>
+    /// <returns><see cref="Attribute"/></returns>
+    /// <example>
+    /// 	<code>Link link = ie.Link(Find.ByCustom("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
+    /// </example>
+    public static Attribute ByCustom(string attributeName, ICompare comparer)
+    {
+      return new Attribute(attributeName, comparer);
     }
 
     /// <summary>
@@ -1359,7 +1483,7 @@ namespace WatiN.Core
     {
       return new StyleAttribute(styleAttributeName, value);
     }
-    
+
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="value">Regular expression to find a matching value of the given style attribute.</param>
     /// <returns><see cref="StyleAttribute"/></returns>
@@ -1370,5 +1494,16 @@ namespace WatiN.Core
     {
       return new StyleAttribute(styleAttributeName, value);
     }
-  } 
+
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="comparer">The comparer.</param>
+    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <example>
+    /// 	<code>Link link = ie.Link(Find.ByStyle("font-family", new StringContainsAndCaseInsensitiveComparer("aria")));</code>
+    /// </example>
+    public static StyleAttribute ByStyle(string styleAttributeName, ICompare comparer)
+    {
+      return new StyleAttribute(styleAttributeName, comparer);
+    }
+  }
 }
