@@ -104,6 +104,16 @@ namespace WatiN.UnitTests
     }
 
     [Test]
+    public void DoesFrameCodeWorkIfToBrowsersWithFramesAreOpen()
+    {
+      using (IE ie2 = new IE(FramesetURI))
+      {
+        Frame contentsFrame = ie2.Frame(Find.ByName("contents"));
+        Assert.IsFalse(contentsFrame.Html.StartsWith("<FRAMESET"),"inner html of frame is expected");
+      }
+    }
+
+    [Test]
     public void Frames()
     {
       const int expectedFramesCount = 2;
