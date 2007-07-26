@@ -138,6 +138,8 @@ namespace WatiN.Core
     /// </summary>
     public virtual void WaitForComplete()
     {
+      Thread.Sleep(100); 
+
       InitTimeout();
       WaitForCompleteOrTimeout();
     }
@@ -337,6 +339,8 @@ namespace WatiN.Core
 
     protected void waitWhileIEBusy(IWebBrowser2 ie)
     {
+      Thread.Sleep(100);
+
       while (IsIEBusy(ie))
       {
         ThrowExceptionWhenTimeout("Internet Explorer busy");

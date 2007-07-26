@@ -1,5 +1,3 @@
-using System;
-
 namespace WatiN.Core.UnitTests
 {
   using mshtml;
@@ -9,9 +7,9 @@ namespace WatiN.Core.UnitTests
   [TestFixture]
   public class DocumentTests
   {
-    MockRepository _mockRepository;
-    IHTMLDocument2 _mockHtmlDocument;
-    IHTMLWindow2 _mockHtmlWindow2;
+    private MockRepository _mockRepository;
+    private IHTMLDocument2 _mockHtmlDocument;
+    private IHTMLWindow2 _mockHtmlWindow2;
 
     [SetUp]
     public void Setup()
@@ -35,11 +33,10 @@ namespace WatiN.Core.UnitTests
       Expect.Call(mockDocument.HtmlDocument).Repeat.Once().Return(_mockHtmlDocument);
       Expect.Call(_mockHtmlDocument.parentWindow).Repeat.Once().Return(_mockHtmlWindow2);
       Expect.Call(_mockHtmlWindow2.execScript("alert('hello')", "javascript")).Return(null);
-      
+
       _mockRepository.ReplayAll();
 
       mockDocument.RunScript("alert('hello')");
     }
   }
-
 }
