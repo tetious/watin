@@ -25,7 +25,7 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using Attribute=WatiN.Core.Attribute;
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
   [TestFixture]
   public class FramesetTests : WatiNTest

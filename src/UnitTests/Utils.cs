@@ -22,7 +22,7 @@ using NUnit.Framework;
 
 using WatiN.Core;
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
   [TestFixture]
   public class Utils : WatiNTest

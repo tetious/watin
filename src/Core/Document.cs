@@ -795,7 +795,7 @@ namespace WatiN.Core
     /// <param name="language">The language.</param>
     public void RunScript(string scriptCode, string language)
     {
-      UtilityClass.RunScript(scriptCode, "javascript", htmlDocument.parentWindow);
+      UtilityClass.RunScript(scriptCode, "javascript", HtmlDocument.parentWindow);
     }
 
     /// <summary>

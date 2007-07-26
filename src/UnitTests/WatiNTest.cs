@@ -19,8 +19,10 @@
 using System;
 using System.IO;
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
+  using NUnit.Framework.SyntaxHelpers;
+
   public class WatiNTest
   {
     private static Uri htmlTestBaseURI = null;

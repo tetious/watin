@@ -28,7 +28,7 @@ using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using Attribute=WatiN.Core.Attribute;
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
   using System.IO;
   using Rhino.Mocks;

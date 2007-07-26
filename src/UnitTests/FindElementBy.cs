@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
   using System;
   using System.Collections;

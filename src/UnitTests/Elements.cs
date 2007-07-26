@@ -26,7 +26,7 @@ using WatiN.Core;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.UnitTests
+namespace WatiN.Core.UnitTests
 {
   using mshtml;
   using Rhino.Mocks;
