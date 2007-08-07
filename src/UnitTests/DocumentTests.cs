@@ -26,7 +26,7 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
-    public void RunScript()
+    public void RunScriptShouldCallHtmlDocumentProperty()
     {
       Document mockDocument = (Document) _mockRepository.PartialMock(typeof (Document));
 
