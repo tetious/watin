@@ -399,7 +399,7 @@ namespace WatiN.Core.UnitTests
     public void FindByCustom()
     {
       const string id = "id";
-      Core.Attribute value = Find.ByCustom(id, "idvalue");
+      Core.Attribute value = Find.By(id, "idvalue");
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
 
@@ -416,12 +416,12 @@ namespace WatiN.Core.UnitTests
       Assert.IsFalse(value.Compare(attributeBag), "Compare should not partial match value");
 
       Regex regex = new Regex("lue$");
-      value = Find.ByCustom(id, regex);
+      value = Find.By(id, regex);
       attributeBag = new TestAttributeBag(id, "idvalue");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
 
-      value = Find.ByCustom(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
+      value = Find.By(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
 
@@ -1079,7 +1079,7 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (ReEntryException))]
     public void RecusiveCallExceptionExpected()
     {
-      Core.Attribute findBy = Find.ByCustom("tag", "value");
+      Core.Attribute findBy = Find.By("tag", "value");
       findBy.Or(findBy);
 
       Expect.Call(mockAttributeBag.GetValue("tag")).Return("val").Repeat.AtLeastOnce();
@@ -1111,11 +1111,11 @@ namespace WatiN.Core.UnitTests
       mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
       findBy = null;
 
-      findBy1 = Find.ByCustom("1", "true");
-      findBy2 = Find.ByCustom("2", "true");
-      findBy3 = Find.ByCustom("3", "true");
-      findBy4 = Find.ByCustom("4", "true");
-      findBy5 = Find.ByCustom("5", "true");
+      findBy1 = Find.By("1", "true");
+      findBy2 = Find.By("2", "true");
+      findBy3 = Find.By("3", "true");
+      findBy4 = Find.By("4", "true");
+      findBy5 = Find.By("5", "true");
     }
 
     [Test]
@@ -1197,14 +1197,14 @@ namespace WatiN.Core.UnitTests
       mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
       findBy = null;
 
-      findBy1 = Find.ByCustom("1", "true");
-      findBy2 = Find.ByCustom("2", "true");
-      findBy3 = Find.ByCustom("3", "true");
-      findBy4 = Find.ByCustom("4", "true");
-      findBy5 = Find.ByCustom("5", "true");
-      findBy6 = Find.ByCustom("6", "true");
-      findBy7 = Find.ByCustom("7", "true");
-      findBy8 = Find.ByCustom("8", "true");
+      findBy1 = Find.By("1", "true");
+      findBy2 = Find.By("2", "true");
+      findBy3 = Find.By("3", "true");
+      findBy4 = Find.By("4", "true");
+      findBy5 = Find.By("5", "true");
+      findBy6 = Find.By("6", "true");
+      findBy7 = Find.By("7", "true");
+      findBy8 = Find.By("8", "true");
     }
 
     [Test]
@@ -1362,10 +1362,10 @@ namespace WatiN.Core.UnitTests
 //    {
 //      IE ie = new IE();
 //
-//      ie.Link(Find.ByCustom("disabled", Is.True));
-//      ie.Link(Find.ByCustom("disabled", Is.False));
+//      ie.Link(Find.By("disabled", Is.True));
+//      ie.Link(Find.By("disabled", Is.False));
 //
-//      ie.Link(Find.ByCustom("disabled", Is.GreaterThan() && Is.LessThan()));
+//      ie.Link(Find.By("disabled", Is.GreaterThan() && Is.LessThan()));
 //
 //      ie.Button(Find.ByText(Text.Contains("something")));
 //      ie.Button(Find.ByText(Text.StartsWith("something")));

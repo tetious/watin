@@ -30,7 +30,7 @@ namespace WatiN.Core
   /// <example>
   /// <code>ie.Link(new Attribute("id", "testlinkid")).Url</code>
   /// or use 
-  /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
+  /// <code>ie.Link(Find.By("id", "testlinkid")).Url</code>
   /// </example>
   public class Attribute
   {
@@ -45,27 +45,27 @@ namespace WatiN.Core
     protected Attribute lastAddedOrAttribute;
 
 
-    // This makes the Find.ByName() & Find.ByCustom() syntax possible
+    // This makes the Find.ByName() & Find.By() syntax possible
     // and is needed for the && operator
     public static Attribute operator &(Attribute first, Attribute second)
     {
       return first.And(second);
     }
 
-    // This makes the Find.ByName() | Find.ByCustom() syntax possible
+    // This makes the Find.ByName() | Find.By() syntax possible
     // and is needed for the || operator
     public static Attribute operator |(Attribute first, Attribute second)
     {
       return first.Or(second);
     }
 
-    // This makes the Find.ByName() && Find.ByCustom() syntax possible
+    // This makes the Find.ByName() && Find.By() syntax possible
     public static bool operator true(Attribute attribute)
     {
       return false;
     }
 
-    // This makes the Find.ByName() || Find.ByCustom() syntax possible
+    // This makes the Find.ByName() || Find.By() syntax possible
     public static bool operator false(Attribute attribute)
     {
       return false;
@@ -1227,9 +1227,9 @@ namespace WatiN.Core
     /// <param name="value">The exact matching value of the attribute.</param>
     /// <returns><see cref="Attribute" /></returns>
     /// <example>
-    /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
+    /// <code>ie.Link(Find.By("id", "testlinkid")).Url</code>
     /// </example>
-    public static Attribute ByCustom(string attributeName, string value)
+    public static Attribute By(string attributeName, string value)
     {
       return new Attribute(attributeName, value);
     }
@@ -1238,9 +1238,9 @@ namespace WatiN.Core
     /// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
     /// <returns><see cref="Attribute" /></returns>
     /// <example>
-    /// <code>ie.Link(Find.ByCustom("id", new Regex("pattern goes here"))).Url</code>
+    /// <code>ie.Link(Find.By("id", new Regex("pattern goes here"))).Url</code>
     /// </example>
-    public static Attribute ByCustom(string attributeName, Regex regex)
+    public static Attribute By(string attributeName, Regex regex)
     {
       return new Attribute(attributeName, regex);
     }
@@ -1249,11 +1249,50 @@ namespace WatiN.Core
     /// <param name="comparer">The comparer to be used.</param>
     /// <returns><see cref="Attribute"/></returns>
     /// <example>
-    /// 	<code>Link link = ie.Link(Find.ByCustom("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
+    /// 	<code>Link link = ie.Link(Find.By("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
     /// </example>
-    public static Attribute ByCustom(string attributeName, ICompare comparer)
+    public static Attribute By(string attributeName, ICompare comparer)
     {
       return new Attribute(attributeName, comparer);
+    }
+
+    /// <summary>
+    /// Find an element by an attribute.
+    /// </summary>
+    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="value">The exact matching value of the attribute.</param>
+    /// <returns><see cref="Attribute" /></returns>
+    /// <example>
+    /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
+    /// </example>
+    [Obsolete("Use Find.By(attributeName, value) instead")]
+    public static Attribute ByCustom(string attributeName, string value)
+    {
+      return By(attributeName, value);
+    }
+
+    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
+    /// <returns><see cref="Attribute" /></returns>
+    /// <example>
+    /// <code>ie.Link(Find.ByCustom("id", new Regex("pattern goes here"))).Url</code>
+    /// </example>
+    [Obsolete("Use Find.By(attributeName, regex) instead")]
+    public static Attribute ByCustom(string attributeName, Regex regex)
+    {
+      return By(attributeName, regex);
+    }
+
+    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="comparer">The comparer to be used.</param>
+    /// <returns><see cref="Attribute"/></returns>
+    /// <example>
+    /// 	<code>Link link = ie.Link(Find.ByCustom("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
+    /// </example>
+    [Obsolete("Use Find.By(attributeName, comparer) instead")]
+    public static Attribute ByCustom(string attributeName, ICompare comparer)
+    {
+      return By(attributeName, comparer);
     }
 
     /// <summary>

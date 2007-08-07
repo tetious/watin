@@ -289,7 +289,7 @@ namespace WatiN.Core
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
     /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
-    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
     /// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
@@ -320,7 +320,7 @@ namespace WatiN.Core
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
     /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
-    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -350,7 +350,7 @@ namespace WatiN.Core
     /// Does the specified Internet Explorer exist.
     /// </summary>
     /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
-    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.ByCustom("hwnd", windowHandle)</c> are supported.</param>
+    /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
     /// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Attribute"/>. Otherwise it returns <c>false</c>. </returns>
     public static bool Exists(Attribute findBy)
     {

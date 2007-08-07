@@ -736,7 +736,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void ButtonAndOthersFindByShouldNeverThrowInvalidAttributeException()
     {
-      Button button = ie.Button(Find.ByCustom("noattribute", "novalue"));
+      Button button = ie.Button(Find.By("noattribute", "novalue"));
       Assert.IsFalse(button.Exists);
     }
 
@@ -1208,7 +1208,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindingElementByCustomAttribute()
     {
-      Assert.IsTrue(ie.Table(Find.ByCustom("myattribute", "myvalue")).Exists);
+      Assert.IsTrue(ie.Table(Find.By("myattribute", "myvalue")).Exists);
     }
     
     [Test]
@@ -1702,7 +1702,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindBySourceIndex()
     {
-      Button button = ie.Button(Find.ByCustom("sourceIndex", "13"));
+      Button button = ie.Button(Find.By("sourceIndex", "13"));
 
       Assert.AreEqual("13", button.GetAttributeValue("sourceIndex"));
     }
@@ -1716,7 +1716,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindByShouldPassEvenIfAttributeValueOfHTMLELementIsNull()
     {
-      Assert.IsFalse(ie.Button(Find.ByCustom("classname", "nullstring")).Exists);
+      Assert.IsFalse(ie.Button(Find.By("classname", "nullstring")).Exists);
     }
   }
   
