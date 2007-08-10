@@ -20,7 +20,8 @@ using System.Text.RegularExpressions;
 
 namespace WatiN.Core
 {
-    using WatiN.Core.Interfaces;
+  using System.Collections;
+  using WatiN.Core.Interfaces;
 
   /// <summary>
   /// Summary description for SubElements.
@@ -49,6 +50,13 @@ namespace WatiN.Core
     public static Element Element(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new ElementsContainer(ie, new ElementFinder(null, findBy, elements));
+    }
+
+    public static Element Element(DomContainer domContainer, string tagname, Attribute findBy, IElementCollection elements, params string[] inputtypes)
+    {
+      string inputtypesString = UtilityClass.StringArrayToString(inputtypes, ",");
+
+      return new ElementsContainer(domContainer, new ElementFinder(tagname, inputtypesString, findBy, elements));
     }
 
     public static ElementCollection Elements(DomContainer ie, IElementCollection elements)
@@ -231,8 +239,6 @@ namespace WatiN.Core
     {
       return new ImageCollection(ie, new ElementFinder(Core.Image.ElementTags, elements));
     }
-
-      
   }
 }
 

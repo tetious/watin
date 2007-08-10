@@ -292,6 +292,19 @@ namespace WatiN.Core
       }
     }
 
+    public static string StringArrayToString(string[] inputtypes, string seperator)
+    {
+      string inputtypesString = "";
+      if (inputtypes.Length > 0)
+      {
+        foreach (string inputtype in inputtypes)
+        {
+          inputtypesString += inputtype + seperator;
+        }
+        inputtypesString.Remove(inputtypesString.Length - seperator.Length, 1);
+      }
+      return inputtypesString;
+    }
 	}
   
   /// <summary>

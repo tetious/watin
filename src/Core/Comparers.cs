@@ -218,5 +218,11 @@ namespace WatiN.Core
     }
   }
 
-
+  public class AlwaysTrueComparer : ICompare
+  {
+    public bool Compare(string value)
+    {
+      return true;
+    }
+  }
 }

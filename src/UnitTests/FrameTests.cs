@@ -61,7 +61,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsInstanceOfType(typeof(Document),ie.Frame("mainid"));
     }
   
-    [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a Frame or IFrame by id with value 'NonExistingFrameID'")]
+    [Test, ExpectedException(typeof(FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame by id with value 'NonExistingFrameID'")]
     public void ExpectFrameNotFoundException()
     {
       ie.Frame(Find.ById("NonExistingFrameID"));
@@ -302,7 +302,7 @@ namespace WatiN.Core.UnitTests
       ie.Close();
     }
 
-    [Test, ExpectedException(typeof(FrameNotFoundException),"Could not find a Frame or IFrame by id with value 'NonExistingIFrameID'")]
+    [Test, ExpectedException(typeof(FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame by id with value 'NonExistingIFrameID'")]
     public void ExpectFrameNotFoundException()
     {
       ie.Frame(Find.ById("NonExistingIFrameID"));

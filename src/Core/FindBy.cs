@@ -424,7 +424,7 @@ namespace WatiN.Core
   /// This class is only used in the ElementsSupport Class to 
   /// create a collection of all elements.
   /// </summary>
-  internal class AlwaysTrueAttribute : Attribute
+  public class AlwaysTrueAttribute : Attribute
   {
     public AlwaysTrueAttribute() : base("noAttribute", "")
     {
@@ -888,15 +888,8 @@ namespace WatiN.Core
   /// This class provides factory methods for de most commonly used attributes
   /// to find an element on a web page.
   /// </summary>
-  public sealed class Find
+  public class Find
   {
-    /// <summary>
-    /// Prevent creating an instance of this class (contains only static members)
-    /// </summary>
-    private Find()
-    {
-    }
-
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.
     /// </summary>

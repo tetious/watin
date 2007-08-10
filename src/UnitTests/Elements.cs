@@ -464,7 +464,7 @@ namespace WatiN.Core.UnitTests
       ie.Button("disabledid").Click();
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException), "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
+    [Test, ExpectedException(typeof(ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
     public void ButtonElementNotFoundException()
     {
       IE.Settings.WaitUntilExistsTimeOut = 1;
@@ -725,7 +725,28 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
       Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
     }
-    
+
+    [Test]
+    public void ElementByTagNameAndInputType()
+    {
+      Element element = ie.Element("input", Find.By("id", "name"), "text");
+      Assert.IsTrue(element.Exists);
+    }
+
+    [Test]
+    public void ElementByTagName()
+    {
+      Element element = ie.Element("a", Find.By("id", "testlinkid"));
+      Assert.IsTrue(element.Exists);
+    }
+
+    [Test]
+    public void FindHeadElementByTagName()
+    {
+      Element element = ie.Element("head", Find.ByIndex(0));
+      Assert.IsTrue(element.Exists);
+    }
+
     [Test]
     public void ElementFindByShouldNeverThrowInvalidAttributeException()
     {
@@ -1147,21 +1168,21 @@ namespace WatiN.Core.UnitTests
       ie.TextField("name").Flash();
     }
 
-    [Test, ExpectedException(typeof(ElementReadOnlyException),"Element with Id:readonlytext is readonly")]
+    [Test, ExpectedException(typeof(ElementReadOnlyException),  ExpectedMessage = "Element with Id:readonlytext is readonly")]
     public void TextFieldReadyOnlyException()
     {
       TextField textField = ie.TextField("readonlytext");
       textField.TypeText("This should go wrong");
     }
 
-    [Test, ExpectedException(typeof(ElementDisabledException),"Element with Id:disabledtext is disabled")]
+    [Test, ExpectedException(typeof(ElementDisabledException), ExpectedMessage = "Element with Id:disabledtext is disabled")]
     public void TextFieldDisabledException()
     {
       TextField textField = ie.TextField(Find.ByName("disabledtext"));
       textField.TypeText("This should go wrong");
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException),"Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
+    [Test, ExpectedException(typeof(ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
     public void TextFieldElementNotFoundException()
     {
       IE.Settings.WaitUntilExistsTimeOut = 1;
@@ -1495,7 +1516,7 @@ namespace WatiN.Core.UnitTests
       }
     }
     
-    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 1 seconds for element to show up.'" )]
+    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException),  ExpectedMessage = "Timeout while 'waiting 1 seconds for element to show up.'" )]
     public void WaitUntilElementExistsTimeOutException()
     {
       ie.Button("nonexistingbutton").WaitUntilExists(1);
@@ -1650,7 +1671,7 @@ namespace WatiN.Core.UnitTests
       mocks.VerifyAll();
     }
 
-    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException), "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
+    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException),  ExpectedMessage = "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
     public void WaitUntilTimesOut()
     {
       MockRepository mocks = new MockRepository();
@@ -2309,7 +2330,7 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("Third Listitem",selectList.SelectedItems[1],"Third Listitem not selected after Select");
     }
 
-    [Test, ExpectedException(typeof(SelectListItemNotFoundException), "No item with text or value 'None existing item' was found in the selectlist")]
+    [Test, ExpectedException(typeof(SelectListItemNotFoundException),  ExpectedMessage = "No item with text or value 'None existing item' was found in the selectlist")]
     public void SelectItemNotFoundException()
     {
       SelectList selectList = ie.SelectList("Select1");

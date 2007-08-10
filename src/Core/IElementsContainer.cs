@@ -38,6 +38,7 @@ namespace WatiN.Core.Interfaces
     Element Element(string elementId);
     Element Element(Regex elementId);
     Element Element(Attribute findBy);
+    Element Element(string tagname, Attribute findBy, params string[] inputtypes);
     ElementCollection Elements { get; }
 
     FileUpload FileUpload(string elementId);

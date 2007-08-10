@@ -24,6 +24,8 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+  using System;
+
   /// <summary>
   /// Summary description for ElementsContainer.
   /// </summary>
@@ -93,6 +95,11 @@ namespace WatiN.Core
     public Element Element(Attribute findBy)
     {
       return ElementsSupport.Element(DomContainer, findBy, this);
+    }
+
+    public Element Element(string tagname, Attribute findBy, params string[] inputtypes)
+    {
+      return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
     }
 
     public ElementCollection Elements

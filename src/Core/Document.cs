@@ -424,6 +424,11 @@ namespace WatiN.Core
       return ElementsSupport.Element(DomContainer, findBy, this);
     }
 
+    public Element Element(string tagname, Attribute findBy, params string[] inputtypes)
+    {
+      return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
+    }
+
     public ElementCollection Elements
     {
       get { return ElementsSupport.Elements(DomContainer, this); }
