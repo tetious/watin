@@ -86,6 +86,7 @@ Copyright 2006-2007 Jeroen van Menen
                 <include name="${unittests.source.dir}\*.cs"/>
             </sources>
             <references>
+                <include name="${bin.dir}\${shdocvw.assembly.name}"/>
                 <include name="${pia.dir}\Microsoft.mshtml.dll"/>
                 <include name="${bin.dir}\${core.assembly.name}"/>
                 <include name="${libraries.dir}\nunit.framework.dll"/>

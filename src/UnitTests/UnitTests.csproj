@@ -100,6 +100,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "Interop.SHDocVw"
+                    AssemblyName = "Interop.SHDocVw"
+                    HintPath = "..\..\lib\Net\1.1\Interop.SHDocVw.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -174,6 +179,10 @@
                 />
                 <File
                     RelPath = "html\main.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\OnBeforeUnloadJavaDialog.html"
                     BuildAction = "Content"
                 />
                 <File

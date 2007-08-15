@@ -767,7 +767,7 @@ namespace WatiN.Core.DialogHandlers
     /// <returns>
     /// 	<c>true</c> if the specified window is a certificate dialog; otherwise, <c>false</c>.
     /// </returns>
-    protected virtual bool IsCertificateDialog(Window window)
+    public virtual bool IsCertificateDialog(Window window)
     {     
       return window.StyleInHex == certificateWarningDialogStyle;
     }
@@ -810,7 +810,7 @@ namespace WatiN.Core.DialogHandlers
     /// <returns>
     /// 	<c>true</c> if the specified window is a security alert dialog; otherwise, <c>false</c>.
     /// </returns>
-    protected virtual bool IsSecurityAlertDialog(Window window)
+    public virtual bool IsSecurityAlertDialog(Window window)
     {     
       return window.StyleInHex == securityAlertDialogStyle;
     }
@@ -974,7 +974,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    internal abstract bool CanHandleDialog(Window window);
+    public abstract bool CanHandleDialog(Window window);
 
     public bool Exists()
     {
@@ -1017,7 +1017,7 @@ namespace WatiN.Core.DialogHandlers
       }
     }
 
-    internal override bool CanHandleDialog(Window window)
+    public override bool CanHandleDialog(Window window)
     {
       return (window.StyleInHex == "94C801C5" && ButtonWithId1Exists(window.Hwnd));
     }
@@ -1028,9 +1028,17 @@ namespace WatiN.Core.DialogHandlers
     }
   }
   
+  public class ReturnDialogHandler : ConfirmDialogHandler
+  {
+    public override bool CanHandleDialog(Window window)
+    {
+      return (window.StyleInHex == "94C803C5" && ButtonWithId1Exists(window.Hwnd));
+    }
+  }
+
   public class AlertDialogHandler : JavaDialogHandler
   {
-    internal override bool CanHandleDialog(Window window)
+    public override bool CanHandleDialog(Window window)
     {      
       return (window.StyleInHex == "94C801C5" && !ButtonWithId1Exists(window.Hwnd));
     }

@@ -40,6 +40,7 @@ namespace WatiN.Core.UnitTests
     public static Uri IFramesLeftURI = new Uri(HtmlTestBaseURI, "iframes\\leftpage.html");
     public static Uri IFramesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
     public static Uri IFramesRightURI = new Uri(HtmlTestBaseURI, "iframes\\rightpage.html");
+    public static Uri OnBeforeUnloadJavaDialogURI = new Uri(HtmlTestBaseURI, "OnBeforeUnloadJavaDialog.html");
     public static string GoogleUrl = "http://www.google.com";
     public static string EbayUrl = "http://www.ebay.com";
     

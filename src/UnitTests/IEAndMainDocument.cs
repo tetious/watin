@@ -32,6 +32,7 @@ namespace WatiN.Core.UnitTests
 {
   using System.IO;
   using Rhino.Mocks;
+  using SHDocVw;
 
   [TestFixture]
   public class IeTests : WatiNTest
@@ -1532,5 +1533,58 @@ namespace WatiN.Core.UnitTests
       mocks.VerifyAll();
     }
   }
+
+  [TestFixture]
+  public class ReturnJavaDialogHandlerTest : WatiNTest
+  {
+    [Test]
+    public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnOkShouldCloseIE()
+    {
+      using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))
+      {
+        ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();
+        ie.AddDialogHandler(returnDialogHandler);
+
+        IntPtr hWnd = ie.hWnd;
+        // can't use ie.Close() here cause this will cleanup the registered
+        // returnDialogHandler which leads to a timeout on the WaitUntilExists
+        InternetExplorer internetExplorer = (InternetExplorer)ie.InternetExplorer;
+        internetExplorer.Quit();
+        
+        returnDialogHandler.WaitUntilExists();
+        returnDialogHandler.OKButton.Click();
+
+        Thread.Sleep(2000);
+        Assert.IsFalse(IE.Exists(new WatiN.Core.Attribute("hwnd", hWnd.ToString())));
+      }
+    }
+
+    [Test]
+    public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnCancelShouldKeepIEOpen()
+    {
+      using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))
+      {
+        ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();
+        ie.AddDialogHandler(returnDialogHandler);
+
+        IntPtr hWnd = ie.hWnd;
+
+        // can't use ie.Close() here cause this will cleanup the registered
+        // returnDialogHandler which leads to a timeout on the WaitUntilExists
+        InternetExplorer internetExplorer = (InternetExplorer)ie.InternetExplorer;
+        internetExplorer.Quit();
+        
+        returnDialogHandler.WaitUntilExists();
+        returnDialogHandler.CancelButton.Click();
+
+        Thread.Sleep(2000);
+        Assert.IsTrue(IE.Exists(new WatiN.Core.Attribute("hwnd", hWnd.ToString())));
+
+        // finally close the ie instance
+        internetExplorer.Quit();
+        returnDialogHandler.WaitUntilExists();
+        returnDialogHandler.OKButton.Click();
+      }
+    }
+  }
 }
-// TODO: Add unittest to see if Settings properties are used in code.
