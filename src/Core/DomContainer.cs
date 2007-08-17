@@ -33,10 +33,9 @@ namespace WatiN.Core
   /// </summary>
   public abstract class DomContainer : Document
   {
-    private IHTMLDocument2 htmlDocument;
-    private SimpleTimer waitForCompleteTimeout;
-    private DialogWatcher dialogWatcher;
-    private bool disposed = false;
+    private IHTMLDocument2 _htmlDocument;
+    private DialogWatcher _dialogWatcher;
+    private bool _disposed = false;
 
     public DomContainer()
     {
@@ -47,7 +46,23 @@ namespace WatiN.Core
     {
       get;
     }
-    
+
+    /// <summary>
+    /// Gets the process ID the Internet Explorer or HTMLDialog is running in.
+    /// </summary>
+    /// <value>The process ID.</value>
+    public int ProcessID
+    {
+      get
+      {
+        int iePid;
+
+        NativeMethods.GetWindowThreadProcessId(hWnd, out iePid);
+
+        return iePid;
+      }
+    }
+
     /// <summary>
     /// This method must be overriden by all sub classes
     /// </summary>
@@ -60,12 +75,12 @@ namespace WatiN.Core
     {
       get
       {
-        if (htmlDocument == null)
+        if (_htmlDocument == null)
         {
-          htmlDocument = OnGetHtmlDocument();
+          _htmlDocument = OnGetHtmlDocument();
         }
 
-        return htmlDocument;
+        return _htmlDocument;
       }
     }
 
@@ -74,10 +89,10 @@ namespace WatiN.Core
     /// </summary>
     protected void StartDialogWatcher()
     {
-      if (dialogWatcher == null)
+      if (_dialogWatcher == null)
       {
-        dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
-        dialogWatcher.IncreaseReferenceCount();
+        _dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+        _dialogWatcher.IncreaseReferenceCount();
       }
     }
 
@@ -89,7 +104,7 @@ namespace WatiN.Core
     {
       get
       {
-        return dialogWatcher;
+        return _dialogWatcher;
       }
     }
 
@@ -117,18 +132,39 @@ namespace WatiN.Core
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-      if (!disposed)
+      if (!_disposed)
       {
-        htmlDocument = null;
-        if (dialogWatcher != null)
+        _htmlDocument = null;
+        if (_dialogWatcher != null)
         {
           DialogWatcher.DecreaseReferenceCount();
-          dialogWatcher = null;
+          _dialogWatcher = null;
         }        
-        disposed = true;
+        _disposed = true;
 
         base.Dispose(true);        
       }
+    }
+
+    public virtual void WaitForComplete()
+    {
+      WaitForComplete(new WaitForComplete(this));
+    }
+
+    public void WaitForComplete(IWait waitForComplete)
+    {
+      waitForComplete.DoWait();
+    }
+  }  
+
+  public class WaitForComplete : IWait
+  {
+    protected DomContainer _domContainer;
+    protected SimpleTimer _waitForCompleteTimeout;
+
+    public WaitForComplete(DomContainer _domContainer)
+    {
+      this._domContainer = _domContainer;
     }
 
     /// <summary>
@@ -136,7 +172,7 @@ namespace WatiN.Core
     /// processing or the timeout period (30 seconds) has expired.
     /// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitForCompleteTimeOut"/>
     /// </summary>
-    public virtual void WaitForComplete()
+    public virtual void DoWait()
     {
       Thread.Sleep(100); 
 
@@ -151,9 +187,9 @@ namespace WatiN.Core
     /// </summary>
     protected internal void WaitForCompleteOrTimeout()
     {
-      WaitWhileMainDocumentNotAvailable(this);
-      WaitWhileDocumentStateNotComplete(HtmlDocument);
-      WaitForFramesToComplete(HtmlDocument);
+      WaitWhileMainDocumentNotAvailable(_domContainer);
+      WaitWhileDocumentStateNotComplete(_domContainer.HtmlDocument);
+      WaitForFramesToComplete(_domContainer.HtmlDocument);
     }
 
     private void WaitForFramesToComplete(IHTMLDocument2 maindocument)
@@ -172,7 +208,7 @@ namespace WatiN.Core
 
           try
           {
-            waitWhileIEBusy(frame);
+            WaitWhileIEBusy(frame);
             waitWhileIEStateNotComplete(frame);
             WaitWhileFrameDocumentNotAvailable(frame);
 
@@ -197,20 +233,18 @@ namespace WatiN.Core
     /// <returns></returns>
     protected internal SimpleTimer InitTimeout()
     {
-      waitForCompleteTimeout = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
-      return waitForCompleteTimeout;
+
+      _waitForCompleteTimeout = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
+      return _waitForCompleteTimeout;
     }
-    
-    /// <summary>
-    /// This method checks the return value of IsTimedOut. When true, it will
-    /// throw a TimeoutException with the timeoutMessage param as message.
-    /// </summary>
-    /// <param name="timeoutMessage">The message to present when the TimeoutException is thrown</param>
-    protected internal void ThrowExceptionWhenTimeout(string timeoutMessage)
+
+    private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
     {
-      if (IsTimedOut())
+      HTMLDocument document = (HTMLDocument)htmlDocument;
+      while (document.readyState != "complete")
       {
-        throw new Exceptions.TimeoutException(timeoutMessage);
+        ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");
+        Thread.Sleep(100);
       }
     }
 
@@ -223,16 +257,19 @@ namespace WatiN.Core
     /// return value will be true</returns>
     protected internal bool IsTimedOut()
     {
-      return waitForCompleteTimeout.Elapsed;
+      return _waitForCompleteTimeout.Elapsed;
     }
 
-    private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
+    /// <summary>
+    /// This method checks the return value of IsTimedOut. When true, it will
+    /// throw a TimeoutException with the timeoutMessage param as message.
+    /// </summary>
+    /// <param name="timeoutMessage">The message to present when the TimeoutException is thrown</param>
+    protected internal void ThrowExceptionWhenTimeout(string timeoutMessage)
     {
-      HTMLDocument document = (HTMLDocument)htmlDocument;
-      while (document.readyState != "complete")
+      if (IsTimedOut())
       {
-        ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");
-        Thread.Sleep(100);
+        throw new Exceptions.TimeoutException(timeoutMessage);
       }
     }
 
@@ -299,22 +336,6 @@ namespace WatiN.Core
       return false;
     }
 
-    /// <summary>
-    /// Gets the process ID the Internet Explorer or HTMLDialog is running in.
-    /// </summary>
-    /// <value>The process ID.</value>
-    public int ProcessID
-    {
-      get
-      {
-        int iePid;
-
-        NativeMethods.GetWindowThreadProcessId(hWnd, out iePid);
-
-        return iePid;
-      }
-    }
-
     protected void waitWhileIEStateNotComplete(IWebBrowser2 ie)
     {
       while (IsIEReadyStateComplete(ie))
@@ -337,7 +358,7 @@ namespace WatiN.Core
       }
     }
 
-    protected void waitWhileIEBusy(IWebBrowser2 ie)
+    protected void WaitWhileIEBusy(IWebBrowser2 ie)
     {
       Thread.Sleep(100);
 
@@ -360,5 +381,11 @@ namespace WatiN.Core
         return false;
       }
     }
-  }  
+
+  }
+
+  public interface IWait
+  {
+    void DoWait();
+  }
 }

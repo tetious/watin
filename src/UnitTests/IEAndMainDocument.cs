@@ -181,20 +181,7 @@ namespace WatiN.Core.UnitTests
         }
       }
     }
-    
-    [Test]
-    public void ContainsText()
-    {
-      using (IE ie = new IE(MainURI))
-      {
-        Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
-        Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
-                
-        Assert.IsTrue(ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
-        Assert.IsFalse(ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
-      }
-    }
-    
+        
     [Test]
     public void AlertAndConfirmDialogHandler()
     {

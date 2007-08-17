@@ -711,11 +711,10 @@ namespace WatiN.Core
     /// <summary>
     /// Use existing InternetExplorer object. The param is of type
     /// object because otherwise all projects using WatiN should also
-    /// reference the Interop.SHDocVw assembly (yes also with the interal
-    /// access modifier)
+    /// reference the Interop.SHDocVw assembly.
     /// </summary>
     /// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
-    internal IE(object shDocVwInternetExplorer)
+    public IE(object shDocVwInternetExplorer)
     {
       CheckThreadApartmentStateIsSTA();
 
@@ -1203,12 +1202,7 @@ namespace WatiN.Core
     /// </summary>
     public override void WaitForComplete()
     {
-      InitTimeout();
-
-      waitWhileIEBusy(ie);
-      waitWhileIEStateNotComplete(ie);
-      
-      WaitForCompleteOrTimeout();
+      WaitForComplete(new IEWaitForComplete(this));
     }
 
     #region IDisposable Members
@@ -1361,6 +1355,28 @@ namespace WatiN.Core
       }
       
       return value;
+    }
+  }
+
+  public class IEWaitForComplete : WaitForComplete
+  {
+    private IE _ie;
+
+    public IEWaitForComplete(IE ie) : base(ie)
+    {
+      _ie = ie;
+    }
+
+    public override void DoWait()
+    {
+      Thread.Sleep(100); 
+
+      InitTimeout();
+
+      WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
+      waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
+      
+      WaitForCompleteOrTimeout();
     }
   }
 }
