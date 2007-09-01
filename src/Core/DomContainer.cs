@@ -26,6 +26,16 @@ using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {
+  using WatiN.Core.Interfaces;
+
+  namespace Interfaces
+  {
+    public interface IWait
+    {
+      void DoWait();
+    }
+  }
+
   /// <summary>
   /// This class hosts functionality for classes which are an entry point
   /// to a document and its elements and/or frames. Currently implemented
@@ -185,14 +195,14 @@ namespace WatiN.Core
     /// or the timeout period has expired. You should
     /// call InitTimeout prior to calling this method.
     /// </summary>
-    protected internal void WaitForCompleteOrTimeout()
+    protected virtual void WaitForCompleteOrTimeout()
     {
       WaitWhileMainDocumentNotAvailable(_domContainer);
       WaitWhileDocumentStateNotComplete(_domContainer.HtmlDocument);
       WaitForFramesToComplete(_domContainer.HtmlDocument);
     }
 
-    private void WaitForFramesToComplete(IHTMLDocument2 maindocument)
+    protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
     {
       HTMLDocument mainHtmlDocument = (HTMLDocument) maindocument;
       
@@ -231,14 +241,14 @@ namespace WatiN.Core
     /// determining a time out. It's set to the current time.
     /// </summary>
     /// <returns></returns>
-    protected internal SimpleTimer InitTimeout()
+    protected virtual SimpleTimer InitTimeout()
     {
 
       _waitForCompleteTimeout = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
       return _waitForCompleteTimeout;
     }
 
-    private void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
+    protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
     {
       HTMLDocument document = (HTMLDocument)htmlDocument;
       while (document.readyState != "complete")
@@ -255,7 +265,7 @@ namespace WatiN.Core
     /// </summary>
     /// <returns>If the timespan is more than 30 seconds, the
     /// return value will be true</returns>
-    protected internal bool IsTimedOut()
+    protected virtual bool IsTimedOut()
     {
       return _waitForCompleteTimeout.Elapsed;
     }
@@ -265,7 +275,7 @@ namespace WatiN.Core
     /// throw a TimeoutException with the timeoutMessage param as message.
     /// </summary>
     /// <param name="timeoutMessage">The message to present when the TimeoutException is thrown</param>
-    protected internal void ThrowExceptionWhenTimeout(string timeoutMessage)
+    protected virtual void ThrowExceptionWhenTimeout(string timeoutMessage)
     {
       if (IsTimedOut())
       {
@@ -273,7 +283,7 @@ namespace WatiN.Core
       }
     }
 
-    private void WaitWhileMainDocumentNotAvailable(DomContainer domContainer)
+    protected virtual void WaitWhileMainDocumentNotAvailable(DomContainer domContainer)
     {
       while (!IsDocumentReadyStateAvailable(GetDomContainerDocument(domContainer)))
       {
@@ -283,7 +293,7 @@ namespace WatiN.Core
       }
     }
 
-    private void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
+    protected virtual void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
     {
       while (!IsDocumentReadyStateAvailable(GetFrameDocument(frame)))
       {
@@ -293,7 +303,7 @@ namespace WatiN.Core
       }
     }
 
-    private static IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
+    protected virtual IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
     {
       try
       {
@@ -305,7 +315,7 @@ namespace WatiN.Core
       }
     }
 
-    private static IHTMLDocument2 GetDomContainerDocument(DomContainer domContainer)
+    protected virtual IHTMLDocument2 GetDomContainerDocument(DomContainer domContainer)
     {
       try
       {
@@ -317,7 +327,7 @@ namespace WatiN.Core
       }
     }
 
-    private static bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
+    protected virtual bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
     {
       if (document != null)
       {
@@ -336,7 +346,7 @@ namespace WatiN.Core
       return false;
     }
 
-    protected void waitWhileIEStateNotComplete(IWebBrowser2 ie)
+    protected virtual void waitWhileIEStateNotComplete(IWebBrowser2 ie)
     {
       while (IsIEReadyStateComplete(ie))
       {
@@ -346,7 +356,7 @@ namespace WatiN.Core
       }
     }
 
-    private static bool IsIEReadyStateComplete(IWebBrowser2 ie)
+    protected virtual bool IsIEReadyStateComplete(IWebBrowser2 ie)
     {
       try
       {
@@ -358,7 +368,7 @@ namespace WatiN.Core
       }
     }
 
-    protected void WaitWhileIEBusy(IWebBrowser2 ie)
+    protected virtual void WaitWhileIEBusy(IWebBrowser2 ie)
     {
       Thread.Sleep(100);
 
@@ -370,7 +380,7 @@ namespace WatiN.Core
       }
     }
 
-    private static bool IsIEBusy(IWebBrowser2 ie)
+    protected virtual bool IsIEBusy(IWebBrowser2 ie)
     {
       try
       {
@@ -381,11 +391,5 @@ namespace WatiN.Core
         return false;
       }
     }
-
-  }
-
-  public interface IWait
-  {
-    void DoWait();
   }
 }
