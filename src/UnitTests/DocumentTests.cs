@@ -19,12 +19,6 @@ namespace WatiN.Core.UnitTests
       _mockHtmlWindow2 = (IHTMLWindow2) _mockRepository.CreateMock(typeof (IHTMLWindow2));
     }
 
-    [TearDown]
-    public void TearDown()
-    {
-      _mockRepository.VerifyAll();
-    }
-
     [Test]
     public void RunScriptShouldCallHtmlDocumentProperty()
     {
@@ -37,6 +31,18 @@ namespace WatiN.Core.UnitTests
       _mockRepository.ReplayAll();
 
       mockDocument.RunScript("alert('hello')");
+
+      _mockRepository.VerifyAll();
+   }
+
+    [Test]
+    public void TestEval()
+    {
+      using(IE ie = new IE())
+      {
+        string result = ie.Eval("2+5");
+        Assert.That(result, NUnit.Framework.SyntaxHelpers.Is.EqualTo("7"));
+      }
     }
   }
 }

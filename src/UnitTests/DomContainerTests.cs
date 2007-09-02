@@ -5,6 +5,7 @@ namespace WatiN.Core.UnitTests
   using NUnit.Framework;
   using Rhino.Mocks;
   using SHDocVw;
+  using WatiN.Core.Interfaces;
 
   [TestFixture]
   public class DomContainerTests

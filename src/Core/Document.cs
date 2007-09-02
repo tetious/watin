@@ -812,5 +812,31 @@ namespace WatiN.Core
     {
       UtilityClass.FireEvent(element, eventName);
     }
+
+    public string Eval(string code)
+    {
+      string elementId = Guid.NewGuid().ToString();
+
+      string createElement =string.Format(@"
+            var elem = document.createElement('INPUT');
+            elem.id = '{0}';
+            elem.type = 'HIDDEN';
+            elem.value = {1};
+            document.body.appendChild(elem);"
+        , elementId, code);
+
+      RunScript(createElement);
+
+      string result = TextField(elementId).Value;
+
+      string removeElement = string.Format(@"
+            var elem = document.getElementById('{0}');
+            document.body.removeChild(elem);"
+        , elementId);
+      
+      RunScript(removeElement);
+
+      return result;
+    }
   }
 }
