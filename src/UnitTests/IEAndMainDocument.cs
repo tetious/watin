@@ -31,6 +31,7 @@ using Attribute=WatiN.Core.Attribute;
 namespace WatiN.Core.UnitTests
 {
   using System.IO;
+  using NUnit.Framework.SyntaxHelpers;
   using Rhino.Mocks;
   using SHDocVw;
 
@@ -1199,9 +1200,9 @@ namespace WatiN.Core.UnitTests
       Expect.Call(buggyDialogHandler.HandleDialog(dialog)).Throw(new Exception());
       // Expect Logger will be called with the exception text and stack trace
       mockLogWriter.LogAction("");
-      LastCall.Constraints(Text.Like("Exception was thrown while DialogWatcher called HandleDialog:"));
+      LastCall.Constraints(Rhino.Mocks.Text.Like("Exception was thrown while DialogWatcher called HandleDialog:"));
       mockLogWriter.LogAction("");
-      LastCall.Constraints(Text.StartsWith("System.Exception:"));
+      LastCall.Constraints(Rhino.Mocks.Text.StartsWith("System.Exception:"));
       // Expect the next dialogHandler will be called even do an exception
       // has been thrown by the previous handler
       Expect.Call(nextDialogHandler.HandleDialog(dialog)).Return(true);
@@ -1225,6 +1226,21 @@ namespace WatiN.Core.UnitTests
       
       mocks.VerifyAll();
     }
+
+    [Test]
+    public void StartingDialogWatcherShouldAdhereToSetting()
+    {
+      IE.Settings.Reset();
+
+      Assert.That(IE.Settings.AutoStartDialogWatcher, "Unexpected value for AutoStartDialogWatcher");
+
+      IE.Settings.AutoStartDialogWatcher = false;
+      using(IE ie = new IE())
+      {
+        Assert.That(ie.DialogWatcher, NUnit.Framework.SyntaxHelpers.Is.Null);  
+      }
+    }
+
   }
 
   [TestFixture]

@@ -106,6 +106,7 @@ namespace WatiN.Core
       public bool highLightElement;
       public string highLightColor;
       public bool autoCloseDialogs;
+      public bool autoStartDialogWatcher;
     }
     
     private settingsStruct settings;
@@ -146,6 +147,7 @@ namespace WatiN.Core
       settings.highLightElement = true;
       settings.highLightColor = "yellow";
       settings.autoCloseDialogs = true;
+      settings.autoStartDialogWatcher = true;
     }
 
     /// <summary>
@@ -227,6 +229,19 @@ namespace WatiN.Core
       set { settings.autoCloseDialogs = value; }
     }
     
+    /// <summary>
+    /// Gets or sets a value indicating whether to auto start the dialog watcher at all.
+    /// This value is evaluated everytime a new IE instance is created
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if dialog watcher should be started when a new IE instance is created; otherwise, <c>false</c>.
+    /// </value>
+    public bool AutoStartDialogWatcher
+    {
+      get { return settings.autoStartDialogWatcher; }
+      set { settings.autoStartDialogWatcher = value; }
+    }
+
     private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
     {
       if (value < 0 )
@@ -1358,9 +1373,9 @@ namespace WatiN.Core
     }
   }
 
-  public class IEWaitForComplete : WaitForComplete
+  public class IEWaitForComplete : WaitForComplete 
   {
-    private IE _ie;
+    protected IE _ie;
 
     public IEWaitForComplete(IE ie) : base(ie)
     {

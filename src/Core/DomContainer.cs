@@ -99,7 +99,7 @@ namespace WatiN.Core
     /// </summary>
     protected void StartDialogWatcher()
     {
-      if (_dialogWatcher == null)
+      if (IE.Settings.AutoStartDialogWatcher && _dialogWatcher == null)
       {
         _dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
         _dialogWatcher.IncreaseReferenceCount();
