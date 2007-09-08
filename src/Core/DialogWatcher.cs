@@ -777,7 +777,7 @@ namespace WatiN.Core.DialogHandlers
   /// This class handles the Security Warning dialog and does press
   /// the OK button when the dialog shows up.
   /// </summary>
-  public class SecurityAlertDialogHandler : IDialogHandler
+  public class SecurityAlertDialogHandler : BaseDialogHandler
   {
     private const string securityAlertDialogStyle = "94C80AC4";
 
@@ -787,7 +787,7 @@ namespace WatiN.Core.DialogHandlers
     /// </summary>
     /// <param name="window">The window.</param>
     /// <returns></returns>
-    public bool HandleDialog(Window window)
+    public override bool HandleDialog(Window window)
     {
       if (IsSecurityAlertDialog(window))
       {
