@@ -156,14 +156,35 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Waits for the page to be completely loaded
+    /// </summary>
     public virtual void WaitForComplete()
     {
       WaitForComplete(new WaitForComplete(this));
     }
 
+    /// <summary>
+    /// Waits for the page to be completely loaded
+    /// </summary>
+    /// <param name="waitForComplete">The wait for complete.</param>
     public void WaitForComplete(IWait waitForComplete)
     {
       waitForComplete.DoWait();
+    }
+
+    /// <summary>
+    /// Captures the web page to file. The file extension is used to 
+    /// determine the image format. The following image formats are
+    /// supported (if the encoder is available on the machine):
+    /// jpg, tif, gif, png, bmp.
+    /// If you want more controle over the output, use <seealso cref="CaptureWebPage.CaptureWebPageToFile"/>
+    /// </summary>
+    /// <param name="filename">The filename.</param>
+    public void CaptureWebPageToFile(string filename)
+    {
+      CaptureWebPage captureWebPage = new CaptureWebPage(this);
+      captureWebPage.CaptureWebPageToFile(filename, false, false, 100, 100);
     }
   }  
 

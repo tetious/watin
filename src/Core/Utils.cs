@@ -16,28 +16,29 @@
 
 #endregion Copyright
 
-using System;
-using System.Timers;
-using mshtml;
-
 namespace WatiN.Core
 {
+  using System;
   using System.Collections;
   using System.Collections.Specialized;
   using System.Text;
+  using System.Timers;
+  using mshtml;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
   using WatiN.Core.Logging;
 
   /// <summary>
-	/// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
-	/// </summary>
-	public sealed class UtilityClass
-	{
+  /// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
+  /// </summary>
+  public sealed class UtilityClass
+  {
     /// <summary>
     /// Prevent creating an instance of this class (contains only static members)
     /// </summary>
-    private UtilityClass(){}
+    private UtilityClass()
+    {
+    }
 
     /// <summary>
     /// Dumps all element ids to <see cref="DebugLogWriter"/>
@@ -107,14 +108,14 @@ namespace WatiN.Core
       FrameCollection frames = document.Frames;
 
       logWriter.LogAction("There are " + frames.Length.ToString() + " Frames");
-      
+
       int index = 0;
-      foreach(Frame frame in frames)
+      foreach (Frame frame in frames)
       {
         logWriter.LogAction("Frame index: " + index.ToString());
         logWriter.LogAction(" name: " + frame.Name);
         logWriter.LogAction(" scr: " + frame.Url);
-        
+
         index++;
       }
     }
@@ -130,7 +131,7 @@ namespace WatiN.Core
     {
       return (value == null || value.Length == 0);
     }
-	  
+
     /// <summary>
     /// Determines whether the specified <paramref name="value" /> is null or empty.
     /// </summary>
@@ -149,16 +150,16 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="theObject">The object.</param>
     /// <returns></returns>
-	  public static string ToString(object theObject)
-	  {
-	    if (theObject == null)
-	    {
-	      return String.Empty;
-	    }
-	    
-	    return theObject.ToString();
-	  }
-	  
+    public static string ToString(object theObject)
+    {
+      if (theObject == null)
+      {
+        return String.Empty;
+      }
+
+      return theObject.ToString();
+    }
+
     private static IHTMLElementCollection elementCollection(Document document)
     {
       return document.HtmlDocument.all;
@@ -170,14 +171,14 @@ namespace WatiN.Core
     /// <param name="hWnd">The hWND of the window if which the class name should be retrieved.</param>
     /// <param name="expectedClassName">Expected name of the class.</param>
     /// <returns></returns>
-	  public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
-	  {
-	    if (hWnd == IntPtr.Zero) return false;
-	    
-	    string className = NativeMethods.GetClassName(hWnd);
-      
-	    return className.Equals(expectedClassName);
-	  }
+    public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
+    {
+      if (hWnd == IntPtr.Zero) return false;
+
+      string className = NativeMethods.GetClassName(hWnd);
+
+      return className.Equals(expectedClassName);
+    }
 
     /// <summary>
     /// Converts the HTML element collection to an array list.
@@ -185,17 +186,17 @@ namespace WatiN.Core
     /// <param name="elementCollection">The element collection.</param>
     /// <returns>an array list with all the elements found in the element collection</returns>
     internal static ArrayList IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
-	  {
-	    ArrayList elements = new ArrayList();
-	    int length = elementCollection.length;
+    {
+      ArrayList elements = new ArrayList();
+      int length = elementCollection.length;
 
-      for(int index = 0; index < length; index++)
+      for (int index = 0; index < length; index++)
       {
         elements.Add(elementCollection.item(index, null));
       }
 
-	    return elements;
-	  }
+      return elements;
+    }
 
     /// <summary>
     /// Runs the javascript code in IE.
@@ -233,7 +234,7 @@ namespace WatiN.Core
     public static void FireEvent(DispHTMLBaseElement element, string eventName)
     {
       NameValueCollection collection = new NameValueCollection();
-      collection.Add("button","1");
+      collection.Add("button", "1");
 
       FireEvent(element, eventName, collection);
     }
@@ -276,9 +277,9 @@ namespace WatiN.Core
         // is thrown. The following code doesn't seem to have any effect,
         // but maybe someday MicroSoft fixes the issue... so I wrote the code anyway.
         object dummyEvt = null;
-        object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
-        
-        IHTMLEventObj2 eventObj = (IHTMLEventObj2)parentEvt;
+        object parentEvt = ((IHTMLDocument4) element.document).CreateEventObject(ref dummyEvt);
+
+        IHTMLEventObj2 eventObj = (IHTMLEventObj2) parentEvt;
 
         for (int index = 0; index < eventObjectProperties.Count; index++)
         {
@@ -305,8 +306,8 @@ namespace WatiN.Core
       }
       return inputtypesString;
     }
-	}
-  
+  }
+
   /// <summary>
   /// This class provides a simple way to handle loops that have to time out after 
   /// a specified number of seconds.
@@ -328,8 +329,8 @@ namespace WatiN.Core
   /// </example>
   public class SimpleTimer
   {
-    Timer clock = null;
-    
+    private Timer clock = null;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SimpleTimer"/> class.
     /// </summary>
@@ -343,7 +344,7 @@ namespace WatiN.Core
 
       if (timeout > 0)
       {
-        clock = new Timer(timeout * 1000);
+        clock = new Timer(timeout*1000);
         clock.AutoReset = false;
         clock.Elapsed += new ElapsedEventHandler(ElapsedEvent);
         clock.Start();

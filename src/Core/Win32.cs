@@ -48,6 +48,9 @@ namespace WatiN.Core
     internal const int WM_ACTIVATE = 6;
     internal const int MA_ACTIVATE = 1;
 
+    internal const int GW_CHILD = 5;
+    internal const int GW_HWNDNEXT = 2;
+
 
     #endregion Constants
 
@@ -208,8 +211,14 @@ namespace WatiN.Core
     [DllImport("user32.dll", SetLastError=true)]
     internal static extern IntPtr GetForegroundWindow();
 
+    [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
+    public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+
+    [DllImport("user32.dll")]
+    internal static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+
     [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
-    internal static extern int GetWindowText( IntPtr handleToWindow, StringBuilder windowText, int maxTextLength );
+    internal static extern int GetWindowText(IntPtr handleToWindow, StringBuilder windowText, int maxTextLength );
 
     [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
     internal static extern int GetWindowTextLength(IntPtr hWnd);
@@ -302,6 +311,9 @@ namespace WatiN.Core
     [DllImport("kernel32")]
     internal static extern int GetCurrentThreadId();
     
+    [DllImport("gdi32.dll")]
+    internal static extern bool DeleteObject(IntPtr hObject);
+
     #region ComImport Interfaces
 
     [ComImport, Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
