@@ -205,7 +205,13 @@ namespace WatiN.Core
       bool doKeyPress = ShouldEventBeFired(htmlElement.onkeypress);
       bool doKeyUp = ShouldEventBeFired(htmlElement.onkeyup);
 
-      for (int i = 0; i < value.Length; i++)
+      int length = value.Length;
+      if (MaxLength !=0 && length > MaxLength )
+      {
+        length = MaxLength;
+      }
+
+      for (int i = 0; i < length; i++)
       {
         //TODO: Make typing speed a variable
         //        Thread.Sleep(0); 
