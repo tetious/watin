@@ -19,8 +19,10 @@
 namespace WatiN.Core.UnitTests
 {
   using System;
+  using System.Drawing;
   using System.IO;
   using System.Threading;
+  using System.Windows.Forms;
   using NUnit.Framework;
   using Rhino.Mocks;
   using SHDocVw;
@@ -160,6 +162,25 @@ namespace WatiN.Core.UnitTests
 
         ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
         Assert.AreEqual(NativeMethods.WindowShowStyle.ShowNormal.ToString(), ie.GetWindowStyle().ToString(), "Not ShowNormal");
+      }
+    }
+
+    [Test]
+    public void AutoMoveMousePointerToTopLeft()
+    {
+      Point notTopLeftPoint = new Point(50, 50);
+      Cursor.Position = notTopLeftPoint;
+      IE.Settings.AutoMoveMousePointerToTopLeft = false;
+
+      using(new IE())
+      {
+        Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(notTopLeftPoint));
+      }
+
+      IE.Settings.Reset();
+      using(new IE())
+      {
+        Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(new Point(0,0)));
       }
     }
 
@@ -906,7 +927,7 @@ namespace WatiN.Core.UnitTests
       using (IE ie = new IE(TestEventsURI))
       {
         TextField report = ie.TextField("Report");
-        Button button = ie.Button(Find.ByValue("Button without id"));
+        Core.Button button = ie.Button(Find.ByValue("Button without id"));
 
         Assert.IsNull(button.Id, "Button id not null before click event");
         Assert.IsNull(report.Text, "Report not empty");
@@ -992,7 +1013,7 @@ namespace WatiN.Core.UnitTests
         
         ie.TextField(Find.ByName("form_loginname")).WaitUntilExists();
 
-        Assert.IsTrue(securityAlertDialogHandlerMock.HasHandeledSecurityAlertDialog);
+        Assert.IsTrue(securityAlertDialogHandlerMock.HasHandledSecurityAlertDialog);
       }
     }
 
@@ -1008,20 +1029,20 @@ namespace WatiN.Core.UnitTests
 
     private class SecurityAlertDialogHandlerMock : SecurityAlertDialogHandler
     {
-      private bool _hasHandeledSecurityAlertDialog;
+      private bool _hasHandledSecurityAlertDialog;
 
-      public bool HasHandeledSecurityAlertDialog
+      public bool HasHandledSecurityAlertDialog
       {
-        get { return _hasHandeledSecurityAlertDialog; }
+        get { return _hasHandledSecurityAlertDialog; }
       }
 
       public override bool HandleDialog(Window window)
       {
         bool handled = base.HandleDialog(window);
 
-        if (handled && !HasHandeledSecurityAlertDialog)
+        if (handled && !HasHandledSecurityAlertDialog)
         {
-          _hasHandeledSecurityAlertDialog = true;
+          _hasHandledSecurityAlertDialog = true;
         }
         return handled;
       }

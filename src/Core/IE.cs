@@ -33,6 +33,9 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+  using System.Drawing;
+  using System.Windows.Forms;
+
   /// <summary>
   /// This class is used to define the default settings used by WatiN. 
   /// Use <c>IE.Settings</c> to access or change these settings.
@@ -107,6 +110,7 @@ namespace WatiN.Core
       public string highLightColor;
       public bool autoCloseDialogs;
       public bool autoStartDialogWatcher;
+      public bool autoMoveMousePointerToTopLeft;
     }
     
     private settingsStruct settings;
@@ -148,6 +152,7 @@ namespace WatiN.Core
       settings.highLightColor = "yellow";
       settings.autoCloseDialogs = true;
       settings.autoStartDialogWatcher = true;
+      settings.autoMoveMousePointerToTopLeft = true;
     }
 
     /// <summary>
@@ -240,6 +245,19 @@ namespace WatiN.Core
     {
       get { return settings.autoStartDialogWatcher; }
       set { settings.autoStartDialogWatcher = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to move the cursor to the top left
+    /// of the screen everytime a new IE instance is created.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> when mouse should be moved to top left; otherwise, <c>false</c>.
+    /// </value>
+    public bool AutoMoveMousePointerToTopLeft
+    {
+      get { return settings.autoMoveMousePointerToTopLeft; }
+      set { settings.autoMoveMousePointerToTopLeft = value; }
     }
 
     private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
@@ -747,7 +765,7 @@ namespace WatiN.Core
     {
       CheckThreadApartmentStateIsSTA();
 
-      MoveMouseToTopLeft();
+      MoveMousePoinerToTopLeft();
 
       if (createInNewProcess)
       {
@@ -894,12 +912,13 @@ namespace WatiN.Core
       return null;
     }
 
-    private void MoveMouseToTopLeft()
+    private void MoveMousePoinerToTopLeft()
     {
-      // Better move the mouse out of the way.
-      System.Windows.Forms.Cursor.Position = new System.Drawing.Point(0, 0);
+      if (Settings.AutoMoveMousePointerToTopLeft)
+      {
+        Cursor.Position = new Point(0, 0);
+      }
     }
-
     
     /// <summary>
     /// Navigates Internet Explorer to the given <paramref name="url" />.
