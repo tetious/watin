@@ -144,6 +144,15 @@ namespace WatiN.Core.UnitTests
       }
     }
 
+    [Test, Category("InternetConnectionNeeded")]
+    public void AddProtocolToUrlIfOmmitted()
+    {
+      using(IE ie = new IE("www.google.com"))
+      {
+        Assert.That(ie.Url, NUnit.Framework.SyntaxHelpers.Text.StartsWith("http://"));
+      }
+    }
+
     [Test]
     public void WindowStyle()
     {
