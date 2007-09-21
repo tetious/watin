@@ -40,11 +40,6 @@ namespace WatiN.Core
   /// </summary>
   public class ElementFinder
   {
-    public static ElementFinder ButtonFinder(Attribute findBy, IElementCollection elements)
-    {
-      return new ElementFinder(Button.ElementTags, findBy, elements);
-    }
-
     private ArrayList tagsToFind = new ArrayList();
     
     protected readonly Attribute findBy;

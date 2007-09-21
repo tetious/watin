@@ -105,6 +105,16 @@
                     AssemblyName = "Interop.SHDocVw"
                     HintPath = "..\..\lib\Net\1.1\Interop.SHDocVw.dll"
                 />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -230,4 +240,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 

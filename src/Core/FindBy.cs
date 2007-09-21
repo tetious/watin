@@ -436,6 +436,43 @@ namespace WatiN.Core
     }
   }
 
+	/// <summary>
+	/// Class to find an element by it's alt text.
+	/// </summary>  
+	/// <example>
+	/// <code>ie.Image(new Alt("alt text")).Src</code>
+	/// or use
+	/// <code>ie.Image(Find.ByAlt("alt text")).Src</code>
+	/// </example>
+	public class Alt : Attribute
+	{
+		private const string attributeName = "alt";
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Alt"/> class.
+		/// </summary>
+		/// <param name="alt">The alt text to find.</param>
+		public Alt(string alt) : base(attributeName, alt)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Alt"/> class.
+		/// </summary>
+		/// <param regex="regex">The regular expression to match with.</param>
+		public Alt(Regex regex) : base(attributeName, regex)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Alt"/> class.
+		/// </summary>
+		/// <param name="comparer">The comparer.</param>
+		public Alt(ICompare comparer) : base(attributeName, comparer)
+		{
+		}
+	}
+
   /// <summary>
   /// Class to find an element by it's id.
   /// </summary>  
@@ -890,6 +927,45 @@ namespace WatiN.Core
   /// </summary>
   public class Find
   {
+		/// <summary>
+		/// Finds an element by its alt text.
+		/// </summary>
+		/// <param name="alt">The alt text to find.</param>
+		/// <returns>The attribute</returns>
+		/// <example>
+		/// <code>ie.Image(Find.ByAlt("alt text")).Name</code>
+		/// </example>
+		public static Alt ByAlt(string alt)
+		{
+			return new Alt(alt);
+		}
+
+		/// <summary>
+		/// Finds an element by its alt text.
+		/// </summary>
+		/// <param name="regex">The regular expression for the alt text to find.</param>
+		/// <returns>The attribute</returns>
+		/// <example>
+		/// <code>ie.Image(Find.ByAlt(new Regex("pattern goes here")))).Name</code>
+		/// </example>
+		public static Alt ByAlt(Regex regex)
+		{
+			return new Alt(regex);
+		}
+
+		/// <summary>
+		/// Finds an element by its alt text.
+		/// </summary>
+		/// <param name="compare">The compare.</param>
+		/// <returns>The attribute</returns>
+		/// <example>
+		/// 	<code>Image img = ie.Image(Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("alt text")));</code>
+		/// </example>
+		public static Alt ByAlt(ICompare compare)
+		{
+			return new Alt(compare);
+		}
+
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.
     /// </summary>

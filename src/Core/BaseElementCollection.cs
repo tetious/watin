@@ -38,7 +38,7 @@ namespace WatiN.Core
     
     private ArrayList elements;
     private CreateElementInstance createElementInstance;
-    private ElementFinder finder;
+    protected ElementFinder finder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ButtonCollection"/> class.

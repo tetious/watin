@@ -16,28 +16,26 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
-
-using WatiN.Core;
-using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core.UnitTests
 {
+  using System;
+  using System.Collections;
+  using System.Collections.Specialized;
+  using System.Text.RegularExpressions;
   using mshtml;
+  using NUnit.Framework;
   using Rhino.Mocks;
+  using SHDocVw;
+  using WatiN.Core.Exceptions;
+  using WatiN.Core.Interfaces;
 
   [TestFixture]
   public class Elements : WatiNTest
   {
     private IE ie;
-    const string tableId = "table1";
+    private const string tableId = "table1";
     private Settings defaultSettings;
-    
+
     [TestFixtureSetUp]
     public void FixtureSetup()
     {
@@ -55,47 +53,47 @@ namespace WatiN.Core.UnitTests
     public void TestSetUp()
     {
       IE.Settings = defaultSettings.Clone();
-      if(!ie.Uri.Equals(MainURI))
+      if (!ie.Uri.Equals(MainURI))
       {
         ie.GoTo(MainURI);
       }
     }
-    
+
     [Test]
     public void IEIsIE()
     {
-      Assert.IsInstanceOfType(typeof(IE), ie);
+      Assert.IsInstanceOfType(typeof (IE), ie);
     }
 
     [Test]
     public void IEIsDomContainer()
     {
-      Assert.IsInstanceOfType(typeof(DomContainer), ie); 
+      Assert.IsInstanceOfType(typeof (DomContainer), ie);
     }
-    
+
     [Test]
     public void DomContainerIsDocument()
     {
-      Assert.IsInstanceOfType(typeof(Document), ie); 
-    }   
-    
+      Assert.IsInstanceOfType(typeof (Document), ie);
+    }
+
     [Test]
     public void DocumentIsISubElement()
     {
-      Assert.IsInstanceOfType(typeof(IElementsContainer), ie); 
-    }   
+      Assert.IsInstanceOfType(typeof (IElementsContainer), ie);
+    }
 
     [Test]
     public void TableElementTags()
     {
       Assert.AreEqual(1, Table.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("table",((ElementTag) Table.ElementTags[0]).TagName);
+      Assert.AreEqual("table", ((ElementTag) Table.ElementTags[0]).TagName);
     }
 
     [Test]
     public void TableFromElement()
     {
-      Element element = ie.Element(tableId);  
+      Element element = ie.Element(tableId);
       Table table = new Table(element);
       Assert.AreEqual(tableId, table.Id);
     }
@@ -135,31 +133,31 @@ namespace WatiN.Core.UnitTests
     public void TableRowGetParentTable()
     {
       TableRow tableRow = ie.TableRow("row0");
-      Assert.IsInstanceOfType(typeof(TableBody), tableRow.Parent, "Parent should be a TableBody Type");
-      Assert.IsInstanceOfType(typeof(Table), tableRow.ParentTable, "Should be a Table Type");
+      Assert.IsInstanceOfType(typeof (TableBody), tableRow.Parent, "Parent should be a TableBody Type");
+      Assert.IsInstanceOfType(typeof (Table), tableRow.ParentTable, "Should be a Table Type");
       Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
     }
 
     [Test]
     public void TableTest()
     {
-      Assert.AreEqual(tableId,  ie.Table(Find.ById(tableId)).Id);
-      
+      Assert.AreEqual(tableId, ie.Table(Find.ById(tableId)).Id);
+
       Table table = ie.Table(tableId);
-      Assert.AreEqual(tableId,  table.Id);
-      Assert.AreEqual(tableId,  table.ToString());
+      Assert.AreEqual(tableId, table.Id);
+      Assert.AreEqual(tableId, table.ToString());
       Assert.AreEqual(3, table.TableRows.Length, "Unexpected number of rows");
 
-      TableRow row = table.FindRow("a1",0);
+      TableRow row = table.FindRow("a1", 0);
       Assert.IsNotNull(row, "Row with a1 expected");
       Assert.AreEqual("a1", row.TableCells[0].Text, "Unexpected text in cell");
-      
 
-      row = table.FindRow("b2",1);
+
+      row = table.FindRow("b2", 1);
       Assert.IsNotNull(row, "Row with b2 expected");
       Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
 
-      row = table.FindRow("c1",0);
+      row = table.FindRow("c1", 0);
       Assert.IsNull(row, "No row with c1 expected");
     }
 
@@ -168,19 +166,19 @@ namespace WatiN.Core.UnitTests
     {
       Table table = ie.Table(tableId);
       Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
-      
+
       TableRow row = table.FindRow(new Regex("a"), 0);
       Assert.IsNotNull(row, "row expected");
       Assert.AreEqual("a1", row.TableCells[0].Text);
     }
-  
+
     [Test]
     public void TableFindRowWithTextIgnoreCase()
     {
       Table table = ie.Table(tableId);
 
       // test: ignore case of the text to find
-      TableRow row = table.FindRow("A2",1);
+      TableRow row = table.FindRow("A2", 1);
       Assert.IsNotNull(row, "Row with a1 expected");
       Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
     }
@@ -191,7 +189,7 @@ namespace WatiN.Core.UnitTests
       Table table = ie.Table(tableId);
 
       // test: ignore case of the text to find
-      TableRow row = table.FindRow("a",1);
+      TableRow row = table.FindRow("a", 1);
       Assert.IsNull(row, "No row expected");
     }
 
@@ -199,19 +197,19 @@ namespace WatiN.Core.UnitTests
     public void TableFindRowWithRegex()
     {
       Table table = ie.Table(tableId);
-      
-      TableRow row = table.FindRow(new Regex("b"),1);
-      
+
+      TableRow row = table.FindRow(new Regex("b"), 1);
+
       Assert.IsNotNull(row, "Row with b1 expected");
       Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
     }
-    
+
     [Test]
     public void Tables()
     {
       // Collection.length
       TableCollection tables = ie.Tables;
-      
+
       Assert.AreEqual(2, tables.Length);
 
       // Collection items by index
@@ -227,12 +225,12 @@ namespace WatiN.Core.UnitTests
       {
         tableEnumerator.MoveNext();
         object enumTable = tableEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(table.OuterHtml, ((Table)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(tableEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
     }
@@ -241,13 +239,13 @@ namespace WatiN.Core.UnitTests
     public void TableRowElementTags()
     {
       Assert.AreEqual(1, TableRow.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("tr",((ElementTag) TableRow.ElementTags[0]).TagName);
+      Assert.AreEqual("tr", ((ElementTag) TableRow.ElementTags[0]).TagName);
     }
 
     [Test]
     public void TableRowFromElement()
     {
-      Element element = ie.Element("row0");  
+      Element element = ie.Element("row0");
       TableRow tableRow = new TableRow(element);
       Assert.AreEqual("row0", tableRow.Id);
     }
@@ -265,7 +263,7 @@ namespace WatiN.Core.UnitTests
     {
       // Collection.Length
       TableRowCollection rows = ie.Table("table1").TableRows;
-      
+
       Assert.AreEqual(3, rows.Length);
 
       // Collection items by index
@@ -281,12 +279,12 @@ namespace WatiN.Core.UnitTests
       {
         rowEnumerator.MoveNext();
         object enumTable = rowEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(row.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(row.OuterHtml, ((TableRow)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(row.OuterHtml, ((TableRow) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(3, count);
     }
@@ -295,13 +293,13 @@ namespace WatiN.Core.UnitTests
     public void TableCellElementTags()
     {
       Assert.AreEqual(1, TableCell.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("td",((ElementTag) TableCell.ElementTags[0]).TagName);
+      Assert.AreEqual("td", ((ElementTag) TableCell.ElementTags[0]).TagName);
     }
 
     [Test]
     public void TableCellFromElement()
     {
-      Element element = ie.Element("td1");  
+      Element element = ie.Element("td1");
       TableCell tableCell = new TableCell(element);
       Assert.AreEqual("td1", tableCell.Id);
     }
@@ -321,7 +319,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(ie.TableCell(new Regex("td1"), 0).Exists);
       Assert.IsFalse(ie.TableCell("td1", 100).Exists);
     }
-    
+
     [Test]
     public void TableCellByIndex()
     {
@@ -334,7 +332,7 @@ namespace WatiN.Core.UnitTests
     public void TableCellGetParentTableRow()
     {
       TableCell tableCell = ie.TableCell(Find.ByText("b1"));
-      Assert.IsInstanceOfType(typeof(TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
+      Assert.IsInstanceOfType(typeof (TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
       Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
     }
 
@@ -350,7 +348,7 @@ namespace WatiN.Core.UnitTests
     {
       // Collection.Length
       TableCellCollection cells = ie.Table("table1").TableRows[1].TableCells;
-      
+
       Assert.AreEqual(2, cells.Length);
 
       // Collection items by index
@@ -366,12 +364,12 @@ namespace WatiN.Core.UnitTests
       {
         cellEnumerator.MoveNext();
         object enumTable = cellEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(cell.GetType(), enumTable, "Types are not the same");
-        Assert.AreEqual(cell.OuterHtml, ((TableCell)enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(cell.OuterHtml, ((TableCell) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(cellEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
     }
@@ -382,7 +380,7 @@ namespace WatiN.Core.UnitTests
       Button helloButton = ie.Button("helloid");
       Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
     }
-    
+
     [Test]
     public void GetValidButUndefiniedAttribute()
     {
@@ -390,14 +388,14 @@ namespace WatiN.Core.UnitTests
       Assert.IsNull(helloButton.GetAttributeValue("title"));
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void GetAttributeValueOfNullThrowsArgumentNullException()
     {
       Button helloButton = ie.Button("helloid");
       Assert.IsNull(helloButton.GetAttributeValue(null));
     }
 
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void GetAttributeValueOfEmptyStringThrowsArgumentNullException()
     {
       Button helloButton = ie.Button("helloid");
@@ -408,41 +406,41 @@ namespace WatiN.Core.UnitTests
     public void ButtonElementTags()
     {
       Assert.AreEqual(2, Button.ElementTags.Count, "2 elementtags expected");
-      Assert.AreEqual("input",((ElementTag) Button.ElementTags[0]).TagName);
-      Assert.AreEqual("button submit image reset",((ElementTag) Button.ElementTags[0]).InputTypes);
-      Assert.AreEqual("button",((ElementTag) Button.ElementTags[1]).TagName);
+      Assert.AreEqual("input", ((ElementTag) Button.ElementTags[0]).TagName);
+      Assert.AreEqual("button submit image reset", ((ElementTag) Button.ElementTags[0]).InputTypes);
+      Assert.AreEqual("button", ((ElementTag) Button.ElementTags[1]).TagName);
     }
-    
+
     [Test]
     public void ButtonFormInputElement()
     {
       const string popupValue = "Show modeless dialog";
       Button button = ie.Button(Find.ById("popupid"));
-      
-      Assert.IsInstanceOfType(typeof(Element), button);
-      Assert.IsInstanceOfType(typeof(Button), button);
+
+      Assert.IsInstanceOfType(typeof (Element), button);
+      Assert.IsInstanceOfType(typeof (Button), button);
 
       Assert.AreEqual(popupValue, button.Value);
       Assert.AreEqual(popupValue, ie.Button("popupid").Value);
       Assert.AreEqual(popupValue, ie.Button("popupid").ToString());
       Assert.AreEqual(popupValue, ie.Button(Find.ByName("popupname")).Value);
-      
+
       Button helloButton = ie.Button("helloid");
       Assert.AreEqual("Show allert", helloButton.Value);
       Assert.AreEqual(helloButton.Value, helloButton.Text);
-      
+
       Assert.IsTrue(ie.Button(new Regex("popupid")).Exists);
     }
-        
+
     [Test]
     public void ButtonFormButtonElement()
     {
       const string Value = "Button Element";
-      
+
       Button button = ie.Button(Find.ById("buttonelementid"));
-      
-      Assert.IsInstanceOfType(typeof(Element), button);
-      Assert.IsInstanceOfType(typeof(Button), button);
+
+      Assert.IsInstanceOfType(typeof (Element), button);
+      Assert.IsInstanceOfType(typeof (Button), button);
 
       Assert.AreEqual(Value, button.Value);
       Assert.AreEqual(Value, ie.Button("buttonelementid").Value);
@@ -454,17 +452,17 @@ namespace WatiN.Core.UnitTests
       // but the value attribute seems to return the innertext(!)
       // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
       Assert.AreEqual(Value, ie.Button(Find.ByValue("Button Element")).Value);
-      
+
       Assert.IsTrue(ie.Button(new Regex("buttonelementid")).Exists);
     }
 
-    [Test, ExpectedException(typeof(ElementDisabledException))]
+    [Test, ExpectedException(typeof (ElementDisabledException))]
     public void ButtonDisabledException()
     {
       ie.Button("disabledid").Click();
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
+    [Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
     public void ButtonElementNotFoundException()
     {
       IE.Settings.WaitUntilExistsTimeOut = 1;
@@ -497,14 +495,14 @@ namespace WatiN.Core.UnitTests
       Button button = new Button(element);
       Assert.AreEqual("buttonelementid", button.Id);
     }
-    
-    [Test, ExpectedException(typeof(ArgumentException))]
+
+    [Test, ExpectedException(typeof (ArgumentException))]
     public void ButtonFromElementArgumentException()
     {
       Element element = ie.Element("Checkbox1");
       new Button(element);
     }
-    
+
     [Test]
     public void Buttons()
     {
@@ -516,7 +514,7 @@ namespace WatiN.Core.UnitTests
 
       // Collection.Length
       ButtonCollection formButtons = form.Buttons;
-      
+
       Assert.AreEqual(expectedFormButtonsCount, formButtons.Length);
 
       // Collection items by index
@@ -528,7 +526,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(form.Buttons.Exists("modalid"));
       Assert.IsTrue(form.Buttons.Exists(new Regex("modalid")));
       Assert.IsFalse(form.Buttons.Exists("nonexistingid"));
-      
+
       IEnumerable buttonEnumerable = formButtons;
       IEnumerator buttonEnumerator = buttonEnumerable.GetEnumerator();
 
@@ -538,12 +536,12 @@ namespace WatiN.Core.UnitTests
       {
         buttonEnumerator.MoveNext();
         object enumButton = buttonEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(inputButton.GetType(), enumButton, "Types are not the same");
-        Assert.AreEqual(inputButton.OuterHtml, ((Button)enumButton).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(inputButton.OuterHtml, ((Button) enumButton).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(buttonEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFormButtonsCount, count);
     }
@@ -556,35 +554,35 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("disabledid", buttons[0].Id);
       Assert.AreEqual("buttonelementid", buttons[1].Id);
     }
-    
+
     [Test]
     public void ButtonsFilterOnArrayListElements()
     {
       ButtonCollection buttons = ie.Buttons;
       Assert.AreEqual(5, buttons.Length);
-      
+
       buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
       Assert.AreEqual(2, buttons.Length);
       Assert.AreEqual("disabledid", buttons[0].Id);
       Assert.AreEqual("buttonelementid", buttons[1].Id);
     }
-    
+
     [Test]
     public void CheckBoxElementTags()
     {
       Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("input",((ElementTag) CheckBox.ElementTags[0]).TagName);
-      Assert.AreEqual("checkbox",((ElementTag) CheckBox.ElementTags[0]).InputTypes);
+      Assert.AreEqual("input", ((ElementTag) CheckBox.ElementTags[0]).TagName);
+      Assert.AreEqual("checkbox", ((ElementTag) CheckBox.ElementTags[0]).InputTypes);
     }
 
     [Test]
     public void CheckBoxFromElement()
     {
-      Element element = ie.Element("Checkbox1");  
+      Element element = ie.Element("Checkbox1");
       CheckBox checkBox = new CheckBox(element);
       Assert.AreEqual("Checkbox1", checkBox.Id);
     }
-    
+
     [Test]
     public void CheckBoxExists()
     {
@@ -601,13 +599,12 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("Checkbox1", checkbox1.Id, "Found wrong checkbox");
       Assert.AreEqual("Checkbox1", checkbox1.ToString(), "ToString didn't return Id");
       Assert.IsTrue(checkbox1.Checked, "Should initially be checked");
-      
+
       checkbox1.Checked = false;
       Assert.IsFalse(checkbox1.Checked, "Should not be checked");
 
       checkbox1.Checked = true;
       Assert.IsTrue(checkbox1.Checked, "Should be checked");
-      
     }
 
     [Test]
@@ -618,10 +615,10 @@ namespace WatiN.Core.UnitTests
       CheckBoxCollection formCheckBoxs = ie.Form("FormCheckboxes").CheckBoxes;
 
       // Collection items by index
-      Assert.AreEqual(3,formCheckBoxs.Length, "Wrong number off checkboxes");
+      Assert.AreEqual(3, formCheckBoxs.Length, "Wrong number off checkboxes");
       Assert.AreEqual("Checkbox1", formCheckBoxs[0].Id);
       Assert.AreEqual("Checkbox2", formCheckBoxs[1].Id);
-      Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);      
+      Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);
 
       // Collection iteration and comparing the result with Enumerator
       IEnumerable checkboxEnumerable = formCheckBoxs;
@@ -632,12 +629,12 @@ namespace WatiN.Core.UnitTests
       {
         checkboxEnumerator.MoveNext();
         object enumCheckbox = checkboxEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(checkBox.GetType(), enumCheckbox, "Types are not the same");
-        Assert.AreEqual(checkBox.OuterHtml, ((CheckBox)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(checkBox.OuterHtml, ((CheckBox) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(3, count);
     }
@@ -646,17 +643,17 @@ namespace WatiN.Core.UnitTests
     public void DivElementTags()
     {
       Assert.AreEqual(1, Div.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("div",((ElementTag) Div.ElementTags[0]).TagName);
+      Assert.AreEqual("div", ((ElementTag) Div.ElementTags[0]).TagName);
     }
 
     [Test]
     public void DivFromElement()
     {
-      Element element = ie.Element("divid");  
+      Element element = ie.Element("divid");
       Div div = new Div(element);
       Assert.AreEqual("divid", div.Id);
     }
-    
+
     [Test]
     public void DivExists()
     {
@@ -691,33 +688,33 @@ namespace WatiN.Core.UnitTests
       {
         divEnumerator.MoveNext();
         object enumDiv = divEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(div.GetType(), enumDiv, "Types are not the same");
-        Assert.AreEqual(div.OuterHtml, ((Div)enumDiv).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(div.OuterHtml, ((Div) enumDiv).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(1, count);
     }
 
-    
+
     [Test]
     public void Element()
     {
       Element element = ie.Element(Find.ById(tableId));
 
-      Assert.IsAssignableFrom(typeof(ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
+      Assert.IsAssignableFrom(typeof (ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
 
-      Assert.IsNotNull(element,  "Element not found");
-      
+      Assert.IsNotNull(element, "Element not found");
+
       // check behavior for standard attribute
       Assert.AreEqual(tableId, element.GetAttributeValue("id"), "GetAttributeValue id failed");
       // check behavior for non existing attribute
       Assert.IsNull(element.GetAttributeValue("watin"), "GetAttributeValue watin should return null");
       // check behavior for custom attribute
-      Assert.AreEqual("myvalue",element.GetAttributeValue("myattribute"), "GetAttributeValue myattribute should return myvalue");
-      
+      Assert.AreEqual("myvalue", element.GetAttributeValue("myattribute"), "GetAttributeValue myattribute should return myvalue");
+
       Assert.AreEqual("table", element.TagName.ToLower(), "Invalid tagname");
 
       // Textbefore and TextAfter tests
@@ -766,7 +763,7 @@ namespace WatiN.Core.UnitTests
     {
       Assert.IsTrue(ie.Elements.Exists(Find.ByFor("Checkbox21")));
     }
-            
+
     [Test]
     public void ElementCollectionSecondFilterShouldNeverThrowInvalidAttributeException()
     {
@@ -774,7 +771,7 @@ namespace WatiN.Core.UnitTests
       ElementCollection elements2 = elements.Filter(Find.ByFor("Checkbox21"));
       Assert.AreEqual(0, elements2.Length);
     }
-    
+
     [Test]
     public void ButtonCollectionSecondFilterAndOthersShouldNeverThrowInvalidAttributeException()
     {
@@ -782,12 +779,12 @@ namespace WatiN.Core.UnitTests
       ButtonCollection buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
       Assert.AreEqual(0, buttons2.Length);
     }
-    
+
     [Test]
     public void LabelElementTags()
     {
       Assert.AreEqual(1, Label.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("label",((ElementTag) Label.ElementTags[0]).TagName);
+      Assert.AreEqual("label", ((ElementTag) Label.ElementTags[0]).TagName);
     }
 
     [Test]
@@ -815,12 +812,12 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
       Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
     }
-    
+
     [Test]
     public void LabelByForWithElement()
     {
       CheckBox checkBox = ie.CheckBox("Checkbox21");
-      
+
       Label label = ie.Label(Find.ByFor(checkBox));
 
       Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
@@ -852,7 +849,7 @@ namespace WatiN.Core.UnitTests
       LabelCollection labelCollection = ie.Labels;
 
       // Collection items by index
-      Assert.AreEqual(expectedLabelCount,labelCollection.Length, "Wrong number of labels");
+      Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");
 
       // Collection iteration and comparing the result with Enumerator
       IEnumerable labelEnumerable = labelCollection;
@@ -863,12 +860,12 @@ namespace WatiN.Core.UnitTests
       {
         labelEnumerator.MoveNext();
         object enumCheckbox = labelEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(label.GetType(), enumCheckbox, "Types are not the same");
-        Assert.AreEqual(label.OuterHtml, ((Label)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(label.OuterHtml, ((Label) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(labelEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedLabelCount, count);
     }
@@ -877,13 +874,13 @@ namespace WatiN.Core.UnitTests
     public void LinkElementTags()
     {
       Assert.AreEqual(1, Link.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("a",((ElementTag) Link.ElementTags[0]).TagName);
+      Assert.AreEqual("a", ((ElementTag) Link.ElementTags[0]).TagName);
     }
 
     [Test]
     public void LinkFromElement()
     {
-      Element element = ie.Element("testlinkid");  
+      Element element = ie.Element("testlinkid");
       Link link = new Link(element);
       Assert.AreEqual("testlinkid", link.Id);
     }
@@ -895,7 +892,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(ie.Link(new Regex("testlinkid")).Exists);
       Assert.IsFalse(ie.Link("nonexistingtestlinkid").Exists);
     }
-    
+
     [Test]
     public void LinkTest()
     {
@@ -922,7 +919,7 @@ namespace WatiN.Core.UnitTests
       LinkCollection links = ie.Links;
 
       // Collection items by index
-      Assert.AreEqual(expectedLinkCount,links.Length, "Wrong number off links");
+      Assert.AreEqual(expectedLinkCount, links.Length, "Wrong number off links");
       Assert.AreEqual("testlinkid", links[0].Id);
       Assert.AreEqual("testlinkid1", links[1].Id);
 
@@ -935,12 +932,12 @@ namespace WatiN.Core.UnitTests
       {
         linksEnumerator.MoveNext();
         object enumLink = linksEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(link.GetType(), enumLink, "Types are not the same");
-        Assert.AreEqual(link.OuterHtml, ((Link)enumLink).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(link.OuterHtml, ((Link) enumLink).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(linksEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedLinkCount, count);
     }
@@ -950,14 +947,14 @@ namespace WatiN.Core.UnitTests
     public void RadioButtonElementTags()
     {
       Assert.AreEqual(1, RadioButton.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("input",((ElementTag) RadioButton.ElementTags[0]).TagName);
-      Assert.AreEqual("radio",((ElementTag) RadioButton.ElementTags[0]).InputTypes);
+      Assert.AreEqual("input", ((ElementTag) RadioButton.ElementTags[0]).TagName);
+      Assert.AreEqual("radio", ((ElementTag) RadioButton.ElementTags[0]).InputTypes);
     }
 
     [Test]
     public void RadioButtonFromElement()
     {
-      Element element = ie.Element("Radio1");  
+      Element element = ie.Element("Radio1");
       RadioButton radioButton = new RadioButton(element);
       Assert.AreEqual("Radio1", radioButton.Id);
     }
@@ -978,7 +975,7 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
       Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
       Assert.IsTrue(RadioButton1.Checked, "Should initially be checked");
-      
+
       RadioButton1.Checked = false;
       Assert.IsFalse(RadioButton1.Checked, "Should not be checked");
 
@@ -993,7 +990,7 @@ namespace WatiN.Core.UnitTests
 
       RadioButtonCollection formRadioButtons = ie.Form("FormRadioButtons").RadioButtons;
 
-      Assert.AreEqual(2,formRadioButtons.Length, "Wrong number off RadioButtons");
+      Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
       Assert.AreEqual("Radio2", formRadioButtons[0].Id);
       Assert.AreEqual("Radio3", formRadioButtons[1].Id);
 
@@ -1006,38 +1003,37 @@ namespace WatiN.Core.UnitTests
       {
         radiobuttonEnumerator.MoveNext();
         object enumRadioButton = radiobuttonEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(radioButton.GetType(), enumRadioButton, "Types are not the same");
-        Assert.AreEqual(radioButton.OuterHtml, ((RadioButton)enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(radioButton.OuterHtml, ((RadioButton) enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(radiobuttonEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
-
     }
 
     [Test]
     public void TextFieldElementTags()
     {
       Assert.AreEqual(2, TextField.ElementTags.Count, "2 elementtags expected");
-      Assert.AreEqual("input",((ElementTag) TextField.ElementTags[0]).TagName);
-      Assert.AreEqual("text password textarea hidden",((ElementTag) TextField.ElementTags[0]).InputTypes);
-      Assert.AreEqual("textarea",((ElementTag) TextField.ElementTags[1]).TagName);
+      Assert.AreEqual("input", ((ElementTag) TextField.ElementTags[0]).TagName);
+      Assert.AreEqual("text password textarea hidden", ((ElementTag) TextField.ElementTags[0]).InputTypes);
+      Assert.AreEqual("textarea", ((ElementTag) TextField.ElementTags[1]).TagName);
     }
 
     [Test]
     public void TextFieldFromElementInput()
     {
-      Element element = ie.Element("name");  
+      Element element = ie.Element("name");
       TextField textField = new TextField(element);
       Assert.AreEqual("name", textField.Id);
     }
-    
+
     [Test]
     public void TextFieldFromElementTextArea()
     {
-      Element element = ie.Element("Textarea1");  
+      Element element = ie.Element("Textarea1");
       TextField textField = new TextField(element);
       Assert.AreEqual("Textarea1", textField.Id);
     }
@@ -1055,9 +1051,22 @@ namespace WatiN.Core.UnitTests
     {
       TextField textfieldName = ie.TextField("Textarea1");
       string textWithNewLine = "Line1" + Environment.NewLine + "Line2";
-      
+
       textfieldName.TypeText(textWithNewLine);
       Assert.AreEqual(textWithNewLine, textfieldName.Value);
+    }
+
+    [Test]
+    public void TextFieldTypTextShouldHonourMaxLength()
+    {
+      TextField textField = ie.TextField("name");
+      int maxLenght = textField.MaxLength;
+
+      textField.TypeText("1".PadLeft(maxLenght));
+      Assert.That(textField.Value.Trim(), NUnit.Framework.SyntaxHelpers.Is.EqualTo("1"));
+
+      textField.TypeText("23".PadLeft(maxLenght + 1));
+      Assert.That(textField.Value.Trim(), NUnit.Framework.SyntaxHelpers.Is.EqualTo("2"));
     }
 
     [Test]
@@ -1072,21 +1081,19 @@ namespace WatiN.Core.UnitTests
 
       Assert.AreEqual(200, textfieldName.MaxLength, "Unexpected maxlenght");
 
-      Assert.IsNull(textfieldName.Value, "Initial value should be null");
-      
       textfieldName.TypeText(value);
-      Assert.AreEqual(value,textfieldName.Value, "TypeText not OK");
+      Assert.AreEqual(value, textfieldName.Value, "TypeText not OK");
 
-      textfieldName.AppendText(appendValue) ;
-      Assert.AreEqual(value + appendValue,textfieldName.Value, "AppendText not OK");
+      textfieldName.AppendText(appendValue);
+      Assert.AreEqual(value + appendValue, textfieldName.Value, "AppendText not OK");
 
       textfieldName.Clear();
       Assert.IsNull(textfieldName.Value, "After Clear value should by null");
 
       textfieldName.Value = value;
-      Assert.AreEqual(value,textfieldName.Value, "Value not OK");
-      Assert.AreEqual(value,textfieldName.Text, "Text not OK");
-      
+      Assert.AreEqual(value, textfieldName.Value, "Value not OK");
+      Assert.AreEqual(value, textfieldName.Text, "Text not OK");
+
       Assert.AreEqual("Textfield title", textfieldName.ToString(), "Expected Title");
       Assert.AreEqual("readonlytext", ie.TextField("readonlytext").ToString(), "Expected Id");
       Assert.AreEqual("disabledtext", ie.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
@@ -1095,7 +1102,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void TextFieldTypeTextEvents()
     {
-      using(IE ie1= new IE(TestEventsURI))
+      using (IE ie1 = new IE(TestEventsURI))
       {
         Assert.IsFalse(ie1.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
         Assert.IsFalse(ie1.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
@@ -1103,11 +1110,11 @@ namespace WatiN.Core.UnitTests
 
         const string text = "test";
         ie1.TextField("textfieldid").TypeText(text);
-        
+
         Assert.IsTrue(ie1.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
         Assert.IsTrue(ie1.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
         Assert.IsTrue(ie1.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
-        
+
         Assert.AreEqual(text, ie1.TextField("txtKeycodeId").Value, "KeyUp event expected");
       }
     }
@@ -1115,7 +1122,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void TextFieldTypeTextEventsInFrame()
     {
-      using(IE ie1= new IE(FramesetURI))
+      using (IE ie1 = new IE(FramesetURI))
       {
         Frame frame = ie1.Frames[1];
         frame.RunScript("window.document.location.href='TestEvents.html';");
@@ -1125,13 +1132,13 @@ namespace WatiN.Core.UnitTests
         Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
 
         frame.TextField("textfieldid").TypeText("test");
-        
+
         Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
         Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
         Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
       }
     }
-    
+
     [Test]
     public void TextFieldTextAreaElement()
     {
@@ -1147,19 +1154,19 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual(0, textfieldName.MaxLength, "Unexpected maxlenght");
 
       Assert.IsNull(textfieldName.Value, "Initial value should be null");
-      
-      textfieldName.TypeText(value);
-      Assert.AreEqual(value,textfieldName.Value, "TypeText not OK");
 
-      textfieldName.AppendText(appendValue) ;
-      Assert.AreEqual(value + appendValue,textfieldName.Value, "AppendText not OK");
+      textfieldName.TypeText(value);
+      Assert.AreEqual(value, textfieldName.Value, "TypeText not OK");
+
+      textfieldName.AppendText(appendValue);
+      Assert.AreEqual(value + appendValue, textfieldName.Value, "AppendText not OK");
 
       textfieldName.Clear();
       Assert.IsNull(textfieldName.Value, "After Clear value should by null");
 
       textfieldName.Value = value;
-      Assert.AreEqual(value,textfieldName.Value, "Value not OK");
-      Assert.AreEqual(value,textfieldName.Text, "Text not OK");
+      Assert.AreEqual(value, textfieldName.Value, "Value not OK");
+      Assert.AreEqual(value, textfieldName.Text, "Text not OK");
     }
 
     [Test]
@@ -1168,27 +1175,27 @@ namespace WatiN.Core.UnitTests
       ie.TextField("name").Flash();
     }
 
-    [Test, ExpectedException(typeof(ElementReadOnlyException),  ExpectedMessage = "Element with Id:readonlytext is readonly")]
+    [Test, ExpectedException(typeof (ElementReadOnlyException), ExpectedMessage = "Element with Id:readonlytext is readonly")]
     public void TextFieldReadyOnlyException()
     {
       TextField textField = ie.TextField("readonlytext");
       textField.TypeText("This should go wrong");
     }
 
-    [Test, ExpectedException(typeof(ElementDisabledException), ExpectedMessage = "Element with Id:disabledtext is disabled")]
+    [Test, ExpectedException(typeof (ElementDisabledException), ExpectedMessage = "Element with Id:disabledtext is disabled")]
     public void TextFieldDisabledException()
     {
       TextField textField = ie.TextField(Find.ByName("disabledtext"));
       textField.TypeText("This should go wrong");
     }
 
-    [Test, ExpectedException(typeof(ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
+    [Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
     public void TextFieldElementNotFoundException()
     {
       IE.Settings.WaitUntilExistsTimeOut = 1;
       ie.TextField("noneexistingtextfieldid").TypeText("");
     }
-    
+
     [Test]
     public void TextFields()
     {
@@ -1215,35 +1222,35 @@ namespace WatiN.Core.UnitTests
       {
         textfieldEnumerator.MoveNext();
         object enumTextfield = textfieldEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(textField.GetType(), enumTextfield, "Types are not the same");
-        Assert.AreEqual(textField.OuterHtml, ((TextField)enumTextfield).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(textField.OuterHtml, ((TextField) enumTextfield).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(textfieldEnumerator.MoveNext(), "Expected last item");
 
       Assert.AreEqual(1, count);
     }
-    
+
     [Test]
     public void FindingElementByCustomAttribute()
     {
       Assert.IsTrue(ie.Table(Find.By("myattribute", "myvalue")).Exists);
     }
-    
+
     [Test]
     public void FileUploadElementTags()
     {
       Assert.AreEqual(1, FileUpload.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("input",((ElementTag) FileUpload.ElementTags[0]).TagName);
-      Assert.AreEqual("file",((ElementTag) FileUpload.ElementTags[0]).InputTypes);
+      Assert.AreEqual("input", ((ElementTag) FileUpload.ElementTags[0]).TagName);
+      Assert.AreEqual("file", ((ElementTag) FileUpload.ElementTags[0]).InputTypes);
     }
 
     [Test]
     public void FileUploadFromElement()
     {
-      Element element = ie.Element("upload");  
+      Element element = ie.Element("upload");
       FileUpload fileUpload = new FileUpload(element);
       Assert.AreEqual("upload", fileUpload.Id);
     }
@@ -1260,22 +1267,22 @@ namespace WatiN.Core.UnitTests
     public void FileUploadTest()
     {
       FileUpload fileUpload = ie.FileUpload("upload");
-      
+
       Assert.IsNotNull(fileUpload);
       Assert.IsNull(fileUpload.FileName);
-      
+
       fileUpload.Set(MainURI.LocalPath);
-      
-      Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);      
+
+      Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);
     }
-    
-    [Test, ExpectedException(typeof(System.IO.FileNotFoundException))]
+
+    [Test, ExpectedException(typeof (System.IO.FileNotFoundException))]
     public void FileUploadFileNotFoundException()
     {
       FileUpload fileUpload = ie.FileUpload("upload");
       fileUpload.Set("nonexistingfile.nef");
     }
-    
+
     [Test]
     public void FileUploads()
     {
@@ -1284,7 +1291,7 @@ namespace WatiN.Core.UnitTests
 
       // Collection.Length
       FileUploadCollection formFileUploads = ie.FileUploads;
-      
+
       // Collection items by index
       Assert.AreEqual("upload", ie.FileUploads[0].Id);
 
@@ -1297,27 +1304,27 @@ namespace WatiN.Core.UnitTests
       {
         FileUploadEnumerator.MoveNext();
         object enumFileUpload = FileUploadEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(inputFileUpload.GetType(), enumFileUpload, "Types are not the same");
-        Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload)enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload) enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedFileUploadsCount, count);
     }
-    
+
     [Test]
     public void ParaElementTags()
     {
       Assert.AreEqual(1, Para.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("p",((ElementTag) Para.ElementTags[0]).TagName);
+      Assert.AreEqual("p", ((ElementTag) Para.ElementTags[0]).TagName);
     }
 
     [Test]
     public void ParaFromElement()
     {
-      Element element = ie.Element("links");  
+      Element element = ie.Element("links");
       Para para = new Para(element);
       Assert.AreEqual("links", para.Id);
     }
@@ -1329,18 +1336,18 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(ie.Para(new Regex("links")).Exists);
       Assert.IsFalse(ie.Para("nonexistinglinks").Exists);
     }
-    
+
     [Test]
     public void ParaTest()
     {
       Para para = ie.Para("links");
-      
-      Assert.IsInstanceOfType(typeof(ElementsContainer), para);
-      
+
+      Assert.IsInstanceOfType(typeof (ElementsContainer), para);
+
       Assert.IsNotNull(para);
       Assert.AreEqual("links", para.Id);
     }
-    
+
     [Test]
     public void Paras()
     {
@@ -1349,7 +1356,7 @@ namespace WatiN.Core.UnitTests
 
       // Collection.Length
       ParaCollection formParas = ie.Paras;
-      
+
       // Collection items by index
       Assert.IsNull(ie.Paras[0].Id);
       Assert.AreEqual("links", ie.Paras[1].Id);
@@ -1365,16 +1372,16 @@ namespace WatiN.Core.UnitTests
       {
         ParaEnumerator.MoveNext();
         object enumPara = ParaEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(inputPara.GetType(), enumPara, "Types are not the same");
-        Assert.AreEqual(inputPara.OuterHtml, ((Para)enumPara).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(inputPara.OuterHtml, ((Para) enumPara).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(ParaEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedParasCount, count);
     }
-    
+
     [Test]
     public void SpanExists()
     {
@@ -1387,13 +1394,13 @@ namespace WatiN.Core.UnitTests
     public void SpanElementTags()
     {
       Assert.AreEqual(1, Span.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("span",((ElementTag) Span.ElementTags[0]).TagName);
+      Assert.AreEqual("span", ((ElementTag) Span.ElementTags[0]).TagName);
     }
 
     [Test]
     public void SpanFromElement()
     {
-      Element element = ie.Element("spanid1");  
+      Element element = ie.Element("spanid1");
       Span span = new Span(element);
       Assert.AreEqual("spanid1", span.Id);
     }
@@ -1402,13 +1409,13 @@ namespace WatiN.Core.UnitTests
     public void SpanTest()
     {
       Span Span = ie.Span("spanid1");
-      
-      Assert.IsInstanceOfType(typeof(ElementsContainer), Span);
-      
+
+      Assert.IsInstanceOfType(typeof (ElementsContainer), Span);
+
       Assert.IsNotNull(Span, "Span should bot be null");
       Assert.AreEqual("spanid1", Span.Id, "Unexpected id");
     }
-    
+
     [Test]
     public void Spans()
     {
@@ -1417,7 +1424,7 @@ namespace WatiN.Core.UnitTests
 
       // Collection.Length
       SpanCollection formSpans = ie.Spans;
-      
+
       // Collection items by index
       Assert.AreEqual("spanid1", ie.Spans[0].Id);
       Assert.AreEqual("Span1", ie.Spans[1].Id);
@@ -1431,16 +1438,16 @@ namespace WatiN.Core.UnitTests
       {
         SpanEnumerator.MoveNext();
         object enumSpan = SpanEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(inputSpan.GetType(), enumSpan, "Types are not the same");
-        Assert.AreEqual(inputSpan.OuterHtml, ((Span)enumSpan).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(inputSpan.OuterHtml, ((Span) enumSpan).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedSpansCount, count);
     }
-        
+
     [Test]
     public void ElementExists()
     {
@@ -1448,30 +1455,30 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
       Assert.IsFalse(ie.Button("noneexistingelementid").Exists);
     }
-    
+
     [Test]
     public void WaitUntilElementExistsTestElementAlreadyExists()
     {
       Button button = ie.Button("disabledid");
-      
+
       Assert.IsTrue(button.Exists);
       button.WaitUntilExists();
       Assert.IsTrue(button.Exists);
     }
-    
+
     [Test]
     public void WaitUntilElementExistsElementInjectionAfter3Seconds()
     {
       Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
-      using(IE ie1 = new IE(TestEventsURI))
+      using (IE ie1 = new IE(TestEventsURI))
       {
         TextField injectedTextField = ie1.TextField("injectedTextField");
         TextField injectedDivTextField = ie1.Div("seconddiv").TextField("injectedTextField");
- 
+
         Assert.IsFalse(injectedTextField.Exists);
         Assert.IsFalse(injectedDivTextField.Exists);
-        
+
         ie1.Button("injectElement").ClickNoWait();
 
         Assert.IsFalse(injectedTextField.Exists);
@@ -1494,7 +1501,7 @@ namespace WatiN.Core.UnitTests
 
       Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
-      using(IE ie1 = new IE(TestEventsURI))
+      using (IE ie1 = new IE(TestEventsURI))
       {
         TextField textfieldToRemove = ie1.TextField("textFieldToRemove");
         TextFieldCollection textfields = ie1.TextFields;
@@ -1515,13 +1522,13 @@ namespace WatiN.Core.UnitTests
         Assert.IsFalse(textfields[indexTextFieldToRemove].Exists);
       }
     }
-    
-    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException),  ExpectedMessage = "Timeout while 'waiting 1 seconds for element to show up.'" )]
+
+    [Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while 'waiting 1 seconds for element to show up.'")]
     public void WaitUntilElementExistsTimeOutException()
     {
       ie.Button("nonexistingbutton").WaitUntilExists(1);
     }
-    
+
     [Test]
     public void WaitUntil()
     {
@@ -1579,7 +1586,7 @@ namespace WatiN.Core.UnitTests
       Expect.Call(finder.FindFirst()).Return(htmlelement).Repeat.Once();
 
       Expect.Call(htmlelement.innerText).Return("succeeded");
-      
+
       mocks.ReplayAll();
 
       Element element = new Element(null, finder);
@@ -1599,7 +1606,7 @@ namespace WatiN.Core.UnitTests
 
       Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
       Expect.Call(finder.FindFirst()).Return(null).Repeat.AtLeastOnce();
-      
+
       mocks.ReplayAll();
 
       Element element = new Element(null, finder);
@@ -1614,7 +1621,7 @@ namespace WatiN.Core.UnitTests
       {
         timeoutException = e;
       }
-      
+
       Assert.IsNotNull(timeoutException, "TimeoutException not thrown");
       Assert.IsNull(timeoutException.InnerException, "Unexpected innerexception");
 
@@ -1648,9 +1655,9 @@ namespace WatiN.Core.UnitTests
       }
 
       Assert.IsNotNull(timeoutException, "TimeoutException not thrown");
-      Assert.IsInstanceOfType(typeof(UnauthorizedAccessException), timeoutException.InnerException, "Unexpected innerexception");
+      Assert.IsInstanceOfType(typeof (UnauthorizedAccessException), timeoutException.InnerException, "Unexpected innerexception");
       Assert.AreEqual("mockUnauthorizedAccessException", timeoutException.InnerException.Message);
-      
+
       mocks.VerifyAll();
     }
 
@@ -1663,7 +1670,7 @@ namespace WatiN.Core.UnitTests
       Element mockElement = (Element) mocks.DynamicMock(typeof (Element), null, htmlelement);
 
       Expect.Call(mockElement.Exists).Repeat.Never();
-      
+
       mocks.ReplayAll();
 
       mockElement.WaitUntilExists(3);
@@ -1671,13 +1678,13 @@ namespace WatiN.Core.UnitTests
       mocks.VerifyAll();
     }
 
-    [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException),  ExpectedMessage = "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
+    [Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
     public void WaitUntilTimesOut()
     {
       MockRepository mocks = new MockRepository();
 
       IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
-      
+
       Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.AtLeastOnce();
 
       mocks.ReplayAll();
@@ -1708,7 +1715,7 @@ namespace WatiN.Core.UnitTests
       MockRepository mocks = new MockRepository();
 
       IHTMLElement htmlelement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
-      
+
       Expect.Call(htmlelement.getAttribute("sourceIndex", 0)).Return(13);
 
       mocks.ReplayAll();
@@ -1718,8 +1725,8 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("13", element.GetAttributeValue("sourceIndex"));
 
       mocks.VerifyAll();
-    } 
-    
+    }
+
     [Test]
     public void FindBySourceIndex()
     {
@@ -1733,14 +1740,14 @@ namespace WatiN.Core.UnitTests
     {
       Assert.AreEqual("popupid", ie.Button(Find.ByIndex(0)).Id);
     }
-    
+
     [Test]
     public void FindByShouldPassEvenIfAttributeValueOfHTMLELementIsNull()
     {
       Assert.IsFalse(ie.Button(Find.By("classname", "nullstring")).Exists);
     }
   }
-  
+
 
   [TestFixture]
   public class ImageTests : WatiNTest
@@ -1749,20 +1756,20 @@ namespace WatiN.Core.UnitTests
 
     private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
     private Uri watinwebsiteLogoImage = new Uri(HtmlTestBaseURI, "images\\watin.jpg");
-    
+
     [TestFixtureTearDown]
     public void Teardown()
     {
       ie.Close();
     }
-    
+
     [Test]
     public void ImageElementTags()
     {
       Assert.AreEqual(2, Image.ElementTags.Count, "2 elementtags expected");
-      Assert.AreEqual("img",((ElementTag) Image.ElementTags[0]).TagName);
-      Assert.AreEqual("input",((ElementTag) Image.ElementTags[1]).TagName);
-      Assert.AreEqual("image",((ElementTag) Image.ElementTags[1]).InputTypes);
+      Assert.AreEqual("img", ((ElementTag) Image.ElementTags[0]).TagName);
+      Assert.AreEqual("input", ((ElementTag) Image.ElementTags[1]).TagName);
+      Assert.AreEqual("image", ((ElementTag) Image.ElementTags[1]).InputTypes);
     }
 
     [Test]
@@ -1779,7 +1786,7 @@ namespace WatiN.Core.UnitTests
 
     private void AssertImageFromElement(string id)
     {
-      Element element = ie.Element(id);  
+      Element element = ie.Element(id);
       Image image = new Image(element);
       Assert.AreEqual(id, image.Id);
     }
@@ -1803,7 +1810,7 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
       Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
     }
-    
+
     [Test]
     public void ImageInputTag()
     {
@@ -1815,13 +1822,13 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual(watinwebsiteLogoImage, new Uri(image.Src), "Unexpected Src");
       Assert.AreEqual("WatiN logo in input element of type image", image.Alt, "Unexpected Alt");
     }
-        
+
     [Test]
     public void ImageReadyStateUninitializedButShouldReturn()
     {
       Assert.IsFalse(ie.Image("Image3").Complete);
     }
-    
+
     [Test]
     public void Images()
     {
@@ -1830,7 +1837,7 @@ namespace WatiN.Core.UnitTests
 
       // Collection.Length
       ImageCollection formImages = ie.Images;
-      
+
       // Collection items by index
       Assert.AreEqual("Image1", ie.Images[0].Id);
       Assert.AreEqual("Image2", ie.Images[1].Id);
@@ -1846,31 +1853,96 @@ namespace WatiN.Core.UnitTests
       {
         ImageEnumerator.MoveNext();
         object enumImage = ImageEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(inputImage.GetType(), enumImage, "Types are not the same");
-        Assert.AreEqual(inputImage.OuterHtml, ((Image)enumImage).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(inputImage.OuterHtml, ((Image) enumImage).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(expectedImagesCount, count);
     }
-    
+
     [Test]
     public void ButtonFromInputImage()
     {
       Button button = ie.Button(Find.BySrc(new Regex("images/watin.jpg")));
-      
+
       Assert.IsTrue(button.Exists, "Button should exist");
       Assert.AreEqual("Image4", button.Id, "Unexpected id");
     }
+
+		[Test]
+		public void AreaElementTags()
+		{
+			Assert.AreEqual(1, Area.ElementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("area",((ElementTag) Area.ElementTags[0]).TagName);
+			Assert.AreEqual(null, ((ElementTag) Area.ElementTags[0]).InputTypes);
+  }
+
+		[Test]
+		public void AreaFromElement()
+		{
+			Element element = ie.Element("Area1");  
+			Area area = new Area(element);
+			Assert.AreEqual("Area1", area.Id);
+		}
+    
+		[Test]
+		public void AreaExists()
+		{
+			Assert.IsTrue(ie.Area("Area1").Exists);
+			Assert.IsTrue(ie.Area(new Regex("Area1")).Exists);
+			Assert.IsFalse(ie.Area("noneexistingArea1id").Exists);
+		}
+
+		[Test]
+		public void AreaTest()
+		{
+			Area area1 = ie.Area("Area1");
+
+			Assert.AreEqual("Area1", area1.Id, "Found wrong area");
+
+			Assert.AreEqual("WatiN", area1.Alt, "Alt text was incorrect");
+			Assert.IsTrue(area1.Url.EndsWith("main.html"), "Url was incorrect");
+			Assert.AreEqual("0,0,110,45", area1.Coords, "Coords was incorrect");
+			Assert.AreEqual("rect", area1.Shape.ToLower(), "Shape was incorrect");
+		}
+
+		[Test]
+		public void Areas()
+		{
+			// Collection items by index
+			AreaCollection areas = ie.Areas;
+			Assert.AreEqual(2, areas.Length, "Unexpected number of areas");
+			Assert.AreEqual("Area1", areas[0].Id);
+			Assert.AreEqual("Area2", areas[1].Id);      
+
+			// Collection iteration and comparing the result with Enumerator
+			IEnumerable areaEnumerable = areas;
+			IEnumerator areaEnumerator = areaEnumerable.GetEnumerator();
+
+			int count = 0;
+			foreach (Area area in areaEnumerable)
+			{
+				areaEnumerator.MoveNext();
+				object enumArea = areaEnumerator.Current;
+        
+				Assert.IsInstanceOfType(area.GetType(), enumArea, "Types are not the same");
+				Assert.AreEqual(area.OuterHtml, ((Area)enumArea).OuterHtml, "foreach and IEnumator don't act the same.");
+				++count;
+			}
+      
+			Assert.IsFalse(areaEnumerator.MoveNext(), "Expected last item");
+			Assert.AreEqual(2, count);
+		}
   }
   
   [TestFixture]
   public class FormTests : WatiNTest
   {
-    IE ie = new IE();
-    
+    private IE ie = new IE();
+
     [SetUp]
     public void TestSetup()
     {
@@ -1879,24 +1951,24 @@ namespace WatiN.Core.UnitTests
         ie.GoTo(FormSubmitURI);
       }
     }
-    
+
     [TestFixtureTearDown]
     public void FixtureTeardown()
     {
       ie.Close();
     }
-    
+
     [Test]
     public void FormElementTags()
     {
       Assert.AreEqual(1, Form.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("form",((ElementTag) Form.ElementTags[0]).TagName);
+      Assert.AreEqual("form", ((ElementTag) Form.ElementTags[0]).TagName);
     }
 
     [Test]
     public void ImageFromElementImage()
     {
-      Element element = ie.Element("Form1");  
+      Element element = ie.Element("Form1");
       Form form = new Form(element);
       Assert.AreEqual("Form1", form.Id);
     }
@@ -1916,7 +1988,7 @@ namespace WatiN.Core.UnitTests
 
       Assert.AreEqual(ie.Uri, MainURI);
     }
-    
+
     [Test]
     public void FormSubmitBySubmitButton()
     {
@@ -1924,18 +1996,18 @@ namespace WatiN.Core.UnitTests
 
       Assert.AreEqual(ie.Uri, MainURI);
     }
-    
+
     [Test]
     public void FormTest()
     {
       Form form = ie.Form("Form2");
-      
-      Assert.IsInstanceOfType(typeof(ElementsContainer), form);
+
+      Assert.IsInstanceOfType(typeof (ElementsContainer), form);
       Assert.AreEqual("Form2", form.Id, "Unexpected Id");
       Assert.AreEqual("form2name", form.Name, "Unexpected Name");
       Assert.AreEqual("Form title", form.Title, "Unexpected Title");
     }
-    
+
     [Test]
     public void Forms()
     {
@@ -1948,10 +2020,10 @@ namespace WatiN.Core.UnitTests
       // Collection items by index
       Assert.AreEqual("Form", forms[0].Id);
       Assert.AreEqual("FormInputElement", forms[1].Id);
-      Assert.AreEqual("FormHiddens", forms[2].Id);      
-      Assert.AreEqual("ReadyOnlyDisabledInputs", forms[3].Id);      
-      Assert.AreEqual("FormCheckboxes", forms[4].Id);      
-      Assert.AreEqual("FormRadioButtons", forms[5].Id);      
+      Assert.AreEqual("FormHiddens", forms[2].Id);
+      Assert.AreEqual("ReadyOnlyDisabledInputs", forms[3].Id);
+      Assert.AreEqual("FormCheckboxes", forms[4].Id);
+      Assert.AreEqual("FormRadioButtons", forms[5].Id);
 
       // Collection iteration and comparing the result with Enumerator
       IEnumerable checkboxEnumerable = forms;
@@ -1962,16 +2034,16 @@ namespace WatiN.Core.UnitTests
       {
         checkboxEnumerator.MoveNext();
         object enumCheckbox = checkboxEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(form.GetType(), enumCheckbox, "Types are not the same");
-        Assert.AreEqual(form.OuterHtml, ((Form)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(form.OuterHtml, ((Form) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(6, count);
     }
-    
+
     [Test]
     public void FormToStringWithTitleIdAndName()
     {
@@ -1981,15 +2053,15 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual("This is a form with no ID, Title or name.", ie.Forms[4].ToString(), "Text expected");
     }
   }
-  
+
   [TestFixture]
   public class ElementStyleTests : WatiNTest
   {
-    const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
+    private const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
 
-    IE ie = new IE();
-    TextField element;
-    
+    private IE ie = new IE();
+    private TextField element;
+
     [SetUp]
     public void TestSetup()
     {
@@ -1999,13 +2071,13 @@ namespace WatiN.Core.UnitTests
         element = ie.TextField("Textarea1");
       }
     }
-    
+
     [TestFixtureTearDown]
     public void FixtureTeardown()
     {
       ie.Close();
     }
-    
+
     [Test]
     public void GetAttributeValueStyleAsString()
     {
@@ -2023,49 +2095,49 @@ namespace WatiN.Core.UnitTests
     {
       Assert.AreEqual(style, element.Style.CssText);
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void GetAttributeValueOfNullThrowsArgumenNullException()
     {
       element.Style.GetAttributeValue(null);
     }
-    
-    [Test, ExpectedException(typeof(ArgumentNullException))]
+
+    [Test, ExpectedException(typeof (ArgumentNullException))]
     public void GetAttributeValueOfEmptyStringThrowsArgumenNullException()
     {
       element.Style.GetAttributeValue(String.Empty);
     }
-    
+
     [Test]
     public void GetAttributeValueBackgroundColor()
     {
       Assert.AreEqual("blue", element.Style.GetAttributeValue("BackgroundColor"));
     }
-    
+
     [Test]
     public void GetAttributeValueBackgroundColorByOriginalHTMLattribname()
     {
       Assert.AreEqual("blue", element.Style.GetAttributeValue("background-color"));
     }
-    
+
     [Test]
     public void GetAttributeValueOfUndefiniedButValidAttribute()
     {
       Assert.IsNull(element.Style.GetAttributeValue("cursor"));
     }
-    
+
     [Test]
     public void GetAttributeValueOfUndefiniedAndInvalidAttribute()
     {
       Assert.IsNull(element.Style.GetAttributeValue("nonexistingattrib"));
     }
-    
+
     [Test]
     public void BackgroundColor()
     {
       Assert.AreEqual("blue", element.Style.BackgroundColor);
     }
-    
+
     [Test]
     public void Color()
     {
@@ -2100,16 +2172,16 @@ namespace WatiN.Core.UnitTests
   [TestFixture]
   public class ElementTests
   {
-    MockRepository mocks;
-    IHTMLDOMNode node;
-    Element element;
+    private MockRepository mocks;
+    private IHTMLDOMNode node;
+    private Element element;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
       node = (IHTMLDOMNode) mocks.CreateMock(typeof (IHTMLDOMNode));
-      
+
       element = new Element(null, node);
     }
 
@@ -2135,11 +2207,11 @@ namespace WatiN.Core.UnitTests
       string tagname = ((ElementTag) TableRow.ElementTags[0]).TagName;
 
       Expect.Call(node.parentNode).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return(tagname).Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return(tagname).Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(TableRow), element.Parent);
+      Assert.IsInstanceOfType(typeof (TableRow), element.Parent);
     }
 
     [Test]
@@ -2148,11 +2220,11 @@ namespace WatiN.Core.UnitTests
       IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
 
       Expect.Call(node.parentNode).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(ElementsContainer), element.Parent);
+      Assert.IsInstanceOfType(typeof (ElementsContainer), element.Parent);
     }
 
     [Test]
@@ -2171,11 +2243,11 @@ namespace WatiN.Core.UnitTests
       string tagname = ((ElementTag) Link.ElementTags[0]).TagName;
 
       Expect.Call(node.previousSibling).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return(tagname).Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return(tagname).Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(Link), element.PreviousSibling);
+      Assert.IsInstanceOfType(typeof (Link), element.PreviousSibling);
     }
 
     [Test]
@@ -2184,11 +2256,11 @@ namespace WatiN.Core.UnitTests
       IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
 
       Expect.Call(node.previousSibling).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(ElementsContainer), element.PreviousSibling);
+      Assert.IsInstanceOfType(typeof (ElementsContainer), element.PreviousSibling);
     }
 
     [Test]
@@ -2203,16 +2275,16 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void ElementNextSiblingReturningTypedParent()
     {
-      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement), typeof(IHTMLInputElement));
+      IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement), typeof (IHTMLInputElement));
       ElementTag inputTextField = (ElementTag) TextField.ElementTags[0];
 
       Expect.Call(node.nextSibling).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return(inputTextField.TagName).Repeat.Any();
-      Expect.Call(((IHTMLInputElement)parentNode).type).Return(inputTextField.InputTypes).Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return(inputTextField.TagName).Repeat.Any();
+      Expect.Call(((IHTMLInputElement) parentNode).type).Return(inputTextField.InputTypes).Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(TextField), element.NextSibling);
+      Assert.IsInstanceOfType(typeof (TextField), element.NextSibling);
     }
 
     [Test]
@@ -2221,11 +2293,11 @@ namespace WatiN.Core.UnitTests
       IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
 
       Expect.Call(node.nextSibling).Return(parentNode);
-      Expect.Call(((IHTMLElement)parentNode).tagName).Return("notag").Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
 
       mocks.ReplayAll();
 
-      Assert.IsInstanceOfType(typeof(ElementsContainer), element.NextSibling);
+      Assert.IsInstanceOfType(typeof (ElementsContainer), element.NextSibling);
     }
 
     [Test]
@@ -2241,7 +2313,7 @@ namespace WatiN.Core.UnitTests
       mocks.ReplayAll();
 
       Element element = new Element(null, finder);
-      
+
       Assert.AreEqual("mockedtag", element.TagName);
 
       element.Refresh();
@@ -2256,7 +2328,7 @@ namespace WatiN.Core.UnitTests
   public class SelectListTests : WatiNTest
   {
     private IE ie;
-    
+
     [TestFixtureSetUp]
     public void FixtureSetup()
     {
@@ -2273,13 +2345,13 @@ namespace WatiN.Core.UnitTests
     public void SupportedElementTags()
     {
       Assert.AreEqual(1, SelectList.ElementTags.Count, "1 elementtags expected");
-      Assert.AreEqual("select",((ElementTag) SelectList.ElementTags[0]).TagName);
+      Assert.AreEqual("select", ((ElementTag) SelectList.ElementTags[0]).TagName);
     }
 
     [Test]
     public void SelectListFromElement()
     {
-      Element element = ie.Element("Select2");  
+      Element element = ie.Element("Select2");
       SelectList selectList = new SelectList(element);
       Assert.AreEqual("Select2", selectList.Id);
     }
@@ -2297,47 +2369,47 @@ namespace WatiN.Core.UnitTests
     {
       SelectList selectList = ie.SelectList("Select2");
 
-      Assert.IsNotNull(selectList,"SelectList niet aangetroffen");
+      Assert.IsNotNull(selectList, "SelectList niet aangetroffen");
 
       StringCollection items = selectList.AllContents;
 
       Assert.AreEqual(4, items.Count);
-      Assert.AreEqual("First Listitem",items[0],"First Listitem not found");
-      Assert.AreEqual("Second Listitem",items[1],"Second Listitem not found");
-      Assert.AreEqual("Third Listitem",items[2],"Third Listitem not found");
-      Assert.AreEqual("Fourth Listitem",items[3],"Fourth Listitem not found");
+      Assert.AreEqual("First Listitem", items[0], "First Listitem not found");
+      Assert.AreEqual("Second Listitem", items[1], "Second Listitem not found");
+      Assert.AreEqual("Third Listitem", items[2], "Third Listitem not found");
+      Assert.AreEqual("Fourth Listitem", items[3], "Fourth Listitem not found");
 
       Assert.IsTrue(selectList.Multiple, "'Select 2' must be allow multiple selection to pass the next tests");
-              
+
       // Second Listitem is selected by default/loading the page
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "SelectedItem not selected on page load");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "SelectedItem not selected on page load");
 
       selectList.ClearList();
-      Assert.AreEqual(0,selectList.SelectedItems.Count, "After ClearList there are still items selected");
+      Assert.AreEqual(0, selectList.SelectedItems.Count, "After ClearList there are still items selected");
       Assert.IsFalse(selectList.HasSelectedItems, "No selected items expected");
 
       selectList.Select("Third Listitem");
 
       Assert.IsTrue(selectList.HasSelectedItems, "Selecteditems expected after first select");
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "Wrong number of items selected after Select Third Listitem");
-      Assert.AreEqual("Third Listitem",selectList.SelectedItems[0],"Third Listitem not selected after Select");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "Wrong number of items selected after Select Third Listitem");
+      Assert.AreEqual("Third Listitem", selectList.SelectedItems[0], "Third Listitem not selected after Select");
 
       selectList.Select("First Listitem");
 
       Assert.IsTrue(selectList.HasSelectedItems, "Selecteditems expected after second select");
-      Assert.AreEqual(2,selectList.SelectedItems.Count, "Wrong number of items selected after Select First Listitem");
-      Assert.AreEqual("First Listitem",selectList.SelectedItems[0],"First Listitem not selected after Select");
-      Assert.AreEqual("Third Listitem",selectList.SelectedItems[1],"Third Listitem not selected after Select");
+      Assert.AreEqual(2, selectList.SelectedItems.Count, "Wrong number of items selected after Select First Listitem");
+      Assert.AreEqual("First Listitem", selectList.SelectedItems[0], "First Listitem not selected after Select");
+      Assert.AreEqual("Third Listitem", selectList.SelectedItems[1], "Third Listitem not selected after Select");
     }
 
-    [Test, ExpectedException(typeof(SelectListItemNotFoundException),  ExpectedMessage = "No item with text or value 'None existing item' was found in the selectlist")]
+    [Test, ExpectedException(typeof (SelectListItemNotFoundException), ExpectedMessage = "No item with text or value 'None existing item' was found in the selectlist")]
     public void SelectItemNotFoundException()
     {
       SelectList selectList = ie.SelectList("Select1");
       selectList.Select("None existing item");
     }
 
-    [Test, ExpectedException(typeof(SelectListItemNotFoundException))]
+    [Test, ExpectedException(typeof (SelectListItemNotFoundException))]
     public void SelectPartialTextMatchItemNotFoundException()
     {
       SelectList selectList = ie.SelectList("Select1");
@@ -2367,12 +2439,12 @@ namespace WatiN.Core.UnitTests
       {
         selectListEnumerator.MoveNext();
         object enumSelectList = selectListEnumerator.Current;
-        
+
         Assert.IsInstanceOfType(selectList.GetType(), enumSelectList, "Types are not the same");
-        Assert.AreEqual(selectList.OuterHtml, ((SelectList)enumSelectList).OuterHtml, "foreach and IEnumator don't act the same.");
+        Assert.AreEqual(selectList.OuterHtml, ((SelectList) enumSelectList).OuterHtml, "foreach and IEnumator don't act the same.");
         ++count;
       }
-      
+
       Assert.IsFalse(selectListEnumerator.MoveNext(), "Expected last item");
       Assert.AreEqual(2, count);
     }
@@ -2391,24 +2463,24 @@ namespace WatiN.Core.UnitTests
       // Make sure the page is fresh so the selected item (after loading
       // the page) is the right one.
       ie.GoTo(ie.Url);
-      
+
       SelectList selectList = ie.SelectList("Select1");
 
-      Assert.IsNotNull(selectList,"SelectList niet aangetroffen");
+      Assert.IsNotNull(selectList, "SelectList niet aangetroffen");
 
       Assert.IsFalse(selectList.Multiple, "Select 1 must not allow multiple selection to pass the next tests");
 
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "Not one item selected on page load");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "Not one item selected on page load");
       // Test if the right item is selected after a page load
       Assert.AreEqual("First text", selectList.SelectedItem, "'First text' not selected on page load");
-              
+
       selectList.ClearList();
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "SelectedItem should still be selected after ClearList");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "SelectedItem should still be selected after ClearList");
       Assert.IsTrue(selectList.HasSelectedItems, "Selected item expected");
 
       selectList.Select("Second text");
       Assert.IsTrue(selectList.HasSelectedItems, "Selected item expected");
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "Unexpected count");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "Unexpected count");
       Assert.AreEqual("Second text", selectList.SelectedItems[0], "Unexpected SelectedItem by index");
       Assert.AreEqual("Second text", selectList.SelectedItem, "Unexpected SelectedItem");
 
@@ -2423,11 +2495,11 @@ namespace WatiN.Core.UnitTests
 
       selectList.Select(new Regex("cond te"));
       Assert.IsTrue(selectList.HasSelectedItems, "Selected item expected");
-      Assert.AreEqual(1,selectList.SelectedItems.Count, "Unexpected count");
+      Assert.AreEqual(1, selectList.SelectedItems.Count, "Unexpected count");
       Assert.AreEqual("Second text", selectList.SelectedItems[0], "Unexpected SelectedItem by index");
       Assert.AreEqual("Second text", selectList.SelectedItem, "Unexpected SelectedItem");
     }
-    
+
     [Test]
     public void SelectValueWithRegex()
     {
@@ -2453,7 +2525,7 @@ namespace WatiN.Core.UnitTests
     public void OptionsInSingelSelectList()
     {
       SelectList selectList = ie.SelectList("Select1");
-      
+
       Assert.IsFalse(selectList.Option("Third text").Selected);
       selectList.Option("Third text").Select();
       Assert.IsTrue(selectList.Option("Third text").Selected);
@@ -2468,7 +2540,7 @@ namespace WatiN.Core.UnitTests
       ie.GoTo(MainURI);
 
       SelectList selectList = ie.SelectList("Select2");
-      
+
       Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected");
       selectList.Option("Third Listitem").Select();
       Assert.IsTrue(selectList.Option("Third Listitem").Selected, "Third listitem is not selected");
@@ -2477,8 +2549,102 @@ namespace WatiN.Core.UnitTests
       Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected #2");
     }
   }
+
+  [TestFixture, Ignore("work in progress")]
+  public class modalPopupExtenderTests
+  {
+    [Test]
+    public void modalPopupExtenderTest()
+    {
+      using (IE ie = new MyIE("http://www.asp.net/AJAX/Control-Toolkit/Live/ModalPopup/ModalPopup.aspx"))
+      {
+        Div modalDialog = ie.Div("ctl00_SampleContent_Panel1");
+        Assert.IsTrue(modalDialog.Parent.Style.Display == "none", "modaldialog should not be visible");
+
+        // Show the modaldialog
+        ie.Link("showModalPopupClientButton").Click();
+
+        modalDialog.WaitUntil(new VisibleAttribute(true), 5);
+        Assert.IsTrue(modalDialog.Style.Display != "none", "modaldialog should be visible");
+
+        // Hide the modaldialog
+        Link link = modalDialog.Link("ctl00_SampleContent_CancelButton");
+        link.Click();
+        modalDialog.WaitUntil(new VisibleAttribute(false), 5);
+        Assert.IsTrue(modalDialog.Style.Display == "none", "modaldialog should be visible again");
+      }
+    }
+  }
+
+  public class VisibleAttribute : Core.Attribute
+  {
+    public VisibleAttribute(bool visible) : base("visible", new BoolComparer(visible))
+    {
+    }
+
+    protected override bool doCompare(IAttributeBag attributeBag)
+    {
+      ElementAttributeBag bag = (ElementAttributeBag) attributeBag;
+
+      return comparer.Compare(IsVisible(new Element(null, bag.IHTMLElement)).ToString());
+    }
+
+    public bool IsVisible(Element element)
+    {
+      bool isVisible = true;
+      if (element.Parent != null)
+      {
+        isVisible = IsVisible(element.Parent);
+      }
+
+      if (isVisible)
+      {
+        isVisible = (element.Style.Display != "none");
+      }
+
+      return isVisible;
+    }
+  }
+
+  public class MyIE : IE
+  {
+    public MyIE(string url): base(url)
+    {}
+
+    public override void WaitForComplete()
+    {
+      Link("showModalPopupClientButton").WaitUntilExists();
+    }
+  }
+
+//  public class MyIE : IE
+//  {
+//    public MyIE(string url) : base(url)
+//    {
+//    }
+//
+//    public override void WaitForComplete()
+//    {
+//      WaitForComplete(new MyWaitClass(this));
+//    }
+//  }
+//
+//  public class MyWaitClass : IEWaitForComplete
+//  {
+//    public MyWaitClass(IE ie) : base(ie)
+//    {
+//    }
+//
+//    protected override bool IsIEBusy(IWebBrowser2 ie)
+//    {
+//      try
+//      {
+//        return ie.Busy && (ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE);
+//      }
+//      catch
+//      {
+//        return false;
+//      }
+//    }
+//  }
 }
-
-
-
-

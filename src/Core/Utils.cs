@@ -247,10 +247,6 @@ namespace WatiN.Core
     /// <param name="eventObjectProperties">The event object properties.</param>
     public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
     {
-      // TODO: Passing the eventarguments in a new param of type array. This array
-      //       holds 0 or more name/value pairs where the name is a property of the event object
-      //       and the value is the value that's assigned to the property.
-
       // Execute the JScript to fire the event inside the Browser.
       StringBuilder scriptCode = new StringBuilder();
       scriptCode.Append("var newEvt = document.createEventObject();");

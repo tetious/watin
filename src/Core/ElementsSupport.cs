@@ -36,7 +36,27 @@ namespace WatiN.Core
     /// Prevent creating an instance of this class (contains only static members)
     /// </summary>
     private ElementsSupport(){}
-        
+
+		public static Area Area(DomContainer domContainer, Attribute findBy, IElementCollection elements)
+		{
+			return new Area(domContainer, new ElementFinder(Core.Area.ElementTags, findBy, elements));
+		}
+
+		public static AreaCollection Areas(DomContainer domContainer, IElementCollection elements)
+		{
+			return new AreaCollection(domContainer, new ElementFinder(Core.Area.ElementTags, elements));
+		}    
+
+		public static Button Button(DomContainer ie, Attribute findBy, IElementCollection elements)
+		{
+			return new Button(ie, new ElementFinder(Core.Button.ElementTags, findBy, elements));
+		}
+
+		public static ButtonCollection Buttons(DomContainer ie, IElementCollection elements)
+		{
+			return new ButtonCollection(ie, new ElementFinder(Core.Button.ElementTags, elements));
+		}
+    
     public static CheckBox CheckBox(DomContainer ie, Attribute findBy, IElementCollection elements)
     {
       return new CheckBox(ie, new ElementFinder(Core.CheckBox.ElementTags, findBy, elements));
@@ -241,4 +261,5 @@ namespace WatiN.Core
     }
   }
 }
+
 

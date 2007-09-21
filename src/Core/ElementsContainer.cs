@@ -42,6 +42,26 @@ namespace WatiN.Core
 
     #region IElementsContainer
 
+		public Area Area(string elementId)
+		{
+			return Area(Find.ById(elementId));
+		}
+
+		public Area Area(Regex elementId)
+		{
+			return Area(Find.ById(elementId));
+		}
+
+		public Area Area(Attribute findBy)
+		{
+			return ElementsSupport.Area(DomContainer, findBy, this);
+		}
+  
+		public AreaCollection Areas
+		{
+			get { return ElementsSupport.Areas(DomContainer, this); }
+		}
+
     public Button Button(string elementId)
     {
       return Button(Find.ById(elementId));
@@ -54,12 +74,12 @@ namespace WatiN.Core
 
     public Button Button(Attribute findBy)
     {
-      return new Button(DomContainer, ElementFinder.ButtonFinder(findBy, this));
+      return ElementsSupport.Button(DomContainer, findBy, this);
     }
   
     public ButtonCollection Buttons
     {
-      get { return new ButtonCollection(DomContainer, ElementFinder.ButtonFinder(null, this)); }
+      get { return ElementsSupport.Buttons(DomContainer, this); }
     }
 
     public CheckBox CheckBox(string elementId)

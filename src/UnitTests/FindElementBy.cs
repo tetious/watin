@@ -96,6 +96,27 @@ namespace WatiN.Core.UnitTests
       mocks.VerifyAll();
     }
 
+		[Test]
+		public void FindByAlt()
+		{
+			Alt value = Find.ByAlt("alt text");
+
+			Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Alt class should inherit Attribute class");
+
+			const string name = "alt";
+			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
+			Assert.AreEqual("alt text", value.Value, "Wrong value");
+
+			Regex regex = new Regex("ext$");
+			value = Find.ByAlt(regex);
+			TestAttributeBag attributeBag = new TestAttributeBag(name, "alt text");
+
+			Assert.IsTrue(value.Compare(attributeBag), "Regex ext$ should match");
+
+			value = Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("ALT TexT"));
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+		}
+
     [Test]
     public void FindByName()
     {

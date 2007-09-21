@@ -18,11 +18,15 @@
 
 namespace WatiN.Core
 {
+  using System.Reflection;
+  using System.Runtime.InteropServices;
+  using System.Runtime.InteropServices.Expando;
   using mshtml;
   using System;
   using System.Text.RegularExpressions;
   using WatiN.Core.Interfaces;
   using WatiN.Core.Exceptions;
+  using WatiN.Core.Logging;
 
   /// <summary>
   /// This class gives access to all contained elements of the webpage or the
@@ -120,6 +124,22 @@ namespace WatiN.Core
     }
 
     /// <summary>
+    /// Gets the inner text of the Body part of the webpage.
+    /// </summary>
+    /// <value>The inner text.</value>
+    public string Text
+		{
+			get
+			{
+				IHTMLElement body = HtmlDocument.body;
+
+				if (body == null) return null;
+
+				return body.innerText;
+			}
+		}
+
+    /// <summary>
     /// Returns a System.Uri instance of the url displayed in the address bar of the browser, 
     /// of the currently displayed web page.
     /// </summary>
@@ -188,12 +208,8 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(string text)
     {
-      IHTMLElement body = HtmlDocument.body;
+			string innertext = Text;
       
-      if (body == null) return false;
-
-      string innertext = body.innerText;
-
       if (innertext == null) return false;
 
       return (innertext.IndexOf(text) >= 0);
@@ -208,16 +224,24 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(Regex regex)
     {
-      IHTMLElement body = HtmlDocument.body;
+			string innertext = Text;
       
-      if (body == null) return false;
-
-      string innertext = body.innerText;
-
       if (innertext == null) return false;
 
       return (regex.Match(innertext).Success);
     }
+
+    /// <summary>
+		/// Gets the text inside the HTML Body element that matches the regular expression.
+		/// </summary>
+		/// <param name="regex">The regular expression to match with.</param>
+		/// <returns>The matching text, or null if none.</returns>
+		public string FindText(Regex regex)
+		{
+			Match match = regex.Match(Text);
+
+			return match.Success ? match.Value : null;
+		}
 
     /// <summary>
     /// Gets the title of the webpage.
@@ -246,7 +270,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the specified frame by it's id.
+    /// Gets the specified frame by its id.
     /// </summary>
     /// <param name="id">The id of the frame.</param>
     /// <exception cref="FrameNotFoundException">Thrown if the given <paramref name="id" /> isn't found.</exception>
@@ -256,7 +280,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the specified frame by it's id.
+    /// Gets the specified frame by its id.
     /// </summary>
     /// <param name="id">The regular expression to match with the id of the frame.</param>
     /// <exception cref="FrameNotFoundException">Thrown if the given <paramref name="id" /> isn't found.</exception>
@@ -266,7 +290,7 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Gets the specified frame by it's name.
+    /// Gets the specified frame by its name.
     /// </summary>
     /// <param name="findBy">The name of the frame.</param>
     /// <exception cref="FrameNotFoundException">Thrown if the given name isn't found.</exception>
@@ -285,32 +309,26 @@ namespace WatiN.Core
 
     #region IElementsContainer
 
-    /// <summary>
-    /// Gets the specified Button by it's id.
-    /// </summary>
-    /// <param name="elementId">The id of the element.</param>
-    /// <exception cref="ElementNotFoundException">Thrown if the given <paramref name="elementId"/> isn't found.</exception>
-    /// <example>
-    /// This example opens a webpage, types some text and submits it by clicking
-    /// the submit button.
-    /// <code>
-    /// using WatiN.Core;
-    /// 
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE("http://www.example.net");
-    ///        ie.TextField(Find.ById("textFieldComment")).TypeText("This is a comment to submit");
-    ///        ie.Button("buttonSubmit").Click;
-    ///        ie.Close;
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
+		public Area Area(string elementId)
+		{
+			return Area(Find.ById(elementId));
+		}
+
+		public Area Area(Regex elementId)
+		{
+			return Area(Find.ById(elementId));
+		}
+
+		public Area Area(Attribute findBy)
+		{
+			return ElementsSupport.Area(DomContainer, findBy, this);
+		}
+  
+		public AreaCollection Areas
+		{
+			get { return ElementsSupport.Areas(DomContainer, this); }
+		}
+
     public Button Button(string elementId)
     {
       return Button(Find.ById(elementId));
@@ -321,72 +339,14 @@ namespace WatiN.Core
       return Button(Find.ById(elementId));
     }
 
-    /// <summary>
-    /// Gets the specified Button by using the given <see cref="Attribute" /> to find the Button.
-    /// <seealso cref="Find" />
-    /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> class or one of it's subclasses to find an element by. The <see cref="Find" /> class provides factory methodes to create specialized instances.</param>
-    /// <exception cref="ElementNotFoundException">Thrown if the given <paramref name="findBy"/> doesn't match an element in the webpage.</exception>
-    /// <example>
-    /// This example opens a webpage, types some text and submits it by clicking
-    /// the submit button.
-    /// <code>
-    /// using WatiN.Core;
-    /// 
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE("http://www.example.net");
-    ///        Id textFieldId = new Id("textFieldComment");
-    ///        ie.TextField(textFieldId).TypeText("This is a comment to submit");
-    ///        ie.Button(Find.ByText("Submit")).Click;
-    ///        ie.Close;
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
     public Button Button(Attribute findBy)
     {
-      return new Button(DomContainer, ElementFinder.ButtonFinder(findBy, this));
+			return ElementsSupport.Button(DomContainer, findBy, this);
     }
 
-    /// <summary>
-    /// Gets a typed collection of <see cref="WatiN.Core.Button" /> instances within this <see cref="Document"/>.
-    /// </summary>
-    ///     /// <example>
-    /// This example opens a webpage and writes out the text of each button to the
-    /// debug window.
-    /// <code>
-    /// using WatiN.Core;
-    /// 
-    /// namespace NewIEExample
-    /// {
-    ///    public class WatiNWebsite
-    ///    {
-    ///      public WatiNWebsite()
-    ///      {
-    ///        IE ie = new IE("http://www.example.net");
-    ///       
-    ///        ButtonCollection buttons = ie.Buttons;
-    /// 
-    ///        foreach (Button button in buttons)
-    ///        {
-    ///          System.Diagnostics.Debug.Writeline(button.Text);
-    ///        }
-    /// 
-    ///        ie.Close;
-    ///      }
-    ///    }
-    ///  }
-    /// </code>
-    /// </example>
     public ButtonCollection Buttons
     {
-      get { return new ButtonCollection(DomContainer, ElementFinder.ButtonFinder(null, this)); }
+			get { return ElementsSupport.Buttons(DomContainer, this); }
     }
 
     public CheckBox CheckBox(string elementId)
@@ -629,15 +589,6 @@ namespace WatiN.Core
       return ElementsSupport.TableCell(DomContainer, findBy, this);
     }
 
-    /// <summary>
-    /// Finds a TableCell by the n-th index of an id. 
-    /// index counting is zero based.
-    /// </summary>  
-    /// <example>
-    /// This example will get Text of the third(!) index on the page of a
-    /// TableCell element with "tablecellid" as it's id value. 
-    /// <code>ie.TableCell("tablecellid", 2).Text</code>
-    /// </example>
     public TableCell TableCell(string elementId, int index)
     {
       return ElementsSupport.TableCell(DomContainer, elementId, index, this);
@@ -787,10 +738,10 @@ namespace WatiN.Core
     /// <summary>
     /// Runs the javascript code in IE.
     /// </summary>
-    /// <param name="scriptCode">The javascript code.</param>
-    public void RunScript(string scriptCode)
+    /// <param name="javaScriptCode">The javascript code.</param>
+    public void RunScript(string javaScriptCode)
     {
-      RunScript(scriptCode, "javascript");
+      RunScript(javaScriptCode, "javascript");
     }
 
     /// <summary>
@@ -800,7 +751,7 @@ namespace WatiN.Core
     /// <param name="language">The language.</param>
     public void RunScript(string scriptCode, string language)
     {
-      UtilityClass.RunScript(scriptCode, "javascript", HtmlDocument.parentWindow);
+      UtilityClass.RunScript(scriptCode, language, HtmlDocument.parentWindow);
     }
 
     /// <summary>
@@ -813,30 +764,64 @@ namespace WatiN.Core
       UtilityClass.FireEvent(element, eventName);
     }
 
-    public string Eval(string code)
+    /// <summary>
+    /// Evaluates the specified JavaScript code within the scope of this
+    /// document. Returns the value computed by the last expression in the
+    /// code block after implicit conversion to a string.
+    /// </summary>
+    /// <example>
+    /// The following example shows an alert dialog then returns the string "4".
+    /// 
+    /// Eval("window.alert('Hello world!'); 2 + 2");
+    /// 
+    /// </example>
+    /// <param name="javaScriptCode">The JavaScript code</param>
+    /// <returns>The result converted to a string</returns>
+    /// <exception cref="JavaScriptException">Thrown when the JavaScript code cannot be evaluated
+    /// or throws an exception during evaluation</exception>
+    public string Eval(string javaScriptCode)
     {
-      string elementId = Guid.NewGuid().ToString();
+      const string resultPropertyName = "___expressionResult___";
+      const string errorPropertyName = "___expressionError___";
 
-      string createElement =string.Format(@"
-            var elem = document.createElement('INPUT');
-            elem.id = '{0}';
-            elem.type = 'HIDDEN';
-            elem.value = {1};
-            document.body.appendChild(elem);"
-        , elementId, code);
+      string exprWithAssignment = "try {\n"
+        + "document." + resultPropertyName + "= String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))\n"
+        + "} catch (error) {\n"
+        + "document." + errorPropertyName + "= 'message' in error ? error.name + ': ' + error.message : String(error)\n"
+        + "}";
 
-      RunScript(createElement);
+      // Run the script.
+      RunScript(exprWithAssignment);
+     
+      // See if an error occured.
+      string error = GetPropertyValue(errorPropertyName);
+      if (error != null)
+      {
+        throw new JavaScriptException(error);
+      }
 
-      string result = TextField(elementId).Value;
+      // Return the result
+      return GetPropertyValue(resultPropertyName);
+    }
 
-      string removeElement = string.Format(@"
-            var elem = document.getElementById('{0}');
-            document.body.removeChild(elem);"
-        , elementId);
-      
-      RunScript(removeElement);
+    private string GetPropertyValue(string propertyName)
+    {
+      IExpando domDocumentExpando = (IExpando) HtmlDocument;
 
-      return result;
+      PropertyInfo errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
+      if (errorProperty != null)
+      {
+        try
+        {
+          return (string)errorProperty.GetValue(domDocumentExpando, null);
+        }
+        catch (COMException)
+        {
+          return null;
+        }
+      }
+
+      return null;
     }
   }
 }

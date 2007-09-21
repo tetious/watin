@@ -51,6 +51,12 @@ namespace WatiN.Core.UnitTests
       _mockRepository.Verify(_mockWait);
     }
 
+		[Test]
+		public void Text()
+		{
+			Assert.IsTrue(_ie.Text.IndexOf("Contains text in DIV") >= 0, "Text property did not return expected contents.");
+		}
+
     [Test]
     public void ContainsText()
     {
@@ -60,6 +66,13 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(_ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
       Assert.IsFalse(_ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
     }
+
+		[Test]
+		public void FindText()
+		{
+			Assert.AreEqual("Contains text in DIV", _ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
+			Assert.IsNull(_ie.FindText(new Regex("abcde")), "Text incorrectly found");
+		}
 
     [TearDown]
     public virtual void TearDown()
