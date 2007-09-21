@@ -111,6 +111,7 @@ namespace WatiN.Core
       public bool autoCloseDialogs;
       public bool autoStartDialogWatcher;
       public bool autoMoveMousePointerToTopLeft;
+      public bool makeNewIEInstanceVisible;
     }
     
     private settingsStruct settings;
@@ -153,6 +154,7 @@ namespace WatiN.Core
       settings.autoCloseDialogs = true;
       settings.autoStartDialogWatcher = true;
       settings.autoMoveMousePointerToTopLeft = true;
+      settings.makeNewIEInstanceVisible = true;
     }
 
     /// <summary>
@@ -258,6 +260,18 @@ namespace WatiN.Core
     {
       get { return settings.autoMoveMousePointerToTopLeft; }
       set { settings.autoMoveMousePointerToTopLeft = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to make a new <see cref="IE"/> instance visible.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if you want to make a new <see cref="IE"/> instance visible; otherwise, <c>false</c>.
+    /// </value>
+    public bool MakeNewIeInstanceVisible
+    {
+      get { return settings.makeNewIEInstanceVisible; }
+      set { settings.makeNewIEInstanceVisible = value; }
     }
 
     private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
@@ -862,7 +876,7 @@ namespace WatiN.Core
       {
         navigateTo(uri);
       }
-      ie.Visible = true;
+      ie.Visible = Settings.MakeNewIeInstanceVisible;
       StartDialogWatcher();
     }
 

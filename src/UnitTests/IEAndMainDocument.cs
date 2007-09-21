@@ -194,6 +194,26 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
+    public void MakeNewIeInstanceVisible()
+    {
+      IE.Settings.Reset();
+      Assert.That(IE.Settings.MakeNewIeInstanceVisible, "Default should be true");
+
+      using(IE ie = new IE())
+      {
+        Assert.That(((InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
+      }
+
+      IE.Settings.MakeNewIeInstanceVisible = false;
+      Assert.That(IE.Settings.MakeNewIeInstanceVisible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "should be false");
+
+      using(IE ie = new IE())
+      {
+        Assert.That(((InternetExplorer) ie.InternetExplorer).Visible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "IE Should be visible");
+      }
+    }
+
+    [Test]
     public void HTMLDialogModeless()
     {
       using (IE ie = new IE(MainURI))
