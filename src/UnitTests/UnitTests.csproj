@@ -88,7 +88,7 @@
                 <Reference
                     Name = "Rhino.Mocks"
                     AssemblyName = "Rhino.Mocks"
-                    HintPath = "..\..\..\..\..\Program Files\rhino-mocks\2.9.6-net-1.1\Rhino.Mocks.dll"
+                    HintPath = "..\..\lib\Net\1.1\Rhino.Mocks.dll"
                 />
                 <Reference
                     Name = "System.Data"
@@ -240,5 +240,4 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
-
 
