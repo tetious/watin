@@ -18,15 +18,14 @@
 
 namespace WatiN.Core
 {
+  using System;
   using System.Reflection;
   using System.Runtime.InteropServices;
   using System.Runtime.InteropServices.Expando;
-  using mshtml;
-  using System;
   using System.Text.RegularExpressions;
-  using WatiN.Core.Interfaces;
+  using mshtml;
   using WatiN.Core.Exceptions;
-  using WatiN.Core.Logging;
+  using WatiN.Core.Interfaces;
 
   /// <summary>
   /// This class gives access to all contained elements of the webpage or the
@@ -55,7 +54,7 @@ namespace WatiN.Core
   ///  }
   /// </code>
   /// </example>
-  public abstract class Document : IElementsContainer, IDisposable, IElementCollection 
+  public abstract class Document : IElementsContainer, IDisposable, IElementCollection
   {
     private DomContainer domContainer;
     private IHTMLDocument2 htmlDocument;
@@ -116,7 +115,7 @@ namespace WatiN.Core
       get
       {
         IHTMLElement body = HtmlDocument.body;
-        
+
         if (body == null) return null;
 
         return body.outerHTML;
@@ -128,16 +127,16 @@ namespace WatiN.Core
     /// </summary>
     /// <value>The inner text.</value>
     public string Text
-		{
-			get
-			{
-				IHTMLElement body = HtmlDocument.body;
+    {
+      get
+      {
+        IHTMLElement body = HtmlDocument.body;
 
-				if (body == null) return null;
+        if (body == null) return null;
 
-				return body.innerText;
-			}
-		}
+        return body.innerText;
+      }
+    }
 
     /// <summary>
     /// Returns a System.Uri instance of the url displayed in the address bar of the browser, 
@@ -208,8 +207,8 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(string text)
     {
-			string innertext = Text;
-      
+      string innertext = Text;
+
       if (innertext == null) return false;
 
       return (innertext.IndexOf(text) >= 0);
@@ -224,24 +223,24 @@ namespace WatiN.Core
     /// </returns>
     public bool ContainsText(Regex regex)
     {
-			string innertext = Text;
-      
+      string innertext = Text;
+
       if (innertext == null) return false;
 
       return (regex.Match(innertext).Success);
     }
 
     /// <summary>
-		/// Gets the text inside the HTML Body element that matches the regular expression.
-		/// </summary>
-		/// <param name="regex">The regular expression to match with.</param>
-		/// <returns>The matching text, or null if none.</returns>
-		public string FindText(Regex regex)
-		{
-			Match match = regex.Match(Text);
+    /// Gets the text inside the HTML Body element that matches the regular expression.
+    /// </summary>
+    /// <param name="regex">The regular expression to match with.</param>
+    /// <returns>The matching text, or null if none.</returns>
+    public string FindText(Regex regex)
+    {
+      Match match = regex.Match(Text);
 
-			return match.Success ? match.Value : null;
-		}
+      return match.Success ? match.Value : null;
+    }
 
     /// <summary>
     /// Gets the title of the webpage.
@@ -309,25 +308,25 @@ namespace WatiN.Core
 
     #region IElementsContainer
 
-		public Area Area(string elementId)
-		{
-			return Area(Find.ById(elementId));
-		}
+    public Area Area(string elementId)
+    {
+      return Area(Find.ById(elementId));
+    }
 
-		public Area Area(Regex elementId)
-		{
-			return Area(Find.ById(elementId));
-		}
+    public Area Area(Regex elementId)
+    {
+      return Area(Find.ById(elementId));
+    }
 
-		public Area Area(Attribute findBy)
-		{
-			return ElementsSupport.Area(DomContainer, findBy, this);
-		}
-  
-		public AreaCollection Areas
-		{
-			get { return ElementsSupport.Areas(DomContainer, this); }
-		}
+    public Area Area(Attribute findBy)
+    {
+      return ElementsSupport.Area(DomContainer, findBy, this);
+    }
+
+    public AreaCollection Areas
+    {
+      get { return ElementsSupport.Areas(DomContainer, this); }
+    }
 
     public Button Button(string elementId)
     {
@@ -341,12 +340,12 @@ namespace WatiN.Core
 
     public Button Button(Attribute findBy)
     {
-			return ElementsSupport.Button(DomContainer, findBy, this);
+      return ElementsSupport.Button(DomContainer, findBy, this);
     }
 
     public ButtonCollection Buttons
     {
-			get { return ElementsSupport.Buttons(DomContainer, this); }
+      get { return ElementsSupport.Buttons(DomContainer, this); }
     }
 
     public CheckBox CheckBox(string elementId)
@@ -554,7 +553,7 @@ namespace WatiN.Core
       get { return ElementsSupport.Tables(DomContainer, this); }
     }
 
-    public TableBody TableBody (string elementId)
+    public TableBody TableBody(string elementId)
     {
       return TableBody(Find.ById(elementId));
     }
@@ -566,7 +565,7 @@ namespace WatiN.Core
 
     public TableBody TableBody(Attribute findBy)
     {
-      return ElementsSupport.TableBody(DomContainer,findBy, this);
+      return ElementsSupport.TableBody(DomContainer, findBy, this);
     }
 
     public TableBodyCollection TableBodies
@@ -714,7 +713,7 @@ namespace WatiN.Core
 
     IHTMLElementCollection IElementCollection.Elements
     {
-      get 
+      get
       {
         try
         {
@@ -785,14 +784,14 @@ namespace WatiN.Core
       const string errorPropertyName = "___expressionError___";
 
       string exprWithAssignment = "try {\n"
-        + "document." + resultPropertyName + "= String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))\n"
-        + "} catch (error) {\n"
-        + "document." + errorPropertyName + "= 'message' in error ? error.name + ': ' + error.message : String(error)\n"
-        + "}";
+                                  + "document." + resultPropertyName + "= String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))\n"
+                                  + "} catch (error) {\n"
+                                  + "document." + errorPropertyName + "= 'message' in error ? error.name + ': ' + error.message : String(error)\n"
+                                  + "}";
 
       // Run the script.
       RunScript(exprWithAssignment);
-     
+
       // See if an error occured.
       string error = GetPropertyValue(errorPropertyName);
       if (error != null)
@@ -813,7 +812,7 @@ namespace WatiN.Core
       {
         try
         {
-          return (string)errorProperty.GetValue(domDocumentExpando, null);
+          return (string) errorProperty.GetValue(domDocumentExpando, null);
         }
         catch (COMException)
         {
