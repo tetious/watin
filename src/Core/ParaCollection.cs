@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public ParaCollection Filter(Attribute findBy)
+    public ParaCollection Filter(AttributeConstraint findBy)
     {      
       return new ParaCollection(domContainer, DoFilter(findBy));
     }

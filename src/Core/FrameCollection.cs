@@ -44,7 +44,7 @@ namespace WatiN.Core
 
     public Frame this[int index] { get { return (Frame)elements[index]; } }
 
-    public bool Exists(Attribute findBy)
+    public bool Exists(AttributeConstraint findBy)
     {
       foreach (Frame frame in elements)
       {

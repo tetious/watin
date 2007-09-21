@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public SelectListCollection Filter(Attribute findBy)
+    public SelectListCollection Filter(AttributeConstraint findBy)
     {      
       return new SelectListCollection(domContainer, DoFilter(findBy));
     }

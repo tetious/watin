@@ -50,13 +50,13 @@ namespace WatiN.Core
     /// a Frame. A FrameNotFoundException will be thrown if the Frame isn't found.
     /// </summary>
     /// <param name="frames">Collection of frames to find the frame in</param>
-    /// <param name="findBy">The <see cref="Attribute"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
-    public static Frame Find(FrameCollection frames, Attribute findBy)
+    /// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
+    public static Frame Find(FrameCollection frames, AttributeConstraint findBy)
     {
       return findFrame(frames, findBy);
     }
 
-    private static Frame findFrame(FrameCollection frames, Attribute findBy)
+    private static Frame findFrame(FrameCollection frames, AttributeConstraint findBy)
     {
       foreach (Frame frame in frames)
       {

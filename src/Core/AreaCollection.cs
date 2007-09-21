@@ -46,11 +46,11 @@ namespace WatiN.Core
 		{}
 
 		/// <summary>
-		/// Returns a new <see cref="AreaCollection" /> filtered by the <see cref="Attribute" />.
+		/// Returns a new <see cref="AreaCollection" /> filtered by the <see cref="AttributeConstraint" />.
 		/// </summary>
 		/// <param name="findBy">The attribute to filter by.</param>
 		/// <returns>The filtered collection.</returns>
-		public AreaCollection Filter(Attribute findBy)
+		public AreaCollection Filter(AttributeConstraint findBy)
 		{
 			return new AreaCollection(domContainer, DoFilter(findBy));
 		}

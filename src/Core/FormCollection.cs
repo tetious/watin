@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public FormCollection Filter(Attribute findBy)
+    public FormCollection Filter(AttributeConstraint findBy)
     {      
       return new FormCollection(domContainer, DoFilter(findBy));
     }

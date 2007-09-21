@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public TextFieldCollection Filter(Attribute findBy)
+    public TextFieldCollection Filter(AttributeConstraint findBy)
     {      
       return new TextFieldCollection(domContainer, DoFilter(findBy));
     }

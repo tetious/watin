@@ -32,78 +32,78 @@ namespace WatiN.Core
   /// or use 
   /// <code>ie.Link(Find.By("id", "testlinkid")).Url</code>
   /// </example>
-  public class Attribute
+  public class AttributeConstraint
   {
     private string attributeName;
     private string valueToLookFor;
     private bool busyComparing = false;
 
     protected ICompare comparer;
-    protected Attribute andAttribute;
-    protected Attribute orAttribute;
-    protected Attribute lastAddedAttribute;
-    protected Attribute lastAddedOrAttribute;
+    protected AttributeConstraint andAttributeConstraint;
+    protected AttributeConstraint orAttributeConstraint;
+    protected AttributeConstraint lastAddedAttributeConstraint;
+    protected AttributeConstraint lastAddedOrAttributeConstraint;
 
 
     // This makes the Find.ByName() & Find.By() syntax possible
     // and is needed for the && operator
-    public static Attribute operator &(Attribute first, Attribute second)
+    public static AttributeConstraint operator &(AttributeConstraint first, AttributeConstraint second)
     {
       return first.And(second);
     }
 
     // This makes the Find.ByName() | Find.By() syntax possible
     // and is needed for the || operator
-    public static Attribute operator |(Attribute first, Attribute second)
+    public static AttributeConstraint operator |(AttributeConstraint first, AttributeConstraint second)
     {
       return first.Or(second);
     }
 
     // This makes the Find.ByName() && Find.By() syntax possible
-    public static bool operator true(Attribute attribute)
+    public static bool operator true(AttributeConstraint attributeConstraint)
     {
       return false;
     }
 
     // This makes the Find.ByName() || Find.By() syntax possible
-    public static bool operator false(Attribute attribute)
+    public static bool operator false(AttributeConstraint attributeConstraint)
     {
       return false;
     }
 
-    public static Attribute operator !(Attribute attribute)
+    public static AttributeConstraint operator !(AttributeConstraint attributeConstraint)
     {
-      return new Not(attribute);
+      return new Not(attributeConstraint);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Attribute"/> class.
+    /// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
     /// </summary>
     /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
     /// <param name="value">The value to look for.</param>
-    public Attribute(string attributeName, string value)
+    public AttributeConstraint(string attributeName, string value)
     {
       CheckArgumentNotNull("value", value);
       Init(attributeName, value, new StringComparer(value));
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Attribute"/> class.
+    /// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
     /// </summary>
-    /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
+    /// <param name="attributeName">Name of the AttributeConstraint as recognised by Internet Explorer.</param>
     /// <param name="regex">The regular expression to use.</param>
-    public Attribute(string attributeName, Regex regex)
+    public AttributeConstraint(string attributeName, Regex regex)
     {
       CheckArgumentNotNull("regex", regex);
       Init(attributeName, regex.ToString(), new RegexComparer(regex));
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Attribute"/> class.
+    /// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
     /// </summary>
     /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
     /// <param name="comparer">The comparer.</param>
-    public Attribute(string attributeName, ICompare comparer)
+    public AttributeConstraint(string attributeName, ICompare comparer)
     {
       CheckArgumentNotNull("comparer", comparer);
       Init(attributeName, comparer.ToString(), comparer);
@@ -209,14 +209,14 @@ namespace WatiN.Core
     {
       bool returnValue = initialReturnValue;
 
-      if (returnValue && andAttribute != null)
+      if (returnValue && andAttributeConstraint != null)
       {
-        returnValue = andAttribute.Compare(attributeBag);
+        returnValue = andAttributeConstraint.Compare(attributeBag);
       }
 
-      if (returnValue == false && orAttribute != null)
+      if (returnValue == false && orAttributeConstraint != null)
       {
-        returnValue = orAttribute.Compare(attributeBag);
+        returnValue = orAttributeConstraint.Compare(attributeBag);
       }
 
       return returnValue;
@@ -238,7 +238,7 @@ namespace WatiN.Core
     /// Call this method if you override the Compare method and don't call base.compare.
     /// You should typically call this method as the first line of code in your
     /// compare method. Calling this will prevent unnoticed reentry problems, resulting
-    /// in a StackOverflowException when your attribute class is recursively used in a multiple
+    /// in a StackOverflowException when your AttributeConstraint class is recursively used in a multiple
     /// findby scenario.
     /// <seealso cref="Compare"/>
     /// <seealso cref="UnLockCompare"/>
@@ -280,13 +280,13 @@ namespace WatiN.Core
     }
 
     /// <summary>
-    /// Adds the specified attribute to the And Attribute chain of a multiple <see cref="Attribute"/>
+    /// Adds the specified AttributeConstraint to the And AttributeConstraint chain of a multiple <see cref="AttributeConstraint"/>
     /// element search. When calling And or using the operators, WatiN will always use
     /// ConditionAnd (&amp;&amp;) during the evaluation.
     /// <seealso cref="Or"/>
     /// </summary>
-    /// <param name="attribute">The <see cref="Attribute"/> instance.</param>
-    /// <returns>This <see cref="Attribute"/></returns>
+    /// <param name="attributeConstraint">The <see cref="AttributeConstraint"/> instance.</param>
+    /// <returns>This <see cref="AttributeConstraint"/></returns>
     /// <example>
     /// If you want to find a Button by it's name and value this example shows you how to use
     /// the And method to do this:
@@ -303,30 +303,30 @@ namespace WatiN.Core
     /// Button myButton = ie.Button(Find.ByName("buttonname") &amp; Find.ByValue("Button value"));
     /// </code>
     /// </example>
-    public Attribute And(Attribute attribute)
+    public AttributeConstraint And(AttributeConstraint attributeConstraint)
     {
-      if (andAttribute == null)
+      if (andAttributeConstraint == null)
       {
-        andAttribute = attribute;
+        andAttributeConstraint = attributeConstraint;
       }
       else
       {
-        lastAddedAttribute.And(attribute);
+        lastAddedAttributeConstraint.And(attributeConstraint);
       }
 
-      lastAddedAttribute = attribute;
+      lastAddedAttributeConstraint = attributeConstraint;
 
       return this;
     }
 
     /// <summary>
-    /// Adds the specified attribute to the Or Attribute chain of a multiple <see cref="Attribute"/>
+    /// Adds the specified AttributeConstraint to the Or AttributeConstraint chain of a multiple <see cref="AttributeConstraint"/>
     /// element search. When calling Or or using the | or || operators, WatiN will always use
     /// ConditionOr (||) during the evaluation.
     /// <seealso cref="And"/>
     /// </summary>
-    /// <param name="attribute">The <see cref="Attribute"/> instance.</param>
-    /// <returns>This <see cref="Attribute"/></returns>
+    /// <param name="attributeConstraint">The <see cref="AttributeConstraint"/> instance.</param>
+    /// <returns>This <see cref="AttributeConstraint"/></returns>
     /// <example>
     /// If you want to find a Button by it's English or Dutch value this example shows you how to use
     /// the Or method to do this:
@@ -343,19 +343,19 @@ namespace WatiN.Core
     /// Button myButton = ie.Button(Find.ByValue("Cancel") || Find.ByValue("Annuleren"));
     /// </code>
     /// </example>
-    public Attribute Or(Attribute attribute)
+    public AttributeConstraint Or(AttributeConstraint attributeConstraint)
     {
-      if (orAttribute == null)
+      if (orAttributeConstraint == null)
       {
-        orAttribute = attribute;
+        orAttributeConstraint = attributeConstraint;
       }
       else
       {
-        lastAddedOrAttribute.Or(attribute);
+        lastAddedOrAttributeConstraint.Or(attributeConstraint);
       }
 
-      lastAddedOrAttribute = attribute;
-      lastAddedAttribute = attribute;
+      lastAddedOrAttributeConstraint = attributeConstraint;
+      lastAddedAttributeConstraint = attributeConstraint;
 
       return this;
     }
@@ -364,7 +364,7 @@ namespace WatiN.Core
     /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
     /// </summary>
     /// <returns>
-    /// The Value of this <see cref="Attribute" />
+    /// The Value of this <see cref="AttributeConstraint" />
     /// </returns>
     public override string ToString()
     {
@@ -388,18 +388,28 @@ namespace WatiN.Core
     }
   }
 
-  public class Not : Attribute
+  [Obsolete("Use AttributeConstraint instead")]
+  public class Attribute : AttributeConstraint
   {
-    private Attribute attribute;
+    public Attribute(string attributeName, ICompare comparer) : base(attributeName, comparer) {}
 
-    public Not(Attribute attribute) : base("not", string.Empty)
+    public Attribute(string attributeName, Regex regex) : base(attributeName, regex) {}
+
+    public Attribute(string attributeName, string value) : base(attributeName, value) {}
+  }
+
+  public class Not : AttributeConstraint
+  {
+    private AttributeConstraint _attributeConstraint;
+
+    public Not(AttributeConstraint attributeConstraint) : base("not", string.Empty)
     {
-      if (attribute == null)
+      if (attributeConstraint == null)
       {
-        throw new ArgumentNullException("attribute");
+        throw new ArgumentNullException("_attributeConstraint");
       }
 
-      this.attribute = attribute;
+      this._attributeConstraint = attributeConstraint;
     }
 
     public override bool Compare(IAttributeBag attributeBag)
@@ -409,7 +419,7 @@ namespace WatiN.Core
 
       try
       {
-        result = !(attribute.Compare(attributeBag));
+        result = !(_attributeConstraint.Compare(attributeBag));
       }
       finally
       {
@@ -424,7 +434,7 @@ namespace WatiN.Core
   /// This class is only used in the ElementsSupport Class to 
   /// create a collection of all elements.
   /// </summary>
-  public class AlwaysTrueAttribute : Attribute
+  public class AlwaysTrueAttribute : AttributeConstraint
   {
     public AlwaysTrueAttribute() : base("noAttribute", "")
     {
@@ -444,7 +454,7 @@ namespace WatiN.Core
 	/// or use
 	/// <code>ie.Image(Find.ByAlt("alt text")).Src</code>
 	/// </example>
-	public class Alt : Attribute
+	public class Alt : AttributeConstraint
 	{
 		private const string attributeName = "alt";
 
@@ -481,7 +491,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByLink("testlinkid")).Url</code>
   /// </example>
-  public class Id : Attribute
+  public class Id : AttributeConstraint
   {
     private const string attributeName = "id";
 
@@ -522,7 +532,7 @@ namespace WatiN.Core
   /// the second item in the collection, like this:
   /// <code>ie.Links.Filter(Find.ByName("linkname"))[1]</code>
   /// </example>
-  public class Index : Attribute
+  public class Index : AttributeConstraint
   {
     private int index;
     private int counter = -1;
@@ -548,19 +558,19 @@ namespace WatiN.Core
         bool resultAnd = false;
         resultOr = false;
 
-        if (andAttribute != null)
+        if (andAttributeConstraint != null)
         {
-          resultAnd = andAttribute.Compare(attributeBag);
+          resultAnd = andAttributeConstraint.Compare(attributeBag);
         }
 
-        if (resultAnd || andAttribute == null)
+        if (resultAnd || andAttributeConstraint == null)
         {
           counter++;
         }
 
-        if (orAttribute != null && resultAnd == false)
+        if (orAttributeConstraint != null && resultAnd == false)
         {
-          resultOr = orAttribute.Compare(attributeBag);
+          resultOr = orAttributeConstraint.Compare(attributeBag);
         }
       }
       finally
@@ -580,7 +590,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByName("testlinkname")).Url</code>
   /// </example>
-  public class Name : Attribute
+  public class Name : AttributeConstraint
   {
     private const string attributeName = "name";
 
@@ -617,7 +627,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByText("my link")).Url</code>
   /// </example>
-  public class Text : Attribute
+  public class Text : AttributeConstraint
   {
     private const string attributeName = "innertext";
 
@@ -655,7 +665,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Span(Find.ByStyle("color", "red"))</code>
   /// </example>
-  public class StyleAttribute : Attribute
+  public class StyleAttribute : AttributeConstraint
   {
     private const string attributeName = "style.";
 
@@ -696,7 +706,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Label(Find.ByFor("optionbuttonid")).Text</code>
   /// </example>
-  public class For : Attribute
+  public class For : AttributeConstraint
   {
     private const string attributeName = "htmlfor";
 
@@ -741,7 +751,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
   /// </example>
-  public class Url : Attribute
+  public class Url : AttributeConstraint
   {
     private const string attributeName = "href";
 
@@ -817,7 +827,7 @@ namespace WatiN.Core
   /// or use
   /// <code>IE ie = IE.AttachToIE(Find.ByTitle("WatiN Home Page"))</code>
   /// </example>
-  public class Title : Attribute
+  public class Title : AttributeConstraint
   {
     private const string attributeName = "title";
 
@@ -855,7 +865,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Button(Find.ByValue("My Button"))</code>
   /// </example>
-  public class Value : Attribute
+  public class Value : AttributeConstraint
   {
     private const string attributeName = "value";
 
@@ -892,7 +902,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Image(Find.BySrc("image.gif")).Url</code>
   /// </example>
-  public class Src : Attribute
+  public class Src : AttributeConstraint
   {
     private const string attributeName = "src";
 
@@ -931,7 +941,7 @@ namespace WatiN.Core
 		/// Finds an element by its alt text.
 		/// </summary>
 		/// <param name="alt">The alt text to find.</param>
-		/// <returns>The attribute</returns>
+		/// <returns>The AttributeConstraint</returns>
 		/// <example>
 		/// <code>ie.Image(Find.ByAlt("alt text")).Name</code>
 		/// </example>
@@ -944,7 +954,7 @@ namespace WatiN.Core
 		/// Finds an element by its alt text.
 		/// </summary>
 		/// <param name="regex">The regular expression for the alt text to find.</param>
-		/// <returns>The attribute</returns>
+		/// <returns>The AttributeConstraint</returns>
 		/// <example>
 		/// <code>ie.Image(Find.ByAlt(new Regex("pattern goes here")))).Name</code>
 		/// </example>
@@ -957,7 +967,7 @@ namespace WatiN.Core
 		/// Finds an element by its alt text.
 		/// </summary>
 		/// <param name="compare">The compare.</param>
-		/// <returns>The attribute</returns>
+		/// <returns>The AttributeConstraint</returns>
 		/// <example>
 		/// 	<code>Image img = ie.Image(Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("alt text")));</code>
 		/// </example>
@@ -1292,37 +1302,37 @@ namespace WatiN.Core
     /// <summary>
     /// Find an element by an attribute.
     /// </summary>
-    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="attributeName">The attribute name to compare the value with.</param>
     /// <param name="value">The exact matching value of the attribute.</param>
-    /// <returns><see cref="Attribute" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.By("id", "testlinkid")).Url</code>
     /// </example>
-    public static Attribute By(string attributeName, string value)
+    public static AttributeConstraint By(string attributeName, string value)
     {
-      return new Attribute(attributeName, value);
+      return new AttributeConstraint(attributeName, value);
     }
 
-    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="attributeName">The attribute name to compare the value with.</param>
     /// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
-    /// <returns><see cref="Attribute" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.By("id", new Regex("pattern goes here"))).Url</code>
     /// </example>
-    public static Attribute By(string attributeName, Regex regex)
+    public static AttributeConstraint By(string attributeName, Regex regex)
     {
-      return new Attribute(attributeName, regex);
+      return new AttributeConstraint(attributeName, regex);
     }
 
     /// <param name="attributeName">The attribute to compare the value with.</param>
     /// <param name="comparer">The comparer to be used.</param>
-    /// <returns><see cref="Attribute"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Link link = ie.Link(Find.By("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
     /// </example>
-    public static Attribute By(string attributeName, ICompare comparer)
+    public static AttributeConstraint By(string attributeName, ICompare comparer)
     {
-      return new Attribute(attributeName, comparer);
+      return new AttributeConstraint(attributeName, comparer);
     }
 
     /// <summary>
@@ -1330,36 +1340,36 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="attributeName">The attribute to compare the value with.</param>
     /// <param name="value">The exact matching value of the attribute.</param>
-    /// <returns><see cref="Attribute" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByCustom("id", "testlinkid")).Url</code>
     /// </example>
     [Obsolete("Use Find.By(attributeName, value) instead")]
-    public static Attribute ByCustom(string attributeName, string value)
+    public static AttributeConstraint ByCustom(string attributeName, string value)
     {
       return By(attributeName, value);
     }
 
     /// <param name="attributeName">The attribute to compare the value with.</param>
     /// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
-    /// <returns><see cref="Attribute" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByCustom("id", new Regex("pattern goes here"))).Url</code>
     /// </example>
     [Obsolete("Use Find.By(attributeName, regex) instead")]
-    public static Attribute ByCustom(string attributeName, Regex regex)
+    public static AttributeConstraint ByCustom(string attributeName, Regex regex)
     {
       return By(attributeName, regex);
     }
 
     /// <param name="attributeName">The attribute to compare the value with.</param>
     /// <param name="comparer">The comparer to be used.</param>
-    /// <returns><see cref="Attribute"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Link link = ie.Link(Find.ByCustom("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
     /// </example>
     [Obsolete("Use Find.By(attributeName, comparer) instead")]
-    public static Attribute ByCustom(string attributeName, ICompare comparer)
+    public static AttributeConstraint ByCustom(string attributeName, ICompare comparer)
     {
       return By(attributeName, comparer);
     }

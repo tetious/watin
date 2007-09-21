@@ -146,12 +146,12 @@ namespace WatiN.Core.Exceptions
 
   public class ReEntryException : WatiNException
   {
-    public ReEntryException(Attribute attribute): base(createMessage(attribute))
+    public ReEntryException(AttributeConstraint attributeConstraint): base(createMessage(attributeConstraint))
     {}
 
-    private static string createMessage(Attribute attribute)
+    private static string createMessage(AttributeConstraint attributeConstraint)
     {
-      return string.Format("The compare methode of an Attribute class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' searching for '{1}' in attribute '{2}'.", attribute.GetType().ToString(), attribute.Value, attribute.AttributeName);
+      return string.Format("The compare methode of an AttributeConstraint class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' searching for '{1}' in attributeConstraint '{2}'.", attributeConstraint.GetType().ToString(), attributeConstraint.Value, attributeConstraint.AttributeName);
     }
   }
 

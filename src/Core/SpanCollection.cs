@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public SpanCollection Filter(Attribute findBy)
+    public SpanCollection Filter(AttributeConstraint findBy)
     {      
       return new SpanCollection(domContainer, DoFilter(findBy));
     }

@@ -140,14 +140,14 @@ namespace WatiN.Core
         throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
       }
 
-      object attribute = GetAttributeValue(attributeName, style);
+      object attributeValue = GetAttributeValue(attributeName, style);
 
-      if (attribute == DBNull.Value || attribute == null)
+      if (attributeValue == DBNull.Value || attributeValue == null)
       {
         return null;
       }
 
-      return attribute.ToString();
+      return attributeValue.ToString();
     }
 
     internal static object GetAttributeValue(string attributeName, IHTMLStyle style)

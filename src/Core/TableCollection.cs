@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public TableCollection Filter(Attribute findBy)
+    public TableCollection Filter(AttributeConstraint findBy)
     {      
       return new TableCollection(domContainer, DoFilter(findBy));
     }

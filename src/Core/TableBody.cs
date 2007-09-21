@@ -61,7 +61,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The find by.</param>
     /// <returns></returns>
-    public override TableRow TableRow(Attribute findBy)
+    public override TableRow TableRow(AttributeConstraint findBy)
     {
       return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
     }

@@ -1547,7 +1547,7 @@ namespace WatiN.Core.UnitTests
       Element element = new Element(null, htmlelement);
 
       // calls htmlelement.getAttribute twice (ones true and once false is returned)
-      element.WaitUntil(new Core.Attribute("disabled", new BoolComparer(false)), 1);
+      element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
 
       mocks.VerifyAll();
     }
@@ -1567,7 +1567,7 @@ namespace WatiN.Core.UnitTests
 
       mocks.ReplayAll();
 
-      element.WaitUntil(new Core.Attribute("disabled", new BoolComparer(false)), 1);
+      element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
 
       mocks.VerifyAll();
     }
@@ -1694,7 +1694,7 @@ namespace WatiN.Core.UnitTests
       Assert.AreEqual(true.ToString(), element.GetAttributeValue("disabled"));
 
       // calls htmlelement.getAttribute twice (ones true and once false is returned)
-      element.WaitUntil(new Core.Attribute("disabled", false.ToString()), 1);
+      element.WaitUntil(new AttributeConstraint("disabled", false.ToString()), 1);
     }
 
     [Test]

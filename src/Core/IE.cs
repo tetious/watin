@@ -321,7 +321,7 @@ namespace WatiN.Core
     /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <param name="findBy">The <see cref="AttributeConstraint"/> of the IE window to find. 
     /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
     /// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -342,7 +342,7 @@ namespace WatiN.Core
     /// </code>
     /// </example>
 
-    public static IE AttachToIE(Attribute findBy)
+    public static IE AttachToIE(AttributeConstraint findBy)
     {
       return findIE(findBy, Settings.AttachToIETimeOut);
     }
@@ -352,7 +352,7 @@ namespace WatiN.Core
     /// The first instance that matches the given <paramref name="findBy"/> will be returned.
     /// The attached Internet Explorer will be closed after destroying the IE instance.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <param name="findBy">The <see cref="AttributeConstraint"/> of the IE window to find. 
     /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
     /// <param name="timeout">The number of seconds to wait before timing out</param>
     /// <returns>An <see cref="IE"/> instance.</returns>
@@ -374,7 +374,7 @@ namespace WatiN.Core
     /// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
     /// </code>
     /// </example>
-    public static IE AttachToIE(Attribute findBy, int timeout)
+    public static IE AttachToIE(AttributeConstraint findBy, int timeout)
     {
       return findIE(findBy, timeout);
     }
@@ -382,10 +382,10 @@ namespace WatiN.Core
     /// <summary>
     /// Does the specified Internet Explorer exist.
     /// </summary>
-    /// <param name="findBy">The <see cref="Attribute"/> of the IE window to find. 
+    /// <param name="findBy">The <see cref="AttributeConstraint"/> of the IE window to find. 
     /// <see cref="Url"/>, <see cref="Title"/> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-    /// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Attribute"/>. Otherwise it returns <c>false</c>. </returns>
-    public static bool Exists(Attribute findBy)
+    /// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="AttributeConstraint"/>. Otherwise it returns <c>false</c>. </returns>
+    public static bool Exists(AttributeConstraint findBy)
     {
       return (null != findInternetExplorer(findBy));
     }
@@ -819,7 +819,7 @@ namespace WatiN.Core
 
         if (mainWindowHandle != 0 )
         {
-          return findInternetExplorer(new Attribute("hwnd", mainWindowHandle.ToString()), settings.AttachToIETimeOut);
+          return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), settings.AttachToIETimeOut);
         }
         else
         {
@@ -866,7 +866,7 @@ namespace WatiN.Core
       StartDialogWatcher();
     }
 
-    private static IE findIE(Attribute findBy, int timeout)
+    private static IE findIE(AttributeConstraint findBy, int timeout)
     {
       InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
         
@@ -881,7 +881,7 @@ namespace WatiN.Core
       throw new IENotFoundException(findBy.AttributeName, findBy.Value, timeout);
     }
 
-    private static InternetExplorer findInternetExplorer(Attribute findBy, int timeout)
+    private static InternetExplorer findInternetExplorer(AttributeConstraint findBy, int timeout)
     {
       Logger.LogAction("Busy finding Internet Explorer with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
@@ -902,7 +902,7 @@ namespace WatiN.Core
       return null;
     }
 
-    private static InternetExplorer findInternetExplorer(Attribute findBy)
+    private static InternetExplorer findInternetExplorer(AttributeConstraint findBy)
     {
       ShellWindows allBrowsers = new ShellWindows();
 
@@ -1310,7 +1310,7 @@ namespace WatiN.Core
     /// Find.ByUrl and Find.ByTitle are supported.
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
-    public HtmlDialog HtmlDialog(Attribute findBy)
+    public HtmlDialog HtmlDialog(AttributeConstraint findBy)
     {
       return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
     }
@@ -1321,12 +1321,12 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The url of the html page shown in the dialog</param>
     /// <param name="timeout">Number of seconds before the search times out.</param>
-    public HtmlDialog HtmlDialog(Attribute findBy, int timeout)
+    public HtmlDialog HtmlDialog(AttributeConstraint findBy, int timeout)
     {
       return findHtmlDialog(findBy, timeout);
     }
 
-    private HtmlDialog findHtmlDialog(Attribute findBy, int timeout)
+    private HtmlDialog findHtmlDialog(AttributeConstraint findBy, int timeout)
     {
       Logger.LogAction("Busy finding HTMLDialog with " + findBy.AttributeName + " '" + findBy.Value + "'");
 
@@ -1350,7 +1350,7 @@ namespace WatiN.Core
   }
 
   /// <summary>
-  /// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="Attribute.Compare"/>.
+  /// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="AttributeConstraint.Compare"/>.
   /// </summary>
   public class IEAttributeBag: IAttributeBag
   {

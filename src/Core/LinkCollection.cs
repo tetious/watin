@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public LinkCollection Filter(Attribute findBy)
+    public LinkCollection Filter(AttributeConstraint findBy)
     {      
       return new LinkCollection(domContainer, DoFilter(findBy));
     }

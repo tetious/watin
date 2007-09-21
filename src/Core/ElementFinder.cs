@@ -36,16 +36,16 @@ namespace WatiN.Core
   /// <summary>
   /// This class is mainly used internally by WatiN to find elements in
   /// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
-  /// the given <see cref="Attribute"/>.
+  /// the given <see cref="AttributeConstraint"/>.
   /// </summary>
   public class ElementFinder
   {
     private ArrayList tagsToFind = new ArrayList();
     
-    protected readonly Attribute findBy;
+    protected readonly AttributeConstraint findBy;
     protected readonly IElementCollection elementCollection;
 
-    public ElementFinder(ArrayList elementTags, Attribute findBy, IElementCollection elementCollection)
+    public ElementFinder(ArrayList elementTags, AttributeConstraint findBy, IElementCollection elementCollection)
     {
       if (elementCollection == null) { throw new ArgumentNullException("elementCollection"); }
 
@@ -65,7 +65,7 @@ namespace WatiN.Core
     public ElementFinder(ArrayList elementTags, IElementCollection elementCollection) : this(elementTags, null, elementCollection)
     {}
     
-    public ElementFinder(string tagName, string inputType, Attribute findBy, IElementCollection elementCollection)
+    public ElementFinder(string tagName, string inputType, AttributeConstraint findBy, IElementCollection elementCollection)
     {
       if (elementCollection == null) { throw new ArgumentNullException("elementCollection"); }
 
@@ -123,7 +123,7 @@ namespace WatiN.Core
       return FindAll(findBy);
     }
     
-    public ArrayList FindAll(Attribute findBy)
+    public ArrayList FindAll(AttributeConstraint findBy)
     {
       if (tagsToFind.Count == 1)
       {
@@ -142,7 +142,7 @@ namespace WatiN.Core
       }
     }
 
-    private static Attribute getFindBy(Attribute findBy)
+    private static AttributeConstraint getFindBy(AttributeConstraint findBy)
     {
       if (findBy == null)
       {
@@ -151,7 +151,7 @@ namespace WatiN.Core
       return findBy;
     }
 
-    private ArrayList findElementsByAttribute(ElementTag elementTag, Attribute findBy, bool returnAfterFirstMatch)
+    private ArrayList findElementsByAttribute(ElementTag elementTag, AttributeConstraint findBy, bool returnAfterFirstMatch)
     {
       // Get elements with the tagname from the page
       ArrayList children = new ArrayList();
@@ -240,7 +240,7 @@ namespace WatiN.Core
   }
 
   /// <summary>
-  /// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="Attribute.Compare"/>.
+  /// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="AttributeConstraint.Compare"/>.
   /// </summary>
   public class ElementAttributeBag : IAttributeBag
   {
@@ -273,28 +273,28 @@ namespace WatiN.Core
         return element.style.cssText;
       }
 
-      object attribute;
+      object attributeValue;
       
       if (attributename.ToLower().StartsWith("style."))
       {
-        attribute = Style.GetAttributeValue(attributename.Substring(6), element.style); 
+        attributeValue = Style.GetAttributeValue(attributename.Substring(6), element.style); 
       }
       else
       {
-        attribute = element.getAttribute(attributename, 0);
+        attributeValue = element.getAttribute(attributename, 0);
       }
 
-      if (attribute == DBNull.Value)
+      if (attributeValue == DBNull.Value)
       {
         return null;
       }
         
-      if (attribute == null)
+      if (attributeValue == null)
       {
         return null;
       }
       
-      return attribute.ToString();
+      return attributeValue.ToString();
     }
   }
 

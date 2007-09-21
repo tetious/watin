@@ -94,7 +94,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The find by.</param>
     /// <returns></returns>
-    public override TableBody TableBody(Attribute findBy)
+    public override TableBody TableBody(AttributeConstraint findBy)
     {
       return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this) );
     }

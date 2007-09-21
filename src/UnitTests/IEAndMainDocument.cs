@@ -738,7 +738,7 @@ namespace WatiN.Core.UnitTests
       IEExistsAsserts(Find.ByTitle("Ai"));
     }
 
-    private static void IEExistsAsserts(Core.Attribute findByUrl)
+    private static void IEExistsAsserts(AttributeConstraint findByUrl)
     {
       Assert.IsFalse(IE.Exists(findByUrl));
 
@@ -1615,7 +1615,7 @@ namespace WatiN.Core.UnitTests
         returnDialogHandler.OKButton.Click();
 
         Thread.Sleep(2000);
-        Assert.IsFalse(IE.Exists(new WatiN.Core.Attribute("hwnd", hWnd.ToString())));
+        Assert.IsFalse(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
       }
     }
 
@@ -1638,7 +1638,7 @@ namespace WatiN.Core.UnitTests
         returnDialogHandler.CancelButton.Click();
 
         Thread.Sleep(2000);
-        Assert.IsTrue(IE.Exists(new WatiN.Core.Attribute("hwnd", hWnd.ToString())));
+        Assert.IsTrue(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
 
         // finally close the ie instance
         internetExplorer.Quit();

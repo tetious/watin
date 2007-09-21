@@ -201,7 +201,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findBy">The find by to use.</param>
     /// <returns></returns>
-    public Option Option(Attribute findBy)
+    public Option Option(AttributeConstraint findBy)
     {
       return ElementsSupport.Option(DomContainer, findBy, new ElementCollection(this));
     }
@@ -305,12 +305,12 @@ namespace WatiN.Core
       get { return SelectedOption != null; }
     }
 
-    private static Attribute GetIsSelectedAttribute()
+    private static AttributeConstraint GetIsSelectedAttribute()
     {
-      return new Attribute("selected", true.ToString());
+      return new AttributeConstraint("selected", true.ToString());
     }
 
-    private void SelectByTextOrValue(Attribute findBy)
+    private void SelectByTextOrValue(AttributeConstraint findBy)
     {
       OptionCollection options = Options.Filter(findBy);
       

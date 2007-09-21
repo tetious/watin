@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public CheckBoxCollection Filter(Attribute findBy)
+    public CheckBoxCollection Filter(AttributeConstraint findBy)
     {      
       return new CheckBoxCollection(domContainer, DoFilter(findBy));
     }

@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public ImageCollection Filter(Attribute findBy)
+    public ImageCollection Filter(AttributeConstraint findBy)
     {      
       return new ImageCollection(domContainer, DoFilter(findBy));
     }

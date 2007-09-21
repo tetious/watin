@@ -295,14 +295,14 @@ namespace WatiN.Core
         return htmlElement.style.cssText;
       }
       
-      object attribute = htmlElement.getAttribute(attributeName, 0);
+      object attributeValue = htmlElement.getAttribute(attributeName, 0);
 
-      if (attribute == DBNull.Value || attribute == null)
+      if (attributeValue == DBNull.Value || attributeValue == null)
       {
         return null;
       }
 
-      return attribute.ToString();
+      return attributeValue.ToString();
     }
 
     /// <summary>
@@ -742,7 +742,7 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout.</param>
     public void WaitUntil(string attributename, string expectedValue, int timeout)
     {
-      WaitUntil(new Attribute(attributename, expectedValue), timeout);
+      WaitUntil(new AttributeConstraint(attributename, expectedValue), timeout);
     }
 
     /// <summary>
@@ -765,25 +765,25 @@ namespace WatiN.Core
     /// <param name="timeout">The timeout.</param>
     public void WaitUntil(string attributename, Regex expectedValue, int timeout)
     {
-      WaitUntil(new Attribute(attributename, expectedValue), timeout);
+      WaitUntil(new AttributeConstraint(attributename, expectedValue), timeout);
     }
 
     /// <summary>
-    /// Waits until the given <paramref name="attribute" /> matches.
+    /// Waits until the given <paramref name="attributeConstraint" /> matches.
     /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
     /// </summary>
-    /// <param name="attribute">The attribute.</param>
-    public void WaitUntil(Attribute attribute)
+    /// <param name="attributeConstraint">The AttributeConstraint.</param>
+    public void WaitUntil(AttributeConstraint attributeConstraint)
     {
-      WaitUntil(attribute, IE.Settings.WaitUntilExistsTimeOut);
+      WaitUntil(attributeConstraint, IE.Settings.WaitUntilExistsTimeOut);
     }
 
     /// <summary>
-    /// Waits until the given <paramref name="attribute" /> matches.
+    /// Waits until the given <paramref name="attributeConstraint" /> matches.
     /// </summary>
-    /// <param name="attribute">The attribute.</param>
+    /// <param name="attributeConstraint">The AttributeConstraint.</param>
     /// <param name="timeout">The timeout.</param>
-    public void WaitUntil(Attribute attribute, int timeout)
+    public void WaitUntil(AttributeConstraint attributeConstraint, int timeout)
     {
       Exception lastException;
 
@@ -804,7 +804,7 @@ namespace WatiN.Core
           {
             attributeBag.IHTMLElement = htmlElement;
             
-            if (attribute.Compare(attributeBag))
+            if (attributeConstraint.Compare(attributeBag))
             {
               return;
             }
@@ -819,7 +819,7 @@ namespace WatiN.Core
         Thread.Sleep(200);
       } while (!timeoutTimer.Elapsed);
 
-      ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attribute.AttributeName, attribute.Value));
+      ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attributeConstraint.AttributeName, attributeConstraint.Value));
     }
 
     private static void ThrowTimeOutException(Exception lastException, string message)

@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public FileUploadCollection Filter(Attribute findBy)
+    public FileUploadCollection Filter(AttributeConstraint findBy)
     {      
       return new FileUploadCollection(domContainer, DoFilter(findBy));
     }

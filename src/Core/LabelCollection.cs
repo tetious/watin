@@ -56,7 +56,7 @@ namespace WatiN.Core
       } 
     }
     
-    public LabelCollection Filter(Attribute findBy)
+    public LabelCollection Filter(AttributeConstraint findBy)
     {      
       return new LabelCollection(domContainer, DoFilter(findBy));
     }

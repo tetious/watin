@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 
       For value = Find.ByFor("foridvalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "For class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "For class should inherit Attribute class");
 
       Assert.That(value.AttributeName, Is.EqualTo(htmlfor), "Wrong attributename");
       Assert.AreEqual("foridvalue", value.Value, "Wrong value");
@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
     {
       Id value = Find.ById("idvalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Id class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Id class should inherit Attribute class");
 
       const string id = "id";
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
@@ -101,7 +101,7 @@ namespace WatiN.Core.UnitTests
 		{
 			Alt value = Find.ByAlt("alt text");
 
-			Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Alt class should inherit Attribute class");
+			Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Alt class should inherit Attribute class");
 
 			const string name = "alt";
 			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
@@ -122,7 +122,7 @@ namespace WatiN.Core.UnitTests
     {
       Name value = Find.ByName("namevalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Name class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Name class should inherit Attribute class");
 
       const string name = "name";
       Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
@@ -143,7 +143,7 @@ namespace WatiN.Core.UnitTests
     {
       Core.Text value = Find.ByText("textvalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Text class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Text class should inherit Attribute class");
 
       const string innertext = "innertext";
       Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
@@ -166,7 +166,7 @@ namespace WatiN.Core.UnitTests
       const string attributeName = "background-color";
       StyleAttribute value = Find.ByStyle(attributeName, "red");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "StyleAttribute class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "StyleAttribute class should inherit Attribute class");
 
       const string fullAttributeName = "style.background-color";
       Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
@@ -188,13 +188,13 @@ namespace WatiN.Core.UnitTests
       string url = WatiNURI.ToString();
       Url value = Find.ByUrl(url);
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit Attribute class");
       AssertUrlValue(value);
 
       // make sure overload also works
       value = Find.ByUrl(url, true);
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit Attribute class");
       AssertUrlValue(value);
 
       TestAttributeBag attributeBag = new TestAttributeBag("href", url);
@@ -274,7 +274,7 @@ namespace WatiN.Core.UnitTests
 
       Title value = Find.ByTitle("titlevalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Title class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Title class should inherit Attribute class");
 
       Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
@@ -323,7 +323,7 @@ namespace WatiN.Core.UnitTests
 
       Value value = Find.ByValue("valuevalue");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Value class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Value class should inherit Attribute class");
 
       Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
@@ -346,7 +346,7 @@ namespace WatiN.Core.UnitTests
 
       Src value = Find.BySrc("image.gif");
 
-      Assert.IsInstanceOfType(typeof (Core.Attribute), value, "Src class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Src class should inherit Attribute class");
 
       Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("image.gif", value.Value, "Wrong value");
@@ -370,57 +370,57 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullAttribute()
     {
-      new Core.Attribute(null, "idvalue");
+      new AttributeConstraint(null, "idvalue");
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullValue()
     {
-      new Core.Attribute("id", (string) null);
+      new AttributeConstraint("id", (string) null);
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNulls()
     {
-      new Core.Attribute(null, (string) null);
+      new AttributeConstraint(null, (string) null);
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullRegex()
     {
-      new Core.Attribute("id", (Regex) null);
+      new AttributeConstraint("id", (Regex) null);
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithNullsRegex()
     {
-      new Core.Attribute(null, (Regex) null);
+      new AttributeConstraint(null, (Regex) null);
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithEmptyAttribute()
     {
-      new Core.Attribute(string.Empty, "idvalue");
+      new AttributeConstraint(string.Empty, "idvalue");
     }
 
     [Test]
     public void NewAttributeWithEmptyValue()
     {
-      Core.Attribute attribute = new Core.Attribute("id", string.Empty);
+      AttributeConstraint attribute = new AttributeConstraint("id", string.Empty);
       Assert.IsEmpty(attribute.Value);
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void NewAttributeWithEmpties()
     {
-      new Core.Attribute(string.Empty, string.Empty);
+      new AttributeConstraint(string.Empty, string.Empty);
     }
 
     [Test]
     public void FindByCustom()
     {
       const string id = "id";
-      Core.Attribute value = Find.By(id, "idvalue");
+      AttributeConstraint value = Find.By(id, "idvalue");
       Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("idvalue", value.Value, "Wrong value");
 
@@ -629,14 +629,14 @@ namespace WatiN.Core.UnitTests
   public class NotAttributeTests
   {
     private MockRepository mocks;
-    private Core.Attribute attribute;
+    private AttributeConstraint attribute;
     private IAttributeBag attributeBag;
 
     [SetUp]
     public void Setup()
     {
       mocks = new MockRepository();
-      attribute = (Core.Attribute) mocks.DynamicMock(typeof (Core.Attribute), "fake", "");
+      attribute = (AttributeConstraint) mocks.DynamicMock(typeof (AttributeConstraint), "fake", "");
       attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
 
       SetupResult.For(attribute.Compare(null)).IgnoreArguments().Return(false);
@@ -659,7 +659,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AttributeOperatorNotOverload()
     {
-      Core.Attribute attributenot = !attribute;
+      AttributeConstraint attributenot = !attribute;
 
       Assert.IsInstanceOfType(typeof (Not), attributenot, "Expected Not instance");
       Assert.IsTrue(attributenot.Compare(attributeBag));
@@ -888,7 +888,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AndTrue()
     {
-      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      AttributeConstraint findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("X");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("Cancel");
@@ -903,7 +903,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AndFalseFirstSoSecondPartShouldNotBeEvaluated()
     {
-      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      AttributeConstraint findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Y");
 
@@ -917,7 +917,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AndFalseSecond()
     {
-      Core.Attribute findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
+      AttributeConstraint findBy = Find.ByName("X").And(Find.ByValue("Cancel"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       attributeBag.Add("value", "OK");
@@ -927,7 +927,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OrFirstTrue()
     {
-      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      AttributeConstraint findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
@@ -935,7 +935,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OrSecondTrue()
     {
-      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      AttributeConstraint findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
       Assert.IsTrue(findBy.Compare(attributeBag));
     }
@@ -943,7 +943,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OrFalse()
     {
-      Core.Attribute findBy = Find.ByName("X").Or(Find.ByName("Y"));
+      AttributeConstraint findBy = Find.ByName("X").Or(Find.ByName("Y"));
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
     }
@@ -951,8 +951,8 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AndOr()
     {
-      Core.Attribute findByNames = Find.ByName("X").Or(Find.ByName("Y"));
-      Core.Attribute findBy = Find.ByValue("Cancel").And(findByNames);
+      AttributeConstraint findByNames = Find.ByName("X").Or(Find.ByName("Y"));
+      AttributeConstraint findBy = Find.ByValue("Cancel").And(findByNames);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "X");
       attributeBag.Add("value", "Cancel");
@@ -962,7 +962,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void AndOrThroughOperatorOverloads()
     {
-      Core.Attribute findBy = Find.ByName("X") & Find.ByValue("Cancel") | (Find.ByName("Z") & Find.ByValue("Cancel"));
+      AttributeConstraint findBy = Find.ByName("X") & Find.ByValue("Cancel") | (Find.ByName("Z") & Find.ByValue("Cancel"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       attributeBag.Add("value", "OK");
@@ -978,7 +978,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void Occurence0()
     {
-      Core.Attribute findBy = new Index(0);
+      AttributeConstraint findBy = new Index(0);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -988,7 +988,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void Occurence2()
     {
-      Core.Attribute findBy = new Index(2);
+      AttributeConstraint findBy = new Index(2);
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1000,7 +1000,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OccurenceAndTrue()
     {
-      Core.Attribute findBy = new Index(1).And(Find.ByName("Z"));
+      AttributeConstraint findBy = new Index(1).And(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1010,7 +1010,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OccurenceOr()
     {
-      Core.Attribute findBy = new Index(2).Or(Find.ByName("Z"));
+      AttributeConstraint findBy = new Index(2).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -1023,7 +1023,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OccurenceAndFalse()
     {
-      Core.Attribute findBy = new Index(1).And(Find.ByName("Y"));
+      AttributeConstraint findBy = new Index(1).And(Find.ByName("Y"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1033,7 +1033,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void TrueAndOccurence()
     {
-      Core.Attribute findBy = Find.ByName("Z").And(new Index(1));
+      AttributeConstraint findBy = Find.ByName("Z").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1043,7 +1043,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FalseAndOccurence()
     {
-      Core.Attribute findBy = Find.ByName("Y").And(new Index(1));
+      AttributeConstraint findBy = Find.ByName("Y").And(new Index(1));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1053,7 +1053,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void TrueAndOccurenceAndTrue()
     {
-      Core.Attribute findBy = Find.ByName("Z").And(new Index(1)).And(Find.ByValue("text"));
+      AttributeConstraint findBy = Find.ByName("Z").And(new Index(1)).And(Find.ByValue("text"));
 
       Expect.Call(mockAttributeBag.GetValue("name")).Return("Z");
       Expect.Call(mockAttributeBag.GetValue("value")).Return("text");
@@ -1079,7 +1079,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OccurenceAndOrWithOrTrue()
     {
-      Core.Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      AttributeConstraint findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Z");
       Assert.IsTrue(findBy.Compare(attributeBag));
@@ -1088,7 +1088,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void OccurenceAndOrWithAndTrue()
     {
-      Core.Attribute findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
+      AttributeConstraint findBy = new Index(2).And(Find.ByName("Y")).Or(Find.ByName("Z"));
 
       TestAttributeBag attributeBag = new TestAttributeBag("name", "Y");
       Assert.IsFalse(findBy.Compare(attributeBag));
@@ -1100,7 +1100,7 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (ReEntryException))]
     public void RecusiveCallExceptionExpected()
     {
-      Core.Attribute findBy = Find.By("tag", "value");
+      AttributeConstraint findBy = Find.By("tag", "value");
       findBy.Or(findBy);
 
       Expect.Call(mockAttributeBag.GetValue("tag")).Return("val").Repeat.AtLeastOnce();
@@ -1117,13 +1117,13 @@ namespace WatiN.Core.UnitTests
     private MockRepository mocks;
     private IAttributeBag mockAttributeBag;
 
-    private Core.Attribute findBy1;
-    private Core.Attribute findBy2;
-    private Core.Attribute findBy3;
-    private Core.Attribute findBy4;
-    private Core.Attribute findBy5;
+    private AttributeConstraint findBy1;
+    private AttributeConstraint findBy2;
+    private AttributeConstraint findBy3;
+    private AttributeConstraint findBy4;
+    private AttributeConstraint findBy5;
 
-    private Core.Attribute findBy;
+    private AttributeConstraint findBy;
 
     [SetUp]
     public void Setup()
@@ -1201,15 +1201,15 @@ namespace WatiN.Core.UnitTests
     private MockRepository mocks;
     private IAttributeBag mockAttributeBag;
 
-    private Core.Attribute findBy1;
-    private Core.Attribute findBy2;
-    private Core.Attribute findBy3;
-    private Core.Attribute findBy4;
-    private Core.Attribute findBy5;
-    private Core.Attribute findBy6;
-    private Core.Attribute findBy7;
-    private Core.Attribute findBy8;
-    private Core.Attribute findBy;
+    private AttributeConstraint findBy1;
+    private AttributeConstraint findBy2;
+    private AttributeConstraint findBy3;
+    private AttributeConstraint findBy4;
+    private AttributeConstraint findBy5;
+    private AttributeConstraint findBy6;
+    private AttributeConstraint findBy7;
+    private AttributeConstraint findBy8;
+    private AttributeConstraint findBy;
 
     [SetUp]
     public void Setup()

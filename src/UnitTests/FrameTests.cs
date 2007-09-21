@@ -23,7 +23,6 @@ using NUnit.Framework;
 using WatiN.Core;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
-using Attribute=WatiN.Core.Attribute;
 
 namespace WatiN.Core.UnitTests
 {
@@ -150,7 +149,7 @@ namespace WatiN.Core.UnitTests
       UtilityClass.DumpFrames(ie);
     }
     
-    private static void AssertFindFrame(IE ie, Attribute findBy, string expectedFrameName)
+    private static void AssertFindFrame(IE ie, AttributeConstraint findBy, string expectedFrameName)
     {
       Frame frame = null;
       if (findBy is Url)
