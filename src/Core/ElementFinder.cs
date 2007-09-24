@@ -304,7 +304,7 @@ namespace WatiN.Core
   /// </summary>
   public class ElementTag
   {
-    public readonly string TagName;
+    public readonly string TagName = null;
     public readonly string InputTypes;
     public readonly bool IsInputElement = false;
       
@@ -313,7 +313,10 @@ namespace WatiN.Core
     
     public ElementTag(string tagName, string inputTypes)
     {
-      TagName = tagName;
+      if (tagName != null)
+      {
+        TagName = tagName.ToLower();
+      }
       IsInputElement = ElementFinder.isInputElement(tagName);
         
       // Check arguments
@@ -327,7 +330,19 @@ namespace WatiN.Core
         InputTypes = inputTypes.ToLower();
       }
     }
+    
+    public ElementTag(IHTMLElement element)
+    {
+      TagName = element.tagName.ToLower();
+      IsInputElement = ElementFinder.isInputElement(TagName);
+      if (IsInputElement)
+      {
+        IHTMLInputElement inputElement = (IHTMLInputElement)element;
       
+        InputTypes = inputElement.type.ToLower();
+      }
+    }
+
     public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
     {
       if (elements == null) return null;
@@ -368,11 +383,16 @@ namespace WatiN.Core
 
     public override string ToString()
     {
+      string returnValue = string.Empty;
       if (IsInputElement)
       {
-        return String.Format("{0} ({1})", TagName.ToUpper(), InputTypes);
+        returnValue = String.Format("{0} ({1})", TagName.ToUpper(), InputTypes);
       }
-      return TagName.ToUpper();
+      if (TagName != null)
+      {
+        returnValue = TagName.ToUpper();
+      }
+      return returnValue;
     }
 
     private bool CompareTagName(IHTMLElement element)
@@ -391,12 +411,22 @@ namespace WatiN.Core
       
       string inputElementType = inputElement.type.ToLower();
     
-      if (InputTypes.IndexOf(inputElementType) >= 0)
-      {
-        return true;
-      }
-      
-      return false;
+      return (InputTypes.IndexOf(inputElementType) >= 0);
+    }
+
+    public override int GetHashCode()
+    {
+      return (TagName != null ? TagName.GetHashCode() : 0) + 29*(InputTypes != null ? InputTypes.GetHashCode() : 0);
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (this == obj) return true;
+      ElementTag elementTag = obj as ElementTag;
+      if (elementTag == null) return false;
+      if (!Equals(TagName, elementTag.TagName)) return false;
+      if (!Equals(InputTypes, elementTag.InputTypes)) return false;
+      return true;
     }
 
     public static bool IsValidElement(object element, ArrayList elementTags)

@@ -870,6 +870,13 @@ namespace WatiN.Core.UnitTests
     {
       Assert.IsFalse(ElementTag.IsValidElement(new object(), new ArrayList()));
     }
+
+    [Test]
+    public void ToStringShouldBeEmptyIfTagNameIsNull()
+    {
+      ElementTag elementTag = new ElementTag((string)null);
+      Assert.That(elementTag.ToString(), Is.EqualTo(""));
+    }
   }
 
   [TestFixture]
