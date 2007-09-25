@@ -687,6 +687,54 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
+    public void Reopen()
+    {
+      FailIfIEWindowExists("main", "Reopen");
+
+      string url = MainURI.ToString();
+      using (IE ie = new IE(url))
+      {
+        Assert.AreEqual(MainURI, new Uri(ie.Url));
+        object oldIEObj = ie.InternetExplorer;
+
+        ie.Reopen();
+        Assert.AreNotSame(oldIEObj, ie.InternetExplorer, "Reopen should create a new browser.");
+
+        Assert.AreEqual("about:blank", ie.Url);
+      }
+    }
+
+    [Test]
+    public void ReopenWithUrlAndLogonDialogHandlerInNewProcess()
+    {
+      FailIfIEWindowExists("main", "ReopenWithUrlAndLogonDialogHandler");
+
+      LogonDialogHandler logon = new LogonDialogHandler("y", "z");
+
+      using (IE ie1 = new IE())
+      {
+        using (IE ie2 = new IE())
+        {
+          Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "process id problem");
+
+          Assert.AreEqual("about:blank", ie2.Url);
+          object oldIEObj = ie2.InternetExplorer;
+
+          ie2.Reopen(MainURI, logon, true);
+          Assert.AreNotSame(oldIEObj, ie2.InternetExplorer, "Reopen should create a new browser.");
+
+          Assert.AreNotEqual(ie1.ProcessID, ie2.ProcessID, "process id problem");
+
+          Assert.AreEqual(MainURI, new Uri(ie2.Url));
+          Assert.IsTrue(ie2.DialogWatcher.Contains(logon));
+          Assert.AreEqual(1, ie2.DialogWatcher.Count);
+        }
+      }
+
+      Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
+    }
+
+    [Test]
     public void RefreshWithNeverExpiredPage()
     {
       using (IE ie = new IE(MainURI))
@@ -697,6 +745,70 @@ namespace WatiN.Core.UnitTests
 
         Assert.AreEqual("refresh test", ie.TextField("name").Text);
       }
+    }
+
+    [Test]
+    public void Cookies()
+    {
+      using (IE ie = new IE())
+      {
+        // Clear all cookies.
+        ie.ClearCookies();
+
+        // Ensure our test cookies don't exist from a previous run.
+        Assert.IsNull(ie.GetCookie("http://1.watin.com/", "test-cookie"));
+        Assert.IsNull(ie.GetCookie("http://2.watin.com/", "test-cookie"));
+
+        // Create cookies for a pair of domains.
+        ie.SetCookie("http://1.watin.com/", "test-cookie=abc; expires=Wed, 01-Jan-2020 00:00:00 GMT");
+        Assert.AreEqual("test-cookie=abc", ie.GetCookie("http://1.watin.com/", "test-cookie"));
+
+        ie.SetCookie("http://2.watin.com/", "test-cookie=def; expires=Wed, 01-Jan-2020 00:00:00 GMT");
+        Assert.AreEqual("test-cookie=def", ie.GetCookie("http://2.watin.com/", "test-cookie"));
+
+        // Clear cookies under one subdomain.
+        ie.ClearCookies("http://1.watin.com/");
+
+        // Ensure just the cookie of the first subdomain was deleted.
+        Assert.IsNull(ie.GetCookie("http://1.watin.com/", "test-cookie"));
+        Assert.AreEqual("test-cookie=def", ie.GetCookie("http://2.watin.com/", "test-cookie"));
+
+        // Clear cookies under master domain.
+        ie.ClearCookies("http://watin.com/");
+
+        // Ensure the second subdomain's cookie was deleted this time.
+        Assert.IsNull(ie.GetCookie("http://2.watin.com/", "test-cookie"));
+      }
+    }
+
+    [Test]
+    public void ClearCache()
+    {
+      using (IE ie = new IE(GoogleUrl))
+      {
+        // Testing cache clearing directly is a little difficult because we cannot
+        // easily enumerate its contents without using system APIs.
+        // We could create a sample page that includes a nonce but says it's cacheable
+        // forever.  Then we should only observe the change on refresh or cache clearing.
+        // Fortunately Google has already done it for us.
+
+        // Save the original page html.
+        string oldHtml = GetHtmlSource(ie);
+
+        // If we navigate to the page again, we should see identical Html.
+        ie.GoTo(GoogleUrl);
+        Assert.AreEqual(oldHtml, GetHtmlSource(ie), "HTML should be identical when pulling from the cache.");
+
+        // But after clearing the cache, things are different.
+        ie.ClearCache();
+        ie.GoTo(GoogleUrl);
+        Assert.AreNotEqual(oldHtml, GetHtmlSource(ie), "HTML should differ after cache has been cleared.");
+      }
+    }
+
+    private static string GetHtmlSource(IE ie)
+    {
+      return ie.HtmlDocument.body.parentElement.outerHTML;
     }
 
     [Test, Category("InternetConnectionNeeded")]

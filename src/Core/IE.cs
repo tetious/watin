@@ -1166,6 +1166,79 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Closes then reopens Internet Explorer with a blank page.
+    /// </summary>
+    /// <remarks>
+    /// You could also use one of the overloaded methods.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
+    ///        ie.Reopen();
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public void Reopen()
+    {
+      Reopen(new Uri("about:blank"), null, false);
+    }
+
+    /// <summary>
+    /// Closes then reopens Internet Explorer and navigates to the given <paramref name="uri"/>.
+    /// </summary>
+    /// <param name="uri">The Uri to open</param>
+    /// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
+    /// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
+    /// <remarks>
+    /// You could also use one of the overloaded methods.
+    /// </remarks>
+    /// <example>
+    /// The following example creates a new Internet Explorer instances and navigates to
+    /// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
+    /// <code>
+    /// using WatiN.Core;
+    /// 
+    /// namespace NewIEExample
+    /// {
+    ///    public class WatiNWebsite
+    ///    {
+    ///      public WatiNWebsite()
+    ///      {
+    ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+    ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
+    ///        ie.Reopen();
+    ///      }
+    ///    }
+    ///  }
+    /// </code>
+    /// </example>
+    public void Reopen(Uri uri, LogonDialogHandler logonDialogHandler, bool createInNewProcess)
+    {
+      Close();
+      Recycle();
+      CreateNewIEAndGoToUri(uri, logonDialogHandler, createInNewProcess);
+    }
+
+    protected override void Recycle()
+    {
+      base.Recycle();
+      isDisposed = false;
+    }
+
     private void DisposeAndCloseIE(bool closeIE)
     {
       if (!isDisposed)
@@ -1233,6 +1306,129 @@ namespace WatiN.Core
       }
     }
 
+    /// <summary>
+    /// Clears all browser cookies.
+    /// </summary>
+    /// <remarks>
+    /// Internet Explorer maintains an internal cookie cache that does not immediately
+    /// expire when cookies are cleared.  This is the case even when the cookies are
+    /// cleared using the Internet Options dialog.  If cookies have been used by
+    /// the current browser session it may be necessary to <see cref="Reopen" /> the
+    /// browser to ensure the internal cookie cache is flushed.  Therefore it is
+    /// recommended to clear cookies at the beginning of the test before navigating
+    /// to any pages (other than "about:blank") to avoid having to reopen the browser.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Clear cookies first.
+    /// IE ie = new IE();
+    /// ie.ClearCookies();
+    /// 
+    /// // Then go to the site and sign in.
+    /// ie.GoTo("http://www.example.com/");
+    /// ie.Link(Find.ByText("Sign In")).Click();
+    /// </code>
+    /// </example>
+    /// <seealso cref="Reopen"/>
+    public void ClearCookies()
+    {
+      Logger.LogAction("Clearing cookies for all sites.");
+
+      WinInet.ClearCookies(null);
+    }
+
+    /// <summary>
+    /// Clears the browser cookies associated with a particular site and to
+    /// any of the site's subdomains.
+    /// </summary>
+    /// <remarks>
+    /// Internet Explorer maintains an internal cookie cache that does not immediately
+    /// expire when cookies are cleared.  This is the case even when the cookies are
+    /// cleared using the Internet Options dialog.  If cookies have been used by
+    /// the current browser session it may be necessary to <see cref="Reopen" /> the
+    /// browser to ensure the internal cookie cache is flushed.  Therefore it is
+    /// recommended to clear cookies at the beginning of the test before navigating
+    /// to any pages (other than "about:blank") to avoid having to reopen the browser.
+    /// </remarks>
+    /// <param name="url">The site url associated with the cookie.</param>
+    /// <example>
+    /// <code>
+    /// // Clear cookies first.
+    /// IE ie = new IE();
+    /// ie.ClearCookies("http://www.example.com/");
+    /// 
+    /// // Then go to the site and sign in.
+    /// ie.GoTo("http://www.example.com/");
+    /// ie.Link(Find.ByText("Sign In")).Click();
+    /// </code>
+    /// </example>
+    /// <seealso cref="Reopen"/>
+    public void ClearCookies(string url)
+    {
+      if (url == null)
+        throw new ArgumentNullException("url");
+
+      Logger.LogAction(String.Format("Clearing cookies for site '{0}'.", url));
+
+      WinInet.ClearCookies(url);
+    }
+
+    /// <summary>
+    /// Clears the browser cache but leaves cookies alone.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// // Clear the cache and cookies.
+    /// IE ie = new IE();
+    /// ie.ClearCache();
+    /// ie.ClearCookies();
+    /// 
+    /// // Then go to the site and sign in.
+    /// ie.GoTo("http://www.example.com/");
+    /// ie.Link(Find.ByText("Sign In")).Click();
+    /// </code>
+    /// </example>
+    /// <seealso cref="Reopen"/>
+    public void ClearCache()
+    {
+      Logger.LogAction("Clearing browser cache.");
+
+      WinInet.ClearCache();
+    }
+
+    /// <summary>
+    /// Gets the value of a cookie.
+    /// </summary>
+    /// <remarks>
+    /// This method cannot retrieve the value of cookies protected by the <c>httponly</c> security option.
+    /// </remarks>
+    /// <param name="url">The site url associated with the cookie.</param>
+    /// <param name="cookieName">The cookie name.</param>
+    /// <returns>The cookie data of the form:
+    /// &lt;name&gt;=&lt;value&gt;[; &lt;name&gt;=&lt;value&gt;]...
+    /// [; expires=&lt;date:DAY, DD-MMM-YYYY HH:MM:SS GMT&gt;][; domain=&lt;domain_name&gt;]
+    /// [; path=&lt;some_path&gt;][; secure][; httponly].  Returns null if there are no associated cookies.</returns>
+    public string GetCookie(string url, string cookieName)
+    {
+      return WinInet.GetCookie(url, cookieName);
+    }
+
+    /// <summary>
+    /// Sets the value of a cookie.
+    /// </summary>
+    /// <remarks>
+    /// If no expiration date is specified, the cookie expires when the session ends.
+    /// </remarks>
+    /// <param name="url">The site url associated with the cookie.</param>
+    /// <param name="cookieData">The cookie data of the form:
+    /// &lt;name&gt;=&lt;value&gt;[; &lt;name&gt;=&lt;value&gt;]...
+    /// [; expires=&lt;date:DAY, DD-MMM-YYYY HH:MM:SS GMT&gt;][; domain=&lt;domain_name&gt;]
+    /// [; path=&lt;some_path&gt;][; secure][; httponly].</param>
+    /// <seealso cref="ClearCookies"/>
+    public void SetCookie(string url, string cookieData)
+    {
+      WinInet.SetCookie(url, cookieData);
+    }
 
     private bool IsInternetExplorerStillAvailable()
     {
@@ -1442,4 +1638,5 @@ namespace WatiN.Core
     }
   }
 }
+
 

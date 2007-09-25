@@ -186,7 +186,17 @@ namespace WatiN.Core
       CaptureWebPage captureWebPage = new CaptureWebPage(this);
       captureWebPage.CaptureWebPageToFile(filename, false, false, 100, 100);
     }
-  }  
+
+    /// <summary>
+    /// Recycles the DomContainer to its initially created state so that it can be reused.
+    /// </summary>
+    protected virtual void Recycle()
+    {
+      Dispose(true);
+      DomContainer = this;
+      _disposed = false;
+    }
+  }
 
   public class WaitForComplete : IWait
   {
