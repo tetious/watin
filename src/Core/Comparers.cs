@@ -96,7 +96,7 @@ namespace WatiN.Core
 
     public override string ToString()
     {
-      return GetType().ToString() + " compares with: " + uriToCompareWith.ToString();
+      return uriToCompareWith.ToString();
     }
   }
 
@@ -166,7 +166,7 @@ namespace WatiN.Core
 
     public override string ToString()
     {
-      return GetType().ToString() + " compares with: " + valueToCompareWith;
+      return valueToCompareWith;
     }
   }
 

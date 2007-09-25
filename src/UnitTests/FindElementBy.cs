@@ -40,7 +40,7 @@ namespace WatiN.Core.UnitTests
     {
       const string htmlfor = "htmlfor";
 
-      For value = Find.ByFor("foridvalue");
+      AttributeConstraint value = Find.ByFor("foridvalue");
 
       Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "For class should inherit Attribute class");
 
@@ -60,7 +60,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindByID()
     {
-      Id value = Find.ById("idvalue");
+      AttributeConstraint value = Find.ById("idvalue");
 
       Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Id class should inherit Attribute class");
 
@@ -87,11 +87,11 @@ namespace WatiN.Core.UnitTests
 
       mocks.ReplayAll();
 
-      Id value = Find.ById(new Regex("lue$"));
+      AttributeConstraint value = Find.ById(new Regex("lue$"));
       Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match.");
 
       // See if mocked comparer is used. VerifyAll will check this
-      new Id(comparer).Compare(attributeBag);
+      Find.ById(comparer).Compare(attributeBag);
 
       mocks.VerifyAll();
     }
@@ -99,7 +99,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindByAlt()
 		{
-			Alt value = Find.ByAlt("alt text");
+			AttributeConstraint value = Find.ByAlt("alt text");
 
 			Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Alt class should inherit Attribute class");
 
@@ -120,7 +120,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindByName()
     {
-      Name value = Find.ByName("namevalue");
+      AttributeConstraint value = Find.ByName("namevalue");
 
       Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Name class should inherit Attribute class");
 
@@ -141,7 +141,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void FindByText()
     {
-      Core.Text value = Find.ByText("textvalue");
+      AttributeConstraint value = Find.ByText("textvalue");
 
       Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Text class should inherit Attribute class");
 
@@ -164,9 +164,9 @@ namespace WatiN.Core.UnitTests
     public void FindByStyle()
     {
       const string attributeName = "background-color";
-      StyleAttribute value = Find.ByStyle(attributeName, "red");
+      AttributeConstraint value = Find.ByStyle(attributeName, "red");
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "StyleAttribute class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "StyleAttribute class should inherit AttributeConstraint class");
 
       const string fullAttributeName = "style.background-color";
       Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
@@ -186,15 +186,15 @@ namespace WatiN.Core.UnitTests
     public void FindByUrl()
     {
       string url = WatiNURI.ToString();
-      Url value = Find.ByUrl(url);
+      AttributeConstraint value = Find.ByUrl(url);
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit AttributeConstraint class");
       AssertUrlValue(value);
 
       // make sure overload also works
       value = Find.ByUrl(url, true);
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Url class should inherit AttributeConstraint class");
       AssertUrlValue(value);
 
       TestAttributeBag attributeBag = new TestAttributeBag("href", url);
@@ -205,23 +205,21 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (UriFormatException))]
     public void FindingEmptyUrlNotAllowed()
     {
-      new Url(String.Empty);
-
-      new Url(String.Empty, true);
+      Find.ByUrl(String.Empty);
     }
 
     [Test]
     public void FindByUri()
     {
-      Url value = new Url(WatiNURI);
+      AttributeConstraint value = Find.ByUrl(WatiNURI);
       AssertUrlValue(value);
 
       // make sure the ignore querystring constructer also works.
-      value = new Url(WatiNURI, true);
+      value = Find.ByUrl(WatiNURI, true);
       AssertUrlValue(value);
     }
 
-    private static void AssertUrlValue(Url value)
+    private static void AssertUrlValue(AttributeConstraint value)
     {
       Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
@@ -229,11 +227,9 @@ namespace WatiN.Core.UnitTests
       TestAttributeBag attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
 
       Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
-      Assert.IsTrue(value.Compare(WatiNURI), "Should match WatiN uri");
 
       attributeBag = new TestAttributeBag(href, "http://www.microsoft.com");
       Assert.IsFalse(value.Compare(attributeBag), "Shouldn't match Microsoft");
-      Assert.IsFalse(value.Compare(MainURI), "Shouldn't match mainUri");
 
       attributeBag = new TestAttributeBag(href, null);
       Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
@@ -246,7 +242,7 @@ namespace WatiN.Core.UnitTests
     public void FindByUrlWithRegex()
     {
       Regex regex = new Regex("^http://watin");
-      Url value = Find.ByUrl(regex);
+      AttributeConstraint value = Find.ByUrl(regex);
       TestAttributeBag attributeBag = new TestAttributeBag(href, "http://watin.sourceforge.net");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex ^http://watin should match");
@@ -261,7 +257,7 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (UriFormatException))]
     public void FindByUrlInvalidCompare()
     {
-      Url value = Find.ByUrl(WatiNURI.ToString());
+      AttributeConstraint value = Find.ByUrl(WatiNURI.ToString());
       TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge.net");
 
       value.Compare(attributeBag);
@@ -272,9 +268,9 @@ namespace WatiN.Core.UnitTests
     {
       const string title = "title";
 
-      Title value = Find.ByTitle("titlevalue");
+      AttributeConstraint value = Find.ByTitle("titlevalue");
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Title class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Title class should inherit AttributeConstraint class");
 
       Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("titlevalue", value.Value, "Wrong value");
@@ -321,9 +317,9 @@ namespace WatiN.Core.UnitTests
     {
       const string valueAttrib = "value";
 
-      Value value = Find.ByValue("valuevalue");
+      AttributeConstraint value = Find.ByValue("valuevalue");
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Value class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Value class should inherit AttributeConstraint class");
 
       Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("valuevalue", value.Value, "Wrong value");
@@ -344,9 +340,9 @@ namespace WatiN.Core.UnitTests
     {
       const string src = "src";
 
-      Src value = Find.BySrc("image.gif");
+      AttributeConstraint value = Find.BySrc("image.gif");
 
-      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Src class should inherit Attribute class");
+      Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Src class should inherit AttributeConstraint class");
 
       Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
       Assert.AreEqual("image.gif", value.Value, "Wrong value");
@@ -445,55 +441,6 @@ namespace WatiN.Core.UnitTests
       value = Find.By(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
     }
-
-    [Test]
-    public void ElementUrlPartialValue()
-    {
-      ElementUrlPartialValue value = new ElementUrlPartialValue("watin.sourceforge");
-
-      Assert.IsInstanceOfType(typeof (Url), value, "ElementUrlPartialValue class should inherit Url class");
-
-      Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
-      Assert.AreEqual("watin.sourceforge", value.Value, "Wrong value");
-
-      TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge");
-      Assert.IsTrue(value.Compare(attributeBag), "Compare should match");
-
-      value = new ElementUrlPartialValue("watin.sourceforge");
-
-      attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
-      Assert.IsTrue(value.Compare(attributeBag), "Compare should partial match title");
-
-      attributeBag = new TestAttributeBag(href, "www.microsoft.com");
-      Assert.IsFalse(value.Compare(attributeBag), "Compare should not match title");
-
-      using (new IE(MainURI))
-      {
-        string partialUrl = MainURI.ToString();
-        partialUrl = partialUrl.Remove(0, partialUrl.Length - 8);
-
-        using (IE ie = IE.AttachToIE(new ElementUrlPartialValue(partialUrl)))
-        {
-          Assert.AreEqual(MainURI, ie.Uri);
-        }
-      }
-    }
-  }
-
-  public class ElementUrlPartialValue : Url
-  {
-    private string url = null;
-
-    public ElementUrlPartialValue(string url) : base("http://www.fakeurl.com")
-    {
-      this.url = url;
-      comparer = new StringContainsAndCaseInsensitiveComparer(url);
-    }
-
-    public override string Value
-    {
-      get { return url; }
-    }
   }
 
   [TestFixture]
@@ -536,7 +483,7 @@ namespace WatiN.Core.UnitTests
     {
       WatiN.Core.StringComparer comparer = new WatiN.Core.StringComparer("A test value");
 
-      Assert.AreEqual("WatiN.Core.StringComparer compares with: A test value", comparer.ToString());
+      Assert.AreEqual("A test value", comparer.ToString());
     }
   }
 
@@ -580,8 +527,7 @@ namespace WatiN.Core.UnitTests
     {
       StringContainsAndCaseInsensitiveComparer comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
 
-      Assert.AreEqual("WatiN.Core.StringContainsAndCaseInsensitiveComparer compares with: a test value",
-                      comparer.ToString());
+      Assert.AreEqual("a test value", comparer.ToString());
     }
   }
 
@@ -789,7 +735,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsFalse(comparer.Compare(new Uri("http://watin")), "Uri: Partial match should not match");
       Assert.IsFalse(comparer.Compare(new Uri("file://html/main.html")),
                      "Uri: Something completely different should not match");
-      Assert.IsFalse(comparer.Compare((Uri) null), "Uri: null should not match");
+      Assert.IsFalse(comparer.Compare(null), "Uri: null should not match");
     }
 
     [Test]
@@ -838,7 +784,7 @@ namespace WatiN.Core.UnitTests
     {
       UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
 
-      Assert.AreEqual("WatiN.Core.UriComparer compares with: http://watin.sourceforge.net/", comparer.ToString());
+      Assert.AreEqual("http://watin.sourceforge.net/", comparer.ToString());
     }
   }
 

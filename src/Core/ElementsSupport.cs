@@ -187,12 +187,12 @@ namespace WatiN.Core
 
     public static TableCell TableCell(DomContainer ie, string elementId, int index, IElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
+      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, Find.ByIndex(index).And(Find.ById(elementId)), elements));
     }
     
     public static TableCell TableCell(DomContainer ie, Regex elementId, int index, IElementCollection elements)
     {
-      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, new Index(index).And(new Id(elementId)), elements));
+      return new TableCell(ie, new ElementFinder(Core.TableCell.ElementTags, Find.ByIndex(index).And(Find.ById(elementId)), elements));
     }
 
     public static TableCellCollection TableCells(DomContainer ie, IElementCollection elements)

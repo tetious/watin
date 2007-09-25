@@ -781,7 +781,7 @@ namespace WatiN.Core.UnitTests
       using (new IE(MainURI))
       {
         DateTime startTime = DateTime.Now;
-        using (IE.AttachToIE(new Url(MainURI), 0))
+        using (IE.AttachToIE(Find.ByUrl(MainURI), 0))
         {
           // Should return (within 1 second).
           Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
@@ -845,7 +845,7 @@ namespace WatiN.Core.UnitTests
       DateTime startTime = DateTime.Now;
       const int timeoutTime = 5;
       const string ieTitle = "Non Existing IE Title";
-      const string expectedMessage = "Could not find an IE window by title with value '" + ieTitle + "'. (Search expired after '5' seconds)";
+      const string expectedMessage = "Could not find an IE window by title with value 'non existing ie title'. (Search expired after '5' seconds)";
 
       try
       {
@@ -906,7 +906,7 @@ namespace WatiN.Core.UnitTests
     {
       using (IE ie = new IE(MainURI))
       {
-        Url findBy = Find.ByUrl(PopUpURI);
+        AttributeConstraint findBy = Find.ByUrl(PopUpURI);
         Assert.IsFalse(ie.HtmlDialogs.Exists(findBy));
 
         ie.Button("modalid").ClickNoWait();
@@ -924,7 +924,7 @@ namespace WatiN.Core.UnitTests
       {
         DateTime startTime = DateTime.Now;
         const int timeoutTime = 5;
-        string expectedMessage = "Could not find a HTMLDialog by title with value 'PopUpTest'. (Search expired after '5' seconds)";
+        string expectedMessage = "Could not find a HTMLDialog by title with value 'popuptest'. (Search expired after '5' seconds)";
 
         try
         {

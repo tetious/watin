@@ -388,7 +388,7 @@ namespace WatiN.Core
       {
         returnValue = String.Format("{0} ({1})", TagName.ToUpper(), InputTypes);
       }
-      if (TagName != null)
+      else if (TagName != null)
       {
         returnValue = TagName.ToUpper();
       }

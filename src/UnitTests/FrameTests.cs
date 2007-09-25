@@ -152,13 +152,10 @@ namespace WatiN.Core.UnitTests
     private static void AssertFindFrame(IE ie, AttributeConstraint findBy, string expectedFrameName)
     {
       Frame frame = null;
-      if (findBy is Url)
+      string attributeName = findBy.AttributeName.ToLower();
+      if (attributeName == "href" || attributeName == "name")
       {
-        frame = ie.Frame((Url)findBy);
-      }
-      else if (findBy is Name)
-      {
-        frame = ie.Frame((Name)findBy);
+        frame = ie.Frame(findBy);
       }
       Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
       Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy.ToString() + ", " + findBy.Value);

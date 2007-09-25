@@ -213,7 +213,7 @@ namespace WatiN.Core
   /// Use this class to find a row which contains a particular value
   /// in a table cell contained in a table column.
   /// </summary>
-  public class TableRowFinder : Text
+  public class TableRowFinder : AttributeConstraint
   {
     private int columnIndex;
     private ICompare containsText;
@@ -223,7 +223,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findText">The text to find (exact match but case insensitive).</param>
     /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(string findText, int inColumn): base(new StringEqualsAndCaseInsensitiveComparer(findText))
+    public TableRowFinder(string findText, int inColumn): base(Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(findText))
     {
       columnIndex = inColumn;
       containsText = new StringContainsAndCaseInsensitiveComparer(findText);
@@ -234,7 +234,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="findTextRegex">The regular expression to match with.</param>
     /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(Regex findTextRegex, int inColumn): base(findTextRegex)
+    public TableRowFinder(Regex findTextRegex, int inColumn): base(Find.textAttribute, findTextRegex)
     {
       columnIndex = inColumn;
       containsText = new AlwaysTrueComparer();
@@ -245,7 +245,7 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="comparer">The comparer.</param>
     /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(ICompare comparer, int inColumn) : base(comparer)
+    public TableRowFinder(ICompare comparer, int inColumn) : base(Find.textAttribute, comparer)
     {
       columnIndex = inColumn;
       containsText = new AlwaysTrueComparer();

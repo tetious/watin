@@ -409,7 +409,7 @@ namespace WatiN.Core
         throw new ArgumentNullException("_attributeConstraint");
       }
 
-      this._attributeConstraint = attributeConstraint;
+      _attributeConstraint = attributeConstraint;
     }
 
     public override bool Compare(IAttributeBag attributeBag)
@@ -446,43 +446,6 @@ namespace WatiN.Core
     }
   }
 
-	/// <summary>
-	/// Class to find an element by it's alt text.
-	/// </summary>  
-	/// <example>
-	/// <code>ie.Image(new Alt("alt text")).Src</code>
-	/// or use
-	/// <code>ie.Image(Find.ByAlt("alt text")).Src</code>
-	/// </example>
-	public class Alt : AttributeConstraint
-	{
-		private const string attributeName = "alt";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Alt"/> class.
-		/// </summary>
-		/// <param name="alt">The alt text to find.</param>
-		public Alt(string alt) : base(attributeName, alt)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Alt"/> class.
-		/// </summary>
-		/// <param regex="regex">The regular expression to match with.</param>
-		public Alt(Regex regex) : base(attributeName, regex)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Alt"/> class.
-		/// </summary>
-		/// <param name="comparer">The comparer.</param>
-		public Alt(ICompare comparer) : base(attributeName, comparer)
-		{
-		}
-	}
-
   /// <summary>
   /// Class to find an element by it's id.
   /// </summary>  
@@ -491,6 +454,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByLink("testlinkid")).Url</code>
   /// </example>
+  [Obsolete("Use Find.ById() or the class AttributeConstraint instead")]
   public class Id : AttributeConstraint
   {
     private const string attributeName = "id";
@@ -590,6 +554,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByName("testlinkname")).Url</code>
   /// </example>
+  [Obsolete("Use Find.ByName() or the class AttributeConstraint instead")]
   public class Name : AttributeConstraint
   {
     private const string attributeName = "name";
@@ -627,6 +592,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByText("my link")).Url</code>
   /// </example>
+  [Obsolete("Use Find.ByText() or the class AttributeConstraint instead")]
   public class Text : AttributeConstraint
   {
     private const string attributeName = "innertext";
@@ -665,6 +631,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Span(Find.ByStyle("color", "red"))</code>
   /// </example>
+  [Obsolete("Use Find.ByStyle() or the class AttributeConstraint instead")]
   public class StyleAttribute : AttributeConstraint
   {
     private const string attributeName = "style.";
@@ -706,6 +673,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Label(Find.ByFor("optionbuttonid")).Text</code>
   /// </example>
+  [Obsolete("Use Find.ByFor() or the class AttributeConstraint instead")]
   public class For : AttributeConstraint
   {
     private const string attributeName = "htmlfor";
@@ -751,6 +719,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
   /// </example>
+  [Obsolete("Use Find.ByUrl() or the class AttributeConstraint instead")]
   public class Url : AttributeConstraint
   {
     private const string attributeName = "href";
@@ -827,6 +796,7 @@ namespace WatiN.Core
   /// or use
   /// <code>IE ie = IE.AttachToIE(Find.ByTitle("WatiN Home Page"))</code>
   /// </example>
+  [Obsolete("Use Find.ByTitle() or the class AttributeConstraint instead")]
   public class Title : AttributeConstraint
   {
     private const string attributeName = "title";
@@ -865,6 +835,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Button(Find.ByValue("My Button"))</code>
   /// </example>
+  [Obsolete("Use Find.ByValue() or the class AttributeConstraint instead")]
   public class Value : AttributeConstraint
   {
     private const string attributeName = "value";
@@ -902,6 +873,7 @@ namespace WatiN.Core
   /// or use
   /// <code>ie.Image(Find.BySrc("image.gif")).Url</code>
   /// </example>
+  [Obsolete("Use Find.BySrc() or the class AttributeConstraint instead")]
   public class Src : AttributeConstraint
   {
     private const string attributeName = "src";
@@ -937,6 +909,17 @@ namespace WatiN.Core
   /// </summary>
   public class Find
   {
+		internal const string altAttribute = "alt";
+    internal const string idAttribute = "id";
+    internal const string forAttribute = "htmlfor";
+    internal const string nameAttribute = "name";
+    internal const string srcAttribute = "src";
+    internal const string styleBaseAttribute = "style.";
+    internal const string textAttribute = "innertext";    
+    internal const string titleAttribute = "title";    
+    internal const string valueAttribute = "value";
+    internal const string hrefAttribute = "href";
+
 		/// <summary>
 		/// Finds an element by its alt text.
 		/// </summary>
@@ -945,9 +928,9 @@ namespace WatiN.Core
 		/// <example>
 		/// <code>ie.Image(Find.ByAlt("alt text")).Name</code>
 		/// </example>
-		public static Alt ByAlt(string alt)
+		public static AttributeConstraint ByAlt(string alt)
 		{
-			return new Alt(alt);
+		  return new AttributeConstraint(altAttribute, alt);
 		}
 
 		/// <summary>
@@ -958,9 +941,9 @@ namespace WatiN.Core
 		/// <example>
 		/// <code>ie.Image(Find.ByAlt(new Regex("pattern goes here")))).Name</code>
 		/// </example>
-		public static Alt ByAlt(Regex regex)
+		public static AttributeConstraint ByAlt(Regex regex)
 		{
-			return new Alt(regex);
+			return new AttributeConstraint(altAttribute, regex);
 		}
 
 		/// <summary>
@@ -971,89 +954,89 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Image img = ie.Image(Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("alt text")));</code>
 		/// </example>
-		public static Alt ByAlt(ICompare compare)
+		public static AttributeConstraint ByAlt(ICompare compare)
 		{
-			return new Alt(compare);
+			return new AttributeConstraint(altAttribute, compare);
 		}
 
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.
     /// </summary>
     /// <param name="forId">Id of the element the label is linked with.</param>
-    /// <returns><see cref="For" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Label(Find.ByFor("optionbuttonid")).Text</code>
     /// </example>
-    public static For ByFor(string forId)
+    public static AttributeConstraint ByFor(string forId)
     {
-      return new For(forId);
+      return new AttributeConstraint(forAttribute, forId);
     }
 
     /// <param name="regex">Regular expression to find the matching Id of the element
     ///  the label is linked with.</param>
-    /// <returns><see cref="For" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Label(Find.ByFor(new Regex("pattern goes here")).Text</code>
     /// </example>
-    public static For ByFor(Regex regex)
+    public static AttributeConstraint ByFor(Regex regex)
     {
-      return new For(regex);
+      return new AttributeConstraint(forAttribute, regex);
     }
 
     /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
-    /// <returns><see cref="For" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>
     /// CheckBox checkbox = ie.CheckBox("checkboxid");
     /// ie.Label(Find.ByFor(checkbox).Text</code>
     /// </example>
-    public static For ByFor(Element element)
+    public static AttributeConstraint ByFor(Element element)
     {
-      return new For(element);
+      return new AttributeConstraint(forAttribute, element.Id);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="For"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>
     /// Label label = ie.Label(Find.ByFor(new StringContainsAndCaseInsensitiveComparer("optionbuttonid")));</code>
     /// </example>
-    public static For ByFor(ICompare comparer)
+    public static AttributeConstraint ByFor(ICompare comparer)
     {
-      return new For(comparer);
+      return new AttributeConstraint(forAttribute, comparer);
     }
 
     /// <summary>
     /// Find an element by its id.
     /// </summary>
     /// <param name="id">Element id to find.</param>
-    /// <returns><see cref="Id" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ById("testlinkid")).Url</code>
     /// </example>
-    public static Id ById(string id)
+    public static AttributeConstraint ById(string id)
     {
-      return new Id(id);
+      return new AttributeConstraint(idAttribute, id);
     }
 
     /// <param name="regex">Regular expression to find a matching Id.</param>
-    /// <returns><see cref="Id" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ById(new Regex("pattern goes here"))).Url</code>
     /// </example>
-    public static Id ById(Regex regex)
+    public static AttributeConstraint ById(Regex regex)
     {
-      return new Id(regex);
+      return new AttributeConstraint(idAttribute, regex);
     }
 
     /// <param name="compare">The compare.</param>
-    /// <returns><see cref="Id"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Link link = ie.Link(Find.ById(new StringContainsAndCaseInsensitiveComparer("linkId1")));</code>
     /// </example>
-    public static Id ById(ICompare compare)
+    public static AttributeConstraint ById(ICompare compare)
     {
-      return new Id(compare);
+      return new AttributeConstraint(idAttribute, compare);
     }
 
     /// <summary>
@@ -1070,233 +1053,233 @@ namespace WatiN.Core
     /// Find an element by its name.
     /// </summary>
     /// <param name="name">Name to find.</param>
-    /// <returns><see cref="Name" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByName("testlinkname")).Url</code>
     /// </example>
-    public static Name ByName(string name)
+    public static AttributeConstraint ByName(string name)
     {
-      return new Name(name);
+      return new AttributeConstraint(nameAttribute, name);
     }
 
     /// <param regex="regex">Regular expression to find a matching Name.</param>
-    /// <returns><see cref="Name" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByName(new Regex("pattern goes here")))).Url</code>
     /// </example>
-    public static Name ByName(Regex regex)
+    public static AttributeConstraint ByName(Regex regex)
     {
-      return new Name(regex);
+      return new AttributeConstraint(nameAttribute, regex);
     }
 
     /// <summary>
     /// Bies the name.
     /// </summary>
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Name"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>ie.Link(Find.ByName(new StringContainsAndCaseInsensitiveComparer("linkname")))).Url</code>
     /// </example>
-    public static Name ByName(ICompare comparer)
+    public static AttributeConstraint ByName(ICompare comparer)
     {
-      return new Name(comparer);
+      return new AttributeConstraint(nameAttribute, comparer);
     }
 
     /// <summary>
     /// Find an element by its (inner) text
     /// </summary>
     /// <param name="text">Element text</param>
-    /// <returns><see cref="Text" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByText("my link")).Url</code>
     /// </example>
-    public static Text ByText(string text)
+    public static AttributeConstraint ByText(string text)
     {
-      return new Text(text);
+      return new AttributeConstraint(textAttribute, new StringContainsAndCaseInsensitiveComparer(text));
     }
 
     /// <param name="regex">Regular expression to find a matching Text.</param>
-    /// <returns><see cref="Text" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByText(new Regex("pattern goes here"))).Url</code>
     /// </example>
-    public static Text ByText(Regex regex)
+    public static AttributeConstraint ByText(Regex regex)
     {
-      return new Text(regex);
+      return new AttributeConstraint(textAttribute, regex);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Text"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Link link = ie.Link(Find.ByText(new StringContainsAndCaseInsensitiveComparer("my li"))).Url</code>
     /// </example>
-    public static Text ByText(ICompare comparer)
+    public static AttributeConstraint ByText(ICompare comparer)
     {
-      return new Text(comparer);
+      return new AttributeConstraint(textAttribute, comparer);
     }
 
     /// <summary>
     /// Find an element, frame, IE instance or HTMLDialog by its Url.
     /// </summary>
     /// <param name="url">The well-formed url to find.</param>
-    /// <returns><see cref="Url" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net")).Url</code>
     /// </example>
-    public static Url ByUrl(string url)
+    public static AttributeConstraint ByUrl(string url)
     {
-      return new Url(url);
+      return ByUrl(new Uri(url));
     }
 
     /// <param name="url">The well-formed url to find.</param>
     /// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
-    /// <returns><see cref="Url" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByUrl("http://watin.sourceforge.net", true)).Url</code>
     /// </example>
-    public static Url ByUrl(string url, bool ignoreQuery)
+    public static AttributeConstraint ByUrl(string url, bool ignoreQuery)
     {
-      return new Url(url, ignoreQuery);
+      return ByUrl(new Uri(url), ignoreQuery);
     }
 
     /// <param name="uri">The uri to find.</param>
-    /// <returns><see cref="Url" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByUrl(new Uri("watin.sourceforge.net"))).Url</code>
     /// </example>
-    public static Url ByUrl(Uri uri)
+    public static AttributeConstraint ByUrl(Uri uri)
     {
-      return new Url(uri);
+      return ByUrl(uri, false);
     }
 
     /// <param name="uri">The uri to find.</param>
     /// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
-    /// <returns><see cref="Url" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByUrl(new Uri("watin.sourceforge.net", true))).Url</code>
     /// </example>
-    public static Url ByUrl(Uri uri, bool ignoreQuery)
+    public static AttributeConstraint ByUrl(Uri uri, bool ignoreQuery)
     {
-      return new Url(uri, ignoreQuery);
+      return new AttributeConstraint(hrefAttribute, new UriComparer(uri, ignoreQuery));
     }
 
     /// <param name="regex">Regular expression to find a matching Url.</param>
-    /// <returns><see cref="Url" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Link(Find.ByUrl(new Regex("pattern goes here"))).Url</code>
     /// </example>
-    public static Url ByUrl(Regex regex)
+    public static AttributeConstraint ByUrl(Regex regex)
     {
-      return new Url(regex);
+      return new AttributeConstraint(hrefAttribute, regex);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Url"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>ie.Link(Find.ByUrl(new UriComparer(uri, ignoreQuery))).Url</code>
     /// </example>
-    public static Url ByUrl(ICompare comparer)
+    public static AttributeConstraint ByUrl(ICompare comparer)
     {
-      return new Url(comparer);
+      return new AttributeConstraint(hrefAttribute, comparer);
     }
 
     /// <summary>
     /// Find an element, frame, IE instance or HTMLDialog by its Title.
     /// </summary>
     /// <param name="title">The title to match partially.</param>
-    /// <returns><see cref="Title"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// <code>IE ie = IE.AttachToIE(Find.ByTitle("WatiN Home Page"))</code>
     /// </example>
-    public static Title ByTitle(string title)
+    public static AttributeConstraint ByTitle(string title)
     {
-      return new Title(title);
+      return new AttributeConstraint(titleAttribute, new StringContainsAndCaseInsensitiveComparer(title));
     }
 
     /// <param name="regex">Regular expression to find a matching Title.</param>
-    /// <returns><see cref="Title"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// <code>IE ie = IE.AttachToIE(Find.ByTitle(new Regex("pattern goes here")))</code>
     /// </example>
-    public static Title ByTitle(Regex regex)
+    public static AttributeConstraint ByTitle(Regex regex)
     {
-      return new Title(regex);
+      return new AttributeConstraint(titleAttribute, regex);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Title"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>IE ie = IE.AttachToIE(Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("part of the title")));</code>
     /// </example>
-    public static Title ByTitle(ICompare comparer)
+    public static AttributeConstraint ByTitle(ICompare comparer)
     {
-      return new Title(comparer);
+      return new AttributeConstraint(titleAttribute, comparer);
     }
 
     /// <summary>
     /// Find an element by its value attribute.
     /// </summary>
     /// <param name="value">The value to find.</param>
-    /// <returns><see cref="Value"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// <code>ie.Button(Find.ByValue("My Button"))</code>
     /// </example>
-    public static Value ByValue(string value)
+    public static AttributeConstraint ByValue(string value)
     {
-      return new Value(value);
+      return new AttributeConstraint(valueAttribute, value);
     }
 
     /// <param name="regex">Regular expression to find a matching Value.</param>
-    /// <returns><see cref="Value"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// <code>ie.Button(Find.ByValue(new Regex("pattern goes here")))</code>
     /// </example>
-    public static Value ByValue(Regex regex)
+    public static AttributeConstraint ByValue(Regex regex)
     {
-      return new Value(regex);
+      return new AttributeConstraint(valueAttribute, regex);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Value"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>ie.Button(Find.ByValue(new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
     /// </example>
-    public static Value ByValue(ICompare comparer)
+    public static AttributeConstraint ByValue(ICompare comparer)
     {
-      return new Value(comparer);
+      return new AttributeConstraint(valueAttribute, comparer);
     }
 
     /// <summary>
     /// Find an <see cref="Image"/> by its source (src) attribute.
     /// </summary>
     /// <param name="src">Src to find.</param>
-    /// <returns><see cref="Src" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Image(Find.BySrc("image.gif"))</code>
     /// </example>
-    public static Src BySrc(string src)
+    public static AttributeConstraint BySrc(string src)
     {
-      return new Src(src);
+      return new AttributeConstraint(srcAttribute, src);
     }
 
     /// <param regex="regex">Regular expression to find a matching Src.</param>
-    /// <returns><see cref="Src" /></returns>
+    /// <returns><see cref="AttributeConstraint" /></returns>
     /// <example>
     /// <code>ie.Image(Find.BySrc(new Regex("pattern goes here"))))</code>
     /// </example>
-    public static Src BySrc(Regex regex)
+    public static AttributeConstraint BySrc(Regex regex)
     {
-      return new Src(regex);
+      return new AttributeConstraint(srcAttribute, regex);
     }
 
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="Src"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Image image = ie.Image(Find.BySrc(new StringContainsAndCaseInsensitiveComparer("watin/sourceforge")));</code>
     /// </example>
-    public static Src BySrc(ICompare comparer)
+    public static AttributeConstraint BySrc(ICompare comparer)
     {
-      return new Src(comparer);
+      return new AttributeConstraint(srcAttribute, comparer);
     }
 
     /// <summary>
@@ -1379,35 +1362,35 @@ namespace WatiN.Core
     /// </summary>
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="value">The exact matching value of the attribute.</param>
-    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>ie.Span(Find.ByStyle("background-color", "red"))</code>
     /// </example>
-    public static StyleAttribute ByStyle(string styleAttributeName, string value)
+    public static AttributeConstraint ByStyle(string styleAttributeName, string value)
     {
-      return new StyleAttribute(styleAttributeName, value);
+      return new AttributeConstraint(styleBaseAttribute + styleAttributeName, value);
     }
 
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="value">Regular expression to find a matching value of the given style attribute.</param>
-    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>ie.Link(Find.ByStyle("font-family", new Regex("pattern goes here")))</code>
     /// </example>
-    public static StyleAttribute ByStyle(string styleAttributeName, Regex value)
+    public static AttributeConstraint ByStyle(string styleAttributeName, Regex value)
     {
-      return new StyleAttribute(styleAttributeName, value);
+      return new AttributeConstraint(styleBaseAttribute + styleAttributeName, value);
     }
 
     /// <param name="styleAttributeName">Name of the style attribute.</param>
     /// <param name="comparer">The comparer.</param>
-    /// <returns><see cref="StyleAttribute"/></returns>
+    /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
     /// 	<code>Link link = ie.Link(Find.ByStyle("font-family", new StringContainsAndCaseInsensitiveComparer("aria")));</code>
     /// </example>
-    public static StyleAttribute ByStyle(string styleAttributeName, ICompare comparer)
+    public static AttributeConstraint ByStyle(string styleAttributeName, ICompare comparer)
     {
-      return new StyleAttribute(styleAttributeName, comparer);
+      return new AttributeConstraint(styleBaseAttribute + styleAttributeName, comparer);
     }
   }
 }

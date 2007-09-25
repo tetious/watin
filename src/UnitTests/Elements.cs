@@ -25,7 +25,6 @@ namespace WatiN.Core.UnitTests
   using mshtml;
   using NUnit.Framework;
   using Rhino.Mocks;
-  using SHDocVw;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
 
@@ -2615,35 +2614,4 @@ namespace WatiN.Core.UnitTests
       Link("showModalPopupClientButton").WaitUntilExists();
     }
   }
-
-//  public class MyIE : IE
-//  {
-//    public MyIE(string url) : base(url)
-//    {
-//    }
-//
-//    public override void WaitForComplete()
-//    {
-//      WaitForComplete(new MyWaitClass(this));
-//    }
-//  }
-//
-//  public class MyWaitClass : IEWaitForComplete
-//  {
-//    public MyWaitClass(IE ie) : base(ie)
-//    {
-//    }
-//
-//    protected override bool IsIEBusy(IWebBrowser2 ie)
-//    {
-//      try
-//      {
-//        return ie.Busy && (ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE);
-//      }
-//      catch
-//      {
-//        return false;
-//      }
-//    }
-//  }
 }

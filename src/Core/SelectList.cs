@@ -142,7 +142,7 @@ namespace WatiN.Core
     {
       Logger.LogAction("Selecting item with value '" + value + "' in " + GetType().Name + " '" + Id + "'");
 
-      SelectByTextOrValue(new Value(new StringEqualsAndCaseInsensitiveComparer(value)));
+      SelectByTextOrValue(Find.ByValue(new StringEqualsAndCaseInsensitiveComparer(value)));
     }
     
     /// <summary>
@@ -325,9 +325,9 @@ namespace WatiN.Core
       }
     }
 
-    private static Text GetTextAttribute(string text)
+    private static AttributeConstraint GetTextAttribute(string text)
     {
-      return new Text(new StringEqualsAndCaseInsensitiveComparer(text));
+      return Find.ByText(new StringEqualsAndCaseInsensitiveComparer(text));
     }
 
     private IHTMLSelectElement selectElement

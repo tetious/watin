@@ -95,12 +95,12 @@ namespace WatiN.Core
 
     public bool Exists(string elementId)
     {
-      return Exists(new Id(elementId));
+      return Exists(Find.ById(elementId));
     }
 
     public bool Exists(Regex elementId)
     {
-      return Exists(new Id(elementId));
+      return Exists(Find.ById(elementId));
     }
     
     public bool Exists(AttributeConstraint findBy)
