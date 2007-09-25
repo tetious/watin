@@ -1397,31 +1397,23 @@ namespace WatiN.Core.DialogHandlers
 
         ConfirmDialogHandler confirmDialogHandler = dialogHandler as ConfirmDialogHandler;
 
+        // hasHandledDialog must be set before the Click and not
+        // after because this code executes on a different Thread
+        // and could lead to property HasHandledDialog returning false
+        // while hasHandledDialog set had to be set.
+        hasHandledDialog = true;
+
         if (confirmDialogHandler != null && clickCancelButton)
         {
-          // hasHandledDialog must be set before the Click and not
-          // after because this code executes on a different Thread
-          // and could lead to property HasHandledDialog returning false
-          // while hasHandledDialog set had to be set.
-          hasHandledDialog = true;
-          
           confirmDialogHandler.CancelButton.Click();
         }
         else
         {
-          // hasHandledDialog must be set before the Click and not
-          // after because this code executes on a different Thread
-          // and could lead to property HasHandledDialog returning false
-          // while hasHandledDialog set had to be set.
-          hasHandledDialog = true;
-          
           dialogHandler.OKButton.Click();
         }
-        
-        return true;
       }
       
-      return false;
+      return hasHandledDialog;
     }
   }
   
