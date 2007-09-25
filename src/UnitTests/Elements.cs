@@ -1199,7 +1199,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void TextFields()
     {
-      Assert.AreEqual(6, ie.TextFields.Length, "Number of TextFields should by 4");
+      Assert.AreEqual(6, ie.TextFields.Length, "Unexpected number of TextFields");
 
       // Collection items by index
       Form mainForm = ie.Form("FormHiddens");
@@ -2228,7 +2228,7 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
-    public void ElementPreviousSiblingShouldReturnWhenFirstSibling()
+    public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
     {
       Expect.Call(node.previousSibling).Return(null);
       mocks.ReplayAll();
@@ -2264,7 +2264,7 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
-    public void ElementNextSiblingShouldReturnWhenLastSibling()
+    public void ElementNextSiblingShouldReturnNullWhenLastSibling()
     {
       Expect.Call(node.nextSibling).Return(null);
       mocks.ReplayAll();
@@ -2276,11 +2276,10 @@ namespace WatiN.Core.UnitTests
     public void ElementNextSiblingReturningTypedParent()
     {
       IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement), typeof (IHTMLInputElement));
-      ElementTag inputTextField = (ElementTag) TextField.ElementTags[0];
 
       Expect.Call(node.nextSibling).Return(parentNode);
-      Expect.Call(((IHTMLElement) parentNode).tagName).Return(inputTextField.TagName).Repeat.Any();
-      Expect.Call(((IHTMLInputElement) parentNode).type).Return(inputTextField.InputTypes).Repeat.Any();
+      Expect.Call(((IHTMLElement) parentNode).tagName).Return("input").Repeat.Any();
+      Expect.Call(((IHTMLInputElement) parentNode).type).Return("text").Repeat.Any();
 
       mocks.ReplayAll();
 
@@ -2576,7 +2575,7 @@ namespace WatiN.Core.UnitTests
     }
   }
 
-  public class VisibleAttribute : Core.Attribute
+  public class VisibleAttribute : AttributeConstraint
   {
     public VisibleAttribute(bool visible) : base("visible", new BoolComparer(visible))
     {

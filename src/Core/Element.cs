@@ -36,11 +36,13 @@ namespace WatiN.Core
   /// </summary>
   public class Element
   {
-    private DomContainer domContainer;
-    private object element;
-    private ElementFinder elementFinder;
-    
-    private string originalcolor;
+    private static Hashtable _elementConstructors = null;
+
+    private DomContainer _domContainer;
+    private object _element;
+    private ElementFinder _elementFinder;
+
+    private string _originalcolor;
 
     /// <summary>
     /// This constructor is mainly used from within WatiN.
@@ -71,7 +73,7 @@ namespace WatiN.Core
     {
       if (ElementTag.IsValidElement(element.htmlElement, elementTags))
       {
-        init(element.domContainer, element.element, element.elementFinder);
+        init(element._domContainer, element._element, element._elementFinder);
       }
       else
       {
@@ -81,9 +83,9 @@ namespace WatiN.Core
 
     private void init(DomContainer domContainer, object element, ElementFinder elementFinder)
     {
-      this.domContainer = domContainer;
-      this.element = element;
-      this.elementFinder = elementFinder;
+      _domContainer = domContainer;
+      _element = element;
+      _elementFinder = elementFinder;
     }
 
     /// <summary>
@@ -206,7 +208,7 @@ namespace WatiN.Core
         IHTMLElement nextSibling = domNode.nextSibling as IHTMLElement;
         if (nextSibling != null)
         {
-          return GetTypedElement(domContainer, nextSibling);
+          return GetTypedElement(_domContainer, nextSibling);
         }
         return null;
       }
@@ -223,7 +225,7 @@ namespace WatiN.Core
         IHTMLElement previousSibling = domNode.previousSibling as IHTMLElement;
         if (previousSibling != null)
         {
-          return GetTypedElement(domContainer, previousSibling);
+          return GetTypedElement(_domContainer, previousSibling);
         }
         return null;
       }
@@ -262,7 +264,7 @@ namespace WatiN.Core
         IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
         if (parentNode != null)
         {
-          return GetTypedElement(domContainer, parentNode);
+          return GetTypedElement(_domContainer, parentNode);
         }
         return null;
       }
@@ -569,21 +571,21 @@ namespace WatiN.Core
         {
           try
           {
-            originalcolor = (string)htmlElement.style.backgroundColor;
+            _originalcolor = (string)htmlElement.style.backgroundColor;
             htmlElement.style.backgroundColor = IE.Settings.HighLightColor;
           }
           catch
           {
-            originalcolor = null;
+            _originalcolor = null;
           }
         }
         else
         {
           try
           {
-            if (originalcolor != null)
+            if (_originalcolor != null)
             {
-              htmlElement.style.backgroundColor = originalcolor;
+              htmlElement.style.backgroundColor = _originalcolor;
             }
             else
             {
@@ -593,7 +595,7 @@ namespace WatiN.Core
           catch {}
           finally
           {
-            originalcolor = null;
+            _originalcolor = null;
           }
         }
       }
@@ -634,7 +636,7 @@ namespace WatiN.Core
     /// <value>The DOM container.</value>
     public DomContainer DomContainer
     {
-      get { return domContainer; }
+      get { return _domContainer; }
     }
 
     /// <summary>
@@ -657,11 +659,11 @@ namespace WatiN.Core
           }
           catch(WatiN.Core.Exceptions.TimeoutException)
           {
-            throw elementFinder.CreateElementNotFoundException();
+            throw _elementFinder.CreateElementNotFoundException();
           }
         }
 
-        return element;
+        return _element;
       }
     }
 
@@ -840,7 +842,7 @@ namespace WatiN.Core
       if (waitUntilExists)
       {
         if(ElementAvailable()) { return; }
-        else if(elementFinder == null)
+        else if(_elementFinder == null)
         {
           throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
         }
@@ -917,9 +919,9 @@ namespace WatiN.Core
     /// </example>
     public void Refresh()
     {
-      if (elementFinder != null)
+      if (_elementFinder != null)
       {
-        element = null;
+        _element = null;
       }
     }
 
@@ -929,9 +931,9 @@ namespace WatiN.Core
     /// <returns></returns>
     protected object getElement()
     {
-      if (elementFinder != null)
+      if (_elementFinder != null)
       {
-        element = elementFinder.FindFirst();
+        _element = _elementFinder.FindFirst();
       }
       else
       {
@@ -941,7 +943,7 @@ namespace WatiN.Core
         // These checks are only necessary if element field
         // is set during the construction of an ElementCollection
         // or a more specialized element collection (like TextFieldCollection)
-        IHTMLElement ihtmlElement = element as IHTMLElement;
+        IHTMLElement ihtmlElement = _element as IHTMLElement;
 
         if (ihtmlElement != null)
         {
@@ -949,29 +951,29 @@ namespace WatiN.Core
           {
             if(ihtmlElement.sourceIndex < 0)
             {
-              element = null;
+              _element = null;
             }
             else
             {
               if(ihtmlElement.offsetParent == null)
               {
-                element = null;
+                _element = null;
               }
             }
           }
           catch
           {
-            element = null;
+            _element = null;
           }
         }
       }
 
-      return element;
+      return _element;
     }
 
     private bool ElementAvailable()
     {
-      return element != null;
+      return _element != null;
     }
 
     /// <summary>
@@ -981,14 +983,35 @@ namespace WatiN.Core
     /// </summary>
     public void WaitForComplete()
     {
-      domContainer.WaitForComplete();
+      _domContainer.WaitForComplete();
     }
 
     internal static Element GetTypedElement(DomContainer domContainer, IHTMLElement element)
     {
-      Assembly assembly = Assembly.Load("WatiN.Core");
+      if (_elementConstructors == null)
+      {
+        _elementConstructors = CreateElementConstructorHashTable();
+      }
 
+      ElementTag elementTag = new ElementTag(element);
       Element returnElement = new ElementsContainer(domContainer, element);
+
+      if (_elementConstructors.Contains(elementTag))
+      {
+        ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
+        if (constructorInfo != null)
+        {
+          return (Element)constructorInfo.Invoke(new object[] {returnElement});
+        }
+      }
+
+      return returnElement;
+    }
+
+    internal static Hashtable CreateElementConstructorHashTable()
+    {
+      Hashtable elementConstructors = new Hashtable();
+      Assembly assembly = Assembly.GetExecutingAssembly();
 
       foreach (Type type in assembly.GetTypes())
       {
@@ -997,22 +1020,63 @@ namespace WatiN.Core
           PropertyInfo property = type.GetProperty("ElementTags");
           if (property != null)
           {
-            ArrayList elementTags = (ArrayList)property.GetValue(type, null);
-
-            if (ElementTag.IsValidElement(element, elementTags))
+            ConstructorInfo constructor = type.GetConstructor(new Type[] {typeof (Element)});
+            if (constructor != null)
             {
-              ConstructorInfo constructor = type.GetConstructor(new Type[] {typeof (Element)});
-              if (constructor != null)
+              ArrayList elementTags = (ArrayList)property.GetValue(type, null);
+              if (elementTags != null)
               {
-                returnElement = (Element)constructor.Invoke(new object[] {returnElement});
-                break;
+                elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
+                foreach (ElementTag elementTag in elementTags)
+                {
+                  // This is a terrible hack, but it will do for now.
+                  // Button and Image both support input/image. If
+                  // an element is input/image I prefer to return
+                  // an Image object.
+                  try
+                  {
+                    elementConstructors.Add(elementTag, constructor);
+                  }
+                  catch(ArgumentException)
+                  {
+                    if (type.Equals(typeof(Image)))
+                    {
+                      elementConstructors.Remove(elementTag);
+                      elementConstructors.Add(elementTag, constructor);
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
 
-      return returnElement;
+      return elementConstructors;
+    }
+
+    private static ArrayList CreateUniqueElementTagsForInputTypes(ArrayList elementTags)
+    {
+      ArrayList uniqueElementTags = new ArrayList();
+
+      foreach (ElementTag elementTag in elementTags)
+      {
+        if (elementTag.IsInputElement)
+        {
+          string[] inputtypes = elementTag.InputTypes.Split(" ".ToCharArray());
+          foreach (string inputtype in inputtypes)
+          {
+            ElementTag inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
+            uniqueElementTags.Add(inputtypeElementTag);
+          }
+        }
+        else
+        {
+          uniqueElementTags.Add(elementTag);
+        }
+      }
+
+      return uniqueElementTags;
     }
   }
 }
