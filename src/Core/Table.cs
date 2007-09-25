@@ -25,6 +25,7 @@ using WatiN.Core.Logging;
 namespace WatiN.Core
 {
   using System;
+  using WatiN.Core.Comparers;
 
   /// <summary>
   /// This class provides specialized functionality for a HTML table element.

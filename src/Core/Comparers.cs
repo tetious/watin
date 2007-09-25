@@ -15,7 +15,7 @@ namespace WatiN.Core.Interfaces
   }
 }
 
-namespace WatiN.Core
+namespace WatiN.Core.Comparers
 {
   using System;
   using System.Text.RegularExpressions;
@@ -26,6 +26,14 @@ namespace WatiN.Core
     public virtual bool Compare(string value)
     {
       return false;
+    }
+  }
+
+  public class AlwaysTrueComparer : ICompare
+  {
+    public bool Compare(string value)
+    {
+      return true;
     }
   }
 
@@ -101,41 +109,50 @@ namespace WatiN.Core
   }
 
   /// <summary>
-  /// Class that supports comparing a <see cref="bool"/> instance with a string value.
+  /// Class that supports a simple matching of two strings.
   /// </summary>
-  public class BoolComparer : StringEqualsAndCaseInsensitiveComparer
+  public class StringContainsAndCaseInsensitiveComparer : StringComparer
   {
-    public BoolComparer(bool value) : base(value.ToString())
+    public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
     {
+      valueToCompareWith = value.ToLower();
+    }
+
+    public override bool Compare(string value)
+    {
+      if (value == null)
+      {
+        return false;
+      }
+
+      if (valueToCompareWith == String.Empty & value != String.Empty)
+      {
+        return false;
+      }
+
+      return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
     }
   }
 
   /// <summary>
-  /// Class that supports matching a regular expression with a string value.
+  /// Class that supports a simple matching of two strings.
   /// </summary>
-  public class RegexComparer : BaseComparer
+  public class StringEqualsAndCaseInsensitiveComparer : StringComparer
   {
-    private Regex regexToUse;
-
-    public RegexComparer(Regex regex)
+    public StringEqualsAndCaseInsensitiveComparer(string value) : base(value)
     {
-      if (regex == null)
-      {
-        throw new ArgumentNullException("regex");
-      }
-      regexToUse = regex;
     }
 
     public override bool Compare(string value)
     {
       if (value == null) return false;
 
-      return regexToUse.IsMatch(value);
+      return (String.Compare(value, valueToCompareWith, true) == 0);
     }
 
     public override string ToString()
     {
-      return GetType().ToString() + " matching against: " + regexToUse.ToString();
+      return valueToCompareWith;
     }
   }
 
@@ -171,58 +188,41 @@ namespace WatiN.Core
   }
 
   /// <summary>
-  /// Class that supports a simple matching of two strings.
+  /// Class that supports comparing a <see cref="bool"/> instance with a string value.
   /// </summary>
-  public class StringEqualsAndCaseInsensitiveComparer : StringComparer
+  public class BoolComparer : StringEqualsAndCaseInsensitiveComparer
   {
-    public StringEqualsAndCaseInsensitiveComparer(string value) : base(value)
+    public BoolComparer(bool value) : base(value.ToString())
     {
+    }
+  }
+
+  /// <summary>
+  /// Class that supports matching a regular expression with a string value.
+  /// </summary>
+  public class RegexComparer : BaseComparer
+  {
+    private Regex regexToUse;
+
+    public RegexComparer(Regex regex)
+    {
+      if (regex == null)
+      {
+        throw new ArgumentNullException("regex");
+      }
+      regexToUse = regex;
     }
 
     public override bool Compare(string value)
     {
       if (value == null) return false;
 
-      return (String.Compare(value, valueToCompareWith, true) == 0);
+      return regexToUse.IsMatch(value);
     }
 
     public override string ToString()
     {
-      return valueToCompareWith;
-    }
-  }
-
-  /// <summary>
-  /// Class that supports a simple matching of two strings.
-  /// </summary>
-  public class StringContainsAndCaseInsensitiveComparer : StringComparer
-  {
-    public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
-    {
-      valueToCompareWith = value.ToLower();
-    }
-
-    public override bool Compare(string value)
-    {
-      if (value == null)
-      {
-        return false;
-      }
-
-      if (valueToCompareWith == String.Empty & value != String.Empty)
-      {
-        return false;
-      }
-
-      return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
-    }
-  }
-
-  public class AlwaysTrueComparer : ICompare
-  {
-    public bool Compare(string value)
-    {
-      return true;
+      return GetType().ToString() + " matching against: " + regexToUse.ToString();
     }
   }
 }

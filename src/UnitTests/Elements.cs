@@ -25,6 +25,7 @@ namespace WatiN.Core.UnitTests
   using mshtml;
   using NUnit.Framework;
   using Rhino.Mocks;
+  using WatiN.Core.Comparers;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
 

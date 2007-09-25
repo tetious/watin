@@ -27,6 +27,7 @@ using WatiN.Core.Logging;
 namespace WatiN.Core
 {
   using System;
+  using WatiN.Core.Comparers;
   using WatiN.Core.Interfaces;
 
   /// <summary>

@@ -20,6 +20,7 @@ namespace WatiN.Core
 {
   using System;
   using System.Text.RegularExpressions;
+  using WatiN.Core.Comparers;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
 

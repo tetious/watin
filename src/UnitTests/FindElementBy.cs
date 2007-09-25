@@ -26,6 +26,7 @@ namespace WatiN.Core.UnitTests
   using Rhino.Mocks;
   using NUnit.Framework;
   using WatiN.Core;
+  using WatiN.Core.Comparers;
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
   using Is=NUnit.Framework.SyntaxHelpers.Is;
@@ -449,7 +450,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void ConstructorWithValue()
     {
-      ICompare comparer = new WatiN.Core.StringComparer("A test value");
+      ICompare comparer = new StringComparer("A test value");
 
       Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
 
@@ -464,13 +465,13 @@ namespace WatiN.Core.UnitTests
     [Test, ExpectedException(typeof (ArgumentNullException))]
     public void ConstructorWithNullShouldThrowArgumentNullException()
     {
-      new WatiN.Core.StringComparer(null);
+      new StringComparer(null);
     }
 
     [Test]
     public void ConstuctorWithStringEmpty()
     {
-      ICompare comparer = new WatiN.Core.StringComparer(String.Empty);
+      ICompare comparer = new StringComparer(String.Empty);
 
       Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
 
@@ -481,7 +482,7 @@ namespace WatiN.Core.UnitTests
     [Test]
     public void ToStringTest()
     {
-      WatiN.Core.StringComparer comparer = new WatiN.Core.StringComparer("A test value");
+      StringComparer comparer = new StringComparer("A test value");
 
       Assert.AreEqual("A test value", comparer.ToString());
     }
