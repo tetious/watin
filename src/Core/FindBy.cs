@@ -85,7 +85,7 @@ namespace WatiN.Core
     public AttributeConstraint(string attributeName, string value)
     {
       CheckArgumentNotNull("value", value);
-      Init(attributeName, value, new StringComparer(value));
+      Init(attributeName, value, new WatiN.Core.Comparers.StringComparer(value));
     }
 
     /// <summary>

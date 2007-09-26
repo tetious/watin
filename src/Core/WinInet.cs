@@ -18,6 +18,9 @@
 
 using System;
 using System.Runtime.InteropServices;
+#if NET20
+using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
+#endif
 using WatiN.Core.Logging;
 
 namespace WatiN.Core

@@ -30,7 +30,10 @@ namespace WatiN.Core.UnitTests
   using WatiN.Core.Exceptions;
   using WatiN.Core.Interfaces;
   using Is=NUnit.Framework.SyntaxHelpers.Is;
-
+  #if NET20
+  using StringComparer=WatiN.Core.Comparers.StringComparer;
+  #endif
+  
   [TestFixture]
   public class FindElementBy : WatiNTest
   {
