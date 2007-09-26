@@ -2192,6 +2192,117 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
+    public void AncestorTypeShouldReturnTypedElement()
+    {
+      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode1);
+      Expect.Call(((IHTMLElement) parentNode1).tagName).Return("table").Repeat.Any();
+      
+      Expect.Call(parentNode1.parentNode).Return(parentNode2);
+      Expect.Call(((IHTMLElement) parentNode2).tagName).Return("div").Repeat.Any();
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof (Div), element.Ancestor(typeof(Div)));
+    }
+
+    [Test]
+    public void AncestorTagNameShouldReturnTypedElement()
+    {
+      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode1);
+      IHTMLElement tableElement = (IHTMLElement) parentNode1;
+      Expect.Call(tableElement.tagName).Return("table").Repeat.Any();
+      Expect.Call(tableElement.getAttribute("tagname",0)).Return("table");
+      
+      Expect.Call(parentNode1.parentNode).Return(parentNode2);
+      IHTMLElement divElement = (IHTMLElement) parentNode2;
+      Expect.Call(divElement.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement.getAttribute("tagname",0)).Return("div");
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof (Div), element.Ancestor("Div"));
+    }
+
+    [Test]
+    public void AncestorAttributeConstraintShouldReturnTypedElement()
+    {
+      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode1);
+      IHTMLElement tableElement = (IHTMLElement) parentNode1;
+      Expect.Call(tableElement.tagName).Return("table").Repeat.Any();
+      Expect.Call(tableElement.getAttribute("innertext",0)).Return("not ok");
+      
+      Expect.Call(parentNode1.parentNode).Return(parentNode2);
+      IHTMLElement divElement = (IHTMLElement) parentNode2;
+      Expect.Call(divElement.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement.getAttribute("innertext",0)).Return("ancestor");
+
+      mocks.ReplayAll();
+
+      Assert.IsInstanceOfType(typeof (Div), element.Ancestor(Find.ByText("ancestor")));
+    }
+
+    [Test]
+    public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
+    {
+      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode1);
+      IHTMLElement divElement1 = (IHTMLElement) parentNode1;
+      Expect.Call(divElement1.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement1.getAttribute("innertext",0)).Return("first ancestor");
+      
+      Expect.Call(parentNode1.parentNode).Return(parentNode2);
+      IHTMLElement divElement2 = (IHTMLElement) parentNode2;
+      Expect.Call(divElement2.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement2.getAttribute("innertext",0)).Return("second ancestor");
+      Expect.Call(divElement2.innerText).Return("second ancestor");
+      
+      mocks.ReplayAll();
+
+      Element ancestor = element.Ancestor(typeof(Div), Find.ByText("second ancestor"));
+      
+      Assert.IsInstanceOfType(typeof (Div), ancestor);
+      Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
+    }
+
+    [Test]
+    public void AncestorTagNameAndAttributeConstraintShouldReturnTypedElement()
+    {
+      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+
+      Expect.Call(node.parentNode).Return(parentNode1);
+      IHTMLElement divElement1 = (IHTMLElement) parentNode1;
+      Expect.Call(divElement1.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement1.getAttribute("tagname",0)).Return("div");
+      Expect.Call(divElement1.getAttribute("innertext",0)).Return("first ancestor");
+      
+      Expect.Call(parentNode1.parentNode).Return(parentNode2);
+      IHTMLElement divElement2 = (IHTMLElement) parentNode2;
+      Expect.Call(divElement2.tagName).Return("div").Repeat.Any();
+      Expect.Call(divElement2.getAttribute("tagname",0)).Return("div");
+      Expect.Call(divElement2.getAttribute("innertext",0)).Return("second ancestor");
+      Expect.Call(divElement2.innerText).Return("second ancestor");
+      
+      mocks.ReplayAll();
+
+      Element ancestor = element.Ancestor("Div", Find.ByText("second ancestor"));
+      
+      Assert.IsInstanceOfType(typeof (Div), ancestor);
+      Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
+    }
+
+    [Test]
     public void ElementParentShouldReturnNullWhenRootElement()
     {
       Expect.Call(node.parentNode).Return(null);

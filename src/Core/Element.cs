@@ -16,19 +16,18 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections;
-using System.Threading;
-
-using mshtml;
-using WatiN.Core.Exceptions;
-using WatiN.Core.Logging;
-
 namespace WatiN.Core
 {
+  using System;
+  using System.Collections;
   using System.Collections.Specialized;
   using System.Reflection;
   using System.Text.RegularExpressions;
+  using System.Threading;
+  using mshtml;
+  using WatiN.Core.Comparers;
+  using WatiN.Core.Exceptions;
+  using WatiN.Core.Logging;
 
   /// <summary>
   /// This is the base class for all other element types in this project, like
@@ -53,7 +52,7 @@ namespace WatiN.Core
     {
       init(domContainer, element, null);
     }
-    
+
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
@@ -63,7 +62,7 @@ namespace WatiN.Core
     {
       init(domContainer, null, elementFinder);
     }
-    
+
     /// <summary>
     /// This constructor is mainly used from within WatiN.
     /// </summary>
@@ -105,7 +104,7 @@ namespace WatiN.Core
     {
       get { return htmlElement2.readyStateValue == 4; }
     }
-    
+
     /// <summary>
     /// Gets a value indicating whether this <see cref="Element"/> is enabled.
     /// </summary>
@@ -213,7 +212,7 @@ namespace WatiN.Core
         return null;
       }
     }
-    
+
     /// <summary>
     /// Gets the previous sibling of this element in the Dom of the HTML page.
     /// </summary>
@@ -272,12 +271,9 @@ namespace WatiN.Core
 
     public Style Style
     {
-      get
-      {
-        return new Style(htmlElement.style);
-      }
+      get { return new Style(htmlElement.style); }
     }
-    
+
     /// <summary>
     /// This methode can be used if the attribute isn't available as a property of
     /// Element or a subclass of Element.
@@ -291,12 +287,12 @@ namespace WatiN.Core
       {
         throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
       }
-      
-      if (string.Compare(attributeName, "style", true) == 0 )
+
+      if (string.Compare(attributeName, "style", true) == 0)
       {
         return htmlElement.style.cssText;
       }
-      
+
       object attributeValue = htmlElement.getAttribute(attributeName, 0);
 
       if (attributeValue == DBNull.Value || attributeValue == null)
@@ -328,7 +324,10 @@ namespace WatiN.Core
     /// </summary>
     public void Click()
     {
-      if (!Enabled) { throw new ElementDisabledException(Id); }
+      if (!Enabled)
+      {
+        throw new ElementDisabledException(Id);
+      }
 
       Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
       Highlight(true);
@@ -357,7 +356,10 @@ namespace WatiN.Core
     /// </summary>
     public void ClickNoWait()
     {
-      if (!Enabled) { throw new ElementDisabledException(Id); }
+      if (!Enabled)
+      {
+        throw new ElementDisabledException(Id);
+      }
 
       Logger.LogAction("Clicking (no wait) " + GetType().Name + " '" + ToString() + "'");
 
@@ -375,7 +377,10 @@ namespace WatiN.Core
     /// </summary>
     public void Focus()
     {
-      if (!Enabled) { throw new ElementDisabledException(Id); }
+      if (!Enabled)
+      {
+        throw new ElementDisabledException(Id);
+      }
 
       DispHtmlBaseElement.focus();
       FireEvent("onFocus");
@@ -386,7 +391,10 @@ namespace WatiN.Core
     /// </summary>
     public void DoubleClick()
     {
-      if (!Enabled) { throw new ElementDisabledException(Id); }
+      if (!Enabled)
+      {
+        throw new ElementDisabledException(Id);
+      }
 
       Logger.LogAction("Double clicking " + GetType().Name + " '" + ToString() + "'");
 
@@ -425,7 +433,7 @@ namespace WatiN.Core
     private static NameValueCollection GetKeyCodeEventProperty(char character)
     {
       NameValueCollection eventProperties = new NameValueCollection(1);
-      eventProperties.Add("keyCode",((int)character).ToString());
+      eventProperties.Add("keyCode", ((int) character).ToString());
       return eventProperties;
     }
 
@@ -470,7 +478,7 @@ namespace WatiN.Core
     {
       FireEvent("onMouseEnter");
     }
-    
+
     /// <summary>
     /// Fires the mousedown event on this element.
     /// </summary>
@@ -519,7 +527,10 @@ namespace WatiN.Core
 
     private void fireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
     {
-      if (!Enabled) { throw new ElementDisabledException(Id); }
+      if (!Enabled)
+      {
+        throw new ElementDisabledException(Id);
+      }
 
       Highlight(true);
 
@@ -532,7 +543,10 @@ namespace WatiN.Core
         UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
       }
 
-      if (waitForComplete) {WaitForComplete();}
+      if (waitForComplete)
+      {
+        WaitForComplete();
+      }
       Highlight(false);
     }
 
@@ -543,7 +557,7 @@ namespace WatiN.Core
     {
       Flash(5);
     }
-    
+
     /// <summary>
     /// Flashes this element the specified number of flashes.
     /// </summary>
@@ -571,7 +585,7 @@ namespace WatiN.Core
         {
           try
           {
-            _originalcolor = (string)htmlElement.style.backgroundColor;
+            _originalcolor = (string) htmlElement.style.backgroundColor;
             htmlElement.style.backgroundColor = IE.Settings.HighLightColor;
           }
           catch
@@ -592,7 +606,9 @@ namespace WatiN.Core
               htmlElement.style.backgroundColor = "";
             }
           }
-          catch {}
+          catch
+          {
+          }
           finally
           {
             _originalcolor = null;
@@ -657,7 +673,7 @@ namespace WatiN.Core
           {
             WaitUntilExists();
           }
-          catch(WatiN.Core.Exceptions.TimeoutException)
+          catch (WatiN.Core.Exceptions.TimeoutException)
           {
             throw _elementFinder.CreateElementNotFoundException();
           }
@@ -695,7 +711,7 @@ namespace WatiN.Core
       // Wait 30 seconds max
       WaitUntilExists(IE.Settings.WaitUntilExistsTimeOut);
     }
-    
+
     /// <summary>
     /// Waits until the element exists. Wait will time out after <paramref name="timeout"/> seconds.
     /// </summary>
@@ -714,7 +730,7 @@ namespace WatiN.Core
       // Wait 30 seconds max
       WaitUntilRemoved(IE.Settings.WaitUntilExistsTimeOut);
     }
-    
+
     /// <summary>
     /// Waits until the element no longer exists. Wait will time out after <paramref name="timeout"/> seconds.
     /// </summary>
@@ -805,18 +821,17 @@ namespace WatiN.Core
           if (Exists)
           {
             attributeBag.IHTMLElement = htmlElement;
-            
+
             if (attributeConstraint.Compare(attributeBag))
             {
               return;
             }
-            
           }
         }
         catch (Exception e)
         {
           lastException = e;
-        }        
+        }
 
         Thread.Sleep(200);
       } while (!timeoutTimer.Elapsed);
@@ -841,24 +856,30 @@ namespace WatiN.Core
       // Does it make sense to go into the do loop?
       if (waitUntilExists)
       {
-        if(ElementAvailable()) { return; }
-        else if(_elementFinder == null)
+        if (ElementAvailable())
+        {
+          return;
+        }
+        else if (_elementFinder == null)
         {
           throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
         }
       }
       else
       {
-        if (!ElementAvailable()) { return; }
+        if (!ElementAvailable())
+        {
+          return;
+        }
       }
 
       Exception lastException;
       SimpleTimer timeoutTimer = new SimpleTimer(timeout);
-      
+
       do
       {
         lastException = null;
-        
+
         try
         {
           if (Exists == waitUntilExists)
@@ -870,11 +891,11 @@ namespace WatiN.Core
         {
           lastException = e;
         }
-        
+
         Thread.Sleep(200);
       } while (!timeoutTimer.Elapsed);
 
-      ThrowTimeOutException(lastException,string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));    
+      ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
     }
 
     /// <summary>
@@ -949,13 +970,13 @@ namespace WatiN.Core
         {
           try
           {
-            if(ihtmlElement.sourceIndex < 0)
+            if (ihtmlElement.sourceIndex < 0)
             {
               _element = null;
             }
             else
             {
-              if(ihtmlElement.offsetParent == null)
+              if (ihtmlElement.offsetParent == null)
               {
                 _element = null;
               }
@@ -998,10 +1019,10 @@ namespace WatiN.Core
 
       if (_elementConstructors.Contains(elementTag))
       {
-        ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
+        ConstructorInfo constructorInfo = (ConstructorInfo) _elementConstructors[elementTag];
         if (constructorInfo != null)
         {
-          return (Element)constructorInfo.Invoke(new object[] {returnElement});
+          return (Element) constructorInfo.Invoke(new object[] {returnElement});
         }
       }
 
@@ -1015,7 +1036,7 @@ namespace WatiN.Core
 
       foreach (Type type in assembly.GetTypes())
       {
-        if (type.IsSubclassOf(typeof(Element)))
+        if (type.IsSubclassOf(typeof (Element)))
         {
           PropertyInfo property = type.GetProperty("ElementTags");
           if (property != null)
@@ -1023,7 +1044,7 @@ namespace WatiN.Core
             ConstructorInfo constructor = type.GetConstructor(new Type[] {typeof (Element)});
             if (constructor != null)
             {
-              ArrayList elementTags = (ArrayList)property.GetValue(type, null);
+              ArrayList elementTags = (ArrayList) property.GetValue(type, null);
               if (elementTags != null)
               {
                 elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
@@ -1037,9 +1058,9 @@ namespace WatiN.Core
                   {
                     elementConstructors.Add(elementTag, constructor);
                   }
-                  catch(ArgumentException)
+                  catch (ArgumentException)
                   {
-                    if (type.Equals(typeof(Image)))
+                    if (type.Equals(typeof (Image)))
                     {
                       elementConstructors.Remove(elementTag);
                       elementConstructors.Add(elementTag, constructor);
@@ -1077,6 +1098,132 @@ namespace WatiN.Core
       }
 
       return uniqueElementTags;
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified type.
+    /// </summary>
+    /// <param name="ancestorType">The ancestorType.</param>
+    /// <returns>An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.</returns>
+    ///<example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div));
+    /// </code>
+    /// </example>
+    public Element Ancestor(Type ancestorType)
+    {
+      return Ancestor(ancestorType, new AlwaysTrueAttribute());
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified AttributConstraint.
+    /// </summary>
+    /// <param name="findBy">The AttributConstraint to match with.</param>
+    /// <returns>An Element. If no ancestor of ancestorType is found <code>null</code> is returned.</returns>
+    ///<example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor(Find.ByText("First name");
+    /// </code>
+    /// </example>
+    public Element Ancestor(AttributeConstraint findBy)
+    {
+      Element parentElement = Parent;
+
+      while (parentElement != null)
+      {
+        if (Matches(parentElement, findBy))
+        {
+          return parentElement;
+        }
+        parentElement = parentElement.Parent;
+      }
+
+      return null;
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified Type and AttributConstraint.
+    /// </summary>
+    /// <param name="ancestorType">Type of the ancestor.</param>
+    /// <param name="findBy">The AttributConstraint to match with.</param>
+    /// <returns>
+    /// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
+    /// </returns>
+    /// <example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div), Find.ByText("First name");
+    /// </code>
+    /// </example>
+    public Element Ancestor(Type ancestorType, AttributeConstraint findBy)
+    {
+      Element parentElement = Parent;
+
+      while (parentElement != null)
+      {
+        if (parentElement.GetType() == ancestorType && Matches(parentElement, findBy))
+        {
+          return parentElement;
+        }
+        parentElement = parentElement.Parent;
+      }
+
+      return null;
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified Tag and AttributConstraint.
+    /// </summary>
+    /// <param name="tagName">The tag of the ancestor.</param>
+    /// <param name="findBy">The AttributConstraint to match with.</param>
+    /// <returns>
+    /// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
+    /// If no specific type is available, an element of type ElementContainer will be returned. 
+    /// If there is no ancestor that matches Tag and AttributeConstraint, <code>null</code> is returned.</returns>
+    /// </returns>
+    /// <example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name");
+    /// </code>
+    /// </example>
+    public Element Ancestor(string tagName, AttributeConstraint findBy)
+    {
+      AttributeConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+                                         && findBy;
+
+      return Ancestor(findAncestor);
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified Tag.
+    /// </summary>
+    /// <param name="tagName">The tag of the ancestor.</param>
+    /// <returns>An typed instance of the element matching the Tag. If no specific type is
+    /// available, an element of type ElementContainer will be returned. 
+    /// If there is no ancestor that matches Tag, <code>null</code> is returned.</returns>
+    ///<example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor("Div");
+    /// </code>
+    /// </example>
+    public Element Ancestor(string tagName)
+    {
+      return Ancestor(tagName, new AlwaysTrueAttribute());
+    }
+
+    private static bool Matches(Element parentElement, AttributeConstraint findBy)
+    {
+      ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement) parentElement.HTMLElement);
+      return findBy.Compare(attributeBag);
     }
   }
 }

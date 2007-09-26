@@ -59,18 +59,7 @@ namespace WatiN.Core
     {
       get
       {
-        Element parentElement = Parent;
-        
-        while (parentElement != null)
-        {
-          if (parentElement is Table)
-          {
-            return (Table)parentElement;
-          }
-          parentElement = parentElement.Parent;
-        }
- 
-        return null;
+        return (Table) Ancestor(typeof (Table));
       }
     }
   }

@@ -21,6 +21,8 @@ using mshtml;
 
 namespace WatiN.Core
 {
+  using System;
+
   /// <summary>
   /// This class provides specialized functionality for a HTML td element.
   /// </summary>
@@ -63,18 +65,7 @@ namespace WatiN.Core
     {
       get
       {
-        Element parentElement = Parent;
-        
-        while (parentElement != null)
-        {
-          if (parentElement is TableRow)
-          {
-            return (TableRow)parentElement;
-          }
-          parentElement = parentElement.Parent;
-        }
- 
-        return null;
+        return (TableRow)Ancestor(typeof(TableRow));
       }
     }
 

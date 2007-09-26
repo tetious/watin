@@ -164,18 +164,7 @@ namespace WatiN.Core
     {
       get
       {
-        Element parentElement = Parent;
-        
-        while (parentElement != null)
-        {
-          if (parentElement is SelectList)
-          {
-            return (SelectList)parentElement;
-          }
-          parentElement = parentElement.Parent;
-        }
- 
-        return null;
+        return (SelectList) Ancestor(typeof (SelectList));
       }
     }
 
