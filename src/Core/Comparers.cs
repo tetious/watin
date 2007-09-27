@@ -225,4 +225,21 @@ namespace WatiN.Core.Comparers
       return GetType().ToString() + " matching against: " + regexToUse.ToString();
     }
   }
+  
+  #if NET20
+	public class PredicateComparer : BaseComparer
+	{
+		private Predicate<string> _predicate;
+	
+		public PredicateComparer(Predicate<string> predicate)
+		{
+			_predicate = predicate;	
+		}
+	
+		public override bool Compare(string value)
+		{
+			return _predicate.Invoke(value);
+		}
+	}	
+	#endif
 }
