@@ -1104,7 +1104,6 @@ namespace WatiN.Core
      /// <summary>
     /// Gets the closest ancestor of the specified type.
     /// </summary>
-    /// <param name="ancestorType">The ancestorType.</param>
     /// <returns>An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.</returns>
     ///<example>
     /// The following example returns the Div a textfield is located in.
@@ -1121,7 +1120,6 @@ namespace WatiN.Core
         /// <summary>
     /// Gets the closest ancestor of the specified Type and AttributConstraint.
     /// </summary>
-    /// <param name="ancestorType">Type of the ancestor.</param>
     /// <param name="findBy">The AttributConstraint to match with.</param>
     /// <returns>
     /// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
@@ -1130,7 +1128,7 @@ namespace WatiN.Core
     /// The following example returns the Div a textfield is located in.
     /// <code>
     /// IE ie = new IE("http://www.example.com");
-    /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt(Find.ByText("First name"));
+    /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(Find.ByText("First name"));
     /// </code>
     /// </example>
     public T Ancestor<T>(AttributeConstraint findBy) where T : Element

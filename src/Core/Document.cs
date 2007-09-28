@@ -770,9 +770,9 @@ namespace WatiN.Core
     /// </summary>
     /// <example>
     /// The following example shows an alert dialog then returns the string "4".
-    /// 
+    /// <code>
     /// Eval("window.alert('Hello world!'); 2 + 2");
-    /// 
+    /// </code>
     /// </example>
     /// <param name="javaScriptCode">The JavaScript code</param>
     /// <returns>The result converted to a string</returns>
