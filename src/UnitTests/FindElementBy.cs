@@ -1377,8 +1377,8 @@ namespace WatiN.Core.UnitTests
   		_value = value;
   		return _returnValue;
   	}
-  	#endif
   }
+ 	#endif
 
 //  public class ContraintSyntaxTest
 //  {
