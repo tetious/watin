@@ -18,6 +18,7 @@
         <ComponentRef Id="LicenseTxt" />
         <ComponentRef Id="ReadmeTxt" />
         <ComponentRef Id="WatiN.CoreDll" />
+        <ComponentRef Id="WatiN.CoreXml" />
         <ComponentRef Id="WatiN.Core.UnitTestsDll" />
         <ComponentRef Id="WatiN.Core.UnitTests.dllConfig" />
         <ComponentRef Id="Microsoft.mshtmlDll" />

@@ -32,6 +32,9 @@
 							<Component Guid="A37BD5B1-82FC-4D9F-A033-A93C9A5B5390" Id="WatiN.Core.UnitTests.dllConfig" DiskId="1">
 								<File Source="$(var.distdir)bin\WatiN.Core.UnitTests.dll.config" Name="WATINC_1.CON" Id="WatiN.Core.UnitTests.dll.config" LongName="WatiN.Core.UnitTests.dll.config" />
 							</Component>
+							<Component Guid="A37BD5B1-82FC-4D9F-A033-A93C9A5B5390" Id="WatiN.CoreXml" DiskId="1">
+								<File Source="$(var.distdir)bin\WatiN.Core.xml" Name="WATINC_1.XML" Id="WatiN.Core.xml" LongName="WatiN.Core.xml" />
+							</Component>
 							<Directory Id="binhtml" Name="html">
 								<Component Guid="0D7542BA-4551-418A-AD14-1766A8485560" Id="binhtml" DiskId="1">
 									<File Source="$(var.distdir)bin\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="CrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />

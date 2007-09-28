@@ -22,7 +22,7 @@ Copyright 2006-2007 Jeroen van Menen
     
     <property name="base.dir"                       value="${project::get-base-directory()}" />
     <property name="build.base.dir"                 value="${base.dir}\build" />
-	<property name="source.dir"                     value="${base.dir}\src" />
+		<property name="source.dir"                     value="${base.dir}\src" />
     
     <property name="system32.dir"                   value="${environment::get-variable('SystemRoot')}\system32"/>
     <property name="pia.dir"                        value="${environment::get-variable('SystemDrive')}\Program Files\Microsoft.Net\Primary Interop Assemblies"/>
@@ -81,7 +81,7 @@ Copyright 2006-2007 Jeroen van Menen
         <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
         <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
-        <csc debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
+        <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
             <sources>
                 <include name="${unittests.source.dir}\*.cs"/>
             </sources>
@@ -242,7 +242,8 @@ Copyright 2006-2007 Jeroen van Menen
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll"/>
 				<include name="*.config"/>
-            </fileset>
+				<include name="*.xml"/>
+      </fileset>
 		</copy>
 		
 		<copy file="${pia.dir}\Microsoft.mshtml.dll" todir="${distribution.dir}\bin" />
@@ -397,7 +398,6 @@ Copyright 2006-2007 Jeroen van Menen
 	    <call target="dist" />
 	    <call target="installer"  />
 	</target>
-
 </project>
 
 
