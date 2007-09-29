@@ -37,8 +37,15 @@ namespace WatiN.Core.UnitTests
   [TestFixture]
   public class FindElementBy : WatiNTest
   {
-    private const string href = "href";
-
+    private const string _href = "href";
+		private string _expectedPredicateCompareValue;
+		
+		[SetUp]
+		public void SetUp()
+		{
+			_expectedPredicateCompareValue = null;
+		}
+		
     [Test]
     public void FindByFor()
     {
@@ -59,6 +66,13 @@ namespace WatiN.Core.UnitTests
 
       value = Find.ByFor(new StringContainsAndCaseInsensitiveComparer("VAl"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+      attributeBag = new TestAttributeBag(htmlfor, "forvalue");
+			_expectedPredicateCompareValue = "forvalue";
+			value = Find.ByFor(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -75,6 +89,12 @@ namespace WatiN.Core.UnitTests
       TestAttributeBag attributeBag = new TestAttributeBag("id", "idvalue");
       value = Find.ById(new StringContainsAndCaseInsensitiveComparer("Val"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "idvalue";
+			value = Find.ById(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -119,8 +139,22 @@ namespace WatiN.Core.UnitTests
 
 			value = Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("ALT TexT"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+			
+			#if NET20
+			_expectedPredicateCompareValue = "alt text";
+			value = Find.ByAlt(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
 		}
 
+		#if NET20
+		private bool TestPredicateCompareMethod(string value)
+		{
+			return value == _expectedPredicateCompareValue;
+		}
+		#endif
+
+		
     [Test]
     public void FindByName()
     {
@@ -140,6 +174,12 @@ namespace WatiN.Core.UnitTests
 
       value = Find.ByName(new StringContainsAndCaseInsensitiveComparer("eVAl"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "namevalue";
+			value = Find.ByName(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -162,6 +202,11 @@ namespace WatiN.Core.UnitTests
       value = Find.ByText(new StringContainsAndCaseInsensitiveComparer("tVal"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
+      #if NET20
+			_expectedPredicateCompareValue = "textvalue";
+			value = Find.ByText(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -184,7 +229,13 @@ namespace WatiN.Core.UnitTests
 
       value = Find.ByStyle(attributeName, new StringContainsAndCaseInsensitiveComparer("rEe"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
-    }
+    
+      #if NET20
+			_expectedPredicateCompareValue = "green";
+			value = Find.ByStyle(attributeName, TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
+		}
 
     [Test]
     public void FindByUrl()
@@ -204,6 +255,12 @@ namespace WatiN.Core.UnitTests
       TestAttributeBag attributeBag = new TestAttributeBag("href", url);
       value = Find.ByUrl(new StringContainsAndCaseInsensitiveComparer("/watin.Sour"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = url;
+			value = Find.ByUrl(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test, ExpectedException(typeof (UriFormatException))]
@@ -225,20 +282,20 @@ namespace WatiN.Core.UnitTests
 
     private static void AssertUrlValue(AttributeConstraint value)
     {
-      Assert.AreEqual(href, value.AttributeName, "Wrong attributename");
+      Assert.AreEqual(_href, value.AttributeName, "Wrong attributename");
       Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
 
-      TestAttributeBag attributeBag = new TestAttributeBag(href, WatiNURI.ToString());
+      TestAttributeBag attributeBag = new TestAttributeBag(_href, WatiNURI.ToString());
 
       Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
 
-      attributeBag = new TestAttributeBag(href, "http://www.microsoft.com");
+      attributeBag = new TestAttributeBag(_href, "http://www.microsoft.com");
       Assert.IsFalse(value.Compare(attributeBag), "Shouldn't match Microsoft");
 
-      attributeBag = new TestAttributeBag(href, null);
+      attributeBag = new TestAttributeBag(_href, null);
       Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
 
-      attributeBag = new TestAttributeBag(href, String.Empty);
+      attributeBag = new TestAttributeBag(_href, String.Empty);
       Assert.IsFalse(value.Compare(attributeBag), "Null should not match");
     }
 
@@ -247,7 +304,7 @@ namespace WatiN.Core.UnitTests
     {
       Regex regex = new Regex("^http://watin");
       AttributeConstraint value = Find.ByUrl(regex);
-      TestAttributeBag attributeBag = new TestAttributeBag(href, "http://watin.sourceforge.net");
+      TestAttributeBag attributeBag = new TestAttributeBag(_href, "http://watin.sourceforge.net");
 
       Assert.IsTrue(value.Compare(attributeBag), "Regex ^http://watin should match");
     }
@@ -262,7 +319,7 @@ namespace WatiN.Core.UnitTests
     public void FindByUrlInvalidCompare()
     {
       AttributeConstraint value = Find.ByUrl(WatiNURI.ToString());
-      TestAttributeBag attributeBag = new TestAttributeBag(href, "watin.sourceforge.net");
+      TestAttributeBag attributeBag = new TestAttributeBag(_href, "watin.sourceforge.net");
 
       value.Compare(attributeBag);
     }
@@ -314,6 +371,12 @@ namespace WatiN.Core.UnitTests
       attributeBag = new TestAttributeBag(title, "title");
       value = Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("iTl"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "title";
+			value = Find.ByTitle(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -337,6 +400,12 @@ namespace WatiN.Core.UnitTests
 
       value = Find.ByValue(new StringContainsAndCaseInsensitiveComparer("eVal"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "valuevalue";
+			value = Find.ByValue(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test]
@@ -365,6 +434,12 @@ namespace WatiN.Core.UnitTests
 
       value = Find.BySrc(new StringContainsAndCaseInsensitiveComparer("es/Im"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "/images/image.gif";
+			value = Find.BySrc(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
 
     [Test, ExpectedException(typeof (ArgumentNullException))]
@@ -417,7 +492,7 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
-    public void FindByCustom()
+    public void FindBy()
     {
       const string id = "id";
       AttributeConstraint value = Find.By(id, "idvalue");
@@ -444,6 +519,12 @@ namespace WatiN.Core.UnitTests
 
       value = Find.By(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
       Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
+      
+      #if NET20
+			_expectedPredicateCompareValue = "idvalue";
+			value = Find.By(id, TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+			#endif
     }
   }
 

@@ -960,6 +960,21 @@ namespace WatiN.Core
 			return new AttributeConstraint(altAttribute, compare);
 		}
 
+		#if NET20
+		/// <summary>
+		/// Finds an element by its alt text.
+		/// </summary>
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// 	<code>Image img = ie.Image(Find.ByAlt(MyOwnCompareMethod));</code>
+		/// </example>
+		public static AttributeConstraint ByAlt(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(altAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+		
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.
     /// </summary>
@@ -1007,6 +1022,20 @@ namespace WatiN.Core
       return new AttributeConstraint(forAttribute, comparer);
     }
 
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Label label = ie.Label(Find.ByFor(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByFor(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(forAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
     /// <summary>
     /// Find an element by its id.
     /// </summary>
@@ -1039,6 +1068,20 @@ namespace WatiN.Core
     {
       return new AttributeConstraint(idAttribute, compare);
     }
+
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.ById(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ById(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(idAttribute, new PredicateComparer(predicate));
+		}
+		#endif
 
     /// <summary>
     /// Find an element by its index.
@@ -1086,6 +1129,20 @@ namespace WatiN.Core
       return new AttributeConstraint(nameAttribute, comparer);
     }
 
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.ByName(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByName(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(nameAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
     /// <summary>
     /// Find an element by its (inner) text
     /// </summary>
@@ -1119,7 +1176,21 @@ namespace WatiN.Core
       return new AttributeConstraint(textAttribute, comparer);
     }
 
-    /// <summary>
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.ByName(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByText(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(textAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
+		/// <summary>
     /// Find an element, frame, IE instance or HTMLDialog by its Url.
     /// </summary>
     /// <param name="url">The well-formed url to find.</param>
@@ -1184,7 +1255,21 @@ namespace WatiN.Core
       return new AttributeConstraint(hrefAttribute, comparer);
     }
 
-    /// <summary>
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.ByUrl(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByUrl(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(hrefAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
+		/// <summary>
     /// Find an element, frame, IE instance or HTMLDialog by its Title.
     /// </summary>
     /// <param name="title">The title to match partially.</param>
@@ -1217,13 +1302,29 @@ namespace WatiN.Core
       return new AttributeConstraint(titleAttribute, comparer);
     }
 
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// IE ie = IE.AttachToIE(Find.ByTitle(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByTitle(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(titleAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
     /// <summary>
     /// Find an element by its value attribute.
     /// </summary>
     /// <param name="value">The value to find.</param>
     /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
-    /// <code>ie.Button(Find.ByValue("My Button"))</code>
+    /// <code>
+    /// Button button = ie.Button(Find.ByValue("My Button"))
+    /// </code>
     /// </example>
     public static AttributeConstraint ByValue(string value)
     {
@@ -1233,7 +1334,9 @@ namespace WatiN.Core
     /// <param name="regex">Regular expression to find a matching Value.</param>
     /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
-    /// <code>ie.Button(Find.ByValue(new Regex("pattern goes here")))</code>
+    /// <code>
+    /// Button button = ie.Button(Find.ByValue(new Regex("pattern goes here")))
+    /// </code>
     /// </example>
     public static AttributeConstraint ByValue(Regex regex)
     {
@@ -1243,12 +1346,28 @@ namespace WatiN.Core
     /// <param name="comparer">The comparer.</param>
     /// <returns><see cref="AttributeConstraint"/></returns>
     /// <example>
-    /// 	<code>ie.Button(Find.ByValue(new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
+    /// <code>
+    /// Button button = ie.Button(Find.ByValue(new StringContainsAndCaseInsensitiveComparer("pattern goes here")));
+    /// </code>
     /// </example>
     public static AttributeConstraint ByValue(ICompare comparer)
     {
       return new AttributeConstraint(valueAttribute, comparer);
     }
+
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Button button = ie.Button(Find.ByValue(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByValue(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(valueAttribute, new PredicateComparer(predicate));
+		}
+		#endif
 
     /// <summary>
     /// Find an <see cref="Image"/> by its source (src) attribute.
@@ -1283,7 +1402,21 @@ namespace WatiN.Core
       return new AttributeConstraint(srcAttribute, comparer);
     }
 
-    /// <summary>
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Image image = ie.Image(Find.BySrc(MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint BySrc(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(srcAttribute, new PredicateComparer(predicate));
+		}
+		#endif
+
+		/// <summary>
     /// Find an element by an attribute.
     /// </summary>
     /// <param name="attributeName">The attribute name to compare the value with.</param>
@@ -1318,6 +1451,20 @@ namespace WatiN.Core
     {
       return new AttributeConstraint(attributeName, comparer);
     }
+
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.By("innertext", MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint By(string attributeName, Predicate<string> predicate)
+		{
+			return new AttributeConstraint(attributeName, new PredicateComparer(predicate));
+		}
+		#endif
 
     /// <summary>
     /// Find an element by an attribute.
@@ -1393,5 +1540,19 @@ namespace WatiN.Core
     {
       return new AttributeConstraint(styleBaseAttribute + styleAttributeName, comparer);
     }
+    
+    #if NET20
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>
+		/// Link link = ie.Link(Find.ByStyle("font-family", MyOwnCompareMethod));
+		/// </code>
+		/// </example>
+		public static AttributeConstraint ByStyle(string styleAttributeName, Predicate<string> predicate)
+		{
+			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateComparer(predicate));
+		}
+		#endif
   }
 }
