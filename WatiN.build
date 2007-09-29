@@ -31,7 +31,7 @@ Copyright 2006-2007 Jeroen van Menen
     <property name="core.assembly.name"             value="${core.name}.dll" />
     <property name="core.xmldoc.name"               value="${core.name}.xml" />
 	<property name="core.source.dir"                value="${source.dir}\Core" />
-	<property name="core.helpfile.name"             value="WatiN.chm" />
+	<property name="core.helpfile.name"             value="WatiN" />
 
     <property name="unittests.name"                 value="${core.name}.UnitTests" />
     <property name="unittests.assembly.name"        value="${unittests.name}.dll" />
@@ -48,9 +48,11 @@ Copyright 2006-2007 Jeroen van Menen
 	<property name="installer.source.dir"           value="${source.dir}\Installer\" />
 
 	<property name="tools.dir"                      value="${base.dir}\tools" />
-	<property name="ncoverexplorer.console.file"	value="${tools.dir}\NCoverExplorer\NCoverExplorer.Console.exe" />
-	<property name="ncover.console.file"	        value="${tools.dir}\NCover\NCover.Console.exe" />
-    <property name="wix.dir"                        value="${tools.dir}\WiX" />
+	<property name="ncoverexplorer.console.file"		value="${tools.dir}\NCoverExplorer\NCoverExplorer.Console.exe" />
+	<property name="ncover.console.file"	        	value="${tools.dir}\NCover\NCover.Console.exe" />
+	<property name="ndoc2.task.file"								value="${tools.dir}\NCoverExplorerExtras\bin\NCoverExplorer.NAntTasks.dll" />
+	<property name="ndoc2.console.file"							value="${tools.dir}\NDoc2\NDocConsole.exe" />
+  <property name="wix.dir"                      	value="${tools.dir}\WiX" />
     
 	<!-- User targets -->
 	<target name="clean" description="Delete Automated Build artifacts">
@@ -124,8 +126,8 @@ Copyright 2006-2007 Jeroen van Menen
     <target name="init-properties">
 	    <property name="build.dir"                      value="${build.base.dir}\${nant.settings.currentframework}" />
 
-        <property name="bin.dir" 			            value="${build.dir}\bin" />
-        <property name="reports.dir" 			        value="${build.dir}\test-reports" />
+      <property name="bin.dir" 			            value="${build.dir}\bin" />
+      <property name="reports.dir" 			        value="${build.dir}\test-reports" />
 	    <property name="distribution.dir"               value="${build.dir}\dist" />
 	    <property name="installer.wixobj.dir"           value="${build.dir}\wixobj\" />
 	    <property name="coverage.xml.output.file" 		value="${reports.dir}\Coverage.xml" />
@@ -134,7 +136,7 @@ Copyright 2006-2007 Jeroen van Menen
 	    <property name="unittest.assembly.file"		    value="${bin.dir}\${unittests.assembly.name}" />
 	    <property name="unittest.xml.output.file" 		value="${reports.dir}\UnitTests.xml" />
 	    
-       	<property name="core.helpfile.file"             value="${build.dir}\ndoc\${core.helpfile.name}" />
+       	<property name="core.helpfile.file"             value="${build.dir}\ndoc\${core.helpfile.name}.chm" />
     </target>
 
     <target name="copy-testdata">
@@ -211,23 +213,27 @@ Copyright 2006-2007 Jeroen van Menen
 		</exec>
 	</target>
 
-	<target name="ndoc" description="Creates documentation with ndoc">
-	    <ndoc>
+	<target name="ndoc" description="Creates documentation with ndoc 2 alpha 3">
+			<loadtasks assembly="${ndoc2.task.file}" />
+
+	    <ndoc2 program="${ndoc2.console.file}">
             <assemblies basedir="${bin.dir}">
                 <include name="${core.assembly.name}" />
             </assemblies>
             <documenters>
-                <documenter name="MSDN">
+                <documenter name="MSDN-CHM">
                     <property name="OutputDirectory" value="${path::get-directory-name(core.helpfile.file)}" />
                     <property name="HtmlHelpName" value="${core.helpfile.name}" />
-                    <property name="Title" value="${project.name} ${core.assembly.version} Documentation (generated with NDoc)" />
+                    <property name="Title" value="${project.name} ${core.assembly.version} Documentation (generated with NDoc2)" />
                     <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-                    <property name="CopyrightText" value="(C) Jeroen van Menen 2006-2007" />
-                    <property name="Preliminary" value="True" />
+                    <property name="CopyrightHref" value="http://watin.sourceforge.net/" />
+                	  <property name="CopyrightText" value="(C) Jeroen van Menen 2006-2007" />
+                    <property name="Preliminary" value="False" />
                     <property name="CleanIntermediates" value="True" />
+                    <property name="IncludeDefaultThreadSafety" value="False" />
                 </documenter>
             </documenters>
-        </ndoc>
+        </ndoc2>
 	</target>
 	
 	<target name="dist">
