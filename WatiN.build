@@ -299,6 +299,18 @@ Copyright 2006-2007 Jeroen van Menen
             value="TRACE;${project.properties.define}" />
         
         <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Interop.SHDocVw']/@HintPath"
+            value="..\..\bin\Interop.SHDocVw.dll" />
+
+        <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Rhino.Mocks']/@HintPath"
+            value="..\..\bin\nunit.framework.dll" />
+
+        <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
+            xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'nunit.framework']/@HintPath"
+            value="..\..\bin\Rhino.Mocks.dll" />
+
+		<xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
             xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
             value="DEBUG;TRACE;${project.properties.define}" />
 
