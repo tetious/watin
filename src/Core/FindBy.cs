@@ -1181,7 +1181,7 @@ namespace WatiN.Core
 		/// <returns>The AttributeConstraint</returns>
 		/// <example>
 		/// <code>
-		/// Link link = ie.Link(Find.ByName(MyOwnCompareMethod));
+		/// Link link = ie.Link(Find.ByText(MyOwnCompareMethod));
 		/// </code>
 		/// </example>
 		public static AttributeConstraint ByText(Predicate<string> predicate)
