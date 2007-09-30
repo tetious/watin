@@ -1221,6 +1221,7 @@ namespace WatiN.Core.UnitTests
     [TearDown]
     public void TearDown()
     {
+      IE.Settings.Reset();
       Logger.LogWriter = saveLoggerInstance;
     }
 

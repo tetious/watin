@@ -782,7 +782,7 @@ namespace WatiN.Core.UnitTests
     {
       RegexComparer comparer = new RegexComparer(new Regex("^A test value$"));
 
-      Assert.AreEqual("WatiN.Core.RegexComparer matching against: ^A test value$", comparer.ToString());
+      Assert.AreEqual("WatiN.Core.Comparers.RegexComparer matching against: ^A test value$", comparer.ToString());
     }
   }
 
