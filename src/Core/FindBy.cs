@@ -1453,18 +1453,19 @@ namespace WatiN.Core
     }
 
     #if NET20
-		/// <param name="predicate">The predicate method to call to make the comparison.</param>
-		/// <returns>The AttributeConstraint</returns>
-		/// <example>
-		/// <code>
-		/// Link link = ie.Link(Find.By("innertext", MyOwnCompareMethod));
-		/// </code>
-		/// </example>
-		public static AttributeConstraint By(string attributeName, Predicate<string> predicate)
-		{
-			return new AttributeConstraint(attributeName, new PredicateComparer(predicate));
-		}
-		#endif
+    /// <param name="attributeName">The attribute to compare the value with.</param>
+    /// <param name="predicate">The predicate method to call to make the comparison.</param>
+	/// <returns>The AttributeConstraint</returns>
+	/// <example>
+	/// <code>
+	/// Link link = ie.Link(Find.By("innertext", MyOwnCompareMethod));
+	/// </code>
+	/// </example>
+	public static AttributeConstraint By(string attributeName, Predicate<string> predicate)
+	{
+		return new AttributeConstraint(attributeName, new PredicateComparer(predicate));
+	}
+	#endif
 
     /// <summary>
     /// Find an element by an attribute.
@@ -1542,17 +1543,18 @@ namespace WatiN.Core
     }
     
     #if NET20
-		/// <param name="predicate">The predicate method to call to make the comparison.</param>
-		/// <returns>The AttributeConstraint</returns>
-		/// <example>
-		/// <code>
-		/// Link link = ie.Link(Find.ByStyle("font-family", MyOwnCompareMethod));
-		/// </code>
-		/// </example>
-		public static AttributeConstraint ByStyle(string styleAttributeName, Predicate<string> predicate)
-		{
-			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateComparer(predicate));
-		}
-		#endif
+    /// <param name="styleAttributeName">Name of the style attribute.</param>
+    /// <param name="predicate">The predicate method to call to make the comparison.</param>
+	/// <returns>The AttributeConstraint</returns>
+	/// <example>
+	/// <code>
+	/// Link link = ie.Link(Find.ByStyle("font-family", MyOwnCompareMethod));
+	/// </code>
+	/// </example>
+	public static AttributeConstraint ByStyle(string styleAttributeName, Predicate<string> predicate)
+	{
+		return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateComparer(predicate));
+	}
+	#endif
   }
 }
