@@ -290,6 +290,13 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
+    public void TableRowRowIndex()
+    {
+      Assert.AreEqual(1, ie.TableRow(Find.ByText("a1")).Index);
+      Assert.AreEqual(2, ie.TableRow(Find.ByText("b2")).Index);
+    }
+
+    [Test]
     public void TableCellElementTags()
     {
       Assert.AreEqual(1, TableCell.ElementTags.Count, "1 elementtags expected");

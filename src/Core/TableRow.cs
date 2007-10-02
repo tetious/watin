@@ -62,5 +62,17 @@ namespace WatiN.Core
         return (Table) Ancestor(typeof (Table));
       }
     }
+
+    /// <summary>
+    /// Gets the index of the <see cref="TableRow"/> in the <see cref="TableRowCollection"/> of the parent <see cref="Table"/>.
+    /// </summary>
+    /// <value>The index of the row.</value>
+    public int Index
+    {
+        get
+        {
+            return int.Parse(GetAttributeValue("rowIndex"));
+        }
+    }
   }
 }
