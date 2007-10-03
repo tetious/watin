@@ -1,6 +1,6 @@
-WatiN 1.2.0.4000 (30 September 2007)
+WatiN 1.2.0.4000 (4 October 2007)
 
-This release includes mainly new features (some only for .Net 2.0). You can now start a new IE instance in its own process, set event properties when firing events on an element, get a specific Ancestor of an element, use your own attribute comparers, implement specific wait logic, evaluatie javascript code, automate the Area element, clean up all IE caches and much more. Many thanks to all who contributed to this release!
+This release includes mainly new features (some only for .Net 2.0). You can now start a new IE instance in its own process, set event properties when firing events on an element, get a specific Ancestor of an element, use your own attribute comparers, implement specific wait logic, evaluatie javascript code, automate the Area element, clean up all IE caches, take snapshots of webpages and much more. Many thanks to all who contributed to this release!
 
 For the full release notes visit http://watin.sourceforge.net/releasenotes-1-2-0-4000.html
 

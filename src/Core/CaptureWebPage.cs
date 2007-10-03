@@ -17,7 +17,7 @@
 // ---------------------------------------------------------------------------
 //
 // Copyright (c) Doug Weems.
-// http://www.codeproject.com/useritems/WebCapture.asp
+// http://www.codeproject.com/cs/media/IECapture.asp
 // 
 // You may use this code for fun and knowledge.
 // You can compile and use the application as is or copy out what you need.  
@@ -38,7 +38,7 @@ namespace WatiN.Core
 
   /// <summary>
   /// This class contains functionality to capture an image from a web page and save it to a file.
-  /// The code was written by Doug Weems at http://www.codeproject.com/useritems/WebCapture.asp/>
+  /// The code was written by Doug Weems at http://www.codeproject.com/cs/media/IECapture.asp/>
   /// </summary>
   public class CaptureWebPage
   {

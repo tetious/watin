@@ -1408,6 +1408,8 @@ namespace WatiN.Core
     /// &lt;name&gt;=&lt;value&gt;[; &lt;name&gt;=&lt;value&gt;]...
     /// [; expires=&lt;date:DAY, DD-MMM-YYYY HH:MM:SS GMT&gt;][; domain=&lt;domain_name&gt;]
     /// [; path=&lt;some_path&gt;][; secure][; httponly].  Returns null if there are no associated cookies.</returns>
+    /// <seealso cref="ClearCookies()"/>
+    /// <seealso cref="SetCookie(string,string)"/>
     public string GetCookie(string url, string cookieName)
     {
       return WinInet.GetCookie(url, cookieName);
@@ -1424,7 +1426,8 @@ namespace WatiN.Core
     /// &lt;name&gt;=&lt;value&gt;[; &lt;name&gt;=&lt;value&gt;]...
     /// [; expires=&lt;date:DAY, DD-MMM-YYYY HH:MM:SS GMT&gt;][; domain=&lt;domain_name&gt;]
     /// [; path=&lt;some_path&gt;][; secure][; httponly].</param>
-    /// <seealso cref="ClearCookies"/>
+    /// <seealso cref="ClearCookies()"/>
+    /// <seealso cref="GetCookie(string,string)"/>
     public void SetCookie(string url, string cookieData)
     {
       WinInet.SetCookie(url, cookieData);
