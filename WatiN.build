@@ -235,6 +235,29 @@ Copyright 2006-2007 Jeroen van Menen
             </documenters>
         </ndoc2>
 	</target>
+
+	<target name="ndocweb" description="Creates documentation with ndoc 2 alpha 3">
+			<loadtasks assembly="${ndoc2.task.file}" />
+
+	    <ndoc2 program="${ndoc2.console.file}">
+            <assemblies basedir="${bin.dir}">
+                <include name="${core.assembly.name}" />
+            </assemblies>
+            <documenters>
+                <documenter name="MSDN-Web">
+                    <property name="OutputDirectory" value="${path::get-directory-name(core.helpfile.file)}" />
+                    <property name="HtmlHelpName" value="${core.helpfile.name}" />
+                    <property name="Title" value="${project.name} ${core.assembly.version} Documentation (generated with NDoc2)" />
+                    <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+                    <property name="CopyrightHref" value="http://watin.sourceforge.net/" />
+                	  <property name="CopyrightText" value="(C) Jeroen van Menen 2006-2007" />
+                    <property name="Preliminary" value="False" />
+                    <property name="CleanIntermediates" value="True" />
+                    <property name="IncludeDefaultThreadSafety" value="False" />
+                </documenter>
+            </documenters>
+        </ndoc2>
+	</target>
 	
 	<target name="dist">
 	    <!-- Copy distribution root files -->
@@ -411,10 +434,10 @@ Copyright 2006-2007 Jeroen van Menen
 	    <call target="set-net-2.0-version" />
 	    <call target="clean" />
 	    <call target="build" />
-	    <call target="run-unit-tests" />
-	    <call target="ndoc" />
-	    <call target="dist" />
-	    <call target="installer"  />
+	    <!--call target="run-unit-tests" /-->
+	    <call target="ndocweb" />
+	    <!--call target="dist" /-->
+	    <!--call target="installer"  /-->
 	</target>
 </project>
 

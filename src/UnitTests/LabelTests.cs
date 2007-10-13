@@ -1,0 +1,100 @@
+namespace WatiN.Core.UnitTests
+{
+  using System.Collections;
+  using System.Text.RegularExpressions;
+  using NUnit.Framework;
+
+  [TestFixture]
+  public class LabelTests : BaseElementsTests
+  {
+    [Test]
+    public void LabelElementTags()
+    {
+      Assert.AreEqual(1, Label.ElementTags.Count, "1 elementtags expected");
+      Assert.AreEqual("label", ((ElementTag) Label.ElementTags[0]).TagName);
+    }
+
+    [Test]
+    public void LabelFromElement()
+    {
+      Element element = ie.Element(Find.ByFor("Checkbox21"));
+      Label label = new Label(element);
+      Assert.AreEqual("Checkbox21", label.For);
+    }
+
+    [Test]
+    public void LabelExists()
+    {
+      Assert.IsTrue(ie.Label(Find.ByFor("Checkbox21")).Exists);
+      Assert.IsTrue(ie.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
+      Assert.IsFalse(ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
+    }
+
+    [Test]
+    public void LabelByFor()
+    {
+      Label label = ie.Label(Find.ByFor("Checkbox21"));
+
+      Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
+      Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+      Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+    }
+
+    [Test]
+    public void LabelByForWithElement()
+    {
+      CheckBox checkBox = ie.CheckBox("Checkbox21");
+
+      Label label = ie.Label(Find.ByFor(checkBox));
+
+      Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
+      Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+      Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+    }
+
+    [Test]
+    public void LabelWrapped()
+    {
+      LabelCollection labelCollection = ie.Labels;
+      Assert.AreEqual(2, ie.Labels.Length, "Unexpected number of labels");
+
+      Label label = labelCollection[1];
+
+      Assert.AreEqual(null, label.For, "Unexpected label.For id");
+      Assert.AreEqual("Test label before:  Test label after", label.Text, "Unexpected label.Text");
+
+      // Element.TextBefore and Element.TextAfter are tested in test method Element
+    }
+
+    [Test]
+    public void Labels()
+    {
+      const int expectedLabelCount = 2;
+
+      Assert.AreEqual(expectedLabelCount, ie.Labels.Length, "Unexpected number of labels");
+
+      LabelCollection labelCollection = ie.Labels;
+
+      // Collection items by index
+      Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");
+
+      // Collection iteration and comparing the result with Enumerator
+      IEnumerable labelEnumerable = labelCollection;
+      IEnumerator labelEnumerator = labelEnumerable.GetEnumerator();
+
+      int count = 0;
+      foreach (Label label in labelCollection)
+      {
+        labelEnumerator.MoveNext();
+        object enumCheckbox = labelEnumerator.Current;
+
+        Assert.IsInstanceOfType(label.GetType(), enumCheckbox, "Types are not the same");
+        Assert.AreEqual(label.OuterHtml, ((Label) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+        ++count;
+      }
+
+      Assert.IsFalse(labelEnumerator.MoveNext(), "Expected last item");
+      Assert.AreEqual(expectedLabelCount, count);
+    }
+  }
+}

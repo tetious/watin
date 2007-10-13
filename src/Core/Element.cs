@@ -1151,7 +1151,7 @@ namespace WatiN.Core
     /// </example>
     public Element Ancestor(Type ancestorType)
     {
-      return Ancestor(ancestorType, new AlwaysTrueAttribute());
+      return Ancestor(ancestorType, new AlwaysTrueAttributeConstraint());
     }
 
     /// <summary>
@@ -1259,7 +1259,7 @@ namespace WatiN.Core
     /// </example>
     public Element Ancestor(string tagName)
     {
-      return Ancestor(tagName, new AlwaysTrueAttribute());
+      return Ancestor(tagName, new AlwaysTrueAttributeConstraint());
     }
 
     private static bool Matches(Element parentElement, AttributeConstraint findBy)

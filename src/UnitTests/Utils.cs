@@ -16,14 +16,12 @@
 
 #endregion Copyright
 
-using System;
-using System.Threading;
-using NUnit.Framework;
-
-using WatiN.Core;
-
 namespace WatiN.Core.UnitTests
 {
+  using System;
+  using System.Threading;
+  using NUnit.Framework;
+
   [TestFixture]
   public class Utils : WatiNTest
   {
@@ -44,7 +42,7 @@ namespace WatiN.Core.UnitTests
         UtilityClass.DumpElementsWithHtmlSource(ie);
       }
     }
-    
+
     [Test]
     public void IsNullOrEmpty()
     {
@@ -53,7 +51,7 @@ namespace WatiN.Core.UnitTests
       Assert.IsTrue(UtilityClass.IsNullOrEmpty(""), "zero length string should return true");
       Assert.IsFalse(UtilityClass.IsNullOrEmpty("test"), "string 'test' should return false");
     }
-    
+
     [Test]
     public void IsNotNullOrEmpty()
     {
@@ -62,26 +60,26 @@ namespace WatiN.Core.UnitTests
       Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(""), "zero length string should return false");
       Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
     }
-    
+
     [Test]
     public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
     {
-      Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero,"classname"));
+      Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "classname"));
     }
-    
-    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+
+    [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
     public void SimpleTimerWithNegativeTimeoutNotAllowed()
     {
       new SimpleTimer(-1);
     }
-    
+
     [Test]
     public void SimpleTimerWithZeroTimoutIsAllowed()
     {
       SimpleTimer timer = new SimpleTimer(0);
       Assert.IsTrue(timer.Elapsed);
     }
-    
+
     [Test]
     public void SimpleTimerOneSecond()
     {
@@ -89,7 +87,7 @@ namespace WatiN.Core.UnitTests
       Thread.Sleep(1200);
       Assert.IsTrue(timer.Elapsed);
     }
-    
+
     [Test]
     public void SimpleTimerThreeSeconds()
     {
@@ -99,7 +97,7 @@ namespace WatiN.Core.UnitTests
       Thread.Sleep(1000);
       Assert.IsTrue(timer.Elapsed);
     }
-    
+
     [Test]
     public void ToStringTests()
     {

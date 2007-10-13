@@ -16,12 +16,10 @@
 
 #endregion Copyright
 
-using System;
-using System.IO;
-
 namespace WatiN.Core.UnitTests
 {
-  using NUnit.Framework.SyntaxHelpers;
+  using System;
+  using System.IO;
 
   public class WatiNTest
   {
@@ -35,7 +33,7 @@ namespace WatiN.Core.UnitTests
     public static Uri TestEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
     public static Uri FormSubmitURI = new Uri(HtmlTestBaseURI, "formsubmit.html");
     public static Uri WatiNURI = new Uri("http://watin.sourceforge.net");
-    public static Uri ImagesURI = new Uri(HtmlTestBaseURI,"images.html");
+    public static Uri ImagesURI = new Uri(HtmlTestBaseURI, "images.html");
     public static Uri IFramesMainURI = new Uri(HtmlTestBaseURI, "iframes\\main.html");
     public static Uri IFramesLeftURI = new Uri(HtmlTestBaseURI, "iframes\\leftpage.html");
     public static Uri IFramesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
@@ -43,7 +41,7 @@ namespace WatiN.Core.UnitTests
     public static Uri OnBeforeUnloadJavaDialogURI = new Uri(HtmlTestBaseURI, "OnBeforeUnloadJavaDialog.html");
     public static string GoogleUrl = "http://www.google.com";
     public static string EbayUrl = "http://www.ebay.com";
-    
+
     public static Uri HtmlTestBaseURI
     {
       get
@@ -59,18 +57,18 @@ namespace WatiN.Core.UnitTests
     private static string GetHtmlTestFilesLocation()
     {
       DirectoryInfo baseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-      
+
       // Search for the html directory in the current domains base directory
       // Valid when executing WatiN UnitTests in a deployed situation. 
       string htmlTestFilesLocation = baseDirectory.FullName + @"\html\";
-      
+
       if (!Directory.Exists(htmlTestFilesLocation))
       {
         // If html directory not found, search two dirs up in the directory tree
         // Valid when executing WatiN UnitTests from within Visual Studio
         htmlTestFilesLocation = baseDirectory.Parent.Parent.FullName + @"\html\";
       }
-      
+
       return htmlTestFilesLocation;
     }
   }

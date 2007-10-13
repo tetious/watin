@@ -121,9 +121,9 @@ namespace WatiN.Core
     {
       Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      TableRowFinder finder = new TableRowFinder(findText, inColumn);
+      TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findText, inColumn);
       
-      return findRow(finder);
+      return findRow(attributeConstraint);
     }
 
     /// <summary>
@@ -137,18 +137,18 @@ namespace WatiN.Core
     {
       Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      TableRowFinder finder = new TableRowFinder(findTextRegex, inColumn);
+      TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
-      return FindRow(finder);
+      return FindRow(attributeConstraint);
     }
 
-    private TableRow findRow(TableRowFinder finder)
+    private TableRow findRow(TableRowAttributeConstraint attributeConstraint)
     {
       string innertext = GetFirstTBody().innerText;
       
-      if (innertext != null && finder.IsTextContainedIn(innertext))
+      if (innertext != null && attributeConstraint.IsTextContainedIn(innertext))
       {
-        return FindRow(finder);
+        return FindRow(attributeConstraint);
       }
       
       return null;
@@ -159,7 +159,7 @@ namespace WatiN.Core
       return Id;
     }
     
-    public TableRow FindRow(TableRowFinder findBy)
+    public TableRow FindRow(TableRowAttributeConstraint findBy)
     {
       TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
       
@@ -207,74 +207,6 @@ namespace WatiN.Core
           return (IHTMLElementCollection)table.GetFirstTBody().all;
         }
       }
-    }
-  }
-
-  /// <summary>
-  /// Use this class to find a row which contains a particular value
-  /// in a table cell contained in a table column.
-  /// </summary>
-  public class TableRowFinder : AttributeConstraint
-  {
-    private int columnIndex;
-    private ICompare containsText;
-      
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
-    /// </summary>
-    /// <param name="findText">The text to find (exact match but case insensitive).</param>
-    /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(string findText, int inColumn): base(Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(findText))
-    {
-      columnIndex = inColumn;
-      containsText = new StringContainsAndCaseInsensitiveComparer(findText);
-    }
-      
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
-    /// </summary>
-    /// <param name="findTextRegex">The regular expression to match with.</param>
-    /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(Regex findTextRegex, int inColumn): base(Find.textAttribute, findTextRegex)
-    {
-      columnIndex = inColumn;
-      containsText = new AlwaysTrueComparer();
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TableRowFinder"/> class.
-    /// </summary>
-    /// <param name="comparer">The comparer.</param>
-    /// <param name="inColumn">The column index in which to look for the value.</param>
-    public TableRowFinder(ICompare comparer, int inColumn) : base(Find.textAttribute, comparer)
-    {
-      columnIndex = inColumn;
-      containsText = new AlwaysTrueComparer();
-    }
-  
-    public override bool Compare(IAttributeBag attributeBag)
-    {
-      IHTMLElement element = ((ElementAttributeBag)attributeBag).IHTMLElement;
-
-      if (IsTextContainedIn(element.innerText))
-      {
-        // Get all elements and filter this for TableCells
-        IHTMLElementCollection allElements = (IHTMLElementCollection)element.all;
-        IHTMLElementCollection tableCellElements = (IHTMLElementCollection)allElements.tags(ElementsSupport.TableCellTagName);
-        
-        if (tableCellElements.length - 1 >= columnIndex)
-        {
-          IHTMLElement tableCell = (IHTMLElement)tableCellElements.item(columnIndex, null);
-          return base.Compare(new ElementAttributeBag(tableCell));
-        }
-      }
-        
-      return false;
-    }
-
-    public bool IsTextContainedIn(string text)
-    {
-      return containsText.Compare(text);
     }
   }
 }

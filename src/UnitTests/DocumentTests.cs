@@ -4,6 +4,7 @@ namespace WatiN.Core.UnitTests
   using NUnit.Framework;
   using Rhino.Mocks;
   using WatiN.Core.Exceptions;
+  using WatiN.Core.Interfaces;
 
   [TestFixture]
   public class DocumentTests : WatiNTest
@@ -18,6 +19,15 @@ namespace WatiN.Core.UnitTests
       _mockRepository = new MockRepository();
       _mockHtmlDocument = (IHTMLDocument2) _mockRepository.CreateMock(typeof (IHTMLDocument2));
       _mockHtmlWindow2 = (IHTMLWindow2) _mockRepository.CreateMock(typeof (IHTMLWindow2));
+    }
+
+    [Test]
+    public void DocumentIsISubElement()
+    {
+      using (IE ie = new IE())
+      {
+        Assert.IsInstanceOfType(typeof (IElementsContainer), ie);
+      }
     }
 
     [Test]
@@ -84,7 +94,7 @@ namespace WatiN.Core.UnitTests
 
         result = ie.Eval("'te' + 'st'");
         Assert.That(result, NUnit.Framework.SyntaxHelpers.Is.EqualTo("test"));
-        
+
 
         try
         {
@@ -113,6 +123,5 @@ namespace WatiN.Core.UnitTests
         Assert.AreEqual("5", result);
       }
     }
-
   }
 }
