@@ -79,6 +79,19 @@ namespace WatiN.Core.UnitTests
     }
 
     [Test]
+    public void LogActionWithParamsShouldCallLogActionOnLogWriterInstance()
+    {
+      mockLogWriter.LogAction("Test this and that");
+
+      mocks.ReplayAll();
+
+      Logger.LogWriter = mockLogWriter;
+      Logger.LogAction("Test {0} and {1}","this","that");
+
+      mocks.VerifyAll();
+    }
+
+    [Test]
     public void LogActionShouldCallLogActionOnLogWriterInstance2()
     {
       Logger.LogWriter = mockLogWriter;

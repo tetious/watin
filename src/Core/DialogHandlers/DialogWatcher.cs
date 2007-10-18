@@ -407,15 +407,9 @@ namespace WatiN.Core.DialogHandlers
     {
       if (window.IsDialog())
       {
-        // Wait untill window is visible so all properties
-        // of the window class (like Style and StyleInHex)
-        // will return valid values.
-        while (window.Visible == false)
-        {
-          Thread.Sleep(50);
-        }
-        
-        // Lock the thread and see if a handler will handle
+      	WaitUntilVisibleOrTimeOut(window);
+
+      	// Lock the thread and see if a handler will handle
         // this dialog window
         lock (this)
         {
@@ -423,10 +417,7 @@ namespace WatiN.Core.DialogHandlers
           {
             try
             {
-              if (dialogHandler.HandleDialog(window))
-              {
-                return;
-              }
+              if (dialogHandler.HandleDialog(window)) return;
             }
             catch (Exception e)
             {
@@ -437,17 +428,35 @@ namespace WatiN.Core.DialogHandlers
             }
           }
 
-          // If no handler handled the dialog, see if it
-          // should be close automatically.
+          // If no handler handled the dialog, see if the dialog
+          // should be closed automatically.
           if (CloseUnhandledDialogs)
           {
+						Logger.LogAction("Auto closing dialog with title '{0}'.", window.Title);
             window.ForceClose();
           }
         }
       }
     }
 
-    #region IDisposable Members
+  	private static void WaitUntilVisibleOrTimeOut(Window window)
+  	{
+			// Wait untill window is visible so all properties
+  		// of the window class (like Style and StyleInHex)
+  		// will return valid values.
+  		SimpleTimer timer = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
+			
+			do
+			{
+				if (window.Visible) return;
+
+				Thread.Sleep(50);
+			} while (!timer.Elapsed);
+
+			Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, IE.Settings.WaitForCompleteTimeOut);
+  	}
+
+  	#region IDisposable Members
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or

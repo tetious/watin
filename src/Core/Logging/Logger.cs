@@ -34,13 +34,28 @@ namespace WatiN.Core.Logging
     /// </summary>
     private Logger(){}
 
-    /// <summary>
-    /// Logs the action.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    public static void LogAction(string message)
+		/// <summary>
+		/// Logs the action. It replaces the format item(s) in the 
+		/// <paramref name="message"/> with the text equivalent  of the value
+		/// of a corresponding Object instance in the <paramref name="args"/>
+		/// array.
+		/// </summary>
+		/// <param name="message">A message containing zero or more format items.</param>
+		/// <param name="args">An object array containing zero or more objects to format</param>
+		/// <example>
+		/// Call this function from your code like this:
+		/// <code>
+		/// Logger.LogAction("Some message");
+		/// </code>
+		/// or
+		/// <code>
+		/// Logger.LogAction("Some message with an {0} to {1}, "item", "format");
+		/// </code>
+		/// 
+		/// </example>
+    public static void LogAction(string message, params object[] args)
     {
-      LogWriter.LogAction(message);
+      LogWriter.LogAction(string.Format(message, args));
     }
 
     /// <summary>
