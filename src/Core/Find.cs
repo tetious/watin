@@ -39,6 +39,7 @@ namespace WatiN.Core
     internal const string titleAttribute = "title";    
     internal const string valueAttribute = "value";
     internal const string hrefAttribute = "href";
+    internal const string classNameAttribute = "classname";
 
 		/// <summary>
 		/// Finds an element by its alt text.
@@ -79,7 +80,7 @@ namespace WatiN.Core
 			return new AttributeConstraint(altAttribute, compare);
 		}
 
-		#if NET20
+#if NET20
 		/// <summary>
 		/// Finds an element by its alt text.
 		/// </summary>
@@ -92,7 +93,61 @@ namespace WatiN.Core
 		{
 			return new AttributeConstraint(altAttribute, new PredicateComparer(predicate));
 		}
-		#endif
+#endif
+
+		/// <summary>
+		/// Finds an element by its (CSS) class name text.
+		/// </summary>
+		/// <param name="classname">The class name to find.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>ie.Div(Find.ByClass("HighlightedHeader")).Name</code>
+		/// </example>
+		public static AttributeConstraint ByClass(string classname)
+		{
+			return new AttributeConstraint(classNameAttribute, classname);
+		}
+
+		/// <summary>
+		/// Finds an element by its (CSS) class name text.
+		/// </summary>
+		/// <param name="regex">The regular expression for the class name to find.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// <code>ie.Div(Find.ByClass(new Regex("HighlightedHeader")))).Name</code>
+		/// </example>
+		public static AttributeConstraint ByClass(Regex regex)
+		{
+			return new AttributeConstraint(classNameAttribute, regex);
+		}
+
+		/// <summary>
+		/// Finds an element by its (CSS) class name text.
+		/// </summary>
+		/// <param name="compare">The comparer.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// 	<code>Div div = ie.Div(Find.ByClass(new StringContainsAndCaseInsensitiveComparer("Highlighted")));</code>
+		/// </example>
+		public static AttributeConstraint ByClass(ICompare compare)
+		{
+			return new AttributeConstraint(classNameAttribute, compare);
+		}
+
+#if NET20
+		/// <summary>
+		/// Finds an element by its (CSS) class name text.
+		/// </summary>
+		/// <param name="predicate">The predicate method to call to make the comparison.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+		/// 	<code>Div div = ie.Div(Find.ByClass(MyOwnCompareMethod));</code>
+		/// </example>
+		public static AttributeConstraint ByClass(Predicate<string> predicate)
+		{
+			return new AttributeConstraint(classNameAttribute, new PredicateComparer(predicate));
+		}
+#endif
 		
     /// <summary>
     /// Find a Label element by the id of the element it's linked with.

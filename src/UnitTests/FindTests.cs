@@ -522,5 +522,33 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
     }
+
+		[Test]
+		public void FindByClass()
+		{
+			AttributeConstraint value = Find.ByClass("highlighted");
+
+			Assert.IsInstanceOfType(typeof (AttributeConstraint), value, "Find.ByClass should return an AttributeConstraint");
+
+			const string classname = "classname";
+			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
+			Assert.AreEqual("highlighted", value.Value, "Wrong value");
+
+			Regex regex = new Regex("ghted$");
+			value = Find.ByClass(regex);
+			MockAttributeBag attributeBag = new MockAttributeBag(classname, "highlighted");
+
+			Assert.IsTrue(value.Compare(attributeBag), "Regex ghted$ should match");
+
+			value = Find.ByClass(new StringContainsAndCaseInsensitiveComparer("hLIg"));
+			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+
+#if NET20
+			_expectedPredicateCompareValue = "highlighted";
+			value = Find.ByClass(TestPredicateCompareMethod);
+			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
+#endif
+		}
+
   }
 }
