@@ -117,15 +117,11 @@ namespace WatiN.Core
 
     private void TypeAppendClearText(string value, bool append, bool clear)
     {
-      if (!Enabled) { throw new ElementDisabledException(ToString()); }
-      if (ReadOnly) { throw new ElementReadOnlyException(ToString()); }
-      
-      if (value != null)
-      {
-        value = value.Replace(Environment.NewLine, "\r");
-      }
+    	CheckIfTypingIsPossibleInThisTextField();
 
-      Highlight(true);
+    	value = ReplaceNewLineWithCorrectCharacters(value);
+
+    	Highlight(true);
       Focus();
       if (!append) Select();
       if (!append) setValue("");
@@ -140,7 +136,22 @@ namespace WatiN.Core
       catch {}
     }
 
-    public string Value
+  	private static string ReplaceNewLineWithCorrectCharacters(string value)
+  	{
+  		if (value != null)
+  		{
+  			value = value.Replace(Environment.NewLine, "\r");
+  		}
+  		return value;
+  	}
+
+  	private void CheckIfTypingIsPossibleInThisTextField()
+  	{
+  		if (!Enabled) { throw new ElementDisabledException(ToString()); }
+  		if (ReadOnly) { throw new ElementReadOnlyException(ToString()); }
+  	}
+
+  	public string Value
     {
       get { return textElement.Value; }
       // Don't use this set property internally (in this class) but use setValue. 

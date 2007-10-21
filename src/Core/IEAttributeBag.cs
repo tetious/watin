@@ -45,31 +45,19 @@ namespace WatiN.Core
     public string GetValue(string attributename)
     {
       string name = attributename.ToLower();
-      string value = null;
+      string value;
       
       if (name.Equals("href"))
       {
-        try
-        {
-          value = InternetExplorer.LocationURL;
-        }
-        catch{}
+      	value = GetUrl();
       }
       else if (name.Equals("title"))
       {
-        try
-        {
-          value = ((HTMLDocument) InternetExplorer.Document).title;
-        }
-        catch{}
+      	value = GetTitle();
       }
       else if (name.Equals("hwnd"))
       {
-        try
-        {
-          value = InternetExplorer.HWND.ToString();
-        }
-        catch{}
+      	value = GetHwnd();
       }
       else
       {
@@ -78,5 +66,35 @@ namespace WatiN.Core
       
       return value;
     }
+
+  	private string GetHwnd()
+  	{
+  		try
+  		{
+  			return InternetExplorer.HWND.ToString();
+  		}
+  		catch{}
+  		return null;
+  	}
+
+  	private string GetTitle()
+  	{
+  		try
+  		{
+  			return ((HTMLDocument) InternetExplorer.Document).title;
+  		}
+  		catch{}
+			return null;
+		}
+
+  	private string GetUrl()
+  	{
+  		try
+  		{
+  			return InternetExplorer.LocationURL;
+  		}
+  		catch{}
+  		return null;
+  	}
   }
 }

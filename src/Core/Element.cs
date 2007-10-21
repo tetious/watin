@@ -970,17 +970,10 @@ namespace WatiN.Core
         {
           try
           {
-            if (ihtmlElement.sourceIndex < 0)
-            {
-              _element = null;
-            }
-            else
-            {
-              if (ihtmlElement.offsetParent == null)
-              {
-                _element = null;
-              }
-            }
+          	if (IsElementStillAvailable(ihtmlElement) == false)
+          	{
+          		_element = null;
+          	}
           }
           catch
           {
@@ -992,7 +985,23 @@ namespace WatiN.Core
       return _element;
     }
 
-    private bool ElementAvailable()
+  	private bool IsElementStillAvailable(IHTMLElement ihtmlElement)
+  	{
+  		if (ihtmlElement.sourceIndex < 0)
+  		{
+  			return false;
+  		}
+  		else
+  		{
+  			if (ihtmlElement.offsetParent == null)
+  			{
+  				return false;
+  			}
+  		}
+			return true;
+  	}
+
+  	private bool ElementAvailable()
     {
       return _element != null;
     }
