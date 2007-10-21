@@ -89,33 +89,16 @@ namespace WatiN.Core.DialogHandlers
     /// <returns></returns>
     public override bool HandleDialog(Window window)
     {
-//      Logger.LogAction(">> HandleDialog");
-//      Logger.LogAction("hwnd = " + window.Hwnd.ToString());
-//      Logger.LogAction("style = " + window.Style.ToString());
-//      Logger.LogAction("stylehex = " + window.StyleInHex);
-//      Logger.LogAction("<< HandleDialog");
-
       // This if handles the File download dialog
       if (!HasHandledFileDownloadDialog && IsFileDownloadDialog(window))
       {
-
         window.ToFront();
         window.SetActivate();
 
         DownloadProgressDialog = new Window(window.ParentHwnd);
 			  
-        int buttonid = 0;
-
-        switch (_optionEnum)
-        {
-          case FileDownloadOptionEnum.Run: buttonid = 4426; break;
-          case FileDownloadOptionEnum.Open: buttonid = 4426; break;
-          case FileDownloadOptionEnum.Save: buttonid = 4427; break;
-          case FileDownloadOptionEnum.Cancel: buttonid = 2; break;
-        }
-
-        WinButton btn = new WinButton(buttonid, window.Hwnd);
-        btn.Click();
+				WinButton btn = GetButtonToPress(window);
+      	btn.Click();
 
         hasHandledFileDownloadDialog = !Exists(window);
 
@@ -152,7 +135,37 @@ namespace WatiN.Core.DialogHandlers
       return false;
     }
 
-    /// <summary>
+  	private WinButton GetButtonToPress(Window window)
+  	{
+  		WinButton btn = null;
+
+  		switch (_optionEnum)
+  		{
+  			case FileDownloadOptionEnum.Run: 
+  				btn = new WinButton(4426, window.Hwnd);
+  				break;
+          
+  			case FileDownloadOptionEnum.Open:
+  				btn = new WinButton(4426, window.Hwnd);
+  				break;
+
+  			case FileDownloadOptionEnum.Save: 
+  				btn = new WinButton(4427, window.Hwnd);
+  				if (!btn.Exists())
+  				{
+  					btn = new WinButton(4424, window.Hwnd);
+  				}
+  				break;
+
+  			case FileDownloadOptionEnum.Cancel: 
+  				btn = new WinButton(2, window.Hwnd);
+  				break;
+  		}
+
+  		return btn;
+  	}
+
+  	/// <summary>
     /// Determines whether the specified window is a file download dialog by
     /// checking the style property of the window. It should match
     /// <c>window.StyleInHex == "94C80AC4"</c>
