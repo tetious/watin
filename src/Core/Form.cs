@@ -18,83 +18,74 @@
 
 using System.Collections;
 using mshtml;
-
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML Form element.
-  /// </summary>
-  public class Form : ElementsContainer
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML Form element.
+	/// </summary>
+	public class Form : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("form"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("form"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Form(DomContainer ie, IHTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement)
-    {}
+		public Form(DomContainer ie, IHTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement) {}
 
-    public Form(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
+		public Form(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Form"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Form(Element element) : base(element, ElementTags)
-    {}
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Form"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Form(Element element) : base(element, ElementTags) {}
 
-    public void Submit()
-    {
-      Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");
+		public void Submit()
+		{
+			Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");
 
-      HtmlFormElement.submit();
-      WaitForComplete();
-    }
+			HtmlFormElement.submit();
+			WaitForComplete();
+		}
 
-    public override string ToString()
-    {
-      if (UtilityClass.IsNotNullOrEmpty(Title))
-      {
-        return Title;
-      }
-      if (UtilityClass.IsNotNullOrEmpty(Id))
-      {
-        return Id;
-      }
-      if (UtilityClass.IsNotNullOrEmpty(Name))
-      {
-        return Name;
-      }
-      return base.ToString ();
-    }
+		public override string ToString()
+		{
+			if (UtilityClass.IsNotNullOrEmpty(Title))
+			{
+				return Title;
+			}
+			if (UtilityClass.IsNotNullOrEmpty(Id))
+			{
+				return Id;
+			}
+			if (UtilityClass.IsNotNullOrEmpty(Name))
+			{
+				return Name;
+			}
+			return base.ToString();
+		}
 
-    public string Name
-    {
-      get
-      {
-        return HtmlFormElement.name;
-      }
-    }
+		public string Name
+		{
+			get { return HtmlFormElement.name; }
+		}
 
-    private IHTMLFormElement HtmlFormElement
-    {
-      get {
-        return (IHTMLFormElement)HTMLElement;
-      }
-    }
-  }
+		private IHTMLFormElement HtmlFormElement
+		{
+			get { return (IHTMLFormElement) HTMLElement; }
+		}
+	}
 }

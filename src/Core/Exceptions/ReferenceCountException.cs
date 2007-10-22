@@ -18,7 +18,5 @@
 
 namespace WatiN.Core.Exceptions
 {
-  public class ReferenceCountException : WatiNException
-  {
-  }
+	public class ReferenceCountException : WatiNException {}
 }

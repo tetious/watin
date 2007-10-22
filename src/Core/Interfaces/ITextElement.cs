@@ -16,41 +16,27 @@
 
 #endregion Copyright
 
-using WatiN.Core;
-
 namespace WatiN.Core.Interfaces
 {
-  /// <summary>
-  /// This interface is used by <see cref="TextField"/> to support both
-  /// HTML input element of type text password textarea hidden and 
-  /// for a HTML textarea element.
-  /// </summary>
-  internal interface ITextElement
-  {
-    int MaxLength
-    {
-      get;
-    }
+	/// <summary>
+	/// This interface is used by <see cref="TextField"/> to support both
+	/// HTML input element of type text password textarea hidden and 
+	/// for a HTML textarea element.
+	/// </summary>
+	internal interface ITextElement
+	{
+		int MaxLength { get; }
 
-    bool ReadOnly
-    {
-      get;
-    }
+		bool ReadOnly { get; }
 
-    string Value
-    {
-      get;
-    }
+		string Value { get; }
 
-    void Select();
-    
-    void SetValue(string value);
-    
-    string ToString();
+		void Select();
 
-    string Name
-    {
-      get;
-    }
-  }
+		void SetValue(string value);
+
+		string ToString();
+
+		string Name { get; }
+	}
 }

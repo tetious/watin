@@ -21,49 +21,44 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of <see cref="SelectList" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
-  /// </summary>
-  public class SelectListCollection : BaseElementCollection
-  {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SelectListCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="finder">The finder.</param>
-    public SelectListCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-    {}
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SelectListCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>
-    public SelectListCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-    {}
+	/// <summary>
+	/// A typed collection of <see cref="SelectList" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+	/// </summary>
+	public class SelectListCollection : BaseElementCollection
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SelectListCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="finder">The finder.</param>
+		public SelectListCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
-    /// <summary>
-    /// Gets the <see cref="SelectList"/> at the specified index.
-    /// </summary>
-    /// <value></value>
-    public SelectList this[int index] 
-    {
-      get
-      {
-        return new SelectList(domContainer,(IHTMLElement)Elements[index]);
-      } 
-    }
-    
-    public SelectListCollection Filter(AttributeConstraint findBy)
-    {      
-      return new SelectListCollection(domContainer, DoFilter(findBy));
-    }
-    
-    private static Element New(DomContainer domContainer, IHTMLElement element)
-    {
-      return new SelectList(domContainer, element);
-    }
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SelectListCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="elements">The elements.</param>
+		public SelectListCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+
+		/// <summary>
+		/// Gets the <see cref="SelectList"/> at the specified index.
+		/// </summary>
+		/// <value></value>
+		public SelectList this[int index]
+		{
+			get { return new SelectList(domContainer, (IHTMLElement) Elements[index]); }
+		}
+
+		public SelectListCollection Filter(AttributeConstraint findBy)
+		{
+			return new SelectListCollection(domContainer, DoFilter(findBy));
+		}
+
+		private static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new SelectList(domContainer, element);
+		}
+	}
 }

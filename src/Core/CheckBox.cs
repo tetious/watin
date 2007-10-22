@@ -21,51 +21,48 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML input element of type 
-  /// checkbox.
-  /// </summary>
-  public class CheckBox : RadioCheck
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML input element of type 
+	/// checkbox.
+	/// </summary>
+	public class CheckBox : RadioCheck
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("input", "checkbox"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("input", "checkbox"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CheckBox"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The domContainer.</param>
-    /// <param name="inputElement">The input element.</param>
-    public CheckBox(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, inputElement)
-    {}
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CheckBox"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The domContainer.</param>
-    /// <param name="finder">The finder.</param>
-    public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
-    {}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CheckBox"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The domContainer.</param>
+		/// <param name="inputElement">The input element.</param>
+		public CheckBox(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, inputElement) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="CheckBox"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public CheckBox(Element element) : base(element, ElementTags)
-    {}
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CheckBox"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The domContainer.</param>
+		/// <param name="finder">The finder.</param>
+		public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+
+		/// <summary>
+		/// Initialises a new instance of the <see cref="CheckBox"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public CheckBox(Element element) : base(element, ElementTags) {}
+	}
 }

@@ -16,32 +16,28 @@
 
 #endregion Copyright
 
+using System.Collections;
+using mshtml;
+
 namespace WatiN.Core
 {
-  using System.Collections;
-  using mshtml;
+	/// <summary>
+	/// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
+	/// </summary>
+	public class TableBodyCollection : BaseElementCollection
+	{
+		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
 
-  /// <summary>
-  /// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
-  /// </summary>
-  public class TableBodyCollection:BaseElementCollection
-  {
-    public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-    {
-    }
+		public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
-    public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-    {
-    }
+		public TableBody this[int index]
+		{
+			get { return new TableBody(domContainer, (IHTMLTableSection) Elements[index]); }
+		}
 
-    public TableBody this[int index]
-    {
-      get { return new TableBody(domContainer, (IHTMLTableSection) Elements[index]);}
-    }
-        
-    private static Element New(DomContainer domContainer, IHTMLElement element)
-    {
-      return new TableBody(domContainer, (IHTMLTableSection)element);
-    }
-  }
+		private static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new TableBody(domContainer, (IHTMLTableSection) element);
+		}
+	}
 }

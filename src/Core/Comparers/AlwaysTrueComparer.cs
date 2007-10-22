@@ -16,15 +16,15 @@
 
 #endregion Copyright
 
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core.Comparers
 {
-  using WatiN.Core.Interfaces;
-
-  public class AlwaysTrueComparer : ICompare
-  {
-    public bool Compare(string value)
-    {
-      return true;
-    }
-  }
+	public class AlwaysTrueComparer : ICompare
+	{
+		public bool Compare(string value)
+		{
+			return true;
+		}
+	}
 }

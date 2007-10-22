@@ -21,49 +21,44 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of <see cref="Para" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
-  /// </summary>
-  public class ParaCollection : BaseElementCollection
-  {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ParaCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="finder">The finder.</param>
-    public ParaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-    {}
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ParaCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>
-    public ParaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-    {}
+	/// <summary>
+	/// A typed collection of <see cref="Para" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+	/// </summary>
+	public class ParaCollection : BaseElementCollection
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ParaCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="finder">The finder.</param>
+		public ParaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
-    /// <summary>
-    /// Gets the <see cref="Para"/> at the specified index.
-    /// </summary>
-    /// <value></value>
-    public Para this[int index] 
-    {
-      get
-      {
-        return new Para(domContainer,(IHTMLParaElement)Elements[index]);
-      } 
-    }
-    
-    public ParaCollection Filter(AttributeConstraint findBy)
-    {      
-      return new ParaCollection(domContainer, DoFilter(findBy));
-    }
-    
-    private static Element New(DomContainer domContainer, IHTMLElement element)
-    {
-      return new Para(domContainer, (IHTMLParaElement)element);
-    }
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ParaCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="elements">The elements.</param>
+		public ParaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+
+		/// <summary>
+		/// Gets the <see cref="Para"/> at the specified index.
+		/// </summary>
+		/// <value></value>
+		public Para this[int index]
+		{
+			get { return new Para(domContainer, (IHTMLParaElement) Elements[index]); }
+		}
+
+		public ParaCollection Filter(AttributeConstraint findBy)
+		{
+			return new ParaCollection(domContainer, DoFilter(findBy));
+		}
+
+		private static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Para(domContainer, (IHTMLParaElement) element);
+		}
+	}
 }

@@ -16,60 +16,60 @@
 
 #endregion Copyright
 
+using NUnit.Framework;
+
 namespace WatiN.Core.UnitTests
 {
-  using NUnit.Framework;
+	public class BaseElementsTests : WatiNTest
+	{
+		protected IE ie;
+		private Settings backupSettings;
 
-  public class BaseElementsTests : WatiNTest
-  {
-    protected IE ie;
-    private Settings backupSettings;
+		[TestFixtureSetUp]
+		public void FixtureSetup()
+		{
+			backupSettings = IE.Settings.Clone();
+			IE.Settings = new StealthSettings();
 
-    [TestFixtureSetUp]
-    public void FixtureSetup()
-    {
-      backupSettings = IE.Settings.Clone();
-      IE.Settings = new StealthSettings();
-      
-      ie = new IE(MainURI);
-    }
+			ie = new IE(MainURI);
+		}
 
-    [TestFixtureTearDown]
-    public void FixtureTearDown()
-    {
-      IE.Settings = backupSettings;
-      ie.Close();
-    }
+		[TestFixtureTearDown]
+		public void FixtureTearDown()
+		{
+			IE.Settings = backupSettings;
+			ie.Close();
+		}
 
-    [SetUp]
-    public void TestSetUp()
-    {
-      IE.Settings.Reset();
-      if (!ie.Uri.Equals(MainURI))
-      {
-        ie.GoTo(MainURI);
-      }
-    }
-  }
+		[SetUp]
+		public void TestSetUp()
+		{
+			IE.Settings.Reset();
+			if (!ie.Uri.Equals(MainURI))
+			{
+				ie.GoTo(MainURI);
+			}
+		}
+	}
 
-  public class StealthSettings : Settings
-  {
-    public StealthSettings() : base()
-    {
-      SetDefaults();
-    }
+	public class StealthSettings : Settings
+	{
+		public StealthSettings() : base()
+		{
+			SetDefaults();
+		}
 
-    public override void Reset()
-    {
-      SetDefaults();
-    }
+		public override void Reset()
+		{
+			SetDefaults();
+		}
 
-    private void SetDefaults()
-    {
-      base.Reset();
-      AutoMoveMousePointerToTopLeft = false;
-      HighLightElement = false;
-      MakeNewIeInstanceVisible = false;
-    }
-  }
+		private void SetDefaults()
+		{
+			base.Reset();
+			AutoMoveMousePointerToTopLeft = false;
+			HighLightElement = false;
+			MakeNewIeInstanceVisible = false;
+		}
+	}
 }

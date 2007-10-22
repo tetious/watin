@@ -21,38 +21,35 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML para element.
-  /// </summary>
-  public class Para : ElementsContainer
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML para element.
+	/// </summary>
+	public class Para : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("p"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("p"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Para(DomContainer ie, IHTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement)
-    {}
+		public Para(DomContainer ie, IHTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement) {}
 
-    public Para(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
-    
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Para"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Para(Element element) : base(element, ElementTags)
-    {}
-  }
+		public Para(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Para"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Para(Element element) : base(element, ElementTags) {}
+	}
 }

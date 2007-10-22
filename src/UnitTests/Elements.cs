@@ -16,50 +16,50 @@
 
 #endregion Copyright
 
+using NUnit.Framework;
+
 namespace WatiN.Core.UnitTests
 {
-  using NUnit.Framework;
+	[TestFixture]
+	public class Elements : BaseElementsTests
+	{
+		[Test]
+		public void ButtonAndOthersFindByShouldNeverThrowInvalidAttributeException()
+		{
+			Button button = ie.Button(Find.By("noattribute", "novalue"));
+			Assert.IsFalse(button.Exists);
+		}
 
-  [TestFixture]
-  public class Elements : BaseElementsTests
-  {
-    [Test]
-    public void ButtonAndOthersFindByShouldNeverThrowInvalidAttributeException()
-    {
-      Button button = ie.Button(Find.By("noattribute", "novalue"));
-      Assert.IsFalse(button.Exists);
-    }
+		[Test]
+		public void LinkFindNonExistingElementWithoutElementNotFoundException()
+		{
+			ie.Link(Find.ById("noexistinglinkid"));
+		}
 
-    [Test]
-    public void LinkFindNonExistingElementWithoutElementNotFoundException()
-    {
-      ie.Link(Find.ById("noexistinglinkid"));
-    }
+		[Test]
+		public void FindingElementByCustomAttribute()
+		{
+			Assert.IsTrue(ie.Table(Find.By("myattribute", "myvalue")).Exists);
+		}
 
-    [Test]
-    public void FindingElementByCustomAttribute()
-    {
-      Assert.IsTrue(ie.Table(Find.By("myattribute", "myvalue")).Exists);
-    }
+		[Test]
+		public void FindBySourceIndex()
+		{
+			Button button = ie.Button(Find.By("sourceIndex", "13"));
 
-    [Test]
-    public void FindBySourceIndex()
-    {
-      Button button = ie.Button(Find.By("sourceIndex", "13"));
+			Assert.AreEqual("13", button.GetAttributeValue("sourceIndex"));
+		}
 
-      Assert.AreEqual("13", button.GetAttributeValue("sourceIndex"));
-    }
+		[Test]
+		public void FindByIndex()
+		{
+			Assert.AreEqual("popupid", ie.Button(Find.ByIndex(0)).Id);
+		}
 
-    [Test]
-    public void FindByIndex()
-    {
-      Assert.AreEqual("popupid", ie.Button(Find.ByIndex(0)).Id);
-    }
-
-    [Test]
-    public void FindByShouldPassEvenIfAttributeValueOfHTMLELementIsNull()
-    {
-      Assert.IsFalse(ie.Button(Find.By("classname", "nullstring")).Exists);
-    }
-  }
+		[Test]
+		public void FindByShouldPassEvenIfAttributeValueOfHTMLELementIsNull()
+		{
+			Assert.IsFalse(ie.Button(Find.By("classname", "nullstring")).Exists);
+		}
+	}
 }

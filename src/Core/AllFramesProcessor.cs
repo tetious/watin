@@ -16,67 +16,67 @@
 
 #endregion Copyright
 
+using System.Collections;
+using mshtml;
+using SHDocVw;
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core
 {
-  using System.Collections;
-  using mshtml;
-  using SHDocVw;
-  using WatiN.Core.Interfaces;
+	internal class AllFramesProcessor : IWebBrowser2Processor
+	{
+		public ArrayList elements;
 
-  internal class AllFramesProcessor : IWebBrowser2Processor
-  {
-    public ArrayList elements;
-    
-    private HTMLDocument htmlDocument;
-    private IHTMLElementCollection frameElements;
-    private int index = 0;
-    private DomContainer ie;
-    
-    public AllFramesProcessor(DomContainer ie, HTMLDocument htmlDocument)
-    {
-      elements = new ArrayList();
+		private HTMLDocument htmlDocument;
+		private IHTMLElementCollection frameElements;
+		private int index = 0;
+		private DomContainer ie;
 
-      frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.FrameTagName);
-      
-      // If the current document doesn't contain FRAME elements, it then
-      // might contain IFRAME elements.
-      if (frameElements.length == 0)
-      {
-        frameElements = (IHTMLElementCollection)htmlDocument.all.tags("IFRAME");
-      }
+		public AllFramesProcessor(DomContainer ie, HTMLDocument htmlDocument)
+		{
+			elements = new ArrayList();
 
-      this.ie = ie;
-      this.htmlDocument = htmlDocument;  
-    }
+			frameElements = (IHTMLElementCollection) htmlDocument.all.tags(ElementsSupport.FrameTagName);
 
-    public HTMLDocument HTMLDocument()
-    {
-      return htmlDocument;
-    }
+			// If the current document doesn't contain FRAME elements, it then
+			// might contain IFRAME elements.
+			if (frameElements.length == 0)
+			{
+				frameElements = (IHTMLElementCollection) htmlDocument.all.tags("IFRAME");
+			}
 
-    public void Process(IWebBrowser2 webBrowser2)
-    {
-      // Get the frame element from the parent document
-      IHTMLElement frameElement = (IHTMLElement)frameElements.item(index, null);
-            
-      string frameName = null;
-      string frameId = null;
+			this.ie = ie;
+			this.htmlDocument = htmlDocument;
+		}
 
-      if (frameElement != null)
-      {
-        frameId = frameElement.id;
-        frameName = frameElement.getAttribute("name", 0) as string;
-      }
+		public HTMLDocument HTMLDocument()
+		{
+			return htmlDocument;
+		}
 
-      Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
-      elements.Add(frame);
-                
-      index++;
-    }
+		public void Process(IWebBrowser2 webBrowser2)
+		{
+			// Get the frame element from the parent document
+			IHTMLElement frameElement = (IHTMLElement) frameElements.item(index, null);
 
-    public bool Continue()
-    {
-      return true;
-    }
-  }
+			string frameName = null;
+			string frameId = null;
+
+			if (frameElement != null)
+			{
+				frameId = frameElement.id;
+				frameName = frameElement.getAttribute("name", 0) as string;
+			}
+
+			Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
+			elements.Add(frame);
+
+			index++;
+		}
+
+		public bool Continue()
+		{
+			return true;
+		}
+	}
 }

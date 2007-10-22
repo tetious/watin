@@ -21,67 +21,63 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML img element.
-  /// </summary>
-  public class Image : Element
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML img element.
+	/// </summary>
+	public class Image : Element
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("img"));
-          elementTags.Add(new ElementTag("input", "image"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("img"));
+					elementTags.Add(new ElementTag("input", "image"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Image(DomContainer ie, IHTMLElement imgElement) : base(ie, imgElement)
-    {}
+		public Image(DomContainer ie, IHTMLElement imgElement) : base(ie, imgElement) {}
 
-    public Image(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
-    
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Image"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Image(Element element) : base(element, ElementTags)
-    {}
+		public Image(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    public string Src
-    {
-      get
-      {
-        return GetAttributeValue("src");
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Image"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Image(Element element) : base(element, ElementTags) {}
+
+		public string Src
+		{
+			get
+			{
+				return GetAttributeValue("src");
 //        return ((IHTMLImgElement) HTMLElement).src;
-      }
-    }
-    
-    public string Alt
-    {
-      get
-      {
-        return GetAttributeValue("alt");
-//        return ((IHTMLImgElement) HTMLElement).alt;
-      }
-    }
-    
-    public string Name
-    {
-      get
-      {
-        return GetAttributeValue("name");
-//        return ((IHTMLImgElement) HTMLElement).name;
-      }
-    }
+			}
+		}
 
-  }
+		public string Alt
+		{
+			get
+			{
+				return GetAttributeValue("alt");
+//        return ((IHTMLImgElement) HTMLElement).alt;
+			}
+		}
+
+		public string Name
+		{
+			get
+			{
+				return GetAttributeValue("name");
+//        return ((IHTMLImgElement) HTMLElement).name;
+			}
+		}
+	}
 }

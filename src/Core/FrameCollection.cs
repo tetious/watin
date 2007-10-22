@@ -17,88 +17,93 @@
 #endregion Copyright
 
 using System.Collections;
-
 using mshtml;
-using SHDocVw;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
-  /// </summary>
-  public class FrameCollection : IEnumerable
-  {
-    ArrayList elements;
-		
-    public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument) 
-    {
-      AllFramesProcessor processor = new AllFramesProcessor(ie, (HTMLDocument)htmlDocument);
-      
-      NativeMethods.EnumIWebBrowser2Interfaces(processor);
-      
-      elements = processor.elements;
-    }
+	/// <summary>
+	/// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
+	/// </summary>
+	public class FrameCollection : IEnumerable
+	{
+		private ArrayList elements;
 
-    public int Length { get { return elements.Count; } }
+		public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument)
+		{
+			AllFramesProcessor processor = new AllFramesProcessor(ie, (HTMLDocument) htmlDocument);
 
-    public Frame this[int index] { get { return (Frame)elements[index]; } }
+			NativeMethods.EnumIWebBrowser2Interfaces(processor);
 
-    public bool Exists(AttributeConstraint findBy)
-    {
-      foreach (Frame frame in elements)
-      {
-        if (findBy.Compare(frame))
-        {
-          // Return
-          return true;
-        }
-      }
-      
-      return false;
-    }
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-    {
-      return new Enumerator(elements);
-    }
+			elements = processor.elements;
+		}
 
-    IEnumerator IEnumerable.GetEnumerator() 
-    {
-      return GetEnumerator();
-    }
+		public int Length
+		{
+			get { return elements.Count; }
+		}
 
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-    {
-      ArrayList children;
-      int index;
-      public Enumerator(ArrayList children) 
-      {
-        this.children = children;
-        Reset();
-      }
+		public Frame this[int index]
+		{
+			get { return (Frame) elements[index]; }
+		}
 
-      public void Reset() 
-      {
-        index = -1;
-      }
+		public bool Exists(AttributeConstraint findBy)
+		{
+			foreach (Frame frame in elements)
+			{
+				if (findBy.Compare(frame))
+				{
+					// Return
+					return true;
+				}
+			}
 
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < children.Count;
-      }
+			return false;
+		}
 
-      public Frame Current 
-      {
-        get 
-        {
-          return (Frame)children[index];
-        }
-      }
+		/// <exclude />
+		public Enumerator GetEnumerator()
+		{
+			return new Enumerator(elements);
+		}
 
-      object IEnumerator.Current { get { return Current; } }
-    }
-  }
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		/// <exclude />
+		public class Enumerator : IEnumerator
+		{
+			private ArrayList children;
+			private int index;
+
+			public Enumerator(ArrayList children)
+			{
+				this.children = children;
+				Reset();
+			}
+
+			public void Reset()
+			{
+				index = -1;
+			}
+
+			public bool MoveNext()
+			{
+				++index;
+				return index < children.Count;
+			}
+
+			public Frame Current
+			{
+				get { return (Frame) children[index]; }
+			}
+
+			object IEnumerator.Current
+			{
+				get { return Current; }
+			}
+		}
+	}
 }

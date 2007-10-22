@@ -21,39 +21,35 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML span element.
-  /// </summary>
-  public class Span : ElementsContainer
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML span element.
+	/// </summary>
+	public class Span : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("span"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("span"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Span(DomContainer ie, IHTMLSpanElement htmlSpanElement) : base(ie, (IHTMLElement) htmlSpanElement)
-    {}
-    
-    public Span(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
-    
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Span"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Span(Element element) : base(element, ElementTags)
-    {}
+		public Span(DomContainer ie, IHTMLSpanElement htmlSpanElement) : base(ie, (IHTMLElement) htmlSpanElement) {}
 
-  }
+		public Span(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Span"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Span(Element element) : base(element, ElementTags) {}
+	}
 }

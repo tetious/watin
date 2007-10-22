@@ -21,49 +21,44 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
-  /// </summary>
-  public class ElementCollection : BaseElementCollection
-  {    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ElementCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="finder">The finder.</param>
-    public ElementCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-    {}
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ElementCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>
-    public ElementCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-    {}
+	/// <summary>
+	/// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+	/// </summary>
+	public class ElementCollection : BaseElementCollection
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="finder">The finder.</param>
+		public ElementCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
-    /// <summary>
-    /// Gets the <see cref="Element"/> at the specified index.
-    /// </summary>
-    /// <value></value>
-    public Element this[int index] 
-    {
-      get
-      {
-        return New(domContainer, (IHTMLElement) Elements[index]);
-      } 
-    }
-    
-    public ElementCollection Filter(AttributeConstraint findBy)
-    {      
-      return new ElementCollection(domContainer, DoFilter(findBy));
-    }
-    
-    private static Element New(DomContainer domContainer, IHTMLElement element)
-    {
-      return Element.GetTypedElement(domContainer, element);
-    }
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="elements">The elements.</param>
+		public ElementCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+
+		/// <summary>
+		/// Gets the <see cref="Element"/> at the specified index.
+		/// </summary>
+		/// <value></value>
+		public Element this[int index]
+		{
+			get { return New(domContainer, (IHTMLElement) Elements[index]); }
+		}
+
+		public ElementCollection Filter(AttributeConstraint findBy)
+		{
+			return new ElementCollection(domContainer, DoFilter(findBy));
+		}
+
+		private static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return Element.GetTypedElement(domContainer, element);
+		}
+	}
 }

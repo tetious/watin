@@ -20,19 +20,19 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Logging
 {
-  /// <summary>
-  /// This class provides some basic means to write actions to a logger class.
-  /// WatiN uses this class to log which actions are done while driving Internet
-  /// Explorer.
-  /// </summary>
-  public sealed class Logger
-  {
-    private static ILogWriter mLogWriter;
+	/// <summary>
+	/// This class provides some basic means to write actions to a logger class.
+	/// WatiN uses this class to log which actions are done while driving Internet
+	/// Explorer.
+	/// </summary>
+	public sealed class Logger
+	{
+		private static ILogWriter mLogWriter;
 
-    /// <summary>
-    /// Prevent creating an instance of this class (contains only static members)
-    /// </summary>
-    private Logger(){}
+		/// <summary>
+		/// Prevent creating an instance of this class (contains only static members)
+		/// </summary>
+		private Logger() {}
 
 		/// <summary>
 		/// Logs the action. It replaces the format item(s) in the 
@@ -53,30 +53,26 @@ namespace WatiN.Core.Logging
 		/// </code>
 		/// 
 		/// </example>
-    public static void LogAction(string message, params object[] args)
-    {
-      LogWriter.LogAction(string.Format(message, args));
-    }
+		public static void LogAction(string message, params object[] args)
+		{
+			LogWriter.LogAction(string.Format(message, args));
+		}
 
-    /// <summary>
-    /// Gets or sets the log writer.
-    /// </summary>
-    /// <value>The log writer.</value>
-    public static ILogWriter LogWriter
-    {
-      get
-      {
-        if (mLogWriter == null)
-        {
-          mLogWriter = new NoLog();
-        }
-        return mLogWriter;
-      }
-      set
-      {
-        mLogWriter = value;
-      }
-    }
-
-  }
+		/// <summary>
+		/// Gets or sets the log writer.
+		/// </summary>
+		/// <value>The log writer.</value>
+		public static ILogWriter LogWriter
+		{
+			get
+			{
+				if (mLogWriter == null)
+				{
+					mLogWriter = new NoLog();
+				}
+				return mLogWriter;
+			}
+			set { mLogWriter = value; }
+		}
+	}
 }

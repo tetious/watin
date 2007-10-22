@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections;
 using mshtml;
 
@@ -49,31 +48,28 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="element">The element.</param>
-		public Area(DomContainer domContainer, IHTMLAreaElement element) : base(domContainer, element)
-		{}
-        
+		public Area(DomContainer domContainer, IHTMLAreaElement element) : base(domContainer, element) {}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area" /> class.
 		/// Mainly used by WatiN internally.
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="elementFinder">The element finder.</param>
-		public Area(DomContainer domContainer, ElementFinder elementFinder) : base(domContainer, elementFinder)
-		{}
+		public Area(DomContainer domContainer, ElementFinder elementFinder) : base(domContainer, elementFinder) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area"/> class based on <paramref name="element"/>.
 		/// </summary>
 		/// <param name="element">The element.</param>
-		public Area(Element element) : base(element, ElementTags)
-		{}
+		public Area(Element element) : base(element, ElementTags) {}
 
 		/// <summary>
 		/// Gets the alt-text of the area element.
 		/// </summary>
 		public string Alt
 		{
-			get { return ((IHTMLAreaElement)HTMLElement).alt; }
+			get { return ((IHTMLAreaElement) HTMLElement).alt; }
 		}
 
 		/// <summary>
@@ -81,7 +77,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Url
 		{
-			get { return ((IHTMLAreaElement)HTMLElement).href; }
+			get { return ((IHTMLAreaElement) HTMLElement).href; }
 		}
 
 		/// <summary>
@@ -89,7 +85,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Coords
 		{
-			get { return ((IHTMLAreaElement)HTMLElement).coords; }
+			get { return ((IHTMLAreaElement) HTMLElement).coords; }
 		}
 
 		/// <summary>
@@ -97,7 +93,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Shape
 		{
-			get { return ((IHTMLAreaElement)HTMLElement).shape; }
+			get { return ((IHTMLAreaElement) HTMLElement).shape; }
 		}
 	}
 }

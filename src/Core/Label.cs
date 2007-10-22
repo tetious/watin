@@ -21,48 +21,45 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML label element.
-  /// </summary>
-  public class Label : ElementsContainer
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML label element.
+	/// </summary>
+	public class Label : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("label"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("label"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Label(DomContainer ie, IHTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement)
-    {}
-    
-    public Label(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
+		public Label(DomContainer ie, IHTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Label"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Label(Element element) : base(element, ElementTags)
-    {}
+		public Label(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    public string AccessKey
-    {
-      get {return ((IHTMLLabelElement)HTMLElement).accessKey; }
-    }
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Label"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Label(Element element) : base(element, ElementTags) {}
 
-    public string For
-    {
-      get {return ((IHTMLLabelElement)HTMLElement).htmlFor; }
-    }
-  }
+		public string AccessKey
+		{
+			get { return ((IHTMLLabelElement) HTMLElement).accessKey; }
+		}
+
+		public string For
+		{
+			get { return ((IHTMLLabelElement) HTMLElement).htmlFor; }
+		}
+	}
 }

@@ -19,79 +19,71 @@
 using System.Collections;
 using System.IO;
 using mshtml;
-using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML input element 
-  /// of type file. 
-  /// </summary>
-  public class FileUpload : Element
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML input element 
+	/// of type file. 
+	/// </summary>
+	public class FileUpload : Element
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("input", "file"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("input", "file"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public FileUpload(DomContainer domContainer, IHTMLInputFileElement inputFileElement): base(domContainer, inputFileElement)
-    {}
-    
-    public FileUpload(DomContainer domContainer, ElementFinder finder): base(domContainer, finder)
-    {}
+		public FileUpload(DomContainer domContainer, IHTMLInputFileElement inputFileElement) : base(domContainer, inputFileElement) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="FileUpload"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public FileUpload(Element element) : base(element, ElementTags)
-    {}
+		public FileUpload(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
 
-    public string FileName
-    {
-      get
-      {
-        return IHTMLInputFileElement.value;
-      }
-    }
+		/// <summary>
+		/// Initialises a new instance of the <see cref="FileUpload"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public FileUpload(Element element) : base(element, ElementTags) {}
 
-    public void Set(string fileName)
-    { 
-      
-      FileInfo info = new FileInfo(fileName);
-      if (!info.Exists)
-      {
-        throw new FileNotFoundException("File does not exist", fileName);
-      }
+		public string FileName
+		{
+			get { return IHTMLInputFileElement.value; }
+		}
 
-      FileUploadDialogHandler uploadDialogHandler = new FileUploadDialogHandler(fileName);
-      DomContainer.AddDialogHandler(uploadDialogHandler);
+		public void Set(string fileName)
+		{
+			FileInfo info = new FileInfo(fileName);
+			if (!info.Exists)
+			{
+				throw new FileNotFoundException("File does not exist", fileName);
+			}
 
-      try
-      {
-        Click();
-      }
-      finally
-      {
-        DomContainer.RemoveDialogHandler(uploadDialogHandler);
-      }      
-    }
+			FileUploadDialogHandler uploadDialogHandler = new FileUploadDialogHandler(fileName);
+			DomContainer.AddDialogHandler(uploadDialogHandler);
 
-    private IHTMLInputFileElement IHTMLInputFileElement
-    {
-      get { return ((IHTMLInputFileElement) HTMLElement); }
-    }
-  }
+			try
+			{
+				Click();
+			}
+			finally
+			{
+				DomContainer.RemoveDialogHandler(uploadDialogHandler);
+			}
+		}
+
+		private IHTMLInputFileElement IHTMLInputFileElement
+		{
+			get { return ((IHTMLInputFileElement) HTMLElement); }
+		}
+	}
 }

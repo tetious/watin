@@ -18,10 +18,6 @@
 
 namespace WatiN.Core.Comparers
 {
-  using System;
-  using System.Text.RegularExpressions;
-  using WatiN.Core.Interfaces;
-
 #if NET20
 	public class PredicateComparer : BaseComparer
 	{
@@ -36,6 +32,6 @@ namespace WatiN.Core.Comparers
 		{
 			return _predicate.Invoke(value);
 		}
-	}	
-	#endif
+	}
+#endif
 }

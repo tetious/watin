@@ -18,8 +18,8 @@
 
 namespace WatiN.Core.Interfaces
 {
-  public interface IWait
-  {
-    void DoWait();
-  }
+	public interface IWait
+	{
+		void DoWait();
+	}
 }

@@ -18,53 +18,49 @@
 
 using System.Collections;
 using mshtml;
-
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// Base class for <see cref="CheckBox"/> and <see cref="RadioButton"/> provides
-  /// support for common functionality.
-  /// </summary>
-  public class RadioCheck : Element
-  {
-    public RadioCheck(DomContainer ie, IHTMLInputElement inputElement) : base(ie, (IHTMLElement) inputElement)
-    {}
-    
-    public RadioCheck(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
+	/// <summary>
+	/// Base class for <see cref="CheckBox"/> and <see cref="RadioButton"/> provides
+	/// support for common functionality.
+	/// </summary>
+	public class RadioCheck : Element
+	{
+		public RadioCheck(DomContainer ie, IHTMLInputElement inputElement) : base(ie, (IHTMLElement) inputElement) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="RadioCheck"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    /// <param name="elementTags">The element tags the element should match with.</param>
-    public RadioCheck(Element element, ArrayList elementTags) : base(element, elementTags)
-    {}
+		public RadioCheck(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    public bool Checked
-    {
-      get { return inputElement.@checked; }
-      set
-      {
-        Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");
-        
-        Highlight(true);
-        inputElement.@checked = value;
-        FireEvent("onClick");
-        Highlight(false);
-      }
-    }
+		/// <summary>
+		/// Initialises a new instance of the <see cref="RadioCheck"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		/// <param name="elementTags">The element tags the element should match with.</param>
+		public RadioCheck(Element element, ArrayList elementTags) : base(element, elementTags) {}
 
-    public override string ToString()
-    {
-      return Id;
-    }
+		public bool Checked
+		{
+			get { return inputElement.@checked; }
+			set
+			{
+				Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");
 
-    private IHTMLInputElement inputElement
-    {
-      get { return ((IHTMLInputElement) HTMLElement); }
-    }
-  }
+				Highlight(true);
+				inputElement.@checked = value;
+				FireEvent("onClick");
+				Highlight(false);
+			}
+		}
+
+		public override string ToString()
+		{
+			return Id;
+		}
+
+		private IHTMLInputElement inputElement
+		{
+			get { return ((IHTMLInputElement) HTMLElement); }
+		}
+	}
 }

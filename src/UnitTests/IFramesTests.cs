@@ -16,114 +16,112 @@
 
 #endregion Copyright
 
+using System.Collections;
+using NUnit.Framework;
+using WatiN.Core.Exceptions;
+
 namespace WatiN.Core.UnitTests
 {
-  using System.Collections;
-  using NUnit.Framework;
-  using WatiN.Core.Exceptions;
+	[TestFixture]
+	public class IFramesTests : WatiNTest
+	{
+		private IE ie;
 
-  [TestFixture]
-  public class IFramesTests : WatiNTest
-  {
-    private IE ie;
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			ie = new IE(IFramesMainURI);
+		}
 
-    [TestFixtureSetUp]
-    public void Setup()
-    {
-      ie = new IE(IFramesMainURI);
-    }
+		[TestFixtureTearDown]
+		public void tearDown()
+		{
+			ie.Close();
+		}
 
-    [TestFixtureTearDown]
-    public void tearDown()
-    {
-      ie.Close();
-    }
+		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame by id with value 'NonExistingIFrameID'")]
+		public void ExpectFrameNotFoundException()
+		{
+			ie.Frame(Find.ById("NonExistingIFrameID"));
+		}
 
-    [Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame by id with value 'NonExistingIFrameID'")]
-    public void ExpectFrameNotFoundException()
-    {
-      ie.Frame(Find.ById("NonExistingIFrameID"));
-    }
+		[Test]
+		public void LeftFrame()
+		{
+			Frame leftFrame = ie.Frame(Find.ByName("left"));
+			Assert.IsNotNull(leftFrame, "Frame expected");
+			Assert.AreEqual("left", leftFrame.Name);
+			Assert.AreEqual(null, leftFrame.Id);
 
-    [Test]
-    public void LeftFrame()
-    {
-      Frame leftFrame = ie.Frame(Find.ByName("left"));
-      Assert.IsNotNull(leftFrame, "Frame expected");
-      Assert.AreEqual("left", leftFrame.Name);
-      Assert.AreEqual(null, leftFrame.Id);
+			leftFrame = ie.Frame(Find.ByUrl(IFramesLeftURI));
+			Assert.AreEqual("left", leftFrame.Name);
+		}
 
-      leftFrame = ie.Frame(Find.ByUrl(IFramesLeftURI));
-      Assert.AreEqual("left", leftFrame.Name);
-    }
+		[Test]
+		public void MiddleFrame()
+		{
+			Frame middleFrame = ie.Frame(Find.ByName("middle"));
+			Assert.IsNotNull(middleFrame, "Frame expected");
+			Assert.AreEqual("middle", middleFrame.Name);
+			Assert.AreEqual("iframe2", middleFrame.Id);
 
-    [Test]
-    public void MiddleFrame()
-    {
-      Frame middleFrame = ie.Frame(Find.ByName("middle"));
-      Assert.IsNotNull(middleFrame, "Frame expected");
-      Assert.AreEqual("middle", middleFrame.Name);
-      Assert.AreEqual("iframe2", middleFrame.Id);
+			middleFrame = ie.Frame(Find.ByUrl(IFramesMiddleURI));
+			Assert.AreEqual("middle", middleFrame.Name);
 
-      middleFrame = ie.Frame(Find.ByUrl(IFramesMiddleURI));
-      Assert.AreEqual("middle", middleFrame.Name);
+			middleFrame = ie.Frame(Find.ById("iframe2"));
+			Assert.AreEqual("middle", middleFrame.Name);
+		}
 
-      middleFrame = ie.Frame(Find.ById("iframe2"));
-      Assert.AreEqual("middle", middleFrame.Name);
-    }
+		[Test]
+		public void RightFrame()
+		{
+			Frame rightFrame = ie.Frame(Find.ByUrl(IFramesRightURI));
+			Assert.IsNotNull(rightFrame, "Frame expected");
+			Assert.AreEqual(null, rightFrame.Name);
+			Assert.AreEqual(null, rightFrame.Id);
+		}
 
-    [Test]
-    public void RightFrame()
-    {
-      Frame rightFrame = ie.Frame(Find.ByUrl(IFramesRightURI));
-      Assert.IsNotNull(rightFrame, "Frame expected");
-      Assert.AreEqual(null, rightFrame.Name);
-      Assert.AreEqual(null, rightFrame.Id);
-    }
+		[Test]
+		public void Frames()
+		{
+			const int expectedFramesCount = 3;
+			FrameCollection frames = ie.Frames;
 
-    [Test]
-    public void Frames()
-    {
-      const int expectedFramesCount = 3;
-      FrameCollection frames = ie.Frames;
+			Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
-      Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
+			// Collection items by index
+			Assert.AreEqual("left", frames[0].Name);
+			Assert.AreEqual("middle", frames[1].Name);
+			Assert.AreEqual(null, frames[2].Name);
 
-      // Collection items by index
-      Assert.AreEqual("left", frames[0].Name);
-      Assert.AreEqual("middle", frames[1].Name);
-      Assert.AreEqual(null, frames[2].Name);
+			IEnumerable frameEnumerable = frames;
+			IEnumerator frameEnumerator = frameEnumerable.GetEnumerator();
 
-      IEnumerable frameEnumerable = frames;
-      IEnumerator frameEnumerator = frameEnumerable.GetEnumerator();
+			// Collection iteration and comparing the result with Enumerator
+			int count = 0;
+			foreach (Frame frame in frames)
+			{
+				frameEnumerator.MoveNext();
+				object enumFrame = frameEnumerator.Current;
 
-      // Collection iteration and comparing the result with Enumerator
-      int count = 0;
-      foreach (Frame frame in frames)
-      {
-        frameEnumerator.MoveNext();
-        object enumFrame = frameEnumerator.Current;
+				Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
+				Assert.AreEqual(frame.Html, ((Frame) enumFrame).Html, "foreach and IEnumator don't act the same.");
+				++count;
+			}
 
-        Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
-        Assert.AreEqual(frame.Html, ((Frame) enumFrame).Html, "foreach and IEnumator don't act the same.");
-        ++count;
-      }
+			Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
+			Assert.AreEqual(expectedFramesCount, count);
+		}
 
-      Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
-      Assert.AreEqual(expectedFramesCount, count);
-    }
-
-    [Test] //, Ignore("An Ebay IFrame never reaches complete status"), Category("InternetConnectionNeeded")]
-      public void EbayTest()
-    {
-      // ebay seems to embed some active-x(?) component
-      // which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces
-      // Changed the code to release the pUnk.
-      // This test should ensure propper working untill I'm able to 
-      // create a better test.
-      using (new IE(EbayUrl))
-      {
-      }
-    }
-  }
+		[Test] //, Ignore("An Ebay IFrame never reaches complete status"), Category("InternetConnectionNeeded")]
+			public void EbayTest()
+		{
+			// ebay seems to embed some active-x(?) component
+			// which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces
+			// Changed the code to release the pUnk.
+			// This test should ensure propper working untill I'm able to 
+			// create a better test.
+			using (new IE(EbayUrl)) {}
+		}
+	}
 }

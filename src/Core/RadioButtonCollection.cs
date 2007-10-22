@@ -21,49 +21,44 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of <see cref="RadioButton" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
-  /// </summary>
-  public class RadioButtonCollection : BaseElementCollection
-  {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="finder">The finder.</param>
-    public RadioButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-    {}
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="elements">The elements.</param>
-    public RadioButtonCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-    {}
+	/// <summary>
+	/// A typed collection of <see cref="RadioButton" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+	/// </summary>
+	public class RadioButtonCollection : BaseElementCollection
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="finder">The finder.</param>
+		public RadioButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
-    /// <summary>
-    /// Gets the <see cref="RadioButton"/> at the specified index.
-    /// </summary>
-    /// <value></value>
-    public RadioButton this[int index] 
-    {
-      get
-      {
-        return new RadioButton(domContainer,(IHTMLInputElement)Elements[index]);
-      } 
-    }
-    
-    public RadioButtonCollection Filter(AttributeConstraint findBy)
-    {      
-      return new RadioButtonCollection(domContainer, DoFilter(findBy));
-    }
-    
-    private static Element New(DomContainer domContainer, IHTMLElement element)
-    {
-      return new RadioButton(domContainer, (IHTMLInputElement)element);
-    }
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="elements">The elements.</param>
+		public RadioButtonCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+
+		/// <summary>
+		/// Gets the <see cref="RadioButton"/> at the specified index.
+		/// </summary>
+		/// <value></value>
+		public RadioButton this[int index]
+		{
+			get { return new RadioButton(domContainer, (IHTMLInputElement) Elements[index]); }
+		}
+
+		public RadioButtonCollection Filter(AttributeConstraint findBy)
+		{
+			return new RadioButtonCollection(domContainer, DoFilter(findBy));
+		}
+
+		private static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new RadioButton(domContainer, (IHTMLInputElement) element);
+		}
+	}
 }

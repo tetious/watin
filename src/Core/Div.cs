@@ -21,51 +21,47 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML div element.
-  /// </summary>
-  public class Div : ElementsContainer
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML div element.
+	/// </summary>
+	public class Div : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("div"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("div"));
+				}
 
-        return elementTags;
-      }
-    }
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Div"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="htmlDivElement">The HTML div element.</param>
-    public Div(DomContainer domContainer, IHTMLDivElement htmlDivElement) : base(domContainer, (IHTMLElement) htmlDivElement)
-    {}
+				return elementTags;
+			}
+		}
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Div"/> class.
-    /// Mainly used by WatiN internally.
-    /// </summary>
-    /// <param name="domContainer">The DOM container.</param>
-    /// <param name="finder">The HTML div element.</param>
-    public Div(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder)
-    {}
- 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Div"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Div(Element element) : base(element, ElementTags)
-    {}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Div"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="htmlDivElement">The HTML div element.</param>
+		public Div(DomContainer domContainer, IHTMLDivElement htmlDivElement) : base(domContainer, (IHTMLElement) htmlDivElement) {}
 
-  }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Div"/> class.
+		/// Mainly used by WatiN internally.
+		/// </summary>
+		/// <param name="domContainer">The DOM container.</param>
+		/// <param name="finder">The HTML div element.</param>
+		public Div(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Div"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Div(Element element) : base(element, ElementTags) {}
+	}
 }

@@ -21,64 +21,53 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  using System;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML td element.
+	/// </summary>
+	public class TableCell : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-  /// <summary>
-  /// This class provides specialized functionality for a HTML td element.
-  /// </summary>
-  public class TableCell : ElementsContainer
-  {
-    private static ArrayList elementTags;
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("td"));
+				}
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("td"));
-        }
+				return elementTags;
+			}
+		}
 
-        return elementTags;
-      }
-    }
+		public TableCell(DomContainer ie, IHTMLTableCell htmlTableCell) : base(ie, (IHTMLElement) htmlTableCell) {}
 
-    public TableCell(DomContainer ie, IHTMLTableCell htmlTableCell) : base(ie, (IHTMLElement) htmlTableCell)
-    {}
+		public TableCell(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    public TableCell(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
-    
-    /// <summary>
-    /// Initialises a new instance of the <see cref="TableCell"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public TableCell(Element element) : base(element, ElementTags)
-    {}
+		/// <summary>
+		/// Initialises a new instance of the <see cref="TableCell"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public TableCell(Element element) : base(element, ElementTags) {}
 
-    /// <summary>
-    /// Gets the parent <see cref="TableRow"/> of this <see cref="TableCell"/>.
-    /// </summary>
-    /// <value>The parent table row.</value>
-    public TableRow ParentTableRow
-    {
-      get
-      {
-        return (TableRow)Ancestor(typeof(TableRow));
-      }
-    }
+		/// <summary>
+		/// Gets the parent <see cref="TableRow"/> of this <see cref="TableCell"/>.
+		/// </summary>
+		/// <value>The parent table row.</value>
+		public TableRow ParentTableRow
+		{
+			get { return (TableRow) Ancestor(typeof (TableRow)); }
+		}
 
-    /// <summary>
-    /// Gets the index of the <see cref="TableCell"/> in the <see cref="TableCellCollection"/> of the parent <see cref="TableRow"/>.
-    /// </summary>
-    /// <value>The index of the cell.</value>
-    public int Index
-    {
-      get
-      {
-        return int.Parse(GetAttributeValue("cellindex"));
-      }
-    }
-  }
+		/// <summary>
+		/// Gets the index of the <see cref="TableCell"/> in the <see cref="TableCellCollection"/> of the parent <see cref="TableRow"/>.
+		/// </summary>
+		/// <value>The index of the cell.</value>
+		public int Index
+		{
+			get { return int.Parse(GetAttributeValue("cellindex")); }
+		}
+	}
 }

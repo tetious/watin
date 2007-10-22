@@ -24,189 +24,171 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
-  using System;
-  using WatiN.Core.Comparers;
-
-  /// <summary>
-  /// This class provides specialized functionality for a HTML table element.
-  /// </summary>
-  public class Table : ElementsContainer
-  {
-    private static ArrayList elementTags;
-
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("table"));
-        }
-
-        return elementTags;
-      }
-    }
-
-    public Table(DomContainer ie, IHTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable)
-    {}
-    
-    public Table(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Table"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Table(Element element) : base(element, ElementTags)
-    {}
-
 	/// <summary>
-	/// Returns all rows in the first TBODY section of a table. If no
-	/// explicit sections are defined in the table (like THEAD, TBODY 
-	/// and/or TFOOT sections), it will return all the rows in the table.
-	/// This method also returns rows from nested tables.
+	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
-	/// <value>The table rows.</value>
-    public override TableRowCollection TableRows
-    {
-      get 
-      {
-        return ElementsSupport.TableRows(DomContainer, TableBodies[0]); 
-      }
-    }
+	public class Table : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-    /// <summary>
-    /// Returns the table body sections belonging to this table (not including table body sections 
-    /// from tables nested in this table).
-    /// </summary>
-    /// <value>The table bodies.</value>
-    public override TableBodyCollection TableBodies
-    {
-      get
-      {
-        return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HTMLTable.tBodies));
-      }
-    }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("table"));
+				}
 
-    /// <summary>
-    /// Returns the table body section belonging to this table (not including table body sections 
-    /// from tables nested in this table).
-    /// </summary>
-    /// <param name="findBy">The find by.</param>
-    /// <returns></returns>
-    public override TableBody TableBody(AttributeConstraint findBy)
-    {
-      return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this) );
-    }
+				return elementTags;
+			}
+		}
 
-    private IHTMLElement GetFirstTBody()
-    {
-      return (IHTMLElement)HTMLTable.tBodies.item(0,null);
-    }
+		public Table(DomContainer ie, IHTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable) {}
 
-    private IHTMLTable HTMLTable
-    {
-      get { return (IHTMLTable) HTMLElement; }
-    }
+		public Table(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    /// <summary>
-    /// Finds te first row that matches findText in inColumn defined as a TD html element.
-    /// If no match is found, null is returned.
-    /// </summary>
-    /// <param name="findText">The text to find.</param>
-    /// <param name="inColumn">Index of the column to find the text in.</param>
-    /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-    public TableRow FindRow(string findText, int inColumn)
-    {
-      Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Table"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Table(Element element) : base(element, ElementTags) {}
 
-      TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findText, inColumn);
-      
-      return findRow(attributeConstraint);
-    }
+		/// <summary>
+		/// Returns all rows in the first TBODY section of a table. If no
+		/// explicit sections are defined in the table (like THEAD, TBODY 
+		/// and/or TFOOT sections), it will return all the rows in the table.
+		/// This method also returns rows from nested tables.
+		/// </summary>
+		/// <value>The table rows.</value>
+		public override TableRowCollection TableRows
+		{
+			get { return ElementsSupport.TableRows(DomContainer, TableBodies[0]); }
+		}
 
-    /// <summary>
-    /// Finds te first row that matches findTextRegex in inColumn defined as a TD html element.
-    /// If no match is found, null is returned.
-    /// </summary>
-    /// <param name="findTextRegex">The regular expression the cell text must match.</param>
-    /// <param name="inColumn">Index of the column to find the text in.</param>
-    /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-    public TableRow FindRow(Regex findTextRegex, int inColumn)
-    {
-      Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+		/// <summary>
+		/// Returns the table body sections belonging to this table (not including table body sections 
+		/// from tables nested in this table).
+		/// </summary>
+		/// <value>The table bodies.</value>
+		public override TableBodyCollection TableBodies
+		{
+			get { return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HTMLTable.tBodies)); }
+		}
 
-      TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
+		/// <summary>
+		/// Returns the table body section belonging to this table (not including table body sections 
+		/// from tables nested in this table).
+		/// </summary>
+		/// <param name="findBy">The find by.</param>
+		/// <returns></returns>
+		public override TableBody TableBody(AttributeConstraint findBy)
+		{
+			return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this));
+		}
 
-      return FindRow(attributeConstraint);
-    }
+		private IHTMLElement GetFirstTBody()
+		{
+			return (IHTMLElement) HTMLTable.tBodies.item(0, null);
+		}
 
-    private TableRow findRow(TableRowAttributeConstraint attributeConstraint)
-    {
-      string innertext = GetFirstTBody().innerText;
-      
-      if (innertext != null && attributeConstraint.IsTextContainedIn(innertext))
-      {
-        return FindRow(attributeConstraint);
-      }
-      
-      return null;
-    }
+		private IHTMLTable HTMLTable
+		{
+			get { return (IHTMLTable) HTMLElement; }
+		}
 
-    public override string ToString()
-    {
-      return Id;
-    }
-    
-    public TableRow FindRow(TableRowAttributeConstraint findBy)
-    {
-      TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
-      
-      if (row.Exists)
-      {
-        return row;
-      }
+		/// <summary>
+		/// Finds te first row that matches findText in inColumn defined as a TD html element.
+		/// If no match is found, null is returned.
+		/// </summary>
+		/// <param name="findText">The text to find.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+		public TableRow FindRow(string findText, int inColumn)
+		{
+			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      return null;
-    }
+			TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findText, inColumn);
 
-    public abstract class TableElementCollectionsBase : IElementCollection
-    {
-      protected Table table;
+			return findRow(attributeConstraint);
+		}
 
-      public TableElementCollectionsBase(Table table)
-      {
-        this.table = table;
-      }
+		/// <summary>
+		/// Finds te first row that matches findTextRegex in inColumn defined as a TD html element.
+		/// If no match is found, null is returned.
+		/// </summary>
+		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+		public TableRow FindRow(Regex findTextRegex, int inColumn)
+		{
+			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-      public abstract IHTMLElementCollection Elements { get; }
-    }
+			TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
-    public class TBodies : TableElementCollectionsBase
-    {
-      public TBodies(Table table) : base(table) {}
+			return FindRow(attributeConstraint);
+		}
 
-      public override IHTMLElementCollection Elements
-      {
-        get
-        {
-          return table.HTMLTable.tBodies;
-        }
-      }
-    }
+		private TableRow findRow(TableRowAttributeConstraint attributeConstraint)
+		{
+			string innertext = GetFirstTBody().innerText;
 
-    public class ElementsInFirstTBody : TableElementCollectionsBase
-    {
-      public ElementsInFirstTBody(Table table): base(table) {}
+			if (innertext != null && attributeConstraint.IsTextContainedIn(innertext))
+			{
+				return FindRow(attributeConstraint);
+			}
 
-      public override IHTMLElementCollection Elements
-      {
-        get
-        {
-          return (IHTMLElementCollection)table.GetFirstTBody().all;
-        }
-      }
-    }
-  }
+			return null;
+		}
+
+		public override string ToString()
+		{
+			return Id;
+		}
+
+		public TableRow FindRow(TableRowAttributeConstraint findBy)
+		{
+			TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
+
+			if (row.Exists)
+			{
+				return row;
+			}
+
+			return null;
+		}
+
+		public abstract class TableElementCollectionsBase : IElementCollection
+		{
+			protected Table table;
+
+			public TableElementCollectionsBase(Table table)
+			{
+				this.table = table;
+			}
+
+			public abstract IHTMLElementCollection Elements { get; }
+		}
+
+		public class TBodies : TableElementCollectionsBase
+		{
+			public TBodies(Table table) : base(table) {}
+
+			public override IHTMLElementCollection Elements
+			{
+				get { return table.HTMLTable.tBodies; }
+			}
+		}
+
+		public class ElementsInFirstTBody : TableElementCollectionsBase
+		{
+			public ElementsInFirstTBody(Table table) : base(table) {}
+
+			public override IHTMLElementCollection Elements
+			{
+				get { return (IHTMLElementCollection) table.GetFirstTBody().all; }
+			}
+		}
+	}
 }

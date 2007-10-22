@@ -16,17 +16,16 @@
 
 #endregion Copyright
 
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core.Logging
 {
-  using WatiN.Core.Interfaces;
+	public class NoLog : ILogWriter
+	{
+		#region ILogWriter Members
 
-  public class NoLog : ILogWriter
-  {
-    #region ILogWriter Members
+		public void LogAction(string message) {}
 
-    public void LogAction(string message)
-    {}
-
-    #endregion
-  }
+		#endregion
+	}
 }

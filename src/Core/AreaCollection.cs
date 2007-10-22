@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections;
 using mshtml;
 
@@ -33,8 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public AreaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New))
-		{}
+		public AreaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AreaCollection" /> class.
@@ -42,8 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public AreaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New))
-		{}
+		public AreaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
 
 		/// <summary>
 		/// Returns a new <see cref="AreaCollection" /> filtered by the <see cref="AttributeConstraint" />.
@@ -62,15 +59,12 @@ namespace WatiN.Core
 		/// <returns>The area.</returns>
 		public Area this[int index]
 		{
-			get
-			{
-				return new Area(domContainer, (IHTMLAreaElement) Elements[index]);
-			}
+			get { return new Area(domContainer, (IHTMLAreaElement) Elements[index]); }
 		}
 
 		private static Element New(DomContainer domContainer, IHTMLElement element)
 		{
-			return new Area(domContainer, (IHTMLAreaElement)element);
+			return new Area(domContainer, (IHTMLAreaElement) element);
 		}
 	}
 }

@@ -16,30 +16,30 @@
 
 #endregion Copyright
 
+using System.Threading;
+using SHDocVw;
+
 namespace WatiN.Core
 {
-  using System.Threading;
-  using SHDocVw;
+	public class IEWaitForComplete : WaitForComplete
+	{
+		protected IE _ie;
 
-  public class IEWaitForComplete : WaitForComplete 
-  {
-    protected IE _ie;
+		public IEWaitForComplete(IE ie) : base(ie)
+		{
+			_ie = ie;
+		}
 
-    public IEWaitForComplete(IE ie) : base(ie)
-    {
-      _ie = ie;
-    }
+		public override void DoWait()
+		{
+			Thread.Sleep(100);
 
-    public override void DoWait()
-    {
-      Thread.Sleep(100); 
+			InitTimeout();
 
-      InitTimeout();
+			WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
+			waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
 
-      WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
-      waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
-      
-      WaitForCompleteOrTimeout();
-    }
-  }
+			WaitForCompleteOrTimeout();
+		}
+	}
 }

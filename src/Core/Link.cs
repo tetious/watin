@@ -21,43 +21,40 @@ using mshtml;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// This class provides specialized functionality for a HTML link element.
-  /// </summary>
-  public class Link : Element
-  {
-    private static ArrayList elementTags;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML link element.
+	/// </summary>
+	public class Link : Element
+	{
+		private static ArrayList elementTags;
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("a"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("a"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    public Link(DomContainer ie, IHTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement)
-    {}
+		public Link(DomContainer ie, IHTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement) {}
 
-    public Link(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {}
+		public Link(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Link"/> class based on <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element">The element.</param>
-    public Link(Element element) : base(element, ElementTags)
-    {}
+		/// <summary>
+		/// Initialises a new instance of the <see cref="Link"/> class based on <paramref name="element"/>.
+		/// </summary>
+		/// <param name="element">The element.</param>
+		public Link(Element element) : base(element, ElementTags) {}
 
-    public string Url
-    {
-      get { return ((IHTMLAnchorElement) HTMLElement).href; }
-    }
-  }
+		public string Url
+		{
+			get { return ((IHTMLAnchorElement) HTMLElement).href; }
+		}
+	}
 }

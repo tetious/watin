@@ -16,92 +16,79 @@
 
 #endregion Copyright
 
+using System.Collections;
+using mshtml;
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core
 {
-  using System;
-  using System.Collections;
-  using mshtml;
-  using WatiN.Core.Interfaces;
+	/// <summary>
+	/// This class provides specialized functionality for a HTML tbody element. 
+	/// </summary>
+	public class TableBody : ElementsContainer
+	{
+		private static ArrayList elementTags;
 
-  /// <summary>
-  /// This class provides specialized functionality for a HTML tbody element. 
-  /// </summary>
-  public class TableBody : ElementsContainer
-  {
-    private static ArrayList elementTags;
+		public TableBody(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 
-    public TableBody(DomContainer ie, ElementFinder finder) : base(ie, finder)
-    {
-    }
+		public TableBody(DomContainer ie, IHTMLTableSection element) : base(ie, (IHTMLElement) element) {}
 
-    public TableBody(DomContainer ie, IHTMLTableSection element) : base(ie, (IHTMLElement) element)
-    {
-    }
+		public TableBody(Element element) : base(element, elementTags) {}
 
-    public TableBody(Element element) : base(element, elementTags)
-    {
-    }
+		/// <summary>
+		/// Returns the table rows belonging to this table body (not including table rows 
+		/// from tables nested in this table body).
+		/// </summary>
+		/// <value>The table rows.</value>
+		public override TableRowCollection TableRows
+		{
+			get { return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows)); }
+		}
 
-    /// <summary>
-    /// Returns the table rows belonging to this table body (not including table rows 
-    /// from tables nested in this table body).
-    /// </summary>
-    /// <value>The table rows.</value>
-    public override TableRowCollection TableRows
-    {
-      get
-      {
-        return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows));
-      }
-    }
-
-    /// <summary>
-    /// Returns the table row belonging to this table body (not including table rows 
-    /// from tables nested in this table body).
-    /// </summary>
-    /// <param name="findBy">The find by.</param>
-    /// <returns></returns>
-    public override TableRow TableRow(AttributeConstraint findBy)
-    {
-      return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
-    }
+		/// <summary>
+		/// Returns the table row belonging to this table body (not including table rows 
+		/// from tables nested in this table body).
+		/// </summary>
+		/// <param name="findBy">The find by.</param>
+		/// <returns></returns>
+		public override TableRow TableRow(AttributeConstraint findBy)
+		{
+			return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
+		}
 
 
-    public static ArrayList ElementTags
-    {
-      get
-      {
-        if (elementTags == null)
-        {
-          elementTags = new ArrayList();
-          elementTags.Add(new ElementTag("tbody"));
-        }
+		public static ArrayList ElementTags
+		{
+			get
+			{
+				if (elementTags == null)
+				{
+					elementTags = new ArrayList();
+					elementTags.Add(new ElementTag("tbody"));
+				}
 
-        return elementTags;
-      }
-    }
+				return elementTags;
+			}
+		}
 
-    private IHTMLTableSection HtmlBody
-    {
-      get { return (IHTMLTableSection) HTMLElement; }
-    }
+		private IHTMLTableSection HtmlBody
+		{
+			get { return (IHTMLTableSection) HTMLElement; }
+		}
 
-    public class Rows : IElementCollection
-    {
-      private TableBody tableBody;
+		public class Rows : IElementCollection
+		{
+			private TableBody tableBody;
 
-      public Rows(TableBody tableBody)
-      {
-        this.tableBody = tableBody;
-      }
+			public Rows(TableBody tableBody)
+			{
+				this.tableBody = tableBody;
+			}
 
-      public IHTMLElementCollection Elements
-      {
-        get
-        {
-          return tableBody.HtmlBody.rows;
-        }
-      }
-    }
-  }
+			public IHTMLElementCollection Elements
+			{
+				get { return tableBody.HtmlBody.rows; }
+			}
+		}
+	}
 }

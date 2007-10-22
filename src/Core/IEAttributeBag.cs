@@ -16,85 +16,79 @@
 
 #endregion Copyright
 
+using mshtml;
+using SHDocVw;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core
 {
-  using mshtml;
-  using SHDocVw;
-  using WatiN.Core.Exceptions;
-  using WatiN.Core.Interfaces;
+	/// <summary>
+	/// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="AttributeConstraint.Compare"/>.
+	/// </summary>
+	public class IEAttributeBag : IAttributeBag
+	{
+		private InternetExplorer internetExplorer = null;
 
-  /// <summary>
-  /// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="AttributeConstraint.Compare"/>.
-  /// </summary>
-  public class IEAttributeBag: IAttributeBag
-  {
-    private InternetExplorer internetExplorer = null;
+		public InternetExplorer InternetExplorer
+		{
+			get { return internetExplorer; }
+			set { internetExplorer = value; }
+		}
 
-    public InternetExplorer InternetExplorer
-    {
-      get
-      {
-        return internetExplorer;
-      }
-      set
-      {
-        internetExplorer = value;
-      }
-    }
+		public string GetValue(string attributename)
+		{
+			string name = attributename.ToLower();
+			string value;
 
-    public string GetValue(string attributename)
-    {
-      string name = attributename.ToLower();
-      string value;
-      
-      if (name.Equals("href"))
-      {
-      	value = GetUrl();
-      }
-      else if (name.Equals("title"))
-      {
-      	value = GetTitle();
-      }
-      else if (name.Equals("hwnd"))
-      {
-      	value = GetHwnd();
-      }
-      else
-      {
-        throw new InvalidAttributException(attributename, "IE");
-      }
-      
-      return value;
-    }
+			if (name.Equals("href"))
+			{
+				value = GetUrl();
+			}
+			else if (name.Equals("title"))
+			{
+				value = GetTitle();
+			}
+			else if (name.Equals("hwnd"))
+			{
+				value = GetHwnd();
+			}
+			else
+			{
+				throw new InvalidAttributException(attributename, "IE");
+			}
 
-  	private string GetHwnd()
-  	{
-  		try
-  		{
-  			return InternetExplorer.HWND.ToString();
-  		}
-  		catch{}
-  		return null;
-  	}
+			return value;
+		}
 
-  	private string GetTitle()
-  	{
-  		try
-  		{
-  			return ((HTMLDocument) InternetExplorer.Document).title;
-  		}
-  		catch{}
+		private string GetHwnd()
+		{
+			try
+			{
+				return InternetExplorer.HWND.ToString();
+			}
+			catch {}
 			return null;
 		}
 
-  	private string GetUrl()
-  	{
-  		try
-  		{
-  			return InternetExplorer.LocationURL;
-  		}
-  		catch{}
-  		return null;
-  	}
-  }
+		private string GetTitle()
+		{
+			try
+			{
+				return ((HTMLDocument) InternetExplorer.Document).title;
+			}
+			catch {}
+			return null;
+		}
+
+		private string GetUrl()
+		{
+			try
+			{
+				return InternetExplorer.LocationURL;
+			}
+			catch {}
+			return null;
+		}
+	}
 }

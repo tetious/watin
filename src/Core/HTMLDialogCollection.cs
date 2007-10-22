@@ -22,129 +22,130 @@ using System.Diagnostics;
 
 namespace WatiN.Core
 {
-  /// <summary>
-  /// A typed collection of open <see cref="HtmlDialog" />.
-  /// </summary>
-  public class HtmlDialogCollection : IEnumerable
-  {
-    private ArrayList htmlDialogs;
+	/// <summary>
+	/// A typed collection of open <see cref="HtmlDialog" />.
+	/// </summary>
+	public class HtmlDialogCollection : IEnumerable
+	{
+		private ArrayList htmlDialogs;
 
-    public HtmlDialogCollection(Process ieProcess) 
-    {
-      htmlDialogs = new ArrayList();
+		public HtmlDialogCollection(Process ieProcess)
+		{
+			htmlDialogs = new ArrayList();
 
-      IntPtr hWnd = IntPtr.Zero;
+			IntPtr hWnd = IntPtr.Zero;
 
-      foreach (ProcessThread t in ieProcess.Threads)
-      {
-        int threadId = t.Id;
+			foreach (ProcessThread t in ieProcess.Threads)
+			{
+				int threadId = t.Id;
 
-        NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
-        NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
-      }
-    }
+				NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
+				NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
+			}
+		}
 
-    private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
-    {
-      if (HtmlDialog.IsIETridentDlgFrame(hWnd))
-      {
-        HtmlDialog htmlDialog = new HtmlDialog(hWnd);
-        htmlDialogs.Add(htmlDialog);
-      }
+		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
+		{
+			if (HtmlDialog.IsIETridentDlgFrame(hWnd))
+			{
+				HtmlDialog htmlDialog = new HtmlDialog(hWnd);
+				htmlDialogs.Add(htmlDialog);
+			}
 
-      return true;
-    }
+			return true;
+		}
 
 
-    public int Length { get { return htmlDialogs.Count; } }
+		public int Length
+		{
+			get { return htmlDialogs.Count; }
+		}
 
-    public HtmlDialog this[int index] 
-    { 
-      get
-      {
-        return GetHTMLDialogByIndex(htmlDialogs, index);
-      } 
-    }
+		public HtmlDialog this[int index]
+		{
+			get { return GetHTMLDialogByIndex(htmlDialogs, index); }
+		}
 
-    public void CloseAll()
-    {
-      //TODO: Since HTMLDialog collection contains all HTMLDialogs
-      //      within the processId of this IE instance, there might be
-      //      other HTMLDialogs not created by this IE instance. Closing
-      //      also those HTMLDialogs seems not right.
-      //      So how will we handle this? For now we keep the "old"
-      //      implementation.
-          
-      // Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
-      foreach(HtmlDialog htmlDialog in htmlDialogs)
-      {
-        htmlDialog.Close();
-      }
-    }
-    
-    public bool Exists(AttributeConstraint findBy)
-    {
-      foreach (HtmlDialog htmlDialog in htmlDialogs)
-      {
-        if (findBy.Compare(htmlDialog))
-        {
-          return true;
-        }
-      }
-      
-      return false;
-    }
+		public void CloseAll()
+		{
+			//TODO: Since HTMLDialog collection contains all HTMLDialogs
+			//      within the processId of this IE instance, there might be
+			//      other HTMLDialogs not created by this IE instance. Closing
+			//      also those HTMLDialogs seems not right.
+			//      So how will we handle this? For now we keep the "old"
+			//      implementation.
 
-    private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
-    {
-      HtmlDialog htmlDialog = (HtmlDialog)htmlDialogs[index];
-      htmlDialog.WaitForComplete();
+			// Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
+			foreach (HtmlDialog htmlDialog in htmlDialogs)
+			{
+				htmlDialog.Close();
+			}
+		}
 
-      return htmlDialog;
-    }
+		public bool Exists(AttributeConstraint findBy)
+		{
+			foreach (HtmlDialog htmlDialog in htmlDialogs)
+			{
+				if (findBy.Compare(htmlDialog))
+				{
+					return true;
+				}
+			}
 
-    /// <exclude />
-    public Enumerator GetEnumerator() 
-    {
-      return new Enumerator(htmlDialogs);
-    }
+			return false;
+		}
 
-    IEnumerator IEnumerable.GetEnumerator() 
-    {
-      return GetEnumerator();
-    }
+		private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
+		{
+			HtmlDialog htmlDialog = (HtmlDialog) htmlDialogs[index];
+			htmlDialog.WaitForComplete();
 
-    /// <exclude />
-    public class Enumerator: IEnumerator 
-    {
-      ArrayList htmlDialogs;
-      int index;
-      public Enumerator(ArrayList htmlDialogs) 
-      {
-        this.htmlDialogs = htmlDialogs;
-        Reset();
-      }
+			return htmlDialog;
+		}
 
-      public void Reset() 
-      {
-        index = -1;
-      }
+		/// <exclude />
+		public Enumerator GetEnumerator()
+		{
+			return new Enumerator(htmlDialogs);
+		}
 
-      public bool MoveNext() 
-      {
-        ++index;
-        return index < htmlDialogs.Count;
-      }
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 
-      public HtmlDialog Current 
-      {
-        get 
-        {
-          return GetHTMLDialogByIndex(htmlDialogs, index);
-        }
-      }
+		/// <exclude />
+		public class Enumerator : IEnumerator
+		{
+			private ArrayList htmlDialogs;
+			private int index;
 
-      object IEnumerator.Current { get { return Current; } }
-    }
-  }
+			public Enumerator(ArrayList htmlDialogs)
+			{
+				this.htmlDialogs = htmlDialogs;
+				Reset();
+			}
+
+			public void Reset()
+			{
+				index = -1;
+			}
+
+			public bool MoveNext()
+			{
+				++index;
+				return index < htmlDialogs.Count;
+			}
+
+			public HtmlDialog Current
+			{
+				get { return GetHTMLDialogByIndex(htmlDialogs, index); }
+			}
+
+			object IEnumerator.Current
+			{
+				get { return Current; }
+			}
+		}
+	}
 }
