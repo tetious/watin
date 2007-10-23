@@ -544,12 +544,12 @@ namespace WatiN.Core
 
 			if (createInNewProcess)
 			{
-				Logger.LogAction("Creating new IE instance in a new process");
+				Logger.LogAction("Creating IE instance in a new process");
 				InitIEAndStartDialogWatcher(CreateIEInNewProcess(), uri);
 			}
 			else
 			{
-				Logger.LogAction("Creating new IE instance");
+				Logger.LogAction("Creating IE instance");
 				InitIEAndStartDialogWatcher(new InternetExplorerClass(), uri);
 			}
 

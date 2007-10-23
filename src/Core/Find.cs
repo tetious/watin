@@ -327,7 +327,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(string text)
 		{
-			return new AttributeConstraint(textAttribute, new StringContainsAndCaseInsensitiveComparer(text));
+			return new AttributeConstraint(textAttribute, text);
 		}
 
 		/// <param name="regex">Regular expression to find a matching Text.</param>

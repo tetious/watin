@@ -120,6 +120,16 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
+		/// Gets the comparer used to match the expected attribute value with 
+		/// the attribute value of an html element on a webpage.
+		/// </summary>
+		/// <value>The comparer.</value>
+		public ICompare Comparer
+		{
+			get { return comparer; }
+		}
+
+		/// <summary>
 		/// Gets the name of the attribute.
 		/// </summary>
 		/// <value>The name of the attribute.</value>
