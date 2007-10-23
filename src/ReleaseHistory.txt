@@ -1,3 +1,8 @@
+WatiN 1.2.1.4000 (23 October 2007)
+
+This is a hotfix release and fixes an issue regarding the Find.ByText(string) method. Until version 1.2 it compared values using StringComparer but in 1.2.0 it accidentally was changed into StringContainsAndCaseInsensitiveComparer. This could case different behaviour in your tests. The issue has been fixed.
+
+-------------------------------
 WatiN 1.2.0.4000 (4 October 2007)
 
 This release includes mainly new features (some only for .Net 2.0). You can now start a new IE instance in its own process, set event properties when firing events on an element, get a specific Ancestor of an element, use your own attribute comparers, implement specific wait logic, evaluatie javascript code, automate the Area element, clean up all IE caches, take snapshots of webpages and much more. Many thanks to all who contributed to this release!
