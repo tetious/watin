@@ -19,6 +19,10 @@
 namespace WatiN.Core.UnitTests
 {
 #if NET20
+  using NUnit.Framework;
+  using NUnit.Framework.SyntaxHelpers;
+  using WatiN.Core.Comparers;
+
   [TestFixture]
   public class PredicateComparerTests
   {

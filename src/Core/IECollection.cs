@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections;
+using mshtml;
 using SHDocVw;
 
 namespace WatiN.Core
@@ -38,8 +39,11 @@ namespace WatiN.Core
 			{
 				try
 				{
-					IE ie = new IE(internetExplorer);
-					internetExplorers.Add(ie);
+          if (internetExplorer.Document is IHTMLDocument2)
+          {
+            IE ie = new IE(internetExplorer);
+            internetExplorers.Add(ie);
+          }
 				}
 				catch {}
 			}

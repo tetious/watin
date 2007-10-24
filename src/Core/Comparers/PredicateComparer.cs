@@ -19,6 +19,8 @@
 namespace WatiN.Core.Comparers
 {
 #if NET20
+  using System;
+
 	public class PredicateComparer : BaseComparer
 	{
 		private Predicate<string> _predicate;

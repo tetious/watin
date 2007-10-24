@@ -22,6 +22,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
+using Is = NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests
 {
@@ -66,7 +67,7 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
 
 #if NET20
-      attributeBag = new TestAttributeBag(htmlfor, "forvalue");
+      attributeBag = new MockAttributeBag(htmlfor, "forvalue");
 			_expectedPredicateCompareValue = "forvalue";
 			value = Find.ByFor(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
@@ -99,7 +100,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IdWithRegexAndComparer()
 		{
-			MockRepository mocks = new MockRepository();
+		  MockRepository mocks = new MockRepository();
 			ICompare comparer = (ICompare) mocks.CreateMock(typeof (ICompare));
 			IAttributeBag attributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
 

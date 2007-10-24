@@ -66,7 +66,7 @@ Copyright 2006-2007 Jeroen van Menen
         
         <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
             <sources>
-                <include name="${core.source.dir}\*.cs"/>
+                <include name="${core.source.dir}\**.cs"/>
             </sources>
             <references>
                 <include name="${bin.dir}\${shdocvw.assembly.name}"/>
@@ -85,7 +85,7 @@ Copyright 2006-2007 Jeroen van Menen
 
         <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
             <sources>
-                <include name="${unittests.source.dir}\*.cs"/>
+                <include name="${unittests.source.dir}\**.cs"/>
             </sources>
             <references>
                 <include name="${bin.dir}\${shdocvw.assembly.name}"/>
@@ -440,5 +440,6 @@ Copyright 2006-2007 Jeroen van Menen
 	    <!--call target="installer"  /-->
 	</target>
 </project>
+
 
 
