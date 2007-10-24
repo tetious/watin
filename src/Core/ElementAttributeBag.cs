@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Globalization;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -44,14 +45,14 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			if (string.Compare(attributename, "style", true) == 0)
+			if (string.Compare(attributename, "style", true, CultureInfo.InvariantCulture) == 0)
 			{
 				return element.style.cssText;
 			}
 
 			object attributeValue;
 
-			if (attributename.ToLower().StartsWith("style."))
+			if (attributename.ToLower(CultureInfo.InvariantCulture).StartsWith("style."))
 			{
 				attributeValue = Style.GetAttributeValue(attributename.Substring(6), element.style);
 			}

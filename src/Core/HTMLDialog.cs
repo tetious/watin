@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using mshtml;
 using WatiN.Core.DialogHandlers;
@@ -116,7 +117,7 @@ namespace WatiN.Core
 		{
 			string value = null;
 
-			if (attributename.ToLower().Equals("href"))
+			if (String.Compare(attributename, "href", true, CultureInfo.InvariantCulture) == 0)
 			{
 				try
 				{
@@ -124,7 +125,7 @@ namespace WatiN.Core
 				}
 				catch {}
 			}
-			else if (attributename.ToLower().Equals("title"))
+			else if (String.Compare(attributename, "title", true, CultureInfo.InvariantCulture) == 0)
 			{
 				try
 				{

@@ -17,8 +17,11 @@
 #endregion Copyright
 
 using System.Collections;
+using System.Globalization;
+using System.Threading;
+using mshtml;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
+using Rhino.Mocks;
 
 namespace WatiN.Core.UnitTests
 {
@@ -55,7 +58,85 @@ namespace WatiN.Core.UnitTests
 		public void ToStringShouldBeEmptyIfTagNameIsNull()
 		{
 			ElementTag elementTag = new ElementTag((string) null);
-			Assert.That(elementTag.ToString(), Is.EqualTo(""));
+			Assert.That(elementTag.ToString(), NUnit.Framework.SyntaxHelpers.Is.EqualTo(""));
+		}
+
+		[Test]
+		public void CompareShouldBeCultureInvariant()
+		{
+			// Get the tr-TR (Turkish-Turkey) culture.
+			CultureInfo turkish = new CultureInfo("tr-TR");
+
+			// Get the culture that is associated with the current thread.
+			CultureInfo thisCulture = Thread.CurrentThread.CurrentCulture;
+
+			try
+			{
+				// Set the culture to Turkish
+				Thread.CurrentThread.CurrentCulture = turkish;
+
+				MockRepository mockRepository = new MockRepository();
+				IHTMLElement element = (IHTMLElement) mockRepository.DynamicMultiMock(typeof (IHTMLElement), typeof(IHTMLInputElement));
+
+				AssertUpperCaseLowerCase(element, mockRepository);
+				AssertUpperCaseUpperCase(element, mockRepository);
+				AssertLowerCaseUpperCase(element, mockRepository);
+			}
+			finally
+			{
+				// Set the culture back to the original
+				Thread.CurrentThread.CurrentCulture = thisCulture;
+			}
+		}
+
+		private static void AssertLowerCaseUpperCase(IHTMLElement element, MockRepository mockRepository) 
+		{
+			mockRepository.BackToRecordAll();
+
+			// LowerCase
+			SetupResult.For(element.tagName).Return("input");
+			SetupResult.For(((IHTMLInputElement) element).type).Return("image");
+
+			mockRepository.ReplayAll();
+				
+			// UpperCase
+			ElementTag elementTag = new ElementTag("INPUT", "IMAGE");
+			Assert.IsTrue(elementTag.Compare(element), "Compare should compare using CultureInvariant");
+				
+			mockRepository.VerifyAll();
+		}
+
+		private static void AssertUpperCaseUpperCase(IHTMLElement element, MockRepository mockRepository) 
+		{
+			mockRepository.BackToRecordAll();
+
+			// UpperCase
+			SetupResult.For(element.tagName).Return("INPUT");
+			SetupResult.For(((IHTMLInputElement) element).type).Return("IMAGE");
+
+			mockRepository.ReplayAll();
+				
+			// UpperCase
+			ElementTag elementTag = new ElementTag("INPUT", "IMAGE");
+			Assert.IsTrue(elementTag.Compare(element), "Compare should compare using CultureInvariant");
+				
+			mockRepository.VerifyAll();
+		}
+
+		private static void AssertUpperCaseLowerCase(IHTMLElement element, MockRepository mockRepository) {
+			
+			// UpperCase
+			SetupResult.For(element.tagName).Return("INPUT");
+			SetupResult.For(((IHTMLInputElement) element).type).Return("IMAGE");
+			
+			mockRepository.ReplayAll();
+
+			// LowerCase
+			ElementTag elementTag = new ElementTag("input", "image");
+			Assert.IsTrue(elementTag.Compare(element), "Compare should compare using CultureInvariant");
+			Assert.AreEqual("INPUT (image)", elementTag.ToString(), "ToString problem");
+
+			mockRepository.VerifyAll();
 		}
 	}
 }

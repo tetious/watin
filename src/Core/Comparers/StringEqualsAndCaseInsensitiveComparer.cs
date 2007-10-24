@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Globalization;
 
 namespace WatiN.Core.Comparers
 {
@@ -31,7 +32,7 @@ namespace WatiN.Core.Comparers
 		{
 			if (value == null) return false;
 
-			return (String.Compare(value, valueToCompareWith, true) == 0);
+			return (String.Compare(value, valueToCompareWith, true, CultureInfo.InvariantCulture) == 0);
 		}
 
 		public override string ToString()

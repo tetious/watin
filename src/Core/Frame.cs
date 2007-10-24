@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System.Globalization;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
@@ -107,7 +108,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			switch (attributename.ToLower())
+			switch (attributename.ToLower(CultureInfo.InvariantCulture))
 			{
 				case "name":
 					return Name;

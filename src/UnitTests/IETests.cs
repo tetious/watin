@@ -666,42 +666,43 @@ namespace WatiN.Core.UnitTests
 			ie.ForceClose();
 		}
 
-    /// <summary>
-    /// This test addresses a problem in the IE collection where Windows Explorer
-    /// windows may get included in the list of shell windows which is a bit
-    /// problematic for methods like ForceClose since the test will timeout.
-    /// </summary>
-    [Test]
-    public void IECollectionExcludesWindowsExplorerWindows()
-    {
-      // Bring up an Explorer window and wait for it to become visible.
-      ProcessStartInfo info = new ProcessStartInfo("explorer.exe");
-      info.UseShellExecute = false;
-      info.CreateNoWindow = false;
+		/// <summary>
+		/// This test addresses a problem in the IE collection where Windows Explorer
+		/// windows may get included in the list of shell windows which is a bit
+		/// problematic for methods like ForceClose since the test will timeout.
+		/// </summary>
+		[Test]
+		public void IECollectionExcludesWindowsExplorerWindows()
+		{
+			// Bring up an Explorer window and wait for it to become visible.
+			ProcessStartInfo info = new ProcessStartInfo("explorer.exe");
+			info.UseShellExecute = false;
+			info.CreateNoWindow = true;
 
-      Process p = Process.Start(info);
-      try
-      {
-        Thread.Sleep(2000);
+			Process p = Process.Start(info);
 
-        // Create an IE window so we know there's at least one of them.
-        new IE();
+			try
+			{
+				Thread.Sleep(2000);
 
-        // Iterate over internet explorer windows.
-        // Previously this would pick up a reference to the Windows Explorer
-        // window which would timeout while waiting for the main document to
-        // become available.
-        Assert.GreaterOrEqual(IE.InternetExplorers().Length, 1);
+				// Create an IE window so we know there's at least one of them.
+				new IE();
 
-        foreach (IE ie in IE.InternetExplorers())
-          ie.Close();
-      }
-      finally
-      {
-        if (! p.HasExited)
-          p.Kill();
-      }
-    }
+				// Iterate over internet explorer windows.
+				// Previously this would pick up a reference to the Windows Explorer
+				// window which would timeout while waiting for the main document to
+				// become available.
+				Assert.GreaterOrEqual(IE.InternetExplorers().Length, 1);
+
+				foreach (IE ie in IE.InternetExplorers())
+					ie.Close();
+			}
+			finally
+			{
+				if (! p.HasExited)
+					p.Kill();
+			}
+		}
 
 		private static void FailIfIEWindowExists(string partialTitle, string testName)
 		{

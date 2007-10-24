@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Globalization;
 using mshtml;
 
 namespace WatiN.Core
@@ -34,12 +35,15 @@ namespace WatiN.Core
 
 		public ElementTag(string tagName) : this(tagName, null) {}
 
+		public ElementTag(IHTMLElement element): this(element.tagName, getInputType(element)) {}
+
 		public ElementTag(string tagName, string inputTypes)
 		{
 			if (tagName != null)
 			{
-				TagName = tagName.ToLower();
+				TagName = tagName.ToLower(CultureInfo.InvariantCulture);
 			}
+
 			IsInputElement = ElementFinder.isInputElement(tagName);
 
 			// Check arguments
@@ -50,20 +54,19 @@ namespace WatiN.Core
 					throw new ArgumentNullException("inputTypes", String.Format("inputTypes must be set when tagName is '{0}'", tagName));
 				}
 
-				InputTypes = inputTypes.ToLower();
+				InputTypes = inputTypes.ToLower(CultureInfo.InvariantCulture);
 			}
 		}
 
-		public ElementTag(IHTMLElement element)
+		private static string getInputType(IHTMLElement element)
 		{
-			TagName = element.tagName.ToLower();
-			IsInputElement = ElementFinder.isInputElement(TagName);
-			if (IsInputElement)
+			IHTMLInputElement inputElement = element as IHTMLInputElement;
+			if(inputElement != null)
 			{
-				IHTMLInputElement inputElement = (IHTMLInputElement) element;
-
-				InputTypes = inputElement.type.ToLower();
+				return inputElement.type;
 			}
+
+			return null;
 		}
 
 		public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
@@ -84,10 +87,7 @@ namespace WatiN.Core
 
 		public bool Compare(IHTMLElement element)
 		{
-			if (element == null)
-			{
-				return false;
-			}
+			if (element == null) return false;
 
 			if (CompareTagName(element))
 			{
@@ -95,10 +95,8 @@ namespace WatiN.Core
 				{
 					return CompareAgainstInputTypes(element);
 				}
-				else
-				{
-					return true;
-				}
+
+				return true;
 			}
 
 			return false;
@@ -106,33 +104,32 @@ namespace WatiN.Core
 
 		public override string ToString()
 		{
-			string returnValue = string.Empty;
-			if (IsInputElement)
+			if (TagName != null)
 			{
-				returnValue = String.Format("{0} ({1})", TagName.ToUpper(), InputTypes);
+				string tagName = TagName.ToUpper(CultureInfo.InvariantCulture);
+				if (IsInputElement)
+				{
+					return String.Format("{0} ({1})", tagName, InputTypes);
+				}
+
+				return tagName;
 			}
-			else if (TagName != null)
-			{
-				returnValue = TagName.ToUpper();
-			}
-			return returnValue;
+
+			return string.Empty;
 		}
 
 		private bool CompareTagName(IHTMLElement element)
 		{
-			if (TagName == null)
-			{
-				return true;
-			}
+			if (TagName == null) return true;
 
-			return String.Compare(TagName, element.tagName, true) == 0;
+			return String.Compare(TagName, element.tagName, true, CultureInfo.InvariantCulture) == 0;
 		}
 
 		private bool CompareAgainstInputTypes(IHTMLElement element)
 		{
 			IHTMLInputElement inputElement = (IHTMLInputElement) element;
 
-			string inputElementType = inputElement.type.ToLower();
+			string inputElementType = inputElement.type.ToLower(CultureInfo.InvariantCulture);
 
 			return (InputTypes.IndexOf(inputElementType) >= 0);
 		}

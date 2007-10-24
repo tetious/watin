@@ -18,7 +18,6 @@
 
 using System;
 using NUnit.Framework;
-using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 

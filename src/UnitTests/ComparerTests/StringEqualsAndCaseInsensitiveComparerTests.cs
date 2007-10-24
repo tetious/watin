@@ -17,7 +17,10 @@
 #endregion Copyright
 
 using System;
+using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 
@@ -65,5 +68,30 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual("A test value", comparer.ToString());
 		}
+
+		[Test]
+		public void CompareShouldBeCultureInvariant()
+		{
+			// Get the tr-TR (Turkish-Turkey) culture.
+			CultureInfo turkish = new CultureInfo("tr-TR");
+
+			// Get the culture that is associated with the current thread.
+			CultureInfo thisCulture = Thread.CurrentThread.CurrentCulture;
+
+			try
+			{
+				// Set the culture to Turkish
+				Thread.CurrentThread.CurrentCulture = turkish;
+
+				StringEqualsAndCaseInsensitiveComparer comparer = new StringEqualsAndCaseInsensitiveComparer("I");
+				Assert.That(comparer.Compare("i"), Is.True);
+			}
+			finally
+			{
+				// Set the culture back to the original
+				Thread.CurrentThread.CurrentCulture = thisCulture;
+			}
+		}
+
 	}
 }

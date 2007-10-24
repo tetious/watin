@@ -30,6 +30,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using mshtml;
@@ -306,7 +307,7 @@ namespace WatiN.Core
 		private static ImageCodecInfo GetCodec(string extension)
 		{
 			ImageCodecInfo ici;
-			switch (extension.ToLower())
+			switch (extension.ToLower(CultureInfo.InvariantCulture))
 			{
 				case "jpg":
 					ici = GetEncoderInfo("image/jpeg");

@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System.Globalization;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
@@ -38,7 +39,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			string name = attributename.ToLower();
+			string name = attributename.ToLower(CultureInfo.InvariantCulture);
 			string value;
 
 			if (name.Equals("href"))
