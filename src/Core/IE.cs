@@ -164,6 +164,28 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
+		/// Creates a collection of new IE instances associated with open Internet Explorer windows. Use this
+		/// method if you don't want WatiN to wait until a document is fully loaded before returning it.
+		/// This might be handy in situations where you encounter Internet Explorer instances which are always
+		/// busy loading and block your itteration through the collection.
+		/// </summary>
+		/// <param name="waitForComplete">if set to <c>false</c> WatiN will not wait until the document in the Internet Explorer instance is completely loaded.</param>
+		/// <returns></returns>
+		/// <example>
+		/// This code snippet illustrates the use of this method to itterate through all internet explorer instances.
+		/// <code>
+		/// foreach (IE ie in IE.InternetExplorers(false))
+		/// {
+		///   // do something but be aware that the page might not be completely loaded yet.
+		/// }
+		/// </code>
+		/// </example>
+		public static IECollection InternetExplorers(bool waitForComplete)
+		{
+			return new IECollection(waitForComplete);
+		}
+
+		/// <summary>
 		/// Opens a new Internet Explorer with a blank page. 
 		/// <note>
 		/// When the <see cref="WatiN.Core.IE" />

@@ -719,5 +719,27 @@ namespace WatiN.Core.UnitTests
 
 			return IE.Exists(Find.ByTitle(partialTitle));
 		}
+
+		[Test]
+		public void TestWatiNWithInjectedHTMLCode()
+		{
+			string html = "<HTML><input name=txtSomething><input type=button name=btnSomething value=Click></HTML>";
+
+			using(IE ie = new IE())
+			{
+				ie.HtmlDocument.writeln(html);
+
+				Assert.That(ie.Button(Find.ByName("btnSomething")).Exists);
+			}
+		}
+
+		[Test]
+		public void Test()
+		{
+			using(IE ie = new IE("http://sports.yahoo.com/sc/news?slug=ap-tourdefrance&prov=ap&type=lgns"))
+			{
+				Console.WriteLine(ie.Text);
+			}
+		}
 	}
 }

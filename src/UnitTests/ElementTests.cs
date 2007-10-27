@@ -750,6 +750,49 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
+		public void MoveMousePointer()
+		{
+			IE.Settings.MakeNewIeInstanceVisible = true;
+			IE.Settings.HighLightElement = true;
+
+			using (IE ie = new IE("www.google.com"))
+			{
+				Button button = ie.Button(Find.ByName("btnG"));
+				PositionMousePointerInMiddleOfElement(button);
+				button.Flash();
+				MouseMove(50, 50, true);
+			}
+		}
+
+		private static void PositionMousePointerInMiddleOfElement(Element button) 
+		{
+			int offsetLeft = int.Parse(button.GetAttributeValue("offsetLeft"));
+			int offsetWidth = int.Parse(button.GetAttributeValue("offsetWidth"));
+			int offsetTop = int.Parse(button.GetAttributeValue("offsetTop"));
+			int offsetHeight = int.Parse(button.GetAttributeValue("offsetHeight"));
+				
+			System.Drawing.Point currentPt = new System.Drawing.Point(offsetLeft + (offsetWidth / 2), offsetTop + (offsetHeight / 2));
+			System.Windows.Forms.Cursor.Position = currentPt;
+		}
+
+		public void MouseMove(int X, int Y, bool Relative)
+		{
+			System.Drawing.Point currentPt = System.Windows.Forms.Cursor.Position;
+			if (Relative)
+			{
+				currentPt.X += X;
+				currentPt.Y += Y;
+			}
+			else
+			{
+				currentPt.X = X;
+				currentPt.Y = Y;
+			}
+
+			System.Windows.Forms.Cursor.Position = currentPt;
+		}
+
+		[Test]
 		public void FireEventAlwaysSetsSrcElementOnEventObject()
 		{
 			using (IE ie = new IE(TestEventsURI))

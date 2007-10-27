@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using mshtml;
 using SHDocVw;
@@ -28,9 +29,14 @@ namespace WatiN.Core
 	public class IECollection : IEnumerable
 	{
 		private ArrayList internetExplorers;
+		private bool _waitForComplete;
 
-		public IECollection()
+		public IECollection() : this(true) {}
+
+		public IECollection(bool waitForComplete)
 		{
+			_waitForComplete = waitForComplete;
+
 			internetExplorers = new ArrayList();
 
 			ShellWindows allBrowsers = new ShellWindows();
@@ -39,11 +45,11 @@ namespace WatiN.Core
 			{
 				try
 				{
-          if (internetExplorer.Document is IHTMLDocument2)
-          {
-            IE ie = new IE(internetExplorer);
-            internetExplorers.Add(ie);
-          }
+					if (internetExplorer.Document is IHTMLDocument2)
+					{
+						IE ie = new IE(internetExplorer);
+						internetExplorers.Add(ie);
+					}
 				}
 				catch {}
 			}
@@ -56,13 +62,16 @@ namespace WatiN.Core
 
 		public IE this[int index]
 		{
-			get { return GetIEByIndex(internetExplorers, index); }
+			get { return GetIEByIndex(internetExplorers, index, _waitForComplete); }
 		}
 
-		private static IE GetIEByIndex(ArrayList internetExplorers, int index)
+		private static IE GetIEByIndex(ArrayList internetExplorers, int index, bool waitForComplete)
 		{
 			IE ie = (IE) internetExplorers[index];
-			ie.WaitForComplete();
+			if (waitForComplete)
+			{
+				ie.WaitForComplete();
+			}
 
 			return ie;
 		}
@@ -70,7 +79,7 @@ namespace WatiN.Core
 		/// <exclude />
 		public Enumerator GetEnumerator()
 		{
-			return new Enumerator(internetExplorers);
+			return new Enumerator(internetExplorers, _waitForComplete);
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -82,11 +91,13 @@ namespace WatiN.Core
 		public class Enumerator : IEnumerator
 		{
 			private ArrayList children;
+			private readonly bool _waitForComplete;
 			private int index;
 
-			public Enumerator(ArrayList children)
+			public Enumerator(ArrayList children, bool waitForComplete)
 			{
 				this.children = children;
+				_waitForComplete = waitForComplete;
 				Reset();
 			}
 
@@ -103,7 +114,7 @@ namespace WatiN.Core
 
 			public IE Current
 			{
-				get { return GetIEByIndex(children, index); }
+				get { return GetIEByIndex(children, index, _waitForComplete); }
 			}
 
 			object IEnumerator.Current

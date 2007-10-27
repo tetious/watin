@@ -48,6 +48,22 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 				}
 			}
 		}
+		[Test]
+		public void AlertDialogHandler2()
+		{
+using (IE ie = new IE("www.watinexamples.com"))
+{
+	AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+	ie.DialogWatcher.Add(alertDialogHandler);
+	
+	ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+
+	alertDialogHandler.WaitUntilExists();
+	alertDialogHandler.OKButton.Click();
+
+	ie.WaitForComplete();
+}
+		}
 
 		[Test]
 		public void AlertDialogHandlerWithoutAutoCloseDialogs()
