@@ -21,6 +21,7 @@ using System.Collections;
 using System.Globalization;
 using System.Threading;
 using mshtml;
+using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
@@ -231,7 +232,7 @@ namespace WatiN.Core
 
 		internal static bool isInputElement(string tagName)
 		{
-			return String.Compare(tagName, ElementsSupport.InputTagName, true, CultureInfo.InvariantCulture) == 0;
+			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
 		}
 	}
 }

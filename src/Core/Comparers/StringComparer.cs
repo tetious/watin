@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Globalization;
 
 namespace WatiN.Core.Comparers
 {
@@ -25,10 +26,15 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class StringComparer : BaseComparer
 	{
+		private readonly bool _ignorecase;
 		protected string valueToCompareWith;
 
-		public StringComparer(string value)
+		public StringComparer(string value) : this(value, false) {}
+
+		public StringComparer(string value, bool ignorecase)
 		{
+			_ignorecase = ignorecase;
+			
 			if (value == null)
 			{
 				throw new ArgumentNullException("value");
@@ -38,16 +44,37 @@ namespace WatiN.Core.Comparers
 
 		public override bool Compare(string value)
 		{
-			if (value != null && valueToCompareWith.Equals(value))
-			{
-				return true;
-			}
-			return false;
+			if (value == null) return false;
+
+			return (String.Compare(value, valueToCompareWith, _ignorecase, CultureInfo.InvariantCulture) == 0);
 		}
 
 		public override string ToString()
 		{
 			return valueToCompareWith;
+		}
+
+		/// <summary>
+		/// Compare the two values with <seealso cref="CultureInfo"/> set to InvariantCulture.
+		/// </summary>
+		/// <param name="lhs">The left hand side value.</param>
+		/// <param name="rhs">The right hand side value.</param>
+		/// <returns><c>true</c> or <c>false</c></returns>
+		public static bool AreEqual(string lhs, string rhs)
+		{
+			return new StringComparer(lhs).Compare(rhs);
+		}
+
+		/// <summary>
+		/// Compare the two values with <seealso cref="CultureInfo"/> set to InvariantCulture.
+		/// </summary>
+		/// <param name="lhs">The left hand side value.</param>
+		/// <param name="rhs">The right hand side value.</param>
+		/// <param name="ignoreCase">if set to <c>true</c> it compares case insensitive.</param>
+		/// <returns><c>true</c> or <c>false</c></returns>
+		public static bool AreEqual(string lhs, string rhs, bool ignoreCase)
+		{
+			return new StringComparer(lhs, ignoreCase).Compare(rhs);
 		}
 	}
 }

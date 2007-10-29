@@ -16,9 +16,6 @@
 
 #endregion Copyright
 
-using System;
-using System.Globalization;
-
 namespace WatiN.Core.Comparers
 {
 	/// <summary>
@@ -26,18 +23,6 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class StringEqualsAndCaseInsensitiveComparer : StringComparer
 	{
-		public StringEqualsAndCaseInsensitiveComparer(string value) : base(value) {}
-
-		public override bool Compare(string value)
-		{
-			if (value == null) return false;
-
-			return (String.Compare(value, valueToCompareWith, true, CultureInfo.InvariantCulture) == 0);
-		}
-
-		public override string ToString()
-		{
-			return valueToCompareWith;
-		}
+		public StringEqualsAndCaseInsensitiveComparer(string value) : base(value, true) {}
 	}
 }

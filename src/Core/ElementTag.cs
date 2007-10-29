@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using mshtml;
+using WatiN.Core.Comparers;
 
 namespace WatiN.Core
 {
@@ -122,7 +123,7 @@ namespace WatiN.Core
 		{
 			if (TagName == null) return true;
 
-			return String.Compare(TagName, element.tagName, true, CultureInfo.InvariantCulture) == 0;
+			return StringComparer.AreEqual(TagName, element.tagName, true);
 		}
 
 		private bool CompareAgainstInputTypes(IHTMLElement element)

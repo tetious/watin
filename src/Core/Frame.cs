@@ -20,6 +20,7 @@ using System;
 using System.Globalization;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
@@ -109,7 +110,7 @@ namespace WatiN.Core
 
 			foreach (DispHTMLBaseElement element in elements)
 			{
-				if (string.Compare(element.uniqueID, _frameElementUniqueId, true, CultureInfo.InvariantCulture) == 0)
+				if (StringComparer.AreEqual(element.uniqueID, _frameElementUniqueId, true))
 				{
 					return (IHTMLElement2)element;
 				}

@@ -20,6 +20,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using mshtml;
+using WatiN.Core.Comparers;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -117,7 +118,7 @@ namespace WatiN.Core
 		{
 			string value = null;
 
-			if (String.Compare(attributename, "href", true, CultureInfo.InvariantCulture) == 0)
+			if (StringComparer.AreEqual(attributename, "href", true))
 			{
 				try
 				{
@@ -125,7 +126,7 @@ namespace WatiN.Core
 				}
 				catch {}
 			}
-			else if (String.Compare(attributename, "title", true, CultureInfo.InvariantCulture) == 0)
+			else if (StringComparer.AreEqual(attributename, "title", true))
 			{
 				try
 				{

@@ -19,6 +19,7 @@
 using System;
 using System.Globalization;
 using mshtml;
+using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -45,7 +46,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			if (string.Compare(attributename, "style", true, CultureInfo.InvariantCulture) == 0)
+			if (StringComparer.AreEqual(attributename, "style", true))
 			{
 				return element.style.cssText;
 			}
