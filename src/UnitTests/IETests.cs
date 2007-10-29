@@ -732,14 +732,5 @@ namespace WatiN.Core.UnitTests
 				Assert.That(ie.Button(Find.ByName("btnSomething")).Exists);
 			}
 		}
-
-		[Test]
-		public void Test()
-		{
-			using(IE ie = new IE("http://sports.yahoo.com/sc/news?slug=ap-tourdefrance&prov=ap&type=lgns"))
-			{
-				Console.WriteLine(ie.Text);
-			}
-		}
 	}
 }
