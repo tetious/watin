@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Globalization;
 using mshtml;
 using SHDocVw;
@@ -29,20 +30,22 @@ namespace WatiN.Core
 	/// </summary>
 	public class Frame : Document, IAttributeBag
 	{
-		private string frameName = string.Empty;
-		private string frameId = string.Empty;
+		private IHTMLDocument3 _frameSetParent;
+		private string _frameElementUniqueId;
+		private Element frameElement;
 
 		/// <summary>
 		/// This constructor will mainly be used by the constructor of FrameCollection
 		/// to create an instance of a Frame.
 		/// </summary>
-		/// <param name="ie"></param>
-		/// <param name="htmlDocument"></param>
-		/// <param name="name"></param>
-		/// <param name="id"></param>
-		public Frame(DomContainer ie, IHTMLDocument2 htmlDocument, string name, string id) : base(ie, htmlDocument)
+		/// <param name="ie">The ie.</param>
+		/// <param name="htmlDocument">The HTML document.</param>
+		/// <param name="frameSetParent">The frame set parent.</param>
+		/// <param name="frameElementUniqueId">The frame element unique id.</param>
+		public Frame(DomContainer ie, IHTMLDocument2 htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(ie, htmlDocument)
 		{
-			Init(name, id);
+			_frameSetParent = frameSetParent;
+			_frameElementUniqueId = frameElementUniqueId;
 		}
 
 		/// <summary>
@@ -72,12 +75,46 @@ namespace WatiN.Core
 
 		public string Name
 		{
-			get { return frameName; }
+			get { return GetAttributeValue("name"); }
 		}
 
 		public string Id
 		{
-			get { return frameId; }
+			get { return GetAttributeValue("id"); }
+		}
+
+		public string GetAttributeValue(string attributename)
+		{
+			if(frameElement == null)
+			{
+				IHTMLElement2 element = GetFrameElement("FRAME");
+				if(element == null)			
+				{
+					element = GetFrameElement("IFRAME");
+				}
+
+				if (element == null)
+				{
+					throw new WatiNException("element shouldn't be null");
+				}
+
+				frameElement = new Element(DomContainer, element);
+			}	
+			return frameElement.GetAttributeValue(attributename);
+		}
+
+		private IHTMLElement2 GetFrameElement(string tagname) 
+		{
+			IHTMLElementCollection elements = _frameSetParent.getElementsByTagName(tagname);
+
+			foreach (DispHTMLBaseElement element in elements)
+			{
+				if (string.Compare(element.uniqueID, _frameElementUniqueId, true, CultureInfo.InvariantCulture) == 0)
+				{
+					return (IHTMLElement2)element;
+				}
+			}
+			return null;
 		}
 
 		internal static int GetFrameCountFromHTMLDocument(HTMLDocument htmlDocument)
@@ -98,28 +135,20 @@ namespace WatiN.Core
 			return processor.IWebBrowser2();
 		}
 
-		private void Init(string name, string id)
-		{
-			frameName = name;
-			frameId = id;
-		}
-
 		#region IAttributeBag Members
 
 		public string GetValue(string attributename)
 		{
 			switch (attributename.ToLower(CultureInfo.InvariantCulture))
 			{
-				case "name":
-					return Name;
 				case "url":
 					return Url;
+				
 				case "href":
 					return Url;
-				case "id":
-					return Id;
+
 				default:
-					throw new InvalidAttributException(attributename, "Frame or IFrame");
+					return GetAttributeValue(attributename);
 			}
 		}
 

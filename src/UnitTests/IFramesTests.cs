@@ -18,6 +18,7 @@
 
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
@@ -111,6 +112,20 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(expectedFramesCount, count);
+		}
+
+		[Test]
+		public void ShouldBeAbleToAccessCustomAttributeInIFrameElement()
+		{
+			string value = ie.Frame("iframe2").GetAttributeValue("mycustomattribute");
+			Assert.That(value, Is.EqualTo("WatiN"));
+		}
+
+		[Test]
+		public void ShouldBeAbleToFindFrameUsingCustomAttributeInIFrameElement()
+		{
+			Frame frame = ie.Frame(Find.By("mycustomattribute","WatiN"));
+			Assert.That(frame.Id, Is.EqualTo("iframe2"));
 		}
 
 		[Test] //, Ignore("An Ebay IFrame never reaches complete status"), Category("InternetConnectionNeeded")]

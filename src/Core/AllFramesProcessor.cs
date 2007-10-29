@@ -58,17 +58,10 @@ namespace WatiN.Core
 		{
 			// Get the frame element from the parent document
 			IHTMLElement frameElement = (IHTMLElement) frameElements.item(index, null);
+			string frameElementUniqueId = ((DispHTMLBaseElement) frameElement).uniqueID;
 
-			string frameName = null;
-			string frameId = null;
-
-			if (frameElement != null)
-			{
-				frameId = frameElement.id;
-				frameName = frameElement.getAttribute("name", 0) as string;
-			}
-
-			Frame frame = new Frame(ie, webBrowser2.Document as IHTMLDocument2, frameName, frameId);
+			Frame frame = new Frame(ie, (IHTMLDocument2)webBrowser2.Document, (IHTMLDocument3) htmlDocument, frameElementUniqueId);
+			
 			elements.Add(frame);
 
 			index++;

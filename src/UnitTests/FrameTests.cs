@@ -18,6 +18,7 @@
 
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 
@@ -138,6 +139,26 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(expectedFramesCount, count);
+		}
+
+		[Test]
+		public void ShouldBeAbleToAccessCustomAttributeInFrameSetElement()
+		{
+			string value = ie.Frame("mainid").GetAttributeValue("mycustomattribute");
+			Assert.That(value, Is.EqualTo("WatiN"));
+		}
+
+		[Test]
+		public void ShouldBeAbleToFindFrameUsingCustomAttributeInFrameSetElement()
+		{
+			Frame frame = ie.Frame(Find.By("mycustomattribute","WatiN"));
+			Assert.That(frame.Id, Is.EqualTo("mainid"));
+		}
+
+		[Test, ExpectedException(typeof(FrameNotFoundException))]
+		public void ShouldThrowFrameNotFoundExceptionWhenFindingFrameWithNonExistingAttribute()
+		{
+			ie.Frame(Find.By("nonexisting","something"));
 		}
 
 		[Test]
