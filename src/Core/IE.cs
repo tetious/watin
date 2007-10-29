@@ -153,6 +153,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Creates a collection of new IE instances associated with open Internet Explorer windows.
 		/// </summary>
+		/// <returns>An IE instance which is complete loaded.</returns>
 		/// <example>
 		/// This code snippet illustrates the use of this method to found out the number of open
 		/// Internet Explorer windows.
@@ -167,22 +168,21 @@ namespace WatiN.Core
 		/// Creates a collection of new IE instances associated with open Internet Explorer windows. Use this
 		/// method if you don't want WatiN to wait until a document is fully loaded before returning it.
 		/// This might be handy in situations where you encounter Internet Explorer instances which are always
-		/// busy loading and block your itteration through the collection.
+		/// busy loading and that way blocks itteration through the collection.
 		/// </summary>
-		/// <param name="waitForComplete">if set to <c>false</c> WatiN will not wait until the document in the Internet Explorer instance is completely loaded.</param>
-		/// <returns></returns>
+		/// <returns>An IE instance which might not have been complete loaded yet.</returns>
 		/// <example>
 		/// This code snippet illustrates the use of this method to itterate through all internet explorer instances.
 		/// <code>
-		/// foreach (IE ie in IE.InternetExplorers(false))
+		/// foreach (IE ie in IE.InternetExplorersNoWait)
 		/// {
-		///   // do something but be aware that the page might not be completely loaded yet.
+		/// // do something but be aware that the page might not be completely loaded yet.
 		/// }
 		/// </code>
 		/// </example>
-		public static IECollection InternetExplorers(bool waitForComplete)
+		public static IECollection InternetExplorersNoWait()
 		{
-			return new IECollection(waitForComplete);
+			return new IECollection(false);
 		}
 
 		/// <summary>
@@ -1259,13 +1259,26 @@ namespace WatiN.Core
 		/// <value>The HTML dialogs.</value>
 		public HtmlDialogCollection HtmlDialogs
 		{
-			get
-			{
-				Process p = Process.GetProcessById(ProcessID);
-				HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p);
+			get { return GetHtmlDialogs(true); }
+		}
 
-				return htmlDialogCollection;
-			}
+		/// <summary>
+		/// Returns a collection of open HTML dialogs (modal as well as modeless).
+		/// When itterating through this collection WaitForComplete will not be
+		/// called on a HTML dialog before returning it from the collection.
+		/// </summary>
+		/// <value>The HTML dialogs.</value>
+		public HtmlDialogCollection HtmlDialogsNoWait
+		{
+			get { return GetHtmlDialogs(true); }
+		}
+
+		private HtmlDialogCollection GetHtmlDialogs(bool waitForComplete)
+		{
+			Process p = Process.GetProcessById(ProcessID);
+			HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p, true);
+
+			return htmlDialogCollection;
 		}
 
 		public override IntPtr hWnd

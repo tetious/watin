@@ -27,10 +27,12 @@ namespace WatiN.Core
 	/// </summary>
 	public class HtmlDialogCollection : IEnumerable
 	{
+		private readonly bool _waitForComplete;
 		private ArrayList htmlDialogs;
 
-		public HtmlDialogCollection(Process ieProcess)
+		public HtmlDialogCollection(Process ieProcess, bool waitForComplete)
 		{
+			_waitForComplete = waitForComplete;
 			htmlDialogs = new ArrayList();
 
 			IntPtr hWnd = IntPtr.Zero;
@@ -63,7 +65,7 @@ namespace WatiN.Core
 
 		public HtmlDialog this[int index]
 		{
-			get { return GetHTMLDialogByIndex(htmlDialogs, index); }
+			get { return GetHTMLDialogByIndex(htmlDialogs, index, _waitForComplete); }
 		}
 
 		public void CloseAll()
@@ -95,10 +97,13 @@ namespace WatiN.Core
 			return false;
 		}
 
-		private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index)
+		private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index, bool waitForComplete)
 		{
 			HtmlDialog htmlDialog = (HtmlDialog) htmlDialogs[index];
-			htmlDialog.WaitForComplete();
+			if (waitForComplete)
+			{
+				htmlDialog.WaitForComplete();
+			}
 
 			return htmlDialog;
 		}
@@ -106,7 +111,7 @@ namespace WatiN.Core
 		/// <exclude />
 		public Enumerator GetEnumerator()
 		{
-			return new Enumerator(htmlDialogs);
+			return new Enumerator(htmlDialogs, _waitForComplete);
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -118,11 +123,13 @@ namespace WatiN.Core
 		public class Enumerator : IEnumerator
 		{
 			private ArrayList htmlDialogs;
+			private readonly bool _waitForComplete;
 			private int index;
 
-			public Enumerator(ArrayList htmlDialogs)
+			public Enumerator(ArrayList htmlDialogs, bool waitForComplete)
 			{
 				this.htmlDialogs = htmlDialogs;
+				_waitForComplete = waitForComplete;
 				Reset();
 			}
 
@@ -139,7 +146,7 @@ namespace WatiN.Core
 
 			public HtmlDialog Current
 			{
-				get { return GetHTMLDialogByIndex(htmlDialogs, index); }
+				get { return GetHTMLDialogByIndex(htmlDialogs, index, _waitForComplete); }
 			}
 
 			object IEnumerator.Current
