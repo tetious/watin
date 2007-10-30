@@ -88,6 +88,12 @@ function removeElement()
       div.removeNode(true);
     }, 3000);
 }
+
+function ClickHref()
+{
+    text = document.getElementById("hrefclickresult");
+    text.value = "success";
+}
         </script>
     </head>
     <body>
@@ -119,5 +125,6 @@ function removeElement()
         </P>
         <P>&nbsp;</P>
         <div id="textFieldToRemoveDiv"><input type="text" id="textFieldToRemove" value='Element to be removed'></div>
+        <a href="javascript:ClickHref()" id="hreftest">Link with javascript in Href</a><input id="hrefclickresult" type="text"/>
     </body>
 </html>

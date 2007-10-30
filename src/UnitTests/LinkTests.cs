@@ -19,6 +19,7 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -90,5 +91,19 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(linksEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(expectedLinkCount, count);
 		}
+
+	    [Test]
+	    public void ClickingOnLinkWithJavaScriptInHrefShouldWork()
+	    {
+	        IE.Settings.MakeNewIeInstanceVisible = true;
+
+	        using (IE ie = new IE(TestEventsURI))
+	        {
+	            Link link = ie.Link("hreftest");
+	            link.Click();
+                Assert.That(ie.TextField("hrefclickresult").Value, Is.EqualTo("success"));
+	        }
+	    }
+
 	}
 }
