@@ -20,7 +20,7 @@ using System;
 using System.Globalization;
 using mshtml;
 using SHDocVw;
-using WatiN.Core.Comparers;
+using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 

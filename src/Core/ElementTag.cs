@@ -20,7 +20,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using mshtml;
-using WatiN.Core.Comparers;
+using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core
 {
