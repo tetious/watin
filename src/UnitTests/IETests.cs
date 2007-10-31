@@ -195,7 +195,7 @@ namespace WatiN.Core.UnitTests
 
 				ie.Button("popupid").Click();
 
-				using (Document document = ie.HtmlDialogs[0])
+				using (Document document = ie.HtmlDialog(Find.ByIndex(0)))
 				{
 					Assert.AreEqual(ReferenceCount + 1, ie.DialogWatcher.ReferenceCount, "DialogWatcher reference count");
 				}

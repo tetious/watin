@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
 using System.Text.RegularExpressions;
+using System.Threading;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -227,6 +228,51 @@ namespace WatiN.Core
 
 			return (regex.Match(innertext).Success);
 		}
+
+
+        /// <summary>
+        /// Waits until the text is inside the HTML Body element contains the given <paramref name="text" />.
+        /// Will time out after <see name="IE.Settings.WaitUntilExistsTimeOut" />
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>
+        ///     <see name="TimeoutException"/> if the specified text is not found within the time out period.
+        /// </returns>
+        public void WaitUntilContainsText(string text)
+        {
+            SimpleTimer timer = new SimpleTimer(IE.Settings.WaitUntilExistsTimeOut);
+
+            do
+            {
+                if (ContainsText(text)) { return; }
+
+                Thread.Sleep(50);
+            } while (!timer.Elapsed);
+
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", IE.Settings.WaitUntilExistsTimeOut, text));
+        }
+
+        /// <summary>
+        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
+        /// Will time out after <see name="IE.Settings.WaitUntilExistsTimeOut" />
+        /// </summary>
+        /// <param name="regex">The regular expression to match with.</param>
+        /// <returns>
+        ///     <see name="TimeoutException"/> if the specified text is not found within the time out period.
+        /// </returns>
+        public void WaitUntilContainsText(Regex regex)
+        {
+            SimpleTimer timer = new SimpleTimer(IE.Settings.WaitUntilExistsTimeOut);
+
+            do
+            {
+                if (ContainsText(regex)) { return; }
+
+                Thread.Sleep(50);
+            } while (!timer.Elapsed);
+
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", IE.Settings.WaitUntilExistsTimeOut, regex));
+        }
 
 		/// <summary>
 		/// Gets the text inside the HTML Body element that matches the regular expression.

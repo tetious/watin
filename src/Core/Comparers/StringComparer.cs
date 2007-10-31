@@ -62,7 +62,7 @@ namespace WatiN.Core.Comparers
 		/// <returns><c>true</c> or <c>false</c></returns>
 		public static bool AreEqual(string lhs, string rhs)
 		{
-			return new StringComparer(lhs).Compare(rhs);
+            return AreEqual(lhs, rhs, false);
 		}
 
 		/// <summary>
@@ -74,6 +74,8 @@ namespace WatiN.Core.Comparers
 		/// <returns><c>true</c> or <c>false</c></returns>
 		public static bool AreEqual(string lhs, string rhs, bool ignoreCase)
 		{
+            if (lhs == null) return false;
+
 			return new StringComparer(lhs, ignoreCase).Compare(rhs);
 		}
 	}

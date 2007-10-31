@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System.Text.RegularExpressions;
+using System.Threading;
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -30,6 +32,7 @@ namespace WatiN.Core.UnitTests
 		private MockRepository _mockRepository;
 		private IHTMLDocument2 _mockHtmlDocument;
 		private IHTMLWindow2 _mockHtmlWindow2;
+	    private int _originalWaitUntilExistsTimeOut;
 
 		[SetUp]
 		public void Setup()
@@ -37,10 +40,18 @@ namespace WatiN.Core.UnitTests
 			_mockRepository = new MockRepository();
 			_mockHtmlDocument = (IHTMLDocument2) _mockRepository.CreateMock(typeof (IHTMLDocument2));
 			_mockHtmlWindow2 = (IHTMLWindow2) _mockRepository.CreateMock(typeof (IHTMLWindow2));
+            _originalWaitUntilExistsTimeOut = IE.Settings.WaitUntilExistsTimeOut;
 		}
 
+	    [TearDown]
+	    public void TearDown()
+	    {
+	        IE.Settings.WaitUntilExistsTimeOut = _originalWaitUntilExistsTimeOut;
+	    }
+
+
 		[Test]
-		public void DocumentIsISubElement()
+        public void DocumentIsIElementsContainer()
 		{
 			using (IE ie = new IE())
 			{
@@ -141,5 +152,90 @@ namespace WatiN.Core.UnitTests
 				Assert.AreEqual("5", result);
 			}
 		}
+
+        [Test, ExpectedException(typeof(TimeoutException))]
+        public void WaitUntilContainsTextShouldThrowTimeOutException()
+        {
+            IE.Settings.WaitUntilExistsTimeOut = 1;
+            using(IE ie = new IE())
+            {
+                HTMLInjector.Start(ie, "some text", 2);
+                ie.WaitUntilContainsText("some text");
+            }
+        }
+
+        [Test]
+        public void WaitUntilContainsTextShouldReturn()
+        {
+            IE.Settings.WaitUntilExistsTimeOut = 2;
+            using(IE ie = new IE())
+            {
+                HTMLInjector.Start(ie, "some text", 1);
+                ie.WaitUntilContainsText("some text");
+            }
+        }
+
+        [Test, ExpectedException(typeof(TimeoutException))]
+        public void WaitUntilContainsTextRegexShouldThrowTimeOutException()
+        {
+            IE.Settings.WaitUntilExistsTimeOut = 1;
+            using(IE ie = new IE())
+            {
+                HTMLInjector.Start(ie, "some text", 2);
+                ie.WaitUntilContainsText(new Regex("me te"));
+            }
+        }
+
+        [Test]
+        public void WaitUntilContainsTextRegexShouldReturn()
+        {
+            IE.Settings.WaitUntilExistsTimeOut = 2;
+            using(IE ie = new IE())
+            {
+                HTMLInjector.Start(ie, "some text", 1);
+                ie.WaitUntilContainsText(new Regex("me te"));
+            }
+        }
 	}
+
+    internal class HTMLInjector
+    {
+        private string _html;
+        private readonly int _numberOfSecondsToWaitBeforeInjection;
+        private Document _document;
+
+        public HTMLInjector(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
+        {
+            _document = document;
+            _html = html;
+            _numberOfSecondsToWaitBeforeInjection = numberOfSecondsToWaitBeforeInjection;
+        }
+
+        public void Inject()
+        {
+            Thread.Sleep(_numberOfSecondsToWaitBeforeInjection * 1000);
+
+            try
+            {
+                _document.HtmlDocument.writeln(_html);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Starts a new thread and injects the html into the document after numberOfSecondsToWaitBeforeInjection.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="html"></param>
+        /// <param name="numberOfSecondsToWaitBeforeInjection"></param>
+        public static void Start(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
+        {
+            HTMLInjector htmlInjector = new HTMLInjector(document, html, numberOfSecondsToWaitBeforeInjection);
+
+            ThreadStart start = new ThreadStart(htmlInjector.Inject);
+            Thread thread = new Thread(start);
+            thread.Start();
+        }
+
+    }
 }

@@ -730,6 +730,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FireEventAlwaysSetsLeftMouseOnEventObject()
 		{
+		    IE.Settings.MakeNewIeInstanceVisible = true;
+
 			using (IE ie = new IE(TestEventsURI))
 			{
 				// test in standard IE window
@@ -740,7 +742,7 @@ namespace WatiN.Core.UnitTests
 				// test in HTMLDialog window
 				ie.Button("modalid").ClickNoWait();
 
-				using (HtmlDialog htmlDialog = ie.HtmlDialogs[0])
+				using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0)))
 				{
 					htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 
@@ -805,7 +807,7 @@ namespace WatiN.Core.UnitTests
 				// test in HTMLDialog window
 				ie.Button("modalid").ClickNoWait();
 
-				using (HtmlDialog htmlDialog = ie.HtmlDialogs[0])
+				using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0)))
 				{
 					htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 
