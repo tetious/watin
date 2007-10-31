@@ -420,6 +420,11 @@ Copyright 2006-2007 Jeroen van Menen
 	    <call target="full-net-2.0" />
 	</target>
 	
+	<target name="buildandtest" description="Compiles net 1.1, tests net 1.1, and compiles net 2.0 versions">
+	    <call target="build-net-1.1" />
+	    <call target="build-net-2.0" />
+	</target>
+	
 	<target name="full-net-1.1" if="${framework::sdk-exists('net-1.1')}" description="Compiles, tests, and produces distributions for .Net 1.1" >
 	    <call target="set-net-1.1-version" />
 	    <call target="clean" />
@@ -434,11 +439,25 @@ Copyright 2006-2007 Jeroen van Menen
 	    <call target="set-net-2.0-version" />
 	    <call target="clean" />
 	    <call target="build" />
-	    <!--call target="run-unit-tests" /-->
-	    <call target="ndocweb" />
-	    <!--call target="dist" /-->
-	    <!--call target="installer"  /-->
+	    <call target="run-unit-tests" />
+	    <call target="ndoc" />
+	    <call target="dist" />
+	    <call target="installer"  />
 	</target>
+	
+	<target name="build-net-1.1" if="${framework::sdk-exists('net-1.1')}" description="Compiles, tests, and produces distributions for .Net 1.1" >
+	    <call target="set-net-1.1-version" />
+	    <call target="clean" />
+	    <call target="build" />
+	    <!--call target="run-unit-tests-with-coverage" /-->
+	</target>
+
+	<target name="build-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">
+	    <call target="set-net-2.0-version" />
+	    <call target="clean" />
+	    <call target="build" />
+	</target>
+
 </project>
 
 
