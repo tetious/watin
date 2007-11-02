@@ -41,7 +41,7 @@ namespace WatiN.Core.UnitTests
 			ie.Button("disabledid").Click();
 		}
 
-		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (button submit image reset) or BUTTON' tag containing attribute id with value 'noneexistingbuttonid'")]
+		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid'")]
 		public void ButtonElementNotFoundException()
 		{
 			IE.Settings.WaitUntilExistsTimeOut = 1;

@@ -83,7 +83,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The find by.</param>
 		/// <returns></returns>
-		public override TableBody TableBody(AttributeConstraint findBy)
+		public override TableBody TableBody(BaseConstraint findBy)
 		{
 			return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this));
 		}
@@ -109,9 +109,9 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findText, inColumn);
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findText, inColumn);
 
-			return findRow(attributeConstraint);
+			return findRow(constraint);
 		}
 
 		/// <summary>
@@ -125,9 +125,9 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint attributeConstraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
-			return FindRow(attributeConstraint);
+			return FindRow(constraint);
 		}
 
 		private TableRow findRow(TableRowAttributeConstraint attributeConstraint)

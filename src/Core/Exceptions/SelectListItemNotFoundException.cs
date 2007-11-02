@@ -23,7 +23,7 @@ namespace WatiN.Core.Exceptions
 	/// </summary>
 	public class SelectListItemNotFoundException : WatiNException
 	{
-		public SelectListItemNotFoundException(string value) :
-			base("No item with text or value '" + value + "' was found in the selectlist") {}
+		public SelectListItemNotFoundException(string constraint) :
+			base("No item was found in the selectlist matching constraint: " + constraint) {}
 	}
 }

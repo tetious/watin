@@ -324,7 +324,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AttributeConstraintTests\NotAttributeConstraintTests.cs"
+                    RelPath = "AttributeConstraintTests\NotConstraintTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

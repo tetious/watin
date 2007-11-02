@@ -106,7 +106,7 @@ namespace WatiN.Core
 			return Exists(Find.ById(elementId));
 		}
 
-		public bool Exists(AttributeConstraint findBy)
+		public bool Exists(BaseConstraint findBy)
 		{
 			ElementAttributeBag attributeBag = new ElementAttributeBag();
 
@@ -122,7 +122,7 @@ namespace WatiN.Core
 			return false;
 		}
 
-		protected ArrayList DoFilter(AttributeConstraint findBy)
+		protected ArrayList DoFilter(BaseConstraint findBy)
 		{
 			ArrayList returnElements;
 

@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Para(domContainer, (IHTMLParaElement) Elements[index]); }
 		}
 
-		public ParaCollection Filter(AttributeConstraint findBy)
+		public ParaCollection Filter(BaseConstraint findBy)
 		{
 			return new ParaCollection(domContainer, DoFilter(findBy));
 		}

@@ -785,21 +785,21 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Waits until the given <paramref name="attributeConstraint" /> matches.
+		/// Waits until the given <paramref name="constraint" /> matches.
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
 		/// </summary>
-		/// <param name="attributeConstraint">The AttributeConstraint.</param>
-		public void WaitUntil(AttributeConstraint attributeConstraint)
+		/// <param name="constraint">The BaseConstraint.</param>
+		public void WaitUntil(BaseConstraint constraint)
 		{
-			WaitUntil(attributeConstraint, IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntil(constraint, IE.Settings.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
-		/// Waits until the given <paramref name="attributeConstraint" /> matches.
+		/// Waits until the given <paramref name="constraint" /> matches.
 		/// </summary>
-		/// <param name="attributeConstraint">The AttributeConstraint.</param>
+		/// <param name="constraint">The BaseConstraint.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(AttributeConstraint attributeConstraint, int timeout)
+		public void WaitUntil(BaseConstraint constraint, int timeout)
 		{
 			Exception lastException;
 
@@ -820,7 +820,7 @@ namespace WatiN.Core
 					{
 						attributeBag.IHTMLElement = htmlElement;
 
-						if (attributeConstraint.Compare(attributeBag))
+						if (constraint.Compare(attributeBag))
 						{
 							return;
 						}
@@ -834,7 +834,7 @@ namespace WatiN.Core
 				Thread.Sleep(200);
 			} while (!timeoutTimer.Elapsed);
 
-			ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element attribute '{1}' to change to '{2}'.", timeout, attributeConstraint.AttributeName, attributeConstraint.Value));
+			ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ConstraintToString()));
 		}
 
 		private static void ThrowTimeOutException(Exception lastException, string message)
@@ -1125,9 +1125,9 @@ namespace WatiN.Core
     }
 
         /// <summary>
-    /// Gets the closest ancestor of the specified Type and AttributConstraint.
+    /// Gets the closest ancestor of the specified Type and constraint.
     /// </summary>
-    /// <param name="findBy">The AttributConstraint to match with.</param>
+    /// <param name="findBy">The constraint to match with.</param>
     /// <returns>
     /// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
     /// </returns>
@@ -1138,7 +1138,7 @@ namespace WatiN.Core
     /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(Find.ByText("First name"));
     /// </code>
     /// </example>
-    public T Ancestor<T>(AttributeConstraint findBy) where T : Element
+    public T Ancestor<T>(BaseConstraint findBy) where T : Element
     {
     	return (T)Ancestor(typeof(T), findBy);
     }
@@ -1158,7 +1158,7 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(Type ancestorType)
 		{
-			return Ancestor(ancestorType, new AlwaysTrueAttributeConstraint());
+			return Ancestor(ancestorType, new AlwaysTrueConstraint());
 		}
 
 		/// <summary>
@@ -1173,7 +1173,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(AttributeConstraint findBy)
+		public Element Ancestor(BaseConstraint findBy)
 		{
 			Element parentElement = Parent;
 
@@ -1204,7 +1204,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div), Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(Type ancestorType, AttributeConstraint findBy)
+		public Element Ancestor(Type ancestorType, BaseConstraint findBy)
 		{
 			if (!ancestorType.IsSubclassOf(typeof (Element)) && (ancestorType != typeof (Element)))
 			{
@@ -1233,7 +1233,7 @@ namespace WatiN.Core
 		/// <returns>
 		/// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
 		/// If no specific type is available, an element of type ElementContainer will be returned. 
-		/// If there is no ancestor that matches Tag and AttributeConstraint, <code>null</code> is returned.</returns>
+		/// If there is no ancestor that matches Tag and BaseConstraint, <code>null</code> is returned.</returns>
 		/// </returns>
 		/// <example>
 		/// The following example returns the Div a textfield is located in.
@@ -1242,9 +1242,9 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(string tagName, AttributeConstraint findBy)
+		public Element Ancestor(string tagName, BaseConstraint findBy)
 		{
-			AttributeConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+			BaseConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
 			                                   && findBy;
 
 			return Ancestor(findAncestor);
@@ -1266,10 +1266,10 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(string tagName)
 		{
-			return Ancestor(tagName, new AlwaysTrueAttributeConstraint());
+			return Ancestor(tagName, new AlwaysTrueConstraint());
 		}
 
-		private static bool Matches(Element parentElement, AttributeConstraint findBy)
+		private static bool Matches(Element parentElement, BaseConstraint findBy)
 		{
 			ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement) parentElement.HTMLElement);
 			return findBy.Compare(attributeBag);

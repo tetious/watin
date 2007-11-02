@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Link(domContainer, (IHTMLAnchorElement) Elements[index]); }
 		}
 
-		public LinkCollection Filter(AttributeConstraint findBy)
+		public LinkCollection Filter(BaseConstraint findBy)
 		{
 			return new LinkCollection(domContainer, DoFilter(findBy));
 		}

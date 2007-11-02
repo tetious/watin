@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Image(domContainer, (IHTMLElement) Elements[index]); }
 		}
 
-		public ImageCollection Filter(AttributeConstraint findBy)
+		public ImageCollection Filter(BaseConstraint findBy)
 		{
 			return new ImageCollection(domContainer, DoFilter(findBy));
 		}

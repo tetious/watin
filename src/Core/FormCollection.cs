@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Form(domContainer, (IHTMLFormElement) Elements[index]); }
 		}
 
-		public FormCollection Filter(AttributeConstraint findBy)
+		public FormCollection Filter(BaseConstraint findBy)
 		{
 			return new FormCollection(domContainer, DoFilter(findBy));
 		}

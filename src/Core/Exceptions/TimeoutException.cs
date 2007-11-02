@@ -25,7 +25,7 @@ namespace WatiN.Core.Exceptions
 	/// </summary>
 	public class TimeoutException : WatiNException
 	{
-		public TimeoutException(string value) : base("Timeout while '" + value + "'") {}
-		public TimeoutException(string value, Exception innerException) : base("Timeout while '" + value + "'", innerException) {}
+		public TimeoutException(string value) : base("Timeout while " + value ) {}
+		public TimeoutException(string value, Exception innerException) : base("Timeout while " + value, innerException) {}
 	}
 }

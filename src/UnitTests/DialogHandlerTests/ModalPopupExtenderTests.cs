@@ -52,7 +52,7 @@ namespace WatiN.Core.UnitTests
 	{
 		public VisibleAttribute(bool visible) : base("visible", new BoolComparer(visible)) {}
 
-		protected override bool doCompare(IAttributeBag attributeBag)
+		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
 			ElementAttributeBag bag = (ElementAttributeBag) attributeBag;
 

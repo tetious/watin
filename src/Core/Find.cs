@@ -262,9 +262,9 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static IndexAttributeConstraint ByIndex(int index)
+		public static IndexConstraint ByIndex(int index)
 		{
-			return new IndexAttributeConstraint(index);
+			return new IndexConstraint(index);
 		}
 
 		/// <summary>
@@ -414,7 +414,7 @@ namespace WatiN.Core
 		/// <example>
 		/// <code>ie.Link(Find.ByUrl(new Regex("pattern goes here"))).Url</code>
 		/// </example>
-		public static AttributeConstraint ByUrl(Regex regex)
+		public static BaseConstraint ByUrl(Regex regex)
 		{
 			return new AttributeConstraint(hrefAttribute, regex);
 		}

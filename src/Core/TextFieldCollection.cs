@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new TextField(domContainer, (IHTMLElement) Elements[index]); }
 		}
 
-		public TextFieldCollection Filter(AttributeConstraint findBy)
+		public TextFieldCollection Filter(BaseConstraint findBy)
 		{
 			return new TextFieldCollection(domContainer, DoFilter(findBy));
 		}

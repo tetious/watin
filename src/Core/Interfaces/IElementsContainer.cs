@@ -41,11 +41,11 @@ namespace WatiN.Core.Interfaces
 		Area Area(Regex elementId);
 
 		/// <summary>
-		/// Finds an image map area by an AttributeConstraint.
+		/// Finds an image map area by an BaseConstraint.
 		/// </summary>
-		/// <param name="findBy">The AttributeConstraint</param>
+		/// <param name="findBy">The BaseConstraint</param>
 		/// <returns>The area</returns>
-		Area Area(AttributeConstraint findBy);
+		Area Area(BaseConstraint findBy);
 
 		/// <summary>
 		/// Gets the collection of areas.
@@ -83,10 +83,10 @@ namespace WatiN.Core.Interfaces
 		Button Button(Regex elementId);
 
 		/// <summary>
-		/// Gets the specified Button by using the given <see cref="AttributeConstraint" /> to find the Button.
+		/// Gets the specified Button by using the given <see cref="BaseConstraint" /> to find the Button.
 		/// <seealso cref="Find" />
 		/// </summary>
-		/// <param name="findBy">The <see cref="AttributeConstraint"/> class or one of it's subclasses to find an element by. The <see cref="Find" /> class provides factory methodes to create specialized instances.</param>
+		/// <param name="findBy">The <see cref="BaseConstraint"/> class or one of it's subclasses to find an element by. The <see cref="Find" /> class provides factory methodes to create specialized instances.</param>
 		/// <exception cref="ElementNotFoundException">Thrown if the given <paramref name="findBy"/> doesn't match an element in the webpage.</exception>
 		/// <example>
 		/// This example opens a webpage, types some text and submits it by clicking
@@ -110,7 +110,7 @@ namespace WatiN.Core.Interfaces
 		///  }
 		/// </code>
 		/// </example>
-		Button Button(AttributeConstraint findBy);
+		Button Button(BaseConstraint findBy);
 
 		/// <summary>
 		/// Gets a typed collection of <see cref="WatiN.Core.Button" /> instances within this <see cref="Document"/>.
@@ -146,59 +146,59 @@ namespace WatiN.Core.Interfaces
 
 		CheckBox CheckBox(string elementId);
 		CheckBox CheckBox(Regex elementId);
-		CheckBox CheckBox(AttributeConstraint findBy);
+		CheckBox CheckBox(BaseConstraint findBy);
 		CheckBoxCollection CheckBoxes { get; }
 
 		Element Element(string elementId);
 		Element Element(Regex elementId);
-		Element Element(AttributeConstraint findBy);
-		Element Element(string tagname, AttributeConstraint findBy, params string[] inputtypes);
+		Element Element(BaseConstraint findBy);
+		Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes);
 		ElementCollection Elements { get; }
 
 		FileUpload FileUpload(string elementId);
 		FileUpload FileUpload(Regex elementId);
-		FileUpload FileUpload(AttributeConstraint findBy);
+		FileUpload FileUpload(BaseConstraint findBy);
 		FileUploadCollection FileUploads { get; }
 
 		Form Form(string elementId);
 		Form Form(Regex elementId);
-		Form Form(AttributeConstraint findBy);
+		Form Form(BaseConstraint findBy);
 		FormCollection Forms { get; }
 
 		Label Label(string elementId);
 		Label Label(Regex elementId);
-		Label Label(AttributeConstraint findBy);
+		Label Label(BaseConstraint findBy);
 		LabelCollection Labels { get; }
 
 		Link Link(string elementId);
 		Link Link(Regex elementId);
-		Link Link(AttributeConstraint findBy);
+		Link Link(BaseConstraint findBy);
 		LinkCollection Links { get; }
 
 		Para Para(string elementId);
 		Para Para(Regex elementId);
-		Para Para(AttributeConstraint findBy);
+		Para Para(BaseConstraint findBy);
 		ParaCollection Paras { get; }
 
 		RadioButton RadioButton(string elementId);
 		RadioButton RadioButton(Regex elementId);
-		RadioButton RadioButton(AttributeConstraint findBy);
+		RadioButton RadioButton(BaseConstraint findBy);
 		RadioButtonCollection RadioButtons { get; }
 
 		SelectList SelectList(string elementId);
 		SelectList SelectList(Regex elementId);
-		SelectList SelectList(AttributeConstraint findBy);
+		SelectList SelectList(BaseConstraint findBy);
 		SelectListCollection SelectLists { get; }
 
 		Table Table(string elementId);
 		Table Table(Regex elementId);
-		Table Table(AttributeConstraint findBy);
+		Table Table(BaseConstraint findBy);
 		TableCollection Tables { get; }
 //    TableSectionCollection TableSections { get; }
 
 		TableCell TableCell(string elementId);
 		TableCell TableCell(Regex elementId);
-		TableCell TableCell(AttributeConstraint findBy);
+		TableCell TableCell(BaseConstraint findBy);
 
 		/// <summary>
 		/// Finds a TableCell by the n-th index of an id. 
@@ -216,32 +216,32 @@ namespace WatiN.Core.Interfaces
 
 		TableRow TableRow(string elementId);
 		TableRow TableRow(Regex elementId);
-		TableRow TableRow(AttributeConstraint findBy);
+		TableRow TableRow(BaseConstraint findBy);
 		TableRowCollection TableRows { get; }
 
 		TableBody TableBody(string elementId);
 		TableBody TableBody(Regex elementId);
-		TableBody TableBody(AttributeConstraint findBy);
+		TableBody TableBody(BaseConstraint findBy);
 		TableBodyCollection TableBodies { get; }
 
 		TextField TextField(string elementId);
 		TextField TextField(Regex elementId);
-		TextField TextField(AttributeConstraint findBy);
+		TextField TextField(BaseConstraint findBy);
 		TextFieldCollection TextFields { get; }
 
 		Span Span(string elementId);
 		Span Span(Regex elementId);
-		Span Span(AttributeConstraint findBy);
+		Span Span(BaseConstraint findBy);
 		SpanCollection Spans { get; }
 
 		Div Div(string elementId);
 		Div Div(Regex elementId);
-		Div Div(AttributeConstraint findBy);
+		Div Div(BaseConstraint findBy);
 		DivCollection Divs { get; }
 
 		Image Image(string elementId);
 		Image Image(Regex elementId);
-		Image Image(AttributeConstraint findBy);
+		Image Image(BaseConstraint findBy);
 		ImageCollection Images { get; }
 	}
 }

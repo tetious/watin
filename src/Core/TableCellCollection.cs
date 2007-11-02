@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new TableCell(domContainer, (IHTMLTableCell) Elements[index]); }
 		}
 
-		public TableCellCollection Filter(AttributeConstraint findBy)
+		public TableCellCollection Filter(BaseConstraint findBy)
 		{
 			return new TableCellCollection(domContainer, DoFilter(findBy));
 		}

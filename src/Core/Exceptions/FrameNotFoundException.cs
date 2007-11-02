@@ -23,7 +23,7 @@ namespace WatiN.Core.Exceptions
 	/// </summary>
 	public class FrameNotFoundException : WatiNException
 	{
-		public FrameNotFoundException(string attributeName, string value) :
-			base("Could not find a Frame or IFrame by " + attributeName + " with value '" + value + "'") {}
+		public FrameNotFoundException(string constraint) :
+			base("Could not find a Frame or IFrame matching constraint: " + constraint) {}
 	}
 }

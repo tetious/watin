@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Label(domContainer, (IHTMLLabelElement) Elements[index]); }
 		}
 
-		public LabelCollection Filter(AttributeConstraint findBy)
+		public LabelCollection Filter(BaseConstraint findBy)
 		{
 			return new LabelCollection(domContainer, DoFilter(findBy));
 		}

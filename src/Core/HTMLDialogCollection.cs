@@ -84,7 +84,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public bool Exists(AttributeConstraint findBy)
+		public bool Exists(BaseConstraint findBy)
 		{
 			foreach (HtmlDialog htmlDialog in htmlDialogs)
 			{

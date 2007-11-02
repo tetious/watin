@@ -28,13 +28,13 @@ namespace WatiN.Core.UnitTests
 		private MockRepository mocks;
 		private IAttributeBag mockAttributeBag;
 
-		private AttributeConstraint findBy1;
-		private AttributeConstraint findBy2;
-		private AttributeConstraint findBy3;
-		private AttributeConstraint findBy4;
-		private AttributeConstraint findBy5;
+		private BaseConstraint findBy1;
+		private BaseConstraint findBy2;
+		private BaseConstraint findBy3;
+		private BaseConstraint findBy4;
+		private BaseConstraint findBy5;
 
-		private AttributeConstraint findBy;
+		private BaseConstraint findBy;
 
 		[SetUp]
 		public void Setup()

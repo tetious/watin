@@ -102,7 +102,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("Third Listitem", selectList.SelectedItems[1], "Third Listitem not selected after Select");
 		}
 
-		[Test, ExpectedException(typeof (SelectListItemNotFoundException), ExpectedMessage = "No item with text or value 'None existing item' was found in the selectlist")]
+		[Test, ExpectedException(typeof (SelectListItemNotFoundException), ExpectedMessage = "No item was found in the selectlist matching constraint: Attribute 'innertext' with value 'None existing item'")]
 		public void SelectItemNotFoundException()
 		{
 			SelectList selectList = ie.SelectList("Select1");

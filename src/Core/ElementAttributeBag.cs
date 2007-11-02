@@ -25,7 +25,7 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="AttributeConstraint.Compare"/>.
+	/// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="BaseConstraint.Compare"/>.
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{

@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Span(domContainer, (IHTMLSpanElement) Elements[index]); }
 		}
 
-		public SpanCollection Filter(AttributeConstraint findBy)
+		public SpanCollection Filter(BaseConstraint findBy)
 		{
 			return new SpanCollection(domContainer, DoFilter(findBy));
 		}

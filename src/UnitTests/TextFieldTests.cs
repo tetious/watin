@@ -197,7 +197,7 @@ namespace WatiN.Core.UnitTests
 			textField.TypeText("This should go wrong");
 		}
 
-		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find a 'INPUT (text password textarea hidden) or TEXTAREA' tag containing attribute id with value 'noneexistingtextfieldid'")]
+		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find INPUT (text password textarea hidden) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid'")]
 		public void TextFieldElementNotFoundException()
 		{
 			IE.Settings.WaitUntilExistsTimeOut = 1;

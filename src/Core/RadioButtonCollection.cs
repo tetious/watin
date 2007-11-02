@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new RadioButton(domContainer, (IHTMLInputElement) Elements[index]); }
 		}
 
-		public RadioButtonCollection Filter(AttributeConstraint findBy)
+		public RadioButtonCollection Filter(BaseConstraint findBy)
 		{
 			return new RadioButtonCollection(domContainer, DoFilter(findBy));
 		}

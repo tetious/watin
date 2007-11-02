@@ -51,7 +51,7 @@ namespace WatiN.Core
 			get { return new Button(domContainer, (IHTMLElement) Elements[index]); }
 		}
 
-		public ButtonCollection Filter(AttributeConstraint findBy)
+		public ButtonCollection Filter(BaseConstraint findBy)
 		{
 			return new ButtonCollection(domContainer, DoFilter(findBy));
 		}

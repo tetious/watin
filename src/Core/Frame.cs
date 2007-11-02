@@ -55,12 +55,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="frames">Collection of frames to find the frame in</param>
 		/// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
-		public static Frame Find(FrameCollection frames, AttributeConstraint findBy)
+		public static Frame Find(FrameCollection frames, BaseConstraint findBy)
 		{
 			return findFrame(frames, findBy);
 		}
 
-		private static Frame findFrame(FrameCollection frames, AttributeConstraint findBy)
+		private static Frame findFrame(FrameCollection frames, BaseConstraint findBy)
 		{
 			foreach (Frame frame in frames)
 			{
@@ -71,7 +71,7 @@ namespace WatiN.Core
 				}
 			}
 
-			throw new FrameNotFoundException(findBy.AttributeName, findBy.Value);
+			throw new FrameNotFoundException(findBy.ConstraintToString());
 		}
 
 		public string Name

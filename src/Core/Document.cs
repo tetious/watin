@@ -337,7 +337,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The name of the frame.</param>
 		/// <exception cref="FrameNotFoundException">Thrown if the given name isn't found.</exception>
-		public Frame Frame(AttributeConstraint findBy)
+		public Frame Frame(BaseConstraint findBy)
 		{
 			return Core.Frame.Find(Frames, findBy);
 		}
@@ -362,7 +362,7 @@ namespace WatiN.Core
 			return Area(Find.ById(elementId));
 		}
 
-		public Area Area(AttributeConstraint findBy)
+		public Area Area(BaseConstraint findBy)
 		{
 			return ElementsSupport.Area(DomContainer, findBy, this);
 		}
@@ -382,7 +382,7 @@ namespace WatiN.Core
 			return Button(Find.ById(elementId));
 		}
 
-		public Button Button(AttributeConstraint findBy)
+		public Button Button(BaseConstraint findBy)
 		{
 			return ElementsSupport.Button(DomContainer, findBy, this);
 		}
@@ -402,7 +402,7 @@ namespace WatiN.Core
 			return CheckBox(Find.ById(elementId));
 		}
 
-		public CheckBox CheckBox(AttributeConstraint findBy)
+		public CheckBox CheckBox(BaseConstraint findBy)
 		{
 			return ElementsSupport.CheckBox(DomContainer, findBy, this);
 		}
@@ -422,12 +422,12 @@ namespace WatiN.Core
 			return Element(Find.ById(elementId));
 		}
 
-		public Element Element(AttributeConstraint findBy)
+		public Element Element(BaseConstraint findBy)
 		{
 			return ElementsSupport.Element(DomContainer, findBy, this);
 		}
 
-		public Element Element(string tagname, AttributeConstraint findBy, params string[] inputtypes)
+		public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
 		{
 			return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
 		}
@@ -447,7 +447,7 @@ namespace WatiN.Core
 			return FileUpload(Find.ById(elementId));
 		}
 
-		public FileUpload FileUpload(AttributeConstraint findBy)
+		public FileUpload FileUpload(BaseConstraint findBy)
 		{
 			return ElementsSupport.FileUpload(DomContainer, findBy, this);
 		}
@@ -467,7 +467,7 @@ namespace WatiN.Core
 			return Form(Find.ById(elementId));
 		}
 
-		public Form Form(AttributeConstraint findBy)
+		public Form Form(BaseConstraint findBy)
 		{
 			return ElementsSupport.Form(DomContainer, findBy, this);
 		}
@@ -487,7 +487,7 @@ namespace WatiN.Core
 			return Label(Find.ById(elementId));
 		}
 
-		public Label Label(AttributeConstraint findBy)
+		public Label Label(BaseConstraint findBy)
 		{
 			return ElementsSupport.Label(DomContainer, findBy, this);
 		}
@@ -507,7 +507,7 @@ namespace WatiN.Core
 			return Link(Find.ById(elementId));
 		}
 
-		public Link Link(AttributeConstraint findBy)
+		public Link Link(BaseConstraint findBy)
 		{
 			return ElementsSupport.Link(DomContainer, findBy, this);
 		}
@@ -527,7 +527,7 @@ namespace WatiN.Core
 			return Para(Find.ById(elementId));
 		}
 
-		public Para Para(AttributeConstraint findBy)
+		public Para Para(BaseConstraint findBy)
 		{
 			return ElementsSupport.Para(DomContainer, findBy, this);
 		}
@@ -547,7 +547,7 @@ namespace WatiN.Core
 			return RadioButton(Find.ById(elementId));
 		}
 
-		public RadioButton RadioButton(AttributeConstraint findBy)
+		public RadioButton RadioButton(BaseConstraint findBy)
 		{
 			return ElementsSupport.RadioButton(DomContainer, findBy, this);
 		}
@@ -567,7 +567,7 @@ namespace WatiN.Core
 			return SelectList(Find.ById(elementId));
 		}
 
-		public SelectList SelectList(AttributeConstraint findBy)
+		public SelectList SelectList(BaseConstraint findBy)
 		{
 			return ElementsSupport.SelectList(DomContainer, findBy, this);
 		}
@@ -587,7 +587,7 @@ namespace WatiN.Core
 			return Table(Find.ById(elementId));
 		}
 
-		public Table Table(AttributeConstraint findBy)
+		public Table Table(BaseConstraint findBy)
 		{
 			return ElementsSupport.Table(DomContainer, findBy, this);
 		}
@@ -607,7 +607,7 @@ namespace WatiN.Core
 			return TableBody(Find.ById(elementId));
 		}
 
-		public TableBody TableBody(AttributeConstraint findBy)
+		public TableBody TableBody(BaseConstraint findBy)
 		{
 			return ElementsSupport.TableBody(DomContainer, findBy, this);
 		}
@@ -627,7 +627,7 @@ namespace WatiN.Core
 			return TableCell(Find.ById(elementId));
 		}
 
-		public TableCell TableCell(AttributeConstraint findBy)
+		public TableCell TableCell(BaseConstraint findBy)
 		{
 			return ElementsSupport.TableCell(DomContainer, findBy, this);
 		}
@@ -657,7 +657,7 @@ namespace WatiN.Core
 			return TableRow(Find.ById(elementId));
 		}
 
-		public TableRow TableRow(AttributeConstraint findBy)
+		public TableRow TableRow(BaseConstraint findBy)
 		{
 			return ElementsSupport.TableRow(DomContainer, findBy, this);
 		}
@@ -677,7 +677,7 @@ namespace WatiN.Core
 			return TextField(Find.ById(elementId));
 		}
 
-		public TextField TextField(AttributeConstraint findBy)
+		public TextField TextField(BaseConstraint findBy)
 		{
 			return ElementsSupport.TextField(DomContainer, findBy, this);
 		}
@@ -697,7 +697,7 @@ namespace WatiN.Core
 			return Span(Find.ById(elementId));
 		}
 
-		public Span Span(AttributeConstraint findBy)
+		public Span Span(BaseConstraint findBy)
 		{
 			return ElementsSupport.Span(DomContainer, findBy, this);
 		}
@@ -717,7 +717,7 @@ namespace WatiN.Core
 			return Div(Find.ById(elementId));
 		}
 
-		public Div Div(AttributeConstraint findBy)
+		public Div Div(BaseConstraint findBy)
 		{
 			return ElementsSupport.Div(DomContainer, findBy, this);
 		}
@@ -737,7 +737,7 @@ namespace WatiN.Core
 			return Image(Find.ById(elementId));
 		}
 
-		public Image Image(AttributeConstraint findBy)
+		public Image Image(BaseConstraint findBy)
 		{
 			return ElementsSupport.Image(DomContainer, findBy, this);
 		}

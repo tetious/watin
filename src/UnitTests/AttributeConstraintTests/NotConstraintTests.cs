@@ -23,20 +23,20 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class NotAttributeConstraintTests
+	public class NotConstraintTests
 	{
 		private MockRepository mocks;
-		private AttributeConstraint attribute;
+		private BaseConstraint _base;
 		private IAttributeBag attributeBag;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			attribute = (AttributeConstraint) mocks.DynamicMock(typeof (AttributeConstraint), "fake", "");
+			_base = (BaseConstraint) mocks.DynamicMock(typeof (BaseConstraint));
 			attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
 
-			SetupResult.For(attribute.Compare(null)).IgnoreArguments().Return(false);
+			SetupResult.For(_base.Compare(null)).IgnoreArguments().Return(false);
 			mocks.ReplayAll();
 		}
 
@@ -49,16 +49,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NotTest()
 		{
-			NotAttributeConstraint notAttributeConstraint = new NotAttributeConstraint(attribute);
-			Assert.IsTrue(notAttributeConstraint.Compare(attributeBag));
+			NotConstraint notConstraint = new NotConstraint(_base);
+			Assert.IsTrue(notConstraint.Compare(attributeBag));
 		}
 
 		[Test]
 		public void AttributeOperatorNotOverload()
 		{
-			AttributeConstraint attributenot = !attribute;
+			BaseConstraint attributenot = !_base;
 
-			Assert.IsInstanceOfType(typeof (NotAttributeConstraint), attributenot, "Expected NotAttributeConstraint instance");
+			Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
 			Assert.IsTrue(attributenot.Compare(attributeBag));
 		}
 	}

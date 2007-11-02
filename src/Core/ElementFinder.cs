@@ -29,16 +29,16 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class is mainly used internally by WatiN to find elements in
 	/// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
-	/// the given <see cref="AttributeConstraint"/>.
+	/// the given <see cref="BaseConstraint"/>.
 	/// </summary>
 	public class ElementFinder
 	{
 		private ArrayList tagsToFind = new ArrayList();
 
-		protected readonly AttributeConstraint findBy;
+		protected readonly BaseConstraint findBy;
 		protected readonly IElementCollection elementCollection;
 
-		public ElementFinder(ArrayList elementTags, AttributeConstraint findBy, IElementCollection elementCollection)
+		public ElementFinder(ArrayList elementTags, BaseConstraint findBy, IElementCollection elementCollection)
 		{
 			if (elementCollection == null)
 			{
@@ -60,7 +60,7 @@ namespace WatiN.Core
 
 		public ElementFinder(ArrayList elementTags, IElementCollection elementCollection) : this(elementTags, null, elementCollection) {}
 
-		public ElementFinder(string tagName, string inputType, AttributeConstraint findBy, IElementCollection elementCollection)
+		public ElementFinder(string tagName, string inputType, BaseConstraint findBy, IElementCollection elementCollection)
 		{
 			if (elementCollection == null)
 			{
@@ -102,12 +102,12 @@ namespace WatiN.Core
 
 		internal ElementNotFoundException CreateElementNotFoundException()
 		{
-			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value);
+			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.ConstraintToString());
 		}
 
 		internal ElementNotFoundException CreateElementNotFoundException(Exception innerexception)
 		{
-			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.AttributeName, findBy.Value, innerexception);
+			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.ConstraintToString(), innerexception);
 		}
 
 		public void AddElementTag(string tagName, string inputType)
@@ -120,7 +120,7 @@ namespace WatiN.Core
 			return FindAll(findBy);
 		}
 
-		public ArrayList FindAll(AttributeConstraint findBy)
+		public ArrayList FindAll(BaseConstraint findBy)
 		{
 			if (tagsToFind.Count == 1)
 			{
@@ -139,16 +139,16 @@ namespace WatiN.Core
 			}
 		}
 
-		private static AttributeConstraint getFindBy(AttributeConstraint findBy)
+		private static BaseConstraint getFindBy(BaseConstraint findBy)
 		{
 			if (findBy == null)
 			{
-				return new AlwaysTrueAttributeConstraint();
+				return new AlwaysTrueConstraint();
 			}
 			return findBy;
 		}
 
-		private ArrayList findElementsByAttribute(ElementTag elementTag, AttributeConstraint findBy, bool returnAfterFirstMatch)
+		private ArrayList findElementsByAttribute(ElementTag elementTag, BaseConstraint findBy, bool returnAfterFirstMatch)
 		{
 			// Get elements with the tagname from the page
 			ArrayList children = new ArrayList();

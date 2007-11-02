@@ -28,17 +28,17 @@ namespace WatiN.Core
 	/// <example>
 	/// This example will get the second link of the collection of links
 	/// which have "linkname" as their name value. 
-	/// <code>ie.Link(new IndexAttributeConstraint(1) &amp;&amp; Find.ByName("linkname"))</code>
+	/// <code>ie.Link(new IndexConstraint(1) &amp;&amp; Find.ByName("linkname"))</code>
 	/// You could also consider filtering the Links collection and getting
 	/// the second item in the collection, like this:
 	/// <code>ie.Links.Filter(Find.ByName("linkname"))[1]</code>
 	/// </example>
-	public class IndexAttributeConstraint : AttributeConstraint
+	public class IndexConstraint : BaseConstraint
 	{
 		private int index;
 		private int counter = -1;
 
-		public IndexAttributeConstraint(int index) : base("index", index.ToString())
+		public IndexConstraint(int index)
 		{
 			if (index < 0)
 			{
@@ -48,44 +48,41 @@ namespace WatiN.Core
 			this.index = index;
 		}
 
-		public override bool Compare(IAttributeBag attributeBag)
+		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-			base.LockCompare();
-
 			bool resultOr;
 
-			try
+			bool resultAnd = false;
+			resultOr = false;
+
+			if (_andBaseConstraint != null)
 			{
-				bool resultAnd = false;
-				resultOr = false;
-
-				if (andAttributeConstraint != null)
-				{
-					resultAnd = andAttributeConstraint.Compare(attributeBag);
-				}
-
-				if (resultAnd || andAttributeConstraint == null)
-				{
-					counter++;
-				}
-
-				if (orAttributeConstraint != null && resultAnd == false)
-				{
-					resultOr = orAttributeConstraint.Compare(attributeBag);
-				}
+				resultAnd = _andBaseConstraint.Compare(attributeBag);
 			}
-			finally
+
+			if (resultAnd || _andBaseConstraint == null)
 			{
-				base.UnLockCompare();
+				counter++;
+			}
+
+			if (_orBaseConstraint != null && resultAnd == false)
+			{
+				resultOr = _orBaseConstraint.Compare(attributeBag);
 			}
 
 			return (counter == index) || resultOr;
 		}
+
+		public override string ConstraintToString()
+		{
+			return "Index = " + index;
+		}
+
 	}
 
 	[Obsolete]
-	public class Index : IndexAttributeConstraint
+	public class IndexAttributeConstraint : IndexConstraint
 	{
-		public Index(int index) : base(index) {}
+		public IndexAttributeConstraint(int index) : base(index) {}
 	}
 }

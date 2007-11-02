@@ -47,7 +47,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The attribute to filter by.</param>
 		/// <returns>The filtered collection.</returns>
-		public AreaCollection Filter(AttributeConstraint findBy)
+		public AreaCollection Filter(BaseConstraint findBy)
 		{
 			return new AreaCollection(domContainer, DoFilter(findBy));
 		}

@@ -40,7 +40,7 @@ namespace WatiN.Core.UnitTests
 			ie.Close();
 		}
 
-		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame by id with value 'NonExistingIFrameID'")]
+		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingIFrameID'")]
 		public void ExpectFrameNotFoundException()
 		{
 			ie.Frame(Find.ById("NonExistingIFrameID"));

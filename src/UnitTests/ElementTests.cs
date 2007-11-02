@@ -18,7 +18,9 @@
 
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -501,7 +503,7 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while 'waiting 1 seconds for element to show up.'")]
+		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element to show up.")]
 		public void WaitUntilElementExistsTimeOutException()
 		{
 			ie.Button("nonexistingbutton").WaitUntilExists(1);
@@ -656,7 +658,7 @@ namespace WatiN.Core.UnitTests
 			mocks.VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while 'waiting 1 seconds for element attribute 'disabled' to change to 'False'.'")]
+		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'False'")]
 		public void WaitUntilTimesOut()
 		{
 			MockRepository mocks = new MockRepository();
@@ -754,27 +756,51 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MoveMousePointer()
 		{
-			IE.Settings.MakeNewIeInstanceVisible = true;
-			IE.Settings.HighLightElement = true;
+//			IE.Settings.MakeNewIeInstanceVisible = true;
+//			IE.Settings.HighLightElement = true;
 
 			using (IE ie = new IE("www.google.com"))
+//			using (IE ie = new IE(FramesetURI))
 			{
 				Button button = ie.Button(Find.ByName("btnG"));
-				PositionMousePointerInMiddleOfElement(button);
+//				Link button = ie.Frames[1].Links[0];
+				PositionMousePointerInMiddleOfElement(button, ie);
 				button.Flash();
 				MouseMove(50, 50, true);
+				Thread.Sleep(2000);
 			}
 		}
 
-		private static void PositionMousePointerInMiddleOfElement(Element button) 
+		private static void PositionMousePointerInMiddleOfElement(Element button, IE ie) 
 		{
-			int offsetLeft = int.Parse(button.GetAttributeValue("offsetLeft"));
-			int offsetWidth = int.Parse(button.GetAttributeValue("offsetWidth"));
-			int offsetTop = int.Parse(button.GetAttributeValue("offsetTop"));
-			int offsetHeight = int.Parse(button.GetAttributeValue("offsetHeight"));
-				
-			System.Drawing.Point currentPt = new System.Drawing.Point(offsetLeft + (offsetWidth / 2), offsetTop + (offsetHeight / 2));
+			int left = position(button, "Left");
+			int width = int.Parse(button.GetAttributeValue("clientWidth"));
+			int top = position(button, "Top");
+			int height = int.Parse(button.GetAttributeValue("clientHeight"));
+			
+			IHTMLWindow3 window = (IHTMLWindow3) ie.HtmlDocument.parentWindow;
+			
+			left = left + window.screenLeft;
+			top = top + window.screenTop;
+
+			System.Drawing.Point currentPt = new System.Drawing.Point(left + (width / 2), top + (height / 2));
 			System.Windows.Forms.Cursor.Position = currentPt;
+		}
+
+		private static int position(Element element, string attributename)
+		{
+			int pos = 0;
+			IHTMLElement offsetParent = ((IHTMLElement)element.HTMLElement).offsetParent;
+			if (offsetParent != null)
+			{
+				pos = position(new Element(element.DomContainer, offsetParent), attributename);
+			}
+
+			if (StringComparer.AreEqual(element.TagName, "table", true))
+			{
+				pos = pos + int.Parse(element.GetAttributeValue("client" + attributename));
+			}
+			return pos + int.Parse(element.GetAttributeValue("offset" + attributename));
 		}
 
 		public void MouseMove(int X, int Y, bool Relative)

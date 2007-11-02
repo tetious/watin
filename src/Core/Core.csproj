@@ -450,7 +450,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AttributeConstraints\AlwaysTrueAttributeConstraint.cs"
+                    RelPath = "AttributeConstraints\AlwaysTrueConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -460,12 +460,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AttributeConstraints\IndexAttributeConstraint.cs"
+                    RelPath = "AttributeConstraints\BaseConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AttributeConstraints\NotAttributeConstraint.cs"
+                    RelPath = "AttributeConstraints\IndexConstraint.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributeConstraints\NotConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -54,9 +54,9 @@ namespace WatiN.Core
 		/// <summary>
 		/// Filters this collection with the specified find by.
 		/// </summary>
-		/// <param name="findBy">The <see cref="AttributeConstraint"/> to filter this collection.</param>
+		/// <param name="findBy">The <see cref="BaseConstraint"/> to filter this collection.</param>
 		/// <returns>A filtered <see cref="OptionCollection"/></returns>
-		public OptionCollection Filter(AttributeConstraint findBy)
+		public OptionCollection Filter(BaseConstraint findBy)
 		{
 			return new OptionCollection(domContainer, DoFilter(findBy));
 		}
