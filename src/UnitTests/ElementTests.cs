@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
@@ -26,6 +25,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
+using StringComparer=WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.UnitTests
 {

@@ -23,13 +23,10 @@ using Rhino.Mocks;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 using Is = NUnit.Framework.SyntaxHelpers.Is;
+using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.UnitTests
 {
-#if NET20
-  using StringComparer=WatiN.Core.Comparers.StringComparer;
-#endif
-
 	[TestFixture]
 	public class FindTests : WatiNTest
 	{
