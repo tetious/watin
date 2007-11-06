@@ -44,6 +44,8 @@ namespace WatiN.Core
 	{
 		private Timer clock = null;
 
+	    private int _timeout;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleTimer"/> class.
 		/// </summary>
@@ -54,6 +56,8 @@ namespace WatiN.Core
 			{
 				throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
 			}
+
+		    _timeout = timeout;
 
 			if (timeout > 0)
 			{
@@ -73,7 +77,16 @@ namespace WatiN.Core
 			get { return (clock == null); }
 		}
 
-		private void ElapsedEvent(object source, ElapsedEventArgs e)
+        /// <summary>
+        /// The number of seconds after which this timer times out. The time out can only be
+        /// set through the constructor.
+        /// </summary>
+        public int Timeout
+        {
+            get { return _timeout; }
+        }
+        
+        private void ElapsedEvent(object source, ElapsedEventArgs e)
 		{
 			clock.Stop();
 			clock.Close();

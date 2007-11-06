@@ -1229,6 +1229,17 @@ namespace WatiN.Core
 			WaitForComplete(new IEWaitForComplete(this));
 		}
 
+		/// <summary>
+		/// Waits till the webpage, it's frames and all it's elements are loaded. This
+		/// function is called by WatiN after each action (like clicking a link) so you
+		/// should have to use this function on rare occasions.
+		/// </summary>
+        /// <param name="waitForCompleteTimeOut">The number of seconds to wait before timing out</param>
+        public override void WaitForComplete(int waitForCompleteTimeOut)
+		{
+			WaitForComplete(new IEWaitForComplete(this, waitForCompleteTimeOut));
+		}
+
 		#region IDisposable Members
 
 		/// <summary>

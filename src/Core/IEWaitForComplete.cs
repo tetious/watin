@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Threading;
 using SHDocVw;
 
@@ -30,7 +31,12 @@ namespace WatiN.Core
 			_ie = ie;
 		}
 
-		public override void DoWait()
+	    public IEWaitForComplete(IE ie, int waitForCompleteTimeOut) : base(ie, waitForCompleteTimeOut)
+	    {
+            _ie = ie;
+        }
+
+	    public override void DoWait()
 		{
 			Thread.Sleep(100);
 

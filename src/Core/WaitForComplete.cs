@@ -28,16 +28,28 @@ namespace WatiN.Core
 	{
 		protected DomContainer _domContainer;
 		protected SimpleTimer _waitForCompleteTimeout;
+        protected int _waitForCompleteTimeOut;
 
-		public WaitForComplete(DomContainer _domContainer)
+        /// <summary>
+        /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
+        /// <seealso cref="IE.Settings.WaitForCompleteTimeOut"/> seconds.
+        /// </summary>
+        /// <param name="domContainer">The page to wait for in this domcontainer</param>
+        public WaitForComplete(DomContainer domContainer) : this(domContainer, IE.Settings.WaitForCompleteTimeOut) { }
+
+        /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
+        /// <paramref name="waitForCompleteTimeOut"> seconds.
+        /// <param name="domContainer">The page to wait for in this domcontainer</param>
+        /// <param name="waitForCompleteTimeOut">Time to wait in seconds</param>
+        public WaitForComplete(DomContainer domContainer, int waitForCompleteTimeOut)
 		{
-			this._domContainer = _domContainer;
+			_domContainer = domContainer;
+            _waitForCompleteTimeOut = waitForCompleteTimeOut;
 		}
 
 		/// <summary>
 		/// This method calls InitTimeOut and waits till IE is ready
-		/// processing or the timeout period (30 seconds) has expired.
-		/// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitForCompleteTimeOut"/>
+		/// processing or the timeout period has expired.
 		/// </summary>
 		public virtual void DoWait()
 		{
@@ -100,7 +112,7 @@ namespace WatiN.Core
 		/// <returns></returns>
 		protected virtual SimpleTimer InitTimeout()
 		{
-			_waitForCompleteTimeout = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
+		    _waitForCompleteTimeout = new SimpleTimer(_waitForCompleteTimeOut);
 			return _waitForCompleteTimeout;
 		}
 

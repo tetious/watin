@@ -138,11 +138,20 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Waits for the page to be completely loaded
+		/// Waits for the page to be completely loaded using the IE.Settings.WaitForCompleteTimeOut setting
 		/// </summary>
 		public virtual void WaitForComplete()
 		{
 			WaitForComplete(new WaitForComplete(this));
+		}
+
+		/// <summary>
+        /// Waits for the page to be completely loaded.
+		/// </summary>
+		/// <param name="waitForCompleteTimeOut">The number of seconds to wait before timing out</param>
+		public virtual void WaitForComplete(int waitForCompleteTimeOut)
+		{
+			WaitForComplete(new WaitForComplete(this, waitForCompleteTimeOut));
 		}
 
 		/// <summary>
