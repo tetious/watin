@@ -465,6 +465,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AttributeConstraints\ElementConstraint.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AttributeConstraints\IndexConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -696,6 +701,11 @@
                 />
                 <File
                     RelPath = "Interfaces\ICompare.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\ICompareElement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

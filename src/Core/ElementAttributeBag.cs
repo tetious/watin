@@ -30,6 +30,8 @@ namespace WatiN.Core
 	public class ElementAttributeBag : IAttributeBag
 	{
 		private IHTMLElement element = null;
+		private Element _element = null;
+		private Element _elementTyped;
 
 		public ElementAttributeBag() {}
 
@@ -38,12 +40,55 @@ namespace WatiN.Core
 			IHTMLElement = element;
 		}
 
+		/// <summary>
+		/// Gets or sets the IHTMLelement from which the attribute values are read.
+		/// </summary>
+		/// <value>The IHTMLelement.</value>
 		public IHTMLElement IHTMLElement
 		{
 			get { return element; }
 			set { element = value; }
 		}
 
+		/// <summary>
+		/// Returns a typed Element instance that can be casted to an ElementsContainer.
+		/// </summary>
+		/// <value>The element.</value>
+		public Element Element
+		{
+			get
+			{
+				if (_element == null)
+				{
+					_element = new ElementsContainer(null, IHTMLElement);
+				}
+
+				return _element;
+			}
+		}
+
+		/// <summary>
+		/// Returns a typed Element instance that can be casted to the specific WatiN type.
+		/// </summary>
+		/// <value>The element typed.</value>
+		public Element ElementTyped
+		{
+			get
+			{
+				if (_elementTyped == null)
+				{
+					_elementTyped = Element.GetTypedElement(null, IHTMLElement);
+				}
+
+				return _elementTyped;
+			}
+		}
+
+		/// <summary>
+		/// Gets the value for the given <paramref name="attributename". />
+		/// </summary>
+		/// <param name="attributename">The attributename.</param>
+		/// <returns>The value of the attribute</returns>
 		public string GetValue(string attributename)
 		{
 			if (StringComparer.AreEqual(attributename, "style", true))

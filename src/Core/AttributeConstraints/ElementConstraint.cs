@@ -16,24 +16,35 @@
 
 #endregion Copyright
 
-#if NET20
-using System;
-namespace WatiN.Core.Comparers
-{
+using WatiN.Core.Interfaces;
 
-	public class PredicateComparer : BaseComparer
+namespace WatiN.Core.Constraints
+{
+	public class ElementConstraint : BaseConstraint 
 	{
-		private Predicate<string> _predicate;
-	
-		public PredicateComparer(Predicate<string> predicate)
+		private readonly ICompareElement _comparer;
+
+		public ElementConstraint(ICompareElement comparer)
 		{
-			_predicate = predicate;	
+			_comparer = comparer;
 		}
-	
-		public override bool Compare(string value)
+
+		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-			return _predicate.Invoke(value);
+			ElementAttributeBag elementAttributeBag = attributeBag as ElementAttributeBag;
+			if(elementAttributeBag != null)
+			{
+				return _comparer.Compare(elementAttributeBag.ElementTyped);
+			}
+			else
+			{
+				throw new Exceptions.WatiNException("This Constaint class can only be used to compare against an element");
+			}
+		}
+
+		public override string ConstraintToString()
+		{
+			return "Custom constraint";
 		}
 	}
 }
-#endif

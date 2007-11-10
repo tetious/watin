@@ -314,6 +314,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AttributeConstraintTests\ElementConstraintTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AttributeConstraintTests\EvenMoreComplexMultipleAttributeConstraintsTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

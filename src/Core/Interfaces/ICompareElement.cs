@@ -16,24 +16,13 @@
 
 #endregion Copyright
 
-#if NET20
-using System;
-namespace WatiN.Core.Comparers
+namespace WatiN.Core.Interfaces
 {
-
-	public class PredicateComparer : BaseComparer
+	/// <summary>
+	/// Summary description for ICompareElement.
+	/// </summary>
+	public interface ICompareElement
 	{
-		private Predicate<string> _predicate;
-	
-		public PredicateComparer(Predicate<string> predicate)
-		{
-			_predicate = predicate;	
-		}
-	
-		public override bool Compare(string value)
-		{
-			return _predicate.Invoke(value);
-		}
+		bool Compare(Element element);
 	}
 }
-#endif
