@@ -46,5 +46,10 @@ namespace WatiN.Core.Constraints
 		{
 			return "Custom constraint";
 		}
+		
+		public ICompareElement Comparer
+		{
+			get { return _comparer; }
+		}
 	}
 }

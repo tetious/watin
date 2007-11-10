@@ -18,21 +18,34 @@
 
 #if NET20
 using System;
+using WatiN.Core.Interfaces;
+
 namespace WatiN.Core.Comparers
 {
 
-	public class PredicateComparer : BaseComparer
+	public class PredicateComparer : BaseComparer, ICompareElement
 	{
-		private Predicate<string> _predicate;
+		private Predicate<string> _compareString;
+		private Predicate<Element> _compareElement;
 	
 		public PredicateComparer(Predicate<string> predicate)
 		{
-			_predicate = predicate;	
+			_compareString = predicate;	
 		}
 	
+		public PredicateComparer(Predicate<Element> predicate)
+		{
+			_compareElement = predicate;	
+		}
+
 		public override bool Compare(string value)
 		{
-			return _predicate.Invoke(value);
+			return _compareString.Invoke(value);
+		}
+
+		public virtual bool Compare(Element element)
+		{
+			return _compareElement.Invoke(element);
 		}
 	}
 }

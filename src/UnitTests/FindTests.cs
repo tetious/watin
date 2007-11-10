@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using Is = NUnit.Framework.SyntaxHelpers.Is;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
@@ -446,6 +447,28 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
 		}
+		
+		[Test]
+		public void FindByElement()
+		{
+			ElementComparerMock comparer = new ElementComparerMock();
+			ElementConstraint constraint = Find.ByElement(comparer);
+			
+			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(ElementComparerMock)));
+
+#if NET20
+			constraint = Find.ByElement(CallThisPredicate);
+
+			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(PredicateComparer)));
+#endif
+		}
+
+#if NET20
+		private bool CallThisPredicate(Element element)
+		{
+			return true;
+		}
+#endif
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void NewAttributeWithNullAttribute()
@@ -561,5 +584,17 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
 		}
+		
+		public class ElementComparerMock : ICompareElement
+		{
+			public bool IsCalled = false;
+			
+			public bool Compare(Element element)
+			{
+				IsCalled = true;
+				return true;
+			}
+		}
+		
 	}
 }
