@@ -18,6 +18,7 @@
 
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests

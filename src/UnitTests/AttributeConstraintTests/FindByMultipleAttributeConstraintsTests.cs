@@ -19,6 +19,7 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 

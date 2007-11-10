@@ -1,7 +1,7 @@
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Constraints
 {
 	public abstract class BaseConstraint 
 	{

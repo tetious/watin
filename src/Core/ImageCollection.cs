@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Constraints;
 
 namespace WatiN.Core
 {

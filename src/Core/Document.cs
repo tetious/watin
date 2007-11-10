@@ -23,6 +23,7 @@ using System.Runtime.InteropServices.Expando;
 using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 

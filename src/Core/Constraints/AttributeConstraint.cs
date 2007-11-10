@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Constraints
 {
 	/// <summary>
 	/// This is the base class for finding elements by a specified attribute. Use

@@ -19,6 +19,7 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests

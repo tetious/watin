@@ -19,7 +19,7 @@
 using System;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Constraints
 {
 	public class NotConstraint : BaseConstraint
 	{
@@ -48,11 +48,5 @@ namespace WatiN.Core
 		{
 			return "Not '" + _baseConstraint.ConstraintToString() + "'";
 		}
-	}
-
-	[Obsolete]
-	public class NotAttributeConstraint : NotConstraint
-	{
-		public NotAttributeConstraint(BaseConstraint baseConstraint) : base(baseConstraint) {}
 	}
 }

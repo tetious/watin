@@ -19,7 +19,7 @@
 using System;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Constraints
 {
 	/// <summary>
 	/// Class to find an element by the n-th index.
@@ -78,11 +78,5 @@ namespace WatiN.Core
 			return "Index = " + index;
 		}
 
-	}
-
-	[Obsolete]
-	public class IndexAttributeConstraint : IndexConstraint
-	{
-		public IndexAttributeConstraint(int index) : base(index) {}
 	}
 }

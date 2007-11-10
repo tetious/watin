@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Text.RegularExpressions;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core

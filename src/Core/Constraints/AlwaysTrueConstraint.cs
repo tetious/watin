@@ -16,10 +16,9 @@
 
 #endregion Copyright
 
-using System;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Constraints
 {
 	/// <summary>
 	/// This class is only used in the ElementsSupport Class to 
@@ -37,7 +36,4 @@ namespace WatiN.Core
 			return "any";
 		}
 	}
-
-	[Obsolete]
-	public class AlwaysTrueAttributeConstraint : AlwaysTrueConstraint {}
 }

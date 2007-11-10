@@ -21,6 +21,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Comparers;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;

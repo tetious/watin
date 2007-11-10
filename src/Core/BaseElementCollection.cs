@@ -19,6 +19,7 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using mshtml;
+using WatiN.Core.Constraints;
 
 namespace WatiN.Core
 {
