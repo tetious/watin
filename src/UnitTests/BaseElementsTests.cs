@@ -26,7 +26,7 @@ namespace WatiN.Core.UnitTests
 		private Settings backupSettings;
 
 		[TestFixtureSetUp]
-		public void FixtureSetup()
+		public virtual void FixtureSetup()
 		{
 			backupSettings = IE.Settings.Clone();
 			IE.Settings = new StealthSettings();
@@ -35,14 +35,14 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[TestFixtureTearDown]
-		public void FixtureTearDown()
+		public virtual void FixtureTearDown()
 		{
 			IE.Settings = backupSettings;
 			ie.Close();
 		}
 
 		[SetUp]
-		public void TestSetUp()
+		public virtual void TestSetUp()
 		{
 			IE.Settings.Reset();
 			if (!ie.Uri.Equals(MainURI))

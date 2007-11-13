@@ -241,7 +241,20 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(string text)
         {
-            SimpleTimer timer = new SimpleTimer(IE.Settings.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(text, IE.Settings.WaitUntilExistsTimeOut);
+        }
+
+	    /// <summary>
+        /// Waits until the text is inside the HTML Body element contains the given <paramref name="text" />.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="timeOut">The number of seconds to wait</param>
+        /// <returns>
+        ///     <see name="TimeoutException"/> if the specified text is not found within the time out period.
+        /// </returns>
+        public void WaitUntilContainsText(string text, int timeOut)
+        {
+            SimpleTimer timer = new SimpleTimer(timeOut);
 
             do
             {
@@ -263,7 +276,20 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex)
         {
-            SimpleTimer timer = new SimpleTimer(IE.Settings.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(regex, IE.Settings.WaitUntilExistsTimeOut);
+        }
+
+	    /// <summary>
+        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
+        /// </summary>
+        /// <param name="regex">The regular expression to match with.</param>
+        /// <param name="timeOut">The number of seconds to wait</param>
+        /// <returns>
+        ///     <see name="TimeoutException"/> if the specified text is not found within the time out period.
+        /// </returns>
+        public void WaitUntilContainsText(Regex regex, int timeOut)
+        {
+            SimpleTimer timer = new SimpleTimer(timeOut);
 
             do
             {
