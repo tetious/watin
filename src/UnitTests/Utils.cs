@@ -105,5 +105,22 @@ namespace WatiN.Core.UnitTests
 			Assert.IsEmpty(UtilityClass.ToString(string.Empty), "Empty should return empty string");
 			Assert.AreEqual("test", UtilityClass.ToString("test"), "test should return test");
 		}
+
+		[Test]
+		public void ShouldEscapeSendKeysCharacters()
+		{
+			string original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
+			string expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
+
+			Assert.AreEqual(expected, UtilityClass.EscapeSendKeysCharacters(original));
+		}
+
+		[Test]
+		public void ShouldNotEscapeCharacters()
+		{
+			string original = "just a test";
+
+			Assert.AreEqual(original, UtilityClass.EscapeSendKeysCharacters(original));
+		}
 	}
 }

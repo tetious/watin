@@ -299,5 +299,31 @@ namespace WatiN.Core
 			}
 			return inputtypesString;
 		}
+
+		public static string EscapeSendKeysCharacters(string value) 
+		{
+			const string sendKeysCharactersToBeEscaped = "~%^+{}[]";
+
+			if(value.IndexOfAny(sendKeysCharactersToBeEscaped.ToCharArray()) > -1)
+			{
+				string returnvalue = null;
+
+				foreach (char c in value)
+				{
+					if(sendKeysCharactersToBeEscaped.IndexOf(c) != -1)
+					{
+						// Escape sendkeys special characters
+						returnvalue = returnvalue + "{" + c.ToString() + "}";
+					}
+					else
+					{
+						returnvalue = returnvalue + c.ToString();
+					}
+				}
+				return returnvalue;
+			}		
+
+			return value;
+		}
 	}
 }

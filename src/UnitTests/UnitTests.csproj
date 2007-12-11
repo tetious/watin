@@ -419,6 +419,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "html\~^+{}[].txt"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\CrossDomainFrameset.html"
                     BuildAction = "Content"
                 />

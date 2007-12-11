@@ -49,7 +49,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			checkArgument("Username must be specified", userName, "username");
 
-			this.userName = userName;
+			this.userName = UtilityClass.EscapeSendKeysCharacters(userName);
 
 			if (password == null)
 			{
@@ -57,7 +57,7 @@ namespace WatiN.Core.DialogHandlers
 			}
 			else
 			{
-				this.password = password;
+				this.password = UtilityClass.EscapeSendKeysCharacters(password);
 			}
 		}
 

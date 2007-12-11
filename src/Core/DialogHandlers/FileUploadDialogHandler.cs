@@ -22,11 +22,11 @@ namespace WatiN.Core.DialogHandlers
 {
 	public class FileUploadDialogHandler : BaseDialogHandler
 	{
-		private String fileName;
+		private string fileName;
 
-		public FileUploadDialogHandler(String fileName)
+		public FileUploadDialogHandler(string fileName)
 		{
-			this.fileName = fileName;
+			this.fileName = UtilityClass.EscapeSendKeysCharacters(fileName);
 		}
 
 		public override bool HandleDialog(Window window)
@@ -37,6 +37,7 @@ namespace WatiN.Core.DialogHandlers
 
 				NativeMethods.SetForegroundWindow(usernameControlHandle);
 				NativeMethods.SetActiveWindow(usernameControlHandle);
+
 
 				System.Windows.Forms.SendKeys.SendWait(fileName + "{ENTER}");
 				return true;

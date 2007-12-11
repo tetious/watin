@@ -38,7 +38,7 @@ namespace WatiN.Core.Constraints
 			}
 			else
 			{
-				throw new Exceptions.WatiNException("This Constaint class can only be used to compare against an element");
+				throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
 			}
 		}
 

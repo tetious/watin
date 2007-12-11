@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -54,7 +55,7 @@ namespace WatiN.Core.UnitTests
 		{
 			FileUpload fileUpload = ie.FileUpload("upload");
 
-			Assert.IsNotNull(fileUpload);
+			Assert.That(fileUpload.Exists);
 			Assert.IsNull(fileUpload.FileName);
 
 			fileUpload.Set(MainURI.LocalPath);
@@ -98,6 +99,20 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(expectedFileUploadsCount, count);
+		}
+
+		[Test]
+		public void FileUploadOfFileWithSendKeysEscapeCharactersInFilename()
+		{
+			FileUpload fileUpload = ie.FileUpload("upload");
+
+			Assert.That(fileUpload.Exists);
+			Assert.IsNull(fileUpload.FileName);
+
+			string file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
+			fileUpload.Set(file);
+
+			Assert.AreEqual(file, fileUpload.FileName);
 		}
 	}
 }

@@ -1191,10 +1191,10 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Gets the closest ancestor of the specified Type and AttributConstraint.
+		/// Gets the closest ancestor of the specified Type and BaseConstraint.
 		/// </summary>
 		/// <param name="ancestorType">Type of the ancestor.</param>
-		/// <param name="findBy">The AttributConstraint to match with.</param>
+		/// <param name="findBy">The BaseConstraint to match with.</param>
 		/// <returns>
 		/// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
 		/// </returns>

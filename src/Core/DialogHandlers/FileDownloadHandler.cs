@@ -58,7 +58,7 @@ namespace WatiN.Core.DialogHandlers
 			}
 
 			_optionEnum = FileDownloadOptionEnum.Save;
-			saveAsFilename = filename;
+			saveAsFilename = UtilityClass.EscapeSendKeysCharacters(filename);
 		}
 
 		/// <summary>
