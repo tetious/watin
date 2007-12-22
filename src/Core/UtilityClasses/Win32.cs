@@ -42,13 +42,13 @@ namespace WatiN.Core
 		internal const int KEYEVENTF_KEYUP = 0x2;
 		internal const int KEYEVENTF_TAB = 0x09;
 
-		internal const Int32 SMTO_ABORTIFHUNG = 2;
+		public const Int32 SMTO_ABORTIFHUNG = 2;
 		internal const int BM_CLICK = 245;
 		internal const int WM_ACTIVATE = 6;
 		internal const int MA_ACTIVATE = 1;
 
-		internal const int GW_CHILD = 5;
-		internal const int GW_HWNDNEXT = 2;
+		public const int GW_CHILD = 5;
+		public const int GW_HWNDNEXT = 2;
 
 		#endregion Constants
 
@@ -98,7 +98,7 @@ namespace WatiN.Core
 
 		#endregion Structs
 
-		internal delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
+		public delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
 
 		internal delegate bool EnumChildProc(IntPtr hWnd, ref IntPtr lParam);
 
@@ -187,7 +187,7 @@ namespace WatiN.Core
 		#region DllImport User32
 
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-		internal static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
+		public static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
 
 		[DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		internal static extern int GetClassName(IntPtr handleToWindow, StringBuilder className, int maxClassNameLength);
@@ -245,10 +245,10 @@ namespace WatiN.Core
 		internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildProc lpEnumFunc, ref IntPtr lParam);
 
 		[DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		internal static extern Int32 RegisterWindowMessage(string lpString);
+		public static extern Int32 RegisterWindowMessage(string lpString);
 
 		[DllImport("user32", EntryPoint = "SendMessageTimeoutA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		internal static extern Int32 SendMessageTimeout(IntPtr hWnd, Int32 msg, Int32 wParam, Int32 lParam, Int32 fuFlags, Int32 uTimeout, ref Int32 lpdwResult);
+		public static extern Int32 SendMessageTimeout(IntPtr hWnd, Int32 msg, Int32 wParam, Int32 lParam, Int32 fuFlags, Int32 uTimeout, ref Int32 lpdwResult);
 
 		[DllImport("user32.dll")]
 		internal static extern bool AttachThreadInput(int idAttach, int idAttachTo, bool fAttach);
@@ -305,7 +305,7 @@ namespace WatiN.Core
 		#endregion DllImport User32
 
 		[DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		internal static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
+		public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
 
 		[DllImport("kernel32")]
 		internal static extern int GetCurrentThreadId();
@@ -455,11 +455,13 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="hwnd">The handle to the window</param>
 		/// <returns>Text of the window</returns>
-		internal static string GetClassName(IntPtr hwnd)
+		public static string GetClassName(IntPtr hwnd)
 		{
-			StringBuilder className = new StringBuilder(255);
+			const int maxCapacity = 255;
 
-			Int32 lRes = GetClassName(hwnd, className, className.MaxCapacity);
+			StringBuilder className = new StringBuilder(maxCapacity);
+
+			Int32 lRes = GetClassName(hwnd, className, maxCapacity);
 			if (lRes == 0)
 			{
 				return String.Empty;
@@ -483,7 +485,7 @@ namespace WatiN.Core
 			SendMessage(buttonPtr, BM_CLICK, 0, 0);
 		}
 
-		internal static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
+		public static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
 		{
 			IntPtr hWnd = IntPtr.Zero;
 			enumChildWindowClassName = className;
