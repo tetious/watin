@@ -82,6 +82,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("Image2", image.Id, "Unexpected id");
 			Assert.AreEqual("ImageName2", image.Name, "Unexpected name");
 			Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
+			Assert.AreEqual(watinwebsiteImage, image.Uri, "Unexpected Src");
 			Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
 		}
 
