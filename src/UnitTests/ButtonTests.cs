@@ -199,5 +199,10 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsTrue(ie.Button(new Regex("buttonelementid")).Exists);
 		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
 	}
 }

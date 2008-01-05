@@ -36,6 +36,11 @@ namespace WatiN.Core.UnitTests
 		private IHTMLDOMNode node;
 		private Element element;
 
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
+
 		[SetUp]
 		public void Setup()
 		{

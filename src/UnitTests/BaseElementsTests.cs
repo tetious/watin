@@ -16,11 +16,12 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
 
 namespace WatiN.Core.UnitTests
 {
-	public class BaseElementsTests : WatiNTest
+	public abstract class BaseElementsTests : WatiNTest
 	{
 		protected IE ie;
 		private Settings backupSettings;
@@ -31,7 +32,7 @@ namespace WatiN.Core.UnitTests
 			backupSettings = IE.Settings.Clone();
 			IE.Settings = new StealthSettings();
 
-			ie = new IE(MainURI);
+			ie = new IE(TestPageUri);
 		}
 
 		[TestFixtureTearDown]
@@ -45,10 +46,15 @@ namespace WatiN.Core.UnitTests
 		public virtual void TestSetUp()
 		{
 			IE.Settings.Reset();
-			if (!ie.Uri.Equals(MainURI))
+			if (!ie.Uri.Equals(TestPageUri))
 			{
-				ie.GoTo(MainURI);
+				ie.GoTo(TestPageUri);
 			}
+		}
+
+		public abstract Uri TestPageUri
+		{
+			get;
 		}
 	}
 

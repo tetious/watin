@@ -419,6 +419,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DialogHandlerTests\VbScriptMsgBoxHandlerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "html\~^+{}[].txt"
                     BuildAction = "Content"
                 />

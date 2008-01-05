@@ -240,5 +240,10 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(1, count);
 		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
 	}
 }

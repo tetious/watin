@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -85,6 +86,11 @@ namespace WatiN.Core.UnitTests
 		{
 			Assert.AreEqual(1, ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("a1"))).Index);
 			Assert.AreEqual(2, ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("b2"))).Index);
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
 		}
 	}
 }

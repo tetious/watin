@@ -38,7 +38,7 @@ namespace WatiN.Core
         public WaitForComplete(DomContainer domContainer) : this(domContainer, IE.Settings.WaitForCompleteTimeOut) { }
 
         /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
-        /// <paramref name="waitForCompleteTimeOut"> seconds.
+        /// <paramref name="waitForCompleteTimeOut"> seconds.</paramref>
         /// <param name="domContainer">The page to wait for in this domcontainer</param>
         /// <param name="waitForCompleteTimeOut">Time to wait in seconds</param>
         public WaitForComplete(DomContainer domContainer, int waitForCompleteTimeOut)

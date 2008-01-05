@@ -449,7 +449,7 @@ Copyright 2006-2007 Jeroen van Menen
 	    <call target="set-net-1.1-version" />
 	    <call target="clean" />
 	    <call target="build" />
-	    <!--call target="run-unit-tests-with-coverage" /-->
+	    <call target="run-unit-tests-with-coverage" />
 	</target>
 
 	<target name="build-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">

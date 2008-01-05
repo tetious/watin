@@ -19,6 +19,7 @@
 using System.Globalization;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 

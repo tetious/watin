@@ -615,6 +615,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DialogHandlers\VbScriptMsgBoxDialogHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DialogHandlers\WinButton.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

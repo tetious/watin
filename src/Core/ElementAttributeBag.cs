@@ -19,6 +19,7 @@
 using System;
 using System.Globalization;
 using mshtml;
+using WatiN.Core.Constraints;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Interfaces;
 
@@ -85,7 +86,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Gets the value for the given <paramref name="attributename". />
+		/// Gets the value for the given <paramref name="attributename" />
 		/// </summary>
 		/// <param name="attributename">The attributename.</param>
 		/// <returns>The value of the attribute</returns>

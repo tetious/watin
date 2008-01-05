@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -82,6 +83,11 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(1, count);
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
 		}
 	}
 }

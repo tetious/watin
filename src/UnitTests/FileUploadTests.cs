@@ -114,5 +114,10 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(file, fileUpload.FileName);
 		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
 	}
 }

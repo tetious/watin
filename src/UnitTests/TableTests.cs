@@ -31,6 +31,11 @@ namespace WatiN.Core.UnitTests
 	{
 		private const string tableId = "table1";
 
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
+
 		[Test]
 		public void TableElementTags()
 		{
