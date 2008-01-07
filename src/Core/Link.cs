@@ -54,7 +54,7 @@ namespace WatiN.Core
 
 		public string Url
 		{
-			get { return ((IHTMLAnchorElement) HTMLElement).href; }
+			get { return GetAttributeValue("href"); }
 		}
 	}
 }

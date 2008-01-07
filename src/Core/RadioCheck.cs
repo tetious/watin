@@ -41,7 +41,7 @@ namespace WatiN.Core
 
 		public bool Checked
 		{
-			get { return inputElement.@checked; }
+			get { return bool.Parse(GetAttributeValue("checked")); }
 			set
 			{
 				Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");

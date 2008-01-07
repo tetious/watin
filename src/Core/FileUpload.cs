@@ -57,7 +57,7 @@ namespace WatiN.Core
 
 		public string FileName
 		{
-			get { return IHTMLInputFileElement.value; }
+			get { return GetAttributeValue("value"); }
 		}
 
 		public void Set(string fileName)
@@ -79,11 +79,6 @@ namespace WatiN.Core
 			{
 				DomContainer.RemoveDialogHandler(uploadDialogHandler);
 			}
-		}
-
-		private IHTMLInputFileElement IHTMLInputFileElement
-		{
-			get { return ((IHTMLInputFileElement) HTMLElement); }
 		}
 	}
 }

@@ -54,12 +54,12 @@ namespace WatiN.Core
 
 		public string AccessKey
 		{
-			get { return ((IHTMLLabelElement) HTMLElement).accessKey; }
+			get { return GetAttributeValue("accessKey"); }
 		}
 
 		public string For
 		{
-			get { return ((IHTMLLabelElement) HTMLElement).htmlFor; }
+			get { return GetAttributeValue("htmlFor"); }
 		}
 	}
 }

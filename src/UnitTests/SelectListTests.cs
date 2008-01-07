@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
@@ -25,22 +26,8 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class SelectListTests : WatiNTest
+	public class SelectListTests : BaseElementsTests
 	{
-		private IE ie;
-
-		[TestFixtureSetUp]
-		public void FixtureSetup()
-		{
-			ie = new IE(MainURI);
-		}
-
-		[TestFixtureTearDown]
-		public void FixtureTearDown()
-		{
-			ie.Close();
-		}
-
 		[Test]
 		public void SupportedElementTags()
 		{
@@ -247,6 +234,11 @@ namespace WatiN.Core.UnitTests
 			selectList.Option("Third Listitem").Clear();
 			ie.WaitForComplete();
 			Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected #2");
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
 		}
 	}
 }

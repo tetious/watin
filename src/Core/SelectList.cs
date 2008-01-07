@@ -102,7 +102,7 @@ namespace WatiN.Core
 		/// <value><c>true</c> if multiple; otherwise, <c>false</c>.</value>
 		public bool Multiple
 		{
-			get { return selectElement.multiple; }
+			get { return bool.Parse(GetAttributeValue("multiple")); }
 		}
 
 		/// <summary>
@@ -323,10 +323,6 @@ namespace WatiN.Core
 			return Find.ByText(new StringEqualsAndCaseInsensitiveComparer(text));
 		}
 
-		private IHTMLSelectElement selectElement
-		{
-			get { return ((IHTMLSelectElement) HTMLElement); }
-		}
 
 		public class ElementCollection : IElementCollection
 		{

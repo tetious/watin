@@ -69,7 +69,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Alt
 		{
-			get { return ((IHTMLAreaElement) HTMLElement).alt; }
+			get { return GetAttributeValue("alt"); }
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Url
 		{
-			get { return ((IHTMLAreaElement) HTMLElement).href; }
+			get { return GetAttributeValue("href"); }
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Coords
 		{
-			get { return ((IHTMLAreaElement) HTMLElement).coords; }
+			get { return GetAttributeValue("coords"); }
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string Shape
 		{
-			get { return ((IHTMLAreaElement) HTMLElement).shape; }
+			get { return GetAttributeValue("shape"); }
 		}
 	}
 }

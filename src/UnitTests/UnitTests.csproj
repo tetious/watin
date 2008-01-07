@@ -452,6 +452,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "html\intro.html"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "html\main.html"
                     BuildAction = "Content"
                 />
@@ -469,6 +473,10 @@
                 />
                 <File
                     RelPath = "html\TestEvents.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "html\theApp.html"
                     BuildAction = "Content"
                 />
                 <File

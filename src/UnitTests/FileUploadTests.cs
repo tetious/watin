@@ -104,6 +104,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FileUploadOfFileWithSendKeysEscapeCharactersInFilename()
 		{
+			ie.Refresh();
+
 			FileUpload fileUpload = ie.FileUpload("upload");
 
 			Assert.That(fileUpload.Exists);
