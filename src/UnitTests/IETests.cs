@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2007 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2008 Jeroen van Menen
 
-//Copyright 2006-2007 Jeroen van Menen
+//Copyright 2006-2008 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using mshtml;
 using NUnit.Framework;
 using SHDocVw;
 using WatiN.Core.Constraints;
@@ -31,7 +33,7 @@ using WatiN.Core.Logging;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class IeTests : WatiNTest
+	public class IeTests : BaseWatiNTest
 	{
 		[TestFixtureSetUp]
 		public void Setup()
@@ -171,20 +173,6 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void HTMLDialogModeless()
-		{
-			using (IE ie = new IE(MainURI))
-			{
-				ie.Button("popupid").Click();
-				using (Document dialog = ie.HtmlDialogs[0])
-				{
-					string value = dialog.TextField("dims").Value;
-					Assert.AreEqual("47", value);
-				}
-			}
-		}
-
-		[Test]
 		public void DocumentShouldBeDisposedSoHTMLDialogGetsDisposedAndReferenceCountIsOK()
 		{
 			DialogWatcher dialogWatcher;
@@ -232,18 +220,6 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
 		}
 
-		[Test]
-		public void DocumentUrlandUri()
-		{
-			string url = MainURI.ToString();
-
-			using (IE ie = new IE(url))
-			{
-				Uri uri = new Uri(ie.Url);
-				Assert.AreEqual(MainURI, uri);
-				Assert.AreEqual(ie.Uri, uri);
-			}
-		}
 
 		[Test]
 		public void GoToUrl()
@@ -735,4 +711,111 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 	}
+
+	[TestFixture]
+	public class NewAttachToIeImplementation
+	{
+
+		[Test]
+		public void Test()
+		{
+			ItterateProcesses();
+		}
+
+		public void ItterateProcesses()
+		{
+			IntPtr hWnd = IntPtr.Zero;
+
+			Process[] processes = Process.GetProcesses();
+			Console.WriteLine("#processes = " + processes.Length);
+
+			foreach (Process process in processes)
+			{
+
+				foreach (ProcessThread t in process.Threads)
+				{
+					int threadId = t.Id;
+
+					NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
+					NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
+				}
+			}
+		}
+
+		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
+		{
+//			Console.WriteLine(NativeMethods.GetClassName(hWnd));
+
+			if (IsIEFrame(hWnd))
+			{
+				Console.WriteLine("Is IE Window: " + ((long)hWnd).ToString("X"));
+
+				Console.WriteLine(IEDOMFromhWnd(hWnd).title);
+			}
+
+			return false;
+		}
+
+		internal static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)
+		{
+			Guid IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
+
+			Int32 lRes = 0;
+			Int32 lMsg;
+			Int32 hr;
+
+			//if (IsIETridentDlgFrame(hWnd))
+			//{
+
+			while (!IsIEServerWindow(hWnd))
+			{
+				// Get 1st child IE server window
+				hWnd = NativeMethods.GetChildWindowHwnd(hWnd, "Internet Explorer_Server");
+			}
+
+			if (IsIEServerWindow(hWnd))
+			{
+				// Register the message
+				lMsg = NativeMethods.RegisterWindowMessage("WM_HTML_GETOBJECT");
+
+				// Get the object
+				NativeMethods.SendMessageTimeout(hWnd, lMsg, 0, 0, NativeMethods.SMTO_ABORTIFHUNG, 1000, ref lRes);
+
+				if (lRes != 0)
+				{
+					// Get the object from lRes
+					IHTMLDocument2 ieDOMFromhWnd = null;
+
+					hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
+
+					if (hr != 0)
+					{
+						throw new COMException("ObjectFromLresult has thrown an exception", hr);
+					}
+
+					return ieDOMFromhWnd;
+				}
+			}
+
+			return null;
+		}
+
+		internal static bool IsIETridentDlgFrame(IntPtr hWnd)
+		{
+			return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
+		}
+
+		internal static bool IsIEFrame(IntPtr hWnd)
+		{
+			return UtilityClass.CompareClassNames(hWnd, "IEFrame");
+		}
+
+		private static bool IsIEServerWindow(IntPtr hWnd)
+		{
+			return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
+		}
+
+	}
+
+
 }

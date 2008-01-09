@@ -16,88 +16,82 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
-	public class SimpleJavaDialogHandlerTests : WatiNTest
+	public class SimpleJavaDialogHandlerTests : BaseWithIETests
 	{
 		[Test]
 		public void AlertDialogSimpleJavaDialogHandler()
 		{
-			using (IE ie = new IE(TestEventsURI))
+			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
+			SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+
+			Assert.IsFalse(dialogHandler.HasHandledDialog, "Alert Dialog should not be handled.");
+			Assert.IsNull(dialogHandler.Message, "Message should be null");
+
+			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
 			{
-				Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+				ie.Button(Find.ByValue("Show alert dialog")).Click();
 
-				SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
-
-				Assert.IsFalse(dialogHandler.HasHandledDialog, "Alert Dialog should not be handled.");
-				Assert.IsNull(dialogHandler.Message, "Message should be null");
-
-				using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
-				{
-					ie.Button(Find.ByValue("Show alert dialog")).Click();
-
-					Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
-					Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
-				}
+				Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
+				Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
 			}
 		}
 
 		[Test]
 		public void AlertDialogSimpleJavaDialogHandler2()
 		{
-			using (IE ie = new IE(TestEventsURI))
+			SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+
+			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
 			{
-				SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+				ie.Button(Find.ByValue("Show alert dialog")).Click();
 
-				using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
-				{
-					ie.Button(Find.ByValue("Show alert dialog")).Click();
-
-					Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
-				}
+				Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
 			}
 		}
 
 		[Test]
 		public void ConfirmDialogSimpleJavaDialogHandlerCancel()
 		{
-			using (IE ie = new IE(TestEventsURI))
+			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
+			SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler(true);
+			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
 			{
-				Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+				ie.Button(Find.ByValue("Show confirm dialog")).Click();
 
-				SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler(true);
-				using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
-				{
-					ie.Button(Find.ByValue("Show confirm dialog")).Click();
-
-					Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
-					Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
-					Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
-				}
+				Assert.IsTrue(dialogHandler.HasHandledDialog, "Confirm Dialog should be handled.");
+				Assert.AreEqual("Do you want to do xyz?", dialogHandler.Message);
+				Assert.AreEqual("Cancel", ie.TextField("ReportConfirmResult").Text, "Cancel button expected.");
 			}
 		}
 
 		[Test]
 		public void IEUseOnceDialogHandler()
 		{
-			using (IE ie = new IE(TestEventsURI))
+			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
+			SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
+
+			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
 			{
-				Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+				ie.Button(Find.ByValue("Show alert dialog")).Click();
 
-				SimpleJavaDialogHandler dialogHandler = new SimpleJavaDialogHandler();
-
-				using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
-				{
-					ie.Button(Find.ByValue("Show alert dialog")).Click();
-
-					Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
-					Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
-				}
+				Assert.IsTrue(dialogHandler.HasHandledDialog, "Alert Dialog should be handled.");
+				Assert.AreEqual("This is an alert!", dialogHandler.Message, "Unexpected message");
 			}
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return TestEventsURI; }
 		}
 	}
 }

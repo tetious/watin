@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class LabelTests : BaseElementsTests
+	public class LabelTests : BaseWithIETests
 	{
 		[Test]
 		public void LabelElementTags()

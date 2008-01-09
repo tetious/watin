@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class CheckBoxTests : BaseElementsTests
+	public class CheckBoxTests : BaseWithIETests
 	{
 		[Test]
 		public void CheckBoxElementTags()

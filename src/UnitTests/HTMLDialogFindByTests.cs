@@ -22,26 +22,27 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class HTMLDialogFindByTests : WatiNTest
+	public class HTMLDialogFindByTests : BaseWithIETests
 	{
-		private IE ie = new IE(WatiNTest.MainURI);
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
 
 		[TestFixtureSetUp]
-		public void FixtureSetUp()
+		public override void FixtureSetup()
 		{
+			base.FixtureSetup();
 			ie.Button("modalid").ClickNoWait();
 		}
 
 		[TestFixtureTearDown]
-		public void FixtureTearDown()
+		public override void FixtureTearDown()
 		{
-			foreach (HtmlDialog dialog in ie.HtmlDialogs)
-			{
-				dialog.Close();
-			}
-
+			ie.HtmlDialogs.CloseAll();
 			ie.WaitForComplete();
-			ie.Close();
+		
+			base.FixtureTearDown();		
 		}
 
 		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]

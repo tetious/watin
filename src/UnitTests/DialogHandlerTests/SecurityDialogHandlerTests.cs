@@ -16,15 +16,16 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
-	public class SecurityDialogHandlerTests
+	public class SecurityDialogHandlerTests : BaseWatiNTest
 	{
-		[Test, Category("InternetConnectionNeeded")]
+		[Test, Ignore("No Security dialog is shown any more")] // Category("InternetConnectionNeeded")]
 		public void SecurityAlertDialogHandler()
 		{
 			SecurityAlertDialogHandlerMock securityAlertDialogHandlerMock = new SecurityAlertDialogHandlerMock();

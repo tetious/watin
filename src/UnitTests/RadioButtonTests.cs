@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class RadioButtonTests : BaseElementsTests
+	public class RadioButtonTests : BaseWithIETests
 	{
 		[Test]
 		public void RadioButtonElementTags()

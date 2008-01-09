@@ -18,12 +18,15 @@
 
 using System;
 using System.IO;
+using NUnit.Framework;
 
 namespace WatiN.Core.UnitTests
 {
-	public class WatiNTest
+	public abstract class BaseWatiNTest
 	{
 		private static Uri htmlTestBaseURI = null;
+		private Settings backupSettings;
+
 		public static Uri MainURI = new Uri(HtmlTestBaseURI, "main.html");
 		public static Uri IndexURI = new Uri(HtmlTestBaseURI, "Index.html");
 		public static Uri PopUpURI = new Uri(HtmlTestBaseURI, "popup.html");
@@ -39,8 +42,22 @@ namespace WatiN.Core.UnitTests
 		public static Uri IFramesMiddleURI = new Uri(HtmlTestBaseURI, "iframes\\middlepage.html");
 		public static Uri IFramesRightURI = new Uri(HtmlTestBaseURI, "iframes\\rightpage.html");
 		public static Uri OnBeforeUnloadJavaDialogURI = new Uri(HtmlTestBaseURI, "OnBeforeUnloadJavaDialog.html");
+		public static Uri AboutBlank = new Uri("about:blank");
 		public static string GoogleUrl = "http://www.google.com";
 		public static string EbayUrl = "http://www.ebay.com";
+
+		[TestFixtureSetUp]
+		public virtual void FixtureSetup()
+		{
+			backupSettings = IE.Settings.Clone();
+			IE.Settings = new StealthSettings();
+		}
+
+		[TestFixtureTearDown]
+		public virtual void FixtureTearDown()
+		{
+			IE.Settings = backupSettings;
+		}
 
 		public static Uri HtmlTestBaseURI
 		{

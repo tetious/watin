@@ -24,17 +24,14 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ImageTests : WatiNTest
+	public class ImageTests : BaseWithIETests
 	{
-		private IE ie = new IE(WatiNTest.ImagesURI);
+		private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
+		private Uri watinwebsiteLogoImage = new Uri(HtmlTestBaseURI, "images\\watin.jpg");
 
-		private Uri watinwebsiteImage = new Uri(WatiNTest.HtmlTestBaseURI, "images\\watinwebsite.jpg");
-		private Uri watinwebsiteLogoImage = new Uri(WatiNTest.HtmlTestBaseURI, "images\\watin.jpg");
-
-		[TestFixtureTearDown]
-		public void Teardown()
+		public override Uri TestPageUri
 		{
-			ie.Close();
+			get { return ImagesURI; }
 		}
 
 		[Test]

@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class DivTests : BaseElementsTests
+	public class DivTests : BaseWithIETests
 	{
 		[Test]
 		public void DivElementTags()

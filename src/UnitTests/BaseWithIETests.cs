@@ -21,25 +21,22 @@ using NUnit.Framework;
 
 namespace WatiN.Core.UnitTests
 {
-	public abstract class BaseElementsTests : WatiNTest
+	public abstract class BaseWithIETests : BaseWatiNTest
 	{
 		protected IE ie;
-		private Settings backupSettings;
 
 		[TestFixtureSetUp]
-		public virtual void FixtureSetup()
+		public override void FixtureSetup()
 		{
-			backupSettings = IE.Settings.Clone();
-			IE.Settings = new StealthSettings();
-
+			base.FixtureSetup();
 			ie = new IE(TestPageUri);
 		}
 
 		[TestFixtureTearDown]
-		public virtual void FixtureTearDown()
+		public override void FixtureTearDown()
 		{
-			IE.Settings = backupSettings;
 			ie.Close();
+			base.FixtureTearDown();
 		}
 
 		[SetUp]

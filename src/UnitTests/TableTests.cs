@@ -27,7 +27,7 @@ namespace WatiN.Core.UnitTests
 	/// Summary description for TableTests.
 	/// </summary>
 	[TestFixture]
-	public class TableTests : BaseElementsTests
+	public class TableTests : BaseWithIETests
 	{
 		private const string tableId = "table1";
 

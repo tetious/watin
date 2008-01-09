@@ -26,6 +26,7 @@ using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -34,13 +35,12 @@ namespace WatiN.Core
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
-	public class Element
+	public class Element : IAttributeBag
 	{
 		private static Hashtable _elementConstructors = null;
 
 		private DomContainer _domContainer;
-		private object _element;
-		private ElementFinder _elementFinder;
+		private IEElement _ieElement;
 
 		private string _originalcolor;
 
@@ -73,7 +73,8 @@ namespace WatiN.Core
 		{
 			if (ElementTag.IsValidElement(element.htmlElement, elementTags))
 			{
-				init(element._domContainer, element._element, element._elementFinder);
+				_ieElement = element._ieElement;
+				_domContainer = element._domContainer;
 			}
 			else
 			{
@@ -83,9 +84,8 @@ namespace WatiN.Core
 
 		private void init(DomContainer domContainer, object element, ElementFinder elementFinder)
 		{
+			_ieElement = new IEElement(element, domContainer, elementFinder);
 			_domContainer = domContainer;
-			_element = element;
-			_elementFinder = elementFinder;
 		}
 
 		/// <summary>
@@ -94,7 +94,7 @@ namespace WatiN.Core
 		/// <value>The name of the class.</value>
 		public string ClassName
 		{
-			get { return htmlElement.className; }
+			get { return GetAttributeValue("className"); }
 		}
 
 		/// <summary>
@@ -103,7 +103,15 @@ namespace WatiN.Core
 		/// <value><c>true</c> if complete; otherwise, <c>false</c>.</value>
 		public bool Complete
 		{
-			get { return htmlElement2.readyStateValue == 4; }
+			get
+		{
+				string readyStateValue = GetAttributeValue("readyStateValue"); 
+				if (readyStateValue != null)
+				{
+					return int.Parse(readyStateValue) == 4;
+				}
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -112,7 +120,7 @@ namespace WatiN.Core
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return !htmlElement3.disabled; }
+			get { return !bool.Parse(GetAttributeValue("disabled")); }
 		}
 
 		/// <summary>
@@ -121,7 +129,7 @@ namespace WatiN.Core
 		/// <value>The id.</value>
 		public string Id
 		{
-			get { return htmlElement.id; }
+			get { return GetAttributeValue("id"); }
 		}
 
 		/// <summary>
@@ -131,7 +139,7 @@ namespace WatiN.Core
 		/// <value>The innertext.</value>
 		public virtual string Text
 		{
-			get { return htmlElement.innerText; }
+			get { return GetAttributeValue("innertext"); }
 		}
 
 		/// <summary>
@@ -140,7 +148,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string TextAfter
 		{
-			get { return htmlElement2.getAdjacentText("afterEnd"); }
+			get { return IEElement.TextAfter; }
 		}
 
 		/// <summary>
@@ -149,7 +157,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string TextBefore
 		{
-			get { return htmlElement2.getAdjacentText("beforeBegin"); }
+			get { return IEElement.TextBefore; }
 		}
 
 		/// <summary>
@@ -158,7 +166,7 @@ namespace WatiN.Core
 		/// <value>The inner HTML.</value>
 		public string InnerHtml
 		{
-			get { return htmlElement.innerHTML; }
+			get { return GetAttributeValue("innerHTML"); }
 		}
 
 		/// <summary>
@@ -167,7 +175,7 @@ namespace WatiN.Core
 		/// <value>The outer text.</value>
 		public string OuterText
 		{
-			get { return htmlElement.outerText; }
+			get { return GetAttributeValue("outerText"); }
 		}
 
 		/// <summary>
@@ -176,7 +184,7 @@ namespace WatiN.Core
 		/// <value>The outer HTML.</value>
 		public string OuterHtml
 		{
-			get { return htmlElement.outerHTML; }
+			get { return GetAttributeValue("outerHTML"); }
 		}
 
 		/// <summary>
@@ -185,7 +193,7 @@ namespace WatiN.Core
 		/// <value>The name of the tag.</value>
 		public string TagName
 		{
-			get { return htmlElement.tagName; }
+			get { return GetAttributeValue("tagName"); }
 		}
 
 		/// <summary>
@@ -194,7 +202,7 @@ namespace WatiN.Core
 		/// <value>The title.</value>
 		public string Title
 		{
-			get { return htmlElement.title; }
+			get { return GetAttributeValue("title"); }
 		}
 
 		/// <summary>
@@ -205,14 +213,11 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement nextSibling = domNode.nextSibling as IHTMLElement;
-				if (nextSibling != null)
-				{
-					return GetTypedElement(_domContainer, nextSibling);
-				}
-				return null;
-			}
-		}
+				// TODO: Move logic to create a typed instance from IEElement to Element
+				return IEElement.NextSibling;
+            }
+        }
+
 
 		/// <summary>
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
@@ -222,12 +227,8 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement previousSibling = domNode.previousSibling as IHTMLElement;
-				if (previousSibling != null)
-				{
-					return GetTypedElement(_domContainer, previousSibling);
-				}
-				return null;
+				// TODO: Move logic to create a typed instance from IEElement to Element
+                return IEElement.PreviousSibling;
 			}
 		}
 
@@ -261,18 +262,14 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
-				if (parentNode != null)
-				{
-					return GetTypedElement(_domContainer, parentNode);
-				}
-				return null;
-			}
-		}
+                return IEElement.Parent;
+            }
+        }
 
 		public Style Style
 		{
-			get { return new Style(htmlElement.style); }
+			//TODO: Style class should also delegate to a browser specific instance
+			get { return IEElement.Style; }
 		}
 
 		/// <summary>
@@ -291,17 +288,10 @@ namespace WatiN.Core
 
 			if (string.Compare(attributeName, "style", true) == 0)
 			{
-				return htmlElement.style.cssText;
+				return Style.CssText;
 			}
 
-			object attributeValue = htmlElement.getAttribute(attributeName, 0);
-
-			if (attributeValue == DBNull.Value || attributeValue == null)
-			{
-				return null;
-			}
-
-			return attributeValue.ToString();
+			return IEElement.GetAttributeValue(attributeName);
 		}
 
 		/// <summary>
@@ -333,7 +323,7 @@ namespace WatiN.Core
 			Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
 			Highlight(true);
 
-			ClickDispHtmlBaseElement();
+			IEElement.ClickOnElement();
 
 			try
 			{
@@ -343,11 +333,6 @@ namespace WatiN.Core
 			{
 				Highlight(false);
 			}
-		}
-
-		private void ClickDispHtmlBaseElement()
-		{
-			DispHtmlBaseElement.click();
 		}
 
 		/// <summary>
@@ -366,7 +351,7 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			Thread clickButton = new Thread(new ThreadStart(ClickDispHtmlBaseElement));
+			Thread clickButton = new Thread(new ThreadStart(IEElement.ClickOnElement));
 			clickButton.Start();
 			clickButton.Join(500);
 
@@ -383,7 +368,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(Id);
 			}
 
-			DispHtmlBaseElement.focus();
+			IEElement.SetFocus();
 			FireEvent("onFocus");
 		}
 
@@ -535,14 +520,7 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			if (eventProperties == null)
-			{
-				UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
-			}
-			else
-			{
-				UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
-			}
+			IEElement.FireEvent(eventName, eventProperties);
 
 			if (waitForComplete)
 			{
@@ -586,8 +564,8 @@ namespace WatiN.Core
 				{
 					try
 					{
-						_originalcolor = (string) htmlElement.style.backgroundColor;
-						htmlElement.style.backgroundColor = IE.Settings.HighLightColor;
+						_originalcolor = IEElement.BackgroundColor;
+						IEElement.BackgroundColor = IE.Settings.HighLightColor;
 					}
 					catch
 					{
@@ -600,11 +578,11 @@ namespace WatiN.Core
 					{
 						if (_originalcolor != null)
 						{
-							htmlElement.style.backgroundColor = _originalcolor;
+							IEElement.BackgroundColor = _originalcolor;
 						}
 						else
 						{
-							htmlElement.style.backgroundColor = "";
+							IEElement.BackgroundColor = "";
 						}
 					}
 					catch {}
@@ -616,33 +594,10 @@ namespace WatiN.Core
 			}
 		}
 
+		// TODO: Remove this property or move it to IEElement
 		protected IHTMLElement htmlElement
 		{
 			get { return (IHTMLElement) HTMLElement; }
-		}
-
-		private IHTMLElement2 htmlElement2
-		{
-			get { return (IHTMLElement2) HTMLElement; }
-		}
-
-		private IHTMLElement3 htmlElement3
-		{
-			get { return (IHTMLElement3) HTMLElement; }
-		}
-
-		private IHTMLDOMNode domNode
-		{
-			get { return (IHTMLDOMNode) HTMLElement; }
-		}
-
-		/// <summary>
-		/// Gets the DispHtmlBaseElement by casting <see cref="HTMLElement" />.
-		/// </summary>
-		/// <value>The DispHtmlBaseElement.</value>
-		protected DispHTMLBaseElement DispHtmlBaseElement
-		{
-			get { return (DispHTMLBaseElement) HTMLElement; }
 		}
 
 		/// <summary>
@@ -653,6 +608,8 @@ namespace WatiN.Core
 		{
 			get { return _domContainer; }
 		}
+
+		//TODO: Should return IEElement instead of object
 
 		/// <summary>
 		/// Gets the DOM HTML element for this instance as an object. Cast it to 
@@ -666,7 +623,23 @@ namespace WatiN.Core
 		{
 			get
 			{
-				if (!ElementAvailable())
+				return IEElement.Element;
+			}
+		}
+
+		/// <summary>
+		/// Gets the DOM HTML element for this instance as an object. Cast it to 
+		/// the interface you need. Most of the time the object supports IHTMLELement, 
+		/// IHTMLElement2 and IHTMLElement3 but you can also cast it to a more
+		/// specific interface. You should reference the microsoft.MSHTML.dll 
+		/// assembly to cast it to a valid type.
+		/// </summary>
+		/// <value>The DOM element.</value>
+		public IEElement IEElement
+		{
+			get
+			{
+				if (!_ieElement.HasReferenceToAnElement)
 				{
 					try
 					{
@@ -674,11 +647,11 @@ namespace WatiN.Core
 					}
 					catch (WatiN.Core.Exceptions.TimeoutException)
 					{
-						throw _elementFinder.CreateElementNotFoundException();
+						throw _ieElement.CreateElementNotFoundException();
 					}
 				}
 
-				return _element;
+				return _ieElement;
 			}
 		}
 
@@ -690,14 +663,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				object elementExists = getElement();
-
-				if (elementExists == null)
-				{
-					return false;
-				}
-
-				return true;
+				return UpdateElementReference().HasReferenceToAnElement;
 			}
 		}
 
@@ -804,7 +770,6 @@ namespace WatiN.Core
 		{
 			Exception lastException;
 
-			ElementAttributeBag attributeBag = new ElementAttributeBag();
 
 			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
@@ -819,9 +784,7 @@ namespace WatiN.Core
 					// against some cached reference.
 					if (Exists)
 					{
-						attributeBag.IHTMLElement = htmlElement;
-
-						if (constraint.Compare(attributeBag))
+						if (constraint.Compare(IEElement.AttributeBag))
 						{
 							return;
 						}
@@ -855,18 +818,18 @@ namespace WatiN.Core
 			// Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
-				if (ElementAvailable())
+				if (_ieElement.HasReferenceToAnElement)
 				{
 					return;
 				}
-				else if (_elementFinder == null)
+				else if (_ieElement.HasElementFinder == false)
 				{
 					throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
 				}
 			}
 			else
 			{
-				if (!ElementAvailable())
+				if (!_ieElement.HasReferenceToAnElement)
 				{
 					return;
 				}
@@ -939,9 +902,9 @@ namespace WatiN.Core
 		/// </example>
 		public void Refresh()
 		{
-			if (_elementFinder != null)
+			if (_ieElement.HasElementFinder)
 			{
-				_element = null;
+				_ieElement.ClearElementReference();
 			}
 		}
 
@@ -949,11 +912,11 @@ namespace WatiN.Core
 		/// Calls <see cref="Refresh"/> and returns the element.
 		/// </summary>
 		/// <returns></returns>
-		protected object getElement()
+		protected IEElement UpdateElementReference()
 		{
-			if (_elementFinder != null)
+			if (_ieElement.HasElementFinder)
 			{
-				_element = _elementFinder.FindFirst();
+				_ieElement.FindElement();
 			}
 			else
 			{
@@ -963,46 +926,23 @@ namespace WatiN.Core
 				// These checks are only necessary if element field
 				// is set during the construction of an ElementCollection
 				// or a more specialized element collection (like TextFieldCollection)
-				IHTMLElement ihtmlElement = _element as IHTMLElement;
-
-				if (ihtmlElement != null)
+				if (_ieElement.HasReferenceToAnElement)
 				{
 					try
 					{
-						if (IsElementStillAvailable(ihtmlElement) == false)
+						if (_ieElement.IsElementReferenceStillValid == false)
 						{
-							_element = null;
+							_ieElement.ClearElementReference();
 						}
 					}
 					catch
 					{
-						_element = null;
+						_ieElement.ClearElementReference();
 					}
 				}
 			}
 
-			return _element;
-		}
-
-		private bool IsElementStillAvailable(IHTMLElement ihtmlElement)
-		{
-			if (ihtmlElement.sourceIndex < 0)
-			{
-				return false;
-			}
-			else
-			{
-				if (ihtmlElement.offsetParent == null)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool ElementAvailable()
-		{
-			return _element != null;
+			return _ieElement;
 		}
 
 		/// <summary>
@@ -1180,7 +1120,7 @@ namespace WatiN.Core
 
 			while (parentElement != null)
 			{
-				if (Matches(parentElement, findBy))
+				if (findBy.Compare(parentElement))
 				{
 					return parentElement;
 				}
@@ -1216,7 +1156,7 @@ namespace WatiN.Core
 
 			while (parentElement != null)
 			{
-				if (parentElement.GetType() == ancestorType && Matches(parentElement, findBy))
+				if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
 				{
 					return parentElement;
 				}
@@ -1270,10 +1210,9 @@ namespace WatiN.Core
 			return Ancestor(tagName, new AlwaysTrueConstraint());
 		}
 
-		private static bool Matches(Element parentElement, BaseConstraint findBy)
+		public string GetValue(string attributename)
 		{
-			ElementAttributeBag attributeBag = new ElementAttributeBag((IHTMLElement) parentElement.HTMLElement);
-			return findBy.Compare(attributeBag);
+			return IEElement.AttributeBag.GetValue(attributename);
 		}
 	}
 }

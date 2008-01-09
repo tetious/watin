@@ -27,7 +27,7 @@ using WatiN.Core.Logging;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class DialogWatcherTests : WatiNTest
+	public class DialogWatcherTests : BaseWatiNTest
 	{
 		private ILogWriter saveLoggerInstance;
 

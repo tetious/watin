@@ -26,7 +26,7 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class SelectListTests : BaseElementsTests
+	public class SelectListTests : BaseWithIETests
 	{
 		[Test]
 		public void SupportedElementTags()

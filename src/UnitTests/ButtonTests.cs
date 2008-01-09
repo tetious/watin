@@ -25,7 +25,7 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ButtonTests : BaseElementsTests
+	public class ButtonTests : BaseWithIETests
 	{
 		[Test]
 		public void ButtonCollectionSecondFilterAndOthersShouldNeverThrowInvalidAttributeException()

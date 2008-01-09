@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class SpanTests : BaseElementsTests
+	public class SpanTests : BaseWithIETests
 	{
 		[Test]
 		public void SpanExists()

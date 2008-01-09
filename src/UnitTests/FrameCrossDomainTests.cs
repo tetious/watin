@@ -22,20 +22,11 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture, Category("InternetConnectionNeeded")]
-	public class FrameCrossDomainTests : WatiNTest
+	public class FrameCrossDomainTests : BaseWithIETests
 	{
-		private IE ieframes;
-
-		[TestFixtureSetUp]
-		public void Setup()
+		public override Uri TestPageUri
 		{
-			ieframes = new IE(CrossDomainFramesetURI);
-		}
-
-		[TestFixtureTearDown]
-		public void Teardown()
-		{
-			ieframes.Close();
+			get { return CrossDomainFramesetURI; }
 		}
 
 		[Test]
@@ -43,15 +34,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ieframes.Frames[1].TextField(Find.ByName("q"));
+				ie.Frames[1].TextField(Find.ByName("q"));
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("mainid", ieframes.Frames[1].Id, "Unexpected id");
-			Assert.AreEqual("main", ieframes.Frames[1].Name, "Unexpected name");
+			Assert.AreEqual("mainid", ie.Frames[1].Id, "Unexpected id");
+			Assert.AreEqual("main", ie.Frames[1].Name, "Unexpected name");
 		}
 
 		[Test]
@@ -59,15 +50,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ieframes.Frame("mainid").TextField(Find.ByName("q"));
+				ie.Frame("mainid").TextField(Find.ByName("q"));
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("mainid", ieframes.Frame("mainid").Id, "Unexpected Id");
-			Assert.AreEqual("main", ieframes.Frame("mainid").Name, "Unexpected name");
+			Assert.AreEqual("mainid", ie.Frame("mainid").Id, "Unexpected Id");
+			Assert.AreEqual("main", ie.Frame("mainid").Name, "Unexpected name");
 		}
 
 		[Test]
@@ -75,15 +66,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ieframes.Frame("contentsid").Link("googlelink");
+				ie.Frame("contentsid").Link("googlelink");
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("contentsid", ieframes.Frame("contentsid").Id, "Unexpected Id");
-			Assert.AreEqual("contents", ieframes.Frame("contentsid").Name, "Unexpected name");
+			Assert.AreEqual("contentsid", ie.Frame("contentsid").Id, "Unexpected Id");
+			Assert.AreEqual("contents", ie.Frame("contentsid").Name, "Unexpected name");
 		}
 
 		[Test]
@@ -91,7 +82,7 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ieframes.Frame(Find.ByName("main"));
+				ie.Frame(Find.ByName("main"));
 			}
 			catch (UnauthorizedAccessException)
 			{
@@ -104,7 +95,7 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ieframes.Frame(Find.ByName("contents"));
+				ie.Frame(Find.ByName("contents"));
 			}
 			catch (UnauthorizedAccessException)
 			{

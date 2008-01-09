@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -26,25 +27,14 @@ using WatiN.Core.Constraints;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FramesetTests : WatiNTest
+	public class FramesetTests : BaseWithIETests
 	{
 		private const string frameNameContents = "contents";
 		private const string frameNameMain = "main";
 
-		private IE ie;
-
-		[TestFixtureSetUp]
-		public void Setup()
+		public override Uri TestPageUri
 		{
-			Logger.LogWriter = new DebugLogWriter();
-
-			ie = new IE(FramesetURI);
-		}
-
-		[TestFixtureTearDown]
-		public void tearDown()
-		{
-			ie.Close();
+			get { return FramesetURI; }
 		}
 
 		[Test]
@@ -182,29 +172,33 @@ namespace WatiN.Core.UnitTests
 	}
 
 	[TestFixture]
-	public class FramesetWithinFrameSetTests : WatiNTest
+	public class FramesetWithinFrameSetTests : BaseWithIETests
 	{
 		[Test]
 		public void FramesLength()
 		{
-			using (IE ieframes = new IE(FramesetWithinFramesetURI))
-			{
-				Assert.AreEqual(2, ieframes.Frames.Length);
-				Assert.AreEqual(2, ieframes.Frames[1].Frames.Length);
-			}
+			Assert.AreEqual(2, ie.Frames.Length);
+			Assert.AreEqual(2, ie.Frames[1].Frames.Length);
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return FramesetWithinFramesetURI; }
 		}
 	}
 
 	[TestFixture]
-	public class NoFramesTest : WatiNTest
+	public class NoFramesTest : BaseWithIETests
 	{
 		[Test]
 		public void HasNoFrames()
 		{
-			using (IE iemain = new IE(MainURI))
-			{
-				Assert.AreEqual(0, iemain.Frames.Length);
-			}
+			Assert.AreEqual(0, ie.Frames.Length);
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
 		}
 	}
 }

@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class LinkTests : BaseElementsTests
+	public class LinkTests : BaseWithIETests
 	{
 		[Test]
 		public void LinkElementTags()

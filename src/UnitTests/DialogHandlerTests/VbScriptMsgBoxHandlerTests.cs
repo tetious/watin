@@ -24,7 +24,7 @@ using WatiN.Core.DialogHandlers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class VbScriptMsgBoxDialogHandlerTests : BaseElementsTests
+	public class VbScriptMsgBoxDialogHandlerTests : BaseWithIETests
 	{
 		[Test]
 		public void TestOkOnly()

@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FileUploadTests : BaseElementsTests
+	public class FileUploadTests : BaseWithIETests
 	{
 		[Test]
 		public void FileUploadElementTags()

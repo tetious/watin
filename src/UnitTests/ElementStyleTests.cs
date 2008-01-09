@@ -22,27 +22,20 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ElementStyleTests : WatiNTest
+	public class ElementStyleTests : BaseWithIETests
 	{
 		private const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
-
-		private IE ie = new IE();
 		private TextField element;
 
-		[SetUp]
-		public void TestSetup()
+		public override Uri TestPageUri
 		{
-			if (!ie.Uri.Equals(WatiNTest.MainURI))
-			{
-				ie.GoTo(MainURI);
-				element = ie.TextField("Textarea1");
-			}
+			get { return MainURI; }
 		}
 
-		[TestFixtureTearDown]
-		public void FixtureTeardown()
+		public override void TestSetUp()
 		{
-			ie.Close();
+			base.TestSetUp ();
+			element = ie.TextField("Textarea1");
 		}
 
 		[Test]

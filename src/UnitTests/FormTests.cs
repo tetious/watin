@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -23,23 +24,11 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FormTests : WatiNTest
+	public class FormTests : BaseWithIETests
 	{
-		private IE ie = new IE();
-
-		[SetUp]
-		public void TestSetup()
+		public override Uri TestPageUri
 		{
-			if (!ie.Uri.Equals(WatiNTest.FormSubmitURI))
-			{
-				ie.GoTo(FormSubmitURI);
-			}
-		}
-
-		[TestFixtureTearDown]
-		public void FixtureTeardown()
-		{
-			ie.Close();
+			get { return FormSubmitURI; }
 		}
 
 		[Test]
@@ -136,5 +125,6 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("form4name", ie.Form(Find.ByName("form4name")).ToString(), "Name expected");
 			Assert.AreEqual("This is a form with no ID, Title or name.", ie.Forms[4].ToString(), "Text expected");
 		}
+
 	}
 }

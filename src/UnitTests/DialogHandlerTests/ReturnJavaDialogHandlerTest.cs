@@ -25,12 +25,12 @@ using WatiN.Core.DialogHandlers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ReturnJavaDialogHandlerTest : WatiNTest
+	public class ReturnJavaDialogHandlerTest : BaseWatiNTest
 	{
 		[Test]
 		public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnOkShouldCloseIE()
 		{
-			using (IE ie = new IE(WatiNTest.OnBeforeUnloadJavaDialogURI))
+			using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))
 			{
 				ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();
 				ie.AddDialogHandler(returnDialogHandler);

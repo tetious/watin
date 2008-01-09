@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ParaTests : BaseElementsTests
+	public class ParaTests : BaseWithIETests
 	{
 		[Test]
 		public void ParaElementTags()

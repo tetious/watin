@@ -25,7 +25,7 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TextFieldTests : BaseElementsTests
+	public class TextFieldTests : BaseWithIETests
 	{
 		[Test]
 		public void TextFieldElementTags()

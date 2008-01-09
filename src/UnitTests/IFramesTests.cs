@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -24,20 +25,11 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class IFramesTests : WatiNTest
+	public class IFramesTests : BaseWithIETests
 	{
-		private IE ie;
-
-		[TestFixtureSetUp]
-		public void Setup()
+		public override Uri TestPageUri
 		{
-			ie = new IE(IFramesMainURI);
-		}
-
-		[TestFixtureTearDown]
-		public void tearDown()
-		{
-			ie.Close();
+			get { return IFramesMainURI; }
 		}
 
 		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingIFrameID'")]
@@ -128,8 +120,8 @@ namespace WatiN.Core.UnitTests
 			Assert.That(frame.Id, Is.EqualTo("iframe2"));
 		}
 
-		[Test] //, Ignore("An Ebay IFrame never reaches complete status"), Category("InternetConnectionNeeded")]
-			public void EbayTest()
+		[Test, Category("InternetConnectionNeeded")]
+		public void EbayTest()
 		{
 			// ebay seems to embed some active-x(?) component
 			// which crashed the code in NativeMethods.EnumIWebBrowser2Interfaces

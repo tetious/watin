@@ -23,24 +23,25 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class Utils : WatiNTest
+	public class Utils : BaseWithIETests
 	{
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
+
 		[Test]
 		public void DumpElements()
 		{
-			using (IE ie = new IE(HtmlTestBaseURI + "main.html"))
-			{
-				UtilityClass.DumpElements(ie);
-			}
+			UtilityClass.DumpElements(ie);
 		}
 
 		[Test]
 		public void DumpElementsElab()
 		{
-			using (IE ie = new IE(HtmlTestBaseURI + "Frameset.html"))
-			{
-				UtilityClass.DumpElementsWithHtmlSource(ie);
-			}
+			ie.GoTo(FramesetURI);
+
+			UtilityClass.DumpElementsWithHtmlSource(ie);
 		}
 
 		[Test]

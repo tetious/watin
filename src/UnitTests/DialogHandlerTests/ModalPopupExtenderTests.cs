@@ -25,7 +25,7 @@ namespace WatiN.Core.UnitTests
 	[TestFixture, Ignore("work in progress")]
 	public class ModalPopupExtenderTests
 	{
-		[Test]
+		[Test, Category("InternetConnectionNeeded")]
 		public void ModalPopupExtenderTest()
 		{
 			using (IE ie = new MyIE("http://www.asp.net/AJAX/Control-Toolkit/Live/ModalPopup/ModalPopup.aspx"))

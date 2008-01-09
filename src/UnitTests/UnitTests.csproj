@@ -125,7 +125,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BaseElementsTests.cs"
+                    RelPath = "BaseWatiNTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseWithIETests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -302,11 +307,6 @@
                 <File
                     RelPath = "WatiN.Core.UnitTests.dll.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "WatiNTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs"

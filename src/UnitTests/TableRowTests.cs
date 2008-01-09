@@ -25,7 +25,7 @@ using WatiN.Core.Comparers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TableRowTests : BaseElementsTests
+	public class TableRowTests : BaseWithIETests
 	{
 		[Test]
 		public void TableRowElementTags()

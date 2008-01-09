@@ -19,89 +19,121 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class HTMLDialogTests : WatiNTest
+	public class HTMLDialogTests : BaseWithIETests
 	{
+		[TearDown]
+		public void TearDown()
+		{
+			ie.HtmlDialogs.CloseAll();
+		}
+
 		[Test]
 		public void HTMLDialogModalByTitle()
 		{
-			using (IE ie = new IE(MainURI))
+			ie.Button("modalid").ClickNoWait();
+
+			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
 			{
-				ie.Button("modalid").ClickNoWait();
+				Assert.IsInstanceOfType(typeof (DomContainer), htmlDialog);
 
-				using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
-				{
-					Assert.IsInstanceOfType(typeof (DomContainer), htmlDialog);
+				Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+				Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
 
-					Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-					Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
-
-					htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
-					htmlDialog.Button("hello").Click();
-				}
+				htmlDialog.TextField("name").TypeText("Textfield in HTMLDialog");
+				htmlDialog.Button("hello").Click();
 			}
 		}
 
 		[Test]
 		public void HTMLDialogModalByUrl()
 		{
-			using (IE ie = new IE(MainURI))
-			{
-				ie.Button("modalid").ClickNoWait();
+			ie.Button("modalid").ClickNoWait();
 
-				using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
-				{
-					Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
-					Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
-				}
+			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			{
+				Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+				Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
 			}
 		}
 
 		[Test]
+		public void HTMLDialogShouldBeClosedWhenDisposed()
+		{
+			// Given no HtmlDialog is shown
+			Assert.That(ie.HtmlDialogs.Length, Is.EqualTo(0));
+			
+			// When I open an HtmlDialog
+			// and verify it exists
+			// and the HtmlDialog instance gets disposed
+			ie.Button("modalid").ClickNoWait();
+
+			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			{
+				Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+			}
+
+			// Then again there should be no HtmlDialog open
+			Assert.That(ie.HtmlDialogs.Length, Is.EqualTo(0));
+		}
+
+
+		[Test]
 		public void HTMLDialogsExists()
 		{
-			using (IE ie = new IE(MainURI))
-			{
-				BaseConstraint findBy = Find.ByUrl(PopUpURI);
-				Assert.IsFalse(ie.HtmlDialogs.Exists(findBy));
+			BaseConstraint findBy = Find.ByUrl(PopUpURI);
+			Assert.IsFalse(ie.HtmlDialogs.Exists(findBy));
 
-				ie.Button("modalid").ClickNoWait();
+			ie.Button("modalid").ClickNoWait();
 
-				Thread.Sleep(1000);
+			Thread.Sleep(1000);
 
-				Assert.IsTrue(ie.HtmlDialogs.Exists(findBy));
-			}
+			Assert.IsTrue(ie.HtmlDialogs.Exists(findBy));
 		}
 
 		[Test]
 		public void HTMLDialogNotFoundException()
 		{
-			using (IE ie = new IE(MainURI))
-			{
-				DateTime startTime = DateTime.Now;
-				const int timeoutTime = 5;
-				string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' with value 'popuptest'. (Search expired after '5' seconds). Is there a popup blocker active?";
+			DateTime startTime = DateTime.Now;
+			const int timeoutTime = 5;
+			string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' with value 'popuptest'. (Search expired after '5' seconds). Is there a popup blocker active?";
 
-				try
-				{
-					// Time out after timeoutTime seconds
-					startTime = DateTime.Now;
-					ie.HtmlDialog(Find.ByTitle("PopUpTest"), timeoutTime);
-					Assert.Fail("PopUpTest should not be found");
-				}
-				catch (Exception e)
-				{
-					Assert.IsInstanceOfType(typeof (HtmlDialogNotFoundException), e);
-					// add 1 second to give it some slack.
-					Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
-					Assert.AreEqual(expectedMessage, e.Message, "Unexpected exception message");
-				}
+			try
+			{
+				// Time out after timeoutTime seconds
+				startTime = DateTime.Now;
+				ie.HtmlDialog(Find.ByTitle("PopUpTest"), timeoutTime);
+				Assert.Fail("PopUpTest should not be found");
 			}
+			catch (Exception e)
+			{
+				Assert.IsInstanceOfType(typeof (HtmlDialogNotFoundException), e, "Unexpected exception");
+				// add 1 second to give it some slack.
+				Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
+				Assert.AreEqual(expectedMessage, e.Message, "Unexpected exception message");
+			}
+		}
+
+		[Test]
+		public void HTMLDialogModeless()
+		{
+			ie.Button("popupid").Click();
+			using (Document dialog = ie.HtmlDialogs[0])
+			{
+				string value = dialog.TextField("dims").Value;
+				Assert.AreEqual("47", value);
+			}
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
 		}
 	}
 }

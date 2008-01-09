@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TableCellTests : BaseElementsTests
+	public class TableCellTests : BaseWithIETests
 	{
 		[Test]
 		public void TableCellElementTags()

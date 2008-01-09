@@ -44,7 +44,7 @@ namespace WatiN.Core.UnitTests
 			IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
 			ElementAttributeBag elementAttributeBag = new ElementAttributeBag(IHTMLElementStub);
 
-			SetupResult.For(IHTMLElementStub.tagName).Return("testtagname");
+			SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
 			
 			mocks.ReplayAll();
 

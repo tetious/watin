@@ -29,7 +29,7 @@ using StringComparer = WatiN.Core.Comparers.StringComparer;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FindTests : WatiNTest
+	public class FindTests
 	{
 		private const string _href = "href";
 #if NET20
@@ -50,9 +50,9 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByFor("foridvalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "For class should inherit Attribute class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
-			Assert.That(value.AttributeName, NUnit.Framework.SyntaxHelpers.Is.EqualTo(htmlfor), "Wrong attributename");
+			Assert.That(value.AttributeName, Is.EqualTo(htmlfor), "Wrong attributename");
 			Assert.AreEqual("foridvalue", value.Value, "Wrong value");
 
 			Regex regex = new Regex("^id");
@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex ^id should match");
 
 			value = Find.ByFor(new StringContainsAndCaseInsensitiveComparer("VAl"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
       attributeBag = new MockAttributeBag(htmlfor, "forvalue");
@@ -78,7 +78,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ById("idvalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Id class should inherit Attribute class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string id = "id";
 			Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
@@ -86,7 +86,7 @@ namespace WatiN.Core.UnitTests
 
 			MockAttributeBag attributeBag = new MockAttributeBag("id", "idvalue");
 			value = Find.ById(new StringContainsAndCaseInsensitiveComparer("Val"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "idvalue";
@@ -98,7 +98,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IdWithRegexAndComparer()
 		{
-		  MockRepository mocks = new MockRepository();
+			MockRepository mocks = new MockRepository();
 			ICompare comparer = (ICompare) mocks.CreateMock(typeof (ICompare));
 			IAttributeBag attributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
 
@@ -124,7 +124,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByAlt("alt text");
 			
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Alt class should inherit Attribute class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string name = "alt";
 			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
@@ -137,7 +137,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex ext$ should match");
 
 			value = Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("ALT TexT"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "alt text";
@@ -160,7 +160,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByName("namevalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Name class should inherit Attribute class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string name = "name";
 			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
@@ -173,7 +173,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
 
 			value = Find.ByName(new StringContainsAndCaseInsensitiveComparer("eVAl"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "namevalue";
@@ -188,7 +188,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByText("textvalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Text class should inherit Attribute class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string innertext = "innertext";
 			Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
@@ -201,7 +201,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
 
 			value = Find.ByText(new StringContainsAndCaseInsensitiveComparer("tVal"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "textvalue";
@@ -217,7 +217,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByStyle(attributeName, "red");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "StyleAttributeConstraint class should inherit AttributeConstraint class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string fullAttributeName = "style.background-color";
 			Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
@@ -230,7 +230,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex een$ should match");
 
 			value = Find.ByStyle(attributeName, new StringContainsAndCaseInsensitiveComparer("rEe"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "green";
@@ -242,11 +242,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindByUrl()
 		{
-			string url = WatiNURI.ToString();
+			string url = BaseWithIETests.WatiNURI.ToString();
 			AttributeConstraint value = Find.ByUrl(url);
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Url class should inherit AttributeConstraint class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(UriComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(UriComparer)), "Unexpected comparer");
 			AssertUrlValue(value);
 
 			// make sure overload also works
@@ -257,7 +257,7 @@ namespace WatiN.Core.UnitTests
 
 			MockAttributeBag attributeBag = new MockAttributeBag("href", url);
 			value = Find.ByUrl(new StringContainsAndCaseInsensitiveComparer("/watin.Sour"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = url;
@@ -275,20 +275,20 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindByUri()
 		{
-			AttributeConstraint value = Find.ByUrl(WatiNURI);
+			AttributeConstraint value = Find.ByUrl(BaseWithIETests.WatiNURI);
 			AssertUrlValue(value);
 
 			// make sure the ignore querystring constructer also works.
-			value = Find.ByUrl(WatiNURI, true);
+			value = Find.ByUrl(BaseWithIETests.WatiNURI, true);
 			AssertUrlValue(value);
 		}
 
 		private static void AssertUrlValue(AttributeConstraint value)
 		{
 			Assert.AreEqual(_href, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual(WatiNURI.ToString(), value.Value, "Wrong value");
+			Assert.AreEqual(BaseWithIETests.WatiNURI.ToString(), value.Value, "Wrong value");
 
-			MockAttributeBag attributeBag = new MockAttributeBag(_href, WatiNURI.ToString());
+			MockAttributeBag attributeBag = new MockAttributeBag(_href, BaseWithIETests.WatiNURI.ToString());
 
 			Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
 
@@ -321,7 +321,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (UriFormatException))]
 		public void FindByUrlInvalidCompare()
 		{
-			BaseConstraint value = Find.ByUrl(WatiNURI.ToString());
+			BaseConstraint value = Find.ByUrl(BaseWithIETests.WatiNURI.ToString());
 			MockAttributeBag attributeBag = new MockAttributeBag(_href, "watin.sourceforge.net");
 
 			value.Compare(attributeBag);
@@ -335,7 +335,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByTitle("titlevalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Title class should inherit AttributeConstraint class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringContainsAndCaseInsensitiveComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringContainsAndCaseInsensitiveComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
 			Assert.AreEqual("titlevalue", value.Value, "Wrong value");
@@ -374,7 +374,7 @@ namespace WatiN.Core.UnitTests
 
 			attributeBag = new MockAttributeBag(title, "title");
 			value = Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("iTl"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "title";
@@ -391,7 +391,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByValue("valuevalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Value class should inherit AttributeConstraint class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
 			Assert.AreEqual("valuevalue", value.Value, "Wrong value");
@@ -404,7 +404,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
 
 			value = Find.ByValue(new StringContainsAndCaseInsensitiveComparer("eVal"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "valuevalue";
@@ -421,7 +421,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.BySrc("image.gif");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Src class should inherit AttributeConstraint class");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
 			Assert.AreEqual("image.gif", value.Value, "Wrong value");
@@ -439,7 +439,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex image.gif$ should match");
 
 			value = Find.BySrc(new StringContainsAndCaseInsensitiveComparer("es/Im"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "/images/image.gif";
@@ -524,7 +524,7 @@ namespace WatiN.Core.UnitTests
 		{
 			const string id = "id";
 			AttributeConstraint value = Find.By(id, "idvalue");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
 			Assert.AreEqual("idvalue", value.Value, "Wrong value");
@@ -548,7 +548,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex lue$ should match");
 
 			value = Find.By(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "idvalue";
@@ -563,7 +563,7 @@ namespace WatiN.Core.UnitTests
 			AttributeConstraint value = Find.ByClass("highlighted");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Find.ByClass should return an AttributeConstraint");
-			Assert.That(value.Comparer,  NUnit.Framework.SyntaxHelpers.Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string classname = "classname";
 			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
@@ -576,7 +576,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Compare(attributeBag), "Regex ghted$ should match");
 
 			value = Find.ByClass(new StringContainsAndCaseInsensitiveComparer("hLIg"));
-			Assert.That(value.Compare(attributeBag), NUnit.Framework.SyntaxHelpers.Is.True, "Comparer not used");
+			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
 #if NET20
 			_expectedPredicateCompareValue = "highlighted";
