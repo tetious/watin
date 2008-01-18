@@ -58,277 +58,168 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.parentNode).Return(parentNode1);
-			Expect.Call(((IHTMLElement) parentNode1).tagName).Return("table").Repeat.Any();
-
-			Expect.Call(parentNode1.parentNode).Return(parentNode2);
-			Expect.Call(((IHTMLElement) parentNode2).tagName).Return("div").Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (Div), element.Ancestor(typeof (Div)));
-
-			mocks.VerifyAll();
+			TableCell tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(typeof (Div)));
 		}
 
 		[Test]
 		public void AncestorTagNameShouldReturnTypedElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.parentNode).Return(parentNode1);
-			IHTMLElement tableElement = (IHTMLElement) parentNode1;
-			Expect.Call(tableElement.tagName).Return("table").Repeat.Any();
-			Expect.Call(tableElement.getAttribute("tagname", 0)).Return("table");
-
-			Expect.Call(parentNode1.parentNode).Return(parentNode2);
-			IHTMLElement divElement = (IHTMLElement) parentNode2;
-			Expect.Call(divElement.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement.getAttribute("tagname", 0)).Return("div");
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (Div), element.Ancestor("Div"));
-
-			mocks.VerifyAll();
+			TableCell tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor("Div"));
 		}
 
 		[Test]
 		public void AncestorAttributeConstraintShouldReturnTypedElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.parentNode).Return(parentNode1);
-			IHTMLElement tableElement = (IHTMLElement) parentNode1;
-			Expect.Call(tableElement.tagName).Return("table").Repeat.Any();
-			Expect.Call(tableElement.getAttribute("innertext", 0)).Return("not ok");
-
-			Expect.Call(parentNode1.parentNode).Return(parentNode2);
-			IHTMLElement divElement = (IHTMLElement) parentNode2;
-			Expect.Call(divElement.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement.getAttribute("innertext", 0)).Return("ancestor");
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (Div), element.Ancestor(Find.ByText("ancestor")));
-
-			mocks.VerifyAll();
+			TableCell tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(Find.ById("divid")));
 		}
 
 		[Test]
 		public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
 		{
-			InitMocks();
+			MockRepository mockRepository = new MockRepository();
 
-			IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IBrowserElement firstParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+			IBrowserElement secondParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			Expect.Call(node.parentNode).Return(parentNode1);
-			IHTMLElement divElement1 = (IHTMLElement) parentNode1;
-			Expect.Call(divElement1.getAttribute("tagName", 0)).Return("div").Repeat.Any();
-			Expect.Call(divElement1.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement1.getAttribute("innertext", 0)).Return("first ancestor");
+			element = new Element(null, browserElement); 
+			Expect.Call(browserElement.Parent).Return(firstParentDiv).Repeat.Any();
+			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
+			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
+			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
-			Expect.Call(parentNode1.parentNode).Return(parentNode2);
-			IHTMLElement divElement2 = (IHTMLElement) parentNode2;
-			Expect.Call(divElement2.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement2.getAttribute("innertext", 0)).Return("second ancestor");
-			Expect.Call(divElement2.getAttribute("innertext", 0)).Return("second ancestor");
+			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
+			Expect.Call(firstParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
+			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag);
+			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
+			Expect.Call(secondParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 
-			mocks.ReplayAll();
+			mockRepository.ReplayAll();
 
 			Element ancestor = element.Ancestor(typeof (Div), Find.ByText("second ancestor"));
 
 			Assert.IsInstanceOfType(typeof (Div), ancestor);
 			Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
 
-			mocks.VerifyAll();
+			mockRepository.VerifyAll();
 		}
 
 		[Test]
 		public void AncestorTagNameAndAttributeConstraintShouldReturnTypedElement()
 		{
-			InitMocks();
+			MockRepository mockRepository = new MockRepository();
 
-			IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IBrowserElement firstParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+			IBrowserElement secondParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			Expect.Call(node.parentNode).Return(parentNode1);
-			IHTMLElement divElement1 = (IHTMLElement) parentNode1;
-			Expect.Call(divElement1.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement1.getAttribute("tagname", 0)).Return("div");
-			Expect.Call(divElement1.getAttribute("innertext", 0)).Return("first ancestor");
+			element = new Element(null, browserElement); 
+			Expect.Call(browserElement.Parent).Return(firstParentDiv).Repeat.Any();
+			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
+			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag).Repeat.Any();
+			Expect.Call(firstAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
+			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
-			Expect.Call(parentNode1.parentNode).Return(parentNode2);
-			IHTMLElement divElement2 = (IHTMLElement) parentNode2;
-			Expect.Call(divElement2.tagName).Return("div").Repeat.Any();
-			Expect.Call(divElement2.getAttribute("tagname", 0)).Return("div");
-			Expect.Call(divElement2.getAttribute("innertext", 0)).Return("second ancestor");
-			Expect.Call(divElement2.getAttribute("innertext", 0)).Return("second ancestor");
+			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
+			Expect.Call(firstParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
+			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag).Repeat.Any();
+			Expect.Call(secondAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
+			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
+			Expect.Call(secondParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 
-			mocks.ReplayAll();
+			mockRepository.ReplayAll();
 
 			Element ancestor = element.Ancestor("Div", Find.ByText("second ancestor"));
 
 			Assert.IsInstanceOfType(typeof (Div), ancestor);
 			Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
 
-			mocks.VerifyAll();
+			mockRepository.VerifyAll();
 		}
 
 		[Test]
 		public void ElementParentShouldReturnNullWhenRootElement()
 		{
-			InitMocks();
+			MockRepository mockRepository = new MockRepository();
 
-			Expect.Call(node.parentNode).Return(null);
-			mocks.ReplayAll();
+			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+
+			element = new Element(null, browserElement); 
+			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(browserElement.Parent).Return(null);
+
+			mockRepository.ReplayAll();
 
 			Assert.IsNull(element.Parent);
 
-			mocks.VerifyAll();
+			mockRepository.VerifyAll();
 		}
 
 		[Test]
 		public void ElementParentReturningTypedParent()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			string tagname = ((ElementTag) TableRow.ElementTags[0]).TagName;
-
-			Expect.Call(node.parentNode).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return(tagname).Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (TableRow), element.Parent);
-
-			mocks.VerifyAll();
+			TableCell tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			Assert.IsInstanceOfType(typeof (TableRow), tableCell.Parent);
 		}
 
 		[Test]
-		public void ElementParentReturnsElementsContainerForUnknowElement()
+		public void ElementParentReturnsElementsContainerForUnknownElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.parentNode).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (ElementsContainer), element.Parent);
-
-			mocks.VerifyAll();
+			Element parent = ie.Form("Form").Parent;
+			Assert.IsTrue(parent.GetType().Equals(typeof (ElementsContainer)));
 		}
 
 		[Test]
 		public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
 		{
-			InitMocks();
-
-			Expect.Call(node.previousSibling).Return(null);
-			mocks.ReplayAll();
-
-			Assert.IsNull(element.PreviousSibling);
-
-			mocks.VerifyAll();
+			Assert.IsNull(ie.Div("NextAndPreviousTests").Div("first").PreviousSibling);
 		}
 
 		[Test]
 		public void ElementPreviousSiblingReturningTypedParent()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-			string tagname = ((ElementTag) Link.ElementTags[0]).TagName;
-
-			Expect.Call(node.previousSibling).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return(tagname).Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (Link), element.PreviousSibling);
-
-			mocks.VerifyAll();
+			Assert.IsTrue(ie.RadioButton("Radio1").PreviousSibling.GetType().Equals(typeof (CheckBox)));
 		}
 
 		[Test]
 		public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.previousSibling).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (ElementsContainer), element.PreviousSibling);
-
-			mocks.VerifyAll();
+			Element previous = ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
+			Assert.IsTrue(previous.GetType().Equals(typeof (ElementsContainer)));
 		}
 
 		[Test]
 		public void ElementNextSiblingShouldReturnNullWhenLastSibling()
 		{
-			InitMocks();
-
-			Expect.Call(node.nextSibling).Return(null);
-			mocks.ReplayAll();
-
-			Assert.IsNull(element.NextSibling);
-
-			mocks.VerifyAll();
+			Element next = ie.Div("NextAndPreviousTests").Div("last").NextSibling;
+			Assert.IsNull(next);
 		}
 
 		[Test]
 		public void ElementNextSiblingReturningTypedParent()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement), typeof (IHTMLInputElement));
-
-			Expect.Call(node.nextSibling).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return("input").Repeat.Any();
-			Expect.Call(((IHTMLInputElement) parentNode).type).Return("text").Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (TextField), element.NextSibling);
-
-			mocks.VerifyAll();
+			Element next = ie.Div("NextAndPreviousTests").Div("first").NextSibling;
+			Assert.IsTrue(next.GetType().Equals(typeof (Span)));
 		}
 
 		[Test]
 		public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
 		{
-			InitMocks();
-
-			IHTMLDOMNode parentNode = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-
-			Expect.Call(node.nextSibling).Return(parentNode);
-			Expect.Call(((IHTMLElement) parentNode).tagName).Return("notag").Repeat.Any();
-
-			mocks.ReplayAll();
-
-			Assert.IsInstanceOfType(typeof (ElementsContainer), element.NextSibling);
-
-			mocks.VerifyAll();
+			Element next = ie.Div("NextAndPreviousTests").Span("second").NextSibling;
+			Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer)));
 		}
 
 		[Test]
@@ -424,6 +315,16 @@ namespace WatiN.Core.UnitTests
 		public void ElementCollectionExistsShouldNeverThrowInvalidAttributeException()
 		{
 			Assert.IsTrue(ie.Elements.Exists(Find.ByFor("Checkbox21")));
+		}
+
+		[Test]
+		public void ElementCollectionShouldReturnTypedElements()
+		{
+			ElementCollection elements = ie.Div("NextAndPreviousTests").Elements;
+			Assert.IsTrue(elements[0].GetType().Equals(typeof (Div)), "Element 0 should be a div");
+			Assert.IsTrue(elements[1].GetType().Equals(typeof (Span)), "Element 1 should be a span");
+			Assert.IsTrue(elements[2].GetType().Equals(typeof (ElementsContainer)), "Element 2 should be an elementscontainer");
+			Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
 		}
 
 		[Test]

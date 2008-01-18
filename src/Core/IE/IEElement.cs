@@ -9,17 +9,15 @@ namespace WatiN.Core
 	/// <summary>
 	/// Summary description for IEElement.
 	/// </summary>
-	public class IEElement
+	public class IEElement : IBrowserElement
 	{
 		private object _element;
-		private readonly DomContainer _domContainer;
 		private readonly ElementFinder _elementFinder;
-		private ElementAttributeBag attributeBag = new ElementAttributeBag();
+		private ElementAttributeBag _attributeBag = null;
 
-		public IEElement(object element, DomContainer domcontainer, ElementFinder elementFinder)
+		public IEElement(object element, ElementFinder elementFinder)
 		{
 			_element = element;
-			_domContainer = domcontainer;
 			_elementFinder = elementFinder;
 		}
 
@@ -45,7 +43,7 @@ namespace WatiN.Core
 		/// Gets the next sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The next sibling.</value>
-		public Element NextSibling
+		public IBrowserElement NextSibling
 		{
 			get
 			{
@@ -55,7 +53,7 @@ namespace WatiN.Core
 					IHTMLElement nextSibling = node as IHTMLElement;
 					if (nextSibling != null)
 					{
-						return WatiN.Core.Element.GetTypedElement(_domContainer, nextSibling);
+						return new IEElement(nextSibling, null);
 					}
 					else
 					{
@@ -70,7 +68,7 @@ namespace WatiN.Core
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The previous sibling.</value>
-		public Element PreviousSibling
+		public IBrowserElement PreviousSibling
 		{
 			get
 			{
@@ -80,7 +78,7 @@ namespace WatiN.Core
 					IHTMLElement previousSibling = node as IHTMLElement;
 					if (previousSibling != null)
 					{
-						return WatiN.Core.Element.GetTypedElement(_domContainer, previousSibling);
+						return new IEElement(previousSibling, null);
 					}
 					else
 					{
@@ -117,14 +115,14 @@ namespace WatiN.Core
 		/// watinDiv.Links[1].Click();
 		/// </code>
 		/// </example>
-		public Element Parent
+		public IBrowserElement Parent
 		{
 			get
 			{
 				IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
 				if (parentNode != null)
 				{
-					return WatiN.Core.Element.GetTypedElement(_domContainer, parentNode);
+					return new IEElement(parentNode, null);
 				}
 				return null;
 			}
@@ -195,7 +193,7 @@ namespace WatiN.Core
 		/// Gets the DispHtmlBaseElement />.
 		/// </summary>
 		/// <value>The DispHtmlBaseElement.</value>
-		protected DispHTMLBaseElement DispHtmlBaseElement
+		private DispHTMLBaseElement DispHtmlBaseElement
 		{
 			get { return (DispHTMLBaseElement) _element; }
 		}
@@ -215,8 +213,12 @@ namespace WatiN.Core
 		{
 			get 
 			{
-				attributeBag.IHTMLElement = htmlElement;
-				return attributeBag;
+				if (_attributeBag == null)
+				{
+					_attributeBag = new ElementAttributeBag();
+				}
+				_attributeBag.IHTMLElement = htmlElement;
+				return _attributeBag;
 			}
 		}
 
@@ -255,6 +257,11 @@ namespace WatiN.Core
 			{
 				return _elementFinder != null;
 			}
+		}
+
+		public string TagName
+		{
+			get { return GetAttributeValue("tagName"); }
 		}
 
 		public void FindElement()

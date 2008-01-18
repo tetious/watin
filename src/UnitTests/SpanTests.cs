@@ -63,7 +63,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Spans()
 		{
-			const int expectedSpansCount = 2;
+			const int expectedSpansCount = 3;
 			Assert.AreEqual(expectedSpansCount, ie.Spans.Length, "Unexpected number of Spans");
 
 			// Collection.Length

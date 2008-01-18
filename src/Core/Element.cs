@@ -40,7 +40,7 @@ namespace WatiN.Core
 		private static Hashtable _elementConstructors = null;
 
 		private DomContainer _domContainer;
-		private IEElement _ieElement;
+		private IBrowserElement _browserElement;
 
 		private string _originalcolor;
 
@@ -52,6 +52,16 @@ namespace WatiN.Core
 		public Element(DomContainer domContainer, object element)
 		{
 			init(domContainer, element, null);
+		}
+
+		/// <summary>
+		/// This constructor is mainly used from within WatiN.
+		/// </summary>
+		/// <param name="domContainer"><see cref="DomContainer" /> this element is located in</param>
+		/// <param name="browserElement">The element</param>
+		public Element(DomContainer domContainer, IBrowserElement browserElement)
+		{
+			initElement(domContainer, browserElement);
 		}
 
 		/// <summary>
@@ -71,10 +81,9 @@ namespace WatiN.Core
 		/// <param name="elementTags">The element tags the element should match with.</param>
 		public Element(Element element, ArrayList elementTags)
 		{
-			if (ElementTag.IsValidElement(element.htmlElement, elementTags))
+			if (ElementTag.IsValidElement(element.BrowserElement, elementTags))
 			{
-				_ieElement = element._ieElement;
-				_domContainer = element._domContainer;
+				initElement(element._domContainer, element._browserElement);
 			}
 			else
 			{
@@ -82,10 +91,16 @@ namespace WatiN.Core
 			}
 		}
 
+		private void initElement(DomContainer domContainer, IBrowserElement browserElement) 
+		{
+			_browserElement = browserElement;
+			_domContainer = domContainer;
+		}
+
+		// TODO: This method should be removed
 		private void init(DomContainer domContainer, object element, ElementFinder elementFinder)
 		{
-			_ieElement = new IEElement(element, domContainer, elementFinder);
-			_domContainer = domContainer;
+			initElement(domContainer, new IEElement(element, elementFinder));
 		}
 
 		/// <summary>
@@ -148,7 +163,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string TextAfter
 		{
-			get { return IEElement.TextAfter; }
+			get { return BrowserElement.TextAfter; }
 		}
 
 		/// <summary>
@@ -157,7 +172,7 @@ namespace WatiN.Core
 		/// </summary>
 		public string TextBefore
 		{
-			get { return IEElement.TextBefore; }
+			get { return BrowserElement.TextBefore; }
 		}
 
 		/// <summary>
@@ -213,11 +228,9 @@ namespace WatiN.Core
 		{
 			get
 			{
-				// TODO: Move logic to create a typed instance from IEElement to Element
-				return IEElement.NextSibling;
-            }
+				return GetTypedElement(_domContainer, BrowserElement.NextSibling);
+			}
         }
-
 
 		/// <summary>
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
@@ -227,8 +240,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				// TODO: Move logic to create a typed instance from IEElement to Element
-                return IEElement.PreviousSibling;
+                return GetTypedElement(_domContainer, BrowserElement.PreviousSibling);
 			}
 		}
 
@@ -262,14 +274,14 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return IEElement.Parent;
+                return GetTypedElement(_domContainer, BrowserElement.Parent);
             }
         }
 
 		public Style Style
 		{
 			//TODO: Style class should also delegate to a browser specific instance
-			get { return IEElement.Style; }
+			get { return BrowserElement.Style; }
 		}
 
 		/// <summary>
@@ -291,7 +303,7 @@ namespace WatiN.Core
 				return Style.CssText;
 			}
 
-			return IEElement.GetAttributeValue(attributeName);
+			return BrowserElement.GetAttributeValue(attributeName);
 		}
 
 		/// <summary>
@@ -323,7 +335,7 @@ namespace WatiN.Core
 			Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
 			Highlight(true);
 
-			IEElement.ClickOnElement();
+			BrowserElement.ClickOnElement();
 
 			try
 			{
@@ -351,7 +363,7 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			Thread clickButton = new Thread(new ThreadStart(IEElement.ClickOnElement));
+			Thread clickButton = new Thread(new ThreadStart(BrowserElement.ClickOnElement));
 			clickButton.Start();
 			clickButton.Join(500);
 
@@ -368,7 +380,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(Id);
 			}
 
-			IEElement.SetFocus();
+			BrowserElement.SetFocus();
 			FireEvent("onFocus");
 		}
 
@@ -520,7 +532,7 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			IEElement.FireEvent(eventName, eventProperties);
+			BrowserElement.FireEvent(eventName, eventProperties);
 
 			if (waitForComplete)
 			{
@@ -564,8 +576,8 @@ namespace WatiN.Core
 				{
 					try
 					{
-						_originalcolor = IEElement.BackgroundColor;
-						IEElement.BackgroundColor = IE.Settings.HighLightColor;
+						_originalcolor = BrowserElement.BackgroundColor;
+						BrowserElement.BackgroundColor = IE.Settings.HighLightColor;
 					}
 					catch
 					{
@@ -578,11 +590,11 @@ namespace WatiN.Core
 					{
 						if (_originalcolor != null)
 						{
-							IEElement.BackgroundColor = _originalcolor;
+							BrowserElement.BackgroundColor = _originalcolor;
 						}
 						else
 						{
-							IEElement.BackgroundColor = "";
+							BrowserElement.BackgroundColor = "";
 						}
 					}
 					catch {}
@@ -609,7 +621,7 @@ namespace WatiN.Core
 			get { return _domContainer; }
 		}
 
-		//TODO: Should return IEElement instead of object
+		//TODO: Should return IBrowserElement instead of object
 
 		/// <summary>
 		/// Gets the DOM HTML element for this instance as an object. Cast it to 
@@ -623,7 +635,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return IEElement.Element;
+				return ((IEElement)BrowserElement).Element;
 			}
 		}
 
@@ -635,11 +647,11 @@ namespace WatiN.Core
 		/// assembly to cast it to a valid type.
 		/// </summary>
 		/// <value>The DOM element.</value>
-		public IEElement IEElement
+		public IBrowserElement BrowserElement
 		{
 			get
 			{
-				if (!_ieElement.HasReferenceToAnElement)
+				if (!_browserElement.HasReferenceToAnElement)
 				{
 					try
 					{
@@ -647,11 +659,11 @@ namespace WatiN.Core
 					}
 					catch (WatiN.Core.Exceptions.TimeoutException)
 					{
-						throw _ieElement.CreateElementNotFoundException();
+						throw _browserElement.CreateElementNotFoundException();
 					}
 				}
 
-				return _ieElement;
+				return _browserElement;
 			}
 		}
 
@@ -784,7 +796,7 @@ namespace WatiN.Core
 					// against some cached reference.
 					if (Exists)
 					{
-						if (constraint.Compare(IEElement.AttributeBag))
+						if (constraint.Compare(BrowserElement.AttributeBag))
 						{
 							return;
 						}
@@ -818,18 +830,18 @@ namespace WatiN.Core
 			// Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
-				if (_ieElement.HasReferenceToAnElement)
+				if (_browserElement.HasReferenceToAnElement)
 				{
 					return;
 				}
-				else if (_ieElement.HasElementFinder == false)
+				else if (_browserElement.HasElementFinder == false)
 				{
 					throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
 				}
 			}
 			else
 			{
-				if (!_ieElement.HasReferenceToAnElement)
+				if (!_browserElement.HasReferenceToAnElement)
 				{
 					return;
 				}
@@ -902,9 +914,9 @@ namespace WatiN.Core
 		/// </example>
 		public void Refresh()
 		{
-			if (_ieElement.HasElementFinder)
+			if (_browserElement.HasElementFinder)
 			{
-				_ieElement.ClearElementReference();
+				_browserElement.ClearElementReference();
 			}
 		}
 
@@ -912,11 +924,11 @@ namespace WatiN.Core
 		/// Calls <see cref="Refresh"/> and returns the element.
 		/// </summary>
 		/// <returns></returns>
-		protected IEElement UpdateElementReference()
+		protected IBrowserElement UpdateElementReference()
 		{
-			if (_ieElement.HasElementFinder)
+			if (_browserElement.HasElementFinder)
 			{
-				_ieElement.FindElement();
+				_browserElement.FindElement();
 			}
 			else
 			{
@@ -926,23 +938,23 @@ namespace WatiN.Core
 				// These checks are only necessary if element field
 				// is set during the construction of an ElementCollection
 				// or a more specialized element collection (like TextFieldCollection)
-				if (_ieElement.HasReferenceToAnElement)
+				if (_browserElement.HasReferenceToAnElement)
 				{
 					try
 					{
-						if (_ieElement.IsElementReferenceStillValid == false)
+						if (_browserElement.IsElementReferenceStillValid == false)
 						{
-							_ieElement.ClearElementReference();
+							_browserElement.ClearElementReference();
 						}
 					}
 					catch
 					{
-						_ieElement.ClearElementReference();
+						_browserElement.ClearElementReference();
 					}
 				}
 			}
 
-			return _ieElement;
+			return _browserElement;
 		}
 
 		/// <summary>
@@ -955,15 +967,17 @@ namespace WatiN.Core
 			_domContainer.WaitForComplete();
 		}
 
-		internal static Element GetTypedElement(DomContainer domContainer, IHTMLElement element)
+		internal static Element GetTypedElement(DomContainer domContainer, IBrowserElement ieBrowserElement)
 		{
+			if (ieBrowserElement == null) return null;
+
 			if (_elementConstructors == null)
 			{
 				_elementConstructors = CreateElementConstructorHashTable();
 			}
 
-			ElementTag elementTag = new ElementTag(element);
-			Element returnElement = new ElementsContainer(domContainer, element);
+			ElementTag elementTag = new ElementTag(ieBrowserElement);
+			Element returnElement = new ElementsContainer(domContainer, ieBrowserElement);
 
 			if (_elementConstructors.Contains(elementTag))
 			{
@@ -975,6 +989,12 @@ namespace WatiN.Core
 			}
 
 			return returnElement;
+		}
+
+		// TODO: remove after refactoring dependencies
+		internal static Element GetTypedElement(DomContainer domContainer, IHTMLElement element)
+		{
+			return GetTypedElement(domContainer, new IEElement(element, null));
 		}
 
 		internal static Hashtable CreateElementConstructorHashTable()
@@ -1154,16 +1174,18 @@ namespace WatiN.Core
 
 			Element parentElement = Parent;
 
-			while (parentElement != null)
+			if (parentElement == null)
 			{
-				if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
-				{
-					return parentElement;
-				}
-				parentElement = parentElement.Parent;
+				return null;
 			}
-
-			return null;
+			else if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
+			{
+				return parentElement;
+			}
+			else
+			{
+				return parentElement.Ancestor(ancestorType, findBy);
+			}
 		}
 
 		/// <summary>
@@ -1212,7 +1234,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			return IEElement.AttributeBag.GetValue(attributename);
+			return BrowserElement.AttributeBag.GetValue(attributename);
 		}
 	}
 }

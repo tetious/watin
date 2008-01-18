@@ -162,11 +162,12 @@ namespace WatiN.Core
 				// Loop through each element and evaluate
 				foreach (IHTMLElement element in elements)
 				{
+					IEElement ieElement = new IEElement(element, null);
 					waitUntilElementReadyStateIsComplete(element);
 
 					attributeBag.IHTMLElement = element;
 
-					if (elementTag.Compare(element) && findBy.Compare(attributeBag))
+					if (elementTag.Compare(ieElement) && findBy.Compare(attributeBag))
 					{
 						children.Add(element);
 						if (returnAfterFirstMatch)

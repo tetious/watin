@@ -59,12 +59,25 @@ namespace WatiN.Core
 			}
 		}
 
+		public ElementTag(IBrowserElement browserElement) : this(browserElement.TagName, getInputType(browserElement))
+		{ }
+
 		private static string getInputType(IHTMLElement element)
 		{
 			IHTMLInputElement inputElement = element as IHTMLInputElement;
 			if(inputElement != null)
 			{
 				return inputElement.type;
+			}
+
+			return null;
+		}
+
+		private static string getInputType(IBrowserElement ieBrowserElement)
+		{
+			if(ElementFinder.isInputElement(ieBrowserElement.TagName))
+			{
+				return ieBrowserElement.GetAttributeValue("type");
 			}
 
 			return null;
@@ -79,22 +92,15 @@ namespace WatiN.Core
 			return (IHTMLElementCollection) elements.tags(TagName);
 		}
 
-		public bool Compare(object element)
+		public bool Compare(IBrowserElement browserElement)
 		{
-			IHTMLElement ihtmlElement = element as IHTMLElement;
+			if (browserElement == null) return false;
 
-			return Compare(ihtmlElement);
-		}
-
-		public bool Compare(IHTMLElement element)
-		{
-			if (element == null) return false;
-
-			if (CompareTagName(element))
+			if (CompareTagName(browserElement))
 			{
 				if (IsInputElement)
 				{
-					return CompareAgainstInputTypes(element);
+					return CompareAgainstInputTypes(browserElement);
 				}
 
 				return true;
@@ -119,18 +125,16 @@ namespace WatiN.Core
 			return string.Empty;
 		}
 
-		private bool CompareTagName(IHTMLElement element)
+		private bool CompareTagName(IBrowserElement browserElement)
 		{
 			if (TagName == null) return true;
 
-			return StringComparer.AreEqual(TagName, element.tagName, true);
+			return StringComparer.AreEqual(TagName, browserElement.TagName, true);
 		}
 
-		private bool CompareAgainstInputTypes(IHTMLElement element)
+		private bool CompareAgainstInputTypes(IBrowserElement element)
 		{
-			IHTMLInputElement inputElement = (IHTMLInputElement) element;
-
-			string inputElementType = inputElement.type.ToLower(CultureInfo.InvariantCulture);
+			string inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
 
 			return (InputTypes.IndexOf(inputElementType) >= 0);
 		}
@@ -150,24 +154,29 @@ namespace WatiN.Core
 			return true;
 		}
 
-		public static bool IsValidElement(object element, ArrayList elementTags)
+		public static bool IsValidElement(IBrowserElement browserElement, ArrayList elementTags)
 		{
-			return IsValidElement(element as IHTMLElement, elementTags);
-		}
-
-		public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
-		{
-			if (element == null) return false;
+			if (browserElement == null) return false;
 
 			foreach (ElementTag elementTag in elementTags)
 			{
-				if (elementTag.Compare(element))
+				if (elementTag.Compare(browserElement))
 				{
 					return true;
 				}
 			}
 
 			return false;
+		}
+
+		public static bool IsValidElement(object element, ArrayList elementTags)
+		{
+			return IsValidElement(new IEElement(element, null), elementTags);
+		}
+
+		public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
+		{
+			return IsValidElement(new IEElement(element, null), elementTags);
 		}
 	}
 }

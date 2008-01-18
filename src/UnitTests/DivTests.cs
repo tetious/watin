@@ -59,7 +59,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Divs()
 		{
-			Assert.AreEqual(1, ie.Divs.Length, "Unexpected number of Divs");
+			Assert.AreEqual(4, ie.Divs.Length, "Unexpected number of Divs");
 
 			DivCollection divs = ie.Divs;
 
@@ -82,7 +82,7 @@ namespace WatiN.Core.UnitTests
 			}
 
 			Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(1, count);
+			Assert.AreEqual(4, count);
 		}
 
 		public override Uri TestPageUri

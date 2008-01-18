@@ -60,5 +60,7 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(0, finder.FindAll().Count);
 		}
+
+		// TODO: More tests to cover positive find results
 	}
 }

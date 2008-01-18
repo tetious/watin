@@ -35,17 +35,12 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(elementTag.Compare(null));
 		}
 
-		[Test]
-		public void CompareObjectNotImplementingIHTMLElementShouldReturnFalse()
-		{
-			ElementTag elementTag = new ElementTag("tagname", "");
-			Assert.IsFalse(elementTag.Compare(new object()));
-		}
-
+		// TODO: Vervalt when all refactored to IBrowserElement
 		[Test]
 		public void IsValidElementWithNullElementShouldReturnFalse()
 		{
-			Assert.IsFalse(ElementTag.IsValidElement(null, new ArrayList()));
+			Assert.IsFalse(ElementTag.IsValidElement((IHTMLElement)null, new ArrayList()));
+			Assert.IsFalse(ElementTag.IsValidElement((object)null, new ArrayList()));
 		}
 
 		[Test]
@@ -76,7 +71,7 @@ namespace WatiN.Core.UnitTests
 				Thread.CurrentThread.CurrentCulture = turkish;
 
 				MockRepository mockRepository = new MockRepository();
-				IHTMLElement element = (IHTMLElement) mockRepository.DynamicMultiMock(typeof (IHTMLElement), typeof(IHTMLInputElement));
+				IBrowserElement element = (IBrowserElement) mockRepository.DynamicMock(typeof (IBrowserElement));
 
 				AssertUpperCaseLowerCase(element, mockRepository);
 				AssertUpperCaseUpperCase(element, mockRepository);
@@ -89,13 +84,13 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-		private static void AssertLowerCaseUpperCase(IHTMLElement element, MockRepository mockRepository) 
+		private static void AssertLowerCaseUpperCase(IBrowserElement element, MockRepository mockRepository) 
 		{
 			mockRepository.BackToRecordAll();
 
 			// LowerCase
-			SetupResult.For(element.tagName).Return("input");
-			SetupResult.For(((IHTMLInputElement) element).type).Return("image");
+			SetupResult.For(element.TagName).Return("input");
+			SetupResult.For(element.GetAttributeValue("type")).Return("image");
 
 			mockRepository.ReplayAll();
 				
@@ -106,13 +101,13 @@ namespace WatiN.Core.UnitTests
 			mockRepository.VerifyAll();
 		}
 
-		private static void AssertUpperCaseUpperCase(IHTMLElement element, MockRepository mockRepository) 
+		private static void AssertUpperCaseUpperCase(IBrowserElement element, MockRepository mockRepository) 
 		{
 			mockRepository.BackToRecordAll();
 
 			// UpperCase
-			SetupResult.For(element.tagName).Return("INPUT");
-			SetupResult.For(((IHTMLInputElement) element).type).Return("IMAGE");
+			SetupResult.For(element.TagName).Return("INPUT");
+			SetupResult.For(element.GetAttributeValue("type")).Return("IMAGE");
 
 			mockRepository.ReplayAll();
 				
@@ -123,11 +118,11 @@ namespace WatiN.Core.UnitTests
 			mockRepository.VerifyAll();
 		}
 
-		private static void AssertUpperCaseLowerCase(IHTMLElement element, MockRepository mockRepository) {
+		private static void AssertUpperCaseLowerCase(IBrowserElement element, MockRepository mockRepository) {
 			
 			// UpperCase
-			SetupResult.For(element.tagName).Return("INPUT");
-			SetupResult.For(((IHTMLInputElement) element).type).Return("IMAGE");
+			SetupResult.For(element.TagName).Return("INPUT");
+			SetupResult.For(element.GetAttributeValue("type")).Return("IMAGE");
 			
 			mockRepository.ReplayAll();
 
