@@ -991,12 +991,6 @@ namespace WatiN.Core
 			return returnElement;
 		}
 
-		// TODO: remove after refactoring dependencies
-		internal static Element GetTypedElement(DomContainer domContainer, IHTMLElement element)
-		{
-			return GetTypedElement(domContainer, new IEElement(element, null));
-		}
-
 		internal static Hashtable CreateElementConstructorHashTable()
 		{
 			Hashtable elementConstructors = new Hashtable();

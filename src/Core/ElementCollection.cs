@@ -59,7 +59,7 @@ namespace WatiN.Core
 
 		private static Element New(DomContainer domContainer, IHTMLElement element)
 		{
-			return Element.GetTypedElement(domContainer, element);
+			return Element.GetTypedElement(domContainer, new IEElement(element, null));
 		}
 	}
 }

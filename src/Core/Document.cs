@@ -333,7 +333,7 @@ namespace WatiN.Core
 				IHTMLElement activeElement = HtmlDocument.activeElement;
 				if (activeElement != null)
 				{
-					return Core.Element.GetTypedElement(domContainer, activeElement);
+					return Core.Element.GetTypedElement(domContainer, new IEElement(activeElement, null));
 				}
 				return null;
 			}

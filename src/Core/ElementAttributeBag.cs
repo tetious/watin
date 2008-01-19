@@ -78,7 +78,7 @@ namespace WatiN.Core
 			{
 				if (_elementTyped == null)
 				{
-					_elementTyped = Element.GetTypedElement(null, IHTMLElement);
+					_elementTyped = Element.GetTypedElement(null, new IEElement(IHTMLElement, null));
 				}
 
 				return _elementTyped;
