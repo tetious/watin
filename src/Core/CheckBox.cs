@@ -64,5 +64,10 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="element">The element.</param>
 		public CheckBox(Element element) : base(element, ElementTags) {}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new CheckBox(domContainer, (IHTMLInputElement) element);
+		}
 	}
 }

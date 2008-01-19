@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public SelectListCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public SelectListCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(SelectList.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SelectListCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public SelectListCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public SelectListCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(SelectList.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="SelectList"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public SelectList this[int index]
 		{
-			get { return new SelectList(domContainer, (IHTMLElement) Elements[index]); }
+			get { return (SelectList) ElementsTyped(index); }
 		}
 
 		public SelectListCollection Filter(BaseConstraint findBy)
 		{
 			return new SelectListCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new SelectList(domContainer, element);
 		}
 	}
 }

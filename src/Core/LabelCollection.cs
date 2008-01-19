@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public LabelCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public LabelCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Label.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public LabelCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public LabelCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Label.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Label"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Label this[int index]
 		{
-			get { return new Label(domContainer, (IHTMLLabelElement) Elements[index]); }
+			get { return (Label) ElementsTyped(index); }
 		}
 
 		public LabelCollection Filter(BaseConstraint findBy)
 		{
 			return new LabelCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Label(domContainer, (IHTMLLabelElement) element);
 		}
 	}
 }

@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FileUploadCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public FileUploadCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(FileUpload.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public FileUploadCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public FileUploadCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(FileUpload.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="FileUpload"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public FileUpload this[int index]
 		{
-			get { return new FileUpload(domContainer, (IHTMLInputFileElement) Elements[index]); }
+			get { return (FileUpload) ElementsTyped(index); }
 		}
 
 		public FileUploadCollection Filter(BaseConstraint findBy)
 		{
 			return new FileUploadCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new FileUpload(domContainer, (IHTMLInputFileElement) element);
 		}
 	}
 }

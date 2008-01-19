@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TableCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public TableCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Table.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public TableCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public TableCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Table.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Table"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Table this[int index]
 		{
-			get { return new Table(domContainer, (IHTMLTable) Elements[index]); }
+			get { return (Table) ElementsTyped(index); }
 		}
 
 		public TableCollection Filter(BaseConstraint findBy)
 		{
 			return new TableCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Table(domContainer, (IHTMLTable) element);
 		}
 	}
 }

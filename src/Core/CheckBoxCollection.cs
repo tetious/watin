@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public CheckBoxCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public CheckBoxCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(CheckBox.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public CheckBoxCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public CheckBoxCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(CheckBox.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="CheckBox"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public CheckBox this[int index]
 		{
-			get { return new CheckBox(domContainer, (IHTMLInputElement) Elements[index]); }
+			get { return (CheckBox) ElementsTyped(index); }
 		}
 
 		public CheckBoxCollection Filter(BaseConstraint findBy)
 		{
 			return new CheckBoxCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new CheckBox(domContainer, (IHTMLInputElement) element);
 		}
 	}
 }

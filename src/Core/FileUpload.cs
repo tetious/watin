@@ -80,5 +80,10 @@ namespace WatiN.Core
 				DomContainer.RemoveDialogHandler(uploadDialogHandler);
 			}
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new FileUpload(domContainer, (IHTMLInputFileElement) element);
+		}
 	}
 }

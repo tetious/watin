@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public SpanCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public SpanCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Span.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SpanCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public SpanCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public SpanCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Span.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Span"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Span this[int index]
 		{
-			get { return new Span(domContainer, (IHTMLSpanElement) Elements[index]); }
+			get { return (Span) ElementsTyped(index); }
 		}
 
 		public SpanCollection Filter(BaseConstraint findBy)
 		{
 			return new SpanCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Span(domContainer, (IHTMLSpanElement) element);
 		}
 	}
 }

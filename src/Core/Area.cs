@@ -95,5 +95,10 @@ namespace WatiN.Core
 		{
 			get { return GetAttributeValue("shape"); }
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Area(domContainer, (IHTMLAreaElement) element);
+		}
 	}
 }

@@ -85,5 +85,10 @@ namespace WatiN.Core
 				return GetAttributeValue("name");
 			}
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Image(domContainer, element);
+		}
 	}
 }

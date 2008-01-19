@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TextFieldCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public TextFieldCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TextField.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public TextFieldCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public TextFieldCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TextField.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="TextField"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public TextField this[int index]
 		{
-			get { return new TextField(domContainer, (IHTMLElement) Elements[index]); }
+			get { return (TextField) ElementsTyped(index); }
 		}
 
 		public TextFieldCollection Filter(BaseConstraint findBy)
 		{
 			return new TextFieldCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new TextField(domContainer, element);
 		}
 	}
 }

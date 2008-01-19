@@ -182,5 +182,10 @@ namespace WatiN.Core
 		{
 			get { return (IHTMLOptionElement) HTMLElement; }
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Option(domContainer, (IHTMLOptionElement) element);
+		}
 	}
 }

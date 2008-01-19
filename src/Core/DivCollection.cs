@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public DivCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public DivCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Div.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DivCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public DivCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public DivCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Div.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Div"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Div this[int index]
 		{
-			get { return new Div(domContainer, (IHTMLDivElement) Elements[index]); }
+			get { return (Div)ElementsTyped(index); }
 		}
 
 		public DivCollection Filter(BaseConstraint findBy)
 		{
 			return new DivCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Div(domContainer, (IHTMLDivElement) element);
 		}
 	}
 }

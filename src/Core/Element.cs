@@ -1230,5 +1230,10 @@ namespace WatiN.Core
 		{
 			return BrowserElement.AttributeBag.GetValue(attributename);
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return Element.GetTypedElement(domContainer, new IEElement(element, null));
+		}
 	}
 }

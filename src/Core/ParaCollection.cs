@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ParaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public ParaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Para.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ParaCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public ParaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public ParaCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Para.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Para"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Para this[int index]
 		{
-			get { return new Para(domContainer, (IHTMLParaElement) Elements[index]); }
+			get { return (Para)ElementsTyped(index); }
 		}
 
 		public ParaCollection Filter(BaseConstraint findBy)
 		{
 			return new ParaCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Para(domContainer, (IHTMLParaElement) element);
 		}
 	}
 }

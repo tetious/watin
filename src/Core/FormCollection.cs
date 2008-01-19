@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FormCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public FormCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Form.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public FormCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public FormCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Form.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Form"/> at the specified index.
@@ -49,17 +48,12 @@ namespace WatiN.Core
 		/// <value></value>
 		public Form this[int index]
 		{
-			get { return new Form(domContainer, (IHTMLFormElement) Elements[index]); }
+			get { return (Form) ElementsTyped(index); }
 		}
 
 		public FormCollection Filter(BaseConstraint findBy)
 		{
 			return new FormCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Form(domContainer, (IHTMLFormElement) element);
 		}
 	}
 }

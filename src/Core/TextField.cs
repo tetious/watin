@@ -329,5 +329,10 @@ namespace WatiN.Core
 				get { return inputElement.name; }
 			}
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new TextField(domContainer, element);
+		}
 	}
 }

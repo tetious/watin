@@ -61,5 +61,10 @@ namespace WatiN.Core
 		{
 			get { return GetAttributeValue("htmlFor"); }
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Label(domContainer, (IHTMLLabelElement) element);
+		}
 	}
 }

@@ -191,5 +191,10 @@ namespace WatiN.Core
 				get { return (IHTMLElementCollection) table.GetFirstTBody().all; }
 			}
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Table(domContainer, (IHTMLTable) element);
+		}
 	}
 }

@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
@@ -33,7 +32,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public OptionCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public OptionCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Option.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.
@@ -41,7 +40,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public OptionCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public OptionCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Option.New)) {}
 
 		/// <summary>
 		/// Gets the <see cref="Span"/> at the specified index.
@@ -49,7 +48,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Option this[int index]
 		{
-			get { return new Option(domContainer, (IHTMLOptionElement) Elements[index]); }
+			get { return (Option) ElementsTyped(index); }
 		}
 
 		/// <summary>
@@ -60,11 +59,6 @@ namespace WatiN.Core
 		public OptionCollection Filter(BaseConstraint findBy)
 		{
 			return new OptionCollection(domContainer, DoFilter(findBy));
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new Option(domContainer, (IHTMLOptionElement) element);
 		}
 	}
 }

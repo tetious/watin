@@ -77,6 +77,12 @@ namespace WatiN.Core
 			get { return Elements.Count; }
 		}
 
+		protected Element ElementsTyped(int index)
+		{
+			return createElementInstance(domContainer, (IHTMLElement) Elements[index]); 
+		}
+
+		
 		protected ArrayList Elements
 		{
 			get

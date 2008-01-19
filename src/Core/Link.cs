@@ -56,5 +56,10 @@ namespace WatiN.Core
 		{
 			get { return GetAttributeValue("href"); }
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new Link(domContainer, (IHTMLAnchorElement) element);
+		}
 	}
 }

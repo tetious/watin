@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 
 namespace WatiN.Core
 {
@@ -26,18 +25,13 @@ namespace WatiN.Core
 	/// </summary>
 	public class TableBodyCollection : BaseElementCollection
 	{
-		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(New)) {}
+		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TableBody.New)) {}
 
-		public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(New)) {}
+		public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableBody.New)) {}
 
 		public TableBody this[int index]
 		{
-			get { return new TableBody(domContainer, (IHTMLTableSection) Elements[index]); }
-		}
-
-		private static Element New(DomContainer domContainer, IHTMLElement element)
-		{
-			return new TableBody(domContainer, (IHTMLTableSection) element);
+			get { return (TableBody) ElementsTyped(index); }
 		}
 	}
 }

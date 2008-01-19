@@ -338,5 +338,10 @@ namespace WatiN.Core
 				get { return (IHTMLElementCollection) selectlist.htmlElement.all; }
 			}
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new SelectList(domContainer, element);
+		}
 	}
 }

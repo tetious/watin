@@ -65,5 +65,10 @@ namespace WatiN.Core
 		{
 			get { return int.Parse(GetAttributeValue("rowIndex")); }
 		}
+
+		public static Element New(DomContainer domContainer, IHTMLElement element)
+		{
+			return new TableRow(domContainer, (IHTMLTableRow) element);
+		}
 	}
 }
