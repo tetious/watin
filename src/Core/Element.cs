@@ -42,7 +42,7 @@ namespace WatiN.Core
 		private DomContainer _domContainer;
 		private IBrowserElement _browserElement;
 
-		private string _originalcolor;
+		private Stack _originalcolor;
 
 		/// <summary>
 		/// This constructor is mainly used from within WatiN.
@@ -568,42 +568,44 @@ namespace WatiN.Core
 		/// Highlights this element.
 		/// </summary>
 		/// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
-		protected void Highlight(bool doHighlight)
+		public void Highlight(bool doHighlight)
 		{
 			if (IE.Settings.HighLightElement)
 			{
+				if (_originalcolor == null)
+				{
+					_originalcolor = new Stack();
+				}
+
 				if (doHighlight)
 				{
-					try
-					{
-						_originalcolor = BrowserElement.BackgroundColor;
-						BrowserElement.BackgroundColor = IE.Settings.HighLightColor;
-					}
-					catch
-					{
-						_originalcolor = null;
-					}
+					_originalcolor.Push(BrowserElement.BackgroundColor);
+					SetBackgroundColor(IE.Settings.HighLightColor);
 				}
 				else
 				{
-					try
+					if(_originalcolor.Count > 0)
 					{
-						if (_originalcolor != null)
-						{
-							BrowserElement.BackgroundColor = _originalcolor;
-						}
-						else
-						{
-							BrowserElement.BackgroundColor = "";
-						}
-					}
-					catch {}
-					finally
-					{
-						_originalcolor = null;
+						SetBackgroundColor(_originalcolor.Pop() as string);
 					}
 				}
 			}
+		}
+
+		private void SetBackgroundColor(string color) 
+		{
+			try
+			{
+				if (color != null)
+				{
+					BrowserElement.BackgroundColor = color;
+				}
+				else
+				{
+					BrowserElement.BackgroundColor = "";
+				}				
+			}
+			catch{}
 		}
 
 		// TODO: Remove this property or move it to IEElement
@@ -675,7 +677,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return UpdateElementReference().HasReferenceToAnElement;
+				return RefreshBrowserElement().HasReferenceToAnElement;
 			}
 		}
 
@@ -924,7 +926,7 @@ namespace WatiN.Core
 		/// Calls <see cref="Refresh"/> and returns the element.
 		/// </summary>
 		/// <returns></returns>
-		protected IBrowserElement UpdateElementReference()
+		protected IBrowserElement RefreshBrowserElement()
 		{
 			if (_browserElement.HasElementFinder)
 			{

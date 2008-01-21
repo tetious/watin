@@ -26,6 +26,7 @@ using Rhino.Mocks;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 using StringComparer=WatiN.Core.Comparers.StringComparer;
+using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests
 {
@@ -690,7 +691,7 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-		[Test, Category("InternetConnectionNeeded")]
+		[Test, Ignore("Work in progress")] // Category("InternetConnectionNeeded")]
 		public void PositionMousePointerInMiddleOfElement()
 		{
 			ie.GoTo(GoogleUrl);
@@ -787,6 +788,48 @@ namespace WatiN.Core.UnitTests
 				Assert.AreEqual("Button without id", htmlDialog.TextField("eventScrElement").Value, "Unexpected Event.scrElement.value");
 			}
 		}
+
+		[Test]
+		public void HighlightShouldGoBackToTheOriginalBackGroundColor()
+		{
+			IE.Settings.HighLightElement = true;
+			IE.Settings.HighLightColor = "red";
+
+			TextField textField = ie.TextField("name");
+			string _originalcolor = textField.Style.BackgroundColor;
+
+			textField.Highlight(true);
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after Highlight(true)");
+
+			// Invoke highlighting done by WatiN when typing text
+			IE.Settings.HighLightColor = "yellow";
+			textField.TypeText("abc");
+
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after TypeText");
+		
+			textField.Highlight(false);
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		}
+
+		[Test]
+		public void HighlightShouldNotThrowExceptionWhenCalledToManyTimesWithParamFalse()
+		{
+			IE.Settings.HighLightElement = true;
+			IE.Settings.HighLightColor = "red";
+
+			TextField textField = ie.TextField("name");
+			string _originalcolor = textField.Style.BackgroundColor;
+
+			textField.Highlight(true);
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after Highlight(true)");
+		
+			textField.Highlight(false);
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+
+			textField.Highlight(false);
+			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		}
+
 
 #if NET20
     [Test]
