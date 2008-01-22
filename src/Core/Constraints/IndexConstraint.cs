@@ -48,6 +48,12 @@ namespace WatiN.Core.Constraints
 			this.index = index;
 		}
 
+		public override void Reset()
+		{
+			counter = -1;
+			base.Reset ();
+		}
+
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
 			bool resultOr;

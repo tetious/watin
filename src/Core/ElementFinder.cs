@@ -155,6 +155,8 @@ namespace WatiN.Core
 			ArrayList children = new ArrayList();
 			IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
 
+			findBy.Reset();
+
 			if (elements != null)
 			{
 				ElementAttributeBag attributeBag = new ElementAttributeBag();

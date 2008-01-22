@@ -125,6 +125,24 @@ namespace WatiN.Core.Constraints
 			return returnValue;
 		}
 
+
+		/// <summary>
+		/// Resets this instance and all the AndConstriants and OrConstraints.
+		/// </summary>
+		public virtual void Reset()
+		{
+			if (_andBaseConstraint != null)
+			{
+				_andBaseConstraint.Reset();
+			}
+
+			if (_orBaseConstraint != null)
+			{
+				_orBaseConstraint.Reset();
+			}
+
+		}
+
 		/// <summary>
 		/// Call this method to unlock the compare method. Typically done at the
 		/// end of your compare method. 

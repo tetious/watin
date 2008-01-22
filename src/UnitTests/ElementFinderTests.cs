@@ -16,9 +16,12 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests
 {
@@ -60,6 +63,19 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(0, finder.FindAll().Count);
 		}
+
+		[Test]
+		public void ElementFinderShouldCallConstraintResetBeforeCompare()
+		{
+			MyTestConstraint constraint = new MyTestConstraint();
+			ElementFinder finder = new ElementFinder("input", "text", constraint, stubElementCollection);
+			
+			finder.FindFirst();
+
+			Assert.That(constraint.CallsToReset, Iz.EqualTo(1), "Unexpected number of calls to reset");
+			Assert.That(constraint.CallsToCompare, Iz.EqualTo(0), "Unexpected number of calls to compare");
+		}
+
 
 		// TODO: More tests to cover positive find results
 	}

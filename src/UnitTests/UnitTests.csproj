@@ -309,6 +309,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "AttributeConstraintTests\BaseConstraintTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -325,6 +330,16 @@
                 />
                 <File
                     RelPath = "AttributeConstraintTests\FindByMultipleAttributeConstraintsTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributeConstraintTests\IndexConstraintTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributeConstraintTests\MyTestConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
