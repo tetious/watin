@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelFromElement()
 		{
-			Element element = ie.Element(Find.ByFor("Checkbox21"));
+			Element element = ie.Element("label", Find.ByFor("Checkbox21"));
 			Label label = new Label(element);
 			Assert.AreEqual("Checkbox21", label.For);
 		}

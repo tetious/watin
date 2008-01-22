@@ -62,7 +62,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateButtonFromInputHTMLElement()
 		{
-			Element element = ie.Element("disabledid");
+			Element element = ie.Element("input", Find.ById("disabledid"), "button");
+//			Element element = ie.Element(Find.ById("disabledid"));
 			Button button = new Button(element);
 			Assert.AreEqual("disabledid", button.Id);
 		}
@@ -70,7 +71,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateButtonFromButtonHTMLElement()
 		{
-			Element element = ie.Element("buttonelementid");
+			Element element = ie.Element("button", Find.ById("buttonelementid"));
 			Button button = new Button(element);
 			Assert.AreEqual("buttonelementid", button.Id);
 		}
