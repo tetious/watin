@@ -64,7 +64,7 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Div(Element element) : base(element, ElementTags) {}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Div(domContainer, (IHTMLDivElement) element);
 		}

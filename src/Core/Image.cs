@@ -86,7 +86,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Image(domContainer, element);
 		}

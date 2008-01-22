@@ -95,7 +95,7 @@ namespace WatiN.Core
 			return Value;
 		}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Button(domContainer, element);
 		}

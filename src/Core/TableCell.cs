@@ -70,7 +70,7 @@ namespace WatiN.Core
 			get { return int.Parse(GetAttributeValue("cellindex")); }
 		}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new TableCell(domContainer, (IHTMLTableCell) element);
 		}

@@ -12,7 +12,7 @@ namespace WatiN.Core
 	public class IEElement : IBrowserElement
 	{
 		private object _element;
-		private readonly ElementFinder _elementFinder;
+		private ElementFinder _elementFinder;
 		private ElementAttributeBag _attributeBag = null;
 
 		public IEElement(object element, ElementFinder elementFinder)

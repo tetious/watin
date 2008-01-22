@@ -52,7 +52,7 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Para(Element element) : base(element, ElementTags) {}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Para(domContainer, (IHTMLParaElement) element);
 		}

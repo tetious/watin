@@ -53,7 +53,7 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public RadioButton(Element element) : base(element, ElementTags) {}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new RadioButton(domContainer, (IHTMLInputElement) element);
 		}

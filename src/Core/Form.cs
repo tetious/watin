@@ -88,7 +88,7 @@ namespace WatiN.Core
 			get { return (IHTMLFormElement) HTMLElement; }
 		}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Form(domContainer, (IHTMLFormElement) element);
 		}

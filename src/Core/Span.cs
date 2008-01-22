@@ -52,7 +52,7 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Span(Element element) : base(element, ElementTags) {}
 
-		public static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new Span(domContainer, (IHTMLSpanElement) element);
 		}
