@@ -76,7 +76,7 @@ namespace WatiN.Core
 			get { return (IHTMLTableSection) HTMLElement; }
 		}
 
-		public class Rows : IElementCollection
+	    private class Rows : IElementCollection
 		{
 			private TableBody tableBody;
 
