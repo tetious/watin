@@ -162,7 +162,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("5", result);
 		}
 
-        [Test, ExpectedException(typeof(TimeoutException))]
+        [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException))]
         public void WaitUntilContainsTextShouldThrowTimeOutException()
         {
             IE.Settings.WaitUntilExistsTimeOut = 1;
@@ -180,7 +180,7 @@ namespace WatiN.Core.UnitTests
             ie.WaitUntilContainsText("some text 2");
         }
 
-        [Test, ExpectedException(typeof(TimeoutException))]
+        [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException))]
         public void WaitUntilContainsTextRegexShouldThrowTimeOutException()
         {
             IE.Settings.WaitUntilExistsTimeOut = 1;
