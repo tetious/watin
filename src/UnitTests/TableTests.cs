@@ -52,30 +52,6 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void TableTableBodiesExcludesBodiesFromNestedTables()
-		{
-			ie.GoTo(new Uri(HtmlTestBaseURI, "Tables.html"));
-
-			TableBodyCollection tableBodies = ie.Table("Table1").TableBodies;
-			Assert.AreEqual(2, tableBodies.Length, "Unexpected number of tbodies");
-			Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
-			Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
-		}
-
-		[Test]
-		public void TableBodyExcludesRowsFromNestedTables()
-		{
-			ie.GoTo(new Uri(HtmlTestBaseURI, "Tables.html"));
-
-			TableBody tableBody = ie.Table("Table1").TableBodies[0];
-
-			Assert.AreEqual(1, tableBody.Tables.Length, "Expected nested table");
-			Assert.AreEqual(2, tableBody.TableRows.Length, "Expected 2 rows");
-			Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
-			Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
-		}
-
-		[Test]
 		public void TableExists()
 		{
 			Assert.IsTrue(ie.Table(tableId).Exists);
@@ -155,6 +131,16 @@ namespace WatiN.Core.UnitTests
 
 			Assert.IsNotNull(row, "Row with b1 expected");
 			Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
+		}
+
+		[Test]
+		public void TableFindRowShouldIgnoreTableCellsInsideOfNestedTables()
+		{
+			ie.GoTo(TablesUri);
+
+			Table table = ie.Table("Table1");
+
+			Assert.IsNotNull(table.FindRow("12", 1));
 		}
 
 		[Test]

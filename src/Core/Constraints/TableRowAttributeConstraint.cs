@@ -69,12 +69,12 @@ namespace WatiN.Core.Constraints
 		public override bool Compare(IAttributeBag attributeBag)
 		{
 			IHTMLElement element = ((ElementAttributeBag) attributeBag).IHTMLElement;
-
+			
 			if (IsTextContainedIn(element.innerText))
 			{
 				// Get all elements and filter this for TableCells
-				IHTMLElementCollection allElements = (IHTMLElementCollection) element.all;
-				IHTMLElementCollection tableCellElements = (IHTMLElementCollection) allElements.tags(ElementsSupport.TableCellTagName);
+				IHTMLTableRow tableRowElement = (IHTMLTableRow)element;
+				IHTMLElementCollection tableCellElements = tableRowElement.cells;
 
 				if (tableCellElements.length - 1 >= columnIndex)
 				{
