@@ -31,7 +31,7 @@ namespace WatiN.Core
 	{
 		public ElementsContainer(DomContainer ie, object element) : base(ie, element) {}
 		
-		public ElementsContainer(DomContainer ie, IBrowserElement ieBrowserElement) : base(ie, ieBrowserElement) {}
+		public ElementsContainer(DomContainer ie, INativeElement ieNativeElement) : base(ie, ieNativeElement) {}
 
 		public ElementsContainer(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
 

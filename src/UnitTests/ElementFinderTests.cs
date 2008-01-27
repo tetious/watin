@@ -51,7 +51,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindFirstShoudlReturnNullIfIElementCollectionIsNull()
 		{
-			ElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
+			INativeElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
 
 			Assert.IsNull(finder.FindFirst());
 		}
@@ -59,7 +59,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindAllShouldReturnEmptyArrayListIfIElementCollectionIsNull()
 		{
-			ElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
+			INativeElementFinder finder = new ElementFinder("input", "text", stubElementCollection);
 
 			Assert.AreEqual(0, finder.FindAll().Count);
 		}
@@ -68,7 +68,7 @@ namespace WatiN.Core.UnitTests
 		public void ElementFinderShouldCallConstraintResetBeforeCompare()
 		{
 			MyTestConstraint constraint = new MyTestConstraint();
-			ElementFinder finder = new ElementFinder("input", "text", constraint, stubElementCollection);
+			INativeElementFinder finder = new ElementFinder("input", "text", constraint, stubElementCollection);
 			
 			finder.FindFirst();
 

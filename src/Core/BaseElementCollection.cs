@@ -20,6 +20,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -39,7 +40,7 @@ namespace WatiN.Core
 
 		private ArrayList elements;
 		private CreateElementInstance createElementInstance;
-		protected ElementFinder finder;
+		protected INativeElementFinder finder;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -48,7 +49,7 @@ namespace WatiN.Core
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
 		/// <param name="createElementInstance">The create element instance.</param>
-		public BaseElementCollection(DomContainer domContainer, ElementFinder finder, CreateElementInstance createElementInstance) :
+		public BaseElementCollection(DomContainer domContainer, INativeElementFinder finder, CreateElementInstance createElementInstance) :
 			this(domContainer, (ArrayList) null, createElementInstance)
 		{
 			this.finder = finder;

@@ -82,15 +82,15 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
-			IBrowserElement firstParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			INativeElement firstParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
-			IBrowserElement secondParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			INativeElement secondParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			element = new Element(null, browserElement); 
-			Expect.Call(browserElement.Parent).Return(firstParentDiv).Repeat.Any();
-			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			element = new Element(null, nativeElement); 
+			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
+			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
 			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
@@ -118,15 +118,15 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
-			IBrowserElement firstParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			INativeElement firstParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
-			IBrowserElement secondParentDiv = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			INativeElement secondParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			element = new Element(null, browserElement); 
-			Expect.Call(browserElement.Parent).Return(firstParentDiv).Repeat.Any();
-			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			element = new Element(null, nativeElement); 
+			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
+			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag).Repeat.Any();
 			Expect.Call(firstAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
@@ -156,11 +156,11 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IBrowserElement browserElement = (IBrowserElement) mockRepository.CreateMock(typeof (IBrowserElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 
-			element = new Element(null, browserElement); 
-			Expect.Call(browserElement.HasReferenceToAnElement).Return(true).Repeat.Any();
-			Expect.Call(browserElement.Parent).Return(null);
+			element = new Element(null, nativeElement); 
+			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
+			Expect.Call(nativeElement.Parent).Return(null);
 
 			mockRepository.ReplayAll();
 

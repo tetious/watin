@@ -17,12 +17,18 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using mshtml;
+using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+	namespace Interfaces
+	{
+	}
+
 	/// <summary>
 	/// This class hosts functionality for classes which are an entry point
 	/// to a document and its elements and/or frames. Currently implemented
@@ -97,6 +103,11 @@ namespace WatiN.Core
 		public DialogWatcher DialogWatcher
 		{
 			get { return _dialogWatcher; }
+		}
+
+		public abstract INativeBrowser NativeBrowser
+		{
+			get;
 		}
 
 		/// <summary>

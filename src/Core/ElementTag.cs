@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using mshtml;
+using WatiN.Core.Interfaces;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core
@@ -59,7 +60,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public ElementTag(IBrowserElement browserElement) : this(browserElement.TagName, getInputType(browserElement))
+		public ElementTag(INativeElement nativeElement) : this(nativeElement.TagName, getInputType(nativeElement))
 		{ }
 
 		private static string getInputType(IHTMLElement element)
@@ -73,11 +74,11 @@ namespace WatiN.Core
 			return null;
 		}
 
-		private static string getInputType(IBrowserElement ieBrowserElement)
+		private static string getInputType(INativeElement ieNativeElement)
 		{
-			if(ElementFinder.isInputElement(ieBrowserElement.TagName))
+			if(ElementFinder.isInputElement(ieNativeElement.TagName))
 			{
-				return ieBrowserElement.GetAttributeValue("type");
+				return ieNativeElement.GetAttributeValue("type");
 			}
 
 			return null;
@@ -92,15 +93,15 @@ namespace WatiN.Core
 			return (IHTMLElementCollection) elements.tags(TagName);
 		}
 
-		public bool Compare(IBrowserElement browserElement)
+		public bool Compare(INativeElement nativeElement)
 		{
-			if (browserElement == null) return false;
+			if (nativeElement == null) return false;
 
-			if (CompareTagName(browserElement))
+			if (CompareTagName(nativeElement))
 			{
 				if (IsInputElement)
 				{
-					return CompareAgainstInputTypes(browserElement);
+					return CompareAgainstInputTypes(nativeElement);
 				}
 
 				return true;
@@ -125,14 +126,14 @@ namespace WatiN.Core
 			return string.Empty;
 		}
 
-		private bool CompareTagName(IBrowserElement browserElement)
+		private bool CompareTagName(INativeElement nativeElement)
 		{
 			if (TagName == null) return true;
 
-			return StringComparer.AreEqual(TagName, browserElement.TagName, true);
+			return StringComparer.AreEqual(TagName, nativeElement.TagName, true);
 		}
 
-		private bool CompareAgainstInputTypes(IBrowserElement element)
+		private bool CompareAgainstInputTypes(INativeElement element)
 		{
 			string inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
 
@@ -154,13 +155,13 @@ namespace WatiN.Core
 			return true;
 		}
 
-		public static bool IsValidElement(IBrowserElement browserElement, ArrayList elementTags)
+		public static bool IsValidElement(INativeElement nativeElement, ArrayList elementTags)
 		{
-			if (browserElement == null) return false;
+			if (nativeElement == null) return false;
 
 			foreach (ElementTag elementTag in elementTags)
 			{
-				if (elementTag.Compare(browserElement))
+				if (elementTag.Compare(nativeElement))
 				{
 					return true;
 				}

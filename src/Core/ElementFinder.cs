@@ -32,7 +32,7 @@ namespace WatiN.Core
 	/// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
 	/// the given <see cref="BaseConstraint"/>.
 	/// </summary>
-	public class ElementFinder
+	public class ElementFinder : INativeElementFinder
 	{
 		private ArrayList tagsToFind = new ArrayList();
 

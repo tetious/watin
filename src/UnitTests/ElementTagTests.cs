@@ -22,6 +22,7 @@ using System.Threading;
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
@@ -71,7 +72,7 @@ namespace WatiN.Core.UnitTests
 				Thread.CurrentThread.CurrentCulture = turkish;
 
 				MockRepository mockRepository = new MockRepository();
-				IBrowserElement element = (IBrowserElement) mockRepository.DynamicMock(typeof (IBrowserElement));
+				INativeElement element = (INativeElement) mockRepository.DynamicMock(typeof (INativeElement));
 
 				AssertUpperCaseLowerCase(element, mockRepository);
 				AssertUpperCaseUpperCase(element, mockRepository);
@@ -84,7 +85,7 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-		private static void AssertLowerCaseUpperCase(IBrowserElement element, MockRepository mockRepository) 
+		private static void AssertLowerCaseUpperCase(INativeElement element, MockRepository mockRepository) 
 		{
 			mockRepository.BackToRecordAll();
 
@@ -101,7 +102,7 @@ namespace WatiN.Core.UnitTests
 			mockRepository.VerifyAll();
 		}
 
-		private static void AssertUpperCaseUpperCase(IBrowserElement element, MockRepository mockRepository) 
+		private static void AssertUpperCaseUpperCase(INativeElement element, MockRepository mockRepository) 
 		{
 			mockRepository.BackToRecordAll();
 
@@ -118,7 +119,7 @@ namespace WatiN.Core.UnitTests
 			mockRepository.VerifyAll();
 		}
 
-		private static void AssertUpperCaseLowerCase(IBrowserElement element, MockRepository mockRepository) {
+		private static void AssertUpperCaseLowerCase(INativeElement element, MockRepository mockRepository) {
 			
 			// UpperCase
 			SetupResult.For(element.TagName).Return("INPUT");

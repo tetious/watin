@@ -18,6 +18,7 @@
 
 using System.Collections;
 using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -40,7 +41,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public AreaCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Area.New)) {}
+		public AreaCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Area.New)) {}
 
 		/// <summary>
 		/// Returns a new <see cref="AreaCollection" /> filtered by the <see cref="BaseConstraint" />.

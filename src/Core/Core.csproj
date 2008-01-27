@@ -705,7 +705,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IE\IBrowserElement.cs"
+                    RelPath = "IE\IEBrowser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -746,6 +746,21 @@
                 />
                 <File
                     RelPath = "Interfaces\ILogWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\INativeBrowser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\INativeElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\INativeElementFinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

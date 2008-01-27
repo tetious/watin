@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -27,7 +28,7 @@ namespace WatiN.Core
 	{
 		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TableBody.New)) {}
 
-		public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableBody.New)) {}
+		public TableBodyCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableBody.New)) {}
 
 		public TableBody this[int index]
 		{

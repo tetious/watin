@@ -1,10 +1,9 @@
 using System.Collections.Specialized;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Interfaces
 {
-	public interface IBrowserElement
+	public interface INativeElement
 	{
 		/// <summary>
 		/// Returns the text displayed after this element when it's wrapped
@@ -22,13 +21,13 @@ namespace WatiN.Core
 		/// Gets the next sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The next sibling.</value>
-		IBrowserElement NextSibling { get; }
+		INativeElement NextSibling { get; }
 
 		/// <summary>
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The previous sibling.</value>
-		IBrowserElement PreviousSibling { get; }
+		INativeElement PreviousSibling { get; }
 
 		/// <summary>
 		/// Gets the parent element of this element.
@@ -56,7 +55,7 @@ namespace WatiN.Core
 		/// watinDiv.Links[1].Click();
 		/// </code>
 		/// </example>
-		IBrowserElement Parent { get; }
+		INativeElement Parent { get; }
 
 		Style Style { get; }
 

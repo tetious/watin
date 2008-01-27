@@ -9,7 +9,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Summary description for IEElement.
 	/// </summary>
-	public class IEElement : IBrowserElement
+	public class IEElement : INativeElement
 	{
 		private object _element;
 		private ElementFinder _elementFinder;
@@ -43,7 +43,7 @@ namespace WatiN.Core
 		/// Gets the next sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The next sibling.</value>
-		public IBrowserElement NextSibling
+		public INativeElement NextSibling
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace WatiN.Core
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The previous sibling.</value>
-		public IBrowserElement PreviousSibling
+		public INativeElement PreviousSibling
 		{
 			get
 			{
@@ -115,7 +115,7 @@ namespace WatiN.Core
 		/// watinDiv.Links[1].Click();
 		/// </code>
 		/// </example>
-		public IBrowserElement Parent
+		public INativeElement Parent
 		{
 			get
 			{

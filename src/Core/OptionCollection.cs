@@ -18,6 +18,7 @@
 
 using System.Collections;
 using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -32,7 +33,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public OptionCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Option.New)) {}
+		public OptionCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Option.New)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.

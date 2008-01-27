@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -27,6 +28,7 @@ using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -1296,6 +1298,11 @@ namespace WatiN.Core
 		public override IntPtr hWnd
 		{
 			get { return new IntPtr(ie.HWND); }
+		}
+
+		public override INativeBrowser NativeBrowser
+		{
+			get { return new IEBrowser(); }
 		}
 
 		/// <summary>
