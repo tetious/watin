@@ -49,7 +49,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void FindFirstShoudlReturnNullIfIElementCollectionIsNull()
+		public void FindFirstShouldReturnNullIfIElementCollectionIsNull()
 		{
 			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection);
 
