@@ -57,17 +57,17 @@ namespace WatiN.Core
 		/// Returns an initialized instance of a SelectList object.
 		/// Mainly used by the collectionclass SelectLists.
 		/// </summary>
-		/// <param name="ie">The <see cref="DomContainer"/> the element is in.</param>
+		/// <param name="domContainer">The <see cref="DomContainer"/> the element is in.</param>
 		/// <param name="htmlSelectElement">The HTML select element.</param>
-		public SelectList(DomContainer ie, IHTMLElement htmlSelectElement) : base(ie, htmlSelectElement) {}
+		public SelectList(DomContainer domContainer, IHTMLElement htmlSelectElement) : base(domContainer, htmlSelectElement) {}
 
 		/// <summary>
 		/// Returns an instance of a SelectList object.
 		/// Mainly used internally.
 		/// </summary>
-		/// <param name="ie">The <see cref="DomContainer"/> the element is in.</param>
+		/// <param name="domContainer">The <see cref="DomContainer"/> the element is in.</param>
 		/// <param name="finder">The element finder to use.</param>
-		public SelectList(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public SelectList(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="SelectList"/> class based on <paramref name="element"/>.

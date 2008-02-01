@@ -48,14 +48,6 @@ namespace WatiN.Core.UnitTests
 			base.TestSetUp();
 		}
 
-		private void InitMocks() 
-		{
-			mocks = new MockRepository();
-			node = (IHTMLDOMNode) mocks.CreateMock(typeof (IHTMLDOMNode));
-
-			element = new Element(null, node);
-		}
-
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()
 		{
@@ -90,17 +82,14 @@ namespace WatiN.Core.UnitTests
 
 			element = new Element(null, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
-			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
 			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
 			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
-			Expect.Call(firstParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag);
 			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
-			Expect.Call(secondParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 
 			mockRepository.ReplayAll();
@@ -126,19 +115,16 @@ namespace WatiN.Core.UnitTests
 
 			element = new Element(null, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
-			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag).Repeat.Any();
 			Expect.Call(firstAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
 			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
 			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
-			Expect.Call(firstParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag).Repeat.Any();
 			Expect.Call(secondAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
 			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
-			Expect.Call(secondParentDiv.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 
 			mockRepository.ReplayAll();
@@ -159,7 +145,6 @@ namespace WatiN.Core.UnitTests
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 
 			element = new Element(null, nativeElement); 
-			Expect.Call(nativeElement.HasReferenceToAnElement).Return(true).Repeat.Any();
 			Expect.Call(nativeElement.Parent).Return(null);
 
 			mockRepository.ReplayAll();
@@ -226,14 +211,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementRefresh()
 		{
-			InitMocks();
+			mocks = new MockRepository();
 
-			IElementCollection elementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
-			ElementFinder finder = (ElementFinder) mocks.CreateMock(typeof (ElementFinder), new ArrayList(), null, elementCollection);
-			IHTMLElement ihtmlElement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+			INativeElementFinder finder = (INativeElementFinder) mocks.CreateMock(typeof (INativeElementFinder));
+			INativeElement nativeElement = (INativeElement) mocks.CreateMock(typeof (INativeElement));
 
-			Expect.Call(finder.FindFirst()).Return(ihtmlElement).Repeat.Twice();
-			SetupResult.For(ihtmlElement.getAttribute("tagName",0)).Return("mockedtag");
+			element = new Element(null, finder);
+
+			Expect.Call(finder.FindFirst()).Return(nativeElement).Repeat.Twice();
+			SetupResult.For(nativeElement.GetAttributeValue("tagName")).Return("mockedtag");
 
 			mocks.ReplayAll();
 
@@ -251,13 +237,8 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ArgumentException))]
 		public void AncestorTypeShouldOnlyExceptTypesInheritingElement()
 		{
-			InitMocks();
-
-			mocks.ReplayAll();
-
+			element = ie.Form("Form");
 			element.Ancestor(typeof (String));
-
-			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -456,17 +437,17 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			SetupResult.For(htmlelement.sourceIndex).Return(1);
-			SetupResult.For(htmlelement.offsetParent).Return(htmlelement);
-
-			Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.Once();
-			Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(false).Repeat.Once();
+			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(2);
+			Expect.Call(nativeElement.IsElementReferenceStillValid).Return(true).Repeat.Times(2);
+			Expect.Call(attributeBag.GetValue("disabled")).Return(true.ToString()).Repeat.Once();
+			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
 
 			mockRepository.ReplayAll();
 
-			Element element = new Element(null, htmlelement);
+			Element element = new Element(null, nativeElement);
 
 			// calls htmlelement.getAttribute twice (ones true and once false is returned)
 			element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
@@ -479,11 +460,13 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
-			SetupResult.For(htmlelement.getAttribute("disabled", 0)).Return(false);
+			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(1);
+			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
 
-			element = (Element) mockRepository.DynamicMock(typeof (Element), null, htmlelement);
+			element = (Element) mockRepository.DynamicMock(typeof (Element),(DomContainer) null, nativeElement);
 
 			Expect.Call(element.Exists).Return(true);
 
@@ -499,19 +482,18 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
-			ElementFinder finder = (ElementFinder) mockRepository.CreateMock(typeof (ElementFinder), null, elementCollection);
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			INativeElementFinder elementFinder = (INativeElementFinder) mockRepository.CreateMock(typeof (INativeElementFinder));
 
-			Expect.Call(finder.FindFirst()).Return(null).Repeat.Times(5);
-			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("")).Repeat.Times(4);
-			Expect.Call(finder.FindFirst()).Return(htmlelement).Repeat.Once();
+			element = new Element(null, elementFinder);
 
-			Expect.Call(htmlelement.getAttribute("innertext", 0)).Return("succeeded");
+			Expect.Call(elementFinder.FindFirst()).Return(null).Repeat.Times(5);
+			Expect.Call(elementFinder.FindFirst()).Throw(new UnauthorizedAccessException("")).Repeat.Times(4);
+			Expect.Call(elementFinder.FindFirst()).Return(nativeElement);
+
+			Expect.Call(nativeElement.GetAttributeValue("innertext")).Return("succeeded").Repeat.Once();
 
 			mockRepository.ReplayAll();
-
-			element = new Element(null, finder);
 
 			Assert.AreEqual("succeeded", element.Text);
 
@@ -524,7 +506,7 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
-			ElementFinder finder = (ElementFinder) mockRepository.CreateMock(typeof (ElementFinder), null, elementCollection);
+			IEElementFinder finder = (IEElementFinder) mockRepository.CreateMock(typeof (IEElementFinder), null, elementCollection);
 
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
 			Expect.Call(finder.FindFirst()).Return(null).Repeat.AtLeastOnce();
@@ -556,7 +538,7 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
-			ElementFinder finder = (ElementFinder) mockRepository.DynamicMock(typeof (ElementFinder), null, elementCollection);
+			IEElementFinder finder = (IEElementFinder) mockRepository.DynamicMock(typeof (IEElementFinder), null, elementCollection);
 
 			Expect.Call(finder.FindFirst()).Throw(new Exception(""));
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("mockUnauthorizedAccessException")).Repeat.AtLeastOnce();
@@ -588,8 +570,8 @@ namespace WatiN.Core.UnitTests
 		{
 			MockRepository mockRepository = new MockRepository();
 
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
-			Element mockElement = (Element) mockRepository.DynamicMock(typeof (Element), null, htmlelement);
+			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+			Element mockElement = (Element) mockRepository.DynamicMock(typeof (Element), null, nativeElement);
 
 			Expect.Call(mockElement.Exists).Repeat.Never();
 
@@ -600,25 +582,13 @@ namespace WatiN.Core.UnitTests
 			mockRepository.VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'False'")]
+		[Test, ExpectedException(typeof (WatiN.Core.Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'True'")]
 		public void WaitUntilTimesOut()
 		{
-			MockRepository mockRepository = new MockRepository();
+			element = ie.Form("Form");
+			Assert.That(element.GetAttributeValue("disabled"), Iz.EqualTo(false.ToString()), "Expected enabled form");
 
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
-
-			Expect.Call(htmlelement.getAttribute("disabled", 0)).Return(true).Repeat.AtLeastOnce();
-
-			mockRepository.ReplayAll();
-
-			element = new Element(null, htmlelement);
-
-			Assert.AreEqual(true.ToString(), element.GetAttributeValue("disabled"));
-
-			// calls htmlelement.getAttribute twice (ones true and once false is returned)
-			element.WaitUntil(new AttributeConstraint("disabled", false.ToString()), 1);
-
-			mockRepository.VerifyAll();
+			element.WaitUntil(new AttributeConstraint("disabled", true.ToString()), 1);
 		}
 
 		[Test]
@@ -636,19 +606,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GetAttributeValueOfTypeInt()
 		{
-			MockRepository mockRepository = new MockRepository();
-
-			IHTMLElement htmlelement = (IHTMLElement) mockRepository.CreateMock(typeof (IHTMLElement));
-
-			Expect.Call(htmlelement.getAttribute("sourceIndex", 0)).Return(13);
-
-			mockRepository.ReplayAll();
-
-			element = new Element(null, htmlelement);
-
-			Assert.AreEqual("13", element.GetAttributeValue("sourceIndex"));
-
-			mockRepository.VerifyAll();
+			Assert.AreEqual("10", ie.Form("Form").GetAttributeValue("sourceIndex"));
 		}
 
 		[Test]

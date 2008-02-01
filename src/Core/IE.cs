@@ -29,6 +29,7 @@ using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -60,7 +61,7 @@ namespace WatiN.Core
 	/// </example>
 	public class IE : DomContainer
 	{
-		private InternetExplorer ie;
+		private SHDocVw.InternetExplorer ie;
 
 		private bool autoClose = true;
 		private bool isDisposed = false;
@@ -551,7 +552,7 @@ namespace WatiN.Core
 		{
 			CheckThreadApartmentStateIsSTA();
 
-			InternetExplorer internetExplorer = shDocVwInternetExplorer as InternetExplorer;
+			SHDocVw.InternetExplorer internetExplorer = shDocVwInternetExplorer as SHDocVw.InternetExplorer;
 
 			if (shDocVwInternetExplorer == null)
 			{
@@ -591,7 +592,7 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		private InternetExplorer CreateIEInNewProcess()
+		private SHDocVw.InternetExplorer CreateIEInNewProcess()
 		{
 			Process m_Proc = Process.Start("IExplore.exe", "about:blank");
 
@@ -631,12 +632,12 @@ namespace WatiN.Core
 			}
 		}
 
-		private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer)
+		private void InitIEAndStartDialogWatcher(SHDocVw.InternetExplorer internetExplorer)
 		{
 			InitIEAndStartDialogWatcher(internetExplorer, null);
 		}
 
-		private void InitIEAndStartDialogWatcher(InternetExplorer internetExplorer, Uri uri)
+		private void InitIEAndStartDialogWatcher(SHDocVw.InternetExplorer internetExplorer, Uri uri)
 		{
 			ie = internetExplorer;
 
@@ -652,7 +653,7 @@ namespace WatiN.Core
 
 		private static IE findIE(BaseConstraint findBy, int timeout)
 		{
-			InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
+			SHDocVw.InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
 
 			if (internetExplorer != null)
 			{
@@ -665,7 +666,7 @@ namespace WatiN.Core
 			throw new IENotFoundException(findBy.ConstraintToString(), timeout);
 		}
 
-		private static InternetExplorer findInternetExplorer(BaseConstraint findBy, int timeout)
+		private static SHDocVw.InternetExplorer findInternetExplorer(BaseConstraint findBy, int timeout)
 		{
 			Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ConstraintToString());
 
@@ -675,7 +676,7 @@ namespace WatiN.Core
 			{
 				Thread.Sleep(500);
 
-				InternetExplorer internetExplorer = findInternetExplorer(findBy);
+				SHDocVw.InternetExplorer internetExplorer = findInternetExplorer(findBy);
 
 				if (internetExplorer != null)
 				{
@@ -686,7 +687,7 @@ namespace WatiN.Core
 			return null;
 		}
 
-		private static InternetExplorer findInternetExplorer(BaseConstraint findBy)
+		private static SHDocVw.InternetExplorer findInternetExplorer(BaseConstraint findBy)
 		{
 			ShellWindows allBrowsers = new ShellWindows();
 
@@ -697,7 +698,7 @@ namespace WatiN.Core
 
 			while (browserCounter < browserCount)
 			{
-				attributeBag.InternetExplorer = (InternetExplorer) allBrowsers.Item(browserCounter);
+				attributeBag.InternetExplorer = (SHDocVw.InternetExplorer) allBrowsers.Item(browserCounter);
 
 				if (findBy.Compare(attributeBag))
 				{
@@ -1216,7 +1217,7 @@ namespace WatiN.Core
 			return true;
 		}
 
-		internal override IHTMLDocument2 OnGetHtmlDocument()
+		public override IHTMLDocument2 OnGetHtmlDocument()
 		{
 			return (IHTMLDocument2) ie.Document;
 		}

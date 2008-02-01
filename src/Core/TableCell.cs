@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public TableCell(DomContainer ie, IHTMLTableCell htmlTableCell) : base(ie, (IHTMLElement) htmlTableCell) {}
+		public TableCell(DomContainer domContainer, IHTMLTableCell htmlTableCell) : base(domContainer, (IHTMLElement) htmlTableCell) {}
 
-		public TableCell(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public TableCell(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="TableCell"/> class based on <paramref name="element"/>.

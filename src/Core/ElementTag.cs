@@ -21,6 +21,7 @@ using System.Collections;
 using System.Globalization;
 using mshtml;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core
@@ -46,7 +47,7 @@ namespace WatiN.Core
 				TagName = tagName.ToLower(CultureInfo.InvariantCulture);
 			}
 
-			IsInputElement = ElementFinder.isInputElement(tagName);
+			IsInputElement = ElementTag.IsAnInputElement(tagName);
 
 			// Check arguments
 			if (IsInputElement)
@@ -76,7 +77,7 @@ namespace WatiN.Core
 
 		private static string getInputType(INativeElement ieNativeElement)
 		{
-			if(ElementFinder.isInputElement(ieNativeElement.TagName))
+			if(ElementTag.IsAnInputElement(ieNativeElement.TagName))
 			{
 				return ieNativeElement.GetAttributeValue("type");
 			}
@@ -178,6 +179,11 @@ namespace WatiN.Core
 		public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
 		{
 			return IsValidElement(new IEElement(element, null), elementTags);
+		}
+
+		public static bool IsAnInputElement(string tagName)
+		{
+			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
 		}
 	}
 }

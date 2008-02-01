@@ -36,8 +36,9 @@ namespace WatiN.Core.UnitTests
 	public class IeTests : BaseWatiNTest
 	{
 		[TestFixtureSetUp]
-		public void Setup()
+		public override void FixtureSetup()
 		{
+			base.FixtureSetup();
 			Logger.LogWriter = new DebugLogWriter();
 		}
 
@@ -145,7 +146,7 @@ namespace WatiN.Core.UnitTests
 				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(notTopLeftPoint));
 			}
 
-			IE.Settings.Reset();
+			IE.Settings.AutoMoveMousePointerToTopLeft = true;
 			using (new IE())
 			{
 				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(new Point(0, 0)));
@@ -155,12 +156,12 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MakeNewIeInstanceVisible()
 		{
-			IE.Settings.Reset();
+			IE.Settings.MakeNewIeInstanceVisible = true;
 			Assert.That(IE.Settings.MakeNewIeInstanceVisible, "Default should be true");
 
 			using (IE ie = new IE())
 			{
-				Assert.That(((InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
+				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
 			}
 
 			IE.Settings.MakeNewIeInstanceVisible = false;
@@ -168,7 +169,7 @@ namespace WatiN.Core.UnitTests
 
 			using (IE ie = new IE())
 			{
-				Assert.That(((InternetExplorer) ie.InternetExplorer).Visible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "IE Should be visible");
+				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "IE Should be visible");
 			}
 		}
 

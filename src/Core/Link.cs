@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Link(DomContainer ie, IHTMLAnchorElement htmlAnchorElement) : base(ie, htmlAnchorElement) {}
+		public Link(DomContainer domContainer, IHTMLAnchorElement htmlAnchorElement) : base(domContainer, htmlAnchorElement) {}
 
-		public Link(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Link(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Link"/> class based on <paramref name="element"/>.

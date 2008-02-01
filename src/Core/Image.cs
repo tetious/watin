@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -44,9 +45,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Image(DomContainer ie, IHTMLElement imgElement) : base(ie, imgElement) {}
+		public Image(DomContainer domContainer, IHTMLElement imgElement) : base(domContainer, imgElement) {}
 
-		public Image(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Image(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Image"/> class based on <paramref name="element"/>.

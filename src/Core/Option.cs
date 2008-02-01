@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -49,16 +50,16 @@ namespace WatiN.Core
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.
 		/// </summary>
-		/// <param name="ie">The ie.</param>
+		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="optionElement">The option element.</param>
-		public Option(DomContainer ie, IHTMLOptionElement optionElement) : base(ie, optionElement) {}
+		public Option(DomContainer domContainer, IHTMLOptionElement optionElement) : base(domContainer, optionElement) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.
 		/// </summary>
-		/// <param name="ie">The ie.</param>
+		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="finder">The finder.</param>
-		public Option(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Option(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Option"/> class based on <paramref name="element"/>.

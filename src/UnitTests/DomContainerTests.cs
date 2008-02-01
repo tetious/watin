@@ -20,7 +20,6 @@ using System.Text.RegularExpressions;
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SHDocVw;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
@@ -29,7 +28,7 @@ namespace WatiN.Core.UnitTests
 	public class DomContainerTests
 	{
 		private MockRepository _mockRepository;
-		private InternetExplorer _mockInternetExplorer;
+		private SHDocVw.InternetExplorer _mockInternetExplorer;
 		private IE _ie;
 		private IHTMLDocument2 _mockHTMLDocument2;
 
@@ -42,7 +41,7 @@ namespace WatiN.Core.UnitTests
 			IE.Settings.AutoStartDialogWatcher = false;
 			_mockRepository = new MockRepository();
 
-			_mockInternetExplorer = (InternetExplorer) _mockRepository.DynamicMock(typeof (InternetExplorer));
+			_mockInternetExplorer = (SHDocVw.InternetExplorer) _mockRepository.DynamicMock(typeof (SHDocVw.InternetExplorer));
 			_mockHTMLDocument2 = (IHTMLDocument2) _mockRepository.DynamicMock(typeof (IHTMLDocument2));
 			_mockIHTMLElement = (IHTMLElement) _mockRepository.DynamicMock(typeof (IHTMLElement));
 

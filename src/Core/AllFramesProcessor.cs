@@ -30,9 +30,9 @@ namespace WatiN.Core
 		private HTMLDocument htmlDocument;
 		private IHTMLElementCollection frameElements;
 		private int index = 0;
-		private DomContainer ie;
+		private DomContainer _domContainer;
 
-		public AllFramesProcessor(DomContainer ie, HTMLDocument htmlDocument)
+		public AllFramesProcessor(DomContainer domContainer, HTMLDocument htmlDocument)
 		{
 			elements = new ArrayList();
 
@@ -45,7 +45,7 @@ namespace WatiN.Core
 				frameElements = (IHTMLElementCollection) htmlDocument.all.tags("IFRAME");
 			}
 
-			this.ie = ie;
+			this._domContainer = domContainer;
 			this.htmlDocument = htmlDocument;
 		}
 
@@ -60,7 +60,7 @@ namespace WatiN.Core
 			IHTMLElement frameElement = (IHTMLElement) frameElements.item(index, null);
 			string frameElementUniqueId = ((DispHTMLBaseElement) frameElement).uniqueID;
 
-			Frame frame = new Frame(ie, (IHTMLDocument2)webBrowser2.Document, (IHTMLDocument3) htmlDocument, frameElementUniqueId);
+			Frame frame = new Frame(_domContainer, (IHTMLDocument2)webBrowser2.Document, (IHTMLDocument3) htmlDocument, frameElementUniqueId);
 			
 			elements.Add(frame);
 

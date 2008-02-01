@@ -46,9 +46,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Table(DomContainer ie, IHTMLTable htmlTable) : base(ie, (IHTMLElement) htmlTable) {}
+		public Table(DomContainer domContainer, IHTMLTable htmlTable) : base(domContainer, (IHTMLElement) htmlTable) {}
 
-		public Table(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Table(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Table"/> class based on <paramref name="element"/>.

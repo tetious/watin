@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 				IntPtr hWnd = ie.hWnd;
 				// can't use ie.Close() here cause this will cleanup the registered
 				// returnDialogHandler which leads to a timeout on the WaitUntilExists
-				InternetExplorer internetExplorer = (InternetExplorer) ie.InternetExplorer;
+				SHDocVw.InternetExplorer internetExplorer = (SHDocVw.InternetExplorer) ie.InternetExplorer;
 				internetExplorer.Quit();
 
 				returnDialogHandler.WaitUntilExists();
@@ -61,7 +61,7 @@ namespace WatiN.Core.UnitTests
 
 				// can't use ie.Close() here cause this will cleanup the registered
 				// returnDialogHandler which leads to a timeout on the WaitUntilExists
-				InternetExplorer internetExplorer = (InternetExplorer) ie.InternetExplorer;
+				SHDocVw.InternetExplorer internetExplorer = (SHDocVw.InternetExplorer) ie.InternetExplorer;
 				internetExplorer.Quit();
 
 				returnDialogHandler.WaitUntilExists();

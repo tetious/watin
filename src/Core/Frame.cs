@@ -40,11 +40,11 @@ namespace WatiN.Core
 		/// This constructor will mainly be used by the constructor of FrameCollection
 		/// to create an instance of a Frame.
 		/// </summary>
-		/// <param name="ie">The ie.</param>
+		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="htmlDocument">The HTML document.</param>
 		/// <param name="frameSetParent">The frame set parent.</param>
 		/// <param name="frameElementUniqueId">The frame element unique id.</param>
-		public Frame(DomContainer ie, IHTMLDocument2 htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(ie, htmlDocument)
+		public Frame(DomContainer domContainer, IHTMLDocument2 htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(domContainer, htmlDocument)
 		{
 			_frameSetParent = frameSetParent;
 			_frameElementUniqueId = frameElementUniqueId;

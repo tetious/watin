@@ -76,17 +76,8 @@ namespace WatiN.Core.Interfaces
 
 		IAttributeBag AttributeBag { get; }
 
-		bool HasReferenceToAnElement { get; }
-
 		bool IsElementReferenceStillValid { get; }
 
-		ElementNotFoundException CreateElementNotFoundException();
-
-		bool HasElementFinder { get; }
-
 		string TagName { get; }
-
-		void FindElement();
-		void ClearElementReference();
 	}
 }

@@ -20,6 +20,7 @@ using System;
 using System.Globalization;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.InternetExplorer;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Interfaces;
 

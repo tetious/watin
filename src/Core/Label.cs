@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Label(DomContainer ie, IHTMLLabelElement labelElement) : base(ie, (IHTMLElement) labelElement) {}
+		public Label(DomContainer domContainer, IHTMLLabelElement labelElement) : base(domContainer, (IHTMLElement) labelElement) {}
 
-		public Label(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Label(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Label"/> class based on <paramref name="element"/>.

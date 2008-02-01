@@ -29,9 +29,9 @@ namespace WatiN.Core
 	{
 		private ArrayList elements;
 
-		public FrameCollection(DomContainer ie, IHTMLDocument2 htmlDocument)
+		public FrameCollection(DomContainer domContainer, IHTMLDocument2 htmlDocument)
 		{
-			AllFramesProcessor processor = new AllFramesProcessor(ie, (HTMLDocument) htmlDocument);
+			AllFramesProcessor processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument);
 
 			NativeMethods.EnumIWebBrowser2Interfaces(processor);
 

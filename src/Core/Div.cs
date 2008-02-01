@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -56,7 +57,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The HTML div element.</param>
-		public Div(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+		public Div(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Div"/> class based on <paramref name="element"/>.

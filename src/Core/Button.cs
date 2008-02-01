@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -58,7 +59,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="finder">The input button or button element.</param>
-		public Button(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+		public Button(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Button"/> class based on <paramref name="element"/>.

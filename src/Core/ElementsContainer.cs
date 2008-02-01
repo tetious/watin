@@ -29,11 +29,11 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementsContainer : Element, IElementsContainer, IElementCollection
 	{
-		public ElementsContainer(DomContainer ie, object element) : base(ie, element) {}
+		public ElementsContainer(DomContainer domContainer, object element) : base(domContainer, element) {}
 		
-		public ElementsContainer(DomContainer ie, INativeElement ieNativeElement) : base(ie, ieNativeElement) {}
+		public ElementsContainer(DomContainer domContainer, INativeElement ieNativeElement) : base(domContainer, ieNativeElement) {}
 
-		public ElementsContainer(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public ElementsContainer(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		public ElementsContainer(Element element, ArrayList elementTags) : base(element, elementTags) {}
 

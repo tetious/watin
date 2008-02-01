@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Span(DomContainer ie, IHTMLSpanElement htmlSpanElement) : base(ie, (IHTMLElement) htmlSpanElement) {}
+		public Span(DomContainer domContainer, IHTMLSpanElement htmlSpanElement) : base(domContainer, (IHTMLElement) htmlSpanElement) {}
 
-		public Span(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Span(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Span"/> class based on <paramref name="element"/>.

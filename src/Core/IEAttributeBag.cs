@@ -30,9 +30,9 @@ namespace WatiN.Core
 	/// </summary>
 	public class IEAttributeBag : IAttributeBag
 	{
-		private InternetExplorer internetExplorer = null;
+		private SHDocVw.InternetExplorer internetExplorer = null;
 
-		public InternetExplorer InternetExplorer
+		public SHDocVw.InternetExplorer	 InternetExplorer
 		{
 			get { return internetExplorer; }
 			set { internetExplorer = value; }

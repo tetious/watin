@@ -20,6 +20,7 @@ using System.Collections;
 using System.IO;
 using mshtml;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -47,7 +48,7 @@ namespace WatiN.Core
 
 		public FileUpload(DomContainer domContainer, IHTMLInputFileElement inputFileElement) : base(domContainer, inputFileElement) {}
 
-		public FileUpload(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+		public FileUpload(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="FileUpload"/> class based on <paramref name="element"/>.

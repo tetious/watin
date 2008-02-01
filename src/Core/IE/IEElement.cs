@@ -4,7 +4,7 @@ using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.InternetExplorer
 {
 	/// <summary>
 	/// Summary description for IEElement.
@@ -12,13 +12,18 @@ namespace WatiN.Core
 	public class IEElement : INativeElement
 	{
 		private object _element;
-		private ElementFinder _elementFinder;
+		private IEElementFinder _ieElementFinder = null;
 		private ElementAttributeBag _attributeBag = null;
 
-		public IEElement(object element, ElementFinder elementFinder)
+		public IEElement(object element, IEElementFinder ieElementFinder)
 		{
 			_element = element;
-			_elementFinder = elementFinder;
+			_ieElementFinder = ieElementFinder;
+		}
+
+		public IEElement(object element)
+		{
+			_element = element;
 		}
 
 		/// <summary>
@@ -222,11 +227,6 @@ namespace WatiN.Core
 			}
 		}
 
-		public bool HasReferenceToAnElement
-		{
-			get { return _element != null; }
-		}
-
 		public bool IsElementReferenceStillValid
 		{
 			get
@@ -246,32 +246,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public ElementNotFoundException CreateElementNotFoundException()
-		{
-			return _elementFinder.CreateElementNotFoundException();
-		}
-
-		public bool HasElementFinder
-		{
-			get
-			{
-				return _elementFinder != null;
-			}
-		}
-
 		public string TagName
 		{
 			get { return GetAttributeValue("tagName"); }
-		}
-
-		public void FindElement()
-		{
-			_element = _elementFinder.FindFirst();
-		}
-
-		public void ClearElementReference()
-		{
-			_element = null;
 		}
 	}
 }

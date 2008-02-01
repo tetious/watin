@@ -30,9 +30,9 @@ namespace WatiN.Core
 	{
 		private static ArrayList elementTags;
 
-		public TableBody(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public TableBody(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
-		public TableBody(DomContainer ie, IHTMLTableSection element) : base(ie, (IHTMLElement) element) {}
+		public TableBody(DomContainer domContainer, IHTMLTableSection element) : base(domContainer, (IHTMLElement) element) {}
 
 		public TableBody(Element element) : base(element, elementTags) {}
 

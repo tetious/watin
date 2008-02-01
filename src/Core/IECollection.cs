@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections;
 using mshtml;
 using SHDocVw;
@@ -41,7 +40,7 @@ namespace WatiN.Core
 
 			ShellWindows allBrowsers = new ShellWindows();
 
-			foreach (InternetExplorer internetExplorer in allBrowsers)
+			foreach (SHDocVw.InternetExplorer internetExplorer in allBrowsers)
 			{
 				try
 				{

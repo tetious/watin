@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -43,9 +44,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public RadioButton(DomContainer ie, IHTMLInputElement inputElement) : base(ie, inputElement) {}
+		public RadioButton(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, inputElement) {}
 
-		public RadioButton(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public RadioButton(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="RadioButton"/> class based on <paramref name="element"/>.

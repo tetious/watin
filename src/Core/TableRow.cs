@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public TableRow(DomContainer ie, IHTMLTableRow htmlTableRow) : base(ie, (IHTMLElement) htmlTableRow) {}
+		public TableRow(DomContainer domContainer, IHTMLTableRow htmlTableRow) : base(domContainer, (IHTMLElement) htmlTableRow) {}
 
-		public TableRow(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public TableRow(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="TableRow"/> class based on <paramref name="element"/>.

@@ -27,6 +27,7 @@ using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -41,6 +42,7 @@ namespace WatiN.Core
 
 		private DomContainer _domContainer;
 		private INativeElement _nativeElement;
+		private INativeElementFinder _elementFinder;
 
 		private Stack _originalcolor;
 
@@ -51,7 +53,7 @@ namespace WatiN.Core
 		/// <param name="element">The element</param>
 		public Element(DomContainer domContainer, object element)
 		{
-			init(domContainer, element, null);
+			initElement(domContainer, domContainer.NativeBrowser.CreateElement(element), null);
 		}
 
 		/// <summary>
@@ -61,7 +63,7 @@ namespace WatiN.Core
 		/// <param name="nativeElement">The element</param>
 		public Element(DomContainer domContainer, INativeElement nativeElement)
 		{
-			initElement(domContainer, nativeElement);
+			initElement(domContainer,nativeElement, null);
 		}
 
 		/// <summary>
@@ -69,9 +71,9 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer"><see cref="DomContainer"/> this element is located in</param>
 		/// <param name="elementFinder">The element finder.</param>
-		public Element(DomContainer domContainer, ElementFinder elementFinder)
+		public Element(DomContainer domContainer, INativeElementFinder elementFinder)
 		{
-			init(domContainer, null, elementFinder);
+			initElement(domContainer, null, elementFinder);
 		}
 
 		/// <summary>
@@ -83,24 +85,19 @@ namespace WatiN.Core
 		{
 			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
 			{
-				initElement(element._domContainer, element._nativeElement);
+				initElement(element._domContainer, element._nativeElement, null);
 			}
 			else
 			{
-				throw new ArgumentException(String.Format("Expected element {0}", ElementFinder.GetExceptionMessage(elementTags)), "element");
+				throw new ArgumentException(String.Format("Expected element {0}", IEElementFinder.GetExceptionMessage(elementTags)), "element");
 			}
 		}
 
-		private void initElement(DomContainer domContainer, INativeElement nativeElement) 
+		private void initElement(DomContainer domContainer, INativeElement nativeElement, INativeElementFinder elementFinder) 
 		{
-			_nativeElement = nativeElement;
 			_domContainer = domContainer;
-		}
-
-		// TODO: This method should be removed
-		private void init(DomContainer domContainer, object element, ElementFinder elementFinder)
-		{
-			initElement(domContainer, new IEElement(element, elementFinder));
+			_nativeElement = nativeElement;
+			_elementFinder = elementFinder;
 		}
 
 		/// <summary>
@@ -653,7 +650,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				if (!_nativeElement.HasReferenceToAnElement)
+				if (_nativeElement == null)
 				{
 					try
 					{
@@ -661,7 +658,7 @@ namespace WatiN.Core
 					}
 					catch (WatiN.Core.Exceptions.TimeoutException)
 					{
-						throw _nativeElement.CreateElementNotFoundException();
+						throw _elementFinder.CreateElementNotFoundException();
 					}
 				}
 
@@ -677,7 +674,8 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return RefreshBrowserElement().HasReferenceToAnElement;
+				RefreshNativeElement();
+				return _nativeElement != null;
 			}
 		}
 
@@ -832,18 +830,18 @@ namespace WatiN.Core
 			// Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
-				if (_nativeElement.HasReferenceToAnElement)
+				if (_nativeElement != null)
 				{
 					return;
 				}
-				else if (_nativeElement.HasElementFinder == false)
+				else if (_elementFinder == null)
 				{
 					throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
 				}
 			}
 			else
 			{
-				if (!_nativeElement.HasReferenceToAnElement)
+				if (_nativeElement == null)
 				{
 					return;
 				}
@@ -916,9 +914,9 @@ namespace WatiN.Core
 		/// </example>
 		public void Refresh()
 		{
-			if (_nativeElement.HasElementFinder)
+			if (_elementFinder != null)
 			{
-				_nativeElement.ClearElementReference();
+				_nativeElement = null;
 			}
 		}
 
@@ -926,11 +924,11 @@ namespace WatiN.Core
 		/// Calls <see cref="Refresh"/> and returns the element.
 		/// </summary>
 		/// <returns></returns>
-		protected INativeElement RefreshBrowserElement()
+		protected INativeElement RefreshNativeElement()
 		{
-			if (_nativeElement.HasElementFinder)
+			if (_elementFinder != null)
 			{
-				_nativeElement.FindElement();
+				_nativeElement = _elementFinder.FindFirst();
 			}
 			else
 			{
@@ -940,18 +938,18 @@ namespace WatiN.Core
 				// These checks are only necessary if element field
 				// is set during the construction of an ElementCollection
 				// or a more specialized element collection (like TextFieldCollection)
-				if (_nativeElement.HasReferenceToAnElement)
+				if (_nativeElement != null)
 				{
 					try
 					{
 						if (_nativeElement.IsElementReferenceStillValid == false)
 						{
-							_nativeElement.ClearElementReference();
+							_nativeElement = null;
 						}
 					}
 					catch
 					{
-						_nativeElement.ClearElementReference();
+						_nativeElement = null;
 					}
 				}
 			}
@@ -1235,7 +1233,7 @@ namespace WatiN.Core
 
 		internal static Element New(DomContainer domContainer, IHTMLElement element)
 		{
-			return GetTypedElement(domContainer, new IEElement(element, null));
+			return GetTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(element, null));
 		}
 	}
 }

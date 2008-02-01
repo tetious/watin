@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -43,9 +44,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Form(DomContainer ie, IHTMLFormElement htmlFormElement) : base(ie, (IHTMLElement) htmlFormElement) {}
+		public Form(DomContainer domContainer, IHTMLFormElement htmlFormElement) : base(domContainer, (IHTMLElement) htmlFormElement) {}
 
-		public Form(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Form(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Form"/> class based on <paramref name="element"/>.

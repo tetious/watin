@@ -50,9 +50,9 @@ namespace WatiN.Core
 
 		private ITextElement _textElement;
 
-		public TextField(DomContainer ie, IHTMLElement element) : base(ie, element) {}
+		public TextField(DomContainer domContainer, IHTMLElement element) : base(domContainer, element) {}
 
-		public TextField(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public TextField(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="TextField"/> class based on <paramref name="element"/>.
@@ -66,7 +66,7 @@ namespace WatiN.Core
 			{
 				if (_textElement == null)
 				{
-					if (ElementFinder.isInputElement(htmlElement.tagName))
+					if (ElementTag.IsAnInputElement(htmlElement.tagName))
 					{
 						_textElement = new TextFieldElement((IHTMLInputElement) HTMLElement);
 					}

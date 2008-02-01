@@ -26,6 +26,7 @@ using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -333,7 +334,7 @@ namespace WatiN.Core
 				IHTMLElement activeElement = HtmlDocument.activeElement;
 				if (activeElement != null)
 				{
-					return Core.Element.GetTypedElement(domContainer, new IEElement(activeElement, null));
+					return Core.Element.GetTypedElement(domContainer,domContainer.NativeBrowser.CreateElement(activeElement, null));
 				}
 				return null;
 			}

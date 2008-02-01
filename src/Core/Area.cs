@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -56,7 +57,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="elementFinder">The element finder.</param>
-		public Area(DomContainer domContainer, ElementFinder elementFinder) : base(domContainer, elementFinder) {}
+		public Area(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area"/> class based on <paramref name="element"/>.

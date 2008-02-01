@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -57,7 +58,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="finder">The finder.</param>
-		public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) {}
+		public CheckBox(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="CheckBox"/> class based on <paramref name="element"/>.

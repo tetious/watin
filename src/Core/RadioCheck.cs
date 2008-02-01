@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -28,9 +29,9 @@ namespace WatiN.Core
 	/// </summary>
 	public class RadioCheck : Element
 	{
-		public RadioCheck(DomContainer ie, IHTMLInputElement inputElement) : base(ie, (IHTMLElement) inputElement) {}
+		public RadioCheck(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, (IHTMLElement) inputElement) {}
 
-		public RadioCheck(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public RadioCheck(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="RadioCheck"/> class based on <paramref name="element"/>.

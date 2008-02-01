@@ -174,12 +174,6 @@ namespace WatiN.Core
 			return new TableCollection(domContainer, domContainer.NativeBrowser.CreateElementFinder(Core.Table.ElementTags, elements));
 		}
 
-
-//    public static TableSectionCollection TableSections(IDomContainer domContainer, IElementCollection elements)
-//    {
-//      return new TableSectionCollection(ie, elements);
-//    }
-
 		public static TableCell TableCell(DomContainer domContainer, BaseConstraint findBy, IElementCollection elements)
 		{
 			return new TableCell(domContainer, domContainer.NativeBrowser.CreateElementFinder(Core.TableCell.ElementTags, findBy, elements));

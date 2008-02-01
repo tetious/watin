@@ -17,9 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using mshtml;
-using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
 
@@ -66,7 +64,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// This method must be overriden by all sub classes
 		/// </summary>
-		internal abstract IHTMLDocument2 OnGetHtmlDocument();
+		public abstract IHTMLDocument2 OnGetHtmlDocument();
 
 		/// <summary>
 		/// Returns the 'raw' html document for the internet explorer DOM.

@@ -18,6 +18,7 @@
 
 using System.Collections;
 using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -42,9 +43,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public Para(DomContainer ie, IHTMLParaElement htmlParaElement) : base(ie, (IHTMLElement) htmlParaElement) {}
+		public Para(DomContainer domContainer, IHTMLParaElement htmlParaElement) : base(domContainer, (IHTMLElement) htmlParaElement) {}
 
-		public Para(DomContainer ie, ElementFinder finder) : base(ie, finder) {}
+		public Para(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Para"/> class based on <paramref name="element"/>.
