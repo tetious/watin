@@ -290,11 +290,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IEElementFinder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IEWaitForComplete.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -711,6 +706,11 @@
                 />
                 <File
                     RelPath = "IE\IEElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IE\IEElementFinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

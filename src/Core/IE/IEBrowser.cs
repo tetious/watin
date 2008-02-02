@@ -22,11 +22,6 @@ namespace WatiN.Core.InternetExplorer
 			return new IEElementFinder(tagname, inputtypesString, baseConstraint, elements);
 		}
 
-		public INativeElement CreateElement(object element, INativeElementFinder finder)
-		{
-			return new IEElement(element, (IEElementFinder)finder);
-		}
-
 		public INativeElement CreateElement(object element)
 		{
 			return new IEElement(element, null);

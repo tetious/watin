@@ -21,6 +21,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests

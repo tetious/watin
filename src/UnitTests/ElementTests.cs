@@ -25,6 +25,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using StringComparer=WatiN.Core.Comparers.StringComparer;
 using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
@@ -34,7 +35,6 @@ namespace WatiN.Core.UnitTests
 	public class ElementTests : BaseWithIETests
 	{
 		private MockRepository mocks;
-		private IHTMLDOMNode node;
 		private Element element;
 
 		public override Uri TestPageUri

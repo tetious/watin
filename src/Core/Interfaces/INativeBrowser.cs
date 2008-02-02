@@ -8,7 +8,6 @@ namespace WatiN.Core.Interfaces
 		INativeElementFinder CreateElementFinder(ArrayList tags, BaseConstraint baseConstraint, IElementCollection elements);
 		INativeElementFinder CreateElementFinder(ArrayList tags, IElementCollection elements);
 		INativeElementFinder CreateElementFinder(string tagname, string inputtypesString, BaseConstraint baseConstraint, IElementCollection elements);
-		INativeElement CreateElement(object element, INativeElementFinder finder);
 		INativeElement CreateElement(object element);
 	}
 }

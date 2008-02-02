@@ -1233,7 +1233,7 @@ namespace WatiN.Core
 
 		internal static Element New(DomContainer domContainer, IHTMLElement element)
 		{
-			return GetTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(element, null));
+			return GetTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(element));
 		}
 	}
 }
