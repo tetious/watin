@@ -22,45 +22,51 @@ namespace WatiN.Core.DialogHandlers
 {
 	public class WinButton
 	{
-		private IntPtr hWnd;
+		private IHwnd _hWnd;
 
-		public WinButton(IntPtr Hwnd)
+		public WinButton(IntPtr Hwnd) : this(new Hwnd(Hwnd))
+		{}
+
+	    public WinButton(int buttonid, IntPtr parentHwnd) : this(buttonid, new Hwnd(parentHwnd))
+		{}
+
+		public WinButton(IHwnd Hwnd)
 		{
-			hWnd = Hwnd;
+			_hWnd = Hwnd;
 		}
 
-		public WinButton(int buttonid, IntPtr parentHwnd)
+		public WinButton(int buttonid, IHwnd parentHwnd)
 		{
-			hWnd = NativeMethods.GetDlgItem(parentHwnd, buttonid);
+			_hWnd = new Hwnd(parentHwnd.GetDlgItem(buttonid));
 		}
 
 		public void Click()
 		{
 			if (Exists())
 			{
-				NativeMethods.SendMessage(hWnd, NativeMethods.WM_ACTIVATE, NativeMethods.MA_ACTIVATE, 0);
-				NativeMethods.SendMessage(hWnd, NativeMethods.BM_CLICK, 0, 0);
+				_hWnd.SendMessage(NativeMethods.WM_ACTIVATE, NativeMethods.MA_ACTIVATE, 0);
+				_hWnd.SendMessage(NativeMethods.BM_CLICK, 0, 0);
 			}
 		}
 
 		public bool Exists()
 		{
-			return NativeMethods.IsWindow(hWnd);
+		    return _hWnd.IsWindow && _hWnd.ClassName.Equals("Button");
 		}
 
-		public string Title
+	    public string Title
 		{
-			get { return NativeMethods.GetWindowText(hWnd); }
+            get { return _hWnd.WindowText; }
 		}
 
 		public bool Enabled
 		{
-			get { return NativeMethods.IsWindowEnabled(hWnd); }
+            get { return _hWnd.IsWindowEnabled; }
 		}
 
 		public bool Visible
 		{
-			get { return NativeMethods.IsWindowVisible(hWnd); }
+            get { return _hWnd.IsWindowVisible; }
 		}
 	}
 }

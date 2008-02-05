@@ -575,6 +575,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DialogHandlers\Hwnd.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DialogHandlers\JavaDialogHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -741,6 +746,11 @@
                 />
                 <File
                     RelPath = "Interfaces\IElementsContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interfaces\IHwnd.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

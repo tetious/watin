@@ -414,6 +414,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DialogHandlerTests\WinButtonTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DialogHandlerTests\LogonDialogHandlerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
