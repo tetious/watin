@@ -790,48 +790,61 @@ namespace WatiN.Core.UnitTests
 
 
 #if NET20
-    [Test]
-    public void AncestorGenericType()
-    {
-      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+        [Test]
+        public void AncestorGenericType()
+        {
+            MockRepository mockRepository = new MockRepository();
 
-      Expect.Call(node.parentNode).Return(parentNode1);
-      Expect.Call(((IHTMLElement) parentNode1).tagName).Return("table").Repeat.Any();
-      
-      Expect.Call(parentNode1.parentNode).Return(parentNode2);
-      Expect.Call(((IHTMLElement) parentNode2).tagName).Return("div").Repeat.Any();
+            INativeElement nativeElement = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            INativeElement firstParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            INativeElement secondParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
 
-      mocks.ReplayAll();
+            element = new Element(null, nativeElement);
+            Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
+            Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 
-      Assert.That(element.Ancestor<Div>(), NUnit.Framework.SyntaxHelpers.Is.Not.Null);
-    	
-    }
+            Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
+            Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
 
-    [Test]
-    public void AncestorGenericTypeAndAttributeConstraintShouldReturnTypedElement()
-    {
-      IHTMLDOMNode parentNode1 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
-      IHTMLDOMNode parentNode2 = (IHTMLDOMNode) mocks.CreateMultiMock(typeof (IHTMLDOMNode), typeof (IHTMLElement));
+            mockRepository.ReplayAll();
 
-      Expect.Call(node.parentNode).Return(parentNode1);
-      IHTMLElement divElement1 = (IHTMLElement) parentNode1;
-      Expect.Call(divElement1.tagName).Return("div").Repeat.Any();
-      Expect.Call(divElement1.getAttribute("innertext",0)).Return("first ancestor");
-      
-      Expect.Call(parentNode1.parentNode).Return(parentNode2);
-      IHTMLElement divElement2 = (IHTMLElement) parentNode2;
-      Expect.Call(divElement2.tagName).Return("div").Repeat.Any();
-      Expect.Call(divElement2.getAttribute("innertext",0)).Return("second ancestor");
-      Expect.Call(divElement2.innerText).Return("second ancestor");
-      
-      mocks.ReplayAll();
+            Assert.That(element.Ancestor<Div>(), NUnit.Framework.SyntaxHelpers.Is.Not.Null);
 
-      Element ancestor = element.Ancestor<Div>(Find.ByText("second ancestor"));
-      
-      Assert.IsInstanceOfType(typeof (Div), ancestor);
-      Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
-    }
+        	mockRepository.VerifyAll();
+        }
+
+        [Test]
+        public void AncestorGenericTypeAndAttributeConstraintShouldReturnTypedElement()
+        {
+            MockRepository mockRepository = new MockRepository();
+
+            INativeElement nativeElement = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            INativeElement firstParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            IAttributeBag firstAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
+            INativeElement secondParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            IAttributeBag secondAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
+
+            element = new Element(null, nativeElement);
+            Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
+            Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
+            Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
+            Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
+
+            Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
+            Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
+            Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag);
+            Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
+            Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
+
+            mockRepository.ReplayAll();
+
+            Element ancestor = element.Ancestor<Div>(Find.ByText("second ancestor"));
+          
+            Assert.IsInstanceOfType(typeof (Div), ancestor);
+            Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
+            
+            mockRepository.VerifyAll();
+        }
 
 #endif
 	}
