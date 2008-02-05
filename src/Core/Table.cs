@@ -16,9 +16,11 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using mshtml;
+using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
@@ -100,8 +102,8 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Finds te first row that matches findText in inColumn defined as a TD html element.
-		/// If no match is found, null is returned.
+        /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, null is returned.
 		/// </summary>
 		/// <param name="findText">The text to find.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -112,12 +114,23 @@ namespace WatiN.Core
 
 			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findText, inColumn);
 
-			return findRow(constraint);
+            if (TextIsInBody(constraint))
+			{
+                return FindRow(constraint);
+			}
+		    return null;
 		}
 
-		/// <summary>
-		/// Finds te first row that matches findTextRegex in inColumn defined as a TD html element.
-		/// If no match is found, null is returned.
+        private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
+        {
+            string innertext = GetFirstTBody().innerText;
+
+            return (innertext != null && attributeConstraint.IsTextContainedIn(innertext));
+        }
+        
+        /// <summary>
+        /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
+        /// defined as a TD html element. If no match is found, null is returned.
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -131,17 +144,35 @@ namespace WatiN.Core
 			return FindRow(constraint);
 		}
 
-		private TableRow findRow(TableRowAttributeConstraint attributeConstraint)
+		/// <summary>
+        /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, null is returned.
+		/// </summary>
+		/// <param name="comparer">The comparer that the cell text must match.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+		public TableRow FindRow(ICompare comparer, int inColumn)
 		{
-			string innertext = GetFirstTBody().innerText;
+			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			if (innertext != null && attributeConstraint.IsTextContainedIn(innertext))
-			{
-				return FindRow(attributeConstraint);
-			}
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(comparer, inColumn);
 
-			return null;
+			return FindRow(constraint);
 		}
+
+#if NET20
+        /// <summary>
+        /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, null is returned.
+        /// </summary>
+        /// <param name="predicate">The predicate that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRow(Predicate<string> predicate, int inColumn)
+        {
+            return FindRow(new PredicateComparer(predicate), inColumn);
+        }
+#endif
 
 		public override string ToString()
 		{
