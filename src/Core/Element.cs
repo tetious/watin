@@ -95,6 +95,10 @@ namespace WatiN.Core
 
 		private void initElement(DomContainer domContainer, INativeElement nativeElement, INativeElementFinder elementFinder) 
 		{
+            if (domContainer == null)
+            {
+                throw new ArgumentNullException("domContainer", "Object needed for creating Native wrapper classes");
+            }
 			_domContainer = domContainer;
 			_nativeElement = nativeElement;
 			_elementFinder = elementFinder;
