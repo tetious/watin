@@ -116,6 +116,21 @@ namespace WatiN.Core.DialogHandlers
 			{
 				DownloadProgressDialog = window;
 
+                WinButton openOrRun= new WinButton(4377, new Hwnd(window.Hwnd));
+
+                if (openOrRun.Enabled)
+                {
+                    WinButton close = new WinButton(2, new Hwnd(window.Hwnd));
+
+                    close.Click();
+                    
+                    SimpleTimer timer = new SimpleTimer(5);
+                    while (!timer.Elapsed && window.Exists())
+                    {
+                        Thread.Sleep(200);
+                    }
+                }
+
 				return true;
 			}
 
