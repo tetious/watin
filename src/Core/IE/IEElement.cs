@@ -227,9 +227,9 @@ namespace WatiN.Core.InternetExplorer
 			}
 		}
 
-		public bool IsElementReferenceStillValid
+		public bool IsElementReferenceStillValid()
 		{
-			get
+			try
 			{
 				if (htmlElement.sourceIndex < 0)
 				{
@@ -243,6 +243,10 @@ namespace WatiN.Core.InternetExplorer
 					}
 				}
 				return true;
+			}
+			catch
+			{
+				return false;
 			}
 		}
 

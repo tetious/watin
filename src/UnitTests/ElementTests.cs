@@ -24,10 +24,12 @@ using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using StringComparer=WatiN.Core.Comparers.StringComparer;
 using Iz=NUnit.Framework.SyntaxHelpers.Is;
+using Texzt=NUnit.Framework.SyntaxHelpers.Text;
 
 namespace WatiN.Core.UnitTests
 {
@@ -46,6 +48,12 @@ namespace WatiN.Core.UnitTests
 		public override void TestSetUp()
 		{
 			base.TestSetUp();
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			IE.Settings.Reset();
 		}
 
 		[Test]
@@ -441,7 +449,7 @@ namespace WatiN.Core.UnitTests
 			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 
 			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(2);
-			Expect.Call(nativeElement.IsElementReferenceStillValid).Return(true).Repeat.Times(2);
+			Expect.Call(nativeElement.IsElementReferenceStillValid()).Return(true).Repeat.Times(2);
 			Expect.Call(attributeBag.GetValue("disabled")).Return(true.ToString()).Repeat.Once();
 			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
 
@@ -786,6 +794,72 @@ namespace WatiN.Core.UnitTests
 
 			textField.Highlight(false);
 			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		}
+
+		[Test]
+		public void ElementNotFoundExceptionShouldHaveInnerExceptionIfTheTimeOutExceptionHadOne()
+		{
+			IE.Settings.WaitUntilExistsTimeOut = 1;
+			
+			mocks = new MockRepository();
+
+			INativeElementFinder elementFinder = (INativeElementFinder) mocks.CreateMock(typeof (INativeElementFinder));
+			elementFinder.FindFirst();
+			LastCall.Throw(new Exception("My innerexception")).Repeat.AtLeastOnce();
+			
+			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
+			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
+			
+			element = new Element(null, elementFinder);
+
+			mocks.ReplayAll();
+
+			try
+			{
+				// kick off the elementFinder
+				INativeElement nativeElement = element.NativeElement;
+				Assert.Fail("ElementNotFoundException should be thrown");
+			}
+			catch(ElementNotFoundException e)
+			{
+				Assert.That(e.InnerException != null, "Expected an innerexception");
+				Assert.That(e.Message, Texzt.EndsWith("(inner exception: My innerexception)"));
+			}
+
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ElementNotFoundExceptionShouldHaveNoInnerExceptionIfTheTimeOutExceptionHadNone()
+		{
+			IE.Settings.WaitUntilExistsTimeOut = 1;
+			
+			mocks = new MockRepository();
+
+			INativeElementFinder elementFinder = (INativeElementFinder) mocks.CreateMock(typeof (INativeElementFinder));
+			elementFinder.FindFirst();
+			LastCall.Return(null).Repeat.AtLeastOnce();
+			
+			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
+			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
+			
+			element = new Element(null, elementFinder);
+
+			mocks.ReplayAll();
+
+			try
+			{
+				// kick off the elementFinder
+				INativeElement nativeElement = element.NativeElement;
+				Assert.Fail("ElementNotFoundException should be thrown");
+			}
+			catch(ElementNotFoundException e)
+			{
+				Assert.That(e.InnerException == null, "Expected an innerexception");
+				Assert.That(e.Message, Texzt.DoesNotEndWith("(inner exception: My innerexception)"));
+			}
+
+			mocks.VerifyAll();
 		}
 
 

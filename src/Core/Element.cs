@@ -89,7 +89,7 @@ namespace WatiN.Core
 			}
 			else
 			{
-				throw new ArgumentException(String.Format("Expected element {0}", IEElementFinder.GetExceptionMessage(elementTags)), "element");
+				throw new ArgumentException(String.Format("Expected element {0}", ElementTag.ElementTagsToString(elementTags)), "element");
 			}
 		}
 
@@ -656,9 +656,16 @@ namespace WatiN.Core
 					{
 						WaitUntilExists();
 					}
-					catch (WatiN.Core.Exceptions.TimeoutException)
+					catch (WatiN.Core.Exceptions.TimeoutException e)
 					{
-						throw _elementFinder.CreateElementNotFoundException();
+						if(e.InnerException == null)
+						{
+							throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString);
+						}
+						else
+						{
+							throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString, e.InnerException);
+						}
 					}
 				}
 
@@ -940,14 +947,7 @@ namespace WatiN.Core
 				// or a more specialized element collection (like TextFieldCollection)
 				if (_nativeElement != null)
 				{
-					try
-					{
-						if (_nativeElement.IsElementReferenceStillValid == false)
-						{
-							_nativeElement = null;
-						}
-					}
-					catch
+					if (_nativeElement.IsElementReferenceStillValid() == false)
 					{
 						_nativeElement = null;
 					}

@@ -185,5 +185,21 @@ namespace WatiN.Core
 		{
 			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
 		}
+
+		public static string ElementTagsToString(ArrayList elementTags)
+		{
+			string elementTagsString = String.Empty;
+
+			foreach (ElementTag elementTag in elementTags)
+			{
+				if (elementTagsString.Length > 0)
+				{
+					elementTagsString = elementTagsString + " or ";
+				}
+				elementTagsString = elementTagsString + elementTag.ToString();
+			}
+
+			return elementTagsString;
+		}
 	}
 }

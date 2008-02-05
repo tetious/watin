@@ -79,11 +79,6 @@ namespace WatiN.Core.InternetExplorer
 
 		public virtual INativeElement FindFirst()
 		{
-			return FindFirst(false);
-		}
-
-		public virtual INativeElement FindFirst(bool throwExceptionIfElementNotFound)
-		{
 			foreach (ElementTag elementTag in tagsToFind)
 			{
 				ArrayList elements = findElementsByAttribute(elementTag, findBy, true);
@@ -94,22 +89,22 @@ namespace WatiN.Core.InternetExplorer
 				}
 			}
 
-			if (throwExceptionIfElementNotFound)
-			{
-				throw CreateElementNotFoundException();
-			}
-
 			return null;
 		}
 
-		public ElementNotFoundException CreateElementNotFoundException()
+		public string ElementTagsToString
 		{
-			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.ConstraintToString());
+			get { return ElementTag.ElementTagsToString(tagsToFind); }
+		}
+
+		public string ConstriantToString
+		{
+			get { return findBy.ConstraintToString(); }
 		}
 
 		internal ElementNotFoundException CreateElementNotFoundException(Exception innerexception)
 		{
-			return new ElementNotFoundException(GetExceptionMessage(tagsToFind), findBy.ConstraintToString(), innerexception);
+			return new ElementNotFoundException(ElementTag.ElementTagsToString(tagsToFind), findBy.ConstraintToString(), innerexception);
 		}
 
 		public void AddElementTag(string tagName, string inputType)
@@ -216,22 +211,6 @@ namespace WatiN.Core.InternetExplorer
 			} while (!timeoutTimer.Elapsed);
 
 			throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
-		}
-
-		internal static string GetExceptionMessage(ArrayList elementTags)
-		{
-			string message = String.Empty;
-
-			foreach (ElementTag elementTag in elementTags)
-			{
-				if (message.Length > 0)
-				{
-					message = message + " or ";
-				}
-				message = message + elementTag.ToString();
-			}
-
-			return message;
 		}
 	}
 }

@@ -76,7 +76,7 @@ namespace WatiN.Core.Interfaces
 
 		IAttributeBag AttributeBag { get; }
 
-		bool IsElementReferenceStillValid { get; }
+		bool IsElementReferenceStillValid();
 
 		string TagName { get; }
 	}
