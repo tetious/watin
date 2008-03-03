@@ -148,38 +148,75 @@ namespace WatiN.Core.InternetExplorer
 		private ArrayList findElementsByAttribute(ElementTag elementTag, BaseConstraint findBy, bool returnAfterFirstMatch)
 		{
 			// Get elements with the tagname from the page
-			ArrayList children = new ArrayList();
-			IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
+		    findBy.Reset();
+            Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
+            ElementAttributeBag attributeBag = new ElementAttributeBag();
 
-			findBy.Reset();
-
-			if (elements != null)
-			{
-				ElementAttributeBag attributeBag = new ElementAttributeBag();
-
-				// Loop through each element and evaluate
-				foreach (IHTMLElement element in elements)
-				{
-					IEElement ieElement = new IEElement(element, null);
-					waitUntilElementReadyStateIsComplete(element);
-
-					attributeBag.IHTMLElement = element;
-
-					if (elementTag.Compare(ieElement) && findBy.Compare(attributeBag))
-					{
-						children.Add(element);
-						if (returnAfterFirstMatch)
-						{
-							return children;
-						}
-					}
-				}
-			}
-
-			return children;
+            if (FindByExactMatchOnId(findBy, constraint))
+            {
+                return FindElementById(findBy, elementTag, attributeBag, returnAfterFirstMatch);
+            }
+            return FindElements(findBy, elementTag, attributeBag, returnAfterFirstMatch);
 		}
 
-		private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)
+	    private ArrayList FindElements(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch)
+	    {
+            ArrayList children = new ArrayList();
+            IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
+
+	        if (elements != null)
+	        {
+
+	            // Loop through each element and evaluate
+	            foreach (IHTMLElement element in elements)
+	            {
+                    if (!AddToChildrenIfConstraintsAreMet(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children))
+	                {
+	                    return children;
+	                }
+	            }
+	        }
+
+	        return children;
+	    }
+
+	    private ArrayList FindElementById(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch)
+	    {
+            ArrayList children = new ArrayList();
+
+	        IHTMLElement element = elementTag.GetElementById(elementCollection.Elements, ((AttributeConstraint)findBy).Value);
+
+	        if (element != null)
+	        {
+	            AddToChildrenIfConstraintsAreMet(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children);
+	        }
+	        return children;
+	    }
+
+	    private bool AddToChildrenIfConstraintsAreMet(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
+	    {            
+            IEElement ieElement = new IEElement(element, null);
+	        waitUntilElementReadyStateIsComplete(element);
+
+	        attributeBag.IHTMLElement = element;
+
+	        if (elementTag.Compare(ieElement) && findBy.Compare(attributeBag))
+	        {
+	            children.Add(element);
+	            if (returnAfterFirstMatch)
+	            {
+	                return false;
+	            }
+	        }
+	        return true;
+	    }
+
+	    private bool FindByExactMatchOnId(BaseConstraint findBy, Constraints.AttributeConstraint constraint)
+	    {
+	        return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
+	    }
+
+	    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)
 		{
 			//TODO: See if this method could be dropped, it seems to give
 			//      more trouble (uninitialized state of elements)

@@ -94,6 +94,21 @@ namespace WatiN.Core
 			return (IHTMLElementCollection) elements.tags(TagName);
 		}
 
+        public IHTMLElement GetElementById(IHTMLElementCollection elements, string id)
+		{
+			if (elements == null) return null;
+
+            IHTMLElementCollection3 elementCollection3 = elements as IHTMLElementCollection3;
+            
+            if (elementCollection3 == null) return null;
+            
+            object item = elementCollection3.namedItem(id);
+            if ((item as IHTMLElement) != null) return (IHTMLElement) item;
+            if ((item as IHTMLElementCollection) != null) return (IHTMLElement)((IHTMLElementCollection) item).item(null,0);
+
+            return null;
+		}
+
 		public bool Compare(INativeElement nativeElement)
 		{
 			if (nativeElement == null) return false;

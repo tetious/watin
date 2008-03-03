@@ -42,7 +42,17 @@ namespace WatiN.Core.Constraints
 			return new NotConstraint(baseConstraint);
 		}
 
-		/// <summary>
+	    public bool HasOr
+	    {
+	        get { return _orBaseConstraint != null; }
+	    }
+
+	    public bool HasAnd
+	    {
+            get { return _andBaseConstraint != null; }
+	    }
+
+	    /// <summary>
 		/// This methode implements an exact match comparison. If you want
 		/// different behaviour, inherit this class or one of its subclasses and 
 		/// override Compare with a specific implementation. 
