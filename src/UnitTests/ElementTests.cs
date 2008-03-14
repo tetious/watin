@@ -87,8 +87,9 @@ namespace WatiN.Core.UnitTests
 			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 			INativeElement secondParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+            DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] {});
 
-			element = new Element(null, nativeElement); 
+            element = new Element(domContainer, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
@@ -120,8 +121,9 @@ namespace WatiN.Core.UnitTests
 			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
 			INativeElement secondParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-			element = new Element(null, nativeElement); 
+			element = new Element(domContainer, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag).Repeat.Any();
@@ -151,8 +153,9 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-			element = new Element(null, nativeElement); 
+			element = new Element(domContainer, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(null);
 
 			mockRepository.ReplayAll();
@@ -223,15 +226,16 @@ namespace WatiN.Core.UnitTests
 
 			INativeElementFinder finder = (INativeElementFinder) mocks.CreateMock(typeof (INativeElementFinder));
 			INativeElement nativeElement = (INativeElement) mocks.CreateMock(typeof (INativeElement));
+            DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
 
-			element = new Element(null, finder);
+			element = new Element(domContainer, finder);
 
 			Expect.Call(finder.FindFirst()).Return(nativeElement).Repeat.Twice();
 			SetupResult.For(nativeElement.GetAttributeValue("tagName")).Return("mockedtag");
 
 			mocks.ReplayAll();
 
-			element = new Element(null, finder);
+			element = new Element(domContainer, finder);
 
 			Assert.AreEqual("mockedtag", element.TagName);
 
@@ -447,6 +451,7 @@ namespace WatiN.Core.UnitTests
 
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+            DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
 			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(2);
 			Expect.Call(nativeElement.IsElementReferenceStillValid()).Return(true).Repeat.Times(2);
@@ -455,7 +460,7 @@ namespace WatiN.Core.UnitTests
 
 			mockRepository.ReplayAll();
 
-			Element element = new Element(null, nativeElement);
+			Element element = new Element(domContainer, nativeElement);
 
 			// calls htmlelement.getAttribute twice (ones true and once false is returned)
 			element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
@@ -470,11 +475,12 @@ namespace WatiN.Core.UnitTests
 
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
+            DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
 			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(1);
 			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
 
-			element = (Element) mockRepository.DynamicMock(typeof (Element),(DomContainer) null, nativeElement);
+			element = (Element) mockRepository.DynamicMock(typeof (Element),domContainer, nativeElement);
 
 			Expect.Call(element.Exists).Return(true);
 
@@ -492,8 +498,9 @@ namespace WatiN.Core.UnitTests
 
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
 			INativeElementFinder elementFinder = (INativeElementFinder) mockRepository.CreateMock(typeof (INativeElementFinder));
+            DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-			element = new Element(null, elementFinder);
+			element = new Element(domContainer, elementFinder);
 
 			Expect.Call(elementFinder.FindFirst()).Return(null).Repeat.Times(5);
 			Expect.Call(elementFinder.FindFirst()).Throw(new UnauthorizedAccessException("")).Repeat.Times(4);
@@ -514,6 +521,7 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 			IEElementFinder finder = (IEElementFinder) mockRepository.CreateMock(typeof (IEElementFinder), null, elementCollection);
 
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
@@ -521,7 +529,7 @@ namespace WatiN.Core.UnitTests
 
 			mockRepository.ReplayAll();
 
-			Element element = new Element(null, finder);
+			Element element = new Element(domContainer, finder);
 
 			WatiN.Core.Exceptions.TimeoutException timeoutException = null;
 
@@ -546,14 +554,15 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
-			IEElementFinder finder = (IEElementFinder) mockRepository.DynamicMock(typeof (IEElementFinder), null, elementCollection);
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
+            IEElementFinder finder = (IEElementFinder) mockRepository.DynamicMock(typeof (IEElementFinder), null, elementCollection);
 
 			Expect.Call(finder.FindFirst()).Throw(new Exception(""));
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("mockUnauthorizedAccessException")).Repeat.AtLeastOnce();
 
 			mockRepository.ReplayAll();
 
-			element = new Element(null, finder);
+			element = new Element(domContainer, finder);
 
 			WatiN.Core.Exceptions.TimeoutException timeoutException = null;
 
@@ -579,7 +588,8 @@ namespace WatiN.Core.UnitTests
 			MockRepository mockRepository = new MockRepository();
 
 			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
-			Element mockElement = (Element) mockRepository.DynamicMock(typeof (Element), null, nativeElement);
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
+            Element mockElement = (Element)mockRepository.DynamicMock(typeof(Element), domContainer, nativeElement);
 
 			Expect.Call(mockElement.Exists).Repeat.Never();
 
@@ -809,8 +819,9 @@ namespace WatiN.Core.UnitTests
 			
 			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
 			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
-			
-			element = new Element(null, elementFinder);
+
+            DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
+			element = new Element(domContainer, elementFinder);
 
 			mocks.ReplayAll();
 
@@ -842,8 +853,9 @@ namespace WatiN.Core.UnitTests
 			
 			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
 			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
-			
-			element = new Element(null, elementFinder);
+
+            DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
+			element = new Element(domContainer, elementFinder);
 
 			mocks.ReplayAll();
 
@@ -872,8 +884,9 @@ namespace WatiN.Core.UnitTests
             INativeElement nativeElement = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
             INativeElement firstParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
             INativeElement secondParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-            element = new Element(null, nativeElement);
+            element = new Element(domContainer, nativeElement);
             Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
             Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
 
@@ -897,8 +910,9 @@ namespace WatiN.Core.UnitTests
             IAttributeBag firstAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
             INativeElement secondParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
             IAttributeBag secondAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
+            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-            element = new Element(null, nativeElement);
+            element = new Element(domContainer, nativeElement);
             Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
             Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
             Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
