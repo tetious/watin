@@ -803,7 +803,7 @@ namespace WatiN.Core
 					// against some cached reference.
 					if (Exists)
 					{
-						if (constraint.Compare(NativeElement.AttributeBag))
+						if (constraint.Compare(NativeElement.GetAttributeBag(_domContainer)))
 						{
 							return;
 						}
@@ -1228,7 +1228,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			return NativeElement.AttributeBag.GetValue(attributename);
+			return NativeElement.GetAttributeBag(_domContainer).GetValue(attributename);
 		}
 
 		internal static Element New(DomContainer domContainer, IHTMLElement element)

@@ -214,20 +214,17 @@ namespace WatiN.Core.InternetExplorer
 			get { return _element; }
 		}
 
-		public IAttributeBag AttributeBag
-		{
-			get 
-			{
-				if (_attributeBag == null)
-				{
-					_attributeBag = new ElementAttributeBag();
-				}
-				_attributeBag.IHTMLElement = htmlElement;
-				return _attributeBag;
-			}
-		}
+	    public IAttributeBag GetAttributeBag(DomContainer domContainer)
+	    {
+	        if (_attributeBag == null)
+	        {
+	            _attributeBag = new ElementAttributeBag(domContainer);
+	        }
+	        _attributeBag.IHTMLElement = htmlElement;
+	        return _attributeBag;
+	    }
 
-		public bool IsElementReferenceStillValid()
+	    public bool IsElementReferenceStillValid()
 		{
 			try
 			{

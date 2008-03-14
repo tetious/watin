@@ -74,9 +74,9 @@ namespace WatiN.Core.Interfaces
 
 		string BackgroundColor { get; set; }
 
-		IAttributeBag AttributeBag { get; }
+	    IAttributeBag GetAttributeBag(DomContainer domContainer);
 
-		bool IsElementReferenceStillValid();
+	    bool IsElementReferenceStillValid();
 
 		string TagName { get; }
 	}

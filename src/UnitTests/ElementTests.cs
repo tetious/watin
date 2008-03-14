@@ -92,12 +92,12 @@ namespace WatiN.Core.UnitTests
             element = new Element(domContainer, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
+			Expect.Call(firstParentDiv.GetAttributeBag(domContainer)).Return(firstAttributeBag);
 			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
 			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
 			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag);
+			Expect.Call(secondParentDiv.GetAttributeBag(domContainer)).Return(secondAttributeBag);
 			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
 			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 
@@ -126,13 +126,13 @@ namespace WatiN.Core.UnitTests
 			element = new Element(domContainer, nativeElement); 
 			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
 			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag).Repeat.Any();
+			Expect.Call(firstParentDiv.GetAttributeBag(domContainer)).Return(firstAttributeBag).Repeat.Any();
 			Expect.Call(firstAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
 			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
 			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
 			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag).Repeat.Any();
+			Expect.Call(secondParentDiv.GetAttributeBag(domContainer)).Return(secondAttributeBag).Repeat.Any();
 			Expect.Call(secondAttributeBag.GetValue("tagname")).Return("div").Repeat.Any();
 			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
 			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
@@ -453,7 +453,7 @@ namespace WatiN.Core.UnitTests
 			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
             DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(2);
+			Expect.Call(nativeElement.GetAttributeBag(domContainer)).Return(attributeBag).Repeat.Times(2);
 			Expect.Call(nativeElement.IsElementReferenceStillValid()).Return(true).Repeat.Times(2);
 			Expect.Call(attributeBag.GetValue("disabled")).Return(true.ToString()).Repeat.Once();
 			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
@@ -477,7 +477,7 @@ namespace WatiN.Core.UnitTests
 			IAttributeBag attributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
             DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
 
-			Expect.Call(nativeElement.AttributeBag).Return(attributeBag).Repeat.Times(1);
+			Expect.Call(nativeElement.GetAttributeBag(domContainer)).Return(attributeBag).Repeat.Times(1);
 			Expect.Call(attributeBag.GetValue("disabled")).Return(false.ToString()).Repeat.Once();
 
 			element = (Element) mockRepository.DynamicMock(typeof (Element),domContainer, nativeElement);
@@ -915,12 +915,12 @@ namespace WatiN.Core.UnitTests
             element = new Element(domContainer, nativeElement);
             Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
             Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
-            Expect.Call(firstParentDiv.AttributeBag).Return(firstAttributeBag);
+            Expect.Call(firstParentDiv.GetAttributeBag(domContainer)).Return(firstAttributeBag);
             Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
 
             Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
             Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
-            Expect.Call(secondParentDiv.AttributeBag).Return(secondAttributeBag);
+            Expect.Call(secondParentDiv.GetAttributeBag(domContainer)).Return(secondAttributeBag);
             Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
             Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
 

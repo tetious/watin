@@ -31,15 +31,21 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{
-		private IHTMLElement element = null;
+		private IHTMLElement _htmlElement = null;
 		private Element _element = null;
 		private Element _elementTyped;
+	    private DomContainer _domContainer;
 
-		public ElementAttributeBag() {}
+	    public ElementAttributeBag() {}
 
 		public ElementAttributeBag(IHTMLElement element)
 		{
 			IHTMLElement = element;
+		}
+
+        public ElementAttributeBag(DomContainer domContainer)
+		{
+            DomContainer = domContainer;
 		}
 
 		/// <summary>
@@ -48,11 +54,17 @@ namespace WatiN.Core
 		/// <value>The IHTMLelement.</value>
 		public IHTMLElement IHTMLElement
 		{
-			get { return element; }
-			set { element = value; }
+			get { return _htmlElement; }
+			set { _htmlElement = value; }
 		}
 
-		/// <summary>
+        public DomContainer DomContainer
+        {
+            get { return _domContainer; }
+            set { _domContainer = value; }
+        }
+        
+        /// <summary>
 		/// Returns a typed Element instance that can be casted to an ElementsContainer.
 		/// </summary>
 		/// <value>The element.</value>
@@ -62,7 +74,7 @@ namespace WatiN.Core
 			{
 				if (_element == null)
 				{
-					_element = new ElementsContainer(null, IHTMLElement);
+					_element = new ElementsContainer(DomContainer, IHTMLElement);
 				}
 
 				return _element;
@@ -79,14 +91,14 @@ namespace WatiN.Core
 			{
 				if (_elementTyped == null)
 				{
-					_elementTyped = Element.GetTypedElement(null, new IEElement(IHTMLElement, null));
+					_elementTyped = Element.GetTypedElement(DomContainer, new IEElement(IHTMLElement,null));
 				}
 
 				return _elementTyped;
 			}
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the value for the given <paramref name="attributename" />
 		/// </summary>
 		/// <param name="attributename">The attributename.</param>
@@ -95,18 +107,18 @@ namespace WatiN.Core
 		{
 			if (StringComparer.AreEqual(attributename, "style", true))
 			{
-				return element.style.cssText;
+				return _htmlElement.style.cssText;
 			}
 
 			object attributeValue;
 
 			if (attributename.ToLower(CultureInfo.InvariantCulture).StartsWith("style."))
 			{
-				attributeValue = Style.GetAttributeValue(attributename.Substring(6), element.style);
+				attributeValue = Style.GetAttributeValue(attributename.Substring(6), _htmlElement.style);
 			}
 			else
 			{
-				attributeValue = element.getAttribute(attributename, 0);
+				attributeValue = _htmlElement.getAttribute(attributename, 0);
 			}
 
 			if (attributeValue == DBNull.Value)
