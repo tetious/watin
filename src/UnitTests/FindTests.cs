@@ -242,7 +242,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindByUrl()
 		{
-			string url = BaseWithIETests.WatiNURI.ToString();
+            string url = BaseWithIETests.WatiNURI.AbsoluteUri;
 			AttributeConstraint value = Find.ByUrl(url);
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Url class should inherit AttributeConstraint class");
@@ -286,9 +286,9 @@ namespace WatiN.Core.UnitTests
 		private static void AssertUrlValue(AttributeConstraint value)
 		{
 			Assert.AreEqual(_href, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual(BaseWithIETests.WatiNURI.ToString(), value.Value, "Wrong value");
+			Assert.AreEqual(BaseWithIETests.WatiNURI.AbsoluteUri, value.Value, "Wrong value");
 
-			MockAttributeBag attributeBag = new MockAttributeBag(_href, BaseWithIETests.WatiNURI.ToString());
+            MockAttributeBag attributeBag = new MockAttributeBag(_href, BaseWithIETests.WatiNURI.AbsoluteUri);
 
 			Assert.IsTrue(value.Compare(attributeBag), "Should match WatiN url");
 
@@ -321,7 +321,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (UriFormatException))]
 		public void FindByUrlInvalidCompare()
 		{
-			BaseConstraint value = Find.ByUrl(BaseWithIETests.WatiNURI.ToString());
+            BaseConstraint value = Find.ByUrl(BaseWithIETests.WatiNURI.AbsoluteUri);
 			MockAttributeBag attributeBag = new MockAttributeBag(_href, "watin.sourceforge.net");
 
 			value.Compare(attributeBag);

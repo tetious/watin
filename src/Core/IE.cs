@@ -752,10 +752,10 @@ namespace WatiN.Core
 
 		private void navigateTo(Uri url)
 		{
-			Logger.LogAction("Navigating to '" + url + "'");
+			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
 
 			object nil = null;
-			ie.Navigate(url.ToString(), ref nil, ref nil, ref nil, ref nil);
+			ie.Navigate(url.AbsoluteUri, ref nil, ref nil, ref nil, ref nil);
 		}
 
 		/// <summary>

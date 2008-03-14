@@ -19,6 +19,7 @@
 using System;
 using System.Globalization;
 using System.Threading;
+using System.Web;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
@@ -113,6 +114,16 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
+		public void ToStringTestWithEncodedQueryString()
+		{
+            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+
+			UriComparer comparer = new UriComparer(new Uri(url));
+
+			Assert.That(comparer.ToString(), Is.EqualTo(url));
+		}
+
+		[Test]
 		public void CompareShouldBeCultureInvariant()
 		{
 			// Get the tr-TR (Turkish-Turkey) culture.
@@ -136,6 +147,15 @@ namespace WatiN.Core.UnitTests
 				Thread.CurrentThread.CurrentCulture = thisCulture;
 			}
 		}
+
+        [Test]
+        public void ShoudlFindMatchUrlWithEncodedQueryString()
+        {
+            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+
+            ICompare comparer = new UriComparer(new Uri(url));
+            Assert.That(comparer.Compare(url), Is.True);
+        }
 
 	}
 }

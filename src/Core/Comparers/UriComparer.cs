@@ -72,20 +72,20 @@ namespace WatiN.Core.Comparers
 			{
 				// trim querystrings
 				string trimmedUrl = TrimQueryString(url);
-				string trimmedCompareUrl = TrimQueryString(uriToCompareWith);
+				string trimmedUrlToCompareWith = TrimQueryString(uriToCompareWith);
 				// compare trimmed urls.
-				return (string.Compare(trimmedUrl, trimmedCompareUrl, true) == 0);
+				return (string.Compare(trimmedUrl, trimmedUrlToCompareWith, true) == 0);
 			}
 		}
 
 		private static string TrimQueryString(Uri url)
 		{
-			return url.ToString().Split('?')[0];
+			return url.AbsoluteUri.Split('?')[0];
 		}
 
 		public override string ToString()
 		{
-			return uriToCompareWith.ToString();
+			return uriToCompareWith.AbsoluteUri;
 		}
 	}
 }

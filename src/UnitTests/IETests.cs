@@ -21,9 +21,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Web;
 using System.Windows.Forms;
 using mshtml;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
@@ -84,6 +86,26 @@ namespace WatiN.Core.UnitTests
 				ie.Button(Find.ByName("btnG")).Click();
 
 				Assert.IsTrue(ie.ContainsText("WatiN"));
+			}
+		}
+
+		[Test, Category("InternetConnectionNeeded")]
+		public void GoogleSearchWithEncodedQueryString()
+		{
+			// Instantiate a new DebugLogger to output "user" events to
+			// the debug window in VS
+			Logger.LogWriter = new DebugLogWriter();
+
+            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+
+            using (IE ie = new IE(url))
+			{
+                Assert.That(ie.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
+			}
+            using (IE ie = new IE())
+			{
+                ie.GoTo(url);
+                Assert.That(ie.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
 			}
 		}
 
@@ -201,7 +223,7 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "NewIEWithUrlAndLogonDialogHandler");
 
-			string url = MainURI.ToString();
+            string url = MainURI.AbsoluteUri;
 			LogonDialogHandler logon = new LogonDialogHandler("y", "z");
 
 			using (IE ie = new IE(url, logon))
@@ -227,7 +249,7 @@ namespace WatiN.Core.UnitTests
 		{
 			using (IE ie = new IE())
 			{
-				string url = MainURI.ToString();
+                string url = MainURI.AbsoluteUri;
 
 				ie.GoTo(url);
 
@@ -319,7 +341,7 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "NewIEWithUrl");
 
-			string url = MainURI.ToString();
+            string url = MainURI.AbsoluteUri;
 
 			using (IE ie = new IE(url))
 			{
@@ -335,7 +357,7 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "Reopen");
 
-			string url = MainURI.ToString();
+            string url = MainURI.AbsoluteUri;
 			using (IE ie = new IE(url))
 			{
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
@@ -626,7 +648,7 @@ namespace WatiN.Core.UnitTests
 		public void NewUriAboutBlank()
 		{
 			Uri uri = new Uri("about:blank");
-			Assert.AreEqual("about:blank", uri.ToString());
+            Assert.AreEqual("about:blank", uri.AbsoluteUri);
 		}
 
 		[Test]
