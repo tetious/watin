@@ -116,7 +116,7 @@ namespace WatiN.Core
 
 		public bool Exists(BaseConstraint findBy)
 		{
-			ElementAttributeBag attributeBag = new ElementAttributeBag();
+			ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
 
 			foreach (IHTMLElement element in Elements)
 			{
@@ -148,7 +148,7 @@ namespace WatiN.Core
 			else
 			{
 				returnElements = new ArrayList();
-				ElementAttributeBag attributeBag = new ElementAttributeBag();
+				ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
 
 				foreach (IHTMLElement element in Elements)
 				{

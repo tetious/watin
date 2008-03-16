@@ -38,14 +38,14 @@ namespace WatiN.Core
 
 	    public ElementAttributeBag() {}
 
+        public ElementAttributeBag(DomContainer domContainer)
+        {
+            _domContainer = domContainer;
+        }
+
 		public ElementAttributeBag(IHTMLElement element)
 		{
 			IHTMLElement = element;
-		}
-
-        public ElementAttributeBag(DomContainer domContainer)
-		{
-            DomContainer = domContainer;
 		}
 
 		/// <summary>
