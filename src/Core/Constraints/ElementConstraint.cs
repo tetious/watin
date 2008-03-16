@@ -36,10 +36,7 @@ namespace WatiN.Core.Constraints
 			{
 				return _comparer.Compare(elementAttributeBag.ElementTyped);
 			}
-			else
-			{
-				throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
-			}
+		    throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
 		}
 
 		public override string ConstraintToString()
