@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using mshtml;
@@ -29,8 +30,9 @@ namespace WatiN.Core
 		protected DomContainer _domContainer;
 		protected SimpleTimer _waitForCompleteTimeout;
         protected int _waitForCompleteTimeOut;
+	    private int _milliSecondsTimeOut = 100;
 
-        /// <summary>
+	    /// <summary>
         /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
         /// <seealso cref="IE.Settings.WaitForCompleteTimeOut"/> seconds.
         /// </summary>
@@ -47,19 +49,31 @@ namespace WatiN.Core
             _waitForCompleteTimeOut = waitForCompleteTimeOut;
 		}
 
-		/// <summary>
+	    public int MilliSecondsTimeOut
+	    {
+	        get { return _milliSecondsTimeOut; }
+	        set { _milliSecondsTimeOut = value; }
+	    }
+
+	    /// <summary>
 		/// This method calls InitTimeOut and waits till IE is ready
 		/// processing or the timeout period has expired.
 		/// </summary>
 		public virtual void DoWait()
 		{
-			Thread.Sleep(100);
+			Sleep("DoWait");
 
 			InitTimeout();
 			WaitForCompleteOrTimeout();
 		}
 
-		/// <summary>
+        public virtual void Sleep(string logMessage)
+	    {
+            Console.WriteLine(logMessage + ": Waiting " + MilliSecondsTimeOut);
+	        Thread.Sleep(MilliSecondsTimeOut);
+	    }
+
+	    /// <summary>
 		/// This method waits till IE is ready processing 
 		/// or the timeout period has expired. You should
 		/// call InitTimeout prior to calling this method.
@@ -122,8 +136,8 @@ namespace WatiN.Core
 			while (document.readyState != "complete")
 			{
 				ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");
-				Thread.Sleep(100);
-			}
+                Sleep("WaitWhileDocumentStateNotComplete");
+            }
 		}
 
 		/// <summary>
@@ -157,8 +171,8 @@ namespace WatiN.Core
 			{
 				ThrowExceptionWhenTimeout("waiting for main document becoming available");
 
-				Thread.Sleep(100);
-			}
+                Sleep("WaitWhileMainDocumentNotAvailable");
+            }
 		}
 
 		protected virtual void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
@@ -167,8 +181,8 @@ namespace WatiN.Core
 			{
 				ThrowExceptionWhenTimeout("waiting for frame document becoming available");
 
-				Thread.Sleep(100);
-			}
+                Sleep("WaitWhileFrameDocumentNotAvailable");
+            }
 		}
 
 		protected virtual IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
@@ -219,8 +233,8 @@ namespace WatiN.Core
 			{
 				ThrowExceptionWhenTimeout("Internet Explorer state not complete");
 
-				Thread.Sleep(100);
-			}
+                Sleep("waitWhileIEStateNotComplete");
+            }
 		}
 
 		protected virtual bool IsIEReadyStateComplete(IWebBrowser2 ie)
@@ -237,14 +251,12 @@ namespace WatiN.Core
 
 		protected virtual void WaitWhileIEBusy(IWebBrowser2 ie)
 		{
-			Thread.Sleep(100);
-
 			while (IsIEBusy(ie))
 			{
 				ThrowExceptionWhenTimeout("Internet Explorer busy");
 
-				Thread.Sleep(100);
-			}
+                Sleep("WaitWhileIEBusy 2");
+            }
 		}
 
 		protected virtual bool IsIEBusy(IWebBrowser2 ie)

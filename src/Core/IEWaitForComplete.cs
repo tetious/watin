@@ -38,7 +38,7 @@ namespace WatiN.Core
 
 	    public override void DoWait()
 		{
-			Thread.Sleep(100);
+//			Sleep("DoWait IEWaitForComplete");
 
 			InitTimeout();
 
