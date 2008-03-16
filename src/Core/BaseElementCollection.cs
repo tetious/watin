@@ -132,39 +132,39 @@ namespace WatiN.Core
 
 		protected ArrayList DoFilter(BaseConstraint findBy)
 		{
-			ArrayList returnElements;
-
 			if (elements == null)
 			{
-				if (finder != null)
+			    if (finder != null)
 				{
-					returnElements = finder.FindAll(findBy);
+					return finder.FindAll(findBy);
 				}
-				else
-				{
-					returnElements = new ArrayList();
-				}
+			    
+                return new ArrayList();
 			}
-			else
-			{
-				returnElements = new ArrayList();
-				ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
-
-				foreach (IHTMLElement element in Elements)
-				{
-					attributeBag.IHTMLElement = element;
-
-					if (findBy.Compare(attributeBag))
-					{
-						returnElements.Add(element);
-					}
-				}
-			}
-
-			return returnElements;
+		    
+            return FilterElements(findBy);
 		}
 
-		/// <exclude />
+	    private ArrayList FilterElements(BaseConstraint findBy)
+	    {
+	        ArrayList returnElements;
+	        returnElements = new ArrayList();
+	        ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
+
+	        foreach (IHTMLElement element in Elements)
+	        {
+	            attributeBag.IHTMLElement = element;
+
+	            if (findBy.Compare(attributeBag))
+	            {
+	                returnElements.Add(element);
+	            }
+	        }
+
+	        return returnElements;
+	    }
+
+	    /// <exclude />
 		public Enumerator GetEnumerator()
 		{
 			return new Enumerator(domContainer, Elements, createElementInstance);
