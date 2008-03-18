@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Button" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11      
 	public class ButtonCollection : BaseElementCollection
-	{
+#else
+    public class ButtonCollection : BaseElementCollection<Button>
+#endif
+    {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
 		/// Mainly used by WatiN internally.

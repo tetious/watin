@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Image" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class ImageCollection : BaseElementCollection
+#else
+    public class ImageCollection : BaseElementCollection<Image>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImageCollection"/> class.

@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Div" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class DivCollection : BaseElementCollection
+#else
+    public class DivCollection : BaseElementCollection<Div>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DivCollection"/> class.

@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Option" /> elements within a <see cref="SelectList"/>.
 	/// </summary>
+#if NET11
 	public class OptionCollection : BaseElementCollection
+#else	
+    public class OptionCollection : BaseElementCollection<Option>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.

@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="RadioButton" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-	public class RadioButtonCollection : BaseElementCollection
-	{
+#if NET11
+    public class RadioButtonCollection : BaseElementCollection
+#else
+    public class RadioButtonCollection : BaseElementCollection<RadioButton>
+#endif 
+{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
 		/// Mainly used by WatiN internally.

@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Label" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class LabelCollection : BaseElementCollection
+#else
+    public class LabelCollection : BaseElementCollection<Label>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelCollection"/> class.

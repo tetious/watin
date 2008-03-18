@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="CheckBox" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class CheckBoxCollection : BaseElementCollection
+#else
+    public class CheckBoxCollection : BaseElementCollection<CheckBox>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.

@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="FileUpload" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class FileUploadCollection : BaseElementCollection
-	{
+#else
+    public class FileUploadCollection : BaseElementCollection<FileUpload>
+#endif
+    {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
 		/// Mainly used by WatiN internally.

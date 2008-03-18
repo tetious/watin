@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Constraints;
@@ -34,7 +35,11 @@ namespace WatiN.Core
 	/// This class is mainly used by Watin internally as the base class for all 
 	/// of the element collections.
 	/// </summary>
-	public abstract class BaseElementCollection : IEnumerable
+#if NET11
+    public abstract class BaseElementCollection : IEnumerable
+#else
+    public abstract class BaseElementCollection<T> : IEnumerable<T> where T:Element
+#endif
 	{
 		protected DomContainer domContainer;
 
@@ -49,7 +54,7 @@ namespace WatiN.Core
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
 		/// <param name="createElementInstance">The create element instance.</param>
-		public BaseElementCollection(DomContainer domContainer, INativeElementFinder finder, CreateElementInstance createElementInstance) :
+		protected BaseElementCollection(DomContainer domContainer, INativeElementFinder finder, CreateElementInstance createElementInstance) :
 			this(domContainer, (ArrayList) null, createElementInstance)
 		{
 			this.finder = finder;
@@ -62,7 +67,7 @@ namespace WatiN.Core
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
 		/// <param name="createElementInstance">The create element instance.</param>
-		public BaseElementCollection(DomContainer domContainer, ArrayList elements, CreateElementInstance createElementInstance)
+		protected BaseElementCollection(DomContainer domContainer, ArrayList elements, CreateElementInstance createElementInstance)
 		{
 			this.elements = elements;
 			this.domContainer = domContainer;
@@ -78,10 +83,17 @@ namespace WatiN.Core
 			get { return Elements.Count; }
 		}
 
-		protected Element ElementsTyped(int index)
+#if NET11
+        protected Element ElementsTyped(int index)
 		{
 			return createElementInstance(domContainer, (IHTMLElement) Elements[index]); 
 		}
+#else
+        protected T ElementsTyped(int index)
+		{
+			return (T)createElementInstance(domContainer, (IHTMLElement) Elements[index]); 
+		}
+#endif
 
 		
 		protected ArrayList Elements
@@ -165,10 +177,17 @@ namespace WatiN.Core
 	    }
 
 	    /// <exclude />
-		public Enumerator GetEnumerator()
+		public IEnumerator GetEnumerator()
 		{
 			return new Enumerator(domContainer, Elements, createElementInstance);
 		}
+
+#if !NET11
+	    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			return new EnumeratorT<T>(domContainer, Elements, createElementInstance);
+		}
+#endif
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
@@ -218,5 +237,57 @@ namespace WatiN.Core
 				get { return Current; }
 			}
 		}
+
+        /// <exclude />
+        public class EnumeratorT<T> : IEnumerator<T> where T : Element
+        {
+            private ArrayList children;
+            private DomContainer domContainer;
+            private CreateElementInstance createElementInstance;
+            private int index;
+
+            /// <exclude />
+            public EnumeratorT(DomContainer domContainer, ArrayList children, CreateElementInstance createElementInstance)
+            {
+                this.children = children;
+                this.domContainer = domContainer;
+                this.createElementInstance = createElementInstance;
+
+                Reset();
+            }
+
+            public void Dispose()
+            {
+                children = null;
+                domContainer = null;
+                createElementInstance = null;
+            }
+
+            /// <exclude />
+            public void Reset()
+            {
+                index = -1;
+            }
+
+            /// <exclude />
+            public bool MoveNext()
+            {
+                ++index;
+                return index < children.Count;
+            }
+
+            /// <exclude />
+            public virtual T Current
+            {
+                get { return (T)createElementInstance(domContainer, (IHTMLElement)children[index]); }
+            }
+
+            /// <exclude />
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+        }
+
 	}
 }

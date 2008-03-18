@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Para" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class ParaCollection : BaseElementCollection
-	{
+#else
+    public class ParaCollection : BaseElementCollection<Para>
+#endif	
+    {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ParaCollection"/> class.
 		/// Mainly used by WatiN internally.

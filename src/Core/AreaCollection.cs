@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Area" /> instances within a <see cref="Document" /> or <see cref="Element" />.
 	/// </summary>
+#if NET11
 	public class AreaCollection : BaseElementCollection
-	{
+#else
+    public class AreaCollection : BaseElementCollection<Area>
+#endif
+    {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AreaCollection" /> class.
 		/// Mainly used by WatiN internally.

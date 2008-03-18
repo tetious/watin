@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableRow" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-	public class TableRowCollection : BaseElementCollection
+#if NET11
+    public class TableRowCollection : BaseElementCollection
+#else
+    public class TableRowCollection : BaseElementCollection<TableRow>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableRowCollection"/> class.

@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TextField" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class TextFieldCollection : BaseElementCollection
+#else
+    public class TextFieldCollection : BaseElementCollection<TextField>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.

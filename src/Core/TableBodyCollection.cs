@@ -24,8 +24,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
 	/// </summary>
+#if NET11
 	public class TableBodyCollection : BaseElementCollection
-	{
+#else
+    public class TableBodyCollection : BaseElementCollection<TableBody>
+#endif
+    {
 		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TableBody.New)) {}
 
 		public TableBodyCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableBody.New)) {}

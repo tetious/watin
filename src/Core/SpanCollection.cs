@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Span" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
+#if NET11
 	public class SpanCollection : BaseElementCollection
+#else
+    public class SpanCollection : BaseElementCollection<Span>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SpanCollection"/> class.

@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-	public class FormCollection : BaseElementCollection
+#if NET11
+    public class FormCollection : BaseElementCollection
+#else
+    public class FormCollection : BaseElementCollection<Form>
+#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormCollection"/> class.
