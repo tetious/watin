@@ -17,7 +17,9 @@
 #endregion Copyright
 
 using System.Collections;
-using System.Collections.Generic;
+#if !NET11
+    using System.Collections.Generic;
+#endif
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Constraints;
