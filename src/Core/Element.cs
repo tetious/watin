@@ -85,7 +85,7 @@ namespace WatiN.Core
 		{
 			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
 			{
-				initElement(element._domContainer, element._nativeElement, null);
+				initElement(element._domContainer, element._nativeElement, element._elementFinder);
 			}
 			else
 			{

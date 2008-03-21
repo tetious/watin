@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Specialized;
 using mshtml;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.InternetExplorer
@@ -12,14 +11,7 @@ namespace WatiN.Core.InternetExplorer
 	public class IEElement : INativeElement
 	{
 		private object _element;
-		private IEElementFinder _ieElementFinder = null;
 		private ElementAttributeBag _attributeBag = null;
-
-		public IEElement(object element, IEElementFinder ieElementFinder)
-		{
-			_element = element;
-			_ieElementFinder = ieElementFinder;
-		}
 
 		public IEElement(object element)
 		{
@@ -58,7 +50,7 @@ namespace WatiN.Core.InternetExplorer
 					IHTMLElement nextSibling = node as IHTMLElement;
 					if (nextSibling != null)
 					{
-						return new IEElement(nextSibling, null);
+						return new IEElement(nextSibling);
 					}
 					else
 					{
@@ -83,7 +75,7 @@ namespace WatiN.Core.InternetExplorer
 					IHTMLElement previousSibling = node as IHTMLElement;
 					if (previousSibling != null)
 					{
-						return new IEElement(previousSibling, null);
+						return new IEElement(previousSibling);
 					}
 					else
 					{
@@ -127,7 +119,7 @@ namespace WatiN.Core.InternetExplorer
 				IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
 				if (parentNode != null)
 				{
-					return new IEElement(parentNode, null);
+					return new IEElement(parentNode);
 				}
 				return null;
 			}

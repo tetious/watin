@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.Interfaces
 {

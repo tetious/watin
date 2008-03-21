@@ -659,7 +659,7 @@ namespace WatiN.Core.UnitTests
 			// test in HTMLDialog window
 			ie.Button("modalid").ClickNoWait();
 
-			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0)))
+			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0), 5))
 			{
 				htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 
@@ -757,7 +757,7 @@ namespace WatiN.Core.UnitTests
 			// test in HTMLDialog window
 			ie.Button("modalid").ClickNoWait();
 
-			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0)))
+			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByIndex(0), 5))
 			{
 				htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 

@@ -195,7 +195,7 @@ namespace WatiN.Core.InternetExplorer
 
 	    private bool AddToChildrenIfConstraintsAreMet(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
 	    {            
-            IEElement ieElement = new IEElement(element, null);
+            IEElement ieElement = new IEElement(element);
 	        waitUntilElementReadyStateIsComplete(element);
 
 	        attributeBag.IHTMLElement = element;

@@ -24,7 +24,7 @@ namespace WatiN.Core.InternetExplorer
 
 		public INativeElement CreateElement(object element)
 		{
-			return new IEElement(element, null);
+			return new IEElement(element);
 		}
 	}
 }
