@@ -49,7 +49,6 @@ namespace WatiN.Core
 		public static Button Button(DomContainer domContainer, BaseConstraint findBy, IElementCollection elements)
 		{
 			return new Button(domContainer, domContainer.NativeBrowser.CreateElementFinder(Core.Button.ElementTags, findBy, elements));
-//			return new Button(domContainer, domContainer.NativeBrowser.CreateElementFinder(Core.Button.ElementTags, findBy, elements));
 		}
 
 		public static ButtonCollection Buttons(DomContainer domContainer, IElementCollection elements)

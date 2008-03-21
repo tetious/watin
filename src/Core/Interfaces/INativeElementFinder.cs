@@ -6,6 +6,7 @@ namespace WatiN.Core.Interfaces
 	public interface INativeElementFinder
 	{
 		INativeElement FindFirst();
+	    INativeElement FindFirst(BaseConstraint findBy);
 		ArrayList FindAll();
 		ArrayList FindAll(BaseConstraint findBy);
 		string ElementTagsToString { get; }

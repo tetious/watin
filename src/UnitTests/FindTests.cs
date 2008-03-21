@@ -584,6 +584,13 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
 		}
+
+        [Test]
+        public void FindFirst()
+        {
+            Assert.That(Find.First(), Is.TypeOf(typeof(IndexConstraint)));
+            Assert.That(Find.First().ConstraintToString(), Is.EqualTo("Index = 0"));
+        }
 		
 		public class ElementComparerMock : ICompareElement
 		{

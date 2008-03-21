@@ -88,14 +88,19 @@ namespace WatiN.Core
 #if NET11
         protected Element ElementsTyped(int index)
 		{
-			return createElementInstance(domContainer, (IHTMLElement) Elements[index]); 
+			return CreateElementInstance((IHTMLElement) Elements[index]); 
 		}
 #else
         protected T ElementsTyped(int index)
 		{
-			return (T)createElementInstance(domContainer, (IHTMLElement) Elements[index]); 
+            return (T)CreateElementInstance((IHTMLElement)Elements[index]); 
 		}
 #endif
+
+        private Element CreateElementInstance(IHTMLElement element)
+        {
+            return createElementInstance(domContainer, element);
+        }
 
 		
 		protected ArrayList Elements
@@ -143,6 +148,36 @@ namespace WatiN.Core
 
 			return false;
 		}
+
+#if NET11
+        public Element First()
+        {
+            return FindFirst(Find.First());
+        }
+
+        public Element First(BaseConstraint findBy)
+        {
+            return FindFirst(findBy);
+        }
+#else
+        public T First()
+        {
+            return (T)FindFirst(Find.First());
+        }
+
+        public T First(BaseConstraint findBy)
+        {
+            return (T)FindFirst(findBy);
+        }
+#endif
+
+        private Element FindFirst(BaseConstraint findBy)
+        {
+            if (elements == null)
+                return finder != null ? Element.GetTypedElement(domContainer, finder.FindFirst(findBy)) : null;
+
+            return ElementsTyped(0);
+        }
 
 		protected ArrayList DoFilter(BaseConstraint findBy)
 		{
@@ -240,6 +275,7 @@ namespace WatiN.Core
 			}
 		}
 
+#if !NET11
         /// <exclude />
         public class EnumeratorT<T> : IEnumerator<T> where T : Element
         {
@@ -290,6 +326,6 @@ namespace WatiN.Core
                 get { return Current; }
             }
         }
-
+#endif
 	}
 }

@@ -37,8 +37,8 @@ namespace WatiN.Core.InternetExplorer
 	{
 		private ArrayList tagsToFind = new ArrayList();
 
-		protected readonly BaseConstraint findBy;
-		protected readonly IElementCollection elementCollection;
+		protected readonly BaseConstraint _findBy;
+		protected readonly IElementCollection _elementCollection;
 
 		public IEElementFinder(ArrayList elementTags, BaseConstraint findBy, IElementCollection elementCollection)
 		{
@@ -47,8 +47,8 @@ namespace WatiN.Core.InternetExplorer
 				throw new ArgumentNullException("elementCollection");
 			}
 
-			this.findBy = getFindBy(findBy);
-			this.elementCollection = elementCollection;
+			_findBy = getFindBy(findBy);
+			_elementCollection = elementCollection;
 
 			if (elementTags != null)
 			{
@@ -69,8 +69,8 @@ namespace WatiN.Core.InternetExplorer
 				throw new ArgumentNullException("elementCollection");
 			}
 
-			this.findBy = getFindBy(findBy);
-			this.elementCollection = elementCollection;
+			_findBy = getFindBy(findBy);
+			_elementCollection = elementCollection;
 
 			AddElementTag(tagName, inputType);
 		}
@@ -78,6 +78,11 @@ namespace WatiN.Core.InternetExplorer
 		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection) : this(tagName, inputType, null, elementCollection) {}
 
 		public virtual INativeElement FindFirst()
+		{
+		    return FindFirst(_findBy);
+		}
+
+        public virtual INativeElement FindFirst(BaseConstraint findBy)
 		{
 			foreach (ElementTag elementTag in tagsToFind)
 			{
@@ -99,12 +104,12 @@ namespace WatiN.Core.InternetExplorer
 
 		public string ConstriantToString
 		{
-			get { return findBy.ConstraintToString(); }
+			get { return _findBy.ConstraintToString(); }
 		}
 
 		internal ElementNotFoundException CreateElementNotFoundException(Exception innerexception)
 		{
-			return new ElementNotFoundException(ElementTag.ElementTagsToString(tagsToFind), findBy.ConstraintToString(), innerexception);
+			return new ElementNotFoundException(ElementTag.ElementTagsToString(tagsToFind), _findBy.ConstraintToString(), innerexception);
 		}
 
 		public void AddElementTag(string tagName, string inputType)
@@ -114,29 +119,32 @@ namespace WatiN.Core.InternetExplorer
 
 		public ArrayList FindAll()
 		{
-			return FindAll(findBy);
+			return FindAll(_findBy);
 		}
 
 		public ArrayList FindAll(BaseConstraint findBy)
 		{
-			if (tagsToFind.Count == 1)
+		    if (tagsToFind.Count == 1)
 			{
 				return findElementsByAttribute((ElementTag) tagsToFind[0], findBy, false);
 			}
-			else
-			{
-				ArrayList elements = new ArrayList();
 
-				foreach (ElementTag elementTag in tagsToFind)
-				{
-					elements.AddRange(findElementsByAttribute(elementTag, findBy, false));
-				}
-
-				return elements;
-			}
+		    return FindAllWithMultipleTags(findBy);
 		}
 
-		private static BaseConstraint getFindBy(BaseConstraint findBy)
+	    private ArrayList FindAllWithMultipleTags(BaseConstraint findBy)
+	    {
+	        ArrayList elements = new ArrayList();
+
+	        foreach (ElementTag elementTag in tagsToFind)
+	        {
+	            elements.AddRange(findElementsByAttribute(elementTag, findBy, false));
+	        }
+
+	        return elements;
+	    }
+
+	    private static BaseConstraint getFindBy(BaseConstraint findBy)
 		{
 			if (findBy == null)
 			{
@@ -162,7 +170,7 @@ namespace WatiN.Core.InternetExplorer
 	    private ArrayList FindElements(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch)
 	    {
             ArrayList children = new ArrayList();
-            IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
+            IHTMLElementCollection elements = elementTag.GetElementCollection(_elementCollection.Elements);
 
 	        if (elements != null)
 	        {
@@ -184,7 +192,7 @@ namespace WatiN.Core.InternetExplorer
 	    {
             ArrayList children = new ArrayList();
 
-	        IHTMLElement element = elementTag.GetElementById(elementCollection.Elements, ((AttributeConstraint)findBy).Value);
+	        IHTMLElement element = elementTag.GetElementById(_elementCollection.Elements, ((AttributeConstraint)findBy).Value);
 
 	        if (element != null)
 	        {

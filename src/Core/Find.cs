@@ -715,5 +715,10 @@ namespace WatiN.Core
 			return new ElementConstraint(new PredicateComparer(predicate));
 		}
 #endif	
+    
+        public static IndexConstraint First()
+        {
+            return ByIndex(0);
+        }
 	}
 }
