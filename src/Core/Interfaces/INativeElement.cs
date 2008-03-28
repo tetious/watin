@@ -78,5 +78,7 @@ namespace WatiN.Core.Interfaces
 	    bool IsElementReferenceStillValid();
 
 		string TagName { get; }
+
+        object NativeElement { get; }
 	}
 }

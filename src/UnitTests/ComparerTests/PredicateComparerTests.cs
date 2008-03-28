@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests
       _returnValue = true;
       PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
   		 
-      Assert.That(comparer.Compare(new Element((DomContainer)null,(INativeElementFinder) null)), Is.True);
+      Assert.That(comparer.Compare(new Element(null,(INativeElementFinder) null)), Is.True);
       Assert.That(_called, Is.True);
     }
   	
@@ -84,7 +84,7 @@ namespace WatiN.Core.UnitTests
       _returnValue = false;
       PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
 
-      Assert.That(comparer.Compare(new Element((DomContainer)null, (INativeElementFinder)null)), Is.False);
+      Assert.That(comparer.Compare(new Element(null, (INativeElementFinder)null)), Is.False);
       Assert.That(_called, Is.True);
     }
 

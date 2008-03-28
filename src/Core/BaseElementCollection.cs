@@ -46,7 +46,7 @@ namespace WatiN.Core
 		protected DomContainer domContainer;
 
 		private ArrayList elements;
-		private CreateElementInstance createElementInstance;
+		private readonly CreateElementInstance createElementInstance;
 		protected INativeElementFinder finder;
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace WatiN.Core
         private Element FindFirst(BaseConstraint findBy)
         {
             if (elements == null)
-                return finder != null ? Element.GetTypedElement(domContainer, finder.FindFirst(findBy)) : null;
+                return finder != null ? CreateElementInstance((IHTMLElement)finder.FindFirst(findBy).NativeElement) : null;
 
             return ElementsTyped(0);
         }
@@ -234,9 +234,9 @@ namespace WatiN.Core
 		/// <exclude />
 		public class Enumerator : IEnumerator
 		{
-			private ArrayList children;
-			private DomContainer domContainer;
-			private CreateElementInstance createElementInstance;
+			private readonly ArrayList children;
+			private readonly DomContainer domContainer;
+			private readonly CreateElementInstance createElementInstance;
 			private int index;
 
 			/// <exclude />

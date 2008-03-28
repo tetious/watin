@@ -10,8 +10,8 @@ namespace WatiN.Core.InternetExplorer
 	/// </summary>
 	public class IEElement : INativeElement
 	{
-		private object _element;
-		private ElementAttributeBag _attributeBag = null;
+		private readonly object _element;
+		private ElementAttributeBag _attributeBag;
 
 		public IEElement(object element)
 		{
@@ -201,7 +201,7 @@ namespace WatiN.Core.InternetExplorer
 			set { htmlElement.style.backgroundColor = value; }
 		}
 
-		public object Element
+		public object NativeElement
 		{
 			get { return _element; }
 		}
