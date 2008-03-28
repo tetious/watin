@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
@@ -26,13 +27,18 @@ namespace WatiN.Core.UnitTests
   using WatiN.Core.Comparers;
 
   [TestFixture]
-  public class PredicateComparerTests
+  public class PredicateComparerTests : BaseWithIETests
   {
     private bool _called;
     private string _value;
     private bool _returnValue;
-  
-    [SetUp]
+
+      public override Uri TestPageUri
+      {
+          get { return MainURI; }
+      }
+
+      [SetUp]
     public void SetUp()
     {
       _called = false;
@@ -73,8 +79,8 @@ namespace WatiN.Core.UnitTests
     {
       _returnValue = true;
       PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
-  		 
-      Assert.That(comparer.Compare(new Element(null,(INativeElementFinder) null)), Is.True);
+
+      Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
       Assert.That(_called, Is.True);
     }
   	
@@ -84,7 +90,7 @@ namespace WatiN.Core.UnitTests
       _returnValue = false;
       PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
 
-      Assert.That(comparer.Compare(new Element(null, (INativeElementFinder)null)), Is.False);
+      Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
       Assert.That(_called, Is.True);
     }
 
