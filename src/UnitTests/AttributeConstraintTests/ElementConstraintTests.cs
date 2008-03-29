@@ -42,7 +42,8 @@ namespace WatiN.Core.UnitTests
 		private static void VerifyComparerIsUsed(string tagname, bool expectedResult) {
 			MockRepository mocks = new MockRepository();
 			IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
-			ElementAttributeBag elementAttributeBag = new ElementAttributeBag(IHTMLElementStub);
+		    DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
+            ElementAttributeBag elementAttributeBag = new ElementAttributeBag(domContainer, IHTMLElementStub);
 
 			SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
 			

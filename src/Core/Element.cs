@@ -38,7 +38,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class Element : IAttributeBag
 	{
-		private static Hashtable _elementConstructors = null;
+		private static Hashtable _elementConstructors;
 
 		private DomContainer _domContainer;
 		private INativeElement _nativeElement;
@@ -95,6 +95,8 @@ namespace WatiN.Core
 
 		private void initElement(DomContainer domContainer, INativeElement nativeElement, INativeElementFinder elementFinder) 
 		{
+            if (domContainer == null) throw new ArgumentNullException("domContainer");
+
 			_domContainer = domContainer;
 			_nativeElement = nativeElement;
 			_elementFinder = elementFinder;
@@ -593,14 +595,7 @@ namespace WatiN.Core
 		{
 			try
 			{
-				if (color != null)
-				{
-					NativeElement.BackgroundColor = color;
-				}
-				else
-				{
-					NativeElement.BackgroundColor = "";
-				}				
+				NativeElement.BackgroundColor = color ?? "";				
 			}
 			catch{}
 		}
@@ -634,7 +629,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return ((IEElement)NativeElement).Element;
+				return ((IEElement)NativeElement).NativeElement;
 			}
 		}
 
@@ -658,14 +653,11 @@ namespace WatiN.Core
 					}
 					catch (WatiN.Core.Exceptions.TimeoutException e)
 					{
-						if(e.InnerException == null)
+					    if(e.InnerException == null)
 						{
 							throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString);
 						}
-						else
-						{
-							throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString, e.InnerException);
-						}
+					    throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString, e.InnerException);
 					}
 				}
 
@@ -822,29 +814,27 @@ namespace WatiN.Core
 
 		private static void ThrowTimeOutException(Exception lastException, string message)
 		{
-			if (lastException != null)
+		    if (lastException != null)
 			{
 				throw new WatiN.Core.Exceptions.TimeoutException(message, lastException);
 			}
-			else
-			{
-				throw new WatiN.Core.Exceptions.TimeoutException(message);
-			}
+		    throw new WatiN.Core.Exceptions.TimeoutException(message);
 		}
 
-		private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
+	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
 		{
 			// Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
-				if (_nativeElement != null)
+			    if (_nativeElement != null)
 				{
 					return;
 				}
-				else if (_elementFinder == null)
-				{
-					throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
-				}
+
+			    if (_elementFinder == null)
+			    {
+			        throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
+			    }
 			}
 			else
 			{
@@ -1172,14 +1162,11 @@ namespace WatiN.Core
 			{
 				return null;
 			}
-			else if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
-			{
-				return parentElement;
-			}
-			else
-			{
-				return parentElement.Ancestor(ancestorType, findBy);
-			}
+		    if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
+		    {
+		        return parentElement;
+		    }
+		    return parentElement.Ancestor(ancestorType, findBy);
 		}
 
 		/// <summary>

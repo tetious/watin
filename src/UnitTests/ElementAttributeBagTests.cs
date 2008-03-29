@@ -28,13 +28,15 @@ namespace WatiN.Core.UnitTests
 		private MockRepository mocks;
 		private IHTMLStyle mockHTMLStyle;
 		private IHTMLElement mockHTMLElement;
+	    private DomContainer domContainer;
 
 		[SetUp]
 		public void SetUp()
 		{
 			mocks = new MockRepository();
 			mockHTMLStyle = (IHTMLStyle) mocks.CreateMock(typeof (IHTMLStyle));
-			mockHTMLElement = (IHTMLElement) mocks.CreateMock(typeof (IHTMLElement));
+            mockHTMLElement = (IHTMLElement)mocks.CreateMock(typeof(IHTMLElement)); 
+            domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer));
 		}
 
 		[TearDown]
@@ -53,7 +55,7 @@ namespace WatiN.Core.UnitTests
 
 			mocks.ReplayAll();
 
-			ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
+            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
 
 			Assert.AreEqual(cssText, attributeBag.GetValue("style"));
 		}
@@ -69,7 +71,7 @@ namespace WatiN.Core.UnitTests
 
 			mocks.ReplayAll();
 
-			ElementAttributeBag attributeBag = new ElementAttributeBag(mockHTMLElement);
+            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
 
 			Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
 		}

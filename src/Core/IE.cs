@@ -1303,7 +1303,7 @@ namespace WatiN.Core
 
 		public override INativeBrowser NativeBrowser
 		{
-			get { return new IEBrowser(); }
+			get { return new IEBrowser(this); }
 		}
 
 		/// <summary>

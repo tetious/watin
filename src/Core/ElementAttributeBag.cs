@@ -31,21 +31,18 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{
-		private IHTMLElement _htmlElement = null;
-		private Element _element = null;
+		private IHTMLElement _htmlElement;
+		private Element _element;
 		private Element _elementTyped;
 	    private DomContainer _domContainer;
 
-	    public ElementAttributeBag() {}
+        public ElementAttributeBag(DomContainer domContainer) : this (domContainer, null)
+        {}
 
-        public ElementAttributeBag(DomContainer domContainer)
-        {
-            _domContainer = domContainer;
-        }
-
-		public ElementAttributeBag(IHTMLElement element)
+		public ElementAttributeBag(DomContainer domContainer, IHTMLElement element)
 		{
-			IHTMLElement = element;
+            _domContainer = domContainer;
+            IHTMLElement = element;
 		}
 
 		/// <summary>

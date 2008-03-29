@@ -57,7 +57,7 @@ namespace WatiN.Core.UnitTests
 
 	public class StealthSettings : Settings
 	{
-		public StealthSettings() : base()
+		public StealthSettings()
 		{
 			SetDefaults();
 		}

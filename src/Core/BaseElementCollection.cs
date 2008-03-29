@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 #if !NET11
     using System.Collections.Generic;
@@ -71,6 +72,8 @@ namespace WatiN.Core
 		/// <param name="createElementInstance">The create element instance.</param>
 		protected BaseElementCollection(DomContainer domContainer, ArrayList elements, CreateElementInstance createElementInstance)
 		{
+            if (domContainer == null) throw new ArgumentNullException("domContainer");
+
 			this.elements = elements;
 			this.domContainer = domContainer;
 			this.createElementInstance = createElementInstance;

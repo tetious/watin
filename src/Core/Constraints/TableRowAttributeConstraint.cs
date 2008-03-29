@@ -68,7 +68,8 @@ namespace WatiN.Core.Constraints
 
 		public override bool Compare(IAttributeBag attributeBag)
 		{
-			IHTMLElement element = ((ElementAttributeBag) attributeBag).IHTMLElement;
+		    ElementAttributeBag elementAttributeBag = (ElementAttributeBag) attributeBag;
+		    IHTMLElement element = elementAttributeBag.IHTMLElement;
 			
 			if (IsTextContainedIn(element.innerText))
 			{
@@ -79,7 +80,7 @@ namespace WatiN.Core.Constraints
 				if (tableCellElements.length - 1 >= columnIndex)
 				{
 					IHTMLElement tableCell = (IHTMLElement) tableCellElements.item(columnIndex, null);
-					return base.Compare(new ElementAttributeBag(tableCell));
+                    return base.Compare(new ElementAttributeBag(elementAttributeBag.DomContainer, tableCell));
 				}
 			}
 

@@ -16,10 +16,8 @@
 
 #endregion Copyright
 
-using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using Iz=NUnit.Framework.SyntaxHelpers.Is;
@@ -31,12 +29,14 @@ namespace WatiN.Core.UnitTests
 	{
 		private MockRepository mocks;
 		private IElementCollection stubElementCollection;
+	    private DomContainer domContainer;
 
 		[SetUp]
 		public void SetUp()
 		{
 			mocks = new MockRepository();
 			stubElementCollection = (IElementCollection) mocks.DynamicMock(typeof (IElementCollection));
+            domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer), new object[] { });
 
 			SetupResult.For(stubElementCollection.Elements).Return(null);
 
@@ -52,7 +52,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindFirstShouldReturnNullIfIElementCollectionIsNull()
 		{
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection);
+			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
 
 			Assert.IsNull(finder.FindFirst());
 		}
@@ -60,7 +60,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FindAllShouldReturnEmptyArrayListIfIElementCollectionIsNull()
 		{
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection);
+			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
 
 			Assert.AreEqual(0, finder.FindAll().Count);
 		}
@@ -69,7 +69,7 @@ namespace WatiN.Core.UnitTests
 		public void ElementFinderShouldCallConstraintResetBeforeCompare()
 		{
 			MyTestConstraint constraint = new MyTestConstraint();
-			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection);
+			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection, domContainer);
 			
 			finder.FindFirst();
 

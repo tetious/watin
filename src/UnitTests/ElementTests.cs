@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
@@ -522,7 +521,7 @@ namespace WatiN.Core.UnitTests
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
             DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
-			IEElementFinder finder = (IEElementFinder) mockRepository.CreateMock(typeof (IEElementFinder), null, elementCollection);
+			IEElementFinder finder = (IEElementFinder) mockRepository.CreateMock(typeof (IEElementFinder), null, elementCollection, domContainer);
 
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException(""));
 			Expect.Call(finder.FindFirst()).Return(null).Repeat.AtLeastOnce();
@@ -555,7 +554,7 @@ namespace WatiN.Core.UnitTests
 
 			IElementCollection elementCollection = (IElementCollection) mockRepository.CreateMock(typeof (IElementCollection));
             DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
-            IEElementFinder finder = (IEElementFinder) mockRepository.DynamicMock(typeof (IEElementFinder), null, elementCollection);
+            IEElementFinder finder = (IEElementFinder)mockRepository.DynamicMock(typeof(IEElementFinder), null, elementCollection, domContainer);
 
 			Expect.Call(finder.FindFirst()).Throw(new Exception(""));
 			Expect.Call(finder.FindFirst()).Throw(new UnauthorizedAccessException("mockUnauthorizedAccessException")).Repeat.AtLeastOnce();
