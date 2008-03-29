@@ -130,7 +130,7 @@ namespace WatiN.Core
         
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
-        /// defined as a TD html element. If no match is found, null is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -146,7 +146,7 @@ namespace WatiN.Core
 
 		/// <summary>
         /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, null is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
 		/// </summary>
 		/// <param name="comparer">The comparer that the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -163,7 +163,7 @@ namespace WatiN.Core
 #if NET20
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, null is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -179,6 +179,12 @@ namespace WatiN.Core
 			return Id;
 		}
 
+        /// <summary>
+		/// Finds the first row that meets the <see cref="TableRowAttributeConstraint"/>.
+		/// If no match is found, <c>null</c> is returned.
+		/// </summary>
+		/// <param name="findBy">The constraint used to identify the table cell.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRow(TableRowAttributeConstraint findBy)
 		{
 			TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
