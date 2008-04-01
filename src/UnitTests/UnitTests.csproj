@@ -315,6 +315,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "WatiN.Core.UnitTests.dll.config"
                     BuildAction = "None"
                 />
@@ -415,6 +419,11 @@
                 />
                 <File
                     RelPath = "DialogHandlerTests\FileDownloadHandlerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DialogHandlerTests\PromptDialogHandlerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
