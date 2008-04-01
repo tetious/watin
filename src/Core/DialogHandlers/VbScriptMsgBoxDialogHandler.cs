@@ -20,7 +20,7 @@ namespace WatiN.Core.DialogHandlers
 {
 	public class VbScriptMsgBoxDialogHandler : BaseDialogHandler
 	{
-		private bool hasHandledDialog = false;
+		private bool hasHandledDialog;
 
 		public enum Button
 		{
@@ -33,7 +33,7 @@ namespace WatiN.Core.DialogHandlers
 			No = 7
 		}
 
-		private Button _button = Button.Yes;
+		private readonly Button _button = Button.Yes;
 
 		public VbScriptMsgBoxDialogHandler(Button button)
 		{

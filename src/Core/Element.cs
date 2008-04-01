@@ -42,7 +42,7 @@ namespace WatiN.Core
 
 		private DomContainer _domContainer;
 		private INativeElement _nativeElement;
-		private INativeElementFinder _elementFinder;
+		private INativeElementFinder _nativeElementFinder;
 
 		private Stack _originalcolor;
 
@@ -85,7 +85,7 @@ namespace WatiN.Core
 		{
 			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
 			{
-				initElement(element._domContainer, element._nativeElement, element._elementFinder);
+				initElement(element._domContainer, element._nativeElement, element._nativeElementFinder);
 			}
 			else
 			{
@@ -99,7 +99,7 @@ namespace WatiN.Core
 
 			_domContainer = domContainer;
 			_nativeElement = nativeElement;
-			_elementFinder = elementFinder;
+			_nativeElementFinder = elementFinder;
 		}
 
 		/// <summary>
@@ -615,7 +615,7 @@ namespace WatiN.Core
 			get { return _domContainer; }
 		}
 
-		//TODO: Should return IBrowserElement instead of object
+		//TODO: Should return INativeElement instead of object
 
 		/// <summary>
 		/// Gets the DOM HTML element for this instance as an object. Cast it to 
@@ -655,9 +655,9 @@ namespace WatiN.Core
 					{
 					    if(e.InnerException == null)
 						{
-							throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString);
+							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString);
 						}
-					    throw new ElementNotFoundException(_elementFinder.ElementTagsToString, _elementFinder.ConstriantToString, e.InnerException);
+					    throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString, e.InnerException);
 					}
 				}
 
@@ -831,7 +831,7 @@ namespace WatiN.Core
 					return;
 				}
 
-			    if (_elementFinder == null)
+			    if (_nativeElementFinder == null)
 			    {
 			        throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
 			    }
@@ -911,7 +911,7 @@ namespace WatiN.Core
 		/// </example>
 		public void Refresh()
 		{
-			if (_elementFinder != null)
+			if (_nativeElementFinder != null)
 			{
 				_nativeElement = null;
 			}
@@ -923,9 +923,9 @@ namespace WatiN.Core
 		/// <returns></returns>
 		protected INativeElement RefreshNativeElement()
 		{
-			if (_elementFinder != null)
+			if (_nativeElementFinder != null)
 			{
-				_nativeElement = _elementFinder.FindFirst();
+				_nativeElement = _nativeElementFinder.FindFirst();
 			}
 			else
 			{
