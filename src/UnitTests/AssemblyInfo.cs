@@ -22,14 +22,14 @@ using System.Reflection;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly : AssemblyTitle("")]
-[assembly : AssemblyDescription("")]
-[assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("")]
-[assembly : AssemblyProduct("")]
-[assembly : AssemblyCopyright("")]
-[assembly : AssemblyTrademark("")]
-[assembly : AssemblyCulture("")]
+[assembly: AssemblyTitle("WatiN")]
+[assembly: AssemblyDescription("Web Application Testing In dotNet")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("WatiN")]
+[assembly: AssemblyCopyright("2006 - 2008 Jeroen van Menen")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:
@@ -42,7 +42,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly : AssemblyVersion("1.3.0.3100")]
+[assembly: AssemblyVersion("1.3.0.3200")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

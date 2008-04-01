@@ -27,7 +27,7 @@ using System.Reflection;
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("")]
 [assembly : AssemblyProduct("WatiN")]
-[assembly : AssemblyCopyright("2006 Jeroen van Menen")]
+[assembly : AssemblyCopyright("2006 - 2008 Jeroen van Menen")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
@@ -42,7 +42,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.3.0.3101")]
+[assembly: AssemblyVersion("1.3.0.3200")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
