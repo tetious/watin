@@ -386,7 +386,7 @@ namespace WatiN.Core
         }
 
 #if !NET11
-        public TableBody TableBody(Predicate<TableBody> predicate)
+        public virtual TableBody TableBody(Predicate<TableBody> predicate)
         {
             return TableBody(Find.ByElement(predicate));
         }
@@ -459,7 +459,7 @@ namespace WatiN.Core
         }
 
 #if !NET11
-        public TableRow TableRow(Predicate<TableRow> predicate)
+        public virtual TableRow TableRow(Predicate<TableRow> predicate)
         {
             return TableRow(Find.ByElement(predicate));
         }
