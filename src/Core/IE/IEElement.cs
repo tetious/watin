@@ -52,10 +52,8 @@ namespace WatiN.Core.InternetExplorer
 					{
 						return new IEElement(nextSibling);
 					}
-					else
-					{
-						node = node.nextSibling;
-					}
+				    
+                    node = node.nextSibling;
 				}
 				return null;
 			}
@@ -77,10 +75,8 @@ namespace WatiN.Core.InternetExplorer
 					{
 						return new IEElement(previousSibling);
 					}
-					else
-					{
-						node = node.previousSibling;
-					}
+				    
+                    node = node.previousSibling;
 				}
 				return null;
 			}
@@ -224,14 +220,8 @@ namespace WatiN.Core.InternetExplorer
 				{
 					return false;
 				}
-				else
-				{
-					if (htmlElement.offsetParent == null)
-					{
-						return false;
-					}
-				}
-				return true;
+			    
+                return htmlElement.offsetParent != null;
 			}
 			catch
 			{

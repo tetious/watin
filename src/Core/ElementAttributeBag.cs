@@ -52,7 +52,12 @@ namespace WatiN.Core
 		public IHTMLElement IHTMLElement
 		{
 			get { return _htmlElement; }
-			set { _htmlElement = value; }
+			set 
+            { 
+                _htmlElement = value;
+                _element = null;
+                _elementTyped = null;
+            }
 		}
 
         public DomContainer DomContainer
@@ -118,12 +123,7 @@ namespace WatiN.Core
 				attributeValue = _htmlElement.getAttribute(attributename, 0);
 			}
 
-			if (attributeValue == DBNull.Value)
-			{
-				return null;
-			}
-
-			if (attributeValue == null)
+            if (attributeValue == DBNull.Value || attributeValue == null)
 			{
 				return null;
 			}

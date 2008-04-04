@@ -19,6 +19,8 @@
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.InternetExplorer;
+using Iz = NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests
 {
@@ -75,5 +77,30 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
 		}
+
+        [Test]
+        public void CachedElementPropertiesShouldBeClearedIfNewHtmlElementIsSet()
+        {
+            Expect.Call(mockHTMLElement.getAttribute("id", 0)).Return("one").Repeat.Any();
+            Expect.Call(mockHTMLElement.getAttribute("tagName", 0)).Return("li").Repeat.Any();
+            
+            IHTMLElement mockHTMLElement2 = (IHTMLElement)mocks.CreateMock(typeof(IHTMLElement));
+            Expect.Call(mockHTMLElement2.getAttribute("id", 0)).Return("two").Repeat.Any();
+            Expect.Call(mockHTMLElement2.getAttribute("tagName", 0)).Return("li").Repeat.Any();
+            Expect.Call(domContainer.NativeBrowser).Return(new IEBrowser(domContainer)).Repeat.Any();
+
+            mocks.ReplayAll();
+
+            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
+
+            Assert.That(attributeBag.Element.Id, Iz.EqualTo("one"), "Unexpected Element");
+            Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("one"), "Unexpected ElementTyped");
+
+            attributeBag.IHTMLElement = mockHTMLElement2;
+
+            Assert.That(attributeBag.Element.Id, Iz.EqualTo("two"), "Unexpected Element");
+            Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("two"), "Unexpected ElementTyped");
+
+        }
 	}
 }

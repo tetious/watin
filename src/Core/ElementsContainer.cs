@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using mshtml;
@@ -39,270 +40,384 @@ namespace WatiN.Core
 
 		#region IElementsContainer
 
-		public Area Area(string elementId)
-		{
-			return Area(Find.ById(elementId));
-		}
 
-		public Area Area(Regex elementId)
-		{
-			return Area(Find.ById(elementId));
-		}
+        public Area Area(string elementId)
+        {
+            return Area(Find.ById(elementId));
+        }
 
-		public Area Area(BaseConstraint findBy)
-		{
-			return ElementsSupport.Area(DomContainer, findBy, this);
-		}
+        public Area Area(Regex elementId)
+        {
+            return Area(Find.ById(elementId));
+        }
 
-		public AreaCollection Areas
-		{
-			get { return ElementsSupport.Areas(DomContainer, this); }
-		}
+        public Area Area(BaseConstraint findBy)
+        {
+            return ElementsSupport.Area(DomContainer, findBy, this);
+        }
 
-		public Button Button(string elementId)
-		{
-			return Button(Find.ById(elementId));
-		}
+#if !NET11
+        public Area Area(Predicate<Area> predicate)
+        {
+            return Area(Find.ByElement(predicate));
+        }
+#endif
 
-		public Button Button(Regex elementId)
-		{
-			return Button(Find.ById(elementId));
-		}
+        public AreaCollection Areas
+        {
+            get { return ElementsSupport.Areas(DomContainer, this); }
+        }
 
-		public Button Button(BaseConstraint findBy)
-		{
-			return ElementsSupport.Button(DomContainer, findBy, this);
-		}
+        public Button Button(string elementId)
+        {
+            return Button(Find.ById(elementId));
+        }
 
-		public ButtonCollection Buttons
-		{
-			get { return ElementsSupport.Buttons(DomContainer, this); }
-		}
+        public Button Button(Regex elementId)
+        {
+            return Button(Find.ById(elementId));
+        }
 
-		public CheckBox CheckBox(string elementId)
-		{
-			return CheckBox(Find.ById(elementId));
-		}
+        public Button Button(BaseConstraint findBy)
+        {
+            return ElementsSupport.Button(DomContainer, findBy, this);
+        }
 
-		public CheckBox CheckBox(Regex elementId)
-		{
-			return CheckBox(Find.ById(elementId));
-		}
+#if !NET11
+        public Button Button(Predicate<Button> predicate)
+        {
+            return Button(Find.ByElement(predicate));
+        }
+#endif
+        public ButtonCollection Buttons
+        {
+            get { return ElementsSupport.Buttons(DomContainer, this); }
+        }
 
-		public CheckBox CheckBox(BaseConstraint findBy)
-		{
-			return ElementsSupport.CheckBox(DomContainer, findBy, this);
-		}
+        public CheckBox CheckBox(string elementId)
+        {
+            return CheckBox(Find.ById(elementId));
+        }
 
-		public CheckBoxCollection CheckBoxes
-		{
-			get { return ElementsSupport.CheckBoxes(DomContainer, this); }
-		}
+        public CheckBox CheckBox(Regex elementId)
+        {
+            return CheckBox(Find.ById(elementId));
+        }
 
-		public Element Element(string elementId)
-		{
-			return Element(Find.ById(elementId));
-		}
+        public CheckBox CheckBox(BaseConstraint findBy)
+        {
+            return ElementsSupport.CheckBox(DomContainer, findBy, this);
+        }
 
-		public Element Element(Regex elementId)
-		{
-			return Element(Find.ById(elementId));
-		}
+#if !NET11
+        public CheckBox CheckBox(Predicate<CheckBox> predicate)
+        {
+            return CheckBox(Find.ByElement(predicate));
+        }
+#endif
 
-		public Element Element(BaseConstraint findBy)
-		{
-			return ElementsSupport.Element(DomContainer, findBy, this);
-		}
+        public CheckBoxCollection CheckBoxes
+        {
+            get { return ElementsSupport.CheckBoxes(DomContainer, this); }
+        }
 
-		public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
-		{
-			return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
-		}
+        public Element Element(string elementId)
+        {
+            return Element(Find.ById(elementId));
+        }
 
-		public ElementCollection Elements
-		{
-			get { return ElementsSupport.Elements(DomContainer, this); }
-		}
+        public Element Element(Regex elementId)
+        {
+            return Element(Find.ById(elementId));
+        }
 
-		public FileUpload FileUpload(string elementId)
-		{
-			return FileUpload(Find.ById(elementId));
-		}
+        public Element Element(BaseConstraint findBy)
+        {
+            return ElementsSupport.Element(DomContainer, findBy, this);
+        }
 
-		public FileUpload FileUpload(Regex elementId)
-		{
-			return FileUpload(Find.ById(elementId));
-		}
 
-		public FileUpload FileUpload(BaseConstraint findBy)
-		{
-			return ElementsSupport.FileUpload(DomContainer, findBy, this);
-		}
+#if !NET11
+        public Element Element(Predicate<Element> predicate)
+        {
+            return Element(Find.ByElement(predicate));
+        }
+#endif
 
-		public FileUploadCollection FileUploads
-		{
-			get { return ElementsSupport.FileUploads(DomContainer, this); }
-		}
+        public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
+        {
+            return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
+        }
 
-		public Form Form(string elementId)
-		{
-			return Form(Find.ById(elementId));
-		}
+        public ElementCollection Elements
+        {
+            get { return ElementsSupport.Elements(DomContainer, this); }
+        }
 
-		public Form Form(Regex elementId)
-		{
-			return Form(Find.ById(elementId));
-		}
+        public FileUpload FileUpload(string elementId)
+        {
+            return FileUpload(Find.ById(elementId));
+        }
 
-		public Form Form(BaseConstraint findBy)
-		{
-			return ElementsSupport.Form(DomContainer, findBy, this);
-		}
+        public FileUpload FileUpload(Regex elementId)
+        {
+            return FileUpload(Find.ById(elementId));
+        }
 
-		public FormCollection Forms
-		{
-			get { return ElementsSupport.Forms(DomContainer, this); }
-		}
+        public FileUpload FileUpload(BaseConstraint findBy)
+        {
+            return ElementsSupport.FileUpload(DomContainer, findBy, this);
+        }
 
-		public Label Label(string elementId)
-		{
-			return Label(Find.ById(elementId));
-		}
+#if !NET11
+        public FileUpload FileUpload(Predicate<FileUpload> predicate)
+        {
+            return FileUpload(Find.ByElement(predicate));
+        }
+#endif
 
-		public Label Label(Regex elementId)
-		{
-			return Label(Find.ById(elementId));
-		}
+        public FileUploadCollection FileUploads
+        {
+            get { return ElementsSupport.FileUploads(DomContainer, this); }
+        }
 
-		public Label Label(BaseConstraint findBy)
-		{
-			return ElementsSupport.Label(DomContainer, findBy, this);
-		}
+        public Form Form(string elementId)
+        {
+            return Form(Find.ById(elementId));
+        }
 
-		public LabelCollection Labels
-		{
-			get { return ElementsSupport.Labels(DomContainer, this); }
-		}
+        public Form Form(Regex elementId)
+        {
+            return Form(Find.ById(elementId));
+        }
 
-		public Link Link(string elementId)
-		{
-			return Link(Find.ById(elementId));
-		}
+        public Form Form(BaseConstraint findBy)
+        {
+            return ElementsSupport.Form(DomContainer, findBy, this);
+        }
 
-		public Link Link(Regex elementId)
-		{
-			return Link(Find.ById(elementId));
-		}
+#if !NET11
+        public Form Form(Predicate<Form> predicate)
+        {
+            return Form(Find.ByElement(predicate));
+        }
+#endif
 
-		public Link Link(BaseConstraint findBy)
-		{
-			return ElementsSupport.Link(DomContainer, findBy, this);
-		}
+        public FormCollection Forms
+        {
+            get { return ElementsSupport.Forms(DomContainer, this); }
+        }
 
-		public LinkCollection Links
-		{
-			get { return ElementsSupport.Links(DomContainer, this); }
-		}
+        public Label Label(string elementId)
+        {
+            return Label(Find.ById(elementId));
+        }
 
-		public Para Para(string elementId)
-		{
-			return Para(Find.ById(elementId));
-		}
+        public Label Label(Regex elementId)
+        {
+            return Label(Find.ById(elementId));
+        }
 
-		public Para Para(Regex elementId)
-		{
-			return Para(Find.ById(elementId));
-		}
+        public Label Label(BaseConstraint findBy)
+        {
+            return ElementsSupport.Label(DomContainer, findBy, this);
+        }
 
-		public Para Para(BaseConstraint findBy)
-		{
-			return ElementsSupport.Para(DomContainer, findBy, this);
-		}
+#if !NET11
+        public Label Label(Predicate<Label> predicate)
+        {
+            return Label(Find.ByElement(predicate));
+        }
+#endif
 
-		public ParaCollection Paras
-		{
-			get { return ElementsSupport.Paras(DomContainer, this); }
-		}
+        public LabelCollection Labels
+        {
+            get { return ElementsSupport.Labels(DomContainer, this); }
+        }
 
-		public RadioButton RadioButton(string elementId)
-		{
-			return RadioButton(Find.ById(elementId));
-		}
+        public Link Link(string elementId)
+        {
+            return Link(Find.ById(elementId));
+        }
 
-		public RadioButton RadioButton(Regex elementId)
-		{
-			return RadioButton(Find.ById(elementId));
-		}
+        public Link Link(Regex elementId)
+        {
+            return Link(Find.ById(elementId));
+        }
 
-		public RadioButton RadioButton(BaseConstraint findBy)
-		{
-			return ElementsSupport.RadioButton(DomContainer, findBy, this);
-		}
+        public Link Link(BaseConstraint findBy)
+        {
+            return ElementsSupport.Link(DomContainer, findBy, this);
+        }
 
-		public RadioButtonCollection RadioButtons
-		{
-			get { return ElementsSupport.RadioButtons(DomContainer, this); }
-		}
+#if !NET11
+        public Link Link(Predicate<Link> predicate)
+        {
+            return Link(Find.ByElement(predicate));
+        }
+#endif
 
-		public SelectList SelectList(string elementId)
-		{
-			return SelectList(Find.ById(elementId));
-		}
+        public LinkCollection Links
+        {
+            get { return ElementsSupport.Links(DomContainer, this); }
+        }
 
-		public SelectList SelectList(Regex elementId)
-		{
-			return SelectList(Find.ById(elementId));
-		}
+        public Para Para(string elementId)
+        {
+            return Para(Find.ById(elementId));
+        }
 
-		public SelectList SelectList(BaseConstraint findBy)
-		{
-			return ElementsSupport.SelectList(DomContainer, findBy, this);
-		}
+        public Para Para(Regex elementId)
+        {
+            return Para(Find.ById(elementId));
+        }
 
-		public SelectListCollection SelectLists
-		{
-			get { return ElementsSupport.SelectLists(DomContainer, this); }
-		}
+        public Para Para(BaseConstraint findBy)
+        {
+            return ElementsSupport.Para(DomContainer, findBy, this);
+        }
 
-		public Table Table(string elementId)
-		{
-			return Table(Find.ById(elementId));
-		}
+#if !NET11
+        public Para Para(Predicate<Para> predicate)
+        {
+            return Para(Find.ByElement(predicate));
+        }
+#endif
 
-		public Table Table(Regex elementId)
-		{
-			return Table(Find.ById(elementId));
-		}
+        public ParaCollection Paras
+        {
+            get { return ElementsSupport.Paras(DomContainer, this); }
+        }
 
-		public Table Table(BaseConstraint findBy)
-		{
-			return ElementsSupport.Table(DomContainer, findBy, this);
-		}
+        public RadioButton RadioButton(string elementId)
+        {
+            return RadioButton(Find.ById(elementId));
+        }
 
-		public TableCollection Tables
-		{
-			get { return ElementsSupport.Tables(DomContainer, this); }
-		}
+        public RadioButton RadioButton(Regex elementId)
+        {
+            return RadioButton(Find.ById(elementId));
+        }
 
-		//    public TableSectionCollection TableSections
-		//    {
-		//      get { return SubElementsSupport.TableSections(Ie, this); }
-		//    }
+        public RadioButton RadioButton(BaseConstraint findBy)
+        {
+            return ElementsSupport.RadioButton(DomContainer, findBy, this);
+        }
 
-		public TableCell TableCell(string elementId)
-		{
-			return TableCell(Find.ById(elementId));
-		}
+#if !NET11
+        public RadioButton RadioButton(Predicate<RadioButton> predicate)
+        {
+            return RadioButton(Find.ByElement(predicate));
+        }
+#endif
 
-		public TableCell TableCell(Regex elementId)
-		{
-			return TableCell(Find.ById(elementId));
-		}
+        public RadioButtonCollection RadioButtons
+        {
+            get { return ElementsSupport.RadioButtons(DomContainer, this); }
+        }
 
-		public TableCell TableCell(BaseConstraint findBy)
-		{
-			return ElementsSupport.TableCell(DomContainer, findBy, this);
-		}
+        public SelectList SelectList(string elementId)
+        {
+            return SelectList(Find.ById(elementId));
+        }
+
+        public SelectList SelectList(Regex elementId)
+        {
+            return SelectList(Find.ById(elementId));
+        }
+
+        public SelectList SelectList(BaseConstraint findBy)
+        {
+            return ElementsSupport.SelectList(DomContainer, findBy, this);
+        }
+
+#if !NET11
+        public SelectList SelectList(Predicate<SelectList> predicate)
+        {
+            return SelectList(Find.ByElement(predicate));
+        }
+#endif
+
+        public SelectListCollection SelectLists
+        {
+            get { return ElementsSupport.SelectLists(DomContainer, this); }
+        }
+
+        public Table Table(string elementId)
+        {
+            return Table(Find.ById(elementId));
+        }
+
+        public Table Table(Regex elementId)
+        {
+            return Table(Find.ById(elementId));
+        }
+
+        public Table Table(BaseConstraint findBy)
+        {
+            return ElementsSupport.Table(DomContainer, findBy, this);
+        }
+
+#if !NET11
+        public Table Table(Predicate<Table> predicate)
+        {
+            return Table(Find.ByElement(predicate));
+        }
+#endif
+
+        public TableCollection Tables
+        {
+            get { return ElementsSupport.Tables(DomContainer, this); }
+        }
+
+        public TableBody TableBody(string elementId)
+        {
+            return TableBody(Find.ById(elementId));
+        }
+
+        public TableBody TableBody(Regex elementId)
+        {
+            return TableBody(Find.ById(elementId));
+        }
+
+        public virtual TableBody TableBody(BaseConstraint findBy)
+        {
+            return ElementsSupport.TableBody(DomContainer, findBy, this);
+        }
+
+#if !NET11
+        public TableBody TableBody(Predicate<TableBody> predicate)
+        {
+            return TableBody(Find.ByElement(predicate));
+        }
+#endif
+
+        public virtual TableBodyCollection TableBodies
+        {
+            get { return ElementsSupport.TableBodies(DomContainer, this); }
+        }
+
+        public TableCell TableCell(string elementId)
+        {
+            return TableCell(Find.ById(elementId));
+        }
+
+        public TableCell TableCell(Regex elementId)
+        {
+            return TableCell(Find.ById(elementId));
+        }
+
+        public TableCell TableCell(BaseConstraint findBy)
+        {
+            return ElementsSupport.TableCell(DomContainer, findBy, this);
+        }
+
+#if !NET11
+        public TableCell TableCell(Predicate<TableCell> predicate)
+        {
+            return TableCell(predicate);
+        }
+#endif
 
 		/// <summary>
 		/// Finds a TableCell by the n-th index of an id. 
@@ -313,142 +428,155 @@ namespace WatiN.Core
 		/// with "tablecellid" as it's id value. 
 		/// <code>ie.TableCell("tablecellid", 2).Text</code>
 		/// </example>
-		public TableCell TableCell(string elementId, int index)
-		{
-			return ElementsSupport.TableCell(DomContainer, elementId, index, this);
-		}
+        public TableCell TableCell(string elementId, int index)
+        {
+            return ElementsSupport.TableCell(DomContainer, elementId, index, this);
+        }
 
-		public TableCell TableCell(Regex elementId, int index)
-		{
-			return ElementsSupport.TableCell(DomContainer, elementId, index, this);
-		}
+        public TableCell TableCell(Regex elementId, int index)
+        {
+            return ElementsSupport.TableCell(DomContainer, elementId, index, this);
+        }
 
-		public TableCellCollection TableCells
-		{
-			get { return ElementsSupport.TableCells(DomContainer, this); }
-		}
+        public TableCellCollection TableCells
+        {
+            get { return ElementsSupport.TableCells(DomContainer, this); }
+        }
 
-		public TableRow TableRow(string elementId)
-		{
-			return TableRow(Find.ById(elementId));
-		}
+        public TableRow TableRow(string elementId)
+        {
+            return TableRow(Find.ById(elementId));
+        }
 
-		public TableRow TableRow(Regex elementId)
-		{
-			return TableRow(Find.ById(elementId));
-		}
+        public TableRow TableRow(Regex elementId)
+        {
+            return TableRow(Find.ById(elementId));
+        }
 
-		public virtual TableRow TableRow(BaseConstraint findBy)
-		{
-			return ElementsSupport.TableRow(DomContainer, findBy, this);
-		}
+        public virtual TableRow TableRow(BaseConstraint findBy)
+        {
+            return ElementsSupport.TableRow(DomContainer, findBy, this);
+        }
 
-		public virtual TableRowCollection TableRows
-		{
-			get { return ElementsSupport.TableRows(DomContainer, this); }
-		}
+#if !NET11
+        public TableRow TableRow(Predicate<TableRow> predicate)
+        {
+            return TableRow(Find.ByElement(predicate));
+        }
+#endif
 
-		public TableBody TableBody(string elementId)
-		{
-			return TableBody(Find.ById(elementId));
-		}
+        public virtual TableRowCollection TableRows
+        {
+            get { return ElementsSupport.TableRows(DomContainer, this); }
+        }
 
-		public TableBody TableBody(Regex elementId)
-		{
-			return TableBody(Find.ById(elementId));
-		}
+        public TextField TextField(string elementId)
+        {
+            return TextField(Find.ById(elementId));
+        }
 
-		public virtual TableBody TableBody(BaseConstraint findBy)
-		{
-			return ElementsSupport.TableBody(DomContainer, findBy, this);
-		}
+        public TextField TextField(Regex elementId)
+        {
+            return TextField(Find.ById(elementId));
+        }
 
-		public virtual TableBodyCollection TableBodies
-		{
-			get { return ElementsSupport.TableBodies(DomContainer, this); }
-		}
+        public TextField TextField(BaseConstraint findBy)
+        {
+            return ElementsSupport.TextField(DomContainer, findBy, this);
+        }
 
-		public TextField TextField(string elementId)
-		{
-			return TextField(Find.ById(elementId));
-		}
+#if !NET11
+        public TextField TextField(Predicate<TextField> predicate)
+        {
+            return TextField(Find.ByElement(predicate));
+        }
+#endif
+        public TextFieldCollection TextFields
+        {
+            get { return ElementsSupport.TextFields(DomContainer, this); }
+        }
 
-		public TextField TextField(Regex elementId)
-		{
-			return TextField(Find.ById(elementId));
-		}
+        public Span Span(string elementId)
+        {
+            return Span(Find.ById(elementId));
+        }
 
-		public TextField TextField(BaseConstraint findBy)
-		{
-			return ElementsSupport.TextField(DomContainer, findBy, this);
-		}
+        public Span Span(Regex elementId)
+        {
+            return Span(Find.ById(elementId));
+        }
 
-		public TextFieldCollection TextFields
-		{
-			get { return ElementsSupport.TextFields(DomContainer, this); }
-		}
+        public Span Span(BaseConstraint findBy)
+        {
+            return ElementsSupport.Span(DomContainer, findBy, this);
+        }
 
-		public Span Span(string elementId)
-		{
-			return Span(Find.ById(elementId));
-		}
+#if !NET11
+        public Span Span(Predicate<Span> predicate)
+        {
+            return Span(Find.ByElement(predicate));
+        }
+#endif
 
-		public Span Span(Regex elementId)
-		{
-			return Span(Find.ById(elementId));
-		}
+        public SpanCollection Spans
+        {
+            get { return ElementsSupport.Spans(DomContainer, this); }
+        }
 
-		public Span Span(BaseConstraint findBy)
-		{
-			return ElementsSupport.Span(DomContainer, findBy, this);
-		}
+        public Div Div(string elementId)
+        {
+            return Div(Find.ById(elementId));
+        }
 
-		public SpanCollection Spans
-		{
-			get { return ElementsSupport.Spans(DomContainer, this); }
-		}
+        public Div Div(Regex elementId)
+        {
+            return Div(Find.ById(elementId));
+        }
 
-		public Div Div(string elementId)
-		{
-			return Div(Find.ById(elementId));
-		}
+        public Div Div(BaseConstraint findBy)
+        {
+            return ElementsSupport.Div(DomContainer, findBy, this);
+        }
 
-		public Div Div(Regex elementId)
-		{
-			return Div(Find.ById(elementId));
-		}
+#if !NET11
+        public Div Div(Predicate<Div> predicate)
+        {
+            return Div(Find.ByElement(predicate));
+        }
+#endif
 
-		public Div Div(BaseConstraint findBy)
-		{
-			return ElementsSupport.Div(DomContainer, findBy, this);
-		}
+        public DivCollection Divs
+        {
+            get { return ElementsSupport.Divs(DomContainer, this); }
+        }
 
-		public DivCollection Divs
-		{
-			get { return ElementsSupport.Divs(DomContainer, this); }
-		}
+        public Image Image(string elementId)
+        {
+            return Image(Find.ById(elementId));
+        }
 
-		public Image Image(string elementId)
-		{
-			return Image(Find.ById(elementId));
-		}
+        public Image Image(Regex elementId)
+        {
+            return Image(Find.ById(elementId));
+        }
 
-		public Image Image(Regex elementId)
-		{
-			return Image(Find.ById(elementId));
-		}
+        public Image Image(BaseConstraint findBy)
+        {
+            return ElementsSupport.Image(DomContainer, findBy, this);
+        }
 
-		public Image Image(BaseConstraint findBy)
-		{
-			return ElementsSupport.Image(DomContainer, findBy, this);
-		}
+#if !NET11
+        public Image Image(Predicate<Image> predicate)
+        {
+            return Image(Find.ByElement(predicate));
+        }
+#endif
 
-		public ImageCollection Images
-		{
-			get { return ElementsSupport.Images(DomContainer, this); }
-		}
-
-		#endregion
+        public ImageCollection Images
+        {
+            get { return ElementsSupport.Images(DomContainer, this); }
+        }
+        #endregion
 
 		IHTMLElementCollection IElementCollection.Elements
 		{

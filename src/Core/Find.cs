@@ -712,7 +712,18 @@ namespace WatiN.Core
 		/// <returns>An ElementConstraint instance</returns>
 		public static ElementConstraint ByElement(Predicate<Element> predicate)
 		{
-			return new ElementConstraint(new PredicateComparer(predicate));
+            return ByElement<Element>(predicate);
+		}
+
+		/// <summary>
+		/// Find an Element by calling the predicate for each element that
+		/// needs to be evaluated.
+		/// </summary>
+		/// <param name="predicate">The predicate</param>
+		/// <returns>An ElementConstraint instance</returns>
+		public static ElementConstraint ByElement<T>(Predicate<T> predicate) where T:Element
+		{
+			return new ElementConstraint(new PredicateComparer<T>(predicate));
 		}
 #endif	
     

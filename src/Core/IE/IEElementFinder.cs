@@ -155,10 +155,9 @@ namespace WatiN.Core.InternetExplorer
 		{
 			// Get elements with the tagname from the page
 		    findBy.Reset();
-            Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
             ElementAttributeBag attributeBag = new ElementAttributeBag(_domContainer);
 
-            if (FindByExactMatchOnId(findBy, constraint))
+            if (FindByExactMatchOnId(findBy))
             {
                 return FindElementById(findBy, elementTag, attributeBag, returnAfterFirstMatch);
             }
@@ -176,7 +175,7 @@ namespace WatiN.Core.InternetExplorer
 	            // Loop through each element and evaluate
 	            foreach (IHTMLElement element in elements)
 	            {
-                    if (!AddToChildrenIfConstraintsAreMet(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children))
+                    if (!FinishedAddingChildrenThatMetTheConstraints(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children))
 	                {
 	                    return children;
 	                }
@@ -194,12 +193,12 @@ namespace WatiN.Core.InternetExplorer
 
 	        if (element != null)
 	        {
-	            AddToChildrenIfConstraintsAreMet(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children);
+	            FinishedAddingChildrenThatMetTheConstraints(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children);
 	        }
 	        return children;
 	    }
 
-	    private bool AddToChildrenIfConstraintsAreMet(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
+	    private bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
 	    {            
             IEElement ieElement = new IEElement(element);
 	        waitUntilElementReadyStateIsComplete(element);
@@ -217,8 +216,9 @@ namespace WatiN.Core.InternetExplorer
 	        return true;
 	    }
 
-	    private bool FindByExactMatchOnId(BaseConstraint findBy, Constraints.AttributeConstraint constraint)
+	    private bool FindByExactMatchOnId(BaseConstraint findBy)
 	    {
+            Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
 	        return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
 	    }
 

@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
 using NUnit.Framework;
+using Iz = NUnit.Framework.SyntaxHelpers.Is;
 using Rhino.Mocks;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -37,10 +38,10 @@ namespace WatiN.Core.UnitTests
 
 		public override Uri TestPageUri
 		{
-			get { return AboutBlank; }
+			get { return MainURI; }
 		}
 
-		private void InitMocks() 
+        private void InitMocks() 
 		{
 			_mockRepository = new MockRepository();
 			_mockHtmlDocument = (IHTMLDocument2) _mockRepository.CreateMock(typeof (IHTMLDocument2));
@@ -64,8 +65,6 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void DocumentUrlandUri()
 		{
-			ie.GoTo(MainURI);
-
 			Uri uri = new Uri(ie.Url);
 			Assert.AreEqual(MainURI, uri);
 			Assert.AreEqual(ie.Uri, uri);
@@ -169,6 +168,7 @@ namespace WatiN.Core.UnitTests
 
 			HTMLInjector.Start(ie, "some text 1", 2);
             ie.WaitUntilContainsText("some text 1");
+            ie.GoTo(TestPageUri);
         }
 
         [Test]
@@ -178,6 +178,7 @@ namespace WatiN.Core.UnitTests
 
 			HTMLInjector.Start(ie, "some text 2", 1);
             ie.WaitUntilContainsText("some text 2");
+            ie.GoTo(TestPageUri);
         }
 
         [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException))]
@@ -187,6 +188,7 @@ namespace WatiN.Core.UnitTests
 
 			HTMLInjector.Start(ie, "some text 3", 2);
             ie.WaitUntilContainsText(new Regex("me text 3"));
+            ie.GoTo(TestPageUri);
         }
 
         [Test]
@@ -196,7 +198,183 @@ namespace WatiN.Core.UnitTests
 
 			HTMLInjector.Start(ie, "some text 4", 1);
             ie.WaitUntilContainsText(new Regex("me text 4"));
+            ie.GoTo(TestPageUri);
         }
+
+#if !NET11
+        [Test, Ignore("TODO")]
+        public void TestAreaPredicateOverload()
+        {
+            //            Area Area = ie.Area(t => t.Name == "q");
+            Area Area = ie.Area(delegate(Area t) { return t.Id == "readonlytext"; });
+
+            Assert.That(Area.Id, Iz.EqualTo("readonlytext"));
+        }
+
+        [Test]
+        public void TestButtonPredicateOverload()
+        {
+            //            Button Button = ie.Button(t => t.Name == "q");
+            Button Button = ie.Button(delegate(Button t) { return t.Id == "popupid"; });
+
+            Assert.That(Button.Id, Iz.EqualTo("popupid"));
+        }
+
+        [Test]
+        public void TestCheckBoxPredicateOverload()
+        {
+            //            CheckBox CheckBox = ie.CheckBox(t => t.Name == "q");
+            CheckBox CheckBox = ie.CheckBox(delegate(CheckBox t) { return t.Id == "Checkbox2"; });
+
+            Assert.That(CheckBox.Id, Iz.EqualTo("Checkbox2"));
+        }
+
+        [Test]
+        public void TestElementPredicateOverload()
+        {
+            //            Element Element = ie.Element(t => t.Name == "q");
+            Element Element = ie.Element(delegate(Element t) { return t.Id == "Radio1"; });
+
+            Assert.That(Element.Id, Iz.EqualTo("Radio1"));
+        }
+
+        [Test]
+        public void TestFileUploadPredicateOverload()
+        {
+            //            FileUpload FileUpload = ie.FileUpload(t => t.Name == "q");
+            FileUpload FileUpload = ie.FileUpload(delegate(FileUpload t) { return t.Id == "upload"; });
+
+            Assert.That(FileUpload.Id, Iz.EqualTo("upload"));
+        }
+
+        [Test]
+        public void TestFormPredicateOverload()
+        {
+            //            Form Form = ie.Form(t => t.Name == "q");
+            Form Form = ie.Form(delegate(Form t) { return t.Id == "Form"; });
+
+            Assert.That(Form.Id, Iz.EqualTo("Form"));
+        }
+
+        [Test]
+        public void TestLabelPredicateOverload()
+        {
+            //            Label Label = ie.Label(t => t.Name == "q");
+            Label Label = ie.Label(delegate(Label t) { return t.For == "Checkbox21"; });
+
+            Assert.That(Label.For, Iz.EqualTo("Checkbox21"));
+        }
+
+        [Test]
+        public void TestLinkPredicateOverload()
+        {
+            //            Link Link = ie.Link(t => t.Name == "q");
+            Link Link = ie.Link(delegate(Link t) { return t.Id == "testlinkid"; });
+
+            Assert.That(Link.Id, Iz.EqualTo("testlinkid"));
+        }
+
+        [Test]
+        public void TestParaPredicateOverload()
+        {
+            //            Para Para = ie.Para(t => t.Name == "q");
+            Para Para = ie.Para(delegate(Para t) { return t.Id == "links"; });
+
+            Assert.That(Para.Id, Iz.EqualTo("links"));
+        }
+
+        [Test]
+        public void TestRadioButtonPredicateOverload()
+        {
+            //            RadioButton RadioButton = ie.RadioButton(t => t.Name == "q");
+            RadioButton RadioButton = ie.RadioButton(delegate(RadioButton t) { return t.Id == "Radio1"; });
+
+            Assert.That(RadioButton.Id, Iz.EqualTo("Radio1"));
+        }
+
+        [Test]
+        public void TestSelectListPredicateOverload()
+        {
+            //            SelectList SelectList = ie.SelectList(t => t.Name == "q");
+            SelectList SelectList = ie.SelectList(delegate(SelectList t) { return t.Id == "Select1"; });
+
+            Assert.That(SelectList.Id, Iz.EqualTo("Select1"));
+        }
+
+        [Test]
+        public void TestTablePredicateOverload()
+        {
+            //            Table Table = ie.Table(t => t.Name == "q");
+            Table Table = ie.Table(delegate(Table t) { return t.Id == "table1"; });
+
+            Assert.That(Table.Id, Iz.EqualTo("table1"));
+        }
+
+        [Test]
+        public void TestTableCellPredicateOverload()
+        {
+            //            TableCell TableCell = ie.TableCell(t => t.Name == "q");
+            TableCell TableCell = ie.TableCell(delegate(TableCell t) { return t.Id == "td2"; });
+
+            Assert.That(TableCell.Id, Iz.EqualTo("td2"));
+        }
+
+        [Test]
+        public void TestTableRowPredicateOverload()
+        {
+            //            TableRow TableRow = ie.TableRow(t => t.Name == "q");
+            TableRow TableRow = ie.TableRow(delegate(TableRow t) { return t.Id == "row0"; });
+
+            Assert.That(TableRow.Id, Iz.EqualTo("row0"));
+        }
+
+        [Test, Ignore("TODO")]
+        public void TestTableBodyPredicateOverload()
+        {
+            //            TableBody TableBody = ie.TableBody(t => t.Name == "q");
+            TableBody TableBody = ie.TableBody(delegate(TableBody t) { return t.Id == "readonlytext"; });
+
+            Assert.That(TableBody.Id, Iz.EqualTo("readonlytext"));
+        }
+
+        [Test]
+        public void TestTextFieldPredicateOverload()
+        {
+            //            TextField textField = ie.TextField(t => t.Name == "q");
+            TextField textField = ie.TextField(delegate(TextField t) { return t.Id == "readonlytext"; });
+
+            Assert.That(textField.Id, Iz.EqualTo("readonlytext"));
+        }
+
+        [Test]
+        public void TestSpanPredicateOverload()
+        {
+            //            Span Span = ie.Span(t => t.Name == "q");
+            Span Span = ie.Span(delegate(Span t) { return t.Id == "Span1"; });
+
+            Assert.That(Span.Id, Iz.EqualTo("Span1"));
+        }
+
+        [Test]
+        public void TestDivPredicateOverload()
+        {
+            //            Div Div = ie.Div(t => t.Name == "q");
+            Div Div = ie.Div(delegate(Div t) { return t.Id == "NextAndPreviousTests"; });
+
+            Assert.That(Div.Id, Iz.EqualTo("NextAndPreviousTests"));
+        }
+
+        [Test, Ignore("TODO")]
+        public void TestImagePredicateOverload()
+        {
+            //            Image Image = ie.Image(t => t.Name == "q");
+            Image Image = ie.Image(delegate(Image t) { return t.Id == "readonlytext"; });
+
+            Assert.That(Image.Id, Iz.EqualTo("readonlytext"));
+        }
+
+#endif 
+
 	}
 
     internal class HTMLInjector

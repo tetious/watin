@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -47,6 +48,8 @@ namespace WatiN.Core.Interfaces
 		/// <param name="findBy">The BaseConstraint</param>
 		/// <returns>The area</returns>
 		Area Area(BaseConstraint findBy);
+
+        Area Area(Predicate<Area> predicate);
 
 		/// <summary>
 		/// Gets the collection of areas.
@@ -113,6 +116,8 @@ namespace WatiN.Core.Interfaces
 		/// </example>
 		Button Button(BaseConstraint findBy);
 
+        Button Button(Predicate<Button> predicate);
+
 		/// <summary>
 		/// Gets a typed collection of <see cref="WatiN.Core.Button" /> instances within this <see cref="Document"/>.
 		/// </summary>
@@ -148,58 +153,69 @@ namespace WatiN.Core.Interfaces
 		CheckBox CheckBox(string elementId);
 		CheckBox CheckBox(Regex elementId);
 		CheckBox CheckBox(BaseConstraint findBy);
+        CheckBox CheckBox(Predicate<CheckBox> predicate);
 		CheckBoxCollection CheckBoxes { get; }
 
 		Element Element(string elementId);
 		Element Element(Regex elementId);
 		Element Element(BaseConstraint findBy);
+        Element Element(Predicate<Element> predicate);
 		Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes);
 		ElementCollection Elements { get; }
 
 		FileUpload FileUpload(string elementId);
 		FileUpload FileUpload(Regex elementId);
 		FileUpload FileUpload(BaseConstraint findBy);
-		FileUploadCollection FileUploads { get; }
+        FileUpload FileUpload(Predicate<FileUpload> predicate);
+        FileUploadCollection FileUploads { get; }
 
 		Form Form(string elementId);
 		Form Form(Regex elementId);
 		Form Form(BaseConstraint findBy);
-		FormCollection Forms { get; }
+        Form Form(Predicate<Form> predicate);
+        FormCollection Forms { get; }
 
 		Label Label(string elementId);
 		Label Label(Regex elementId);
 		Label Label(BaseConstraint findBy);
-		LabelCollection Labels { get; }
+        Label Label(Predicate<Label> predicate);
+        LabelCollection Labels { get; }
 
 		Link Link(string elementId);
 		Link Link(Regex elementId);
 		Link Link(BaseConstraint findBy);
-		LinkCollection Links { get; }
+        Link Link(Predicate<Link> predicate);
+        LinkCollection Links { get; }
 
 		Para Para(string elementId);
 		Para Para(Regex elementId);
 		Para Para(BaseConstraint findBy);
-		ParaCollection Paras { get; }
+        Para Para(Predicate<Para> predicate);
+        ParaCollection Paras { get; }
 
 		RadioButton RadioButton(string elementId);
 		RadioButton RadioButton(Regex elementId);
 		RadioButton RadioButton(BaseConstraint findBy);
-		RadioButtonCollection RadioButtons { get; }
+        RadioButton RadioButton(Predicate<RadioButton> predicate);
+        RadioButtonCollection RadioButtons { get; }
 
 		SelectList SelectList(string elementId);
 		SelectList SelectList(Regex elementId);
 		SelectList SelectList(BaseConstraint findBy);
-		SelectListCollection SelectLists { get; }
+        SelectList SelectList(Predicate<SelectList> predicate);
+        SelectListCollection SelectLists { get; }
 
 		Table Table(string elementId);
 		Table Table(Regex elementId);
 		Table Table(BaseConstraint findBy);
-		TableCollection Tables { get; }
+        Table Table(Predicate<Table> predicate);
+        TableCollection Tables { get; }
 //    TableSectionCollection TableSections { get; }
 
 		TableCell TableCell(string elementId);
 		TableCell TableCell(Regex elementId);
 		TableCell TableCell(BaseConstraint findBy);
+        TableCell TableCell(Predicate<TableCell> predicate);
 
 		/// <summary>
 		/// Finds a TableCell by the n-th index of an id. 
@@ -218,31 +234,38 @@ namespace WatiN.Core.Interfaces
 		TableRow TableRow(string elementId);
 		TableRow TableRow(Regex elementId);
 		TableRow TableRow(BaseConstraint findBy);
-		TableRowCollection TableRows { get; }
+        TableRow TableRow(Predicate<TableRow> predicate);
+        TableRowCollection TableRows { get; }
 
 		TableBody TableBody(string elementId);
 		TableBody TableBody(Regex elementId);
 		TableBody TableBody(BaseConstraint findBy);
-		TableBodyCollection TableBodies { get; }
+        TableBody TableBody(Predicate<TableBody> predicate);
+        TableBodyCollection TableBodies { get; }
 
 		TextField TextField(string elementId);
 		TextField TextField(Regex elementId);
 		TextField TextField(BaseConstraint findBy);
+	    TextField TextField(Predicate<TextField> predicate);
+
 		TextFieldCollection TextFields { get; }
 
 		Span Span(string elementId);
 		Span Span(Regex elementId);
 		Span Span(BaseConstraint findBy);
-		SpanCollection Spans { get; }
+        Span Span(Predicate<Span> predicate);
+        SpanCollection Spans { get; }
 
 		Div Div(string elementId);
 		Div Div(Regex elementId);
 		Div Div(BaseConstraint findBy);
-		DivCollection Divs { get; }
+        Div Div(Predicate<Div> predicate);
+        DivCollection Divs { get; }
 
 		Image Image(string elementId);
 		Image Image(Regex elementId);
 		Image Image(BaseConstraint findBy);
-		ImageCollection Images { get; }
+        Image Image(Predicate<Image> predicate);
+        ImageCollection Images { get; }
 	}
 }

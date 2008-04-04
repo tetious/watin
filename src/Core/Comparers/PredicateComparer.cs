@@ -25,8 +25,8 @@ namespace WatiN.Core.Comparers
 
 	public class PredicateComparer : BaseComparer, ICompareElement
 	{
-		private Predicate<string> _compareString;
-		private Predicate<Element> _compareElement;
+		private readonly Predicate<string> _compareString;
+		private readonly Predicate<Element> _compareElement;
 	
 		public PredicateComparer(Predicate<string> predicate)
 		{
@@ -38,7 +38,7 @@ namespace WatiN.Core.Comparers
 			_compareElement = predicate;	
 		}
 
-		public override bool Compare(string value)
+	    public override bool Compare(string value)
 		{
 			return _compareString.Invoke(value);
 		}
@@ -46,6 +46,21 @@ namespace WatiN.Core.Comparers
 		public virtual bool Compare(Element element)
 		{
 			return _compareElement.Invoke(element);
+		}
+	}
+
+	public class PredicateComparer<E> : BaseComparer, ICompareElement where E : Element
+	{
+        private readonly Predicate<E> _compareElement;
+
+        public PredicateComparer(Predicate<E> predicate)
+		{
+			_compareElement = predicate;	
+		}
+
+		public virtual bool Compare(Element element)
+		{
+			return _compareElement.Invoke((E)element);
 		}
 	}
 }

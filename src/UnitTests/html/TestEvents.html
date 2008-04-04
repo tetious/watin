@@ -126,10 +126,11 @@ function fnPrompt()
 		</p>
 		<p>
 			<input type="button" name="cmdClickMe" value="VBScript MsgBox" ID="vbScriptMsgBox" />
-			<input type="text" id="msgBoxButtons" value="0" /> <INPUT type="text" id="msgBoxReturnValue" value="" />
 			<script type="text/vbscript" for="cmdClickMe" event="onClick" language="VBScript">
 			msgBoxReturnValue.value = MsgBox("WatiN VbScriptMsgBoxDialogHandler test.",msgBoxButtons.value)
 			</script>
+			<input type="text" id="msgBoxButtons" value="0" />
+			<input type="text" id="msgBoxReturnValue" value="" />
 		</p>
 		<p>
 			<input id="textfieldid" type="text" onkeydown="javascript:keyDown()" onkeypress="javascript:keyPress()" onkeyup="javascript:keyUp()" /> 

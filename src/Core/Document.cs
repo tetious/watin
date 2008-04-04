@@ -26,7 +26,6 @@ using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -395,7 +394,14 @@ namespace WatiN.Core
 			return ElementsSupport.Area(DomContainer, findBy, this);
 		}
 
-		public AreaCollection Areas
+#if !NET11
+	    public Area Area(Predicate<Area> predicate)
+	    {
+	        return Area(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public AreaCollection Areas
 		{
 			get { return ElementsSupport.Areas(DomContainer, this); }
 		}
@@ -415,7 +421,13 @@ namespace WatiN.Core
 			return ElementsSupport.Button(DomContainer, findBy, this);
 		}
 
-		public ButtonCollection Buttons
+#if !NET11
+	    public Button Button(Predicate<Button> predicate)
+	    {
+	        return Button(Find.ByElement(predicate));
+	    }
+#endif
+	    public ButtonCollection Buttons
 		{
 			get { return ElementsSupport.Buttons(DomContainer, this); }
 		}
@@ -435,7 +447,14 @@ namespace WatiN.Core
 			return ElementsSupport.CheckBox(DomContainer, findBy, this);
 		}
 
-		public CheckBoxCollection CheckBoxes
+#if !NET11
+	    public CheckBox CheckBox(Predicate<CheckBox> predicate)
+	    {
+	        return CheckBox(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public CheckBoxCollection CheckBoxes
 		{
 			get { return ElementsSupport.CheckBoxes(DomContainer, this); }
 		}
@@ -453,9 +472,17 @@ namespace WatiN.Core
 		public Element Element(BaseConstraint findBy)
 		{
 			return ElementsSupport.Element(DomContainer, findBy, this);
-		}
+        }
 
-		public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
+
+#if !NET11
+        public Element Element(Predicate<Element> predicate)
+	    {
+	        return Element(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
 		{
 			return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
 		}
@@ -480,7 +507,14 @@ namespace WatiN.Core
 			return ElementsSupport.FileUpload(DomContainer, findBy, this);
 		}
 
-		public FileUploadCollection FileUploads
+#if !NET11
+	    public FileUpload FileUpload(Predicate<FileUpload> predicate)
+	    {
+	        return FileUpload(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public FileUploadCollection FileUploads
 		{
 			get { return ElementsSupport.FileUploads(DomContainer, this); }
 		}
@@ -500,7 +534,14 @@ namespace WatiN.Core
 			return ElementsSupport.Form(DomContainer, findBy, this);
 		}
 
-		public FormCollection Forms
+#if !NET11
+        public Form Form(Predicate<Form> predicate)
+	    {
+	        return Form(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public FormCollection Forms
 		{
 			get { return ElementsSupport.Forms(DomContainer, this); }
 		}
@@ -520,7 +561,14 @@ namespace WatiN.Core
 			return ElementsSupport.Label(DomContainer, findBy, this);
 		}
 
-		public LabelCollection Labels
+#if !NET11
+	    public Label Label(Predicate<Label> predicate)
+	    {
+	        return Label(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public LabelCollection Labels
 		{
 			get { return ElementsSupport.Labels(DomContainer, this); }
 		}
@@ -540,7 +588,14 @@ namespace WatiN.Core
 			return ElementsSupport.Link(DomContainer, findBy, this);
 		}
 
-		public LinkCollection Links
+#if !NET11
+        public Link Link(Predicate<Link> predicate)
+	    {
+	        return Link(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public LinkCollection Links
 		{
 			get { return ElementsSupport.Links(DomContainer, this); }
 		}
@@ -560,7 +615,14 @@ namespace WatiN.Core
 			return ElementsSupport.Para(DomContainer, findBy, this);
 		}
 
-		public ParaCollection Paras
+#if !NET11
+        public Para Para(Predicate<Para> predicate)
+	    {
+	        return Para(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public ParaCollection Paras
 		{
 			get { return ElementsSupport.Paras(DomContainer, this); }
 		}
@@ -580,7 +642,14 @@ namespace WatiN.Core
 			return ElementsSupport.RadioButton(DomContainer, findBy, this);
 		}
 
-		public RadioButtonCollection RadioButtons
+#if !NET11
+        public RadioButton RadioButton(Predicate<RadioButton> predicate)
+	    {
+	        return RadioButton(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public RadioButtonCollection RadioButtons
 		{
 			get { return ElementsSupport.RadioButtons(DomContainer, this); }
 		}
@@ -600,7 +669,14 @@ namespace WatiN.Core
 			return ElementsSupport.SelectList(DomContainer, findBy, this);
 		}
 
-		public SelectListCollection SelectLists
+#if !NET11
+	    public SelectList SelectList(Predicate<SelectList> predicate)
+	    {
+	        return SelectList(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public SelectListCollection SelectLists
 		{
 			get { return ElementsSupport.SelectLists(DomContainer, this); }
 		}
@@ -620,7 +696,14 @@ namespace WatiN.Core
 			return ElementsSupport.Table(DomContainer, findBy, this);
 		}
 
-		public TableCollection Tables
+#if !NET11
+        public Table Table(Predicate<Table> predicate)
+	    {
+	        return Table(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public TableCollection Tables
 		{
 			get { return ElementsSupport.Tables(DomContainer, this); }
 		}
@@ -640,7 +723,14 @@ namespace WatiN.Core
 			return ElementsSupport.TableBody(DomContainer, findBy, this);
 		}
 
-		public TableBodyCollection TableBodies
+#if !NET11
+        public TableBody TableBody(Predicate<TableBody> predicate)
+	    {
+	        return TableBody(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public TableBodyCollection TableBodies
 		{
 			get { return ElementsSupport.TableBodies(DomContainer, this); }
 		}
@@ -660,7 +750,14 @@ namespace WatiN.Core
 			return ElementsSupport.TableCell(DomContainer, findBy, this);
 		}
 
-		public TableCell TableCell(string elementId, int index)
+#if !NET11
+        public TableCell TableCell(Predicate<TableCell> predicate)
+	    {
+	        return TableCell(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public TableCell TableCell(string elementId, int index)
 		{
 			return ElementsSupport.TableCell(DomContainer, elementId, index, this);
 		}
@@ -690,7 +787,14 @@ namespace WatiN.Core
 			return ElementsSupport.TableRow(DomContainer, findBy, this);
 		}
 
-		public TableRowCollection TableRows
+#if !NET11
+        public TableRow TableRow(Predicate<TableRow> predicate)
+	    {
+	        return TableRow(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public TableRowCollection TableRows
 		{
 			get { return ElementsSupport.TableRows(DomContainer, this); }
 		}
@@ -710,6 +814,12 @@ namespace WatiN.Core
 			return ElementsSupport.TextField(DomContainer, findBy, this);
 		}
 
+#if !NET11
+        public TextField TextField(Predicate<TextField> predicate)
+        {
+            return TextField(Find.ByElement(predicate));
+        }
+#endif
 		public TextFieldCollection TextFields
 		{
 			get { return ElementsSupport.TextFields(DomContainer, this); }
@@ -730,7 +840,14 @@ namespace WatiN.Core
 			return ElementsSupport.Span(DomContainer, findBy, this);
 		}
 
-		public SpanCollection Spans
+#if !NET11
+        public Span Span(Predicate<Span> predicate)
+	    {
+	        return Span(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public SpanCollection Spans
 		{
 			get { return ElementsSupport.Spans(DomContainer, this); }
 		}
@@ -750,7 +867,14 @@ namespace WatiN.Core
 			return ElementsSupport.Div(DomContainer, findBy, this);
 		}
 
-		public DivCollection Divs
+#if !NET11
+        public Div Div(Predicate<Div> predicate)
+	    {
+	        return Div(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public DivCollection Divs
 		{
 			get { return ElementsSupport.Divs(DomContainer, this); }
 		}
@@ -770,7 +894,14 @@ namespace WatiN.Core
 			return ElementsSupport.Image(DomContainer, findBy, this);
 		}
 
-		public ImageCollection Images
+#if !NET11
+        public Image Image(Predicate<Image> predicate)
+	    {
+	        return Image(Find.ByElement(predicate));
+	    }
+#endif
+
+	    public ImageCollection Images
 		{
 			get { return ElementsSupport.Images(DomContainer, this); }
 		}
