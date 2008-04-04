@@ -152,6 +152,13 @@ namespace WatiN.Core
 			return false;
 		}
 
+#if !NET11
+        public bool Exists(Predicate<T> predicate)
+        {
+            return Exists(Find.ByElement(predicate));
+        }
+#endif
+
 #if NET11
         public Element First()
         {

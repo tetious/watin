@@ -91,6 +91,19 @@ namespace WatiN.Core
 			return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this));
 		}
 
+#if !NET11
+        /// <summary>
+		/// Returns the table body section belonging to this table (not including table body sections 
+		/// from tables nested in this table).
+		/// </summary>
+		/// <param name="predicate">The expression to use.</param>
+		/// <returns></returns>
+		public override TableBody TableBody(Predicate<TableBody> predicate)
+		{
+			return TableBody(Find.ByElement(predicate));
+		}
+#endif
+
 		private IHTMLElement GetFirstTBody()
 		{
 			return (IHTMLElement) HTMLTable.tBodies.item(0, null);

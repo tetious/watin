@@ -240,5 +240,13 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
+
+        [Test]
+        public void FindOptionUsingPredicateT()
+        {
+            Option option = ie.SelectList("Select2").Option(o => o.Text == "Third Listitem");
+            Assert.That(option.Exists);
+        }
+
 	}
 }

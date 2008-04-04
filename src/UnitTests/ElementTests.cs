@@ -938,7 +938,7 @@ namespace WatiN.Core.UnitTests
 
     // TODO: Move this class to its own file
     [TestFixture]
-    public class BaseElementCollection : BaseWithIETests
+    public class BaseElementCollectionTest : BaseWithIETests
     {
         public override Uri TestPageUri
         {
@@ -964,5 +964,13 @@ namespace WatiN.Core.UnitTests
             Assert.That(element.Id, Iz.EqualTo("popupid"));
             Assert.That(element, Iz.TypeOf(typeof(Button)));
         }
+
+#if !NET11
+        [Test]
+        public void ExistUsingPredicateT()
+        {
+            Assert.That(ie.Buttons.Exists(delegate(Button b) { return b.Id == "helloid"; }));
+        }
+#endif
     }
 }

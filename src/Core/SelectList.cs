@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
@@ -201,6 +202,18 @@ namespace WatiN.Core
 		{
 			return ElementsSupport.Option(DomContainer, findBy, new ElementCollection(this));
 		}
+
+#if !NET11
+        /// <summary>
+		/// Returns the <see cref="Options" /> which matches the specified expression.
+		/// </summary>
+		/// <param name="predicate">The expression to use.</param>
+		/// <returns></returns>
+		public Option Option(Predicate<Option> predicate)
+		{
+			return Option(Find.ByElement((predicate)));
+		}
+#endif
 
 		/// <summary>
 		/// Returns all the <see cref="Core.Option"/> elements in the <see cref="SelectList"/>.

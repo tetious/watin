@@ -173,5 +173,16 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(tableEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(2, count);
 		}
+
+#if !NET11
+        [Test]
+        public void FindTableBodyUsingPredicateT()
+        {
+            ie.GoTo(TablesUri);
+            TableBody tableBody = ie.Table("Table1").TableBody(delegate(TableBody t) { return t.Id == "tbody3"; });
+
+            Assert.That(tableBody.Exists);
+        }
+#endif
 	}
 }

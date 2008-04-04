@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using mshtml;
 using WatiN.Core.Constraints;
@@ -56,6 +57,19 @@ namespace WatiN.Core
 		{
 			return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
 		}
+
+#if !NET11
+        /// <summary>
+		/// Returns the table row belonging to this table body (not including table rows 
+		/// from tables nested in this table body).
+		/// </summary>
+        /// <param name="predicate">The expression to use.</param>
+		/// <returns></returns>
+		public override TableRow TableRow(Predicate<TableRow> predicate)
+		{
+			return TableRow(Find.ByElement(predicate));
+		}
+#endif
 
 		public static ArrayList ElementTags
 		{
