@@ -29,8 +29,12 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core
 {
 	/// <summary>
+#if NET11
 	/// This delegate is mainly used by <see cref="BaseElementCollection"/> to 
-	/// delegate the creation of a specialized element type. 
+#else
+    /// This delegate is mainly used by <see cref="BaseElementCollection<T>"/> to 
+#endif
+    /// delegate the creation of a specialized element type. 
 	/// </summary>
 	public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
 
@@ -112,14 +116,7 @@ namespace WatiN.Core
 			{
 				if (elements == null)
 				{
-					if (finder != null)
-					{
-						elements = finder.FindAll();
-					}
-					else
-					{
-						elements = new ArrayList();
-					}
+					elements = finder != null ? finder.FindAll() : new ArrayList();
 				}
 
 				return elements;
@@ -206,8 +203,7 @@ namespace WatiN.Core
 
 	    private ArrayList FilterElements(BaseConstraint findBy)
 	    {
-	        ArrayList returnElements;
-	        returnElements = new ArrayList();
+	        ArrayList returnElements = new ArrayList();
 	        ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
 
 	        foreach (IHTMLElement element in Elements)
@@ -232,7 +228,7 @@ namespace WatiN.Core
 #if !NET11
 	    IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			return new EnumeratorT<T>(domContainer, Elements, createElementInstance);
+			return new EnumeratorT(domContainer, Elements, createElementInstance);
 		}
 #endif
 
@@ -287,7 +283,7 @@ namespace WatiN.Core
 
 #if !NET11
         /// <exclude />
-        public class EnumeratorT<T> : IEnumerator<T> where T : Element
+        public class EnumeratorT : IEnumerator<T>
         {
             private ArrayList children;
             private DomContainer domContainer;

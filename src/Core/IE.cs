@@ -622,9 +622,9 @@ namespace WatiN.Core
 #if NET11      
 			// Code for .Net 1.1
 			bool isSTA = (Thread.CurrentThread.ApartmentState == ApartmentState.STA);
-#elif NET20
-	// Code for .Net 2.0
-      bool isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+#else
+            // Code for .Net 2.0
+            bool isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
 			if (!isSTA)
 			{

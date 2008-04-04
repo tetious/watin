@@ -874,7 +874,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 
-#if NET20
+#if !NET11
         [Test]
         public void AncestorGenericType()
         {

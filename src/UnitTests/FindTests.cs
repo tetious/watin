@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests
 	public class FindTests
 	{
 		private const string _href = "href";
-#if NET20
+#if !NET11
     private string _expectedPredicateCompareValue;
 
     [SetUp]
@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
     }
 #endif
 
-		[Test]
+        [Test]
 		public void FindByFor()
 		{
 			const string htmlfor = "htmlfor";
@@ -64,13 +64,13 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByFor(new StringContainsAndCaseInsensitiveComparer("VAl"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-      attributeBag = new MockAttributeBag(htmlfor, "forvalue");
+#if !NET11
+            attributeBag = new MockAttributeBag(htmlfor, "forvalue");
 			_expectedPredicateCompareValue = "forvalue";
 			value = Find.ByFor(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
-		}
+        }
 
 		[Test]
 		public void FindByID()
@@ -88,8 +88,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ById(new StringContainsAndCaseInsensitiveComparer("Val"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "idvalue";
+#if !NET11
+            _expectedPredicateCompareValue = "idvalue";
 			value = Find.ById(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -139,15 +139,15 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("ALT TexT"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "alt text";
+#if !NET11
+            _expectedPredicateCompareValue = "alt text";
 			value = Find.ByAlt(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
-		}
+        }
 
-#if NET20
-		private bool TestPredicateCompareMethod(string value)
+#if !NET11
+        private bool TestPredicateCompareMethod(string value)
 		{
 			return value == _expectedPredicateCompareValue;
 		}
@@ -175,8 +175,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByName(new StringContainsAndCaseInsensitiveComparer("eVAl"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "namevalue";
+#if !NET11
+            _expectedPredicateCompareValue = "namevalue";
 			value = Find.ByName(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -203,8 +203,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByText(new StringContainsAndCaseInsensitiveComparer("tVal"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "textvalue";
+#if !NET11
+            _expectedPredicateCompareValue = "textvalue";
 			value = Find.ByText(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -232,8 +232,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByStyle(attributeName, new StringContainsAndCaseInsensitiveComparer("rEe"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "green";
+#if !NET11
+            _expectedPredicateCompareValue = "green";
 			value = Find.ByStyle(attributeName, TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -259,8 +259,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByUrl(new StringContainsAndCaseInsensitiveComparer("/watin.Sour"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = url;
+#if !NET11
+            _expectedPredicateCompareValue = url;
 			value = Find.ByUrl(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -376,8 +376,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("iTl"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "title";
+#if !NET11
+            _expectedPredicateCompareValue = "title";
 			value = Find.ByTitle(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -406,8 +406,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByValue(new StringContainsAndCaseInsensitiveComparer("eVal"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "valuevalue";
+#if !NET11
+            _expectedPredicateCompareValue = "valuevalue";
 			value = Find.ByValue(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -441,8 +441,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.BySrc(new StringContainsAndCaseInsensitiveComparer("es/Im"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "/images/image.gif";
+#if !NET11
+            _expectedPredicateCompareValue = "/images/image.gif";
 			value = Find.BySrc(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -456,15 +456,15 @@ namespace WatiN.Core.UnitTests
 			
 			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(ElementComparerMock)));
 
-#if NET20
-			constraint = Find.ByElement(CallThisPredicate);
+#if !NET11
+            constraint = Find.ByElement(CallThisPredicate);
 
 			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(PredicateComparer)));
 #endif
-		}
+        }
 
-#if NET20
-		private bool CallThisPredicate(Element element)
+#if !NET11
+        private bool CallThisPredicate(Element element)
 		{
 			return true;
 		}
@@ -550,8 +550,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.By(id, new StringContainsAndCaseInsensitiveComparer("dVal"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "idvalue";
+#if !NET11
+            _expectedPredicateCompareValue = "idvalue";
 			value = Find.By(id, TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif
@@ -578,8 +578,8 @@ namespace WatiN.Core.UnitTests
 			value = Find.ByClass(new StringContainsAndCaseInsensitiveComparer("hLIg"));
 			Assert.That(value.Compare(attributeBag), Is.True, "Comparer not used");
 
-#if NET20
-			_expectedPredicateCompareValue = "highlighted";
+#if !NET11
+            _expectedPredicateCompareValue = "highlighted";
 			value = Find.ByClass(TestPredicateCompareMethod);
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 #endif

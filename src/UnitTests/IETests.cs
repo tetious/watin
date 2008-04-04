@@ -57,9 +57,9 @@ namespace WatiN.Core.UnitTests
 			// Code for .Net 1.1
 			Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
 
-#elif NET20
-	// Code for .Net 2.0
-      Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+#else
+            // Code for .Net 2.0 and higher
+            Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 #endif
 		}
 

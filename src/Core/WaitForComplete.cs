@@ -30,7 +30,7 @@ namespace WatiN.Core
 		protected DomContainer _domContainer;
 		protected SimpleTimer _waitForCompleteTimeout;
         protected int _waitForCompleteTimeOut;
-	    private int _milliSecondsTimeOut = 100;
+	    private int _milliSecondsTimeOut = 10;
 
 	    /// <summary>
         /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after

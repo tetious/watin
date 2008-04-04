@@ -1050,10 +1050,10 @@ namespace WatiN.Core
 			}
 
 			return uniqueElementTags;
-		}
+        }
 
-#if NET20
-	/// <summary>
+#if !NET11
+    /// <summary>
 	/// Gets the closest ancestor of the specified type.
 	/// </summary>
 	/// <returns>An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.</returns>

@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-#if NET20
+#if !NET11
 using System;
 using WatiN.Core.Interfaces;
 

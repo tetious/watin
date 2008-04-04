@@ -81,7 +81,7 @@ namespace WatiN.Core
 			return new AttributeConstraint(altAttribute, compare);
 		}
 
-#if NET20
+#if !NET11
 	/// <summary>
 	/// Finds an element by its alt text.
 	/// </summary>
@@ -133,10 +133,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByClass(ICompare compare)
 		{
 			return new AttributeConstraint(classNameAttribute, compare);
-		}
+        }
 
-#if NET20
-	/// <summary>
+#if !NET11
+        /// <summary>
 	/// Finds an element by its (CSS) class name text.
 	/// </summary>
 	/// <param name="predicate">The predicate method to call to make the comparison.</param>
@@ -195,10 +195,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByFor(ICompare comparer)
 		{
 			return new AttributeConstraint(forAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -242,10 +242,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ById(ICompare compare)
 		{
 			return new AttributeConstraint(idAttribute, compare);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -302,10 +302,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByName(ICompare comparer)
 		{
 			return new AttributeConstraint(nameAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -349,10 +349,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByText(ICompare comparer)
 		{
 			return new AttributeConstraint(textAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -428,10 +428,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByUrl(ICompare comparer)
 		{
 			return new AttributeConstraint(hrefAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -475,10 +475,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByTitle(ICompare comparer)
 		{
 			return new AttributeConstraint(titleAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -528,10 +528,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByValue(ICompare comparer)
 		{
 			return new AttributeConstraint(valueAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -575,10 +575,10 @@ namespace WatiN.Core
 		public static AttributeConstraint BySrc(ICompare comparer)
 		{
 			return new AttributeConstraint(srcAttribute, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="predicate">The predicate method to call to make the comparison.</param>
+#if !NET11
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
 	/// <code>
@@ -625,10 +625,10 @@ namespace WatiN.Core
 		public static AttributeConstraint By(string attributeName, ICompare comparer)
 		{
 			return new AttributeConstraint(attributeName, comparer);
-		}
+        }
 
-#if NET20
-	/// <param name="attributeName">The attribute to compare the value with.</param>
+#if !NET11
+    /// <param name="attributeName">The attribute to compare the value with.</param>
 	/// <param name="predicate">The predicate method to call to make the comparison.</param>
 	/// <returns>The AttributeConstraint</returns>
 	/// <example>
@@ -676,10 +676,10 @@ namespace WatiN.Core
 		public static AttributeConstraint ByStyle(string styleAttributeName, ICompare comparer)
 		{
 			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, comparer);
-		}
+        }
 
-#if NET20
-		/// <param name="styleAttributeName">Name of the style attribute.</param>
+#if !NET11
+        /// <param name="styleAttributeName">Name of the style attribute.</param>
 		/// <param name="predicate">The predicate method to call to make the comparison.</param>
 		/// <returns>The AttributeConstraint</returns>
 		/// <example>
@@ -701,10 +701,10 @@ namespace WatiN.Core
 		public static ElementConstraint ByElement(ICompareElement comparer)
 		{
 			return new ElementConstraint(comparer);
-		}
+        }
 
-#if NET20
-		/// <summary>
+#if !NET11
+        /// <summary>
 		/// Find an Element by calling the predicate for each element that
 		/// needs to be evaluated.
 		/// </summary>

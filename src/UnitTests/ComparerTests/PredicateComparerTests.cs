@@ -17,11 +17,10 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
-#if NET20
+#if !NET11
   using NUnit.Framework;
   using NUnit.Framework.SyntaxHelpers;
   using WatiN.Core.Comparers;

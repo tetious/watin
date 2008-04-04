@@ -171,9 +171,9 @@ namespace WatiN.Core
 			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(comparer, inColumn);
 
 			return FindRow(constraint);
-		}
+        }
 
-#if NET20
+#if !NET11
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned.
