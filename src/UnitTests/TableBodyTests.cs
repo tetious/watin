@@ -38,7 +38,8 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindTableRowUsingPredicateT()
         {
-            TableRow tableRow = ie.Table("Table2").TableBody("tbody2").TableRow(r => r.Id == "2");
+            TableRow tableRow = ie.Table("Table2").TableBody("tbody2").TableRow(
+                delegate(TableRow r) { return r.Id == "2"; });
 
             Assert.That(tableRow.Exists);
         }
