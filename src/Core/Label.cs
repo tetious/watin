@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML label element.
 	/// </summary>
+#if NET11
 	public class Label : ElementsContainer
+#else
+    public class Label : ElementsContainer<Label>
+#endif
 	{
 		private static ArrayList elementTags;
 

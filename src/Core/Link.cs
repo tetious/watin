@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML link element.
 	/// </summary>
+#if NET11
 	public class Link : Element
+#else
+    public class Link : Element<Link>
+#endif 
 	{
 		private static ArrayList elementTags;
 

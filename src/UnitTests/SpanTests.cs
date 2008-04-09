@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
@@ -54,7 +55,10 @@ namespace WatiN.Core.UnitTests
 		{
 			Span Span = ie.Span("spanid1");
 
-			Assert.IsInstanceOfType(typeof (ElementsContainer), Span);
+			Assert.IsInstanceOfType(typeof (IElementsContainer), Span);
+#if !NET11
+            Assert.IsInstanceOfType(typeof (ElementsContainer<Span>), Span);
+#endif
 
 			Assert.IsNotNull(Span, "Span should bot be null");
 			Assert.AreEqual("spanid1", Span.Id, "Unexpected id");

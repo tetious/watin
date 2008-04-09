@@ -26,8 +26,12 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// button, submit, image and reset.
 	/// </summary>
+#if NET11
 	public class Button : Element
-	{
+#else
+    public class Button : Element<Button>
+#endif
+    {
 		private static ArrayList elementTags;
 
 		public static ArrayList ElementTags

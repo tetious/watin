@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
@@ -246,5 +245,15 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
+
+#if !NET11
+        [Test]
+        public void TextFieldOfElementE()
+        {
+            TextField textField = ie.TextField("name");
+//            textField.WaitUntil(t => t.Enabled);
+            textField.WaitUntil(delegate(TextField t) { return t.Enabled; });
+        }
+#endif
 	}
 }

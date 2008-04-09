@@ -27,7 +27,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tbody element. 
 	/// </summary>
-	public class TableBody : ElementsContainer
+#if NET11
+    public class TableBody : ElementsContainer
+#else
+    public class TableBody : ElementsContainer<TableBody>
+#endif
 	{
 		private static ArrayList elementTags;
 

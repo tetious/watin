@@ -32,7 +32,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML select element.
 	/// </summary>
-	public class SelectList : Element
+#if NET11
+    public class SelectList : Element
+#else
+    public class SelectList : Element<SelectList>
+#endif
 	{
 		private static ArrayList elementTags;
 

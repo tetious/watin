@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -115,5 +116,29 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
+
+        [Test]
+        public void TableCellShouldAlsoRecognizeTHElements()
+        {
+            // Register TH element as an element that can be wrapped by TableCell
+            TableCell.ElementTags.Add(new ElementTag("th"));
+
+            using (IE browser = new IE(TablesUri))
+            {
+                Table table = browser.Table("tdandth");
+
+                // Check row with TH elements
+                TableRow rowWithTHs = table.TableRows[0];
+                Assert.That(rowWithTHs.TableCells.Length, Is.EqualTo(2), "Should see 2 TableCells");
+                Assert.That(rowWithTHs.TableCells[0].TagName, Is.EqualTo("TH"), "index 0");
+                Assert.That(rowWithTHs.TableCells[1].TagName, Is.EqualTo("TH"), "index 1");
+
+                // Check row with TD elements
+                TableRow rowWithTDs = table.TableRows[1];
+                Assert.That(rowWithTDs.TableCells.Length, Is.EqualTo(2), "Should see 2 TableCells");
+                Assert.That(rowWithTDs.TableCells[0].TagName, Is.EqualTo("TD"), "index 0");
+                Assert.That(rowWithTDs.TableCells[1].TagName, Is.EqualTo("TD"), "index 1");
+            }
+        }
 	}
 }

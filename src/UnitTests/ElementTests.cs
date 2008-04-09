@@ -175,8 +175,14 @@ namespace WatiN.Core.UnitTests
 		public void ElementParentReturnsElementsContainerForUnknownElement()
 		{
 			Element parent = ie.Form("Form").Parent;
-			Assert.IsTrue(parent.GetType().Equals(typeof (ElementsContainer)));
-		}
+		    IElementsContainer container = parent as IElementsContainer;
+            Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
+#if NET11
+            Assert.IsTrue(parent.GetType().Equals(typeof(IElementsContainer)), "Should implement ElementsContainer");
+#else
+            Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+#endif
+        }
 
 		[Test]
 		public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
@@ -194,8 +200,14 @@ namespace WatiN.Core.UnitTests
 		public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
 		{
 			Element previous = ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
-			Assert.IsTrue(previous.GetType().Equals(typeof (ElementsContainer)));
-		}
+		    IElementsContainer container = previous as IElementsContainer;
+            Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
+#if NET11
+            Assert.IsTrue(previous.GetType().Equals(typeof(ElementsContainer)), "Should implement ElementsContainer");
+#else
+            Assert.IsTrue(previous.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+#endif
+        }
 
 		[Test]
 		public void ElementNextSiblingShouldReturnNullWhenLastSibling()
@@ -215,8 +227,14 @@ namespace WatiN.Core.UnitTests
 		public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
 		{
 			Element next = ie.Div("NextAndPreviousTests").Span("second").NextSibling;
-			Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer)));
-		}
+		    IElementsContainer container = next as IElementsContainer;
+            Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
+#if NET11
+			Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer)), "Should be ElementsContainer");
+#else
+            Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+#endif
+        }
 
 		[Test]
 		public void ElementRefresh()
@@ -257,7 +275,13 @@ namespace WatiN.Core.UnitTests
 		{
 			element = ie.Element(Find.ById("table1"));
 
-			Assert.IsAssignableFrom(typeof (ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
+		    IElementsContainer container = element as IElementsContainer;
+            Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
+#if NET11
+			Assert.IsAssignableFrom(typeof(ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
+#else
+            Assert.IsAssignableFrom(typeof(ElementsContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
+#endif
 
 			Assert.IsNotNull(element, "Element not found");
 
@@ -316,8 +340,15 @@ namespace WatiN.Core.UnitTests
 			ElementCollection elements = ie.Div("NextAndPreviousTests").Elements;
 			Assert.IsTrue(elements[0].GetType().Equals(typeof (Div)), "Element 0 should be a div");
 			Assert.IsTrue(elements[1].GetType().Equals(typeof (Span)), "Element 1 should be a span");
-			Assert.IsTrue(elements[2].GetType().Equals(typeof (ElementsContainer)), "Element 2 should be an elementscontainer");
-			Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
+
+		    IElementsContainer container = elements[2] as IElementsContainer;
+            Assert.That(container, Iz.Not.Null, "Element 2 should be an IElementsContainer");
+#if NET11
+            Assert.IsTrue(elements[2].GetType().Equals(typeof (ElementsContainer)), "Element 2 should be an ElementsContainer");
+#else
+            Assert.IsTrue(elements[2].GetType().Equals(typeof(ElementsContainer<Element>)), "Element 2 should be an ElementsContainer<Element>");
+#endif
+            Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
 		}
 
 		[Test]
@@ -411,7 +442,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilElementRemovedAfter3Seconds()
 		{
-			const int indexTextFieldToRemove = 8;
+			const int indexTextFieldToRemove = 9;
 
 			Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 

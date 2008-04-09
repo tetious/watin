@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML option element.
 	/// </summary>
+#if NET11
 	public class Option : Element
+#else
+    public class Option : Element<Option>
+#endif
 	{
 		private static ArrayList elementTags;
 

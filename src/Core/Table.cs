@@ -30,7 +30,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
-	public class Table : ElementsContainer
+#if NET11
+    public class Table : ElementsContainer
+#else
+	public class Table : ElementsContainer<Table>
+#endif
 	{
 		private static ArrayList elementTags;
 

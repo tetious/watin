@@ -459,7 +459,7 @@ namespace WatiN.Core.UnitTests
 #if !NET11
             constraint = Find.ByElement(CallThisPredicate);
 
-			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(PredicateComparer)));
+			Assert.That(constraint.Comparer, Is.InstanceOfType(typeof(PredicateComparer<Element>)));
 #endif
         }
 

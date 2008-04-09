@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class Style
 	{
-		private IHTMLStyle style;
+		private readonly IHTMLStyle style;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Style"/> class.

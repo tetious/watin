@@ -29,7 +29,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// text password textarea hidden and for a HTML textarea element.
 	/// </summary>
+#if NET11
 	public class TextField : Element
+#else 
+    public class TextField : Element<TextField>
+#endif
 	{
 		private static ArrayList elementTags;
 

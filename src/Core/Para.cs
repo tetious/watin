@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML para element.
 	/// </summary>
+#if NET11
 	public class Para : ElementsContainer
+#else
+    public class Para : ElementsContainer<Para>
+#endif
 	{
 		private static ArrayList elementTags;
 

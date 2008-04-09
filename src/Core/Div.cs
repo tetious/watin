@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML div element.
 	/// </summary>
+#if NET11
 	public class Div : ElementsContainer
+#else
+    public class Div : ElementsContainer<Div>
+#endif 
 	{
 		private static ArrayList elementTags;
 

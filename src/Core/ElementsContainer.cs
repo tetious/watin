@@ -25,10 +25,14 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-	/// <summary>
+    /// <summary>
 	/// Summary description for ElementsContainer.
 	/// </summary>
-	public class ElementsContainer : Element, IElementsContainer, IElementCollection
+#if NET11
+    public class ElementsContainer : Element, IElementsContainer, IElementCollection
+#else
+    public class ElementsContainer<E> : Element<E>, IElementsContainer, IElementCollection where E : Element
+#endif
 	{
 		public ElementsContainer(DomContainer domContainer, object element) : base(domContainer, element) {}
 		

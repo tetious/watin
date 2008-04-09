@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
@@ -183,6 +184,24 @@ namespace WatiN.Core.UnitTests
 
             Assert.That(tableBody.Exists);
         }
+
+//        [Test]
+//        public void TableOfElementE()
+//        {
+//            Element table = ie.Table("name");
+//            table.WaitUntil(delegate(Table table1) { return table1.Enabled; });
+//            
+//            ElementsContainer<Table> table2 = ie.Table("name");
+//            table2.WaitUntil(t => t.Enabled);
+//            
+//            Table table3 = ie.Table("name");
+//            table3.WaitUntil(IsEnabled);
+//        }
+//
+//        private static bool IsEnabled(Table table)
+//	    {
+//	        return table.Enabled;
+//	    }
 #endif
 	}
 }

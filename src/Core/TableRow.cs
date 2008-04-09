@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tr element.
 	/// </summary>
-	public class TableRow : ElementsContainer
+#if NET11
+    public class TableRow : ElementsContainer
+#else
+    public class TableRow : ElementsContainer<TableRow>
+#endif
 	{
 		private static ArrayList elementTags;
 

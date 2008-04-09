@@ -76,7 +76,11 @@ namespace WatiN.Core
 			{
 				if (_element == null)
 				{
+#if NET11
 					_element = new ElementsContainer(DomContainer, IHTMLElement);
+#else
+                    _element = new ElementsContainer<Element>(DomContainer, IHTMLElement);
+#endif
 				}
 
 				return _element;

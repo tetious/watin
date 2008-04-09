@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// Represents an area of an image map.
 	/// </summary>
+#if NET11
 	public class Area : Element
-	{
+#else
+    public class Area : Element<Area>
+#endif
+    {
 		private static ArrayList elementTags;
 
 		public static ArrayList ElementTags

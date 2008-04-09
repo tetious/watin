@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML td element.
 	/// </summary>
-	public class TableCell : ElementsContainer
+#if NET11
+    public class TableCell : ElementsContainer
+#else
+    public class TableCell : ElementsContainer<TableCell>
+#endif
 	{
 		private static ArrayList elementTags;
 

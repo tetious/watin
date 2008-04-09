@@ -32,7 +32,50 @@ using WatiN.Core.Logging;
 
 namespace WatiN.Core
 {
+#if !NET11
+
 	/// <summary>
+	/// This is the base class for all other element types in this project, like
+	/// Button, Checkbox etc.. It provides common functionality to all these elements
+	/// </summary>
+	public class Element<E> : Element where E : Element
+	{
+	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
+	    {}
+
+	    public Element(DomContainer domContainer, object element) : base(domContainer, element)
+	    {}
+
+	    public Element(Element element, ArrayList elementTags) : base(element, elementTags)
+	    {}
+
+	    public Element(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder)
+	    {}
+
+        /// <summary>
+        /// Waits until the given expression is <c>true</c>.
+        /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
+        /// </summary>
+        /// <param name="predicate">The expression to use.</param>
+        public void WaitUntil(Predicate<E> predicate)
+        {
+            WaitUntil(Find.ByElement(predicate), IE.Settings.WaitUntilExistsTimeOut);
+        }
+
+        /// <summary>
+		/// Waits until the given expression is <c>true</c>.
+		/// </summary>
+        /// <param name="predicate">The expression to use.</param>
+		/// <param name="timeout">The timeout.</param>
+		public void WaitUntil(Predicate<E> predicate, int timeout)
+		{
+            WaitUntil(Find.ByElement(predicate), timeout);
+        }
+
+	}
+#endif
+
+    /// <summary>
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
@@ -772,6 +815,16 @@ namespace WatiN.Core
 			WaitUntil(constraint, IE.Settings.WaitUntilExistsTimeOut);
 		}
 
+        /// <summary>
+		/// Waits until the given <paramref name="predicate" /> matches.
+		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
+		/// </summary>
+		/// <param name="predicate">The BaseConstraint.</param>
+		public void WaitUntil<E>(Predicate<E> predicate) where E : Element
+		{
+			WaitUntil(Find.ByElement(predicate), IE.Settings.WaitUntilExistsTimeOut);
+		}
+
 		/// <summary>
 		/// Waits until the given <paramref name="constraint" /> matches.
 		/// </summary>
@@ -967,7 +1020,11 @@ namespace WatiN.Core
 			}
 
 			ElementTag elementTag = new ElementTag(ieNativeElement);
+#if NET11
 			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
+#else
+            Element returnElement = new ElementsContainer<Element>(domContainer, ieNativeElement);
+#endif
 
 			if (_elementConstructors.Contains(elementTag))
 			{

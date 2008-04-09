@@ -25,7 +25,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML span element.
 	/// </summary>
-	public class Span : ElementsContainer
+#if NET11
+    public class Span : ElementsContainer
+#else
+    public class Span : ElementsContainer<Span>
+#endif
 	{
 		private static ArrayList elementTags;
 

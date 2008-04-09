@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
@@ -54,7 +55,10 @@ namespace WatiN.Core.UnitTests
 		{
 			Para para = ie.Para("links");
 
-			Assert.IsInstanceOfType(typeof (ElementsContainer), para);
+			Assert.IsInstanceOfType(typeof (IElementsContainer), para);
+#if !NET11
+            Assert.IsInstanceOfType(typeof (ElementsContainer<Para>), para);
+#endif
 
 			Assert.IsNotNull(para);
 			Assert.AreEqual("links", para.Id);

@@ -25,8 +25,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// checkbox.
-	/// </summary>
-	public class CheckBox : RadioCheck
+    /// </summary>
+#if NET11
+    public class CheckBox : RadioCheck
+#else
+    public class CheckBox : RadioCheck<CheckBox>
+#endif
 	{
 		private static ArrayList elementTags;
 

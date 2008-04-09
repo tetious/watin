@@ -26,7 +26,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML Form element.
 	/// </summary>
+#if NET11
 	public class Form : ElementsContainer
+#else
+	public class Form : ElementsContainer<Form>
+#endif
 	{
 		private static ArrayList elementTags;
 

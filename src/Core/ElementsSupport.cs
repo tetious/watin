@@ -68,14 +68,22 @@ namespace WatiN.Core
 
 		public static Element Element(DomContainer domContainer, BaseConstraint findBy, IElementCollection elements)
 		{
+#if NET11
 			return new ElementsContainer(domContainer, domContainer.NativeBrowser.CreateElementFinder(null, findBy, elements));
-		}
+#else
+            return new ElementsContainer<Element>(domContainer, domContainer.NativeBrowser.CreateElementFinder(null, findBy, elements));
+#endif
+        }
 
 		public static Element Element(DomContainer domContainer, string tagname, BaseConstraint findBy, IElementCollection elements, params string[] inputtypes)
 		{
 			string inputtypesString = UtilityClass.StringArrayToString(inputtypes, ",");
 
+#if NET11
 			return new ElementsContainer(domContainer, domContainer.NativeBrowser.CreateElementFinder(tagname, inputtypesString, findBy, elements));
+#else
+            return new ElementsContainer<Element>(domContainer, domContainer.NativeBrowser.CreateElementFinder(tagname, inputtypesString, findBy, elements));
+#endif
 		}
 
 		public static ElementCollection Elements(DomContainer domContainer, IElementCollection elements)

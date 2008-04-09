@@ -26,7 +26,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// radio.
 	/// </summary>
+#if NET11
 	public class RadioButton : RadioCheck
+#else
+    public class RadioButton : RadioCheck<RadioButton>
+#endif
 	{
 		private static ArrayList elementTags;
 

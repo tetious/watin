@@ -28,7 +28,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element 
 	/// of type file. 
 	/// </summary>
+#if NET11
 	public class FileUpload : Element
+#else
+	public class FileUpload : Element<FileUpload>
+#endif
 	{
 		private static ArrayList elementTags;
 
