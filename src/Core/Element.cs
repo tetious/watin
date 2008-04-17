@@ -565,7 +565,20 @@ namespace WatiN.Core
 			fireEvent(eventName, false, null);
 		}
 
-		private void fireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
+        /// <summary>
+        /// Only fires the event but doesn't wait for the action to complete. 
+        /// The <paramref name="eventProperties" /> collection
+        /// can be used to set values of the event object in the browser to 
+        /// full fill the needs of javascript attached to the event handler.
+        /// </summary>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="eventProperties">The event properties that need to be set.</param>
+        public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
+        {
+            fireEvent(eventName, false, eventProperties);
+        }
+        
+        private void fireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
 		{
 			if (!Enabled)
 			{
