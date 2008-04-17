@@ -964,6 +964,27 @@ namespace WatiN.Core.UnitTests
             mockRepository.VerifyAll();
         }
 
+        [Test]
+        public void TableOfElementE()
+        {
+            Element table = ie.Table("table1");
+            table.WaitUntil(delegate(Table table1) { return table1.Enabled; });
+//            table.WaitUntil((Table table1) => table1.Enabled);
+
+            ElementsContainer<Table> table2 = ie.Table("table1");
+            table2.WaitUntil(delegate(Table t) { return t.Enabled; });
+//            table2.WaitUntil(t => t.Enabled);
+
+            Table table3 = ie.Table("table1");
+            table3.WaitUntil(IsEnabled);
+        }
+
+        private static bool IsEnabled(Table table)
+        {
+            return table.Enabled;
+        }
+
+
 #endif
 	}
 

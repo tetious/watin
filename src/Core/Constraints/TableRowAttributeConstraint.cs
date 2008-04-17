@@ -79,8 +79,14 @@ namespace WatiN.Core.Constraints
 
 				if (tableCellElements.length - 1 >= columnIndex)
 				{
-					IHTMLElement tableCell = (IHTMLElement) tableCellElements.item(columnIndex, null);
-                    return base.Compare(new ElementAttributeBag(elementAttributeBag.DomContainer, tableCell));
+                    IHTMLTableCell tableCell = (IHTMLTableCell)tableCellElements.item(columnIndex, null);
+				    ICompareElement elementComparer = comparer as ICompareElement;
+                    
+                    if (elementComparer != null)
+                    {
+                        return elementComparer.Compare(new TableCell(elementAttributeBag.DomContainer, tableCell));
+                    }
+				    return base.Compare(new ElementAttributeBag(elementAttributeBag.DomContainer, (IHTMLElement) tableCell));
 				}
 			}
 

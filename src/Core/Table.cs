@@ -189,6 +189,18 @@ namespace WatiN.Core
         {
             return FindRow(new PredicateComparer(predicate), inColumn);
         }
+
+        /// <summary>
+        /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
+        /// </summary>
+        /// <param name="predicate">The predicate that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
+        {
+            return FindRow(new PredicateComparer<TableCell>(predicate), inColumn);
+        }
 #endif
 
 		public override string ToString()
