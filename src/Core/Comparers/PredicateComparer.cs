@@ -18,6 +18,7 @@
 
 #if !NET11
 using System;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
@@ -60,7 +61,14 @@ namespace WatiN.Core.Comparers
 
 		public virtual bool Compare(Element element)
 		{
-			return _compareElement.Invoke((E)element);
+		    try
+		    {
+		        return _compareElement.Invoke((E)element);
+		    }
+		    catch (Exception e)
+		    {
+		        throw new WatiNException("Exception during execution of predicate for " + element.OuterHtml, e);
+		    }
 		}
 	}
 }

@@ -86,10 +86,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Buttons()
 		{
-			const int expectedButtonsCount = 5;
+			const int expectedButtonsCount = 6;
 			Assert.AreEqual(expectedButtonsCount, ie.Buttons.Length, "Unexpected number of buttons");
 
-			const int expectedFormButtonsCount = 4;
+			const int expectedFormButtonsCount = 5;
 			Form form = ie.Form("Form");
 
 			// Collection.Length
@@ -139,7 +139,7 @@ namespace WatiN.Core.UnitTests
 		public void ButtonsFilterOnArrayListElements()
 		{
 			ButtonCollection buttons = ie.Buttons;
-			Assert.AreEqual(5, buttons.Length);
+			Assert.AreEqual(6, buttons.Length);
 
 			buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
 			Assert.AreEqual(2, buttons.Length);

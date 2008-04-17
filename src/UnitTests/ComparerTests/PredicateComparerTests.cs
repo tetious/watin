@@ -17,87 +17,97 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
 {
 #if !NET11
-  using NUnit.Framework;
-  using NUnit.Framework.SyntaxHelpers;
-  using WatiN.Core.Comparers;
+    using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
+    using WatiN.Core.Comparers;
 
-  [TestFixture]
-  public class PredicateComparerTests : BaseWithIETests
-  {
-    private bool _called;
-    private string _value;
-    private bool _returnValue;
+    [TestFixture]
+    public class PredicateComparerTests : BaseWithIETests
+    {
+        private bool _called;
+        private string _value;
+        private bool _returnValue;
 
-      public override Uri TestPageUri
-      {
-          get { return MainURI; }
-      }
+        public override Uri TestPageUri
+        {
+            get { return MainURI; }
+        }
 
-      [SetUp]
-    public void SetUp()
-    {
-      _called = false;
-      _value = null;
-    }
-  	
-    [Test]
-    public void StringPredicateShouldBeCalledAndReturnTrue()
-    {
-      _returnValue = true;
-      PredicateComparer comparer = new PredicateComparer(CallThisMethod);
-  		
-      Assert.That(comparer.Compare("test value"), Is.True);
-      Assert.That(_called, Is.True);
-      Assert.That(_value, Is.EqualTo("test value"));
-    }
-  	
-    [Test]
-    public void StringPredicateShouldBeCalledAndReturnFalse()
-    {
-      _returnValue = false;
-      PredicateComparer comparer = new PredicateComparer(CallThisMethod);
-  		
-      Assert.That(comparer.Compare("some input"), Is.False);
-      Assert.That(_called, Is.True);
-      Assert.That(_value, Is.EqualTo("some input"));
-    }
+        [SetUp]
+        public void SetUp()
+        {
+            _called = false;
+            _value = null;
+        }
 
-    public bool CallThisMethod(string value)
-    {
-      _called = true;
-      _value = value;
-      return _returnValue;
-    }
- 
-    [Test]
-    public void ElementPredicateShouldBeCalledAndReturnTrue()
-    {
-      _returnValue = true;
-      PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
+        [Test]
+        public void StringPredicateShouldBeCalledAndReturnTrue()
+        {
+            _returnValue = true;
+            PredicateComparer comparer = new PredicateComparer(CallThisMethod);
 
-      Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
-      Assert.That(_called, Is.True);
-    }
-  	
-    [Test]
-    public void ElementPredicateShouldBeCalledAndReturnFalse()
-    {
-      _returnValue = false;
-      PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
+            Assert.That(comparer.Compare("test value"), Is.True);
+            Assert.That(_called, Is.True);
+            Assert.That(_value, Is.EqualTo("test value"));
+        }
 
-      Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
-      Assert.That(_called, Is.True);
-    }
+        [Test]
+        public void StringPredicateShouldBeCalledAndReturnFalse()
+        {
+            _returnValue = false;
+            PredicateComparer comparer = new PredicateComparer(CallThisMethod);
 
-    public bool CallElementCompareMethod(Element element)
-    {
-    	_called = true;
-    	return _returnValue;
+            Assert.That(comparer.Compare("some input"), Is.False);
+            Assert.That(_called, Is.True);
+            Assert.That(_value, Is.EqualTo("some input"));
+        }
+
+        public bool CallThisMethod(string value)
+        {
+            _called = true;
+            _value = value;
+            return _returnValue;
+        }
+
+        [Test]
+        public void ElementPredicateShouldBeCalledAndReturnTrue()
+        {
+            _returnValue = true;
+            PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
+
+            Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
+            Assert.That(_called, Is.True);
+        }
+
+        [Test]
+        public void ElementPredicateShouldBeCalledAndReturnFalse()
+        {
+            _returnValue = false;
+            PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
+
+            Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
+            Assert.That(_called, Is.True);
+        }
+
+        public bool CallElementCompareMethod(Element element)
+        {
+            _called = true;
+            return _returnValue;
+        }
+
+        [Test, ExpectedException(typeof(WatiNException), ExpectedMessage = "Exception during execution of predicate for <INPUT type=button value=\"Button with no Id\">")]
+        public void IfExceptionDuringExecutionOfPredicateItShouldBeClearThatThisAProblemInThePredicate()
+        {
+            Button button = ie.Button(b => b.Id.Contains("somethingoiojdoijsdf"));
+            
+            //trigger search of the button
+            bool exists = button.Exists;
+        }
     }
-  }
 #endif
 }
