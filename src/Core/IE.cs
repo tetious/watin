@@ -106,9 +106,39 @@ namespace WatiN.Core
 		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
 		/// </code>
 		/// </example>
+		public static IE AttachToIENoWait(BaseConstraint findBy)
+		{
+			return findIE(findBy, Settings.AttachToIETimeOut, false);
+		}
+		
+		/// <summary>
+		/// Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
+		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
+		/// The attached Internet Explorer will be closed after destroying the IE instance.
+		/// </summary>
+		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+		/// <returns>An <see cref="IE"/> instance.</returns>
+		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
+		/// To change this default, set <see cref="P:WatiN.Core.IE.Settings.AttachToIETimeOut"/>
+		/// </exception>
+		/// <example>
+		/// The following example searches for an Internet Exlorer instance with "Example"
+		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
+		/// can be used to test the Example page.
+		/// <code>
+		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
+		/// </code>
+		/// A partial match should also work
+		/// <code>
+		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
+		/// </code>
+		/// </example>
 		public static IE AttachToIE(BaseConstraint findBy)
 		{
-			return findIE(findBy, Settings.AttachToIETimeOut);
+			return findIE(findBy, Settings.AttachToIETimeOut, true);
 		}
 
 		/// <summary>
@@ -140,7 +170,39 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIE(BaseConstraint findBy, int timeout)
 		{
-			return findIE(findBy, timeout);
+			return findIE(findBy, timeout, true);
+		}
+		
+		/// <summary>
+		/// Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
+		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
+		/// The attached Internet Explorer will be closed after destroying the IE instance.
+		/// </summary>
+		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+		/// <param name="timeout">The number of seconds to wait before timing out</param>
+		/// <returns>An <see cref="IE"/> instance.</returns>
+		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
+		/// IENotFoundException will be thrown if an Internet Explorer window with the given 
+		/// <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
+		/// </exception>
+		/// <example>
+		/// The following example searches for an Internet Exlorer instance with "Example"
+		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+		/// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
+		/// can be used to test the Example page.
+		/// <code>
+		/// IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Example"), 60);
+		/// </code>
+		/// A partial match should also work
+		/// <code>
+		/// IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Exa"), 60);
+		/// </code>
+		/// </example>
+		public static IE AttachToIENoWait(BaseConstraint findBy, int timeout)
+		{
+			return findIE(findBy, timeout, false);
 		}
 
 		/// <summary>
@@ -651,14 +713,17 @@ namespace WatiN.Core
 			StartDialogWatcher();
 		}
 
-		private static IE findIE(BaseConstraint findBy, int timeout)
+		private static IE findIE(BaseConstraint findBy, int timeout, bool waitForComplete)
 		{
 			SHDocVw.InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
 
 			if (internetExplorer != null)
 			{
 				IE ie = new IE(internetExplorer);
-				ie.WaitForComplete();
+                if (waitForComplete)
+                {
+			        ie.WaitForComplete();
+			    }
 
 				return ie;
 			}
