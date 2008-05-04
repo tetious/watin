@@ -97,7 +97,7 @@ namespace WatiN.Core
 			{
 				if (_elementTyped == null)
 				{
-					_elementTyped = Element.GetTypedElement(DomContainer, new IEElement(IHTMLElement));
+                    _elementTyped = TypedElementFactory.CreateTypedElement(DomContainer, DomContainer.NativeBrowser.CreateElement(IHTMLElement));
 				}
 
 				return _elementTyped;

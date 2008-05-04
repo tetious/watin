@@ -333,7 +333,7 @@ namespace WatiN.Core
 				IHTMLElement activeElement = HtmlDocument.activeElement;
 				if (activeElement != null)
 				{
-					return Core.Element.GetTypedElement(domContainer,domContainer.NativeBrowser.CreateElement(activeElement));
+                    return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
 				}
 				return null;
 			}
@@ -908,10 +908,10 @@ namespace WatiN.Core
 
 		#endregion
 
-		protected DomContainer DomContainer
+		public DomContainer DomContainer
 		{
 			get { return domContainer; }
-			set { domContainer = value; }
+			protected set { domContainer = value; }
 		}
 
 		IHTMLElementCollection IElementCollection.Elements

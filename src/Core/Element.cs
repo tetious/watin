@@ -52,7 +52,7 @@ namespace WatiN.Core
 	    public Element(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder)
 	    {}
 
-        /// <summary>
+	    /// <summary>
         /// Waits until the given expression is <c>true</c>.
         /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
         /// </summary>
@@ -81,8 +81,6 @@ namespace WatiN.Core
 	/// </summary>
 	public class Element : IAttributeBag
 	{
-		private static Hashtable _elementConstructors;
-
 		private DomContainer _domContainer;
 		private INativeElement _nativeElement;
 		private INativeElementFinder _nativeElementFinder;
@@ -270,7 +268,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return GetTypedElement(_domContainer, NativeElement.NextSibling);
+                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.NextSibling);
 			}
         }
 
@@ -282,7 +280,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return GetTypedElement(_domContainer, NativeElement.PreviousSibling);
+                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.PreviousSibling);
 			}
 		}
 
@@ -316,7 +314,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return GetTypedElement(_domContainer, NativeElement.Parent);
+                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.Parent);
             }
         }
 
@@ -356,14 +354,10 @@ namespace WatiN.Core
 		/// </returns>
 		public override string ToString()
 		{
-			if (UtilityClass.IsNotNullOrEmpty(Title))
-			{
-				return Title;
-			}
-			return Text;
+		    return UtilityClass.IsNotNullOrEmpty(Title) ? Title : Text;
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Clicks this element and waits till the event is completely finished (page is loaded 
 		/// and ready) .
 		/// </summary>
@@ -846,8 +840,6 @@ namespace WatiN.Core
 		public void WaitUntil(BaseConstraint constraint, int timeout)
 		{
 			Exception lastException;
-
-
 			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
 			do
@@ -888,8 +880,8 @@ namespace WatiN.Core
 		}
 
 	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
-		{
-			// Does it make sense to go into the do loop?
+	    {
+	        // Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
 			    if (_nativeElement != null)
@@ -910,32 +902,37 @@ namespace WatiN.Core
 				}
 			}
 
-			Exception lastException;
-			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+	        LoopUntilExistsEqualsWaitUntilExistsArgument(waitUntilExists, timeout);
+	    }
 
-			do
-			{
-				lastException = null;
+        private void LoopUntilExistsEqualsWaitUntilExistsArgument(bool waitUntilExists, int timeout)
+        {
+            Exception lastException;
+            SimpleTimer timeoutTimer = new SimpleTimer(timeout);
 
-				try
-				{
-					if (Exists == waitUntilExists)
-					{
-						return;
-					}
-				}
-				catch (Exception e)
-				{
-					lastException = e;
-				}
+            do
+            {
+                lastException = null;
 
-				Thread.Sleep(200);
-			} while (!timeoutTimer.Elapsed);
+                try
+                {
+                    if (Exists == waitUntilExists)
+                    {
+                        return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    lastException = e;
+                }
 
-			ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
-		}
+                Thread.Sleep(200);
+            } while (!timeoutTimer.Elapsed);
 
-		/// <summary>
+            ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
+        }
+
+        /// <summary>
 		/// Call this method to make sure the cached reference to the html element on the web page
 		/// is refreshed on the next call you make to a property or method of this element.
 		/// When you want to check if an element still <see cref="Exists"/> you don't need 
@@ -1023,104 +1020,6 @@ namespace WatiN.Core
 			_domContainer.WaitForComplete();
 		}
 
-		internal static Element GetTypedElement(DomContainer domContainer, INativeElement ieNativeElement)
-		{
-			if (ieNativeElement == null) return null;
-
-			if (_elementConstructors == null)
-			{
-				_elementConstructors = CreateElementConstructorHashTable();
-			}
-
-			ElementTag elementTag = new ElementTag(ieNativeElement);
-#if NET11
-			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
-#else
-            Element returnElement = new ElementsContainer<Element>(domContainer, ieNativeElement);
-#endif
-
-			if (_elementConstructors.Contains(elementTag))
-			{
-				ConstructorInfo constructorInfo = (ConstructorInfo) _elementConstructors[elementTag];
-				if (constructorInfo != null)
-				{
-					return (Element) constructorInfo.Invoke(new object[] {returnElement});
-				}
-			}
-
-			return returnElement;
-		}
-
-		internal static Hashtable CreateElementConstructorHashTable()
-		{
-			Hashtable elementConstructors = new Hashtable();
-			Assembly assembly = Assembly.GetExecutingAssembly();
-
-			foreach (Type type in assembly.GetTypes())
-			{
-				if (type.IsSubclassOf(typeof (Element)))
-				{
-					PropertyInfo property = type.GetProperty("ElementTags");
-					if (property != null)
-					{
-						ConstructorInfo constructor = type.GetConstructor(new Type[] {typeof (Element)});
-						if (constructor != null)
-						{
-							ArrayList elementTags = (ArrayList) property.GetValue(type, null);
-							if (elementTags != null)
-							{
-								elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
-								foreach (ElementTag elementTag in elementTags)
-								{
-									// This is a terrible hack, but it will do for now.
-									// Button and Image both support input/image. If
-									// an element is input/image I prefer to return
-									// an Image object.
-									try
-									{
-										elementConstructors.Add(elementTag, constructor);
-									}
-									catch (ArgumentException)
-									{
-										if (type.Equals(typeof (Image)))
-										{
-											elementConstructors.Remove(elementTag);
-											elementConstructors.Add(elementTag, constructor);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return elementConstructors;
-		}
-
-		private static ArrayList CreateUniqueElementTagsForInputTypes(ArrayList elementTags)
-		{
-			ArrayList uniqueElementTags = new ArrayList();
-
-			foreach (ElementTag elementTag in elementTags)
-			{
-				if (elementTag.IsInputElement)
-				{
-					string[] inputtypes = elementTag.InputTypes.Split(" ".ToCharArray());
-					foreach (string inputtype in inputtypes)
-					{
-						ElementTag inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
-						uniqueElementTags.Add(inputtypeElementTag);
-					}
-				}
-				else
-				{
-					uniqueElementTags.Add(elementTag);
-				}
-			}
-
-			return uniqueElementTags;
-        }
 
 #if !NET11
     /// <summary>
@@ -1290,7 +1189,118 @@ namespace WatiN.Core
 
 		internal static Element New(DomContainer domContainer, IHTMLElement element)
 		{
-			return GetTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(element));
+            return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(element));
 		}
 	}
+
+//TODO: Move to own file
+    public class TypedElementFactory
+    {
+        private static Hashtable _elementConstructors;
+
+        public static Element CreateTypedElement(DomContainer domContainer, INativeElement ieNativeElement)
+        {
+            if (ieNativeElement == null) return null;
+
+            if (_elementConstructors == null)
+            {
+                _elementConstructors = CreateElementConstructorHashTable();
+            }
+
+            ElementTag elementTag = new ElementTag(ieNativeElement);
+#if NET11
+			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
+#else
+            Element returnElement = new ElementsContainer<Element>(domContainer, ieNativeElement);
+#endif
+
+            if (_elementConstructors.Contains(elementTag))
+            {
+                ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
+                if (constructorInfo != null)
+                {
+                    return (Element)constructorInfo.Invoke(new object[] { returnElement });
+                }
+            }
+
+            return returnElement;
+        }
+
+        internal static Hashtable CreateElementConstructorHashTable()
+        {
+            Hashtable elementConstructors = new Hashtable();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (!type.IsSubclassOf(typeof (Element))) continue;
+                
+                PropertyInfo property = type.GetProperty("ElementTags");
+                if (property == null) continue;
+                
+                ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Element) });
+                if (constructor == null) continue;
+                
+                ArrayList elementTags = (ArrayList)property.GetValue(type, null);
+                if (elementTags == null) continue;
+                
+                elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
+                foreach (ElementTag elementTag in elementTags)
+                {
+                    // This is a terrible hack, but it will do for now.
+                    // Button and Image both support input/image. If
+                    // an element is input/image I prefer to return
+                    // an Image object.
+                    try
+                    {
+                        elementConstructors.Add(elementTag, constructor);
+                    }
+                    catch (ArgumentException)
+                    {
+                        if (type.Equals(typeof(Image)))
+                        {
+                            elementConstructors.Remove(elementTag);
+                            elementConstructors.Add(elementTag, constructor);
+                        }
+                    }
+                }
+            }
+
+            return elementConstructors;
+        }
+
+        private static ArrayList CreateUniqueElementTagsForInputTypes(ArrayList elementTags)
+        {
+            ArrayList uniqueElementTags = new ArrayList();
+
+            foreach (ElementTag elementTag in elementTags)
+            {
+                AddElementTag(elementTag, uniqueElementTags);
+            }
+
+            return uniqueElementTags;
+        }
+
+        private static void AddElementTag(ElementTag elementTag, ArrayList uniqueElementTags)
+        {
+            if (elementTag.IsInputElement)
+            {
+                AddElementTagForEachInputType(elementTag, uniqueElementTags);
+            }
+            else
+            {
+                uniqueElementTags.Add(elementTag);
+            }
+        }
+
+        private static void AddElementTagForEachInputType(ElementTag elementTag, ArrayList uniqueElementTags)
+        {
+            string[] inputtypes = elementTag.InputTypes.Split(" ".ToCharArray());
+            foreach (string inputtype in inputtypes)
+            {
+                ElementTag inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
+                uniqueElementTags.Add(inputtypeElementTag);
+            }
+        }
+    }
 }
