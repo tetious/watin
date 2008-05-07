@@ -21,6 +21,7 @@ using NUnit.Framework;
 using WatiN.Core.Constraints;
 using Rhino.Mocks;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core.UnitTests
 {
@@ -39,13 +40,15 @@ namespace WatiN.Core.UnitTests
 			VerifyComparerIsUsed("tagname", false);
 		}
 
-		private static void VerifyComparerIsUsed(string tagname, bool expectedResult) {
+		private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
+        {
 			MockRepository mocks = new MockRepository();
 			IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
 		    DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
             ElementAttributeBag elementAttributeBag = new ElementAttributeBag(domContainer, IHTMLElementStub);
 
 			SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
+            SetupResult.For(domContainer.NativeBrowser).Return(new IEBrowser(domContainer));
 			
 			mocks.ReplayAll();
 
