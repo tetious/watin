@@ -105,11 +105,6 @@ namespace WatiN.Core.InternetExplorer
 			get { return _findBy.ConstraintToString(); }
 		}
 
-		internal ElementNotFoundException CreateElementNotFoundException(Exception innerexception)
-		{
-			return new ElementNotFoundException(ElementTag.ElementTagsToString(tagsToFind), _findBy.ConstraintToString(), innerexception);
-		}
-
 		public void AddElementTag(string tagName, string inputType)
 		{
 			tagsToFind.Add(new ElementTag(tagName, inputType));
