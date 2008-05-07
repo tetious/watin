@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
@@ -41,12 +42,21 @@ namespace WatiN.Core.UnitTests
 			ie.Button("disabledid").Click();
 		}
 
-		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid'")]
+		[Test]
 		public void ButtonElementNotFoundException()
 		{
-			IE.Settings.WaitUntilExistsTimeOut = 1;
-			ie.Button("noneexistingbuttonid").Click();
-		}
+            try
+            {
+                IE.Settings.WaitUntilExistsTimeOut = 1;
+                ie.Button("noneexistingbuttonid").Click();
+                Assert.Fail("Expected ElementNotFoundException");
+            }
+            catch (ElementNotFoundException e)
+            {
+                Assert.That(e.Message, Text.StartsWith("Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid' at file://"));
+                Assert.That(e.Message, Text.EndsWith("main.html"));
+            }
+        }
 
 		[Test]
 		public void ButtonExists()

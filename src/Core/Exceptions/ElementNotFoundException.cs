@@ -26,24 +26,36 @@ namespace WatiN.Core.Exceptions
 	public class ElementNotFoundException : WatiNException
 	{
 		public ElementNotFoundException(string tagName, string criteria) :
-			base(CreateMessage(tagName, criteria, null)) {}
+			base(CreateMessage(tagName, criteria, null, null)) {}
+
+		public ElementNotFoundException(string tagName, string criteria, string url) :
+			base(CreateMessage(tagName, criteria, url, null)) {}
 
 		public ElementNotFoundException(string tagName, string criteria, Exception innerexception) :
-			base(CreateMessage(tagName, criteria, innerexception.Message), innerexception) {}
+			base(CreateMessage(tagName, criteria, null, innerexception.Message), innerexception) {}
 
-		private static string CreateMessage(string tagName, string criteria, string innerException)
+		public ElementNotFoundException(string tagName, string criteria, string url, Exception innerexception) :
+			base(CreateMessage(tagName, criteria, url, innerexception.Message), innerexception) {}
+
+		private static string CreateMessage(string tagName, string criteria, string url, string innerException)
 		{
 			string message = "Could not find " + UtilityClass.ToString(tagName) + " element tag";
 
-			if (UtilityClass.IsNotNullOrEmpty(criteria))
+            if (UtilityClass.IsNotNullOrEmpty(criteria))
 			{
 				message += " matching criteria: " + criteria;
 			}
 
+            if (UtilityClass.IsNotNullOrEmpty(url))
+            {
+                message += " at " + url;
+            }
+            
 			if (UtilityClass.IsNotNullOrEmpty(innerException))
 			{
 				message += " (inner exception: "+ innerException + ")";
 			}
+
 			
 			return message;
 		}

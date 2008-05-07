@@ -887,6 +887,10 @@ namespace WatiN.Core.UnitTests
             DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
 			element = new Element(domContainer, elementFinder);
 
+		    IHTMLDocument2 ihtmlDocument2 = (IHTMLDocument2) mocks.DynamicMock(typeof (IHTMLDocument2));
+		    SetupResult.For(domContainer.HtmlDocument).Return(ihtmlDocument2);
+		    SetupResult.For(ihtmlDocument2.url).Return("http://mock.value.com");
+
 			mocks.ReplayAll();
 
 			try

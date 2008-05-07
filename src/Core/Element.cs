@@ -705,9 +705,9 @@ namespace WatiN.Core
 					{
 					    if(e.InnerException == null)
 						{
-							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString);
+							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString, _domContainer.Url);
 						}
-					    throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString, e.InnerException);
+                        throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstriantToString, _domContainer.Url, e.InnerException);
 					}
 				}
 

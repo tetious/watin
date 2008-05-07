@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
@@ -197,11 +198,21 @@ namespace WatiN.Core.UnitTests
 			textField.TypeText("This should go wrong");
 		}
 
-		[Test, ExpectedException(typeof (ElementNotFoundException), ExpectedMessage = "Could not find INPUT (text password textarea hidden) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid'")]
+		[Test]
 		public void TextFieldElementNotFoundException()
 		{
-			IE.Settings.WaitUntilExistsTimeOut = 1;
-			ie.TextField("noneexistingtextfieldid").TypeText("");
+		    try
+		    {
+		        IE.Settings.WaitUntilExistsTimeOut = 1;
+		        ie.TextField("noneexistingtextfieldid").TypeText("");
+                Assert.Fail("Expected ElementNotFoundException");
+            }
+		    catch (ElementNotFoundException e)
+		    {
+                Assert.That(e.Message, Text.StartsWith("Could not find INPUT (text password textarea hidden) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid' at file://"));
+                Assert.That(e.Message, Text.EndsWith("main.html"));
+		    }
+
 		}
 
 		[Test]
