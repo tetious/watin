@@ -311,6 +311,8 @@ namespace WatiN.Core.DialogHandlers
 				{
 					foreach (ProcessThread t in process.Threads)
 					{
+                        if (!keepRunning) return;
+
 						int threadId = t.Id;
 
 						NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
