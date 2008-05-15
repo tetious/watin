@@ -1091,16 +1091,18 @@ namespace WatiN.Core
 		{
 			Element parentElement = Parent;
 
-			while (parentElement != null)
-			{
-				if (findBy.Compare(parentElement))
-				{
-					return parentElement;
-				}
-				parentElement = parentElement.Parent;
-			}
+            if (parentElement == null)
+            {
+                return null;
+            }
+            
+            if (findBy.Compare(parentElement))
+            {
+                return parentElement;
+            }
 
-			return null;
+            return parentElement.Ancestor(findBy);
+
 		}
 
 		/// <summary>
@@ -1125,17 +1127,7 @@ namespace WatiN.Core
 				throw new ArgumentException("Type should inherit from Element", "ancestorType");
 			}
 
-			Element parentElement = Parent;
-
-			if (parentElement == null)
-			{
-				return null;
-			}
-		    if (parentElement.GetType() == ancestorType && findBy.Compare(parentElement))
-		    {
-		        return parentElement;
-		    }
-		    return parentElement.Ancestor(ancestorType, findBy);
+		    return Ancestor(Find.ByElement(new TypeComparer(ancestorType)) && findBy);
 		}
 
 		/// <summary>
@@ -1301,6 +1293,22 @@ namespace WatiN.Core
                 ElementTag inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
                 uniqueElementTags.Add(inputtypeElementTag);
             }
+        }
+    }
+
+    // TODO: Extract to own class
+    public class TypeComparer : ICompareElement
+    {
+        private readonly Type _type;
+
+        public TypeComparer(Type type)
+        {
+            _type = type;
+        }
+
+        public bool Compare(Element element)
+        {
+            return element.GetType() == _type;
         }
     }
 }

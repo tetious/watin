@@ -26,7 +26,6 @@ using System.Windows.Forms;
 using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;

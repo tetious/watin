@@ -79,38 +79,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
 		{
-			MockRepository mockRepository = new MockRepository();
+		    TableCell tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+            Element ancestor = tableCell.Ancestor(typeof(Div), Find.ById("divid"));
 
-			INativeElement nativeElement = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
-			INativeElement firstParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
-			IAttributeBag firstAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
-			INativeElement secondParentDiv = (INativeElement) mockRepository.CreateMock(typeof (INativeElement));
-			IAttributeBag secondAttributeBag = (IAttributeBag) mockRepository.CreateMock(typeof (IAttributeBag));
-            DomContainer domContainer = (DomContainer) mockRepository.DynamicMock(typeof(DomContainer), new object[] {});
-
-            element = new Element(domContainer, nativeElement); 
-			Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
-			Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(firstParentDiv.GetAttributeBag(domContainer)).Return(firstAttributeBag);
-			Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
-
-			Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
-			Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
-			Expect.Call(secondParentDiv.GetAttributeBag(domContainer)).Return(secondAttributeBag);
-			Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
-			Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
-
-			mockRepository.ReplayAll();
-
-			Element ancestor = element.Ancestor(typeof (Div), Find.ByText("second ancestor"));
-
-			Assert.IsInstanceOfType(typeof (Div), ancestor);
-			Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
-
-			mockRepository.VerifyAll();
+            Assert.IsInstanceOfType(typeof(Div), ancestor);
+            Assert.That(ancestor.Id, Iz.EqualTo("divid"));
 		}
 
-		[Test]
+	    [Test]
 		public void AncestorTagNameAndAttributeConstraintShouldReturnTypedElement()
 		{
 			MockRepository mockRepository = new MockRepository();
@@ -850,7 +826,11 @@ namespace WatiN.Core.UnitTests
 			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
 			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
 
+		    IHTMLDocument2 ihtmlDocument = (IHTMLDocument2) mocks.CreateMock(typeof (IHTMLDocument2));
+		    SetupResult.For(ihtmlDocument.url).Return("http://mocked.com");
+            
             DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
+		    SetupResult.For(domContainer.HtmlDocument).Return(ihtmlDocument);
 			element = new Element(domContainer, elementFinder);
 
 			mocks.ReplayAll();

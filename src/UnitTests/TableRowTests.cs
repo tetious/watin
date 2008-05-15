@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 
 namespace WatiN.Core.UnitTests
@@ -92,5 +93,18 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
+
+	    [Test]
+	    public void TableRowDirectChildren()
+	    {
+	        ie.GoTo(TablesUri);
+
+	        TableRow tableRow = ie.TableRow("1");
+
+            Assert.That(tableRow.TableCellsDirectChildren.Length, Is.EqualTo(2));
+            Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));
+            Assert.That(tableRow.TableCellsDirectChildren[1].Id, Is.EqualTo("td12"));
+	    }
+
 	}
 }

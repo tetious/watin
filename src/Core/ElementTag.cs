@@ -77,7 +77,7 @@ namespace WatiN.Core
 
 		private static string getInputType(INativeElement ieNativeElement)
 		{
-			if(ElementTag.IsAnInputElement(ieNativeElement.TagName))
+			if(IsAnInputElement(ieNativeElement.TagName))
 			{
 				return ieNativeElement.GetAttributeValue("type");
 			}
@@ -103,8 +103,12 @@ namespace WatiN.Core
             if (elementCollection3 == null) return null;
             
             object item = elementCollection3.namedItem(id);
-            if ((item as IHTMLElement) != null) return (IHTMLElement) item;
-            if ((item as IHTMLElementCollection) != null) return (IHTMLElement)((IHTMLElementCollection) item).item(null,0);
+            IHTMLElement element = null;
+
+            if ((item as IHTMLElement) != null) element = (IHTMLElement) item;
+            else if ((item as IHTMLElementCollection) != null) element = (IHTMLElement)((IHTMLElementCollection)item).item(null, 0);
+
+            if (element !=null && Compare(new IEElement(element))) return element;
 
             return null;
 		}
@@ -117,7 +121,7 @@ namespace WatiN.Core
 			{
 				if (IsInputElement)
 				{
-					return CompareAgainstInputTypes(nativeElement);
+					return CompareInputTypes(nativeElement);
 				}
 
 				return true;
@@ -149,7 +153,7 @@ namespace WatiN.Core
 			return StringComparer.AreEqual(TagName, nativeElement.TagName, true);
 		}
 
-		private bool CompareAgainstInputTypes(INativeElement element)
+	    public bool CompareInputTypes(INativeElement element)
 		{
 			string inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
 

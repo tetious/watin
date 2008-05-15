@@ -71,7 +71,18 @@ namespace WatiN.Core
 			get { return int.Parse(GetAttributeValue("rowIndex")); }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+        public TableCellCollection TableCellsDirectChildren
+        {
+            get 
+            { 
+                IHTMLTableRow row = (IHTMLTableRow)HTMLElement;
+
+                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(row.cells);
+                return new TableCellCollection(DomContainer, list);
+            }
+        }
+
+        internal new static Element New(DomContainer domContainer, IHTMLElement element)
 		{
 			return new TableRow(domContainer, (IHTMLTableRow) element);
 		}

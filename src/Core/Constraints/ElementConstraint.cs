@@ -36,6 +36,12 @@ namespace WatiN.Core.Constraints
 			{
 				return _comparer.Compare(elementAttributeBag.ElementTyped);
 			}
+
+            Element element = attributeBag as Element;
+            if (element != null)
+			{
+                return _comparer.Compare(element);
+			}
 		    throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
 		}
 

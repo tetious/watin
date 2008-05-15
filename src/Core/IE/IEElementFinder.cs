@@ -195,12 +195,17 @@ namespace WatiN.Core.InternetExplorer
 
 	    private bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
 	    {            
-            IEElement ieElement = new IEElement(element);
 	        waitUntilElementReadyStateIsComplete(element);
 
 	        attributeBag.IHTMLElement = element;
 
-	        if (elementTag.Compare(ieElement) && findBy.Compare(attributeBag))
+	        bool validElementType = true;
+            if (elementTag.IsInputElement)
+            {
+                validElementType = elementTag.CompareInputTypes(new IEElement(element));
+            }
+
+	        if (validElementType && findBy.Compare(attributeBag))
 	        {
 	            children.Add(element);
 	            if (returnAfterFirstMatch)
