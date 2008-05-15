@@ -23,6 +23,7 @@ using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -74,7 +75,29 @@ namespace WatiN.Core
 			get { return ElementsSupport.TableRows(DomContainer, TableBodies[0]); }
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Gets the table rows that are direct children of this <see cref="Table"/>, leaving
+        /// out table rows of any nested tables within this <see cref="Table"/>. If the <see cref="Table"/>
+        /// has multiple <see cref="TableBody"/> elements, the <see cref="TableRowCollection"/> contains 
+        /// all the rows of these <see cref="TableBody"/> elements.
+        /// </summary>
+        /// <value>The table rows collection.</value>
+        public TableRowCollection TableRowsDirectChildren
+        {
+            get
+            {
+                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(GetTableRows());
+                return new TableRowCollection(DomContainer, list);
+            }
+        }
+
+	    private IHTMLElementCollection GetTableRows()
+	    {
+	        IHTMLTable table = (IHTMLTable)HTMLElement;
+	        return table.rows;
+	    }
+
+	    /// <summary>
 		/// Returns the table body sections belonging to this table (not including table body sections 
 		/// from tables nested in this table).
 		/// </summary>
@@ -120,7 +143,8 @@ namespace WatiN.Core
 
 		/// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, null is returned.
+        /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in the
+        /// first <see cref="TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="findText">The text to find.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -138,6 +162,27 @@ namespace WatiN.Core
 		    return null;
 		}
 
+		/// <summary>
+        /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in all
+        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+		/// </summary>
+		/// <param name="findText">The text to find.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRowInDirectChildren(string findText, int inColumn)
+		{
+			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findText, inColumn);
+
+            if (TextIsInBody(constraint))
+			{
+                return FindRowInDirectChildren(constraint);
+			}
+		    return null;
+		}
+
         private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
         {
             string innertext = GetFirstTBody().innerText;
@@ -147,7 +192,8 @@ namespace WatiN.Core
         
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
-        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
+        /// first <see cref="TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -161,9 +207,27 @@ namespace WatiN.Core
 			return FindRow(constraint);
 		}
 
+        /// <summary>
+        /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
+        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+		/// </summary>
+		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+		public TableRow FindRowInDirectChildren(Regex findTextRegex, int inColumn)
+		{
+			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
+
+			return FindRowInDirectChildren(constraint);
+		}
+
 		/// <summary>
         /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
+        /// first <see cref="TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="comparer">The comparer that the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -177,10 +241,28 @@ namespace WatiN.Core
 			return FindRow(constraint);
         }
 
+		/// <summary>
+        /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
+        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+		/// </summary>
+		/// <param name="comparer">The comparer that the cell text must match.</param>
+		/// <param name="inColumn">Index of the column to find the text in.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRowInDirectChildren(ICompare comparer, int inColumn)
+		{
+			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+
+			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(comparer, inColumn);
+
+            return FindRowInDirectChildren(constraint);
+        }
+
 #if !NET11
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
+        /// first <see cref="TableBody"/> including rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -192,7 +274,21 @@ namespace WatiN.Core
 
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, <c>null</c> is returned.
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
+        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// </summary>
+        /// <param name="predicate">The predicate that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRowInDirectChildren(Predicate<string> predicate, int inColumn)
+        {
+            return FindRowInDirectChildren(new PredicateComparer(predicate), inColumn);
+        }
+
+        /// <summary>
+        /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
+        /// first <see cref="TableBody"/> including rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -200,6 +296,19 @@ namespace WatiN.Core
         public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
         {
             return FindRow(new PredicateComparer<TableCell>(predicate), inColumn);
+        }
+
+        /// <summary>
+        /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned.  This method will look for rows in all
+        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// </summary>
+        /// <param name="predicate">The predicate that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        public TableRow FindRowInDirectChildren(Predicate<TableCell> predicate, int inColumn)
+        {
+            return FindRowInDirectChildren(new PredicateComparer<TableCell>(predicate), inColumn);
         }
 #endif
 
@@ -226,11 +335,31 @@ namespace WatiN.Core
 			return null;
 		}
 
+        /// <summary>
+		/// Finds the first row that meets the <see cref="TableRowAttributeConstraint"/>.
+		/// If no match is found, <c>null</c> is returned.
+		/// </summary>
+		/// <param name="findBy">The constraint used to identify the table cell.</param>
+		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+		public TableRow FindRowInDirectChildren(TableRowAttributeConstraint findBy)
+		{
+            ElementAttributeBag attributeBag = new ElementAttributeBag(DomContainer);
+
+            ArrayList elements = IEElementFinder.FindElements(findBy, (ElementTag)Core.TableRow.ElementTags[0], attributeBag, true, GetTableRows());
+
+            if (elements.Count > 0)
+            {
+                return new TableRow(DomContainer, (IHTMLTableRow) elements[0]);
+            }
+
+            return null;
+		}
+
 		public abstract class TableElementCollectionsBase : IElementCollection
 		{
 			protected Table table;
 
-			public TableElementCollectionsBase(Table table)
+		    protected TableElementCollectionsBase(Table table)
 			{
 				this.table = table;
 			}

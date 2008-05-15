@@ -71,6 +71,11 @@ namespace WatiN.Core
 			get { return int.Parse(GetAttributeValue("rowIndex")); }
 		}
 
+        /// <summary>
+        /// Gets the table cells that are direct children of this <see cref="TableRow"/>, leaving
+        /// out table cells of any nested tables within this <see cref="TableRow"/>.
+        /// </summary>
+        /// <value>The table cells collection.</value>
         public TableCellCollection TableCellsDirectChildren
         {
             get 

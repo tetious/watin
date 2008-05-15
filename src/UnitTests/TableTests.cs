@@ -135,13 +135,33 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void TableFindRowShouldIgnoreTableCellsInsideOfNestedTables()
+        public void TableRowAttributeConstraintCompareShouldNotCrashIfColumnIndexIsGreaterThenNumberOfColumnsInARow()
 		{
 			ie.GoTo(TablesUri);
 
 			Table table = ie.Table("Table1");
 
-			Assert.IsNotNull(table.FindRow("12", 1));
+			Assert.That(table.FindRow("12", 999), Is.Null);
+		}
+
+		[Test]
+		public void TableFindRowShouldFindTableCellsInsideOfNestedTables()
+		{
+			ie.GoTo(TablesUri);
+
+			Table table = ie.Table("Table1");
+
+			Assert.That(table.FindRow("2", 0), Is.Not.Null);
+		}
+
+		[Test]
+        public void TableFindRowInDirectChildrenShouldIgnoreTableCellsInsideOfNestedTables()
+		{
+			ie.GoTo(TablesUri);
+
+			Table table = ie.Table("Table1");
+
+			Assert.That(table.FindRowInDirectChildren("2", 0), Is.Null);
 		}
 
 		[Test]
@@ -167,13 +187,25 @@ namespace WatiN.Core.UnitTests
 				object enumTable = tableEnumerator.Current;
 
 				Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
-				Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+				Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumerator don't act the same.");
 				++count;
 			}
 
 			Assert.IsFalse(tableEnumerator.MoveNext(), "Expected last item");
 			Assert.AreEqual(2, count);
 		}
+
+        [Test]
+        public void TableRowsDirectChildren()
+        {
+            ie.GoTo(TablesUri);
+
+            Table table = ie.Table("Table1");
+            Assert.That(table.TableRowsDirectChildren.Length, Is.EqualTo(3), "Unexpected number of TableRows");
+            Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
+            Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
+            Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");
+        }
 
 #if !NET11
         [Test]

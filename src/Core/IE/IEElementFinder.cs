@@ -156,13 +156,12 @@ namespace WatiN.Core.InternetExplorer
             {
                 return FindElementById(findBy, elementTag, attributeBag, returnAfterFirstMatch);
             }
-            return FindElements(findBy, elementTag, attributeBag, returnAfterFirstMatch);
+            return FindElements(findBy, elementTag, attributeBag, returnAfterFirstMatch, elementTag.GetElementCollection(_elementCollection.Elements));
 		}
 
-	    private ArrayList FindElements(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch)
+	    public static ArrayList FindElements(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElementCollection elements)
 	    {
             ArrayList children = new ArrayList();
-            IHTMLElementCollection elements = elementTag.GetElementCollection(_elementCollection.Elements);
 
 	        if (elements != null)
 	        {
@@ -193,7 +192,7 @@ namespace WatiN.Core.InternetExplorer
 	        return children;
 	    }
 
-	    private bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
+	    private static bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
 	    {            
 	        waitUntilElementReadyStateIsComplete(element);
 
@@ -216,7 +215,7 @@ namespace WatiN.Core.InternetExplorer
 	        return true;
 	    }
 
-	    private bool FindByExactMatchOnId(BaseConstraint findBy)
+	    private static bool FindByExactMatchOnId(BaseConstraint findBy)
 	    {
             Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
 	        return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);

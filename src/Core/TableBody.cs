@@ -48,8 +48,22 @@ namespace WatiN.Core
 		/// <value>The table rows.</value>
 		public override TableRowCollection TableRows
 		{
-			get { return new TableRowCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows)); }
+            get { return TableRowsDirectChildren; }
 		}
+
+        /// <summary>
+        /// Gets the table rows that are direct children of this <see cref="TableBody"/>, leaving
+        /// out table rows of any nested tables within this <see cref="TableBody"/>.
+        /// </summary>
+        /// <value>The table rows collection.</value>
+        public TableRowCollection TableRowsDirectChildren
+        {
+            get
+            {
+                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows);
+                return new TableRowCollection(DomContainer, list);
+            }
+        }
 
 		/// <summary>
 		/// Returns the table row belonging to this table body (not including table rows 
