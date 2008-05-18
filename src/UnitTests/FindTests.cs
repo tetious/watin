@@ -29,13 +29,18 @@ using StringComparer = WatiN.Core.Comparers.StringComparer;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FindTests
+	public class FindTests : BaseWithIETests
 	{
 		private const string _href = "href";
 #if !NET11
     private string _expectedPredicateCompareValue;
 
-    [SetUp]
+	    public override Uri TestPageUri
+	    {
+            get { return ProximityURI; }
+	    }
+
+	    [SetUp]
     public void SetUp()
     {
       _expectedPredicateCompareValue = null;
@@ -591,6 +596,42 @@ namespace WatiN.Core.UnitTests
             Assert.That(Find.First(), Is.TypeOf(typeof(IndexConstraint)));
             Assert.That(Find.First().ConstraintToString(), Is.EqualTo("Index = 0"));
         }
+		
+		[Test]
+		public void ShouldFindFormElementsByNearbyText() 
+		{
+			// Because ProximityTextConstraint requires a ElementAttribute bag with a fairly complete DOM
+			// we can't use the MockAttributeBag to test this.
+		    TextField inputUsername = ie.TextField(Find.Near("User Name"));
+		    Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find 'User Name' field.");
+
+		    TextField inputPassword = ie.TextField(Find.Near("Password"));
+		    Assert.AreEqual("inputPassword", inputPassword.Id, "Left/right proximity for text did not find 'Password' field.");
+		
+		    // Test with a constraint
+		    TextField inputUsername2 = ie.TextField(new ProximityTextConstraint("User Name"));
+		    Assert.AreEqual(inputUsername.Id, inputUsername2.Id, "Find.Near and ProximityTextConstraint did not find same element.");
+		}
+		
+		[Test]
+		public void ShouldFindFormElementsByLabelText() 
+		{
+			// Because Find.ByLabelText requires a ElementAttribute bag with a fairly complete DOM
+			// we can't use the MockAttributeBag to test this.
+            ie.GoTo(MainURI);
+			
+			// The control to test against
+			Assert.IsTrue(ie.CheckBox("Checkbox21").Exists, "Checkbox21 missing.");
+			CheckBox checkBox21a = ie.CheckBox("Checkbox21");
+			
+			// Test with Find.ByLabelText
+			CheckBox checkBox21b = ie.CheckBox(Find.ByLabelText("label for Checkbox21"));
+			Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
+			
+			// Test with a constraint
+			CheckBox checkBox21c = ie.CheckBox(new LabelTextConstraint("label for Checkbox21"));
+			Assert.AreEqual(checkBox21b.Id, checkBox21c.Id, "Using a LabelTextContraint did not return the same as Find.ByLabelText for Checkbox21.");
+		}
 		
 		public class ElementComparerMock : ICompareElement
 		{

@@ -20,87 +20,109 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using WatiN.Core.Constraints;
+
 
 namespace WatiN.Core.UnitTests
 {
-	[TestFixture]
-	public class CheckBoxTests : BaseWithIETests
-	{
-		[Test]
-		public void CheckBoxElementTags()
-		{
-			Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("input", ((ElementTag) CheckBox.ElementTags[0]).TagName);
-			Assert.AreEqual("checkbox", ((ElementTag) CheckBox.ElementTags[0]).InputTypes);
-		}
+    [TestFixture]
+    public class CheckBoxTests : BaseWithIETests
+    {
+        [Test]
+        public void CheckBoxElementTags()
+        {
+            Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
+            Assert.AreEqual("input", ((ElementTag)CheckBox.ElementTags[0]).TagName);
+            Assert.AreEqual("checkbox", ((ElementTag)CheckBox.ElementTags[0]).InputTypes);
+        }
 
-		[Test]
-		public void CheckBoxFromElement()
-		{
-			Element element = ie.Element("Checkbox1");
-			CheckBox checkBox = new CheckBox(element);
-			Assert.AreEqual("Checkbox1", checkBox.Id);
-		}
+        [Test]
+        public void CheckBoxFromElement()
+        {
+            Element element = ie.Element("Checkbox1");
+            CheckBox checkBox = new CheckBox(element);
+            Assert.AreEqual("Checkbox1", checkBox.Id);
+        }
 
-		[Test]
-		public void CheckBoxExists()
-		{
-			Assert.IsTrue(ie.CheckBox("Checkbox1").Exists);
-			Assert.IsTrue(ie.CheckBox(new Regex("Checkbox1")).Exists);
-			Assert.IsFalse(ie.CheckBox("noneexistingCheckbox1id").Exists);
-		}
+        [Test]
+        public void CheckBoxExists()
+        {
+            Assert.IsTrue(ie.CheckBox("Checkbox1").Exists);
+            Assert.IsTrue(ie.CheckBox(new Regex("Checkbox1")).Exists);
+            Assert.IsFalse(ie.CheckBox("noneexistingCheckbox1id").Exists);
+        }
 
-		[Test]
-		public void CheckBoxTest()
-		{
-			CheckBox checkbox1 = ie.CheckBox("Checkbox1");
+        [Test]
+        public void CheckBoxTest()
+        {
+            CheckBox checkbox1 = ie.CheckBox("Checkbox1");
 
-			Assert.AreEqual("Checkbox1", checkbox1.Id, "Found wrong checkbox");
-			Assert.AreEqual("Checkbox1", checkbox1.ToString(), "ToString didn't return Id");
-			Assert.IsTrue(checkbox1.Checked, "Should initially be checked");
+            Assert.AreEqual("Checkbox1", checkbox1.Id, "Found wrong checkbox");
+            Assert.AreEqual("Checkbox1", checkbox1.ToString(), "ToString didn't return Id");
+            Assert.IsTrue(checkbox1.Checked, "Should initially be checked");
 
-			checkbox1.Checked = false;
-			Assert.IsFalse(checkbox1.Checked, "Should not be checked");
+            checkbox1.Checked = false;
+            Assert.IsFalse(checkbox1.Checked, "Should not be checked");
 
-			checkbox1.Checked = true;
-			Assert.IsTrue(checkbox1.Checked, "Should be checked");
-		}
+            checkbox1.Checked = true;
+            Assert.IsTrue(checkbox1.Checked, "Should be checked");
+        }
 
-		[Test]
-		public void CheckBoxes()
-		{
-			Assert.AreEqual(5, ie.CheckBoxes.Length, "Unexpected number of checkboxes");
+        [Test]
+        public void CheckBoxes()
+        {
+            Assert.AreEqual(5, ie.CheckBoxes.Length, "Unexpected number of checkboxes");
 
-			CheckBoxCollection formCheckBoxs = ie.Form("FormCheckboxes").CheckBoxes;
+            CheckBoxCollection formCheckBoxs = ie.Form("FormCheckboxes").CheckBoxes;
 
-			// Collection items by index
-			Assert.AreEqual(3, formCheckBoxs.Length, "Wrong number off checkboxes");
-			Assert.AreEqual("Checkbox1", formCheckBoxs[0].Id);
-			Assert.AreEqual("Checkbox2", formCheckBoxs[1].Id);
-			Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);
+            // Collection items by index
+            Assert.AreEqual(3, formCheckBoxs.Length, "Wrong number off checkboxes");
+            Assert.AreEqual("Checkbox1", formCheckBoxs[0].Id);
+            Assert.AreEqual("Checkbox2", formCheckBoxs[1].Id);
+            Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);
 
-			// Collection iteration and comparing the result with Enumerator
-			IEnumerable checkboxEnumerable = formCheckBoxs;
-			IEnumerator checkboxEnumerator = checkboxEnumerable.GetEnumerator();
+            // Collection iteration and comparing the result with Enumerator
+            IEnumerable checkboxEnumerable = formCheckBoxs;
+            IEnumerator checkboxEnumerator = checkboxEnumerable.GetEnumerator();
 
-			int count = 0;
-			foreach (CheckBox checkBox in formCheckBoxs)
-			{
-				checkboxEnumerator.MoveNext();
-				object enumCheckbox = checkboxEnumerator.Current;
+            int count = 0;
+            foreach (CheckBox checkBox in formCheckBoxs)
+            {
+                checkboxEnumerator.MoveNext();
+                object enumCheckbox = checkboxEnumerator.Current;
 
-				Assert.IsInstanceOfType(checkBox.GetType(), enumCheckbox, "Types are not the same");
-				Assert.AreEqual(checkBox.OuterHtml, ((CheckBox) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+                Assert.IsInstanceOfType(checkBox.GetType(), enumCheckbox, "Types are not the same");
+                Assert.AreEqual(checkBox.OuterHtml, ((CheckBox)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+                ++count;
+            }
 
-			Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(3, count);
-		}
+            Assert.IsFalse(checkboxEnumerator.MoveNext(), "Expected last item");
+            Assert.AreEqual(3, count);
+        }
 
-		public override Uri TestPageUri
-		{
-			get { return MainURI; }
-		}
-	}
+        public override Uri TestPageUri
+        {
+            get { return MainURI; }
+        }
+
+        [Test]
+        public void FindCheckboxByLabel()
+        {
+            // The control to test against
+            Assert.IsTrue(ie.CheckBox("Checkbox21").Exists, "Checkbox21 missing.");
+            CheckBox checkBox21a = ie.CheckBox("Checkbox21");
+
+            // The new way to do this
+            CheckBox checkBox21b = ie.CheckBox(new LabelTextConstraint("label for Checkbox21"));
+            Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
+
+            // The old way to do this
+            // Using this method is about 10% slower than the new one and much more complicated to read/write
+            Label label = ie.Label(Find.ByText("label for Checkbox21"));
+            Assert.IsNotNull(label, "Missing label for Checkbox21 or text has changed.");
+            CheckBox checkBox21c = ie.CheckBox(label.For);
+            Assert.AreEqual(checkBox21c.Id, checkBox21b.Id, "Label for Checkbox21b did not attach to correct checkbox.");
+
+        }
+    }
 }

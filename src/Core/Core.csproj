@@ -515,12 +515,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Constraints\LabelTextConstraint.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Constraints\NotConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Constraints\ObsoleteConstraints.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Constraints\ProximityTextConstraint.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

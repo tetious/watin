@@ -21,46 +21,46 @@ using Rhino.Mocks;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
-	[TestFixture]
-	public class NotConstraintTests
-	{
-		private MockRepository mocks;
-		private BaseConstraint _base;
-		private IAttributeBag attributeBag;
+    [TestFixture]
+    public class NotConstraintTests
+    {
+        private MockRepository mocks;
+        private BaseConstraint _base;
+        private IAttributeBag attributeBag;
 
-		[SetUp]
-		public void Setup()
-		{
-			mocks = new MockRepository();
-			_base = (BaseConstraint) mocks.DynamicMock(typeof (BaseConstraint));
-			attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+            _base = (BaseConstraint) mocks.DynamicMock(typeof (BaseConstraint));
+            attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
 
-			SetupResult.For(_base.Compare(null)).IgnoreArguments().Return(false);
-			mocks.ReplayAll();
-		}
+            SetupResult.For(_base.Compare(null)).IgnoreArguments().Return(false);
+            mocks.ReplayAll();
+        }
 
-		[TearDown]
-		public void TearDown()
-		{
-			mocks.VerifyAll();
-		}
+        [TearDown]
+        public void TearDown()
+        {
+            mocks.VerifyAll();
+        }
 
-		[Test]
-		public void NotTest()
-		{
-			NotConstraint notConstraint = new NotConstraint(_base);
-			Assert.IsTrue(notConstraint.Compare(attributeBag));
-		}
+        [Test]
+        public void NotTest()
+        {
+            NotConstraint notConstraint = new NotConstraint(_base);
+            Assert.IsTrue(notConstraint.Compare(attributeBag));
+        }
 
-		[Test]
-		public void AttributeOperatorNotOverload()
-		{
-			BaseConstraint attributenot = !_base;
+        [Test]
+        public void AttributeOperatorNotOverload()
+        {
+            BaseConstraint attributenot = !_base;
 
-			Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
-			Assert.IsTrue(attributenot.Compare(attributeBag));
-		}
-	}
+            Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
+            Assert.IsTrue(attributenot.Compare(attributeBag));
+        }
+    }
 }

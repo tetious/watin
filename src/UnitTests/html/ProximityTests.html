@@ -1,0 +1,47 @@
+<html>
+	<HEAD>
+		<title>ProximityTests</title>
+	</HEAD>
+	<body>
+		<form ID="FormLeftRight">
+			User Name: <input type="text" size="20" id="inputUserName" /><br />
+			Password: <input type="text" size="20" id="inputPassword" /><br />
+			<input type="submit" size="20" id="submitSignIn" value="Sign In" /><br />
+		</form>
+		<form ID="FormTopBottom">
+			First Name:<br />
+			<input type="text" size="20" id="inputFirstName" /><br />
+			Last Name:<br />
+			<input type="text" size="20" id="inputLastName" /><br />
+			Email:<br />
+			<input type="text" size="20" id="inputEmail" /><br />
+			<input type="submit" size="20" id="submitRegister" value="Register!" /><br />
+		</form>
+		
+		<!-- Strange DOM order and relationship should not affect absolute positioned elements -->
+		<form ID="FormAbsolute">
+			<div id="SearchFieldDiv" style="position:absolute;top:0;right:0;"><input type="text" size="20" id="inputSearch" /></div>
+		</form>
+		<div id="SearchLabelDiv" style="position:absolute;top:0;right:10em;">Search:</div>
+
+		<form id="FormTable">
+			<table border="0" summary="Layout of tabular form">
+				<tr>
+					<td>Code</td>
+					<td><input type="text" id="inputCode" size="20" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Confirm Code</td>
+					<td><input type="text" id="inputConfirmCode" size="20" /></td>
+					<td><span id="spanValidateCode">Code and Confirm Code must match!</span></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="text-align:right;"><input type="submit" id="submitTable" size="20" /></td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

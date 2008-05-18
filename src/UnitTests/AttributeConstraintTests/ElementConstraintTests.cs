@@ -23,55 +23,55 @@ using Rhino.Mocks;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
-	[TestFixture]
-	public class ElementConstraintTest
-	{
-		[Test]
-		public void ElementConstraintShouldCallComparerAndReturnTrue()
-		{
-			VerifyComparerIsUsed("testtagname", true);
-		}
-
-		[Test]
-		public void ElementConstraintShouldCallComparerAndReturnFalse()
-		{
-			VerifyComparerIsUsed("tagname", false);
-		}
-
-		private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
+    [TestFixture]
+    public class ElementConstraintTest
+    {
+        [Test]
+        public void ElementConstraintShouldCallComparerAndReturnTrue()
         {
-			MockRepository mocks = new MockRepository();
-			IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
-		    DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
+            VerifyComparerIsUsed("testtagname", true);
+        }
+
+        [Test]
+        public void ElementConstraintShouldCallComparerAndReturnFalse()
+        {
+            VerifyComparerIsUsed("tagname", false);
+        }
+
+        private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
+        {
+            MockRepository mocks = new MockRepository();
+            IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
+            DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
             ElementAttributeBag elementAttributeBag = new ElementAttributeBag(domContainer, IHTMLElementStub);
 
-			SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
+            SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
             SetupResult.For(domContainer.NativeBrowser).Return(new IEBrowser(domContainer));
 			
-			mocks.ReplayAll();
+            mocks.ReplayAll();
 
-			ElementComparerMock elementComparerMock = new ElementComparerMock(tagname);
-			ElementConstraint elementConstraint = new ElementConstraint(elementComparerMock);
+            ElementComparerMock elementComparerMock = new ElementComparerMock(tagname);
+            ElementConstraint elementConstraint = new ElementConstraint(elementComparerMock);
 			
-			Assert.That(elementConstraint.Compare(elementAttributeBag) == expectedResult);
+            Assert.That(elementConstraint.Compare(elementAttributeBag) == expectedResult);
 
-			mocks.VerifyAll();
-		}
+            mocks.VerifyAll();
+        }
 
-		public class ElementComparerMock : ICompareElement 
-		{
-			private readonly string _expectedTagName;
+        public class ElementComparerMock : ICompareElement 
+        {
+            private readonly string _expectedTagName;
 			
-			public ElementComparerMock(string expectedTagName)
-			{
-				_expectedTagName = expectedTagName;
-			}
-			public bool Compare(Element element)
-			{
-				return _expectedTagName == element.TagName;
-			}
-		}
-	}
+            public ElementComparerMock(string expectedTagName)
+            {
+                _expectedTagName = expectedTagName;
+            }
+            public bool Compare(Element element)
+            {
+                return _expectedTagName == element.TagName;
+            }
+        }
+    }
 }

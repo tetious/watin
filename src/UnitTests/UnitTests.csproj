@@ -363,6 +363,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AttributeConstraintTests\ProximityTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ComparerTests\BoolComparerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -731,5 +731,32 @@ namespace WatiN.Core
         {
             return ByIndex(0);
         }
+
+		/// <summary>
+		/// Find a form element by looking for specific text on the page near the field.
+		/// </summary>
+		/// <param name="labelText">The text near the field</param>
+		/// <returns><see cref="ProximityTextConstraint"/></returns>
+		/// <example>
+		/// <code>TextField = ie.TextField(Find.Near("User Name"));</code>
+		/// </example>
+		public static ProximityTextConstraint Near( string labelText ) {
+			return new ProximityTextConstraint(labelText);
+		}
+		
+		/// <summary>
+		/// Finds a form element by looking for the &lt;label&gt; associated with it by searching the label text.
+		/// </summary>
+		/// <param name="labelText">The text of the label element</param>
+		/// <returns><see cref="LabelTextConstraint"/></returns>
+		/// <example>
+		/// This will look for a tet field that has a label element with the innerText "User Name:"
+		/// <code>TextField = ie.TextField(Find.ByLabelText("User Name:"));</code>
+		/// </example>
+		public static LabelTextConstraint ByLabelText( string labelText ) 
+		{
+			return new LabelTextConstraint( labelText );
+		}
+		
 	}
 }

@@ -30,7 +30,7 @@ namespace WatiN.Core
 		public const string FrameTagName = "FRAME";
 		public const string InputTagName = "INPUT";
 		public const string TableCellTagName = "TD";
-
+		public const string LabelTagName = "LABEL";
 		/// <summary>
 		/// Prevent creating an instance of this class (contains only static members)
 		/// </summary>
