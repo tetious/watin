@@ -911,7 +911,7 @@ namespace WatiN.Core
 		public DomContainer DomContainer
 		{
 			get { return domContainer; }
-			protected set { domContainer = value; }
+			set { domContainer = value; }
 		}
 
 		IHTMLElementCollection IElementCollection.Elements

@@ -154,7 +154,7 @@ namespace WatiN.Core.UnitTests
 		    IElementsContainer container = parent as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
 #if NET11
-            Assert.IsTrue(parent.GetType().Equals(typeof(IElementsContainer)), "Should implement ElementsContainer");
+            Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer)), "Should implement ElementsContainer");
 #else
             Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
 #endif

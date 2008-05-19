@@ -241,12 +241,14 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
+#if !NET11
         [Test]
         public void FindOptionUsingPredicateT()
         {
             Option option = ie.SelectList("Select2").Option(delegate(Option o) { return o.Text == "Third Listitem"; });
             Assert.That(option.Exists);
         }
+#endif
 
 	}
 }

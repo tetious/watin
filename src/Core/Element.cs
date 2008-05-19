@@ -645,7 +645,15 @@ namespace WatiN.Core
 		{
 			try
 			{
-				NativeElement.BackgroundColor = color ?? "";				
+				if (color != null)
+				{
+					NativeElement.BackgroundColor = color;
+					
+				}
+				else
+				{
+					NativeElement.BackgroundColor = "";
+				}
 			}
 			catch{}
 		}
@@ -822,6 +830,7 @@ namespace WatiN.Core
 			WaitUntil(constraint, IE.Settings.WaitUntilExistsTimeOut);
 		}
 
+#if !NET11
         /// <summary>
 		/// Waits until the given <paramref name="predicate" /> matches.
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
@@ -831,7 +840,7 @@ namespace WatiN.Core
 		{
 			WaitUntil(Find.ByElement(predicate), IE.Settings.WaitUntilExistsTimeOut);
 		}
-
+#endif
 		/// <summary>
 		/// Waits until the given <paramref name="constraint" /> matches.
 		/// </summary>

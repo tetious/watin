@@ -33,19 +33,20 @@ namespace WatiN.Core.UnitTests
 	{
 		private const string _href = "href";
 #if !NET11
-    private string _expectedPredicateCompareValue;
+	    private string _expectedPredicateCompareValue;
+
+	    [SetUp]
+		public void SetUp()
+		{
+			_expectedPredicateCompareValue = null;
+		}
+#endif
 
 	    public override Uri TestPageUri
 	    {
             get { return ProximityURI; }
 	    }
 
-	    [SetUp]
-    public void SetUp()
-    {
-      _expectedPredicateCompareValue = null;
-    }
-#endif
 
         [Test]
 		public void FindByFor()

@@ -218,8 +218,12 @@ namespace WatiN.Core.InternetExplorer
 	    private static bool FindByExactMatchOnId(BaseConstraint findBy)
 	    {
             Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
-	        return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
-	    }
+#if !NET11
+			return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
+#else
+			return constraint != null && constraint.AttributeName.ToLower(System.Globalization.CultureInfo.InvariantCulture) == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
+#endif
+		}
 
 	    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)
 		{
