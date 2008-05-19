@@ -50,39 +50,6 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(ie.Div("noneexistingdivid").Exists);
 		}
 
-        // TODO: Move this test the IEElementFinderTests
-        [Test]
-		public void FindingElementByExactIdShouldBeFasterThenUsingAnyOtherConstraint()
-		{
-            long ticks = DateTime.Now.Ticks;
-            for (int index = 0; index < 100; index++ )
-                Assert.IsTrue(ie.Div("divid").Exists);
-            ticks = DateTime.Now.Ticks - ticks;
-
-            long ticksWithRegEx = DateTime.Now.Ticks;
-            for (int index = 0; index < 100; index++)
-                Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
-            ticksWithRegEx = DateTime.Now.Ticks - ticksWithRegEx;
-
-            Console.WriteLine("Find.By exact id: " + ticks);
-            Console.WriteLine("Find.By regex id: " + ticksWithRegEx);
-            Assert.That(ticks, Is.LessThan(ticksWithRegEx), "Lost performance gain");
-		}
-
-        // TODO: Move this test the IEElementFinderTests
-        [Test]
-        public void ShouldNotFindElementWithIdofWrongElementType()
-        {
-            Assert.That(ie.Span("divid").Exists, Is.False);
-            Assert.That(ie.Div("divid").Exists, Is.True);
-        }
-
-        // TODO: Move this test the IEElementFinderTests
-        [Test]
-        public void ShouldNotFindElementWithByNameWhenSearchingForId()
-        {
-            Assert.That(ie.TextField("textinput1").Exists, Is.False);
-        }
 
 		[Test]
 		public void DivTest()

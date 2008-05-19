@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(elementTag.Compare(null));
 		}
 
-		// TODO: Vervalt when all refactored to IBrowserElement
+		// TODO: Can be dropped when all refactored to IBrowserElement
 		[Test]
 		public void IsValidElementWithNullElementShouldReturnFalse()
 		{

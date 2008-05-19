@@ -971,42 +971,4 @@ namespace WatiN.Core.UnitTests
 
 #endif
 	}
-
-    // TODO: Move this class to its own file
-    [TestFixture]
-    public class BaseElementCollectionTest : BaseWithIETests
-    {
-        public override Uri TestPageUri
-        {
-            get { return MainURI; }
-        }
-
-        [Test]
-        public void FirstWithAttributConstraint()
-        {
-            ElementCollection elements = ie.Elements;
-            Element element = elements.First(Find.ById("popupid"));
-            Assert.That(element.Exists, Iz.True);
-            Assert.That(element, Iz.TypeOf(typeof(Button)));
-        }
-
-        [Test]
-        public void First()
-        {
-            ButtonCollection buttons = ie.Buttons;
-            Element element = buttons.First();
-
-            Assert.That(element.Exists, Iz.True);
-            Assert.That(element.Id, Iz.EqualTo("popupid"));
-            Assert.That(element, Iz.TypeOf(typeof(Button)));
-        }
-
-#if !NET11
-        [Test]
-        public void ExistUsingPredicateT()
-        {
-            Assert.That(ie.Buttons.Exists(delegate(Button b) { return b.Id == "helloid"; }));
-        }
-#endif
-    }
 }

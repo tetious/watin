@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Interfaces;
@@ -23,21 +25,21 @@ using WatiN.Core.InternetExplorer;
 using WatiN.Core.UnitTests.AttributeConstraintTests;
 using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.IETests
 {
 	[TestFixture]
-	public class ElementFinderTests
+	public class IEElementFinderTests : BaseWithIETests
 	{
 		private MockRepository mocks;
 		private IElementCollection stubElementCollection;
-	    private DomContainer domContainer;
+		private DomContainer domContainer;
 
 		[SetUp]
 		public void SetUp()
 		{
 			mocks = new MockRepository();
 			stubElementCollection = (IElementCollection) mocks.DynamicMock(typeof (IElementCollection));
-            domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer), new object[] { });
+			domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer), new object[] { });
 
 			SetupResult.For(stubElementCollection.Elements).Return(null);
 
@@ -78,7 +80,44 @@ namespace WatiN.Core.UnitTests
 			Assert.That(constraint.CallsToCompare, Iz.EqualTo(0), "Unexpected number of calls to compare");
 		}
 
+		// TODO: More tests to cover positive find results		[Test]
 
-		// TODO: More tests to cover positive find results
+		public void ShouldNotFindElementWithIdofWrongElementType()
+		{
+			Assert.That(ie.Span("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
+			Assert.That(ie.Div("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.True);
+		}
+
+		[Test]
+		public void ShouldNotFindElementWithByNameWhenSearchingForId()
+		{
+			Assert.That(ie.TextField("textinput1").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
+		}
+
+		[Test]
+		public void FindingElementByExactIdShouldBeFasterThenUsingAnyOtherConstraint()
+		{
+			// Kick this code off to prevent initialization issues during measurement
+			Assert.IsTrue(ie.Div("divid").Exists);
+
+			long ticks = DateTime.Now.Ticks;
+			for (int index = 0; index < 100; index++ )
+				Assert.IsTrue(ie.Div("divid").Exists);
+			ticks = DateTime.Now.Ticks - ticks;
+
+			long ticksWithRegEx = DateTime.Now.Ticks;
+			for (int index = 0; index < 100; index++)
+				Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
+			ticksWithRegEx = DateTime.Now.Ticks - ticksWithRegEx;
+
+			Console.WriteLine("Find.By exact id: " + ticks);
+			Console.WriteLine("Find.By regex id: " + ticksWithRegEx);
+			Assert.That(ticks, NUnit.Framework.SyntaxHelpers.Is.LessThan(ticksWithRegEx), "Lost performance gain");
+		}
+
+		public override Uri TestPageUri
+		{
+			get { return MainURI; }
+		}
 	}
 }

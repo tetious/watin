@@ -440,6 +440,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TypeComparer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypedElementFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WaitForComplete.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -600,12 +610,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DialogHandlers\PromptDialogHandler.cs"
+                    RelPath = "DialogHandlers\PrintDialogHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DialogHandlers\PrintDialogHandler.cs"
+                    RelPath = "DialogHandlers\PromptDialogHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
