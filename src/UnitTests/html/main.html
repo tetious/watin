@@ -66,42 +66,51 @@ function fnOpen()
                 <td id="td2">b2</td>
             </tr>
         </table>
-        <P>&nbsp;</P>
-        <DIV id="divid" ms_positioning="FlowLayout">
-            <TABLE id="table2" height="24" cellSpacing="0" cellPadding="0" width="232" border="0" ms_1d_layout="TRUE">
-                <TR>
-                    <TD>Contains text in DIV</TD>
-                </TR>
+        <p>&nbsp;</p>
+        <div id="divid" ms_positioning="FlowLayout">
+            <table id="table2" height="24" cellSpacing="0" cellPadding="0" width="232" border="0" ms_1d_layout="TRUE">
                 <tr>
-                    <td><label accesskey="C" for="Checkbox21"> label for Checkbox21</label><label>Test label before: <INPUT id="Checkbox21" type="checkbox" CHECKED value="Effe teste" name="Checkbox21"> Test label after</label></td>
+                    <td>Contains text in DIV</td>
                 </tr>
-            </TABLE>
-        </DIV>
-        <P id="links"><a id="testlinkid" href="http://watin.sourceforge.net" target="_blank" name="testlinkname">WatiN</a>
-            <a id="testlinkid1" href="http://www.microsoft.com/" name="testlinkname1">Microsoft</a><A id="testlinkid2" href="Index.html" name="testlinkname2">
-                Goto Index page</A></P>
-        <P>&nbsp;<SELECT id="Select1" size="1" name="Select1">
-                <OPTION value="1" selected>First text</OPTION>
-                <OPTION value="tweede tekst">Second text</OPTION>
-                <OPTION value="3">Third text</OPTION>
-            </SELECT><SELECT id="Select2" multiple size="2" name="Select2">
-                <OPTION value="1">First Listitem</OPTION>
-                <OPTION value="2" selected>Second Listitem</OPTION>
-                <OPTION value="3">Third Listitem</OPTION>
-                <OPTION value="4">Fourth Listitem</OPTION>
-            </SELECT></P>
+                <tr>
+                    <td>
+                        <label accesskey="C" for="Checkbox21"> label for Checkbox21</label>
+                        <label>Test label before: 
+                        <input id="Checkbox21" type="checkbox" checked="checked" value="Effe teste" name="Checkbox21" /> Test label after</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p id="links">
+            <a id="testlinkid" href="http://watin.sourceforge.net" target="_blank" name="testlinkname">WatiN</a>
+            <a id="testlinkid1" href="http://www.microsoft.com/" name="testlinkname1">Microsoft</a>
+            <a id="testlinkid2" href="Index.html" name="testlinkname2">Goto Index page</a>
+        </p>
         <p>
-        <input type="file" id="upload" /><span id="spanid1" style="COLOR: green"> File </span>
-        <span id="Span1" style="COLOR: olive">upload</span> 
+            &nbsp;
+            <select id="Select1" size="1" name="Select1">
+                <option value="1" selected>First text</option>
+                <option value="tweede tekst">Second text</option>
+                <option value="3">Third text</option>
+            </select>
+            <select id="Select2" multiple size="2" name="Select2">
+                <option value="1">First Listitem</option>
+                <option value="2" selected>Second Listitem</option>
+                <option value="3">Third Listitem</option>
+                <option value="4">Fourth Listitem</option>
+            </select>
+        </p>
+        <p>
+            <input type="file" id="upload" />
+            <span id="spanid1" style="COLOR: green"> File </span>
+            <span id="Span1" style="COLOR: olive">upload</span> 
         </p> 
-        <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">
-            Button Element</button>
+        <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
         <div id="NextAndPreviousTests">
 			<div id="first"></div>
 			<span id="second"></span>
 			<xml id="nonSupportedTagName"></xml>
 			<div id="last"></div>
         </div>    
-            
     </body>
 </html>
