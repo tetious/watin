@@ -103,7 +103,8 @@ namespace WatiN.Core
 			int screenWidth = (int) getDocumentAttribute(myDoc, "clientWidth");
 
 			//Get bitmap to hold screen fragment.
-			Bitmap bm = new Bitmap(screenWidth, screenHeight, PixelFormat.Format16bppRgb555);
+            Bitmap bm = new Bitmap(screenWidth, screenHeight, PixelFormat.Format48bppRgb);
+//			Bitmap bm = new Bitmap(screenWidth, screenHeight, PixelFormat.Format16bppRgb555);
 
 			//Create a target bitmap to draw into.
 			Bitmap bm2 = new Bitmap(widthsize + URLExtraLeft, heightsize + URLExtraHeight - trimHeight, PixelFormat.Format16bppRgb555);
