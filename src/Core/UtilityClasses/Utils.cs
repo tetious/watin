@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -244,22 +245,9 @@ namespace WatiN.Core
 		/// <param name="eventObjectProperties">The event object properties.</param>
 		public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
 		{
-			// Execute the JScript to fire the event inside the Browser.
-			StringBuilder scriptCode = new StringBuilder();
-			scriptCode.Append("var newEvt = document.createEventObject();");
+		    StringBuilder scriptCode = CreateJavaScriptFireEventCode(eventObjectProperties, element, eventName);
 
-			for (int index = 0; index < eventObjectProperties.Count; index++)
-			{
-				scriptCode.Append("newEvt.");
-				scriptCode.Append(eventObjectProperties.GetKey(index));
-				scriptCode.Append(" = ");
-				scriptCode.Append(eventObjectProperties.GetValues(index)[0]);
-				scriptCode.Append(";");
-			}
-
-			scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
-
-			try
+		    try
 			{
 				IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
 				RunScript(scriptCode.ToString(), window);
@@ -286,7 +274,44 @@ namespace WatiN.Core
 			}
 		}
 
-		public static string StringArrayToString(string[] inputtypes, string seperator)
+	    public static StringBuilder CreateJavaScriptFireEventCode(NameValueCollection eventObjectProperties, DispHTMLBaseElement element, string eventName)
+	    {
+	        StringBuilder scriptCode = new StringBuilder();
+	        scriptCode.Append("var newEvt = document.createEventObject();");
+
+	        CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
+
+	        scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
+	        return scriptCode;
+	    }
+
+	    private static void CreateJavaScriptEventObject(StringBuilder scriptCode, NameValueCollection eventObjectProperties)
+	    {
+            if (eventObjectProperties == null) return;
+
+            for (int index = 0; index < eventObjectProperties.Count; index++)
+	        {
+	            scriptCode.Append("newEvt.");
+	            scriptCode.Append(eventObjectProperties.GetKey(index));
+	            scriptCode.Append(" = ");
+	            scriptCode.Append(eventObjectProperties.GetValues(index)[0]);
+	            scriptCode.Append(";");
+	        }
+	    }
+
+        public static void AsyncActionOnBrowser(ThreadStart action)
+        {
+            Thread clickButton = new Thread(new ThreadStart(action));
+#if !NET11
+            clickButton.SetApartmentState(ApartmentState.STA);
+#else
+            clickButton.ApartmentState = ApartmentState.STA;
+#endif
+            clickButton.Start();
+            clickButton.Join(500);
+        }
+
+	    public static string StringArrayToString(string[] inputtypes, string seperator)
 		{
 			string inputtypesString = "";
 			if (inputtypes.Length > 0)

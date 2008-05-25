@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.UnitTests
@@ -235,6 +236,21 @@ namespace WatiN.Core.UnitTests
 			ie.WaitForComplete();
 			Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected #2");
 		}
+
+        [Test]
+        public void Bug_1958882_SelectNoWait_is_waiting_somewhere()
+        {
+            ie.GoTo(TestEventsURI);
+
+            ConfirmDialogHandler confirm = new ConfirmDialogHandler();
+            using (new UseDialogOnce(ie.DialogWatcher, confirm))
+            {
+                ie.SelectList(Find.ById("selectList")).Option(Find.ByValue("2")).SelectNoWait();
+
+                confirm.WaitUntilExists();
+                confirm.OKButton.Click();
+            }
+        }
 
 		public override Uri TestPageUri
 		{

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Text;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -167,6 +168,16 @@ namespace WatiN.Core.InternetExplorer
 			}
 		}
 
+        public void FireEventAsync(string eventName, NameValueCollection eventProperties)
+        {
+            StringBuilder scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
+            IHTMLWindow2 window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
+
+            AsyncScriptRunner asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
+
+            UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
+        }
+
 		protected IHTMLElement htmlElement
 		{
 			get { return (IHTMLElement) _element; }
@@ -202,6 +213,7 @@ namespace WatiN.Core.InternetExplorer
 			get { return _element; }
 		}
 
+
 	    public IAttributeBag GetAttributeBag(DomContainer domContainer)
 	    {
 	        if (_attributeBag == null)
@@ -234,4 +246,21 @@ namespace WatiN.Core.InternetExplorer
 			get { return GetAttributeValue("tagName"); }
 		}
 	}
+
+    public class AsyncScriptRunner
+    {
+        private readonly string _scriptCode;
+        private readonly IHTMLWindow2 _window;
+
+        public AsyncScriptRunner(string scriptCode, IHTMLWindow2 window)
+        {
+            _scriptCode = scriptCode;
+            _window = window;
+        }
+
+        public void FireEvent()
+        {
+            UtilityClass.RunScript(_scriptCode, _window);
+        }
+    }
 }

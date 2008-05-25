@@ -80,5 +80,7 @@ namespace WatiN.Core.Interfaces
 		string TagName { get; }
 
         object NativeElement { get; }
+
+        void FireEventAsync(string eventName, NameValueCollection eventProperties);
 	}
 }

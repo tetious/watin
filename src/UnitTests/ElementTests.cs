@@ -888,6 +888,60 @@ namespace WatiN.Core.UnitTests
 			mocks.VerifyAll();
 		}
 
+        [Test]
+        public void Bug_1932065_FireEventNoWait_hangs_when_ModalWindow_opened()
+        {
+            ie.GoTo(PopUpURI);
+            ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+            ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+        }
+
+//        [Test]
+//        public void SpeedTest()
+//        {
+//            System.GC.Collect();
+//            var ticksStart = DateTime.Now.Ticks;
+//            var nativeElement = ie.Div(Find.First()).NativeElement;
+//            var idivElement = (IHTMLDivElement) nativeElement.NativeElement;
+//            var ihtmlElement = (IHTMLElement) nativeElement.NativeElement;
+//
+//            for (var i = 0; i < 500; i++)
+//            
+//                var element1 = Div.New(ie, nativeElement);
+////                var element1 = Div.New(ie, ihtmlElement);
+//            }
+//
+//            var ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/500);
+//
+////            var element = TypedElementFactory.CreateTypedElement(ie, nativeElement);
+//            System.GC.Collect(); 
+//            ticksStart = DateTime.Now.Ticks;
+//            
+//            for (var i = 0; i < 500; i++)
+//            {
+//                var element1 = TypedElementFactory.CreateTypedElement(ie, nativeElement);
+//            }
+//
+//            ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/500);
+//
+//            System.GC.Collect(); 
+//            ticksStart = DateTime.Now.Ticks;
+//            
+//            for (var i = 0; i < 50000; i++)
+//            {
+//                Div element1 = null;
+//                element1 = new Div(ie, idivElement);
+//            }
+//
+//            ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/5000);
+//
+//        }
 
 #if !NET11
         [Test]

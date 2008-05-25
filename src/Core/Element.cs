@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
@@ -399,14 +400,12 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			Thread clickButton = new Thread(new ThreadStart(NativeElement.ClickOnElement));
-			clickButton.Start();
-			clickButton.Join(500);
+			UtilityClass.AsyncActionOnBrowser(NativeElement.ClickOnElement);
 
-			Highlight(false);
+		    Highlight(false);
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Gives the (input) focus to this element.
 		/// </summary>
 		public void Focus()
@@ -581,12 +580,16 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			NativeElement.FireEvent(eventName, eventProperties);
+            if (waitForComplete)
+            {
+                NativeElement.FireEvent(eventName, eventProperties);
+                WaitForComplete();
+            }
+            else
+            {
+                NativeElement.FireEventAsync(eventName, eventProperties);
+            }
 
-			if (waitForComplete)
-			{
-				WaitForComplete();
-			}
 			Highlight(false);
 		}
 
