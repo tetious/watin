@@ -257,6 +257,22 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
+		public void GoToUrlNoWait()
+		{
+			using (IE ie = new IE())
+			{
+                string url = MainURI.AbsoluteUri;
+
+                ie.GoToNoWait(url);
+
+                Assert.That(ie.Url, Is.EqualTo("about:blank"));
+                
+                ie.WaitForComplete();
+                Assert.AreEqual(MainURI, new Uri(ie.Url));
+            }
+		}
+
+		[Test]
 		public void GoToUri()
 		{
 			using (IE ie = new IE())

@@ -851,6 +851,75 @@ namespace WatiN.Core
 			GoTo(CreateUri(url));
 		}
 
+        /// <summary>
+        /// Navigates Internet Explorer to the given <paramref name="url" /> 
+        /// without waiting for the page load to be finished.
+        /// </summary>
+        /// <param name="url">The URL to GoTo.</param>
+        /// <example>
+        /// The following example creates a new Internet Explorer instance and navigates to
+        /// the WatiN Project website on SourceForge.
+        /// <code>
+        /// using WatiN.Core;
+        /// 
+        /// namespace NewIEExample
+        /// {
+        ///    public class WatiNWebsite
+        ///    {
+        ///      public WatiNWebsite()
+        ///      {
+        ///        IE ie = new IE();
+        ///        ie.GoToNoWait("http://watin.sourceforge.net");
+        ///      }
+        ///    }
+        ///  }
+        /// </code>
+        /// </example>
+        public void GoToNoWait(string url)
+        {
+            GoToNoWait(CreateUri(url));
+        }
+
+        /// <summary>
+        /// Navigates Internet Explorer to the given <paramref name="url" /> 
+        /// without waiting for the page load to be finished.
+        /// </summary>
+        /// <param name="url">The URL to GoTo.</param>
+        /// <example>
+        /// The following example creates a new Internet Explorer instance and navigates to
+        /// the WatiN Project website on SourceForge.
+        /// <code>
+        /// using WatiN.Core;
+        /// 
+        /// namespace NewIEExample
+        /// {
+        ///    public class WatiNWebsite
+        ///    {
+        ///      public WatiNWebsite()
+        ///      {
+        ///        Uri URL = new Uri("http://watin.sourceforge.net");
+        ///        IE ie = new IE();
+        ///        ie.GoToNoWait(URL);
+        ///      }
+        ///    }
+        ///  }
+        /// </code>
+        /// </example>
+        public void GoToNoWait(Uri url)
+        {
+            Thread thread = new Thread(GoToNoWaitInternal);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start(url);
+            thread.Join(500);
+        }
+
+        [STAThread]
+        private void GoToNoWaitInternal(object urlOrUri)
+        {
+            Uri uri = (Uri)urlOrUri;
+            navigateTo(uri);
+        }
+
 		/// <summary>
 		/// Use this method to gain access to the full Internet Explorer object.
 		/// Do this by referencing the Interop.SHDocVw assembly (supplied in the WatiN distribution)

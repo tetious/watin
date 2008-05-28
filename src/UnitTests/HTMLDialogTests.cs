@@ -58,7 +58,7 @@ namespace WatiN.Core.UnitTests
 
 			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
-				Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+				Assert.IsNotNull(htmlDialog, "Dialog not found");
 				Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
 			}
 		}
@@ -76,7 +76,7 @@ namespace WatiN.Core.UnitTests
 
 			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
-				Assert.IsNotNull(htmlDialog, "Dialog niet aangetroffen");
+				Assert.IsNotNull(htmlDialog, "Dialog not found");
 			}
 
 			// Then again there should be no HtmlDialog open
