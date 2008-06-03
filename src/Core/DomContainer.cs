@@ -23,10 +23,6 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-	namespace Interfaces
-	{
-	}
-
 	/// <summary>
 	/// This class hosts functionality for classes which are an entry point
 	/// to a document and its elements and/or frames. Currently implemented
