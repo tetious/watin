@@ -936,9 +936,16 @@ namespace WatiN.Core
 		/// </summary>
 		public void Back()
 		{
-			ie.GoBack();
-			WaitForComplete();
-			Logger.LogAction("Navigated Back to '" + Url + "'");
+		    try
+		    {
+		        ie.GoBack();
+                WaitForComplete();
+                Logger.LogAction("Navigated Back to '" + Url + "'");
+            }
+            catch (COMException)
+		    {
+                Logger.LogAction("No history available, didn't navigate Back.");
+            }
 		}
 
 		/// <summary>
@@ -947,9 +954,16 @@ namespace WatiN.Core
 		/// </summary>
 		public void Forward()
 		{
-			ie.GoForward();
-			WaitForComplete();
-			Logger.LogAction("Navigated Forward to '" + Url + "'");
+		    try
+		    {
+		        ie.GoForward();
+		        WaitForComplete();
+		        Logger.LogAction("Navigated Forward to '" + Url + "'");
+		    }
+            catch (COMException)
+		    {
+                Logger.LogAction("No forward history available, didn't navigate Forward.");
+            }
 		}
 
 		/// <summary>

@@ -524,6 +524,38 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
+        [Test]
+		public void BackShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
+		{
+			using (IE ie = new IE())
+			{
+			    try
+			    {
+			        ie.Back();
+			    }
+			    catch (Exception e)
+			    {
+			        Assert.Fail("Shouldn't throw exception: " + e);
+			    }
+			}
+		}
+
+        [Test]
+		public void ForwardShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
+		{
+			using (IE ie = new IE())
+			{
+			    try
+			    {
+			        ie.Forward();
+			    }
+			    catch (Exception e)
+			    {
+			        Assert.Fail("Shouldn't throw exception: " + e);
+			    }
+			}
+		}
+
 		[Test]
 		public void IEExistsByHWND()
 		{
