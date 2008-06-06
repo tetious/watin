@@ -930,21 +930,24 @@ namespace WatiN.Core
 			get { return ie; }
 		}
 
-		/// <summary>
-		/// Navigates the browser back to the previously displayed Url (like the back
-		/// button in Internet Explorer). 
-		/// </summary>
-		public void Back()
+        /// <summary>
+        /// Navigates the browser back to the previously displayed Url (like the back
+        /// button in Internet Explorer).
+        /// </summary>
+        /// <returns><c>true</c> if navigating back to a previous url was possible, otherwise <c>false</c></returns>
+		public bool Back()
 		{
 		    try
 		    {
 		        ie.GoBack();
                 WaitForComplete();
                 Logger.LogAction("Navigated Back to '" + Url + "'");
+		        return true;
             }
             catch (COMException)
 		    {
                 Logger.LogAction("No history available, didn't navigate Back.");
+		        return false;
             }
 		}
 
@@ -952,17 +955,20 @@ namespace WatiN.Core
 		/// Navigates the browser forward to the next displayed Url (like the forward
 		/// button in Internet Explorer). 
 		/// </summary>
-		public void Forward()
+        /// <returns><c>true</c> if navigating forward to a previous url was possible, otherwise <c>false</c></returns>
+        public bool Forward()
 		{
 		    try
 		    {
 		        ie.GoForward();
 		        WaitForComplete();
 		        Logger.LogAction("Navigated Forward to '" + Url + "'");
+		        return true;
 		    }
             catch (COMException)
 		    {
                 Logger.LogAction("No forward history available, didn't navigate Forward.");
+		        return false;
             }
 		}
 

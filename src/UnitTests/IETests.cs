@@ -516,11 +516,13 @@ namespace WatiN.Core.UnitTests
 				ie.Link(Find.ByUrl(IndexURI)).Click();
 				Assert.AreEqual(IndexURI, new Uri(ie.Url));
 
-				ie.Back();
+				bool wentBack = ie.Back();
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
+                Assert.That(wentBack, "Expected went back");
 
-				ie.Forward();
+				bool wentFoward = ie.Forward();
 				Assert.AreEqual(IndexURI, new Uri(ie.Url));
+				Assert.That(wentFoward, "Expected went forward");
 			}
 		}
 
@@ -531,7 +533,8 @@ namespace WatiN.Core.UnitTests
 			{
 			    try
 			    {
-			        ie.Back();
+			        bool wentBack = ie.Back();
+                    Assert.That(wentBack, Is.False, "Expected no navigation back");
 			    }
 			    catch (Exception e)
 			    {
@@ -547,8 +550,9 @@ namespace WatiN.Core.UnitTests
 			{
 			    try
 			    {
-			        ie.Forward();
-			    }
+			        bool wentForward = ie.Forward();
+                    Assert.That(wentForward, Is.False, "Expected no navigation forward");
+                }
 			    catch (Exception e)
 			    {
 			        Assert.Fail("Shouldn't throw exception: " + e);
