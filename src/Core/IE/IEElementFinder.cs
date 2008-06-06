@@ -35,22 +35,18 @@ namespace WatiN.Core.InternetExplorer
 	/// </summary>
 	public class IEElementFinder : INativeElementFinder
 	{
-		private ArrayList tagsToFind = new ArrayList();
+		private readonly ArrayList tagsToFind = new ArrayList();
 
-		protected readonly BaseConstraint _findBy;
-		protected readonly IElementCollection _elementCollection;
-	    protected readonly DomContainer _domContainer;
+		protected BaseConstraint _findBy;
+		protected IElementCollection _elementCollection;
+	    protected DomContainer _domContainer;
 
+	    public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : this(elementTags, null, elementCollection, domContainer) {}
 	    public IEElementFinder(ArrayList elementTags, BaseConstraint findBy, IElementCollection elementCollection, DomContainer domContainer)
-		{
-			if (elementCollection == null) throw new ArgumentNullException("elementCollection");
-            if (domContainer == null) throw new ArgumentNullException("domContainer");
+	    {
+	        CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
 
-			_findBy = getFindBy(findBy);
-			_elementCollection = elementCollection;
-		    _domContainer = domContainer;
-
-		    if (elementTags != null)
+	        if (elementTags != null)
 			{
 				tagsToFind = elementTags;
 			}
@@ -58,24 +54,29 @@ namespace WatiN.Core.InternetExplorer
 			{
 				AddElementTag(null, null);
 			}
-		}
+	    }
 
-        public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : this(elementTags, null, elementCollection, domContainer) { }
 
+		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : this(tagName, inputType, null, elementCollection, domContainer) {}
 		public IEElementFinder(string tagName, string inputType, BaseConstraint findBy, IElementCollection elementCollection, DomContainer domContainer)
 		{
-			if (elementCollection == null) throw new ArgumentNullException("elementCollection");
-			if (domContainer == null) throw new ArgumentNullException("domContainer");
-
-			_findBy = getFindBy(findBy);
-			_elementCollection = elementCollection;
+            CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
 
 			AddElementTag(tagName, inputType);
 		}
 
-		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : this(tagName, inputType, null, elementCollection, domContainer) {}
 
-		public virtual INativeElement FindFirst()
+	    private void CheckAndInitPrivateFields(IElementCollection elementCollection, DomContainer domContainer, BaseConstraint findBy)
+	    {
+	        if (elementCollection == null) throw new ArgumentNullException("elementCollection");
+	        if (domContainer == null) throw new ArgumentNullException("domContainer");
+
+	        _findBy = getFindBy(findBy);
+	        _elementCollection = elementCollection;
+	        _domContainer = domContainer;
+	    }
+
+	    public virtual INativeElement FindFirst()
 		{
 		    return FindFirst(_findBy);
 		}
