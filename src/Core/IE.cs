@@ -670,10 +670,7 @@ namespace WatiN.Core
 				{
 					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), settings.AttachToIETimeOut);
 				}
-				else
-				{
-					Thread.Sleep(500);
-				}
+			    Thread.Sleep(500);
 			} while (!timeoutTimer.Elapsed);
 
 			throw new IENotFoundException("hwnd not zero", timeout);

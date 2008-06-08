@@ -5,7 +5,7 @@ namespace WatiN.Core.Constraints
 {
 	public abstract class BaseConstraint 
 	{
-		private bool busyComparing = false;
+		private bool busyComparing;
 		protected BaseConstraint _andBaseConstraint;
 		protected BaseConstraint _orBaseConstraint;
 		protected BaseConstraint _lastAddedBaseConstraint;

@@ -971,35 +971,12 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AncestorGenericTypeAndAttributeConstraintShouldReturnTypedElement()
         {
-            MockRepository mockRepository = new MockRepository();
-
-            INativeElement nativeElement = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
-            INativeElement firstParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
-            IAttributeBag firstAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
-            INativeElement secondParentDiv = (INativeElement)mockRepository.CreateMock(typeof(INativeElement));
-            IAttributeBag secondAttributeBag = (IAttributeBag)mockRepository.CreateMock(typeof(IAttributeBag));
-            DomContainer domContainer = (DomContainer)mockRepository.DynamicMock(typeof(DomContainer), new object[] { });
-
-            element = new Element(domContainer, nativeElement);
-            Expect.Call(nativeElement.Parent).Return(firstParentDiv).Repeat.Any();
-            Expect.Call(firstParentDiv.TagName).Return("div").Repeat.Any();
-            Expect.Call(firstParentDiv.GetAttributeBag(domContainer)).Return(firstAttributeBag);
-            Expect.Call(firstAttributeBag.GetValue("innertext")).Return("first ancestor");
-
-            Expect.Call(firstParentDiv.Parent).Return(secondParentDiv).Repeat.Any();
-            Expect.Call(secondParentDiv.TagName).Return("div").Repeat.Any();
-            Expect.Call(secondParentDiv.GetAttributeBag(domContainer)).Return(secondAttributeBag);
-            Expect.Call(secondAttributeBag.GetValue("innertext")).Return("second ancestor");
-            Expect.Call(secondParentDiv.GetAttributeValue("innertext")).Return("second ancestor");
-
-            mockRepository.ReplayAll();
-
-            Element ancestor = element.Ancestor<Div>(Find.ByText("second ancestor"));
+            ie.GoTo(TablesUri);
+            TableRow tableRow = ie.TableRow(Find.ById("2"));
+            Element ancestor = tableRow.Ancestor<Table>(Find.ById("Table1"));
           
-            Assert.IsInstanceOfType(typeof (Div), ancestor);
-            Assert.That(ancestor.Text, NUnit.Framework.SyntaxHelpers.Is.EqualTo("second ancestor"));
-            
-            mockRepository.VerifyAll();
+            Assert.IsInstanceOfType (typeof (Table), ancestor);
+            Assert.That(ancestor.Id, Iz.EqualTo("Table1"));
         }
 
         [Test]

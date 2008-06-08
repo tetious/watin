@@ -37,6 +37,7 @@ namespace WatiN.Core.UnitTests
 			settings.HighLightElement = highLightElement;
 			settings.WaitForCompleteTimeOut = 222;
 			settings.WaitUntilExistsTimeOut = 333;
+		    settings.SleepTime = 444;
 
 			Assert.AreEqual(111, settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
 			Assert.AreEqual(autoCloseDialogs, settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
@@ -44,6 +45,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(highLightElement, settings.HighLightElement, "Unexpected HighLightElement");
 			Assert.AreEqual(222, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
 			Assert.AreEqual(333, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
+            Assert.AreEqual(444, settings.SleepTime, "Unexpected SleepTime");
 		}
 
 		[Test]
@@ -59,6 +61,7 @@ namespace WatiN.Core.UnitTests
 			settings.HighLightElement = highLightElement;
 			settings.WaitForCompleteTimeOut = 222;
 			settings.WaitUntilExistsTimeOut = 333;
+			settings.SleepTime = 444;
 
 			Settings settingsClone = settings.Clone();
 			Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
@@ -67,6 +70,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
 			Assert.AreEqual(222, settingsClone.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
 			Assert.AreEqual(333, settingsClone.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
+            Assert.AreEqual(444, settingsClone.SleepTime, "Unexpected SleepTime");
 		}
 
 		[Test]
@@ -90,6 +94,7 @@ namespace WatiN.Core.UnitTests
 			settings.HighLightElement = highLightElement;
 			settings.WaitForCompleteTimeOut = 222;
 			settings.WaitUntilExistsTimeOut = 333;
+			settings.SleepTime = 444;
 
 			Settings settingsClone = settings.Clone();
 			Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
@@ -98,6 +103,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
 			Assert.AreEqual(222, settingsClone.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
 			Assert.AreEqual(333, settingsClone.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
+            Assert.AreEqual(444, settingsClone.SleepTime, "Unexpected SleepTime");
 
 			settingsClone.Reset();
 			AssertDefaults(settingsClone);
@@ -127,6 +133,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(true, settings.HighLightElement, "Unexpected HighLightElement");
 			Assert.AreEqual(30, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
 			Assert.AreEqual(30, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
+            Assert.AreEqual(100, settings.SleepTime, "Unexpected SleepTime");
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]

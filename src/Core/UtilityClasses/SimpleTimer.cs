@@ -42,7 +42,7 @@ namespace WatiN.Core
 	/// </example>
 	public class SimpleTimer
 	{
-		private Timer clock = null;
+		private Timer clock;
 
 	    private int _timeout;
 

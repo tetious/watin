@@ -31,18 +31,25 @@ namespace WatiN.Core.Constraints
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-			ElementAttributeBag elementAttributeBag = attributeBag as ElementAttributeBag;
-			if(elementAttributeBag != null)
+            Element element = attributeBag as Element;
+
+            ElementAttributeBag elementAttributeBag = attributeBag as ElementAttributeBag;
+            if (elementAttributeBag != null)
 			{
-				return _comparer.Compare(elementAttributeBag.ElementTyped);
+				element = elementAttributeBag.ElementTyped;
 			}
 
-            Element element = attributeBag as Element;
-            if (element != null)
+            if (element == null)
 			{
-                return _comparer.Compare(element);
+                element = attributeBag as Element;
 			}
-		    throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
+
+            if (element != null)
+            {
+                return EvaluateAndOrAttributes(attributeBag, _comparer.Compare(element));
+            }
+
+            throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
 		}
 
 		public override string ConstraintToString()

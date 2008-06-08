@@ -96,6 +96,7 @@ namespace WatiN.Core
 			public bool autoStartDialogWatcher;
 			public bool autoMoveMousePointerToTopLeft;
 			public bool makeNewIEInstanceVisible;
+		    public int sleepTime;
 		}
 
 		private settingsStruct settings;
@@ -133,6 +134,7 @@ namespace WatiN.Core
 			settings.attachToIETimeOut = 30;
 			settings.waitUntilExistsTimeOut = 30;
 			settings.waitForCompleteTimeOut = 30;
+		    settings.sleepTime = 100;
 			settings.highLightElement = true;
 			settings.highLightColor = "yellow";
 			settings.autoCloseDialogs = true;
@@ -143,7 +145,7 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Get or set the default time out used when calling IE ie = IE.AttachToIE(findBy).
-		/// The initial value is 30 seconds. Setting the time out to a negative value will
+		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
 		public int AttachToIETimeOut
@@ -158,7 +160,7 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Get or set the default time out used when calling Element.WaitUntilExists().
-		/// The initial value is 30 seconds. Setting the time out to a negative value will
+		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
 		public int WaitUntilExistsTimeOut
@@ -173,7 +175,7 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Get or set the default time out used when calling ie.WaitForComplete().
-		/// The initial value is 30 seconds. Setting the time out to a negative value will
+		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
 		public int WaitForCompleteTimeOut
@@ -183,6 +185,21 @@ namespace WatiN.Core
 			{
 				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
 				settings.waitForCompleteTimeOut = value;
+			}
+		}
+
+        /// <summary>
+		/// Get or set the default sleep time used when WatiN is waiting for something in a (retry) loop.
+		/// The default value is 100 milliseconds. Setting the time out to a negative value will
+		/// throw a <see cref="ArgumentOutOfRangeException"/>.
+		/// </summary>
+		public int SleepTime
+		{
+			get { return settings.sleepTime; }
+			set
+			{
+				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
+				settings.sleepTime = value;
 			}
 		}
 
@@ -262,7 +279,7 @@ namespace WatiN.Core
 		{
 			if (value < 0)
 			{
-				throw new ArgumentOutOfRangeException("value", "time out should be 0 seconds or more.");
+				throw new ArgumentOutOfRangeException("value", "Should be 0 or more.");
 			}
 		}
 	}

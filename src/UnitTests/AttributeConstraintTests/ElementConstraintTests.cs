@@ -16,17 +16,19 @@
 
 #endregion Copyright
 
+using System;
 using mshtml;
 using NUnit.Framework;
 using WatiN.Core.Constraints;
 using Rhino.Mocks;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
+using Iz = NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
     [TestFixture]
-    public class ElementConstraintTest
+    public class ElementConstraintTest : BaseWithIETests
     {
         [Test]
         public void ElementConstraintShouldCallComparerAndReturnTrue()
@@ -60,6 +62,16 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             mocks.VerifyAll();
         }
 
+        [Test]
+        public void ShouldEvaluateAlsoTheAndConstraint()
+        {
+            Link link1 = ie.Link(Find.ByElement(l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://watin.sourceforge.net"));
+            Link link2 = ie.Link(Find.ByElement(l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://www.microsoft.com/"));
+
+            Assert.That(link1.Url, Iz.EqualTo("http://watin.sourceforge.net/"));
+            Assert.That(link2.Url, Iz.EqualTo("http://www.microsoft.com/"));
+        }
+
         public class ElementComparerMock : ICompareElement 
         {
             private readonly string _expectedTagName;
@@ -72,6 +84,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             {
                 return _expectedTagName == element.TagName;
             }
+        }
+
+        public override Uri TestPageUri
+        {
+            get { return MainURI; }
         }
     }
 }

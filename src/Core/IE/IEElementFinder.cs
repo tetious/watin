@@ -44,7 +44,7 @@ namespace WatiN.Core.InternetExplorer
 	    public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : this(elementTags, null, elementCollection, domContainer) {}
 	    public IEElementFinder(ArrayList elementTags, BaseConstraint findBy, IElementCollection elementCollection, DomContainer domContainer)
 	    {
-	        CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
+            CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
 
 	        if (elementTags != null)
 			{
@@ -64,7 +64,6 @@ namespace WatiN.Core.InternetExplorer
 
 			AddElementTag(tagName, inputType);
 		}
-
 
 	    private void CheckAndInitPrivateFields(IElementCollection elementCollection, DomContainer domContainer, BaseConstraint findBy)
 	    {
@@ -254,7 +253,7 @@ namespace WatiN.Core.InternetExplorer
 					return;
 				}
 
-				Thread.Sleep(100);
+				Thread.Sleep(IE.Settings.SleepTime);
 			} while (!timeoutTimer.Elapsed);
 
 			throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
