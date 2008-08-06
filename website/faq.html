@@ -68,13 +68,20 @@
             <strong>Which windows versions are supported?</strong>
           </p>
           <p>
-            Windows 2000, Windows XP and Windows 2003. Using WatiN on Vista gives some problems when User Account Control (UAC) is enabled. If you disable UAC almost all WatiN unit tests pass.
+            Windows 2000, Windows XP and Windows 2003. 
+          </p>
+          <p>
+			Using WatiN on Vista needs al little extra work due to the Protected Mode. You need to add the domain of the website undertest to the trusted sites list.
+			This will turn Protected mode off for this site and your WatiN tests will run properly. Thanks to James Kovacs for this info.
+          </p>
+          <p>
+			For more info visit <a href="http://www.jameskovacs.com/blog/RunningWatiNTestsOnVista.aspx" target="_blank">http://www.jameskovacs.com/blog/RunningWatiNTestsOnVista.aspx</a>
           </p><br />
           <p>
             <strong>Are you planning to support FireFox?</strong>
           </p>
           <p>
-            Yes, a CTP version of WatiN 2.0 will have (almost complete) support for running tests with FireFox 2.0 as well. This release will be available somewhere in Februari 2008.
+            Yes, a <a href="firefox.html">CTP version of WatiN 2.0</a> with support for running tests with FireFox 2.0 is available. A lot of work still needs to be done before the final release.
           </p><br />
           <p>
             <strong>Will there be a recorder for WatiN scripts?</strong>
