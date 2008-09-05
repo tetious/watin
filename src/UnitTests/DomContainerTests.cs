@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 		[SetUp]
 		public void Setup()
 		{
-			IE.Settings.AutoStartDialogWatcher = false;
+			Settings.Instance.AutoStartDialogWatcher = false;
 			_mockRepository = new MockRepository();
 
 			_mockInternetExplorer = (SHDocVw.InternetExplorer) _mockRepository.DynamicMock(typeof (SHDocVw.InternetExplorer));
@@ -84,7 +84,7 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void WaitForCompleteShouldUseWaitForCompleteTimeOutSetting()
 	    {
-	        int expectedWaitForCompleteTimeOut = IE.Settings.WaitForCompleteTimeOut;
+	        int expectedWaitForCompleteTimeOut = Settings.Instance.WaitForCompleteTimeOut;
 
 	        WaitForCompleteMock waitForCompleteMock = new WaitForCompleteMock(_ie);
 
@@ -128,7 +128,7 @@ namespace WatiN.Core.UnitTests
 		public virtual void TearDown()
 		{
 			_ie.Dispose();
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 		}
 	}
 

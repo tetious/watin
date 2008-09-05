@@ -25,11 +25,11 @@ namespace WatiN.Core.Logging
 	/// WatiN uses this class to log which actions are done while driving Internet
 	/// Explorer.
 	/// </summary>
-	public sealed class Logger
+	public class Logger
 	{
-		private static ILogWriter mLogWriter;
+		private static ILogWriter mLogWriter = DefaultLogger();
 
-		/// <summary>
+	    /// <summary>
 		/// Prevent creating an instance of this class (contains only static members)
 		/// </summary>
 		private Logger() {}
@@ -64,15 +64,23 @@ namespace WatiN.Core.Logging
 		/// <value>The log writer.</value>
 		public static ILogWriter LogWriter
 		{
-			get
+			get { return mLogWriter; }
+			set
 			{
-				if (mLogWriter == null)
-				{
-					mLogWriter = new NoLog();
-				}
-				return mLogWriter;
+                if (value == null)
+                {
+                    mLogWriter = DefaultLogger();
+                }
+                else
+                {
+                    mLogWriter = value;
+                }
 			}
-			set { mLogWriter = value; }
 		}
-	}
+
+        private static NoLog DefaultLogger()
+        {
+            return new NoLog();
+        }
+    }
 }

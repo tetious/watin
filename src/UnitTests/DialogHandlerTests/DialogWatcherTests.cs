@@ -40,7 +40,7 @@ namespace WatiN.Core.UnitTests
 		[TearDown]
 		public void TearDown()
 		{
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 			Logger.LogWriter = saveLoggerInstance;
 		}
 
@@ -238,11 +238,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void StartingDialogWatcherShouldAdhereToSetting()
 		{
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 
-			Assert.That(IE.Settings.AutoStartDialogWatcher, "Unexpected value for AutoStartDialogWatcher");
+			Assert.That(Settings.Instance.AutoStartDialogWatcher, "Unexpected value for AutoStartDialogWatcher");
 
-			IE.Settings.AutoStartDialogWatcher = false;
+			Settings.Instance.AutoStartDialogWatcher = false;
 			using (IE ie = new IE())
 			{
 				Assert.That(ie.DialogWatcher, NUnit.Framework.SyntaxHelpers.Is.Null);

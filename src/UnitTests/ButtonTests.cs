@@ -47,7 +47,7 @@ namespace WatiN.Core.UnitTests
 		{
             try
             {
-                IE.Settings.WaitUntilExistsTimeOut = 1;
+                Settings.Instance.WaitUntilExistsTimeOut = 1;
                 ie.Button("noneexistingbuttonid").Click();
                 Assert.Fail("Expected ElementNotFoundException");
             }

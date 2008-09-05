@@ -28,7 +28,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Class that contains native win32 API support.
 	/// </summary>
-	public sealed class NativeMethods
+	public class NativeMethods
 	{
 		private static string enumChildWindowClassName;
 

@@ -31,7 +31,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Class with some utility methods to explore the HTML of a <see cref="Document"/>.
 	/// </summary>
-	public sealed class UtilityClass
+	public class UtilityClass
 	{
 		/// <summary>
 		/// Prevent creating an instance of this class (contains only static members)

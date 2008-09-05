@@ -60,7 +60,7 @@ namespace WatiN.Core
         /// <param name="predicate">The expression to use.</param>
         public void WaitUntil(Predicate<E> predicate)
         {
-            WaitUntil(Find.ByElement(predicate), IE.Settings.WaitUntilExistsTimeOut);
+            WaitUntil(Find.ByElement(predicate), Settings.Instance.WaitUntilExistsTimeOut);
         }
 
         /// <summary>
@@ -622,7 +622,7 @@ namespace WatiN.Core
 		/// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
 		public void Highlight(bool doHighlight)
 		{
-			if (IE.Settings.HighLightElement)
+			if (Settings.Instance.HighLightElement)
 			{
 				if (_originalcolor == null)
 				{
@@ -632,7 +632,7 @@ namespace WatiN.Core
 				if (doHighlight)
 				{
 					_originalcolor.Push(NativeElement.BackgroundColor);
-					SetBackgroundColor(IE.Settings.HighLightColor);
+					SetBackgroundColor(Settings.Instance.HighLightColor);
 				}
 				else
 				{
@@ -741,12 +741,12 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Waits until the element exists or will time out after 30 seconds.
-		/// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitUntilExistsTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitUntilExistsTimeOut"/>
 		/// </summary>
 		public void WaitUntilExists()
 		{
 			// Wait 30 seconds max
-			WaitUntilExists(IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntilExists(Settings.Instance.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -760,12 +760,12 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Waits until the element no longer exists or will time out after 30 seconds.
-		/// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitUntilExistsTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitUntilExistsTimeOut"/>
 		/// </summary>
 		public void WaitUntilRemoved()
 		{
 			// Wait 30 seconds max
-			WaitUntilRemoved(IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntilRemoved(Settings.Instance.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -785,7 +785,7 @@ namespace WatiN.Core
 		/// <param name="expectedValue">The expected value.</param>
 		public void WaitUntil(string attributename, string expectedValue)
 		{
-			WaitUntil(attributename, expectedValue, IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntil(attributename, expectedValue, Settings.Instance.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -808,7 +808,7 @@ namespace WatiN.Core
 		/// <param name="expectedValue">The expected value.</param>
 		public void WaitUntil(string attributename, Regex expectedValue)
 		{
-			WaitUntil(attributename, expectedValue, IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntil(attributename, expectedValue, Settings.Instance.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -830,7 +830,7 @@ namespace WatiN.Core
 		/// <param name="constraint">The BaseConstraint.</param>
 		public void WaitUntil(BaseConstraint constraint)
 		{
-			WaitUntil(constraint, IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntil(constraint, Settings.Instance.WaitUntilExistsTimeOut);
 		}
 
 #if !NET11
@@ -841,7 +841,7 @@ namespace WatiN.Core
 		/// <param name="predicate">The BaseConstraint.</param>
 		public void WaitUntil<E>(Predicate<E> predicate) where E : Element
 		{
-			WaitUntil(Find.ByElement(predicate), IE.Settings.WaitUntilExistsTimeOut);
+			WaitUntil(Find.ByElement(predicate), Settings.Instance.WaitUntilExistsTimeOut);
 		}
 #endif
 		/// <summary>
@@ -1025,7 +1025,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Waits till the page load is complete. This should only be used on rare occasions
 		/// because WatiN calls this function for you when it handles events (like Click etc..)
-		/// To change the default time out, set <see cref="P:WatiN.Core.IE.Settings.WaitForCompleteTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitForCompleteTimeOut"/>
 		/// </summary>
 		public void WaitForComplete()
 		{
@@ -1050,7 +1050,7 @@ namespace WatiN.Core
     	return (T)Ancestor(typeof(T));
     }
 
-        /// <summary>
+    /// <summary>
     /// Gets the closest ancestor of the specified Type and constraint.
     /// </summary>
     /// <param name="findBy">The constraint to match with.</param>
@@ -1067,6 +1067,25 @@ namespace WatiN.Core
     public T Ancestor<T>(BaseConstraint findBy) where T : Element
     {
     	return (T)Ancestor(typeof(T), findBy);
+    }
+
+    /// <summary>
+    /// Gets the closest ancestor of the specified Type and constraint.
+    /// </summary>
+    /// <param name="predicate">The constraint to match with.</param>
+    /// <returns>
+    /// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
+    /// </returns>
+    /// <example>
+    /// The following example returns the Div a textfield is located in.
+    /// <code>
+    /// IE ie = new IE("http://www.example.com");
+    /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(div => div.Text == "First name");
+    /// </code>
+    /// </example>
+    public T Ancestor<T>(Predicate<T> predicate) where T : Element
+    {
+    	return (T)Ancestor(typeof(T), Find.ByElement(predicate));
     }
 #endif
 
@@ -1167,6 +1186,32 @@ namespace WatiN.Core
 			return Ancestor(findAncestor);
 		}
 
+#if !NET11
+        /// <summary>
+		/// Gets the closest ancestor of the specified Tag and AttributConstraint.
+		/// </summary>
+		/// <param name="tagName">The tag of the ancestor.</param>
+		/// <param name="findBy">The AttributConstraint to match with.</param>
+		/// <returns>
+		/// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
+		/// If no specific type is available, an element of type ElementContainer will be returned. 
+		/// If there is no ancestor that matches Tag and BaseConstraint, <code>null</code> is returned.</returns>
+		/// </returns>
+		/// <example>
+		/// The following example returns the Div a textfield is located in.
+		/// <code>
+		/// IE ie = new IE("http://www.example.com");
+		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name"));
+		/// </code>
+		/// </example>
+		public Element Ancestor(string tagName, Predicate<Element> predicate)
+		{
+			BaseConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+                                               && Find.ByElement(predicate);
+
+			return Ancestor(findAncestor);
+		}
+#endif
 		/// <summary>
 		/// Gets the closest ancestor of the specified Tag.
 		/// </summary>

@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
@@ -56,6 +57,13 @@ namespace WatiN.Core
 		{
 			return new AreaCollection(domContainer, DoFilter(findBy));
 		}
+
+#if !NET11
+        public AreaCollection Filter(Predicate<Area> predicate)
+        {
+            return new AreaCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+        }
+#endif
 
 		/// <summary>
 		/// Gets the <see cref="Area" /> at the specified index.

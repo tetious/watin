@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
@@ -60,5 +61,13 @@ namespace WatiN.Core
 		{
 			return new LabelCollection(domContainer, DoFilter(findBy));
 		}
+
+#if !NET11
+        public LabelCollection Filter(Predicate<Label> predicate)
+        {
+            return new LabelCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+        }
+#endif
+
 	}
 }

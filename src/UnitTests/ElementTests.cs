@@ -52,7 +52,7 @@ namespace WatiN.Core.UnitTests
 		[TearDown]
 		public void TearDown()
 		{
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 		}
 
 		[Test]
@@ -390,7 +390,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilElementExistsElementInjectionAfter3Seconds()
 		{
-			Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+			Assert.IsTrue(Settings.Instance.WaitUntilExistsTimeOut > 3, "Settings.Instance.WaitUntilExistsTimeOut must be more than 3 seconds");
 
 			using (IE ie1 = new IE(TestEventsURI))
 			{
@@ -420,7 +420,7 @@ namespace WatiN.Core.UnitTests
 		{
 			const int indexTextFieldToRemove = 9;
 
-			Assert.IsTrue(IE.Settings.WaitUntilExistsTimeOut > 3, "IE.Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+			Assert.IsTrue(Settings.Instance.WaitUntilExistsTimeOut > 3, "Settings.Instance.WaitUntilExistsTimeOut must be more than 3 seconds");
 
 			using (IE ie1 = new IE(TestEventsURI))
 			{
@@ -688,8 +688,8 @@ namespace WatiN.Core.UnitTests
 		[Test, Ignore("Doesn't work yet")]
 		public void PositionMousePointerInMiddleOfElementInFrame()
 		{
-			IE.Settings.MakeNewIeInstanceVisible = true;
-			IE.Settings.HighLightElement = true;
+			Settings.Instance.MakeNewIeInstanceVisible = true;
+			Settings.Instance.HighLightElement = true;
 
 			using (IE ie = new IE(FramesetURI))
 			{
@@ -774,8 +774,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HighlightShouldGoBackToTheOriginalBackGroundColor()
 		{
-			IE.Settings.HighLightElement = true;
-			IE.Settings.HighLightColor = "red";
+			Settings.Instance.HighLightElement = true;
+			Settings.Instance.HighLightColor = "red";
 
 			TextField textField = ie.TextField("name");
 			string _originalcolor = textField.Style.BackgroundColor;
@@ -784,7 +784,7 @@ namespace WatiN.Core.UnitTests
 			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after Highlight(true)");
 
 			// Invoke highlighting done by WatiN when typing text
-			IE.Settings.HighLightColor = "yellow";
+			Settings.Instance.HighLightColor = "yellow";
 			textField.TypeText("abc");
 
 			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after TypeText");
@@ -796,8 +796,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HighlightShouldNotThrowExceptionWhenCalledToManyTimesWithParamFalse()
 		{
-			IE.Settings.HighLightElement = true;
-			IE.Settings.HighLightColor = "red";
+			Settings.Instance.HighLightElement = true;
+			Settings.Instance.HighLightColor = "red";
 
 			TextField textField = ie.TextField("name");
 			string _originalcolor = textField.Style.BackgroundColor;
@@ -815,7 +815,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNotFoundExceptionShouldHaveInnerExceptionIfTheTimeOutExceptionHadOne()
 		{
-			IE.Settings.WaitUntilExistsTimeOut = 1;
+			Settings.Instance.WaitUntilExistsTimeOut = 1;
 			
 			mocks = new MockRepository();
 
@@ -853,7 +853,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNotFoundExceptionShouldHaveNoInnerExceptionIfTheTimeOutExceptionHadNone()
 		{
-			IE.Settings.WaitUntilExistsTimeOut = 1;
+			Settings.Instance.WaitUntilExistsTimeOut = 1;
 			
 			mocks = new MockRepository();
 
@@ -974,6 +974,17 @@ namespace WatiN.Core.UnitTests
             ie.GoTo(TablesUri);
             TableRow tableRow = ie.TableRow(Find.ById("2"));
             Element ancestor = tableRow.Ancestor<Table>(Find.ById("Table1"));
+          
+            Assert.IsInstanceOfType (typeof (Table), ancestor);
+            Assert.That(ancestor.Id, Iz.EqualTo("Table1"));
+        }
+
+        [Test]
+        public void AncestorGenericTypeAndPredicateShouldReturnTypedElement()
+        {
+            ie.GoTo(TablesUri);
+            TableRow tableRow = ie.TableRow(Find.ById("2"));
+            Element ancestor = tableRow.Ancestor(delegate(Table table) { return table.Id == "Table1"; });
           
             Assert.IsInstanceOfType (typeof (Table), ancestor);
             Assert.That(ancestor.Id, Iz.EqualTo("Table1"));

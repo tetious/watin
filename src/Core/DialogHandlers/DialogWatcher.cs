@@ -54,7 +54,7 @@ namespace WatiN.Core.DialogHandlers
 		private bool keepRunning = true;
 		private ArrayList handlers = new ArrayList();
 		private Thread watcherThread;
-		private bool closeUnhandledDialogs = IE.Settings.AutoCloseDialogs;
+		private bool closeUnhandledDialogs = Settings.Instance.AutoCloseDialogs;
 		private int referenceCount = 0;
 
 		private static ArrayList dialogWatchers = new ArrayList();
@@ -265,7 +265,7 @@ namespace WatiN.Core.DialogHandlers
 
 		/// <summary>
 		/// Gets or sets a value indicating whether unhandled dialogs should be closed automaticaly.
-		/// The initial value is set to the value of <paramref name="IE.Settings.AutoCloseDialogs" />.
+		/// The initial value is set to the value of <paramref name="Settings.Instance.AutoCloseDialogs" />.
 		/// </summary>
 		/// <value>
 		/// 	<c>true</c> if unhandled dialogs should be closed automaticaly; otherwise, <c>false</c>.
@@ -438,7 +438,7 @@ namespace WatiN.Core.DialogHandlers
 			// Wait untill window is visible so all properties
 			// of the window class (like Style and StyleInHex)
 			// will return valid values.
-			SimpleTimer timer = new SimpleTimer(IE.Settings.WaitForCompleteTimeOut);
+			SimpleTimer timer = new SimpleTimer(Settings.Instance.WaitForCompleteTimeOut);
 
 			do
 			{
@@ -447,7 +447,7 @@ namespace WatiN.Core.DialogHandlers
 				Thread.Sleep(50);
 			} while (!timer.Elapsed);
 
-			Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, IE.Settings.WaitForCompleteTimeOut);
+			Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, Settings.Instance.WaitForCompleteTimeOut);
 		}
 
 		#region IDisposable Members

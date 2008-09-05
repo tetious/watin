@@ -139,18 +139,18 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void IESettingsSetToNullShouldThrowArgumentNullException()
 		{
-			IE.Settings = null;
+			Settings.Instance = null;
 		}
 
 		[Test]
 		public void SetIESettings()
 		{
 			Settings settings = new Settings();
-			Assert.AreNotEqual(111, IE.Settings.AttachToIETimeOut);
+			Assert.AreNotEqual(111, Settings.Instance.AttachToIETimeOut);
 			settings.AttachToIETimeOut = 111;
 
-			IE.Settings = settings;
-			Assert.AreEqual(111, IE.Settings.AttachToIETimeOut);
+			Settings.Instance = settings;
+			Assert.AreEqual(111, Settings.Instance.AttachToIETimeOut);
 		}
 	}
 }

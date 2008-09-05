@@ -51,14 +51,14 @@ namespace WatiN.Core.UnitTests
 		[TestFixtureSetUp]
 		public virtual void FixtureSetup()
 		{
-			backupSettings = IE.Settings.Clone();
-			IE.Settings = new StealthSettings();
+			backupSettings = Settings.Instance.Clone();
+			Settings.Instance = new StealthSettings();
 		}
 
 		[TestFixtureTearDown]
 		public virtual void FixtureTearDown()
 		{
-			IE.Settings = backupSettings;
+			Settings.Instance = backupSettings;
 		}
 
 		public static Uri HtmlTestBaseURI

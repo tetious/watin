@@ -46,7 +46,7 @@ namespace WatiN.Core.UnitTests
 		[SetUp]
 		public void SetUp()
 		{
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 		}
 
 		[Test]
@@ -160,14 +160,14 @@ namespace WatiN.Core.UnitTests
 		{
 			Point notTopLeftPoint = new Point(50, 50);
 			Cursor.Position = notTopLeftPoint;
-			IE.Settings.AutoMoveMousePointerToTopLeft = false;
+			Settings.Instance.AutoMoveMousePointerToTopLeft = false;
 
 			using (new IE())
 			{
 				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(notTopLeftPoint));
 			}
 
-			IE.Settings.AutoMoveMousePointerToTopLeft = true;
+			Settings.Instance.AutoMoveMousePointerToTopLeft = true;
 			using (new IE())
 			{
 				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(new Point(0, 0)));
@@ -177,16 +177,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MakeNewIeInstanceVisible()
 		{
-			IE.Settings.MakeNewIeInstanceVisible = true;
-			Assert.That(IE.Settings.MakeNewIeInstanceVisible, "Default should be true");
+			Settings.Instance.MakeNewIeInstanceVisible = true;
+			Assert.That(Settings.Instance.MakeNewIeInstanceVisible, "Default should be true");
 
 			using (IE ie = new IE())
 			{
 				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
 			}
 
-			IE.Settings.MakeNewIeInstanceVisible = false;
-			Assert.That(IE.Settings.MakeNewIeInstanceVisible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "should be false");
+			Settings.Instance.MakeNewIeInstanceVisible = false;
+			Assert.That(Settings.Instance.MakeNewIeInstanceVisible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "should be false");
 
 			using (IE ie = new IE())
 			{

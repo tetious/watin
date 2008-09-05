@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
@@ -65,5 +66,13 @@ namespace WatiN.Core
 		{
 			return new OptionCollection(domContainer, DoFilter(findBy));
 		}
+
+#if !NET11
+        public OptionCollection Filter(Predicate<Option> predicate)
+        {
+            return new OptionCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+        }
+#endif
+
 	}
 }

@@ -233,7 +233,7 @@ namespace WatiN.Core
 
         /// <summary>
         /// Waits until the text is inside the HTML Body element contains the given <paramref name="text" />.
-        /// Will time out after <see name="IE.Settings.WaitUntilExistsTimeOut" />
+        /// Will time out after <see name="Settings.Instance.WaitUntilExistsTimeOut" />
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns>
@@ -241,7 +241,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(string text)
         {
-            WaitUntilContainsText(text, IE.Settings.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(text, Settings.Instance.WaitUntilExistsTimeOut);
         }
 
 	    /// <summary>
@@ -263,12 +263,12 @@ namespace WatiN.Core
                 Thread.Sleep(50);
             } while (!timer.Elapsed);
 
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", IE.Settings.WaitUntilExistsTimeOut, text));
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.Instance.WaitUntilExistsTimeOut, text));
         }
 
         /// <summary>
         /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
-        /// Will time out after <see name="IE.Settings.WaitUntilExistsTimeOut" />
+        /// Will time out after <see name="Settings.Instance.WaitUntilExistsTimeOut" />
         /// </summary>
         /// <param name="regex">The regular expression to match with.</param>
         /// <returns>
@@ -276,7 +276,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex)
         {
-            WaitUntilContainsText(regex, IE.Settings.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(regex, Settings.Instance.WaitUntilExistsTimeOut);
         }
 
 	    /// <summary>
@@ -298,7 +298,7 @@ namespace WatiN.Core
                 Thread.Sleep(50);
             } while (!timer.Elapsed);
 
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", IE.Settings.WaitUntilExistsTimeOut, regex));
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.Instance.WaitUntilExistsTimeOut, regex));
         }
 
 		/// <summary>
@@ -381,12 +381,12 @@ namespace WatiN.Core
 
 		public Area Area(string elementId)
 		{
-			return Area(Find.ById(elementId));
+			return Area(Find.ByDefault(elementId));
 		}
 
 		public Area Area(Regex elementId)
 		{
-			return Area(Find.ById(elementId));
+			return Area(Find.ByDefault(elementId));
 		}
 
 		public Area Area(BaseConstraint findBy)
@@ -408,12 +408,12 @@ namespace WatiN.Core
 
 		public Button Button(string elementId)
 		{
-			return Button(Find.ById(elementId));
+			return Button(Find.ByDefault(elementId));
 		}
 
 		public Button Button(Regex elementId)
 		{
-			return Button(Find.ById(elementId));
+			return Button(Find.ByDefault(elementId));
 		}
 
 		public Button Button(BaseConstraint findBy)
@@ -434,12 +434,12 @@ namespace WatiN.Core
 
 		public CheckBox CheckBox(string elementId)
 		{
-			return CheckBox(Find.ById(elementId));
+			return CheckBox(Find.ByDefault(elementId));
 		}
 
 		public CheckBox CheckBox(Regex elementId)
 		{
-			return CheckBox(Find.ById(elementId));
+			return CheckBox(Find.ByDefault(elementId));
 		}
 
 		public CheckBox CheckBox(BaseConstraint findBy)
@@ -461,12 +461,12 @@ namespace WatiN.Core
 
 		public Element Element(string elementId)
 		{
-			return Element(Find.ById(elementId));
+			return Element(Find.ByDefault(elementId));
 		}
 
 		public Element Element(Regex elementId)
 		{
-			return Element(Find.ById(elementId));
+			return Element(Find.ByDefault(elementId));
 		}
 
 		public Element Element(BaseConstraint findBy)
@@ -494,12 +494,12 @@ namespace WatiN.Core
 
 		public FileUpload FileUpload(string elementId)
 		{
-			return FileUpload(Find.ById(elementId));
+			return FileUpload(Find.ByDefault(elementId));
 		}
 
 		public FileUpload FileUpload(Regex elementId)
 		{
-			return FileUpload(Find.ById(elementId));
+			return FileUpload(Find.ByDefault(elementId));
 		}
 
 		public FileUpload FileUpload(BaseConstraint findBy)
@@ -521,12 +521,12 @@ namespace WatiN.Core
 
 		public Form Form(string elementId)
 		{
-			return Form(Find.ById(elementId));
+			return Form(Find.ByDefault(elementId));
 		}
 
 		public Form Form(Regex elementId)
 		{
-			return Form(Find.ById(elementId));
+			return Form(Find.ByDefault(elementId));
 		}
 
 		public Form Form(BaseConstraint findBy)
@@ -548,12 +548,12 @@ namespace WatiN.Core
 
 		public Label Label(string elementId)
 		{
-			return Label(Find.ById(elementId));
+			return Label(Find.ByDefault(elementId));
 		}
 
 		public Label Label(Regex elementId)
 		{
-			return Label(Find.ById(elementId));
+			return Label(Find.ByDefault(elementId));
 		}
 
 		public Label Label(BaseConstraint findBy)
@@ -575,12 +575,12 @@ namespace WatiN.Core
 
 		public Link Link(string elementId)
 		{
-			return Link(Find.ById(elementId));
+			return Link(Find.ByDefault(elementId));
 		}
 
 		public Link Link(Regex elementId)
 		{
-			return Link(Find.ById(elementId));
+			return Link(Find.ByDefault(elementId));
 		}
 
 		public Link Link(BaseConstraint findBy)
@@ -602,12 +602,12 @@ namespace WatiN.Core
 
 		public Para Para(string elementId)
 		{
-			return Para(Find.ById(elementId));
+			return Para(Find.ByDefault(elementId));
 		}
 
 		public Para Para(Regex elementId)
 		{
-			return Para(Find.ById(elementId));
+			return Para(Find.ByDefault(elementId));
 		}
 
 		public Para Para(BaseConstraint findBy)
@@ -629,12 +629,12 @@ namespace WatiN.Core
 
 		public RadioButton RadioButton(string elementId)
 		{
-			return RadioButton(Find.ById(elementId));
+			return RadioButton(Find.ByDefault(elementId));
 		}
 
 		public RadioButton RadioButton(Regex elementId)
 		{
-			return RadioButton(Find.ById(elementId));
+			return RadioButton(Find.ByDefault(elementId));
 		}
 
 		public RadioButton RadioButton(BaseConstraint findBy)
@@ -656,12 +656,12 @@ namespace WatiN.Core
 
 		public SelectList SelectList(string elementId)
 		{
-			return SelectList(Find.ById(elementId));
+			return SelectList(Find.ByDefault(elementId));
 		}
 
 		public SelectList SelectList(Regex elementId)
 		{
-			return SelectList(Find.ById(elementId));
+			return SelectList(Find.ByDefault(elementId));
 		}
 
 		public SelectList SelectList(BaseConstraint findBy)
@@ -683,12 +683,12 @@ namespace WatiN.Core
 
 		public Table Table(string elementId)
 		{
-			return Table(Find.ById(elementId));
+			return Table(Find.ByDefault(elementId));
 		}
 
 		public Table Table(Regex elementId)
 		{
-			return Table(Find.ById(elementId));
+			return Table(Find.ByDefault(elementId));
 		}
 
 		public Table Table(BaseConstraint findBy)
@@ -710,12 +710,12 @@ namespace WatiN.Core
 
 		public TableBody TableBody(string elementId)
 		{
-			return TableBody(Find.ById(elementId));
+			return TableBody(Find.ByDefault(elementId));
 		}
 
 		public TableBody TableBody(Regex elementId)
 		{
-			return TableBody(Find.ById(elementId));
+			return TableBody(Find.ByDefault(elementId));
 		}
 
 		public TableBody TableBody(BaseConstraint findBy)
@@ -737,12 +737,12 @@ namespace WatiN.Core
 
 		public TableCell TableCell(string elementId)
 		{
-			return TableCell(Find.ById(elementId));
+			return TableCell(Find.ByDefault(elementId));
 		}
 
 		public TableCell TableCell(Regex elementId)
 		{
-			return TableCell(Find.ById(elementId));
+			return TableCell(Find.ByDefault(elementId));
 		}
 
 		public TableCell TableCell(BaseConstraint findBy)
@@ -774,12 +774,12 @@ namespace WatiN.Core
 
 		public TableRow TableRow(string elementId)
 		{
-			return TableRow(Find.ById(elementId));
+			return TableRow(Find.ByDefault(elementId));
 		}
 
 		public TableRow TableRow(Regex elementId)
 		{
-			return TableRow(Find.ById(elementId));
+			return TableRow(Find.ByDefault(elementId));
 		}
 
 		public TableRow TableRow(BaseConstraint findBy)
@@ -801,12 +801,12 @@ namespace WatiN.Core
 
 		public TextField TextField(string elementId)
 		{
-			return TextField(Find.ById(elementId));
+			return TextField(Find.ByDefault(elementId));
 		}
 
 		public TextField TextField(Regex elementId)
 		{
-			return TextField(Find.ById(elementId));
+			return TextField(Find.ByDefault(elementId));
 		}
 
 		public TextField TextField(BaseConstraint findBy)
@@ -827,12 +827,12 @@ namespace WatiN.Core
 
 		public Span Span(string elementId)
 		{
-			return Span(Find.ById(elementId));
+			return Span(Find.ByDefault(elementId));
 		}
 
 		public Span Span(Regex elementId)
 		{
-			return Span(Find.ById(elementId));
+			return Span(Find.ByDefault(elementId));
 		}
 
 		public Span Span(BaseConstraint findBy)
@@ -854,12 +854,12 @@ namespace WatiN.Core
 
 		public Div Div(string elementId)
 		{
-			return Div(Find.ById(elementId));
+			return Div(Find.ByDefault(elementId));
 		}
 
 		public Div Div(Regex elementId)
 		{
-			return Div(Find.ById(elementId));
+			return Div(Find.ByDefault(elementId));
 		}
 
 		public Div Div(BaseConstraint findBy)
@@ -881,12 +881,12 @@ namespace WatiN.Core
 
 		public Image Image(string elementId)
 		{
-			return Image(Find.ById(elementId));
+			return Image(Find.ByDefault(elementId));
 		}
 
 		public Image Image(Regex elementId)
 		{
-			return Image(Find.ById(elementId));
+			return Image(Find.ByDefault(elementId));
 		}
 
 		public Image Image(BaseConstraint findBy)

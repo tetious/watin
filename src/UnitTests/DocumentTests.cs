@@ -46,13 +46,13 @@ namespace WatiN.Core.UnitTests
 			_mockRepository = new MockRepository();
 			_mockHtmlDocument = (IHTMLDocument2) _mockRepository.CreateMock(typeof (IHTMLDocument2));
 			_mockHtmlWindow2 = (IHTMLWindow2) _mockRepository.CreateMock(typeof (IHTMLWindow2));
-			_originalWaitUntilExistsTimeOut = IE.Settings.WaitUntilExistsTimeOut;
+			_originalWaitUntilExistsTimeOut = Settings.Instance.WaitUntilExistsTimeOut;
 		}
 
 		[TearDown]
 	    public void TearDown()
 	    {
-	        IE.Settings.WaitUntilExistsTimeOut = _originalWaitUntilExistsTimeOut;
+	        Settings.Instance.WaitUntilExistsTimeOut = _originalWaitUntilExistsTimeOut;
 	    }
 
 
@@ -164,7 +164,7 @@ namespace WatiN.Core.UnitTests
         [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException))]
         public void WaitUntilContainsTextShouldThrowTimeOutException()
         {
-            IE.Settings.WaitUntilExistsTimeOut = 1;
+            Settings.Instance.WaitUntilExistsTimeOut = 1;
 
 			HTMLInjector.Start(ie, "some text 1", 2);
             ie.WaitUntilContainsText("some text 1");
@@ -174,7 +174,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void WaitUntilContainsTextShouldReturn()
         {
-            IE.Settings.WaitUntilExistsTimeOut = 2;
+            Settings.Instance.WaitUntilExistsTimeOut = 2;
 
 			HTMLInjector.Start(ie, "some text 2", 1);
             ie.WaitUntilContainsText("some text 2");
@@ -184,7 +184,7 @@ namespace WatiN.Core.UnitTests
         [Test, ExpectedException(typeof(WatiN.Core.Exceptions.TimeoutException))]
         public void WaitUntilContainsTextRegexShouldThrowTimeOutException()
         {
-            IE.Settings.WaitUntilExistsTimeOut = 1;
+            Settings.Instance.WaitUntilExistsTimeOut = 1;
 
 			HTMLInjector.Start(ie, "some text 3", 2);
             ie.WaitUntilContainsText(new Regex("me text 3"));
@@ -194,7 +194,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void WaitUntilContainsTextRegexShouldReturn()
         {
-            IE.Settings.WaitUntilExistsTimeOut = 2;
+            Settings.Instance.WaitUntilExistsTimeOut = 2;
 
 			HTMLInjector.Start(ie, "some text 4", 1);
             ie.WaitUntilContainsText(new Regex("me text 4"));

@@ -42,6 +42,8 @@ namespace WatiN.Core
 		internal const string hrefAttribute = "href";
 		internal const string classNameAttribute = "classname";
 
+	    private IDefaultFindFactory _defaultFindFactory = new DefaultFindFactory();
+
 		/// <summary>
 		/// Finds an element by its alt text.
 		/// </summary>
@@ -758,5 +760,14 @@ namespace WatiN.Core
 			return new LabelTextConstraint( labelText );
 		}
 		
+        public static BaseConstraint ByDefault(string value)
+        {
+            return Settings.Instance.DefaultFindFactory.ByDefault(value);
+        }
+
+        public static BaseConstraint ByDefault(Regex value)
+        {
+            return Settings.Instance.DefaultFindFactory.ByDefault(value);
+        }
 	}
 }

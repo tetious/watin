@@ -17,12 +17,13 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
 	/// <summary>
 	/// This class is used to define the default settings used by WatiN. 
-	/// Use <c>IE.Settings</c> to access or change these settings.
+	/// Use <c>Settings.Instance</c> to access or change these settings.
 	/// </summary>
 	/// <example>
 	/// The following example shows you how to change the default time out which is used
@@ -33,7 +34,7 @@ namespace WatiN.Core
 	/// public void AttachToIEExample()
 	/// {
 	///   // Change de default time out from 30 to 60 seconds.
-	///   IE.Settings.AttachToIETimeOut = 60;
+	///   Settings.Instance.AttachToIETimeOut = 60;
 	/// 
 	///   // Start Internet Explorer manually and type 
 	///   // http://watin.sourceforge.net in the navigation bar.
@@ -46,15 +47,15 @@ namespace WatiN.Core
 	/// </code>
 	/// When you frequently want to change these settings you could also create
 	/// two or more instances of the Settings class, set the desired defaults 
-	/// and set the settings class to IE.Settings.
+	/// and set the settings class to Settings.Instance.
 	/// <code>
 	/// public void ChangeSettings()
 	/// {
-	///   IE.Settings = LongTimeOut();
+	///   Settings.Instance = LongTimeOut();
 	///   
 	///   // Do something here that requires more time then the defaults
 	/// 
-	///   IE.Settings = ShortTimeOut();
+	///   Settings.Instance = ShortTimeOut();
 	/// 
 	///   // Do something here if you want a short time out to get
 	///   // the exception quickly incase the item isn't found.  
@@ -97,10 +98,26 @@ namespace WatiN.Core
 			public bool autoMoveMousePointerToTopLeft;
 			public bool makeNewIEInstanceVisible;
 		    public int sleepTime;
+		    public IDefaultFindFactory defaultFindFactory;
 		}
 
 		private settingsStruct settings;
+        private static Settings _instance = new Settings();
 
+	    public static Settings Instance
+        {
+            get { return _instance; }
+            set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
+
+				_instance = value;
+			}
+
+        }
 		public Settings()
 		{
 			SetDefaults();
@@ -141,6 +158,7 @@ namespace WatiN.Core
 			settings.autoStartDialogWatcher = true;
 			settings.autoMoveMousePointerToTopLeft = true;
 			settings.makeNewIEInstanceVisible = true;
+            settings.defaultFindFactory = CreateDefaultFindFactory();
 		}
 
 		/// <summary>
@@ -275,7 +293,28 @@ namespace WatiN.Core
 			set { settings.makeNewIEInstanceVisible = value; }
 		}
 
-		private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
+	    public IDefaultFindFactory DefaultFindFactory
+	    {
+            get { return settings.defaultFindFactory; }
+            set
+            {
+                if (value == null)
+                {
+                    settings.defaultFindFactory = CreateDefaultFindFactory();
+                }
+                else
+                {
+                    settings.defaultFindFactory = value;
+                }
+            }
+	    }
+
+	    private static DefaultFindFactory CreateDefaultFindFactory()
+	    {
+	        return new DefaultFindFactory();
+	    }
+
+	    private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
 		{
 			if (value < 0)
 			{

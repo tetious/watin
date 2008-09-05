@@ -35,7 +35,7 @@ namespace WatiN.Core
 	/// Beware, the code presented in that article is somewhat buggy so it has been
 	/// completely rewritten here.
 	/// </remarks>
-	internal sealed class WinInet
+	internal class WinInet
 	{
 		private delegate void CacheGroupAction(long groupId);
 
@@ -377,7 +377,7 @@ namespace WatiN.Core
 		/// Holds state for the duration of the clear cookies operation because we
 		/// don't have anonymous delegates in .Net 1.1.
 		/// </summary>
-		private sealed class ClearCookiesCommand
+		private class ClearCookiesCommand
 		{
 			private readonly string[] cacheEntrySuffixes;
 

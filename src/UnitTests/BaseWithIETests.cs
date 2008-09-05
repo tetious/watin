@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 		[SetUp]
 		public virtual void TestSetUp()
 		{
-			IE.Settings.Reset();
+			Settings.Instance.Reset();
 			if (!ie.Uri.Equals(TestPageUri))
 			{
 				ie.GoTo(TestPageUri);

@@ -38,6 +38,7 @@ namespace WatiN.Core.UnitTests
 	    [SetUp]
 		public void SetUp()
 		{
+            Settings.Instance.Reset();
 			_expectedPredicateCompareValue = null;
 		}
 #endif
@@ -634,7 +635,48 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(checkBox21b.Id, checkBox21c.Id, "Using a LabelTextContraint did not return the same as Find.ByLabelText for Checkbox21.");
 		}
 		
-		public class ElementComparerMock : ICompareElement
+        [Test]
+        public void FindByDefaultStringShouldReturnDefaultFromTheSetDefaultFindFactory()
+        {
+            // GIVEN
+            Settings.Instance.DefaultFindFactory = new MyTestDefaultFindFactory();
+
+            // WHEN
+            Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault("testValue");
+
+            // THEN
+            Assert.That(byDefault.AttributeName, Is.EqualTo(MyTestDefaultFindFactory.TEST_ATTRIBUTE));
+        }
+
+        [Test]
+        public void FindByDefaultRegexShouldReturnDefaultFromTheSetDefaultFindFactory()
+        {
+            // GIVEN
+            Settings.Instance.DefaultFindFactory = new MyTestDefaultFindFactory();
+
+            // WHEN
+            Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault(new Regex("testValue"));
+
+            // THEN
+            Assert.That(byDefault.AttributeName, Is.EqualTo(MyTestDefaultFindFactory.TEST_ATTRIBUTE));
+        }
+
+	    public class MyTestDefaultFindFactory : IDefaultFindFactory
+	    {
+	        public const string TEST_ATTRIBUTE = "testAttribute";
+            
+            public BaseConstraint ByDefault(string value)
+	        {
+	            return Find.By(TEST_ATTRIBUTE, value);
+	        }
+
+	        public BaseConstraint ByDefault(Regex value)
+	        {
+                return Find.By(TEST_ATTRIBUTE, value);
+            }
+	    }
+
+	    public class ElementComparerMock : ICompareElement
 		{
 			public bool IsCalled = false;
 			
@@ -644,6 +686,5 @@ namespace WatiN.Core.UnitTests
 				return true;
 			}
 		}
-		
 	}
 }

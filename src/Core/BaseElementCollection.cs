@@ -176,6 +176,11 @@ namespace WatiN.Core
         {
             return (T)FindFirst(findBy);
         }
+
+        public T First(Predicate<T> predicate)
+        {
+            return (T)FindFirst(Find.ByElement(predicate));
+        }
 #endif
 
         private Element FindFirst(BaseConstraint findBy)

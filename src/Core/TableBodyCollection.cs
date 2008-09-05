@@ -16,7 +16,9 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -38,5 +40,18 @@ namespace WatiN.Core
 		{
 			get { return (TableBody) ElementsTyped(index); }
 		}
+
+        public TableBodyCollection Filter(BaseConstraint findBy)
+        {
+            return new TableBodyCollection(domContainer, DoFilter(findBy));
+        }
+
+#if !NET11
+        public TableBodyCollection Filter(Predicate<TableBody> predicate)
+        {
+            return new TableBodyCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+        }
+#endif
+
 	}
 }
