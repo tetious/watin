@@ -42,7 +42,7 @@ namespace WatiN.Core
 		internal const string hrefAttribute = "href";
 		internal const string classNameAttribute = "classname";
 
-	    private IDefaultFindFactory _defaultFindFactory = new DefaultFindFactory();
+	    private IFindByDefaultFactory findByDefaultFactory = new FindByDefaultFactory();
 
 		/// <summary>
 		/// Finds an element by its alt text.
@@ -762,12 +762,12 @@ namespace WatiN.Core
 		
         public static BaseConstraint ByDefault(string value)
         {
-            return Settings.Instance.DefaultFindFactory.ByDefault(value);
+            return Settings.findByDefaultFactory.ByDefault(value);
         }
 
         public static BaseConstraint ByDefault(Regex value)
         {
-            return Settings.Instance.DefaultFindFactory.ByDefault(value);
+            return Settings.findByDefaultFactory.ByDefault(value);
         }
 	}
 }

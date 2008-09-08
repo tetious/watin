@@ -52,7 +52,7 @@ namespace WatiN.Core.UnitTests
 		[TearDown]
 		public void TearDown()
 		{
-			Settings.Instance.Reset();
+			Settings.Reset();
 		}
 
 		[Test]
@@ -390,7 +390,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilElementExistsElementInjectionAfter3Seconds()
 		{
-			Assert.IsTrue(Settings.Instance.WaitUntilExistsTimeOut > 3, "Settings.Instance.WaitUntilExistsTimeOut must be more than 3 seconds");
+			Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
 			using (IE ie1 = new IE(TestEventsURI))
 			{
@@ -420,7 +420,7 @@ namespace WatiN.Core.UnitTests
 		{
 			const int indexTextFieldToRemove = 9;
 
-			Assert.IsTrue(Settings.Instance.WaitUntilExistsTimeOut > 3, "Settings.Instance.WaitUntilExistsTimeOut must be more than 3 seconds");
+			Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
 			using (IE ie1 = new IE(TestEventsURI))
 			{
@@ -688,8 +688,8 @@ namespace WatiN.Core.UnitTests
 		[Test, Ignore("Doesn't work yet")]
 		public void PositionMousePointerInMiddleOfElementInFrame()
 		{
-			Settings.Instance.MakeNewIeInstanceVisible = true;
-			Settings.Instance.HighLightElement = true;
+			Settings.MakeNewIeInstanceVisible = true;
+			Settings.HighLightElement = true;
 
 			using (IE ie = new IE(FramesetURI))
 			{
@@ -774,8 +774,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HighlightShouldGoBackToTheOriginalBackGroundColor()
 		{
-			Settings.Instance.HighLightElement = true;
-			Settings.Instance.HighLightColor = "red";
+			Settings.HighLightElement = true;
+			Settings.HighLightColor = "red";
 
 			TextField textField = ie.TextField("name");
 			string _originalcolor = textField.Style.BackgroundColor;
@@ -784,7 +784,7 @@ namespace WatiN.Core.UnitTests
 			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after Highlight(true)");
 
 			// Invoke highlighting done by WatiN when typing text
-			Settings.Instance.HighLightColor = "yellow";
+			Settings.HighLightColor = "yellow";
 			textField.TypeText("abc");
 
 			Assert.That(textField.Style.BackgroundColor, Iz.EqualTo("red"), "Unexpected background after TypeText");
@@ -796,8 +796,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HighlightShouldNotThrowExceptionWhenCalledToManyTimesWithParamFalse()
 		{
-			Settings.Instance.HighLightElement = true;
-			Settings.Instance.HighLightColor = "red";
+			Settings.HighLightElement = true;
+			Settings.HighLightColor = "red";
 
 			TextField textField = ie.TextField("name");
 			string _originalcolor = textField.Style.BackgroundColor;
@@ -815,7 +815,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNotFoundExceptionShouldHaveInnerExceptionIfTheTimeOutExceptionHadOne()
 		{
-			Settings.Instance.WaitUntilExistsTimeOut = 1;
+			Settings.WaitUntilExistsTimeOut = 1;
 			
 			mocks = new MockRepository();
 
@@ -853,7 +853,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNotFoundExceptionShouldHaveNoInnerExceptionIfTheTimeOutExceptionHadNone()
 		{
-			Settings.Instance.WaitUntilExistsTimeOut = 1;
+			Settings.WaitUntilExistsTimeOut = 1;
 			
 			mocks = new MockRepository();
 

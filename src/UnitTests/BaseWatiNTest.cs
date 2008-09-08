@@ -25,7 +25,7 @@ namespace WatiN.Core.UnitTests
 	public abstract class BaseWatiNTest
 	{
 		private static Uri htmlTestBaseURI = null;
-		private Settings backupSettings;
+		private ISettings backupSettings;
 
 		public static Uri MainURI = new Uri(HtmlTestBaseURI, "main.html");
 		public static Uri IndexURI = new Uri(HtmlTestBaseURI, "Index.html");
@@ -51,7 +51,7 @@ namespace WatiN.Core.UnitTests
 		[TestFixtureSetUp]
 		public virtual void FixtureSetup()
 		{
-			backupSettings = Settings.Instance.Clone();
+			backupSettings = Settings.Clone();
 			Settings.Instance = new StealthSettings();
 		}
 

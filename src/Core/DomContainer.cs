@@ -83,7 +83,7 @@ namespace WatiN.Core
 		/// </summary>
 		protected void StartDialogWatcher()
 		{
-			if (Settings.Instance.AutoStartDialogWatcher && _dialogWatcher == null)
+			if (Settings.AutoStartDialogWatcher && _dialogWatcher == null)
 			{
 				_dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
 				_dialogWatcher.IncreaseReferenceCount();
@@ -143,7 +143,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Waits for the page to be completely loaded using the Settings.Instance.WaitForCompleteTimeOut setting
+		/// Waits for the page to be completely loaded using the Settings.WaitForCompleteTimeOut setting
 		/// </summary>
 		public virtual void WaitForComplete()
 		{

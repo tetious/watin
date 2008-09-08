@@ -96,7 +96,7 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void ClickingOnLinkWithJavaScriptInHrefShouldWork()
 	    {
-	        Settings.Instance.MakeNewIeInstanceVisible = true;
+	        Settings.MakeNewIeInstanceVisible = true;
 
 	        using (IE ie = new IE(TestEventsURI))
 	        {

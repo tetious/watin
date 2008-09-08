@@ -34,10 +34,10 @@ namespace WatiN.Core
 
 	    /// <summary>
         /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
-        /// <seealso cref="Settings.Instance.WaitForCompleteTimeOut"/> seconds.
+        /// <seealso cref="Settings.WaitForCompleteTimeOut"/> seconds.
         /// </summary>
         /// <param name="domContainer">The page to wait for in this domcontainer</param>
-        public WaitForComplete(DomContainer domContainer) : this(domContainer, Settings.Instance.WaitForCompleteTimeOut) { }
+        public WaitForComplete(DomContainer domContainer) : this(domContainer, Settings.WaitForCompleteTimeOut) { }
 
         /// Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
         /// <paramref name="waitForCompleteTimeOut"> seconds.</paramref>
@@ -47,7 +47,7 @@ namespace WatiN.Core
 		{
 			_domContainer = domContainer;
             _waitForCompleteTimeOut = waitForCompleteTimeOut;
-            _milliSecondsTimeOut = Settings.Instance.SleepTime;
+            _milliSecondsTimeOut = Settings.SleepTime;
 		}
 
 	    public int MilliSecondsTimeOut

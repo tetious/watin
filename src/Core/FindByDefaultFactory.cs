@@ -4,7 +4,7 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-    public class DefaultFindFactory : IDefaultFindFactory
+    public class FindByDefaultFactory : IFindByDefaultFactory
     {
         public BaseConstraint ByDefault(string value)
         {

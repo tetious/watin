@@ -25,14 +25,9 @@ namespace WatiN.Core.Logging
 	/// WatiN uses this class to log which actions are done while driving Internet
 	/// Explorer.
 	/// </summary>
-	public class Logger
+	public static class Logger
 	{
-		private static ILogWriter mLogWriter = DefaultLogger();
-
-	    /// <summary>
-		/// Prevent creating an instance of this class (contains only static members)
-		/// </summary>
-		private Logger() {}
+		private static ILogWriter mLogWriter = DefaultLogWriter();
 
 		/// <summary>
 		/// Logs the action. It replaces the format item(s) in the 
@@ -69,7 +64,7 @@ namespace WatiN.Core.Logging
 			{
                 if (value == null)
                 {
-                    mLogWriter = DefaultLogger();
+                    mLogWriter = DefaultLogWriter();
                 }
                 else
                 {
@@ -78,7 +73,7 @@ namespace WatiN.Core.Logging
 			}
 		}
 
-        private static NoLog DefaultLogger()
+        private static NoLog DefaultLogWriter()
         {
             return new NoLog();
         }

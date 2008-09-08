@@ -18,139 +18,99 @@
 
 using System;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Is=NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
 	public class SettingsTests
 	{
+        [TearDown]
+        public void TearDown()
+        {
+            Settings.Instance = new DefaultSettings();
+        }
+
 		[Test]
 		public void Properties()
 		{
-			Settings settings = new Settings();
+			Settings.AttachToIETimeOut = 111;
+			bool autoCloseDialogs = !Settings.AutoCloseDialogs;
+			Settings.AutoCloseDialogs = autoCloseDialogs;
+			Settings.HighLightColor = "strange color";
+			bool highLightElement = !Settings.HighLightElement;
+			Settings.HighLightElement = highLightElement;
+			Settings.WaitForCompleteTimeOut = 222;
+			Settings.WaitUntilExistsTimeOut = 333;
+		    Settings.SleepTime = 444;
 
-			settings.AttachToIETimeOut = 111;
-			bool autoCloseDialogs = !settings.AutoCloseDialogs;
-			settings.AutoCloseDialogs = autoCloseDialogs;
-			settings.HighLightColor = "strange color";
-			bool highLightElement = !settings.HighLightElement;
-			settings.HighLightElement = highLightElement;
-			settings.WaitForCompleteTimeOut = 222;
-			settings.WaitUntilExistsTimeOut = 333;
-		    settings.SleepTime = 444;
-
-			Assert.AreEqual(111, settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
-			Assert.AreEqual(autoCloseDialogs, settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
-			Assert.AreEqual("strange color", settings.HighLightColor, "Unexpected HighLightColor");
-			Assert.AreEqual(highLightElement, settings.HighLightElement, "Unexpected HighLightElement");
-			Assert.AreEqual(222, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
-			Assert.AreEqual(333, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
-            Assert.AreEqual(444, settings.SleepTime, "Unexpected SleepTime");
+			Assert.AreEqual(111, Settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+			Assert.AreEqual(autoCloseDialogs, Settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
+			Assert.AreEqual("strange color", Settings.HighLightColor, "Unexpected HighLightColor");
+			Assert.AreEqual(highLightElement, Settings.HighLightElement, "Unexpected HighLightElement");
+			Assert.AreEqual(222, Settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
+			Assert.AreEqual(333, Settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
+            Assert.AreEqual(444, Settings.SleepTime, "Unexpected SleepTime");
 		}
 
 		[Test]
-		public void Clone()
+		public void CloneShouldDelegateToInstance()
 		{
-			Settings settings = new Settings();
+            Rhino.Mocks.MockRepository mocks = new MockRepository();
+            ISettings settings = (ISettings)mocks.CreateMock(typeof(ISettings));
 
-			settings.AttachToIETimeOut = 111;
-			bool autoCloseDialogs = !settings.AutoCloseDialogs;
-			settings.AutoCloseDialogs = autoCloseDialogs;
-			settings.HighLightColor = "strange color";
-			bool highLightElement = !settings.HighLightElement;
-			settings.HighLightElement = highLightElement;
-			settings.WaitForCompleteTimeOut = 222;
-			settings.WaitUntilExistsTimeOut = 333;
-			settings.SleepTime = 444;
+            Expect.Call(settings.Clone()).Return(null);
+		    Settings.Instance = settings;
 
-			Settings settingsClone = settings.Clone();
-			Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
-			Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
-			Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
-			Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
-			Assert.AreEqual(222, settingsClone.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
-			Assert.AreEqual(333, settingsClone.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
-            Assert.AreEqual(444, settingsClone.SleepTime, "Unexpected SleepTime");
-		}
+            mocks.ReplayAll();
 
-		[Test]
-		public void Defaults()
-		{
-			Settings settings = new Settings();
+		    Settings.Clone();
 
-			AssertDefaults(settings);
-		}
+            mocks.VerifyAll();
+        }
 
-		[Test]
+	    [Test]
 		public void Reset()
 		{
-			Settings settings = new Settings();
+            Rhino.Mocks.MockRepository mocks = new MockRepository();
+            ISettings settings = (ISettings)mocks.CreateMock(typeof(ISettings));
 
-			settings.AttachToIETimeOut = 111;
-			bool autoCloseDialogs = !settings.AutoCloseDialogs;
-			settings.AutoCloseDialogs = autoCloseDialogs;
-			settings.HighLightColor = "strange color";
-			bool highLightElement = !settings.HighLightElement;
-			settings.HighLightElement = highLightElement;
-			settings.WaitForCompleteTimeOut = 222;
-			settings.WaitUntilExistsTimeOut = 333;
-			settings.SleepTime = 444;
+	        settings.Reset();
+            Settings.Instance = settings;
 
-			Settings settingsClone = settings.Clone();
-			Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
-			Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
-			Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
-			Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
-			Assert.AreEqual(222, settingsClone.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
-			Assert.AreEqual(333, settingsClone.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
-            Assert.AreEqual(444, settingsClone.SleepTime, "Unexpected SleepTime");
+            mocks.ReplayAll();
 
-			settingsClone.Reset();
-			AssertDefaults(settingsClone);
-		}
+            Settings.Reset();
+
+            mocks.VerifyAll();
+        }
 
 		[Test]
-		public void ChangeSettingInCloneShouldNotChangeOriginalSetting()
-		{
-			Settings settings = new Settings();
-
-			settings.AttachToIETimeOut = 111;
-
-			Settings settingsClone = settings.Clone();
-			Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected clone 1");
-
-			settingsClone.AttachToIETimeOut = 222;
-
-			Assert.AreEqual(111, settings.AttachToIETimeOut, "Unexpected original");
-			Assert.AreEqual(222, settingsClone.AttachToIETimeOut, "Unexpected clone 2");
-		}
-
-		private static void AssertDefaults(Settings settings)
-		{
-			Assert.AreEqual(30, settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
-			Assert.AreEqual(true, settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
-			Assert.AreEqual("yellow", settings.HighLightColor, "Unexpected HighLightColor");
-			Assert.AreEqual(true, settings.HighLightElement, "Unexpected HighLightElement");
-			Assert.AreEqual(30, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
-			Assert.AreEqual(30, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
-            Assert.AreEqual(100, settings.SleepTime, "Unexpected SleepTime");
-		}
-
-		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void IESettingsSetToNullShouldThrowArgumentNullException()
 		{
+            // GIVEN 
+
+		    ISettings original = Settings.Instance;
+		    Assert.That(original, Is.Not.Null, "Expected instance of Settings");
+            
+            // WHEN
 			Settings.Instance = null;
+
+            // THEN
+            Assert.That(Settings.Instance, Is.Not.Null, "Expected new instance of settings (1)");
+            Assert.That(ReferenceEquals(Settings.Instance, original), Is.False, "Expected new instance of settings (2)");
 		}
 
 		[Test]
 		public void SetIESettings()
 		{
-			Settings settings = new Settings();
-			Assert.AreNotEqual(111, Settings.Instance.AttachToIETimeOut);
+			ISettings settings = new DefaultSettings();
+			Assert.AreNotEqual(111, Settings.AttachToIETimeOut);
 			settings.AttachToIETimeOut = 111;
 
 			Settings.Instance = settings;
-			Assert.AreEqual(111, Settings.Instance.AttachToIETimeOut);
+			Assert.AreEqual(111, Settings.AttachToIETimeOut);
 		}
 	}
 }

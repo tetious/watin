@@ -67,10 +67,10 @@ namespace WatiN.Core
 		private bool isDisposed = false;
 
         [Obsolete("Use Settings.Instance instead")]
-		public static Settings Settings
+		public static ISettings Settings
 		{
-			set { Settings.Instance = value; }
-			get { return Settings.Instance; }
+			set { Core.Settings.Instance = value; }
+			get { return Core.Settings.Instance; }
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace WatiN.Core
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
 		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.Instance.AttachToIETimeOut"/>
+		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
 		/// </exception>
 		/// <example>
 		/// The following example searches for an Internet Exlorer instance with "Example"
@@ -113,7 +113,7 @@ namespace WatiN.Core
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
 		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.Instance.AttachToIETimeOut"/>
+		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
 		/// </exception>
 		/// <example>
 		/// The following example searches for an Internet Exlorer instance with "Example"
@@ -660,7 +660,7 @@ namespace WatiN.Core
 
 				if (mainWindowHandle != 0)
 				{
-					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Settings.Instance.AttachToIETimeOut);
+					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Core.Settings.AttachToIETimeOut);
 				}
 			    Thread.Sleep(500);
 			} while (!timeoutTimer.Elapsed);
@@ -1369,7 +1369,7 @@ namespace WatiN.Core
 		/// Waits till the webpage, it's frames and all it's elements are loaded. This
 		/// function is called by WatiN after each action (like clicking a link) so you
 		/// should have to use this function on rare occasions.
-		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitForCompleteTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitForCompleteTimeOut"/>
 		/// </summary>
 		public override void WaitForComplete()
 		{

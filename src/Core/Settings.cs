@@ -21,7 +21,7 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-	/// <summary>
+    /// <summary>
 	/// This class is used to define the default settings used by WatiN. 
 	/// Use <c>Settings.Instance</c> to access or change these settings.
 	/// </summary>
@@ -34,7 +34,7 @@ namespace WatiN.Core
 	/// public void AttachToIEExample()
 	/// {
 	///   // Change de default time out from 30 to 60 seconds.
-	///   Settings.Instance.AttachToIETimeOut = 60;
+	///   Settings.AttachToIETimeOut = 60;
 	/// 
 	///   // Start Internet Explorer manually and type 
 	///   // http://watin.sourceforge.net in the navigation bar.
@@ -47,7 +47,7 @@ namespace WatiN.Core
 	/// </code>
 	/// When you frequently want to change these settings you could also create
 	/// two or more instances of the Settings class, set the desired defaults 
-	/// and set the settings class to Settings.Instance.
+	/// and set the settings class to Settings.
 	/// <code>
 	/// public void ChangeSettings()
 	/// {
@@ -84,81 +84,43 @@ namespace WatiN.Core
 	/// }
 	/// </code>
 	/// </example>
-	public class Settings
-	{
-		private struct settingsStruct
-		{
-			public int attachToIETimeOut;
-			public int waitUntilExistsTimeOut;
-			public int waitForCompleteTimeOut;
-			public bool highLightElement;
-			public string highLightColor;
-			public bool autoCloseDialogs;
-			public bool autoStartDialogWatcher;
-			public bool autoMoveMousePointerToTopLeft;
-			public bool makeNewIEInstanceVisible;
-		    public int sleepTime;
-		    public IDefaultFindFactory defaultFindFactory;
-		}
+	public static class Settings
+    {
+        private static ISettings _instance = CreateDefaultSettings();
 
-		private settingsStruct settings;
-        private static Settings _instance = new Settings();
+        private static DefaultSettings CreateDefaultSettings()
+        {
+            return new DefaultSettings();
+        }
 
-	    public static Settings Instance
+        public static ISettings Instance
         {
             get { return _instance; }
             set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException("value");
-				}
-
 				_instance = value;
+                if (_instance == null)
+				{
+                    _instance = CreateDefaultSettings();
+				}
 			}
-
         }
-		public Settings()
-		{
-			SetDefaults();
-		}
-
-		private Settings(settingsStruct settings)
-		{
-			this.settings = settings;
-		}
 
 		/// <summary>
 		/// Resets this instance to the initial defaults.
 		/// </summary>
-		public virtual void Reset()
+		public static void Reset()
 		{
-			SetDefaults();
+			Instance.Reset();
 		}
 
 		/// <summary>
 		/// Clones this instance.
 		/// </summary>
 		/// <returns></returns>
-		public virtual Settings Clone()
+        public static ISettings Clone()
 		{
-			return new Settings(settings);
-		}
-
-		private void SetDefaults()
-		{
-			settings = new settingsStruct();
-			settings.attachToIETimeOut = 30;
-			settings.waitUntilExistsTimeOut = 30;
-			settings.waitForCompleteTimeOut = 30;
-		    settings.sleepTime = 100;
-			settings.highLightElement = true;
-			settings.highLightColor = "yellow";
-			settings.autoCloseDialogs = true;
-			settings.autoStartDialogWatcher = true;
-			settings.autoMoveMousePointerToTopLeft = true;
-			settings.makeNewIEInstanceVisible = true;
-            settings.defaultFindFactory = CreateDefaultFindFactory();
+			return Instance.Clone();
 		}
 
 		/// <summary>
@@ -166,14 +128,10 @@ namespace WatiN.Core
 		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
-		public int AttachToIETimeOut
+        public static int AttachToIETimeOut
 		{
-			get { return settings.attachToIETimeOut; }
-			set
-			{
-				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
-				settings.attachToIETimeOut = value;
-			}
+			get { return Instance.AttachToIETimeOut; }
+			set { Instance.AttachToIETimeOut = value; }
 		}
 
 		/// <summary>
@@ -181,14 +139,10 @@ namespace WatiN.Core
 		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
-		public int WaitUntilExistsTimeOut
+        public static int WaitUntilExistsTimeOut
 		{
-			get { return settings.waitUntilExistsTimeOut; }
-			set
-			{
-				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
-				settings.waitUntilExistsTimeOut = value;
-			}
+            get { return Instance.WaitUntilExistsTimeOut; }
+            set { Instance.WaitUntilExistsTimeOut = value; }
 		}
 
 		/// <summary>
@@ -196,14 +150,10 @@ namespace WatiN.Core
 		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
-		public int WaitForCompleteTimeOut
+        public static int WaitForCompleteTimeOut
 		{
-			get { return settings.waitForCompleteTimeOut; }
-			set
-			{
-				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
-				settings.waitForCompleteTimeOut = value;
-			}
+			get { return Instance.WaitForCompleteTimeOut; }
+			set { Instance.WaitForCompleteTimeOut = value; }
 		}
 
         /// <summary>
@@ -211,14 +161,10 @@ namespace WatiN.Core
 		/// The default value is 100 milliseconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
-		public int SleepTime
+        public static int SleepTime
 		{
-			get { return settings.sleepTime; }
-			set
-			{
-				IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
-				settings.sleepTime = value;
-			}
+			get { return Instance.SleepTime; }
+			set { Instance.SleepTime = value; }
 		}
 
 		/// <summary>
@@ -226,10 +172,10 @@ namespace WatiN.Core
 		/// Highlighting of an element is done when WatiN fires an event on an
 		/// element or executes a methode (like TypeText).
 		/// </summary>
-		public bool HighLightElement
+        public static bool HighLightElement
 		{
-			get { return settings.highLightElement; }
-			set { settings.highLightElement = value; }
+			get { return Instance.HighLightElement; }
+			set { Instance.HighLightElement = value; }
 		}
 
 		/// <summary>
@@ -238,10 +184,10 @@ namespace WatiN.Core
 		/// Visit http://msdn.microsoft.com/workshop/author/dhtml/reference/colors/colors_name.asp
 		/// for a full list of supported RGB colors and their names.
 		/// </summary>
-		public string HighLightColor
+        public static string HighLightColor
 		{
-			get { return settings.highLightColor; }
-			set { settings.highLightColor = value; }
+			get { return Instance.HighLightColor; }
+			set { Instance.HighLightColor = value; }
 		}
 
 		/// <summary>
@@ -249,10 +195,10 @@ namespace WatiN.Core
 		/// You need to set this value before creating or attaching to any 
 		/// Internet Explorer to have effect.
 		/// </summary>
-		public bool AutoCloseDialogs
+        public static bool AutoCloseDialogs
 		{
-			get { return settings.autoCloseDialogs; }
-			set { settings.autoCloseDialogs = value; }
+			get { return Instance.AutoCloseDialogs; }
+			set { Instance.AutoCloseDialogs = value; }
 		}
 
 		/// <summary>
@@ -262,10 +208,10 @@ namespace WatiN.Core
 		/// <value>
 		/// 	<c>true</c> if dialog watcher should be started when a new IE instance is created; otherwise, <c>false</c>.
 		/// </value>
-		public bool AutoStartDialogWatcher
+        public static bool AutoStartDialogWatcher
 		{
-			get { return settings.autoStartDialogWatcher; }
-			set { settings.autoStartDialogWatcher = value; }
+			get { return Instance.AutoStartDialogWatcher; }
+			set { Instance.AutoStartDialogWatcher = value; }
 		}
 
 		/// <summary>
@@ -275,10 +221,10 @@ namespace WatiN.Core
 		/// <value>
 		/// 	<c>true</c> when mouse should be moved to top left; otherwise, <c>false</c>.
 		/// </value>
-		public bool AutoMoveMousePointerToTopLeft
+        public static bool AutoMoveMousePointerToTopLeft
 		{
-			get { return settings.autoMoveMousePointerToTopLeft; }
-			set { settings.autoMoveMousePointerToTopLeft = value; }
+			get { return Instance.AutoMoveMousePointerToTopLeft; }
+			set { Instance.AutoMoveMousePointerToTopLeft = value; }
 		}
 
 		/// <summary>
@@ -287,39 +233,23 @@ namespace WatiN.Core
 		/// <value>
 		/// 	<c>true</c> if you want to make a new <see cref="IE"/> instance visible; otherwise, <c>false</c>.
 		/// </value>
-		public bool MakeNewIeInstanceVisible
+        public static bool MakeNewIeInstanceVisible
 		{
-			get { return settings.makeNewIEInstanceVisible; }
-			set { settings.makeNewIEInstanceVisible = value; }
+			get { return Instance.MakeNewIeInstanceVisible; }
+			set { Instance.MakeNewIeInstanceVisible = value; }
 		}
 
-	    public IDefaultFindFactory DefaultFindFactory
+        public static IFindByDefaultFactory findByDefaultFactory
 	    {
-            get { return settings.defaultFindFactory; }
-            set
+            get { return Instance.findByDefaultFactory; }
+            set 
             {
-                if (value == null)
+                Instance.findByDefaultFactory = value;
+                if (Instance.findByDefaultFactory == null)
                 {
-                    settings.defaultFindFactory = CreateDefaultFindFactory();
-                }
-                else
-                {
-                    settings.defaultFindFactory = value;
+                    Instance.findByDefaultFactory = new FindByDefaultFactory();
                 }
             }
 	    }
-
-	    private static DefaultFindFactory CreateDefaultFindFactory()
-	    {
-	        return new DefaultFindFactory();
-	    }
-
-	    private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
-		{
-			if (value < 0)
-			{
-				throw new ArgumentOutOfRangeException("value", "Should be 0 or more.");
-			}
-		}
 	}
 }

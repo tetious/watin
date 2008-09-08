@@ -203,7 +203,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    try
 		    {
-		        Settings.Instance.WaitUntilExistsTimeOut = 1;
+		        Settings.WaitUntilExistsTimeOut = 1;
 		        ie.TextField("noneexistingtextfieldid").TypeText("");
                 Assert.Fail("Expected ElementNotFoundException");
             }

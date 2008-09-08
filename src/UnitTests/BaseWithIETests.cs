@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 		[SetUp]
 		public virtual void TestSetUp()
 		{
-			Settings.Instance.Reset();
+			Settings.Reset();
 			if (!ie.Uri.Equals(TestPageUri))
 			{
 				ie.GoTo(TestPageUri);
@@ -55,7 +55,7 @@ namespace WatiN.Core.UnitTests
 		}
 	}
 
-	public class StealthSettings : Settings
+	public class StealthSettings : DefaultSettings
 	{
 		public StealthSettings()
 		{

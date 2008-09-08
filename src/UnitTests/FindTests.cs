@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 	    [SetUp]
 		public void SetUp()
 		{
-            Settings.Instance.Reset();
+            Settings.Reset();
 			_expectedPredicateCompareValue = null;
 		}
 #endif
@@ -639,7 +639,7 @@ namespace WatiN.Core.UnitTests
         public void FindByDefaultStringShouldReturnDefaultFromTheSetDefaultFindFactory()
         {
             // GIVEN
-            Settings.Instance.DefaultFindFactory = new MyTestDefaultFindFactory();
+            Settings.findByDefaultFactory = new MyTestDefaultFindFactory();
 
             // WHEN
             Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault("testValue");
@@ -652,7 +652,7 @@ namespace WatiN.Core.UnitTests
         public void FindByDefaultRegexShouldReturnDefaultFromTheSetDefaultFindFactory()
         {
             // GIVEN
-            Settings.Instance.DefaultFindFactory = new MyTestDefaultFindFactory();
+            Settings.findByDefaultFactory = new MyTestDefaultFindFactory();
 
             // WHEN
             Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault(new Regex("testValue"));
@@ -661,7 +661,7 @@ namespace WatiN.Core.UnitTests
             Assert.That(byDefault.AttributeName, Is.EqualTo(MyTestDefaultFindFactory.TEST_ATTRIBUTE));
         }
 
-	    public class MyTestDefaultFindFactory : IDefaultFindFactory
+	    public class MyTestDefaultFindFactory : IFindByDefaultFactory
 	    {
 	        public const string TEST_ATTRIBUTE = "testAttribute";
             

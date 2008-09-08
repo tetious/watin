@@ -233,7 +233,7 @@ namespace WatiN.Core
 
         /// <summary>
         /// Waits until the text is inside the HTML Body element contains the given <paramref name="text" />.
-        /// Will time out after <see name="Settings.Instance.WaitUntilExistsTimeOut" />
+        /// Will time out after <see name="Settings.WaitUntilExistsTimeOut" />
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns>
@@ -241,7 +241,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(string text)
         {
-            WaitUntilContainsText(text, Settings.Instance.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(text, Settings.WaitUntilExistsTimeOut);
         }
 
 	    /// <summary>
@@ -263,12 +263,12 @@ namespace WatiN.Core
                 Thread.Sleep(50);
             } while (!timer.Elapsed);
 
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.Instance.WaitUntilExistsTimeOut, text));
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.WaitUntilExistsTimeOut, text));
         }
 
         /// <summary>
         /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
-        /// Will time out after <see name="Settings.Instance.WaitUntilExistsTimeOut" />
+        /// Will time out after <see name="Settings.WaitUntilExistsTimeOut" />
         /// </summary>
         /// <param name="regex">The regular expression to match with.</param>
         /// <returns>
@@ -276,7 +276,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex)
         {
-            WaitUntilContainsText(regex, Settings.Instance.WaitUntilExistsTimeOut);
+            WaitUntilContainsText(regex, Settings.WaitUntilExistsTimeOut);
         }
 
 	    /// <summary>
@@ -298,7 +298,7 @@ namespace WatiN.Core
                 Thread.Sleep(50);
             } while (!timer.Elapsed);
 
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.Instance.WaitUntilExistsTimeOut, regex));
+            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex));
         }
 
 		/// <summary>

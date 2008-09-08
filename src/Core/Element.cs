@@ -60,7 +60,7 @@ namespace WatiN.Core
         /// <param name="predicate">The expression to use.</param>
         public void WaitUntil(Predicate<E> predicate)
         {
-            WaitUntil(Find.ByElement(predicate), Settings.Instance.WaitUntilExistsTimeOut);
+            WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
         }
 
         /// <summary>
@@ -622,7 +622,7 @@ namespace WatiN.Core
 		/// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
 		public void Highlight(bool doHighlight)
 		{
-			if (Settings.Instance.HighLightElement)
+			if (Settings.HighLightElement)
 			{
 				if (_originalcolor == null)
 				{
@@ -632,7 +632,7 @@ namespace WatiN.Core
 				if (doHighlight)
 				{
 					_originalcolor.Push(NativeElement.BackgroundColor);
-					SetBackgroundColor(Settings.Instance.HighLightColor);
+					SetBackgroundColor(Settings.HighLightColor);
 				}
 				else
 				{
@@ -741,12 +741,12 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Waits until the element exists or will time out after 30 seconds.
-		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitUntilExistsTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitUntilExistsTimeOut"/>
 		/// </summary>
 		public void WaitUntilExists()
 		{
 			// Wait 30 seconds max
-			WaitUntilExists(Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntilExists(Settings.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -760,12 +760,12 @@ namespace WatiN.Core
 
 		/// <summary>
 		/// Waits until the element no longer exists or will time out after 30 seconds.
-		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitUntilExistsTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitUntilExistsTimeOut"/>
 		/// </summary>
 		public void WaitUntilRemoved()
 		{
 			// Wait 30 seconds max
-			WaitUntilRemoved(Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntilRemoved(Settings.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -785,7 +785,7 @@ namespace WatiN.Core
 		/// <param name="expectedValue">The expected value.</param>
 		public void WaitUntil(string attributename, string expectedValue)
 		{
-			WaitUntil(attributename, expectedValue, Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntil(attributename, expectedValue, Settings.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -808,7 +808,7 @@ namespace WatiN.Core
 		/// <param name="expectedValue">The expected value.</param>
 		public void WaitUntil(string attributename, Regex expectedValue)
 		{
-			WaitUntil(attributename, expectedValue, Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntil(attributename, expectedValue, Settings.WaitUntilExistsTimeOut);
 		}
 
 		/// <summary>
@@ -830,7 +830,7 @@ namespace WatiN.Core
 		/// <param name="constraint">The BaseConstraint.</param>
 		public void WaitUntil(BaseConstraint constraint)
 		{
-			WaitUntil(constraint, Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntil(constraint, Settings.WaitUntilExistsTimeOut);
 		}
 
 #if !NET11
@@ -841,7 +841,7 @@ namespace WatiN.Core
 		/// <param name="predicate">The BaseConstraint.</param>
 		public void WaitUntil<E>(Predicate<E> predicate) where E : Element
 		{
-			WaitUntil(Find.ByElement(predicate), Settings.Instance.WaitUntilExistsTimeOut);
+			WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
 		}
 #endif
 		/// <summary>
@@ -1025,7 +1025,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Waits till the page load is complete. This should only be used on rare occasions
 		/// because WatiN calls this function for you when it handles events (like Click etc..)
-		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.Instance.WaitForCompleteTimeOut"/>
+		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitForCompleteTimeOut"/>
 		/// </summary>
 		public void WaitForComplete()
 		{

@@ -253,7 +253,7 @@ namespace WatiN.Core.InternetExplorer
 					return;
 				}
 
-				Thread.Sleep(Settings.Instance.SleepTime);
+				Thread.Sleep(Settings.SleepTime);
 			} while (!timeoutTimer.Elapsed);
 
 			throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);

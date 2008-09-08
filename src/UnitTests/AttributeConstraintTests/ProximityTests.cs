@@ -128,7 +128,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [Test, ExpectedException(typeof(ElementNotFoundException))]
         public void ShouldFailWhenTextIsNotOnPage() {
 			
-            Settings.Instance.WaitUntilExistsTimeOut = 1;
+            Settings.WaitUntilExistsTimeOut = 1;
             TextField inputDoesNotExist = ie.TextField( new ProximityTextConstraint(  "Aldm4em9dj54bnsvk49sk4ndlkDKj 4KVj FDS" ) );
             inputDoesNotExist.TypeText( "" );	// To activate the lookup
         }
@@ -137,7 +137,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldFailWhenTextIsPartOfAnHtmlElement() 
         {
 			
-            Settings.Instance.WaitUntilExistsTimeOut = 1;
+            Settings.WaitUntilExistsTimeOut = 1;
             TextField inputDoesNotExist = ie.TextField( new ProximityTextConstraint( "submitTable" ) );
             inputDoesNotExist.TypeText( "" );	// To activate the lookup
         }
@@ -185,7 +185,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [Test, ExpectedException(typeof(ElementNotFoundException))]
         public void ShouldFailWhenLabelContainsHtml() {
 			
-            Settings.Instance.WaitUntilExistsTimeOut = 1;
+            Settings.WaitUntilExistsTimeOut = 1;
             TextField inputFirstName = ie.TextField(new ProximityTextConstraint("First Name:<br />"));
             inputFirstName.TypeText( "" );	// To activate the lookup
 			
