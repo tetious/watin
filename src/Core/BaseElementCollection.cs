@@ -125,12 +125,12 @@ namespace WatiN.Core
 
 		public bool Exists(string elementId)
 		{
-			return Exists(Find.ById(elementId));
+			return Exists(Find.ByDefault(elementId));
 		}
 
 		public bool Exists(Regex elementId)
 		{
-			return Exists(Find.ById(elementId));
+            return Exists(Find.ByDefault(elementId));
 		}
 
 		public bool Exists(BaseConstraint findBy)
