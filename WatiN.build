@@ -62,9 +62,9 @@ Copyright 2006-2007 Jeroen van Menen
   <target name="build">
     <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
 
-    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
+    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}" keyfile="${base.dir}\WatiNKey.snk"/>
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}">
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}" keyfile="${base.dir}\WatiNKey.snk">
       <sources>
         <include name="${core.source.dir}\**.cs"/>
       </sources>
@@ -76,14 +76,16 @@ Copyright 2006-2007 Jeroen van Menen
         <include name="System.Windows.Forms.dll"/>
       </references>
       <nowarn>
+        <warning number="0618" />
         <warning number="1591" />
+        <warning number="1616" />
       </nowarn>
     </csc>
 
     <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
     <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}">
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}" keyfile="${base.dir}\WatiNKey.snk">
       <sources>
         <include name="${unittests.source.dir}\**.cs"/>
       </sources>
@@ -95,6 +97,10 @@ Copyright 2006-2007 Jeroen van Menen
         <include name="${libraries.dir}\Rhino.Mocks.dll"/>
         <include name="System.dll"/>
       </references>
+      <nowarn>
+        <warning number="0618" />
+        <warning number="1616" />
+      </nowarn>
     </csc>
 
     <copy file="${libraries.dir}\nunit.framework.dll" todir="${bin.dir}" />
@@ -116,6 +122,7 @@ Copyright 2006-2007 Jeroen van Menen
   <target name="set-net-2.0-version">
     <property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
     <property name="net.framework.fullname"         value=".Net 2.0" />
+    <property name="project.properties.define"      value="" />
     <property name="libraries.dir"                  value="${base.dir}\lib\Net\2.0" />
     <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
 

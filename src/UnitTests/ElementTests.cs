@@ -896,53 +896,6 @@ namespace WatiN.Core.UnitTests
             ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
         }
 
-//        [Test]
-//        public void SpeedTest()
-//        {
-//            System.GC.Collect();
-//            var ticksStart = DateTime.Now.Ticks;
-//            var nativeElement = ie.Div(Find.First()).NativeElement;
-//            var idivElement = (IHTMLDivElement) nativeElement.NativeElement;
-//            var ihtmlElement = (IHTMLElement) nativeElement.NativeElement;
-//
-//            for (var i = 0; i < 500; i++)
-//            
-//                var element1 = Div.New(ie, nativeElement);
-////                var element1 = Div.New(ie, ihtmlElement);
-//            }
-//
-//            var ticksEnd = DateTime.Now.Ticks;
-//            Console.WriteLine(ticksEnd-ticksStart);
-//            Console.WriteLine((ticksEnd-ticksStart)/500);
-//
-////            var element = TypedElementFactory.CreateTypedElement(ie, nativeElement);
-//            System.GC.Collect(); 
-//            ticksStart = DateTime.Now.Ticks;
-//            
-//            for (var i = 0; i < 500; i++)
-//            {
-//                var element1 = TypedElementFactory.CreateTypedElement(ie, nativeElement);
-//            }
-//
-//            ticksEnd = DateTime.Now.Ticks;
-//            Console.WriteLine(ticksEnd-ticksStart);
-//            Console.WriteLine((ticksEnd-ticksStart)/500);
-//
-//            System.GC.Collect(); 
-//            ticksStart = DateTime.Now.Ticks;
-//            
-//            for (var i = 0; i < 50000; i++)
-//            {
-//                Div element1 = null;
-//                element1 = new Div(ie, idivElement);
-//            }
-//
-//            ticksEnd = DateTime.Now.Ticks;
-//            Console.WriteLine(ticksEnd-ticksStart);
-//            Console.WriteLine((ticksEnd-ticksStart)/5000);
-//
-//        }
-
 #if !NET11
         [Test]
         public void AncestorGenericType()
@@ -979,12 +932,13 @@ namespace WatiN.Core.UnitTests
             Assert.That(ancestor.Id, Iz.EqualTo("Table1"));
         }
 
+#if !NET11
         [Test]
         public void AncestorGenericTypeAndPredicateShouldReturnTypedElement()
         {
             ie.GoTo(TablesUri);
             TableRow tableRow = ie.TableRow(Find.ById("2"));
-            Element ancestor = tableRow.Ancestor(delegate(Table table) { return table.Id == "Table1"; });
+            Element ancestor = tableRow.Ancestor<Table>(delegate(Table table) { return table.Id == "Table1"; });
           
             Assert.IsInstanceOfType (typeof (Table), ancestor);
             Assert.That(ancestor.Id, Iz.EqualTo("Table1"));
@@ -994,7 +948,7 @@ namespace WatiN.Core.UnitTests
         public void TableOfElementE()
         {
             Element table = ie.Table("table1");
-            table.WaitUntil(delegate(Table table1) { return table1.Enabled; });
+            table.WaitUntil<Table>(delegate(Table table1) { return table1.Enabled; });
 //            table.WaitUntil((Table table1) => table1.Enabled);
 
             ElementsContainer<Table> table2 = ie.Table("table1");
@@ -1004,7 +958,7 @@ namespace WatiN.Core.UnitTests
             Table table3 = ie.Table("table1");
             table3.WaitUntil(IsEnabled);
         }
-
+#endif
         private static bool IsEnabled(Table table)
         {
             return table.Enabled;

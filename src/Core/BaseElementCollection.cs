@@ -28,15 +28,18 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-	/// <summary>
 #if NET11
+	/// <summary>
 	/// This delegate is mainly used by <see cref="BaseElementCollection"/> to 
-#else
-    /// This delegate is mainly used by <see cref="BaseElementCollection<T>"/> to 
-#endif
     /// delegate the creation of a specialized element type. 
 	/// </summary>
-	public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
+#else
+    /// <summary>
+    /// This delegate is mainly used by BaseElementCollectionT to 
+    /// delegate the creation of a specialized element type. 
+	/// </summary>
+#endif
+    public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
 
 	/// <summary>
 	/// This class is mainly used by Watin internally as the base class for all 

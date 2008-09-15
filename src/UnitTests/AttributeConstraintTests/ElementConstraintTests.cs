@@ -62,15 +62,19 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             mocks.VerifyAll();
         }
 
+#if !NET11
         [Test]
         public void ShouldEvaluateAlsoTheAndConstraint()
         {
-            Link link1 = ie.Link(Find.ByElement(l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://watin.sourceforge.net"));
-            Link link2 = ie.Link(Find.ByElement(l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://www.microsoft.com/"));
+            Link link1 = ie.Link(Find.ByElement(
+                                     delegate(Element l) { return l.Id != null && l.Id.StartsWith("testlink"); }) && Find.ByUrl("http://watin.sourceforge.net"));
+            Link link2 = ie.Link(Find.ByElement(
+                                     delegate(Element l) { return l.Id != null && l.Id.StartsWith("testlink"); }) && Find.ByUrl("http://www.microsoft.com/"));
 
             Assert.That(link1.Url, Iz.EqualTo("http://watin.sourceforge.net/"));
             Assert.That(link2.Url, Iz.EqualTo("http://www.microsoft.com/"));
         }
+#endif
 
         public class ElementComparerMock : ICompareElement 
         {

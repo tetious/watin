@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if SPEEDTEST
+using System;
 using NUnit.Framework;
 using System.Linq;
 using NUnit.Framework.SyntaxHelpers;
@@ -82,6 +83,52 @@ namespace WatiN.Core.UnitTests.DotNet35
             }
         }
 
+//        [Test]
+//        public void SpeedTest()
+//        {
+//            System.GC.Collect();
+//            var ticksStart = DateTime.Now.Ticks;
+//            var nativeElement = ie.Div(Find.First()).NativeElement;
+//            var idivElement = (IHTMLDivElement) nativeElement.NativeElement;
+//            var ihtmlElement = (IHTMLElement) nativeElement.NativeElement;
+//
+//            for (var i = 0; i < 500; i++)
+//            
+//                var element1 = Div.New(ie, nativeElement);
+////                var element1 = Div.New(ie, ihtmlElement);
+//            }
+//
+//            var ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/500);
+//
+////            var element = TypedElementFactory.CreateTypedElement(ie, nativeElement);
+//            System.GC.Collect(); 
+//            ticksStart = DateTime.Now.Ticks;
+//            
+//            for (var i = 0; i < 500; i++)
+//            {
+//                var element1 = TypedElementFactory.CreateTypedElement(ie, nativeElement);
+//            }
+//
+//            ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/500);
+//
+//            System.GC.Collect(); 
+//            ticksStart = DateTime.Now.Ticks;
+//            
+//            for (var i = 0; i < 50000; i++)
+//            {
+//                Div element1 = null;
+//                element1 = new Div(ie, idivElement);
+//            }
+//
+//            ticksEnd = DateTime.Now.Ticks;
+//            Console.WriteLine(ticksEnd-ticksStart);
+//            Console.WriteLine((ticksEnd-ticksStart)/5000);
+//
+//        }
         
 
 
@@ -187,3 +234,4 @@ namespace WatiN.Core.UnitTests.DotNet35
         }
     }
 }
+#endif

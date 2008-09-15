@@ -78,8 +78,8 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table rows that are direct children of this <see cref="Table"/>, leaving
         /// out table rows of any nested tables within this <see cref="Table"/>. If the <see cref="Table"/>
-        /// has multiple <see cref="TableBody"/> elements, the <see cref="TableRowCollection"/> contains 
-        /// all the rows of these <see cref="TableBody"/> elements.
+        /// has multiple <see cref="Core.TableBody"/> elements, the <see cref="TableRowCollection"/> contains 
+        /// all the rows of these <see cref="Core.TableBody"/> elements.
         /// </summary>
         /// <value>The table rows collection.</value>
         public TableRowCollection TableRowsDirectChildren
@@ -144,7 +144,7 @@ namespace WatiN.Core
 		/// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in the
-        /// first <see cref="TableBody"/> including rows in nested tables.
+        /// first <see cref="Core.TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="findText">The text to find.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -165,7 +165,7 @@ namespace WatiN.Core
 		/// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in all
-        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
 		/// </summary>
 		/// <param name="findText">The text to find.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -193,7 +193,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
-        /// first <see cref="TableBody"/> including rows in nested tables.
+        /// first <see cref="Core.TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -210,7 +210,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
-        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -227,7 +227,7 @@ namespace WatiN.Core
 		/// <summary>
         /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
-        /// first <see cref="TableBody"/> including rows in nested tables.
+        /// first <see cref="Core.TableBody"/> including rows in nested tables.
 		/// </summary>
 		/// <param name="comparer">The comparer that the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -244,7 +244,7 @@ namespace WatiN.Core
 		/// <summary>
         /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
-        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
 		/// </summary>
 		/// <param name="comparer">The comparer that the cell text must match.</param>
 		/// <param name="inColumn">Index of the column to find the text in.</param>
@@ -262,7 +262,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
-        /// first <see cref="TableBody"/> including rows in nested tables.
+        /// first <see cref="Core.TableBody"/> including rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -275,7 +275,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
-        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -288,7 +288,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
-        /// first <see cref="TableBody"/> including rows in nested tables.
+        /// first <see cref="Core.TableBody"/> including rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
@@ -301,7 +301,7 @@ namespace WatiN.Core
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned.  This method will look for rows in all
-        /// <see cref="TableBody"/> elements but will ignore rows in nested tables.
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
         /// </summary>
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>

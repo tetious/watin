@@ -1223,7 +1223,7 @@ namespace WatiN.Core
 		/// Internet Explorer maintains an internal cookie cache that does not immediately
 		/// expire when cookies are cleared.  This is the case even when the cookies are
 		/// cleared using the Internet Options dialog.  If cookies have been used by
-		/// the current browser session it may be necessary to <see cref="Reopen" /> the
+		/// the current browser session it may be necessary to <see cref="Reopen()" /> the
 		/// browser to ensure the internal cookie cache is flushed.  Therefore it is
 		/// recommended to clear cookies at the beginning of the test before navigating
 		/// to any pages (other than "about:blank") to avoid having to reopen the browser.
@@ -1239,7 +1239,7 @@ namespace WatiN.Core
 		/// ie.Link(Find.ByText("Sign In")).Click();
 		/// </code>
 		/// </example>
-		/// <seealso cref="Reopen"/>
+		/// <seealso cref="Reopen()"/>
 		public void ClearCookies()
 		{
 			Logger.LogAction("Clearing cookies for all sites.");
@@ -1255,7 +1255,7 @@ namespace WatiN.Core
 		/// Internet Explorer maintains an internal cookie cache that does not immediately
 		/// expire when cookies are cleared.  This is the case even when the cookies are
 		/// cleared using the Internet Options dialog.  If cookies have been used by
-		/// the current browser session it may be necessary to <see cref="Reopen" /> the
+		/// the current browser session it may be necessary to <see cref="Reopen()" /> the
 		/// browser to ensure the internal cookie cache is flushed.  Therefore it is
 		/// recommended to clear cookies at the beginning of the test before navigating
 		/// to any pages (other than "about:blank") to avoid having to reopen the browser.
@@ -1272,7 +1272,7 @@ namespace WatiN.Core
 		/// ie.Link(Find.ByText("Sign In")).Click();
 		/// </code>
 		/// </example>
-		/// <seealso cref="Reopen"/>
+		/// <seealso cref="Reopen()"/>
 		public void ClearCookies(string url)
 		{
 			if (url == null)
@@ -1298,7 +1298,7 @@ namespace WatiN.Core
 		/// ie.Link(Find.ByText("Sign In")).Click();
 		/// </code>
 		/// </example>
-		/// <seealso cref="Reopen"/>
+		/// <seealso cref="Reopen()"/>
 		public void ClearCache()
 		{
 			Logger.LogAction("Clearing browser cache.");

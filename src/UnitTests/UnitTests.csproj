@@ -1,559 +1,389 @@
-<VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.3077"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{D6E231B3-28D9-4F73-9586-738FB528B4DB}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = ""
-                AssemblyKeyContainerName = ""
-                AssemblyName = "WatiN.Core.UnitTests"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Library"
-                PreBuildEvent = ""
-                PostBuildEvent = ""
-                RootNamespace = "WatiN.Core.UnitTests"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = ""
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;NET11"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "bin\Debug\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "bin\Release\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\Net\1.1\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "Core"
-                    Project = "{217E2D34-F6DF-431B-AC5A-B368F481A530}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Microsoft.mshtml"
-                    AssemblyName = "Microsoft.mshtml"
-                    HintPath = "..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
-                    AssemblyFolderKey = "hklm\primary interop assemblies"
-                />
-                <Reference
-                    Name = "Rhino.Mocks"
-                    AssemblyName = "Rhino.Mocks"
-                    HintPath = "..\..\lib\Net\1.1\Rhino.Mocks.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "Interop.SHDocVw"
-                    AssemblyName = "Interop.SHDocVw"
-                    HintPath = "..\..\lib\Net\1.1\Interop.SHDocVw.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "App.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BaseElementCollectionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BaseWatiNTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BaseWithIETests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ButtonTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CheckBoxTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DivTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DocumentTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DomContainerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ElementAttributeBagTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ElementStyleTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ElementTagTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ElementTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FileUploadTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FindTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FormTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FrameCrossDomainTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FrameTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "HTMLDialogFindByTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "HTMLDialogTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IETests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IFramesTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ImageTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LabelTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LinkTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LoggerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MockAttributeBag.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ParaTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RadioButtonTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SelectListTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SettingsTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SpanTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TableBodyTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TableCellTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TableRowTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TableTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TextFieldTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Utils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WatiN.Core.UnitTests.dll.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\BaseConstraintTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\ElementConstraintTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\EvenMoreComplexMultipleAttributeConstraintsTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\FindByMultipleAttributeConstraintsTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\IndexConstraintTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\MyTestConstraint.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\NotConstraintTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AttributeConstraintTests\ProximityTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\BoolComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\PredicateComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\RegexComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\StringComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\StringContainsAndCaseInsensitiveComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\StringEqualsAndCaseInsensitiveComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ComparerTests\UriComparerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\AlertAndConfirmDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\AlertDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\ConfirmDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\DialogWatcherTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\FileDownloadHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\LogonDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\ModalPopupExtenderTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\PromptDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\ReturnJavaDialogHandlerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\SecurityDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\SimpleJavaDialogHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\VbScriptMsgBoxHandlerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DialogHandlerTests\WinButtonTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "html\~^+{}[].txt"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\CrossDomainFrameset.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\formsubmit.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\Frameset.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\FramesetWithinFrameset.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\images.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\Index.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\intro.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\main.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\OnBeforeUnloadJavaDialog.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\popup.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\Tables.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\TestEvents.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\theApp.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\iframes\leftpage.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\iframes\main.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\iframes\middlepage.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\iframes\rightpage.html"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\images\watin.jpg"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "html\images\watinwebsite.jpg"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "IETests\IEElementFinderTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D6E231B3-28D9-4F73-9586-738FB528B4DB}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>WatiN.Core.UnitTests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WatiN.Core.UnitTests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>0.0</OldToolsVersion>
+    <PublishUrl>http://localhost/WatiN.Core.UnitTests/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.SHDocVw">
+      <Name>Interop.SHDocVw</Name>
+      <HintPath>..\..\lib\Net\1.1\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml">
+      <Name>Microsoft.mshtml</Name>
+      <HintPath>..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
+      <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <Name>nunit.framework</Name>
+      <HintPath>..\..\lib\Net\1.1\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <Name>Rhino.Mocks</Name>
+      <HintPath>..\..\lib\Net\1.1\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Name>Core</Name>
+      <Project>{217E2D34-F6DF-431B-AC5A-B368F481A530}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="WatiN.Core.UnitTests.dll.config" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\BaseConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ElementConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\EvenMoreComplexMultipleAttributeConstraintsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\FindByMultipleAttributeConstraintsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\IndexConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\MyTestConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\NotConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ProximityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseElementCollectionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseWatiNTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseWithIETests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CheckBoxTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\BoolComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\PredicateComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\RegexComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringContainsAndCaseInsensitiveComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringEqualsAndCaseInsensitiveComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\UriComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultSettingsTests.cs" />
+    <Compile Include="DialogHandlerTests\AlertAndConfirmDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\AlertDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ConfirmDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\DialogWatcherTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\FileDownloadHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\LogonDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ModalPopupExtenderTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\PromptDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ReturnJavaDialogHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\SecurityDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\SimpleJavaDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\VbScriptMsgBoxHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\WinButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DivTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DomContainerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DotNet35Tests.cs" />
+    <Compile Include="ElementAttributeBagTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElementStyleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElementTagTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElementTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileUploadTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FindTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FormTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameCrossDomainTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HTMLDialogFindByTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HTMLDialogTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IETests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IETests\IEElementFinderTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFramesTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LabelTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LoggerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MockAttributeBag.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParaTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RadioButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SelectListTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SettingsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SpanTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableBodyTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableCellTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableRowTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextFieldTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="html\CrossDomainFrameset.html" />
+    <Content Include="html\formsubmit.html" />
+    <Content Include="html\Frameset.html" />
+    <Content Include="html\FramesetWithinFrameset.html" />
+    <Content Include="html\iframes\leftpage.html" />
+    <Content Include="html\iframes\main.html" />
+    <Content Include="html\iframes\middlepage.html" />
+    <Content Include="html\iframes\rightpage.html" />
+    <Content Include="html\images.html" />
+    <Content Include="html\images\watin.jpg" />
+    <Content Include="html\images\watinwebsite.jpg" />
+    <Content Include="html\Index.html" />
+    <Content Include="html\intro.html" />
+    <Content Include="html\main.html" />
+    <Content Include="html\OnBeforeUnloadJavaDialog.html" />
+    <Content Include="html\popup.html" />
+    <Content Include="html\Tables.html" />
+    <Content Include="html\TestEvents.html" />
+    <Content Include="html\theApp.html" />
+    <Content Include="html\~^+{}[].txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

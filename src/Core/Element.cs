@@ -1191,8 +1191,8 @@ namespace WatiN.Core
 		/// Gets the closest ancestor of the specified Tag and AttributConstraint.
 		/// </summary>
 		/// <param name="tagName">The tag of the ancestor.</param>
-		/// <param name="findBy">The AttributConstraint to match with.</param>
-		/// <returns>
+        /// <param name="predicate">The constraint to match with.</param>
+        /// <returns>
 		/// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
 		/// If no specific type is available, an element of type ElementContainer will be returned. 
 		/// If there is no ancestor that matches Tag and BaseConstraint, <code>null</code> is returned.</returns>

@@ -46,10 +46,7 @@ namespace WatiN.Core
 			if (_elementConstructors.Contains(elementTag))
 			{
 				ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
-				if (constructorInfo != null)
-				{
-					return (Element)constructorInfo.Invoke(new object[] { returnElement });
-				}
+				return (Element)constructorInfo.Invoke(new object[] { returnElement });
 			}
 
 			return returnElement;
