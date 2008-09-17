@@ -20,8 +20,21 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
 {
+    /// <summary>
+    /// Use this class as the base to create your own comparer classes with. 
+    /// Overide the <see cref name="BaseComparer.Compare(string)"/> method
+    /// and implement the desired compare logic.
+    /// </summary>
 	public abstract class BaseComparer : ICompare
 	{
+
+        /// <summary>
+        /// Compares the specified value. You need to override this method
+        /// and provide your own implementation for the comparison with the 
+        /// given <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>Should return <c>true</c> or <c>false</c>, which is the default.</returns>
 		public virtual bool Compare(string value)
 		{
 			return false;

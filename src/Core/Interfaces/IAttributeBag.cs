@@ -18,8 +18,15 @@
 
 namespace WatiN.Core.Interfaces
 {
+
+	/// <summary>
+	/// Used to retreive attribute values from any class that implements this interface
+	/// </summary>
 	public interface IAttributeBag
 	{
+		/// <summary>
+		/// Should return the value for the given attribute name
+		/// </summary>
 		string GetValue(string attributename);
 	}
 }

@@ -20,9 +20,18 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
 {
+    /// <summary>
+    /// This comparer will always return <c>true</c> no matter what value it is given to
+    /// compare with.
+    /// </summary>
 	public class AlwaysTrueComparer : ICompare
 	{
-		public bool Compare(string value)
+        /// <summary>
+        /// Accepts a value bit it will be ignored
+        /// </summary>
+        /// <param name="ignoredValue">The ignored value.</param>
+        /// <returns>Will always return <c>true</c></returns>
+		public bool Compare(string ignoredValue)
 		{
 			return true;
 		}

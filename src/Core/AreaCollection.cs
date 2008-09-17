@@ -59,6 +59,11 @@ namespace WatiN.Core
 		}
 
 #if !NET11
+		/// <summary>
+		/// Returns a new <see cref="AreaCollection" /> filtered by the given <see cref="predicate" />.
+		/// </summary>
+		/// <param name="predicate">A predicate which filters the elements.</param>
+		/// <returns>The filtered collection.</returns>
         public AreaCollection Filter(Predicate<Area> predicate)
         {
             return new AreaCollection(domContainer, DoFilter(Find.ByElement(predicate)));
