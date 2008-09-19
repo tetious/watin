@@ -31,7 +31,7 @@ namespace WatiN.Core.Constraints
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-            Element element = attributeBag as Element;
+            Element element = null;
 
             ElementAttributeBag elementAttributeBag = attributeBag as ElementAttributeBag;
             if (elementAttributeBag != null)

@@ -49,7 +49,7 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnTrue()
         {
             _returnValue = true;
-            PredicateComparer comparer = new PredicateComparer(CallThisMethod);
+            PredicateStringComparer comparer = new PredicateStringComparer(CallThisMethod);
 
             Assert.That(comparer.Compare("test value"), Is.True);
             Assert.That(_called, Is.True);
@@ -60,7 +60,7 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnFalse()
         {
             _returnValue = false;
-            PredicateComparer comparer = new PredicateComparer(CallThisMethod);
+            PredicateStringComparer comparer = new PredicateStringComparer(CallThisMethod);
 
             Assert.That(comparer.Compare("some input"), Is.False);
             Assert.That(_called, Is.True);
@@ -72,26 +72,6 @@ namespace WatiN.Core.UnitTests
             _called = true;
             _value = value;
             return _returnValue;
-        }
-
-        [Test]
-        public void ElementPredicateShouldBeCalledAndReturnTrue()
-        {
-            _returnValue = true;
-            PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
-
-            Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
-            Assert.That(_called, Is.True);
-        }
-
-        [Test]
-        public void ElementPredicateShouldBeCalledAndReturnFalse()
-        {
-            _returnValue = false;
-            PredicateComparer comparer = new PredicateComparer(CallElementCompareMethod);
-
-            Assert.That(comparer.Compare(ie.Button(Find.First())), Is.EqualTo(_returnValue));
-            Assert.That(_called, Is.True);
         }
 
         public bool CallElementCompareMethod(Element element)

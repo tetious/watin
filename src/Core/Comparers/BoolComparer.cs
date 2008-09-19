@@ -23,6 +23,10 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class BoolComparer : StringEqualsAndCaseInsensitiveComparer
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BoolComparer"/> class.
+        /// </summary>
+        /// <param name="value">The given value will be used for the comparision(s) done by <see cref="BoolComparer.Compare(string)"/>.</param>
 		public BoolComparer(bool value) : base(value.ToString()) {}
 	}
 }

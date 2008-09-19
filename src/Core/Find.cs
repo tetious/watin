@@ -94,7 +94,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByAlt(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(altAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(altAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -148,7 +148,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByClass(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(classNameAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(classNameAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -209,7 +209,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByFor(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(forAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(forAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -256,7 +256,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ById(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(idAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(idAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -316,7 +316,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByName(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(nameAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(nameAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -363,7 +363,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByText(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(textAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(textAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -442,7 +442,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByUrl(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(hrefAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(hrefAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -489,7 +489,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByTitle(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(titleAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(titleAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -542,7 +542,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint ByValue(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(valueAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(valueAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -589,7 +589,7 @@ namespace WatiN.Core
 	/// </example>
 		public static AttributeConstraint BySrc(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(srcAttribute, new PredicateComparer(predicate));
+			return new AttributeConstraint(srcAttribute, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -640,7 +640,7 @@ namespace WatiN.Core
 	/// </example>
 	public static AttributeConstraint By(string attributeName, Predicate<string> predicate)
 	{
-		return new AttributeConstraint(attributeName, new PredicateComparer(predicate));
+		return new AttributeConstraint(attributeName, new PredicateStringComparer(predicate));
 	}
 #endif
 
@@ -691,7 +691,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByStyle(string styleAttributeName, Predicate<string> predicate)
 		{
-			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateComparer(predicate));
+			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateStringComparer(predicate));
 		}
 #endif
 
@@ -725,7 +725,7 @@ namespace WatiN.Core
 		/// <returns>An ElementConstraint instance</returns>
 		public static ElementConstraint ByElement<T>(Predicate<T> predicate) where T:Element
 		{
-			return new ElementConstraint(new PredicateComparer<T>(predicate));
+			return new ElementConstraint(new PredicateElementComparer<T>(predicate));
 		}
 #endif	
     

@@ -269,7 +269,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public TableRow FindRow(Predicate<string> predicate, int inColumn)
         {
-            return FindRow(new PredicateComparer(predicate), inColumn);
+            return FindRow(new PredicateStringComparer(predicate), inColumn);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public TableRow FindRowInDirectChildren(Predicate<string> predicate, int inColumn)
         {
-            return FindRowInDirectChildren(new PredicateComparer(predicate), inColumn);
+            return FindRowInDirectChildren(new PredicateStringComparer(predicate), inColumn);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
         {
-            return FindRow(new PredicateComparer<TableCell>(predicate), inColumn);
+            return FindRow(new PredicateElementComparer<TableCell>(predicate), inColumn);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public TableRow FindRowInDirectChildren(Predicate<TableCell> predicate, int inColumn)
         {
-            return FindRowInDirectChildren(new PredicateComparer<TableCell>(predicate), inColumn);
+            return FindRowInDirectChildren(new PredicateElementComparer<TableCell>(predicate), inColumn);
         }
 #endif
 
