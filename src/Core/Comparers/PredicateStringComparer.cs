@@ -22,7 +22,7 @@ using System;
 namespace WatiN.Core.Comparers
 {
     /// <summary>
-    /// Class that supports comparing using a <see cref="Predicate{String}"/>.
+    /// This class supports comparing string values using a <see cref="Predicate{String}"/>.
     /// </summary>
 	public class PredicateStringComparer : BaseComparer
 	{
@@ -38,10 +38,10 @@ namespace WatiN.Core.Comparers
 		}
 
         /// <summary>
-        /// Passes the given <paramref name="value"/> to the string predicte to do the actual comparison
+        /// Passes the given <paramref name="value"/> to the string predicate to do the actual comparison
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">A string value</param>
+        /// <returns>The result of the comparison done by the predicate</returns>
         public override bool Compare(string value)
 		{
 			return _compareString.Invoke(value);

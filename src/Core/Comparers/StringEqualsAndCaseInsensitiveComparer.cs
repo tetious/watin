@@ -19,7 +19,9 @@
 namespace WatiN.Core.Comparers
 {
 	/// <summary>
-	/// Class that supports a simple matching of two strings.
+	/// Class that supports a simple matching of two strings. For a match, the given strings
+	/// should be equal (this includes the casing of the strings).
+	/// You can also use <seealso cref="StringComparer(string, bool)"/>.
 	/// </summary>
 	public class StringEqualsAndCaseInsensitiveComparer : StringComparer
 	{

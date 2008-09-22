@@ -29,8 +29,20 @@ namespace WatiN.Core.Comparers
 		private readonly bool _ignorecase;
 		protected string valueToCompareWith;
 
-		public StringComparer(string value) : this(value, false) {}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringComparer"/> class.
+        /// The string comparison done by <see cref="Compare(string)"/> will ignore any case differences.
+        /// </summary>
+        /// <param name="value">The value used to compare against.</param>
+        public StringComparer(string value) : this(value, false) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringComparer"/> class and allows
+        /// to specify the behavior regarding case sensitive comparisons.
+        /// </summary>
+        /// <param name="value">The value used to compare against.</param>
+        /// <param name="ignorecase">if set to <c>false</c> <see cref="Compare(string)"/>
+        /// will also check the casing of the <see cref="string"/>.</param>
 		public StringComparer(string value, bool ignorecase)
 		{
 			_ignorecase = ignorecase;
@@ -42,6 +54,11 @@ namespace WatiN.Core.Comparers
 			valueToCompareWith = value;
 		}
 
+        /// <summary>
+        /// Compares the specified value. 
+        /// </summary>
+        /// <param name="value">The value to compare with.</param>
+        /// <returns>The result of the comparison.</returns>
 		public override bool Compare(string value)
 		{
 			if (value == null) return false;
@@ -49,6 +66,12 @@ namespace WatiN.Core.Comparers
 			return (String.Compare(value, valueToCompareWith, _ignorecase, CultureInfo.InvariantCulture) == 0);
 		}
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
 		public override string ToString()
 		{
 			return valueToCompareWith;

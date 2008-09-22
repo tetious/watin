@@ -24,15 +24,28 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
 {
+    /// <summary>
+    /// This class supports comparing classes op type <see cref="Element"/> using a <see cref="Predicate{E}"/>.
+    /// </summary>
+    /// <typeparam name="E">An instance or sub type of type <see cref="Element"/></typeparam>
     public class PredicateElementComparer<E> : BaseComparer, ICompareElement where E : Element
     {
         private readonly Predicate<E> _compareElement;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PredicateElementComparer&lt;E&gt;"/> class.
+        /// </summary>
+        /// <param name="predicate">The predicate will be used by <see cref="Compare(Element)"/>.</param>
         public PredicateElementComparer(Predicate<E> predicate)
         {
             _compareElement = predicate;	
         }
 
+        /// <summary>
+        /// Compares the specified element using the predicate passed in as parameter in the constructor.
+        /// </summary>
+        /// <param name="element">The element to evaluate.</param>
+        /// <returns>The result of the comparison done by the predicate</returns>
         public virtual bool Compare(Element element)
         {
             try

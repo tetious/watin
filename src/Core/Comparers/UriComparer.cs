@@ -49,6 +49,13 @@ namespace WatiN.Core.Comparers
 			_ignoreQuery = ignoreQuery;
 		}
 
+        /// <summary>
+        /// Compares the specified value. 
+        /// </summary>
+        /// <param name="value">The url to compare with.</param>
+        /// <returns>
+        /// Should return <c>true</c> or <c>false</c>, which is the default.
+        /// </returns>
 		public override bool Compare(string value)
 		{
 			if (UtilityClass.IsNullOrEmpty(value)) return false;
@@ -68,14 +75,13 @@ namespace WatiN.Core.Comparers
 				// compare without modification
 				return uriToCompareWith.Equals(url);
 			}
-			else
-			{
-				// trim querystrings
-				string trimmedUrl = TrimQueryString(url);
-				string trimmedUrlToCompareWith = TrimQueryString(uriToCompareWith);
-				// compare trimmed urls.
-				return (string.Compare(trimmedUrl, trimmedUrlToCompareWith, true) == 0);
-			}
+		
+            // trim querystrings
+		    string trimmedUrl = TrimQueryString(url);
+		    string trimmedUrlToCompareWith = TrimQueryString(uriToCompareWith);
+		    
+            // compare trimmed urls.
+		    return (string.Compare(trimmedUrl, trimmedUrlToCompareWith, true) == 0);
 		}
 
 		private static string TrimQueryString(Uri url)
@@ -83,6 +89,12 @@ namespace WatiN.Core.Comparers
 			return url.AbsoluteUri.Split('?')[0];
 		}
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
 		public override string ToString()
 		{
 			return uriToCompareWith.AbsoluteUri;

@@ -25,11 +25,21 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class StringContainsAndCaseInsensitiveComparer : StringComparer
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringContainsAndCaseInsensitiveComparer"/> class.
+        /// </summary>
+        /// <param name="value">The value used to compare against.</param>
 		public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
 		{
 			valueToCompareWith = value.ToLower();
 		}
 
+        /// <summary>
+        /// Checks if the given <paramref name="value"/> contains the string to compare against.
+        /// Comparison is done case insensitive.
+        /// </summary>
+        /// <param name="value">The value to compare with.</param>
+        /// <returns>The result of the comparison.</returns>
 		public override bool Compare(string value)
 		{
 			if (value == null)
