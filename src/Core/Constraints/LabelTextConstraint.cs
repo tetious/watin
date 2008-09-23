@@ -18,10 +18,9 @@
 
 // This constraint class is kindly donated by Seven Simple Machines
 
-using System.Globalization;
+using System.Collections;
 using mshtml;
 using WatiN.Core.Comparers;
-
 
 namespace WatiN.Core.Constraints
 {
@@ -32,52 +31,72 @@ namespace WatiN.Core.Constraints
 	/// </summary>
 	/// <example>
 	/// This shows how to find a text field with an associated label containing the text "User name:".
-	/// <code>ie.TextField( new LabelTextConstraint("User name:") )
-	///              .TypeText("jsmythe")</code>
+	/// <code>ie.TextField( new LabelTextConstraint("User name:") ).TypeText("MyUserName")</code>
+	/// or use
+    /// <code>ie.TextField(Find.ByLabelText("User name:")).TypeText("MyUserName")</code>
 	/// </example>
 	public class LabelTextConstraint : AttributeConstraint
 	{
 		private string labelText = string.Empty;
-		private IHTMLElementCollection labelElements = null;
+        private Hashtable labelIdsWithMatchingText;
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
-		/// </summary>
+		/// </summary
 		/// <param name="labelText">The text that represents the label for the form element.</param>
 		public LabelTextConstraint( string labelText ) : base( Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
 		{
-			this.labelText = labelText;
+			this.labelText = labelText.Trim();
 		}
-		
-		public override bool Compare(Interfaces.IAttributeBag attributeBag)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attributeBag">Value to compare with</param>
+        /// <returns>
+        /// 	<c>true</c> if the searched for value equals the given value
+        /// </returns>
+        protected override bool DoCompare(Interfaces.IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
 			IHTMLElement element = ((ElementAttributeBag) attributeBag).IHTMLElement;
 			
 			// Get all elements and filter this for Labels
-			// Making this a class member only increased performance about 3%
-			if( labelElements == null ) {
-				IHTMLElementCollection allElements = (IHTMLElementCollection) ((IHTMLDocument2)element.document).all;
-				labelElements = (IHTMLElementCollection) allElements.tags(ElementsSupport.LabelTagName);
-			}
+            if (labelIdsWithMatchingText == null)
+            {
+                InitLabelIdsWithMatchingText(element);
+            }
 
-			// Get the list of id's of controls that these labels are for
-			for( int i = 0; i < labelElements.length; i++ ) 
-			{
-				IHTMLElement label = (IHTMLElement)labelElements.item( i, null );
-				// Return a match if we find any label element with a For tag matching this element's ID
-				if( ((IHTMLLabelElement)label).htmlFor == element.id && 
-                    label.innerText.ToLower(CultureInfo.InvariantCulture).Trim() == labelText.ToLower(CultureInfo.InvariantCulture).Trim() 
-				  ) return true;
-			}			
-			return false;
+            return labelIdsWithMatchingText.Contains(element.id);
 		}
-		
+
+        private void InitLabelIdsWithMatchingText(IHTMLElement element)
+        {
+            labelIdsWithMatchingText = new Hashtable();
+            
+            var htmlDocument = (IHTMLDocument2)element.document;
+            IHTMLElementCollection labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
+
+            // Get the list of id's of controls that these labels are for
+            for (int i = 0; i < labelElements.length; i++)
+            {
+                IHTMLElement label = (IHTMLElement) labelElements.item(i, null);
+                // Store the id if there is a label text match
+                if (StringComparer.AreEqual(label.innerText.Trim(), labelText))
+                {
+                    var htmlFor = ((IHTMLLabelElement)label).htmlFor;
+                    labelIdsWithMatchingText.Add(htmlFor,htmlFor);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Writes out the constraint into a <see cref="string"/>.
+        /// </summary>
+        /// <returns>The constraint text</returns>
 		public override string ConstraintToString()
 		{
 			return "Label with text '" + labelText +"'";
 		}
-
-
 	}
 }
