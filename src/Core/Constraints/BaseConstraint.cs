@@ -290,6 +290,10 @@ namespace WatiN.Core.Constraints
 			return this;
 		}
 
-		public abstract string ConstraintToString();
+        /// <summary>
+        /// Writes out the constraint into a <see cref="string"/>.
+        /// </summary>
+        /// <returns>The constraint text</returns>
+        public abstract string ConstraintToString();
 	}
 }

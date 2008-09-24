@@ -24,7 +24,6 @@ using WatiN.Core.Comparers;
 
 namespace WatiN.Core.Constraints
 {
-	
     /// <summary>
     /// Use this class to find a form field whose associated label contains a particular value.
     /// This constraint class is kindly donated by Seven Simple Machines.
@@ -50,7 +49,9 @@ namespace WatiN.Core.Constraints
 		}
 
         /// <summary>
-        /// 
+        /// This method expects an <see cref="ElementAttributeBag"/> which it will use
+        /// to determine if the element wrapped by the <see cref="ElementAttributeBag"/> is 
+        /// the element for which a label is specified with the searched for innertext.
         /// </summary>
         /// <param name="attributeBag">Value to compare with</param>
         /// <returns>

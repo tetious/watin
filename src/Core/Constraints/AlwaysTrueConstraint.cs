@@ -26,11 +26,20 @@ namespace WatiN.Core.Constraints
 	/// </summary>
 	public class AlwaysTrueConstraint : BaseConstraint
 	{
+        /// <summary>
+        /// Does the compare without calling <see cref="BaseConstraint.LockCompare"/> and <see cref="BaseConstraint.UnLockCompare"/>.
+        /// </summary>
+        /// <param name="attributeBag">The attribute bag.</param>
+        /// <returns>Will always return <c>true</c></returns>
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
 			return true;
 		}
 
+        /// <summary>
+        /// Writes out the constraint into a <see cref="string"/>.
+        /// </summary>
+        /// <returns>The constraint text</returns>
 		public override string ConstraintToString()
 		{
 			return "any";

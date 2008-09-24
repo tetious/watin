@@ -117,6 +117,9 @@ namespace WatiN.Core.Constraints
 			return EvaluateAndOrAttributes(attributeBag, comparer.Compare(attributeBag.GetValue(attributeName)));
 		}
 
+        /// <summary>
+        /// Use DoCompare instead.
+        /// </summary>
 		[Obsolete("Use DoCompare instead.")]
 		protected bool doCompare(IAttributeBag attributeBag)
 		{
@@ -134,6 +137,10 @@ namespace WatiN.Core.Constraints
 			return Value;
 		}
 
+        /// <summary>
+        /// Writes out the constraint into a <see cref="string"/>.
+        /// </summary>
+        /// <returns>The constraint text</returns>
 		public override string ConstraintToString()
 		{
 			return "Attribute '" + AttributeName + "' with value '" + Value +"'";
