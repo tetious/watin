@@ -16,36 +16,40 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
-	[TestFixture, Ignore("work in progress")]
-	public class ModalPopupExtenderTests
+	[TestFixture]
+	public class ModalPopupExtenderTests : BaseWithIETests
 	{
 		[Test, Category("InternetConnectionNeeded")]
 		public void ModalPopupExtenderTest()
 		{
-			using (IE ie = new MyIE("http://www.asp.net/AJAX/Control-Toolkit/Live/ModalPopup/ModalPopup.aspx"))
-			{
-				Div modalDialog = ie.Div("ctl00_SampleContent_Panel1");
-				Assert.IsTrue(modalDialog.Parent.Style.Display == "none", "modaldialog should not be visible");
+            Div modalDialog = ie.Div("ctl00_SampleContent_Panel1");
+		    Assert.That(modalDialog.Parent.Style.Display, Is.EqualTo("none"), "modaldialog should not be visible");
 
-				// Show the modaldialog
-				ie.Link("showModalPopupClientButton").Click();
+			// Show the modaldialog
+            ie.Link("ctl00_SampleContent_LinkButton1").Click();
 
-				modalDialog.WaitUntil(new VisibleAttribute(true), 5);
-				Assert.IsTrue(modalDialog.Style.Display != "none", "modaldialog should be visible");
+			modalDialog.WaitUntil(new VisibleAttribute(true), 5);
+			Assert.IsTrue(modalDialog.Style.Display != "none", "modaldialog should be visible");
 
-				// Hide the modaldialog
-				Link link = modalDialog.Link("ctl00_SampleContent_CancelButton");
-				link.Click();
-				modalDialog.WaitUntil(new VisibleAttribute(false), 5);
-				Assert.IsTrue(modalDialog.Style.Display == "none", "modaldialog should be visible again");
-			}
+			// Hide the modaldialog
+            Button cancel = modalDialog.Button("ctl00_SampleContent_CancelButton");
+			cancel.Click();
+			modalDialog.WaitUntil(new VisibleAttribute(false), 5);
+            Assert.That(modalDialog.Parent.Style.Display, Is.EqualTo("none"), "modaldialog should be visible again");
 		}
+
+	    public override Uri TestPageUri
+	    {
+            get { return new Uri("http://www.asp.net/AJAX/AjaxControlToolkit/Samples/ModalPopup/ModalPopup.aspx"); }
+	    }
 	}
 
 	public class VisibleAttribute : AttributeConstraint
@@ -54,7 +58,9 @@ namespace WatiN.Core.UnitTests
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-			ElementAttributeBag bag = (ElementAttributeBag) attributeBag;
+            ElementAttributeBag bag = attributeBag as ElementAttributeBag;
+
+            if (bag == null) return false;
 
 			return comparer.Compare(IsVisible(bag.Element).ToString());
 		}
