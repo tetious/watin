@@ -54,7 +54,8 @@ namespace WatiN.Core
 
 		private ITextElement _textElement;
 
-		public TextField(DomContainer domContainer, IHTMLElement element) : base(domContainer, element) {}
+		public TextField(DomContainer domContainer, IHTMLElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		public TextField(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

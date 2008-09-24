@@ -55,7 +55,8 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="element">The input button or button element.</param>
-		public Button(DomContainer domContainer, IHTMLElement element) : base(domContainer, element) {}
+		public Button(DomContainer domContainer, IHTMLElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Button"/> class.

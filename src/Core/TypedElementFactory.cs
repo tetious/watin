@@ -37,13 +37,9 @@ namespace WatiN.Core
 			}
 
 			ElementTag elementTag = new ElementTag(ieNativeElement);
-#if NET11
-			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
-#else
-            Element returnElement = new ElementsContainer<Element>(domContainer, ieNativeElement);
-#endif
+            Element returnElement = GetDefaultReturnElement(domContainer, ieNativeElement);
 
-			if (_elementConstructors.Contains(elementTag))
+		    if (_elementConstructors.Contains(elementTag))
 			{
 				ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
 				return (Element)constructorInfo.Invoke(new object[] { returnElement });
@@ -52,7 +48,16 @@ namespace WatiN.Core
 			return returnElement;
 		}
 
-		internal static Hashtable CreateElementConstructorHashTable()
+	    public static Element GetDefaultReturnElement(DomContainer domContainer, INativeElement ieNativeElement)
+	    {
+#if NET11
+			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
+#else
+	        return new ElementsContainer<Element>(domContainer, ieNativeElement);
+#endif
+	    }
+
+	    internal static Hashtable CreateElementConstructorHashTable()
 		{
 			Hashtable elementConstructors = new Hashtable();
 			Assembly assembly = Assembly.GetExecutingAssembly();

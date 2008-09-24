@@ -66,7 +66,7 @@ namespace WatiN.Core
         }
         
         /// <summary>
-		/// Returns a typed Element instance that can be casted to an ElementsContainer.
+		/// Returns a typed Element instance that can be cast to an ElementsContainer.
 		/// </summary>
 		/// <value>The element.</value>
 		public Element Element
@@ -75,11 +75,7 @@ namespace WatiN.Core
 			{
 				if (_element == null)
 				{
-#if NET11
-					_element = new ElementsContainer(DomContainer, IHTMLElement);
-#else
-                    _element = new ElementsContainer<Element>(DomContainer, IHTMLElement);
-#endif
+				    _element = TypedElementFactory.GetDefaultReturnElement(DomContainer, DomContainer.NativeBrowser.CreateElement(IHTMLElement));
 				}
 
 				return _element;
@@ -87,7 +83,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Returns a typed Element instance that can be casted to the specific WatiN type.
+		/// Returns a typed Element instance that can be cast to the specific WatiN type.
 		/// </summary>
 		/// <value>The element typed.</value>
 		public Element ElementTyped
@@ -97,6 +93,7 @@ namespace WatiN.Core
 				if (_elementTyped == null)
 				{
                     _elementTyped = TypedElementFactory.CreateTypedElement(DomContainer, DomContainer.NativeBrowser.CreateElement(IHTMLElement));
+				    _element = _elementTyped;
 				}
 
 				return _elementTyped;

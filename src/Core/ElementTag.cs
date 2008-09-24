@@ -38,7 +38,7 @@ namespace WatiN.Core
 
 		public ElementTag(string tagName) : this(tagName, null) {}
 
-		public ElementTag(IHTMLElement element): this(element.tagName, getInputType(element)) {}
+        public ElementTag(INativeElement nativeElement) : this(nativeElement.TagName, getInputType(nativeElement)) {}
 
 		public ElementTag(string tagName, string inputTypes)
 		{
@@ -47,7 +47,7 @@ namespace WatiN.Core
 				TagName = tagName.ToLower(CultureInfo.InvariantCulture);
 			}
 
-			IsInputElement = ElementTag.IsAnInputElement(tagName);
+			IsInputElement = IsAnInputElement(tagName);
 
 			// Check arguments
 			if (IsInputElement)
@@ -59,20 +59,6 @@ namespace WatiN.Core
 
 				InputTypes = inputTypes.ToLower(CultureInfo.InvariantCulture);
 			}
-		}
-
-		public ElementTag(INativeElement nativeElement) : this(nativeElement.TagName, getInputType(nativeElement))
-		{ }
-
-		private static string getInputType(IHTMLElement element)
-		{
-			IHTMLInputElement inputElement = element as IHTMLInputElement;
-			if(inputElement != null)
-			{
-				return inputElement.type;
-			}
-
-			return null;
 		}
 
 		private static string getInputType(INativeElement ieNativeElement)

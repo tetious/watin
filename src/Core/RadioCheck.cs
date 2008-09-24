@@ -33,7 +33,8 @@ namespace WatiN.Core
     public class RadioCheck<E> : Element<E> where E : Element
 #endif
 	{
-		public RadioCheck(DomContainer domContainer, IHTMLInputElement inputElement) : base(domContainer, (IHTMLElement) inputElement) {}
+        public RadioCheck(DomContainer domContainer, IHTMLInputElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		public RadioCheck(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

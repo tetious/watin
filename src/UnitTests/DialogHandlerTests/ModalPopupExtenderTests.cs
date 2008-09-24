@@ -56,7 +56,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ElementAttributeBag bag = (ElementAttributeBag) attributeBag;
 
-			return comparer.Compare(IsVisible(new Element(null, bag.IHTMLElement)).ToString());
+			return comparer.Compare(IsVisible(bag.Element).ToString());
 		}
 
 		public bool IsVisible(Element element)

@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public TableRow(DomContainer domContainer, IHTMLTableRow htmlTableRow) : base(domContainer, (IHTMLElement) htmlTableRow) {}
+		public TableRow(DomContainer domContainer, IHTMLTableRow htmlTableRow) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTableRow)) {}
 
 		public TableRow(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

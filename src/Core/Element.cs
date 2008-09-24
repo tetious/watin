@@ -19,8 +19,6 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using mshtml;
@@ -44,7 +42,8 @@ namespace WatiN.Core
 	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
 	    {}
 
-	    public Element(DomContainer domContainer, object element) : base(domContainer, element)
+        [Obsolete("Use the constructor accepting INativeElement instead")]
+	    public Element(DomContainer domContainer, object element) : this(domContainer, domContainer.NativeBrowser.CreateElement(element))
 	    {}
 
 	    public Element(Element element, ArrayList elementTags) : base(element, elementTags)
@@ -93,6 +92,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer"><see cref="DomContainer" /> this element is located in</param>
 		/// <param name="element">The element</param>
+        [Obsolete("Use the constructor accepting INativeElement instead")]
 		public Element(DomContainer domContainer, object element)
 		{
 			initElement(domContainer, domContainer.NativeBrowser.CreateElement(element), null);

@@ -34,9 +34,10 @@ namespace WatiN.Core
     public class ElementsContainer<E> : Element<E>, IElementsContainer, IElementCollection where E : Element
 #endif
 	{
-		public ElementsContainer(DomContainer domContainer, object element) : base(domContainer, element) {}
+        [Obsolete("Use the constructor accepting INativeElement instead")]
+        public ElementsContainer(DomContainer domContainer, object element) : this(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 		
-		public ElementsContainer(DomContainer domContainer, INativeElement ieNativeElement) : base(domContainer, ieNativeElement) {}
+		public ElementsContainer(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement) {}
 
 		public ElementsContainer(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

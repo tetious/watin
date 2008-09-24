@@ -49,7 +49,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Image(DomContainer domContainer, IHTMLElement imgElement) : base(domContainer, imgElement) {}
+        public Image(DomContainer domContainer, IHTMLElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		public Image(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

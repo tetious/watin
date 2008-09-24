@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Link(DomContainer domContainer, IHTMLAnchorElement htmlAnchorElement) : base(domContainer, htmlAnchorElement) {}
+        public Link(DomContainer domContainer, IHTMLAnchorElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		public Link(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

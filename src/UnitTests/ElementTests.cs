@@ -723,10 +723,11 @@ namespace WatiN.Core.UnitTests
 			IHTMLElement offsetParent = ((IHTMLElement)element.HTMLElement).offsetParent;
 			if (offsetParent != null)
 			{
-				pos = position(new Element(element.DomContainer, offsetParent), attributename);
+			    DomContainer domContainer = element.DomContainer;
+			    pos = position(new Element(domContainer, domContainer.NativeBrowser.CreateElement(offsetParent)), attributename);
 			}
 
-			if (StringComparer.AreEqual(element.TagName, "table", true))
+		    if (StringComparer.AreEqual(element.TagName, "table", true))
 			{
 				pos = pos + int.Parse(element.GetAttributeValue("client" + attributename));
 			}

@@ -21,7 +21,6 @@ using System.Collections;
 using System.Threading;
 using mshtml;
 using WatiN.Core.Constraints;
-using WatiN.Core.InternetExplorer;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -37,14 +36,14 @@ namespace WatiN.Core.InternetExplorer
 	{
 		private readonly ArrayList tagsToFind = new ArrayList();
 
-		protected BaseConstraint _findBy;
+		protected BaseConstraint _constraint;
 		protected IElementCollection _elementCollection;
 	    protected DomContainer _domContainer;
 
 	    public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : this(elementTags, null, elementCollection, domContainer) {}
-	    public IEElementFinder(ArrayList elementTags, BaseConstraint findBy, IElementCollection elementCollection, DomContainer domContainer)
+	    public IEElementFinder(ArrayList elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
 	    {
-            CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
+            CheckAndInitPrivateFields(elementCollection, domContainer, constraint);
 
 	        if (elementTags != null)
 			{
@@ -56,35 +55,43 @@ namespace WatiN.Core.InternetExplorer
 			}
 	    }
 
-
 		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : this(tagName, inputType, null, elementCollection, domContainer) {}
-		public IEElementFinder(string tagName, string inputType, BaseConstraint findBy, IElementCollection elementCollection, DomContainer domContainer)
+		public IEElementFinder(string tagName, string inputType, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
 		{
-            CheckAndInitPrivateFields(elementCollection, domContainer, findBy);
+            CheckAndInitPrivateFields(elementCollection, domContainer, constraint);
 
 			AddElementTag(tagName, inputType);
 		}
 
-	    private void CheckAndInitPrivateFields(IElementCollection elementCollection, DomContainer domContainer, BaseConstraint findBy)
+	    private void CheckAndInitPrivateFields(IElementCollection elementCollection, DomContainer domContainer, BaseConstraint constraint)
 	    {
 	        if (elementCollection == null) throw new ArgumentNullException("elementCollection");
 	        if (domContainer == null) throw new ArgumentNullException("domContainer");
 
-	        _findBy = getFindBy(findBy);
+            _constraint = GetConstraint(constraint);
 	        _elementCollection = elementCollection;
 	        _domContainer = domContainer;
 	    }
 
+        private static BaseConstraint GetConstraint(BaseConstraint constraint)
+        {
+            if (constraint == null)
+            {
+                return new AlwaysTrueConstraint();
+            }
+            return constraint;
+        }
+
 	    public virtual INativeElement FindFirst()
 		{
-		    return FindFirst(_findBy);
+		    return FindFirst(_constraint);
 		}
 
-        public virtual INativeElement FindFirst(BaseConstraint findBy)
+        public virtual INativeElement FindFirst(BaseConstraint constraint)
 		{
 			foreach (ElementTag elementTag in tagsToFind)
 			{
-				ArrayList elements = findElementsByAttribute(elementTag, findBy, true);
+				ArrayList elements = findElementsByAttribute(elementTag, constraint, true);
 
 				if (elements.Count > 0)
 				{
@@ -102,7 +109,7 @@ namespace WatiN.Core.InternetExplorer
 
 		public string ConstriantToString
 		{
-			get { return _findBy.ConstraintToString(); }
+			get { return _constraint.ConstraintToString(); }
 		}
 
 		public void AddElementTag(string tagName, string inputType)
@@ -112,87 +119,80 @@ namespace WatiN.Core.InternetExplorer
 
 		public ArrayList FindAll()
 		{
-			return FindAll(_findBy);
+			return FindAll(_constraint);
 		}
 
-		public ArrayList FindAll(BaseConstraint findBy)
+		public ArrayList FindAll(BaseConstraint constraint)
 		{
 		    if (tagsToFind.Count == 1)
 			{
-				return findElementsByAttribute((ElementTag) tagsToFind[0], findBy, false);
+				return findElementsByAttribute((ElementTag) tagsToFind[0], constraint, false);
 			}
 
-		    return FindAllWithMultipleTags(findBy);
+		    return FindAllWithMultipleTags(constraint);
 		}
 
-	    private ArrayList FindAllWithMultipleTags(BaseConstraint findBy)
+	    private ArrayList FindAllWithMultipleTags(BaseConstraint constraint)
 	    {
 	        ArrayList elements = new ArrayList();
 
 	        foreach (ElementTag elementTag in tagsToFind)
 	        {
-	            elements.AddRange(findElementsByAttribute(elementTag, findBy, false));
+	            elements.AddRange(findElementsByAttribute(elementTag, constraint, false));
 	        }
 
 	        return elements;
 	    }
 
-	    private static BaseConstraint getFindBy(BaseConstraint findBy)
-		{
-			if (findBy == null)
-			{
-				return new AlwaysTrueConstraint();
-			}
-			return findBy;
-		}
-
-		private ArrayList findElementsByAttribute(ElementTag elementTag, BaseConstraint findBy, bool returnAfterFirstMatch)
+		private ArrayList findElementsByAttribute(ElementTag elementTag, BaseConstraint constraint, bool returnAfterFirstMatch)
 		{
 			// Get elements with the tagname from the page
-		    findBy.Reset();
+		    constraint.Reset();
             ElementAttributeBag attributeBag = new ElementAttributeBag(_domContainer);
 
-            if (FindByExactMatchOnId(findBy))
+            if (FindByExactMatchOnIdPossible(constraint))
             {
-                return FindElementById(findBy, elementTag, attributeBag, returnAfterFirstMatch);
+                return FindElementById(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
             }
-            return FindElements(findBy, elementTag, attributeBag, returnAfterFirstMatch, elementTag.GetElementCollection(_elementCollection.Elements));
+            return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
 		}
 
-	    public static ArrayList FindElements(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElementCollection elements)
+	    public static ArrayList FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
+	        IHTMLElementCollection elements = elementTag.GetElementCollection(elementCollection.Elements);
             ArrayList children = new ArrayList();
 
 	        if (elements != null)
 	        {
-
 	            // Loop through each element and evaluate
-	            foreach (IHTMLElement element in elements)
-	            {
-                    if (!FinishedAddingChildrenThatMetTheConstraints(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children))
-	                {
-	                    return children;
-	                }
-	            }
+	            var length = elements.length;
+	            for (int index = 0; index < length; index++ )
+                {
+                    IHTMLElement element = (IHTMLElement)elements.item(index, null);
+                    if (FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, ref children))
+                    {
+                        return children;
+                    }
+                }
 	        }
 
 	        return children;
 	    }
 
-	    private ArrayList FindElementById(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch)
+        private static ArrayList FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
             ArrayList children = new ArrayList();
 
-	        IHTMLElement element = elementTag.GetElementById(_elementCollection.Elements, ((AttributeConstraint)findBy).Value);
+	        IHTMLElement element = elementTag.GetElementById(elementCollection.Elements, ((AttributeConstraint)constraint).Value);
 
 	        if (element != null)
 	        {
-	            FinishedAddingChildrenThatMetTheConstraints(findBy, elementTag, attributeBag, returnAfterFirstMatch, element, ref children);
+	            FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, ref children);
 	        }
 	        return children;
 	    }
 
-	    private static bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint findBy, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
+	    private static bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ref ArrayList children)
 	    {            
 	        waitUntilElementReadyStateIsComplete(element);
 
@@ -204,25 +204,25 @@ namespace WatiN.Core.InternetExplorer
                 validElementType = elementTag.CompareInputTypes(new IEElement(element));
             }
 
-	        if (validElementType && findBy.Compare(attributeBag))
+	        if (validElementType && constraint.Compare(attributeBag))
 	        {
 	            children.Add(element);
 	            if (returnAfterFirstMatch)
 	            {
-	                return false;
+	                return true;
 	            }
 	        }
-	        return true;
+	        return false;
 	    }
 
-	    private static bool FindByExactMatchOnId(BaseConstraint findBy)
+	    private static bool FindByExactMatchOnIdPossible(BaseConstraint constraint)
 	    {
-            Constraints.AttributeConstraint constraint = findBy as AttributeConstraint;
-#if !NET11
-			return constraint != null && constraint.AttributeName.ToLowerInvariant() == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
-#else
-			return constraint != null && constraint.AttributeName.ToLower(System.Globalization.CultureInfo.InvariantCulture) == "id" && !(findBy.HasAnd || findBy.HasOr) && constraint.Comparer.GetType() == typeof(StringComparer);
-#endif
+            Constraints.AttributeConstraint attributeConstraint = constraint as AttributeConstraint;
+			
+            return attributeConstraint != null && 
+                   StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) && 
+                   !(constraint.HasAnd || constraint.HasOr) && 
+                   attributeConstraint.Comparer.GetType() == typeof(StringComparer);
 		}
 
 	    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)

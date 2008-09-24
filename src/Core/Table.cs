@@ -53,7 +53,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Table(DomContainer domContainer, IHTMLTable htmlTable) : base(domContainer, (IHTMLElement) htmlTable) {}
+		public Table(DomContainer domContainer, IHTMLTable htmlTable) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTable)) {}
 
 		public Table(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -345,7 +346,7 @@ namespace WatiN.Core
 		{
             ElementAttributeBag attributeBag = new ElementAttributeBag(DomContainer);
 
-            ArrayList elements = IEElementFinder.FindElements(findBy, (ElementTag)Core.TableRow.ElementTags[0], attributeBag, true, GetTableRows());
+            ArrayList elements = IEElementFinder.FindElements(findBy, (ElementTag)Core.TableRow.ElementTags[0], attributeBag, true, new Rows(this));
 
             if (elements.Count > 0)
             {
@@ -384,6 +385,19 @@ namespace WatiN.Core
 			public override IHTMLElementCollection Elements
 			{
 				get { return (IHTMLElementCollection) table.GetFirstTBody().all; }
+			}
+		}
+
+		private class Rows : TableElementCollectionsBase
+		{
+			public Rows(Table table) : base(table) {}
+
+			public override IHTMLElementCollection Elements
+			{
+				get
+                {
+                    return ((IHTMLTable)table.HTMLElement).rows;
+				}
 			}
 		}
 

@@ -211,6 +211,13 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(ie.Button(new Regex("buttonelementid")).Exists);
 		}
 
+        [Test]
+        public void SimpleButtonTest()
+        {
+            Assert.That(ie.Button("buttonelementid").Id, Is.EqualTo("buttonelementid"));
+            Assert.That(ie.Button(Find.ByName("buttonelementname")).Id, Is.EqualTo("buttonelementid"));
+        }
+
 		public override Uri TestPageUri
 		{
 			get { return MainURI; }

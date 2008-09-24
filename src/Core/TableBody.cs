@@ -37,7 +37,8 @@ namespace WatiN.Core
 
 		public TableBody(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
-		public TableBody(DomContainer domContainer, IHTMLTableSection element) : base(domContainer, (IHTMLElement) element) {}
+		public TableBody(DomContainer domContainer, IHTMLTableSection element) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) {}
 
 		public TableBody(Element element) : base(element, elementTags) {}
 

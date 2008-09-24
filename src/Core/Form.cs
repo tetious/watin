@@ -48,7 +48,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Form(DomContainer domContainer, IHTMLFormElement htmlFormElement) : base(domContainer, (IHTMLElement) htmlFormElement) {}
+		public Form(DomContainer domContainer, IHTMLFormElement htmlFormElement) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlFormElement)) {}
 
 		public Form(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

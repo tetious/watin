@@ -50,7 +50,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public FileUpload(DomContainer domContainer, IHTMLInputFileElement inputFileElement) : base(domContainer, inputFileElement) {}
+		public FileUpload(DomContainer domContainer, IHTMLInputFileElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		public FileUpload(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

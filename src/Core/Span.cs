@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Span(DomContainer domContainer, IHTMLSpanElement htmlSpanElement) : base(domContainer, (IHTMLElement) htmlSpanElement) {}
+		public Span(DomContainer domContainer, IHTMLSpanElement htmlSpanElement) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlSpanElement)) {}
 
 		public Span(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

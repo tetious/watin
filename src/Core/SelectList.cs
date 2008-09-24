@@ -63,8 +63,9 @@ namespace WatiN.Core
 		/// Mainly used by the collectionclass SelectLists.
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer"/> the element is in.</param>
-		/// <param name="htmlSelectElement">The HTML select element.</param>
-		public SelectList(DomContainer domContainer, IHTMLElement htmlSelectElement) : base(domContainer, htmlSelectElement) {}
+        /// <param name="element">The HTML select element.</param>
+        public SelectList(DomContainer domContainer, IHTMLElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		/// <summary>
 		/// Returns an instance of a SelectList object.

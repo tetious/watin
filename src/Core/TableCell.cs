@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public TableCell(DomContainer domContainer, IHTMLTableCell htmlTableCell) : base(domContainer, (IHTMLElement) htmlTableCell) {}
+		public TableCell(DomContainer domContainer, IHTMLTableCell htmlTableCell) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTableCell)) {}
 
 		public TableCell(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

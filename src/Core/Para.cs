@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Para(DomContainer domContainer, IHTMLParaElement htmlParaElement) : base(domContainer, (IHTMLElement) htmlParaElement) {}
+		public Para(DomContainer domContainer, IHTMLParaElement htmlParaElement) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlParaElement)) {}
 
 		public Para(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

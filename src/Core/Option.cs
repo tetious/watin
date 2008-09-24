@@ -55,8 +55,9 @@ namespace WatiN.Core
 		/// Initializes a new instance of the <see cref="Option"/> class.
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
-		/// <param name="optionElement">The option element.</param>
-		public Option(DomContainer domContainer, IHTMLOptionElement optionElement) : base(domContainer, optionElement) {}
+        /// <param name="element">The option element.</param>
+        public Option(DomContainer domContainer, IHTMLOptionElement element) :
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.

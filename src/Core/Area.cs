@@ -53,7 +53,8 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="element">The element.</param>
-		public Area(DomContainer domContainer, IHTMLAreaElement element) : base(domContainer, element) {}
+		public Area(DomContainer domContainer, IHTMLAreaElement element) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area" /> class.

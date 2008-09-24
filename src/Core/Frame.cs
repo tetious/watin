@@ -100,7 +100,7 @@ namespace WatiN.Core
 					throw new WatiNException("element shouldn't be null");
 				}
 
-				frameElement = new Element(DomContainer, element);
+				frameElement = new Element(DomContainer, DomContainer.NativeBrowser.CreateElement(element));
 			}	
 			return frameElement.GetAttributeValue(attributename);
 		}

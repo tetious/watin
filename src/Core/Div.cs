@@ -53,7 +53,8 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="htmlDivElement">The HTML div element.</param>
-		public Div(DomContainer domContainer, IHTMLDivElement htmlDivElement) : base(domContainer, (IHTMLElement) htmlDivElement) {}
+		public Div(DomContainer domContainer, IHTMLDivElement htmlDivElement) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlDivElement)) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.

@@ -47,7 +47,8 @@ namespace WatiN.Core
 			}
 		}
 
-		public Label(DomContainer domContainer, IHTMLLabelElement labelElement) : base(domContainer, (IHTMLElement) labelElement) {}
+		public Label(DomContainer domContainer, IHTMLLabelElement labelElement) : 
+            base(domContainer, domContainer.NativeBrowser.CreateElement(labelElement)) {}
 
 		public Label(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
