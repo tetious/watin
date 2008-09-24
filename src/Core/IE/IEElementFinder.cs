@@ -165,7 +165,7 @@ namespace WatiN.Core.InternetExplorer
 	        if (elements != null)
 	        {
 	            // Loop through each element and evaluate
-	            var length = elements.length;
+	            int length = elements.length;
 	            for (int index = 0; index < length; index++ )
                 {
                     IHTMLElement element = (IHTMLElement)elements.item(index, null);

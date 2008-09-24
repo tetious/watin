@@ -100,7 +100,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIENoWait(BaseConstraint findBy)
 		{
-			return findIE(findBy, Settings.AttachToIETimeOut, false);
+			return findIE(findBy, Core.Settings.AttachToIETimeOut, false);
 		}
 		
 		/// <summary>
@@ -130,7 +130,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIE(BaseConstraint findBy)
 		{
-			return findIE(findBy, Settings.AttachToIETimeOut, true);
+			return findIE(findBy, Core.Settings.AttachToIETimeOut, true);
 		}
 
 		/// <summary>
@@ -698,7 +698,7 @@ namespace WatiN.Core
 			{
 				navigateTo(uri);
 			}
-			ie.Visible = Settings.MakeNewIeInstanceVisible;
+			ie.Visible = Core.Settings.MakeNewIeInstanceVisible;
 			StartDialogWatcher();
 		}
 
@@ -767,7 +767,7 @@ namespace WatiN.Core
 
 		private void MoveMousePoinerToTopLeft()
 		{
-			if (Settings.AutoMoveMousePointerToTopLeft)
+			if (Core.Settings.AutoMoveMousePointerToTopLeft)
 			{
 				Cursor.Position = new Point(0, 0);
 			}
@@ -840,6 +840,7 @@ namespace WatiN.Core
 			GoTo(CreateUri(url));
 		}
 
+#if !NET11
         /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" /> 
         /// without waiting for the page load to be finished.
@@ -901,6 +902,7 @@ namespace WatiN.Core
             thread.Start(url);
             thread.Join(500);
         }
+#endif
 
         [STAThread]
         private void GoToNoWaitInternal(object urlOrUri)
@@ -1456,7 +1458,7 @@ namespace WatiN.Core
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
 		public HtmlDialog HtmlDialog(BaseConstraint findBy)
 		{
-			return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
+			return findHtmlDialog(findBy, Core.Settings.AttachToIETimeOut);
 		}
 
 		/// <summary>

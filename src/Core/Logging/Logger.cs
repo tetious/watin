@@ -25,7 +25,11 @@ namespace WatiN.Core.Logging
 	/// WatiN uses this class to log which actions are done while driving Internet
 	/// Explorer.
 	/// </summary>
+#if !NET11
 	public static class Logger
+#else
+	public class Logger
+#endif
 	{
 		private static ILogWriter mLogWriter = DefaultLogWriter();
 

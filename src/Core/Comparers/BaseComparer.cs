@@ -22,7 +22,7 @@ namespace WatiN.Core.Comparers
 {
     /// <summary>
     /// Use this class as the base to create your own comparer classes with. 
-    /// Overide the <see cref name="BaseComparer.Compare(string)"/> method
+    /// Overide the <see cref="BaseComparer.Compare(string)"/> method
     /// and implement the desired compare logic.
     /// </summary>
 	public abstract class BaseComparer : ICompare

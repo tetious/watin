@@ -301,7 +301,7 @@ namespace WatiN.Core
 
         public static void AsyncActionOnBrowser(ThreadStart action)
         {
-            Thread clickButton = new Thread(new ThreadStart(action));
+            Thread clickButton = new Thread(action);
 #if !NET11
             clickButton.SetApartmentState(ApartmentState.STA);
 #else

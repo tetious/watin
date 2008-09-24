@@ -256,6 +256,7 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
+#if !NET11
 		[Test]
 		public void GoToUrlNoWait()
 		{
@@ -271,6 +272,7 @@ namespace WatiN.Core.UnitTests
                 Assert.AreEqual(MainURI, new Uri(ie.Url));
             }
 		}
+#endif
 
 		[Test]
 		public void GoToUri()

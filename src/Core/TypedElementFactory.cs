@@ -51,7 +51,7 @@ namespace WatiN.Core
 	    public static Element GetDefaultReturnElement(DomContainer domContainer, INativeElement ieNativeElement)
 	    {
 #if NET11
-			Element returnElement = new ElementsContainer(domContainer, ieNativeElement);
+			return new ElementsContainer(domContainer, ieNativeElement);
 #else
 	        return new ElementsContainer<Element>(domContainer, ieNativeElement);
 #endif

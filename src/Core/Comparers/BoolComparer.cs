@@ -26,7 +26,7 @@ namespace WatiN.Core.Comparers
         /// <summary>
         /// Initializes a new instance of the <see cref="BoolComparer"/> class.
         /// </summary>
-        /// <param name="value">The given value will be used for the comparision(s) done by <see cref="BoolComparer.Compare(string)"/>.</param>
+        /// <param name="value">The given value will be used for the comparision(s) done by <see cref="BaseComparer.Compare(string)"/>.</param>
 		public BoolComparer(bool value) : base(value.ToString()) {}
 	}
 }

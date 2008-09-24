@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -175,7 +176,7 @@ namespace WatiN.Core.InternetExplorer
 
             AsyncScriptRunner asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
 
-            UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
+            UtilityClass.AsyncActionOnBrowser(new ThreadStart(asyncScriptRunner.FireEvent));
         }
 
 		protected IHTMLElement htmlElement

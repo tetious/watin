@@ -400,7 +400,7 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			UtilityClass.AsyncActionOnBrowser(NativeElement.ClickOnElement);
+			UtilityClass.AsyncActionOnBrowser(new ThreadStart(NativeElement.ClickOnElement));
 
 		    Highlight(false);
 		}

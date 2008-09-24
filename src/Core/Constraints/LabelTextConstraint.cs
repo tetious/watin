@@ -41,7 +41,7 @@ namespace WatiN.Core.Constraints
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
-		/// </summary
+		/// </summary>
 		/// <param name="labelText">The text that represents the label for the form element.</param>
 		public LabelTextConstraint( string labelText ) : base( Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
 		{
@@ -75,7 +75,7 @@ namespace WatiN.Core.Constraints
         {
             labelIdsWithMatchingText = new Hashtable();
             
-            var htmlDocument = (IHTMLDocument2)element.document;
+            IHTMLDocument2 htmlDocument = (IHTMLDocument2)element.document;
             IHTMLElementCollection labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
 
             // Get the list of id's of controls that these labels are for
@@ -85,7 +85,7 @@ namespace WatiN.Core.Constraints
                 // Store the id if there is a label text match
                 if (StringComparer.AreEqual(label.innerText.Trim(), labelText))
                 {
-                    var htmlFor = ((IHTMLLabelElement)label).htmlFor;
+                    string htmlFor = ((IHTMLLabelElement)label).htmlFor;
                     labelIdsWithMatchingText.Add(htmlFor,htmlFor);
                 }
             }
