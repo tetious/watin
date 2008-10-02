@@ -68,16 +68,26 @@
         target="_blank">here</a>.</p><br>
 
         <h1>Changes <span class="green">in</span> general</h1>
-		<p>I like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines who contributed the Find.Near feature.
-        <p>
+		<p>This 1.3 release is the last release supporting the .Net 1.1 framework. Following releases will 'only' support .Net 2.0 and higher and will make use of the new C# 3.0 language improvements (so you will need Visual Studio 2008 to work on the WatiN code base).
+		</p><p>
+		In preparation of the final 2.0 release the code base already has changed quit a bit to allow for multiple browser support. This has led to re-organising classes and namespaces as wel as marking some classes, methods and properties with the Obsolete attribute. If you went (way) beyond the basic use of WatiN you might now encounter the new INativeElement, INativeBrowser and INativeElementFinder interfaces implemented by IEElement, IEBrowser and IEElementFinder. These interfaces are not final yet but are the (internal) way to go for WatiN's multiple browser support (anybody interested in WatiN for Chrome?).
+		</p><p>
+		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines who contributed Find.Near() and Find.ByLabel().
+		</p><p>
 		<strong>Support for lambda expressions and Linq</strong><br>
-		If you use WatiN with Visual Studio 2008 you can use lambda expessions as an alternative to the static methods in the Find class. 
-		<p>
+		One of the most exciting new features in this release is support for lambda expressions. If you use WatiN with Visual Studio 2008 you can now use lambda expessions as an alternative to the static ByXXX methods in the Find class. Following is a simple example:
+		<p></br>
 		<code>
-		  using(IE ie = new IE(someUrlToGoTo))<br>
+		  using(IE ie = new IE("www.watin.example.net"))<br>
 		  {<br>
 	      &nbsp;var button = ie.Button(b => b.Id == "someId");<br>
 		  }<br>
+		</code>
+		</p><p>
+		Since this new construct allows you to access all properties and methods on an element, its possible to express your find constraint in just one lambda expression where previously you needed to write multiple lines of code (or even had to write your own constraint classes).</br>
+		One tip, be aware of null values when inspecting attribute values of an element. For instance:
+		<code>
+	      var button = ie.Button(b => b.Id != null && b.Id.ToLower() == "someid");<br>
 		</code>
 		</p><p>
 		This release of WatiN also enables the use of Linq to find elements in a collection. The following example shows you how to use the Where
@@ -85,281 +95,80 @@
 		</p>
 		<p>
 		<code>
-		  using(IE ie = new IE(someUrlToGoTo))<br>
+		  using(IE ie = new IE("www.watin.example.net"))<br>
 		  {<br>
 	      &nbsp;var disabledButtons = ie.Buttons.Where(b => b.Enabled == false);<br>
 		  }<br>
 		</code>
 		</p><br>
-
-        <p><strong>Cookies and caches</strong><br>
-		To clean up any Internet Explorer caches, <strong>IE.ClearCookies</strong> or <strong>IE.ClearCache</strong> are added. You can call these methods at any time during the live of an IE instance, but you are advised to call these methods directly after creating an IE instance. If you call these methods at a later moment, be aware Internet Explorer still might have cached items in memory which is not cleared by these calls! The only way to make sure this memory cache is cleared is to make use of the new <strong>IE.ReOpen()</strong> method. This method closes and reopens a new IE instance which effectively solves the problem.
-		</p>
-		<p>
-		<code>
-		  using(IE ie = new IE())<br>
-		  {<br>
-	      &nbsp;ie.ClearCache;<br>
-	      &nbsp;ie.ClearCookies;<br>
-	      &nbsp;ie.GoTo(someUrlToGoTo);<br>
-	      <br>
-	      &nbsp;<i>// do something</i><br>
-		  }<br>
-		</code>
-		</p>
-		<p>
-		To manipulte Cookies and/or to read cookie information, IE.GetCookie() and IE.SetCookie are added.
-		<p>
-		<code>
-		  using(IE ie = new IE(someUrlToGoTo))<br>
-		  {<br>
-	      &nbsp;string setvalue = "test-cookie=abc; expires=Wed, 01-Jan-2020 00:00:00 GMT";<br>
-	      &nbsp;ie.SetCookie("http://1.watin.com/", setvalue);<br>
-		  <br>
-	      &nbsp;string getvalue = ie.GetCookie("http://1.watin.com/", "test-cookie");<br>
-          &nbsp;Assert.AreEqual("test-cookie=abc", getvalue);<br>
-		  }<br>
-		</code>
-		</p>
-		<br>
         <p><strong>New Find.By methods</strong><br>
-		The Find.ByCustom() methods are replaced by the new Find.By() methods. Find.ByCustom is marked [Obsolete] and will be removed in the next release. 
-		</p>
-		<p>
-		Two new overloads are added for Find.ByUrl() which make it possible to ignore the querystring part of a url. (Thanks to Seth Behunin for this contrib).
-		</p>
-		<p>
-		A new Find.ByAlt(id) and 3 overloads are added to find Area elements by the value of the Alt attribute.
-		</p>
-		<p>
-		All Find.ByXXX methods have two new overloads. One accepting an object which implements the IComparer interface. This way you can create your own Comparer objects and use these to find matching elements. The other is .Net 2.0 specific and accepts a method of type Predicate<string> also making it possible to use a custom method to find matching elements. The following example about creating and using a custom comparer is for illustration purposes only. This type of matching could also be done by using an overload which accepts a regular expression (RegEx) as its input.</p>
-		<p>
-		<code>
-		  using(IE ie = new IE(someUrlToGoTo))<br>
-		  {<br>
-	      &nbsp;ie.TextField(Find.ById(new EndsWithComparer("txtName"))).TypeText("Found");<br>
-		  <br>
-	      &nbsp;<i>// The following syntax is only available in the .Net 2.0 version;</i><br>
-	      &nbsp;ie.TextField(Find.ById(WhichEndsWithTxtName)).TypeText("Found");<br>
-		  }<br>
-		  <br>
-		  public bool WhichEndsWithTxtName(string value)<br>
-		  {<br>
-		  &nbsp;return value.EndsWith("txtName");<br>
-		  }<br>
-		  <br>
-		  public class EndsWithComparer : WatiN.Core.Comparers.BaseComparer<br>
-		  {<br>
-		  &nbsp;private string _valueToCompareWith;<br>
-		  &nbsp;public EndsWithComparer(string value)<br>
-		  &nbsp;{<br>
-		  &nbsp;&nbsp;_valueToCompareWith = value;<br>
-		  &nbsp;}<br>
-		  &nbsp;public override bool Compare(string value)<br>
-		  &nbsp;{<br>
-		  &nbsp;&nbsp;return value.EndsWith(_valueToCompareWith);<br>
-		  &nbsp;}<br>
-		  }<br>
-		</code>
+		If you still like the Find class and its helper methods better, following is a list of new additions:<br> 
+		<ul>
+			<li>Find.ByClass(value):<br> Finds elements with a matching value for the class attribute.</li>
+			<li>Find.First():<br> A shortcut for Find.ByIndex(0).</li>
+			<li>Find.Near(text):<br> Finds elements in the area near the specified text. Contributed by Jeremy Wadsack of Seven Simple Machines.</li>
+			<li>Find.ByLabel(text):<br> Finds elements with a matching Label text. Contributed by Jeremy Wadsack of Seven Simple Machines.<br>
+			<li>Find.ByElement(ICompareElement):<br> Find an element using your own comparer class implementing ICompareElement. Allows you to access all of the elements properties en methods.</li>
+			<li>Find.ByElement(Predicate):<br> Same as previous but using a Predicate or lambda expression instead of an interface implementation.</li>
+			<li>Find.ByDefault():<br> Will use the default constraint as specified by Settings.FindByDefaultFactory.</li>
+		</ul>
 		</p>
 		<br>
-        <p><strong>Changed Attribute to AttributeConstraint</strong><br>
-        Renamed Attribute class to AttributeConstraint to get ride of the name clash with System.Attribute and it better expresses what the class is meant for. The Attribute class is marked [Obsolete] and will be removed in the next release.</p><p>Almost all classes inheriting from AttributeConstraint are marked [Obsolete]. These classed are overhead since their functionality was only used by WatiN in the Find class. These classes will be removed in the next release.
-		</p>
-		<br>
-		<p><strong>Added support for Area element</strong><br>
-        Within Image maps the Area elements define to clickable areas. The new support for Area elements combined with the new Find.ByAlt() makes it possible to automate 
-		</p>
-		<p>
-		<code>
-		Area area = ie.Area(Find.ByAlt("Alternative text"));
-		</code></p><br>
 
-        <p><strong>Improve speed of finding not natively supported elements</strong><br>
-		To find an element which is not natively supported by Watin, like the LI element for instance, one had to use this kind of code:
+        <p><strong>DialogHandler changes</strong><br>
+		<p>Since many people are using the UseDialogOnce class included in the UnitTest project, it has been moved to the Core project. The class
+		ensures that a dialog handler is removed when it gets disposed. See the examples below on how to use this class.</p>
+		<p>Two new  dialog handlers have been introduced. One to handle the vbscript msgbox dialog (VbScriptMsgBoxDialogHandler). Thanks to Julian Jelfs for this contribution:
 		</p><p>
 		<code>
-		Element item1 = ie.Element(Find.By("tagname", "li") && Find.ById("item1")));
-		</code>
-		</p><p>
-		Since looping through all elements on a page with many elements is not that speedy, a new overload is added to ie.Element which accepts a tagname as an argument. This gives you the same speed with which WatiN supported elements are found.
-		</p><p>
-		<code>
-		Element item1 = ie.Element("li", Find.ById("item1")); 
-		</code>
-        </p>
+        public void Using_the_VbScriptMsgBoxDialogHandler()<br>
+        {<br>
+		&nbsp;var ie = new IE("www.watin.example.net");<br>
 		<br>
-
-        <p><strong>Added Element.Ancestor</strong><br>
-		Added new functionality to the Element class to get an Ancestor of an element. This can be used in situations where you need to lookup a known element to find an other element within the same container element. The following overloads are available:<br><br>
-		Element.Ancestor(Type)<br>
-		Element.Ancestor(AttributeConstraint)<br>
-		Element.Ancestor(Type, AttributeConstraint)<br>
-		Element.Ancestor(TagName)<br>
-		Element.Ancestor(TagName, AttributeConstraint)<br>
-		Element.Ancestor&lt;T&gt;, .Net 2.0 only <br>
-		Element.Ancestor&lt;T&gt;(AttributeConstraint), .Net 2.0 only <br>
-		</p><p>
-		The following example looks for a specific textfield within a table row and then clicks on the edit button within the table row. This is the simplified html hierarchie:<br>
-		<br>
-		TR<br>
-		&nbsp;&nbsp;TD<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;INPUT text, id='fieldInRow1'<br>
-		&nbsp;&nbsp;TD<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;INPUT button, text='edit'<br>
-		<br>
-		<code>
-		Type type = typeof(TableRow);<br>
-		TableRow row = (TableRow)ie.TextField("fieldInRow1").Ancestor(type);<br>
-		row.Button(Find.ByText("edit")).Click();<br>
-		<br>
-		<i>// .Net 2.0 version</i><br>
-		TableRow row = ie.TextField("fieldInRow1").Ancestor&lt;TableRow&gt;;<br>
-		row.Button(Find.ByText("edit")).Click();<br>
-		</code>
-        </p><br>
-
-		<p><strong>Save snapshots of webpages</strong><br>
-		In some situations it might be handy to be able to take a snapshot of the webpage that is shown in the browser. Based on the code of <a href="http://www.codeproject.com/cs/media/IECapture.asp" target="_blank">WebCapture</a> article on CodeProject WatiN now offers this functionality. You can store images in the following formats: jpg, tif, gif, png, bmp. 
-		</p>
-		<p>
-		To create a snapshot simply call the CaptureWebPageToFile method.
-		<code>
-		public void CaptureWatinMainPage()<br>
-		{<br>
-		&nbsp;using(IE ie = new IE("watin.sourceforge.net")<br>
-		&nbsp;{<br>
-		&nbsp;&nbsp;ie.CaptureWebPageToFile("c:\tmp\watin main page.jpg");<br>
-		&nbsp;}<br>
-		}<br>
-		</code></p>
-		<p>If you want more control over the size and quality of the snapshots you can use the new WatiN.Core.CaptureWebPage class instead.</p>
-		
-        <p><strong>New Settings</strong><br>
-		By using the IE.Settings properties it is possible to change some of the default values used by WatiN. This release adds the following new settings.</p>
-		<p>
-		By default WatiN moves the mousepointer out of the way to prevent unexpected behavior during the tests. You can disable this functionality like this:
-		<code>
-		IE.Settings.AutoMoveMousePointerToTopLeft = false; <i>// default is true</i>
-		</code></p>
-		<p>
-		By default WatiN tests make the created Internet Explorer instances visible to the user. You can run your test invisible by changing the following setting. Be aware that HTMLDialogs and any popup windows will be shown even if you set this setting to false (this is default behavior of Internet Explorer which currently can't be suppressed).
-		<code>
-		IE.Settings.MakeNewIeInstanceVisible = false; <i>// default is true</i>
-		</code></p>
-		<p>
-		In situations where you don't want or need WatiN to handle the popup dialogs you can prevent starting the DialogWatcher by changing this setting. If you set this to false, any calls to ie.DialogWatcher.Add(dialogHandler) will result in an exception.
-		<code>
-		IE.Settings.AutoStartDialogWatcher = false; <i>// default is true</i>
-		</code></p>
-		
-		<br>
-        <p><strong>Setting the properties of the (java)script Event object</strong><br>
-		When you have javascript in your webpage which handles some event on an element is most likely uses the event object to retrieve some info regarding the event. For example, in an onkeypress event you want to check the event.keycode to filter certain characters. Until now WatiN had no support to set these properies. This release adds an overload to Element.FireEvent which accepts the eventname and a NameValueCollection property names and their values. These will be set on the Event object passed in when firing the event.</p>
-		<p>
-		The following example fires the onmousedown event and sets the button property on the event object to the value 2 (the right mousebutton).
-		<code>
-		    NameValueCollection eventProperties = new NameValueCollection();<br>
-			eventProperties.Add("button", "2");<br>
-			<br>
-			ie.Div("rightMousePopUpMenu").FireEvent("onmousedown", eventProperties);<br>
-		</code></p>
-		<br>
- 
-        <p><strong>Changes to TextField.TypeText</strong><br>
-		TypeText makes use of the new functionality to set properties of the event object. TypeText fires the onkeydown, onkeypress and onkeyup events and sets the keyCode property to the ascii value of the typed character.</p>
-		<p>TypeText will also honour the maxlength value set on a textfield. The text to type will be cut off if it exceeds the maxlength value.</p>
-		<br>
-
-		<p><strong>Added Eval functionality</strong><br>
-		In the previous release a RunScript method was added to inject and execute javascript code in the browser. With the new Eval method you can inject and execute javascript and get a return value as a result. If there is an error in the javascript, Eval will throw a JavaScriptException with the error message thrown by the javascript runtime inside the browser.</p>
-		<p>
-		The following example uses Eval to show a confirm dialog. It then asserts that you clicked the cancel  button by checking the result value.
-		<code>
-		[Test]<br>
-	    public void TestEval()<br>
-	    {<br>
-	    &nbsp;IE.Settings.AutoStartDialogWatcher = false;<br>
-	    &nbsp;using (IE ie = new IE())<br>
-	    &nbsp;{<br>
-	    &nbsp;&nbsp;string result = ie.Eval("window.confirm('Click Cancel')");<br>
-	    &nbsp;&nbsp;Assert.That(result, NUnit.Framework.SyntaxHelpers.Is.EqualTo("false"));<br>
-	    &nbsp;}<br>
-	    }<br>
-		</code><p>
-		<br>
-		
-        <p><strong>Added ReturnDialogHandler</strong><br>
-		The new ReturnDialogHandler can be used to automate the return dialog typically used to inform the user about something when they leave or close a web page.</p>
-		<p><code>
-		<i>// the html</i><br>
-		&lt;body onbeforeunload='javascript:return "Any changes you may have made will NOT be saved.";'&gt;<br>
-		<br>
-		using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))<br>
-		{<br>
-		&nbsp;ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();<br>
-		&nbsp;ie.AddDialogHandler(returnDialogHandler);<br>
-		<br>
-		&nbsp;<i>// can't use ie.Close() here cause this will cleanup the registered</i><br>
-		&nbsp;<i>// returnDialogHandler which leads to a timeout on the WaitUntilExists</i><br>
-		&nbsp;InternetExplorer internetExplorer = (InternetExplorer) ie.InternetExplorer;<br>
-		&nbsp;internetExplorer.Quit();<br>
-		<br>
-		&nbsp;returnDialogHandler.WaitUntilExists();<br>
-		&nbsp;returnDialogHandler.OKButton.Click();<br>
-		}<br>
-		</code><p>
-		<p>TypeText will also honour the maxlength value set on a textfield. The text to type will be cut off if it exceeds the maxlength value.</p>
-		<br>
-
-        <p><strong>Customize the IE.WaitForComplete logic</strong><br>
-		When some action is executed on an element (like clicking a link or selecting an item in a selectlist) WatiN will look and wait for a postback to be finished. It does this by calling the WaitForComplete method on the DomContainer. This wait logic has been implemented to wait until everything on the page is loaded. If your webpages have many/big images and if the test(s) doesn't require the image(s)/movies/etc to be loaded, your tests are waiting unnecessarily (performance is an issue with UI testing).</p>
-		<p>
-		With this release WatiN offers some new ways to changing this default behavior when needed. First you need to create a new class inheriting from the IE class. Then you can override the WaitForComplete method and inject your own class which implements the IWait inteface. You can also use an even simpler option; use the (build in) element.WaitUntilExists functionality. This waits with a max of 30 seconds (see also IE.Settings for changing this default) for an element to appear on a page.
-		</p>
-		<p>
-		The following example uses IENoWaitForComplete class which completely disables the default WaitForComplete logic. The execution of the test totally depends on the (build in) auto wait functionality, which waits for the element to exist before executing any action on it.
-		<code>
-		private class IENoWaitForComplete : IE<br>
-		{<br>
-		&nbsp;public IENoWaitForComplete(string url) : base(url) {}<br>
-		<br>
-		&nbsp;public override void WaitForComplete()<br>
-		&nbsp;{<br>
-		&nbsp;&nbsp;// Skip Wait logic because of movies loaded and show on page<br>
-		&nbsp;}<br>
-		}<br>
-		<br>
-		public void NameShouldAlwaysBeEmpty()<br>
-		{<br>
-		&nbsp;using (IE ie = new IENoWaitForComplete("www.example.com"))<br>
-		&nbsp;{<br>
-		&nbsp;&nbsp;// By default Watin waits until the link is on the page before <br>
-		&nbsp;&nbsp;// executing the Click. In this case it opens a new webpage<br>
-		&nbsp;&nbsp;ie.Link(Find.ByText("Log in")).Click();<br>
+        &nbsp;var button = VbScriptMsgBoxDialogHandler.Button.Yes;<br>
+        &nbsp;var handler = new VbScriptMsgBoxDialogHandler(button);<br>
         <br>
-		&nbsp;&nbsp;// Wait until the next page is loaded by checking<br>
-		&nbsp;&nbsp;// if the link "Log out" exists before the code proceeds<br>
-		&nbsp;&nbsp;ie.Link(Find.ByText("Log out")).WaitUntilExists();<br>
-		<br>
-		&nbsp;&nbsp;// Check to see if the name textfield is empty<br>
-		&nbsp;&nbsp;Assert.IsNull(ie.TextField("name").Value);<br>
-		&nbsp;}<br>
-		}<br>
+		&nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br>
+        &nbsp;{<br>
+        &nbsp;&nbsp;// Click on button to show the dialog<br>
+        &nbsp;&nbsp;ie.Button("vbScriptMsgBox").Click();<br>
+        &nbsp;}<br>
+        }<br>
 		</code></p>
-		<p>Another option is to inherit the WaitForComplete class and override any of the methods to change the behavior. In your override of WaitForComplete you can use this custom WaitForComplete class like this
-		<code>
-		private class IEWithCustomWaitForComplete : IE<br>
-		{<br>
-		&nbsp;public IEWithCustomWaitForComplete(string url) : base(url) {}<br>
+		<p>And one to handle the prompt dialog (PromptDialogHandler):</p>
+		<p><code>
+        public void Using_the_PromptDialogHandler()<br>
+        {<br>
+		&nbsp;var ie = new IE("www.watin.example.net");<br>
 		<br>
-		&nbsp;public override void WaitForComplete()<br>
-		&nbsp;{<br>
-		&nbsp;&nbsp;WaitForComplete(new MyWaitForCompleteClass())<br>
-		&nbsp;}<br>
-		}<br>
+        &nbsp;var text = "Hello";<br>
+        &nbsp;var handler = new PromptDialogHandler(text);<br>
+        &nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br>
+        &nbsp;{<br>
+        &nbsp;&nbsp;ie.Button("showPrompt").Click();<br>
+        &nbsp;}<br>
+        }<br>
 		</code></p>
-		<br>
+		<p>
+		Other changes to the dialog handlers:
+		<ul>
+			<li>FileDownloadHandler couldn't find the Save button in some enviroments, resulting in a time out. This has been resolved.</li>
+			<li>FileDownloadHandler now close the progress dialog after the download has been completed.</li>
+			<li>Fixed a potential infinit loop in the DialogWatcher class.</li>
+			<li>Log entries are written when a dialog doesn't become visible within the timeout period and when a dialog gets auto closed.</li>
+		</ul>
+		</p>
+
+
+        <p><strong>Other changes</strong><br>
+        <p>Moved UseDialogOnce class to WatiN.Core.DialogHandlers</p>
+        <p>Added params argument to Logger.LogAction(message, args). Calls String.Format internally.</p>
+        <p>Added Uri property to Image</p>
+        <p>When running the WatiN UnitTests they will run in stealth mode showing as less windows as possible during the test run.</p>
+        <p>Screen captures are now made with more color info per pixel.</p>
+        <p>Added documentation to the constraint classes and comparers.</p>
+        <p>IE.Back and IE.Forward don't throw COMException anymore when no (forward) history is available. They will return a success boolean.</p>
+		
 
         <h1>API <span class="green">Changes</span></h1>
 
@@ -370,23 +179,24 @@
         <h1>SourceForge <span class="green">Trackers</span></h1>
 
         <p><strong>Added Feature requests:</strong></p>
+		1714801 Possibility to highlight an element outside of watin. Made Element.Highlight(bool) public.<br>
+		1885867 Improved exception handling for constraints / comparers. The Innerexception of ElementNotFoundException is now set (if an expection occurred during waiting for an element).<br>
+		1943370 IE.AttachToIENoWait() method for handling PDF windows.<br>
 
         <p>
-		1793996 Hide browser at initilization of an IE instance<br>
-		1793979 Control auto move of the mouse pointer at IE initialization<br>
-		1759481 Sleep in WaitForComplete() in order to view postbacks<br>
-		1664472 Add support for setting the event properties when firing an event<br>
-		1563044 Hiding the IE window<br>
-		        Add the http protocol to the url if it is omitted<br>
 		</p><br>
 
         <p><strong>Fixed Bugs:</strong></p>
 
         <p>
-		1801634 Ie.Element(x).Click throws System.NullReferenceException<br>  
-		1761030 RunScript<br>
-		1697343 GetFrameCountFromHTMLDocument fails using framework 1.1<br>
-				RunScript(scriptcode, language) ignores the language param<br>
+		1765704 FileDownload Watcher not working.<br>
+		1819233 Globalization problem on element find. Fixed issues with WatiN not working for Turkish culture settings.<br>
+		1830404 Path that contains a tilde (~) result in faulty control text.<br>
+		....... Fixed issue in GetClassName on Windows 98.<br>
+		1903404 Double URL decoding in Goto().<br>
+		1958882 SelectNoWait is waiting somewhere.<br>
+		1932065 FireEventNoWait hangs when ModalWindow opened.<br>
+		1963035 IE Dispose to long.<br>
         </p><br>
       </div>
       <div id="rightbar">

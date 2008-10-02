@@ -110,6 +110,6 @@ namespace WatiN.Core
         /// </value>
         bool MakeNewIeInstanceVisible { get; set; }
 
-        IFindByDefaultFactory findByDefaultFactory { get; set; }
+        IFindByDefaultFactory FindByDefaultFactory { get; set; }
     }
 }

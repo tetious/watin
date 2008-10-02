@@ -639,7 +639,7 @@ namespace WatiN.Core.UnitTests
         public void FindByDefaultStringShouldReturnDefaultFromTheSetDefaultFindFactory()
         {
             // GIVEN
-            Settings.findByDefaultFactory = new MyTestDefaultFindFactory();
+            Settings.FindByDefaultFactory = new MyTestDefaultFindFactory();
 
             // WHEN
             Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault("testValue");
@@ -652,7 +652,7 @@ namespace WatiN.Core.UnitTests
         public void FindByDefaultRegexShouldReturnDefaultFromTheSetDefaultFindFactory()
         {
             // GIVEN
-            Settings.findByDefaultFactory = new MyTestDefaultFindFactory();
+            Settings.FindByDefaultFactory = new MyTestDefaultFindFactory();
 
             // WHEN
             Constraints.AttributeConstraint byDefault = (Constraints.AttributeConstraint) Find.ByDefault(new Regex("testValue"));

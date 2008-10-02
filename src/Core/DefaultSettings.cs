@@ -215,7 +215,7 @@ namespace WatiN.Core
             set { settings.makeNewIEInstanceVisible = value; }
         }
 
-        public IFindByDefaultFactory findByDefaultFactory
+        public IFindByDefaultFactory FindByDefaultFactory
         {
             get { return settings.findByDefaultFactory; }
             set { settings.findByDefaultFactory = value; }

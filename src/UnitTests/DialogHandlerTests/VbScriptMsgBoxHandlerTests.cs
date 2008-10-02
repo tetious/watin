@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.DialogHandlers;
@@ -102,18 +101,14 @@ namespace WatiN.Core.UnitTests
 			using(new UseDialogOnce(ie.DialogWatcher, handler ))
 			{
 				ie.Button("vbScriptMsgBox").ClickNoWait();
+				handler.WaitUntilHandled(10);
 
-				SimpleTimer timer = new SimpleTimer(10);
-				while(!handler.HasHandledDialog && !timer.Elapsed)
-				{
-					Thread.Sleep(500);
-				}
-				Assert.That(handler.HasHandledDialog, "Should have handled dialog");
+                Assert.That(handler.HasHandledDialog, "Should have handled dialog");
 				return ie.TextField("msgBoxReturnValue").Value;
 			}
 		}
 
-		public override Uri TestPageUri
+	    public override Uri TestPageUri
 		{
 			get { return TestEventsURI; }
 		}

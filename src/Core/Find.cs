@@ -762,12 +762,12 @@ namespace WatiN.Core
 		
         public static BaseConstraint ByDefault(string value)
         {
-            return Settings.findByDefaultFactory.ByDefault(value);
+            return Settings.FindByDefaultFactory.ByDefault(value);
         }
 
         public static BaseConstraint ByDefault(Regex value)
         {
-            return Settings.findByDefaultFactory.ByDefault(value);
+            return Settings.FindByDefaultFactory.ByDefault(value);
         }
 	}
 }

@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System.Threading;
+
 namespace WatiN.Core.DialogHandlers
 {
 	public class VbScriptMsgBoxDialogHandler : BaseDialogHandler
@@ -95,5 +97,21 @@ namespace WatiN.Core.DialogHandlers
 		{
 			get { return hasHandledDialog; }
 		}
+
+	    public bool WaitUntilHandled()
+	    {
+            return WaitUntilHandled(Settings.WaitForCompleteTimeOut);
+	    }
+
+        public bool WaitUntilHandled(int timeoutAfterSeconds)
+	    {
+            SimpleTimer timer = new SimpleTimer(timeoutAfterSeconds);
+            while (!HasHandledDialog && !timer.Elapsed)
+            {
+                Thread.Sleep(200);
+            }
+
+	        return HasHandledDialog;
+	    }
 	}
 }

@@ -243,15 +243,15 @@ namespace WatiN.Core
 			set { Instance.MakeNewIeInstanceVisible = value; }
 		}
 
-        public static IFindByDefaultFactory findByDefaultFactory
+        public static IFindByDefaultFactory FindByDefaultFactory
 	    {
-            get { return Instance.findByDefaultFactory; }
+            get { return Instance.FindByDefaultFactory; }
             set 
             {
-                Instance.findByDefaultFactory = value;
-                if (Instance.findByDefaultFactory == null)
+                Instance.FindByDefaultFactory = value;
+                if (Instance.FindByDefaultFactory == null)
                 {
-                    Instance.findByDefaultFactory = new FindByDefaultFactory();
+                    Instance.FindByDefaultFactory = new FindByDefaultFactory();
                 }
             }
 	    }
