@@ -68,9 +68,9 @@
         target="_blank">here</a>.</p><br>
 
         <h1>Changes <span class="green">in</span> general</h1>
-		<p>This 1.3 release is the last release supporting the .Net 1.1 framework. Following releases will 'only' support .Net 2.0 and higher and will make use of the new C# 3.0 language improvements (so you will need Visual Studio 2008 to work on the WatiN code base).
+		<p>This 1.3 release is probably the last release in the 1.x line of releases and also the last one supporting the .Net 1.1 framework. Following releases will 'only' support .Net 2.0 and higher and will make use of the new C# 3.0 language improvements.
 		</p><p>
-		In preparation of the final 2.0 release the code base already has changed quit a bit to allow for multiple browser support. This has led to re-organising classes and namespaces as wel as marking some classes, methods and properties with the Obsolete attribute. If you went (way) beyond the basic use of WatiN you might now encounter the new INativeElement, INativeBrowser and INativeElementFinder interfaces implemented by IEElement, IEBrowser and IEElementFinder. These interfaces are not final yet but are the (internal) way to go for WatiN's multiple browser support (anybody interested in WatiN for Chrome?).
+		This release is a continuation if the 1.x releases and thus only supports Internet Explorer. In preparation of the final 2.0 release the code base already has changed quit a bit to allow for multiple browser support. This has led to re-organising classes and namespaces as wel as marking some classes, methods and properties with the Obsolete attribute. If you went (way) beyond the basic use of WatiN you might now encounter the new INativeElement, INativeBrowser and INativeElementFinder interfaces implemented by IEElement, IEBrowser and IEElementFinder. These interfaces are not final yet but they are the (internal) way to go for WatiN's multiple browser support (anybody interested in WatiN for Chrome?).
 		</p><p>
 		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines who contributed Find.Near() and Find.ByLabel().
 		</p><p>
@@ -120,6 +120,11 @@
 		ensures that a dialog handler is removed when it gets disposed. See the examples below on how to use this class.</p>
 		<p>Two new  dialog handlers have been introduced. One to handle the vbscript msgbox dialog (VbScriptMsgBoxDialogHandler). Thanks to Julian Jelfs for this contribution:
 		</p><p>
+				<p>
+		    <input id="showPrompt" onclick="fnPrompt()" type="button" value="Show prompt" />
+		    <input id="promptResult" type="text" />
+		</p>
+
 		<code>
         public void Using_the_VbScriptMsgBoxDialogHandler()<br>
         {<br>
