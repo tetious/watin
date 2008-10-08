@@ -65,7 +65,7 @@
 
         <p>You can <strong>download</strong> this release <a href=
         "http://sourceforge.net/project/showfiles.php?group_id=167632"
-        target="_blank">here</a>.</p><br>
+        target="_blank">here</a>.</p><br />
 
         <h1>Changes <span class="green">in</span> general</h1>
 		<p>This 1.3 release is probably the last release in the 1.x line of releases and also the last one supporting the .Net 1.1 framework. Following releases will 'only' support .Net 2.0 and higher and will make use of the new C# 3.0 language improvements.
@@ -74,20 +74,21 @@
 		</p><p>
 		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines who contributed Find.Near() and Find.ByLabel().
 		</p><p>
-		<strong>Support for lambda expressions and Linq</strong><br>
+		<strong>Support for lambda expressions and Linq</strong><br />
+		</p><p>
 		One of the most exciting new features in this release is support for lambda expressions. If you use WatiN with Visual Studio 2008 you can now use lambda expessions as an alternative to the static ByXXX methods in the Find class. Following is a simple example:
 		<p></br>
 		<code>
-		  using(IE ie = new IE("www.watin.example.net"))<br>
-		  {<br>
-	      &nbsp;var button = ie.Button(b => b.Id == "someId");<br>
-		  }<br>
+		  using(IE ie = new IE("www.watin.example.net"))<br />
+		  {<br />
+	      &nbsp;var button = ie.Button(b => b.Id == "someId");<br />
+		  }<br />
 		</code>
 		</p><p>
 		Since this new construct allows you to access all properties and methods on an element, its possible to express your find constraint in just one lambda expression where previously you needed to write multiple lines of code (or even had to write your own constraint classes).</br>
 		One tip, be aware of null values when inspecting attribute values of an element. For instance:
 		<code>
-	      var button = ie.Button(b => b.Id != null && b.Id.ToLower() == "someid");<br>
+	      var button = ie.Button(b => b.Id != null && b.Id.ToLower() == "someid");<br />
 		</code>
 		</p><p>
 		This release of WatiN also enables the use of Linq to find elements in a collection. The following example shows you how to use the Where
@@ -95,27 +96,41 @@
 		</p>
 		<p>
 		<code>
-		  using(IE ie = new IE("www.watin.example.net"))<br>
-		  {<br>
-	      &nbsp;var disabledButtons = ie.Buttons.Where(b => b.Enabled == false);<br>
-		  }<br>
+		  using(IE ie = new IE("www.watin.example.net"))<br />
+		  {<br />
+	      &nbsp;var disabledButtons = ie.Buttons.Where(b => b.Enabled == false);<br />
+		  }<br />
 		</code>
-		</p><br>
-        <p><strong>New Find.By methods</strong><br>
-		If you still like the Find class and its helper methods better, following is a list of new additions:<br> 
+		</p><br />
+        <p><strong>New Find.By methods</strong><br /></p>
+		<p>If you still like the Find class and its helper methods better, following is a list of new additions:<br /> 
 		<ul>
-			<li>Find.ByClass(value):<br> Finds elements with a matching value for the class attribute.</li>
-			<li>Find.First():<br> A shortcut for Find.ByIndex(0).</li>
-			<li>Find.Near(text):<br> Finds elements in the area near the specified text. Contributed by Jeremy Wadsack of Seven Simple Machines.</li>
-			<li>Find.ByLabel(text):<br> Finds elements with a matching Label text. Contributed by Jeremy Wadsack of Seven Simple Machines.<br>
-			<li>Find.ByElement(ICompareElement):<br> Find an element using your own comparer class implementing ICompareElement. Allows you to access all of the elements properties en methods.</li>
-			<li>Find.ByElement(Predicate):<br> Same as previous but using a Predicate or lambda expression instead of an interface implementation.</li>
-			<li>Find.ByDefault():<br> Will use the default constraint as specified by Settings.FindByDefaultFactory.</li>
+			<li>Find.ByClass(value):<br /> Finds elements with a matching value for the class attribute.</li>
+			<li>Find.First():<br /> A shortcut for Find.ByIndex(0).</li>
+			<li>Find.Near(text):<br /> Finds elements in the area near the specified text. Contributed by Jeremy Wadsack of Seven Simple Machines.</li>
+			<li>Find.ByLabel(text):<br /> Finds elements with a matching Label text. Contributed by Jeremy Wadsack of Seven Simple Machines.<br />
+			<li>Find.ByElement(ICompareElement):<br /> Find an element using your own comparer class implementing ICompareElement. Allows you to access all of the elements properties and methods.</li>
+			<li>Find.ByElement(Predicate):<br /> Same as previous but using a Predicate or lambda expression instead of an interface implementation.</li>
+			<li>Find.ByDefault():<br /> Will use the default constraint as specified by Settings.FindByDefaultFactory.</li>
 		</ul>
 		</p>
-		<br>
+		<br />
+		
+        <p><strong>New filtering options on collections</strong><br /></p>
+		<p>All element collections now have the First() and First(BaseConstraint) methods. If you are only interested in the first item of a collection this will give better performance than getting the zero indexed item from a collection (ie.TextFields[0]). Example:</p>
+		<p><code>
+		// Find a TextField with value 'some text' using the new First method<br />
+		TextField first = ie.TextFields.First(Find.ByValue("some text"));<br />
+		// instead of doing it the old way<br />
+		TextField first = ie.TextFields.Filter(Find.ByValue("some text"))[0];<br />
+		</code></p>
+		<p>Also added a new Filter(predicate) method to all element collections. Using delegates or lamba's this allows more control over the elements that should be in the filter. Example:</p>
+		<p><code>
+		var divs = ie.Divs.Filter(d => d.name.StartsWith("i"));
+		</code></p>
 
-        <p><strong>DialogHandler changes</strong><br>
+
+        <p><strong>DialogHandler changes</strong><br /></p>
 		<p>Since many people are using the UseDialogOnce class included in the UnitTest project, it has been moved to the Core project. The class
 		ensures that a dialog handler is removed when it gets disposed. See the examples below on how to use this class.</p>
 		<p>Two new  dialog handlers have been introduced. One to handle the vbscript msgbox dialog (VbScriptMsgBoxDialogHandler). Thanks to Julian Jelfs for this contribution:
@@ -126,46 +141,73 @@
 		</p>
 
 		<code>
-        public void Using_the_VbScriptMsgBoxDialogHandler()<br>
-        {<br>
-		&nbsp;var ie = new IE("www.watin.example.net");<br>
-		<br>
-        &nbsp;var button = VbScriptMsgBoxDialogHandler.Button.Yes;<br>
-        &nbsp;var handler = new VbScriptMsgBoxDialogHandler(button);<br>
-        <br>
-		&nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br>
-        &nbsp;{<br>
-        &nbsp;&nbsp;// Click on button to show the dialog<br>
-        &nbsp;&nbsp;ie.Button("vbScriptMsgBox").Click();<br>
-        &nbsp;}<br>
-        }<br>
+        public void Using_the_VbScriptMsgBoxDialogHandler()<br />
+        {<br />
+		&nbsp;var ie = new IE("www.watin.example.net");<br />
+		<br />
+        &nbsp;var button = VbScriptMsgBoxDialogHandler.Button.Yes;<br />
+        &nbsp;var handler = new VbScriptMsgBoxDialogHandler(button);<br />
+        <br />
+		&nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br />
+        &nbsp;{<br />
+        &nbsp;&nbsp;// Click on button to show the dialog<br />
+        &nbsp;&nbsp;ie.Button("vbScriptMsgBox").Click();<br />
+        &nbsp;}<br />
+        }<br />
 		</code></p>
 		<p>And one to handle the prompt dialog (PromptDialogHandler):</p>
 		<p><code>
-        public void Using_the_PromptDialogHandler()<br>
-        {<br>
-		&nbsp;var ie = new IE("www.watin.example.net");<br>
-		<br>
-        &nbsp;var text = "Hello";<br>
-        &nbsp;var handler = new PromptDialogHandler(text);<br>
-        &nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br>
-        &nbsp;{<br>
-        &nbsp;&nbsp;ie.Button("showPrompt").Click();<br>
-        &nbsp;}<br>
-        }<br>
+        public void Using_the_PromptDialogHandler()<br />
+        {<br />
+		&nbsp;var ie = new IE("www.watin.example.net");<br />
+		<br />
+        &nbsp;var text = "Hello";<br />
+        &nbsp;var handler = new PromptDialogHandler(text);<br />
+        &nbsp;using (new UseDialogOnce(ie.DialogWatcher, handler))<br />
+        &nbsp;{<br />
+        &nbsp;&nbsp;ie.Button("showPrompt").Click();<br />
+        &nbsp;}<br />
+        }<br />
 		</code></p>
 		<p>
 		Other changes to the dialog handlers:
 		<ul>
-			<li>FileDownloadHandler couldn't find the Save button in some enviroments, resulting in a time out. This has been resolved.</li>
 			<li>FileDownloadHandler now close the progress dialog after the download has been completed.</li>
+			<li>FileDownloadHandler couldn't find the Save button in some enviroments, resulting in a time out. This has been resolved.</li>
 			<li>Fixed a potential infinit loop in the DialogWatcher class.</li>
 			<li>Log entries are written when a dialog doesn't become visible within the timeout period and when a dialog gets auto closed.</li>
 		</ul>
+		</p><br />
+		
+        <p><strong>Changes to Table and TableRow</strong><br /></p>
+		<p>Fixed issue where Table.FindRow() was evaluating tablecells in a nested table. If you used this "bug" as a feature, tests might fail due to this fix. Also added new overloads FindRow(ICompare), FindRow(Predicate&lt;string&gt;) and FindRow(Predicate&lt;TableCell&gt;). Following an example on how to use the later:</p>
+		<p><code>
+		ie.Table(findBy).FindRow(cell => Equals(cell.Text, "Some text"));
+		</code></p>
+		<p>With the current Table.TableRows and TableRow.TableCells implementation you get a collection of all these elements, even if they are inside nested tables. In many scenarios a restriction to get only the cells directly related to a row (or only the rows directly related to a table) would make things a lot easier. To accomplish this the following properties are added:
+		<ul>
+			<li>TableRow.TableCellsDirectChildren</li>
+			<li>Table.TableRowsDirectChildren</li>
+			<li>TableBody.TableRowsDirectChildren</li>
+			<li>Table.FindRowInDirectChildren</li>
+		</ul>
 		</p>
 
+        <p><strong>Breaking Changes</strong><br /></p>
+		<p>To support element.WaitUntil(Predicate&lt;T&gt;) for .Net 2.0 and higher, the new classes Element&lt;E&gt; and ElementsContainer&lt;E&gt; are introduced. This is a <i>BREAKING</i> change cause the following syntax won't work any longer (with WatiN for .Net 2.0 and higher):</p>
+		<p><code>
+		ElementsContainer div = ie.Div(findBy);
+		</code></p>
+		<p>Change it into:</p>
+		<p><code>
+		IElementsContainer div = ie.Div(findBy);<br />
+		<br />
+		// or<br />
+		<br />
+		ElementsContainer&lt;Div&gt; div = ie.Div(findBy);<br />
+		</code></p>
 
-        <p><strong>Other changes</strong><br>
+        <p><strong>Other changes</strong><br />
         <p>Moved UseDialogOnce class to WatiN.Core.DialogHandlers</p>
         <p>Added params argument to Logger.LogAction(message, args). Calls String.Format internally.</p>
         <p>Added Uri property to Image</p>
@@ -177,32 +219,31 @@
 
         <h1>API <span class="green">Changes</span></h1>
 
-        <p>See <a href="api-changes-1-1-0-to-1-2-0.html" target=
+        <p>See <a href="api-changes-1-2-0-to-1-3-0.html" target=
         "_blank">this page</a> for a full list of all the API changes
-        between version 1.1.0.4000 and 1.2.0.4000</p><br>
+        between version 1.2.0.4000 and 1.3.0.4000</p><br />
 
         <h1>SourceForge <span class="green">Trackers</span></h1>
 
         <p><strong>Added Feature requests:</strong></p>
-		1714801 Possibility to highlight an element outside of watin. Made Element.Highlight(bool) public.<br>
-		1885867 Improved exception handling for constraints / comparers. The Innerexception of ElementNotFoundException is now set (if an expection occurred during waiting for an element).<br>
-		1943370 IE.AttachToIENoWait() method for handling PDF windows.<br>
-
+		<p>
+		1714801 Possibility to highlight an element outside of watin. Made Element.Highlight(bool) public.<br />
+		1885867 Improved exception handling for constraints / comparers. The Innerexception of ElementNotFoundException is now set (if an expection occurred during waiting for an element).<br />
+		1943370 IE.AttachToIENoWait() method for handling PDF windows.<br />
         <p>
-		</p><br>
+		</p><br />
 
         <p><strong>Fixed Bugs:</strong></p>
-
         <p>
-		1765704 FileDownload Watcher not working.<br>
-		1819233 Globalization problem on element find. Fixed issues with WatiN not working for Turkish culture settings.<br>
-		1830404 Path that contains a tilde (~) result in faulty control text.<br>
-		....... Fixed issue in GetClassName on Windows 98.<br>
-		1903404 Double URL decoding in Goto().<br>
-		1958882 SelectNoWait is waiting somewhere.<br>
-		1932065 FireEventNoWait hangs when ModalWindow opened.<br>
-		1963035 IE Dispose to long.<br>
-        </p><br>
+		1765704 FileDownload Watcher not working.<br />
+		1819233 Globalization problem on element find. Fixed issues with WatiN not working for Turkish culture settings.<br />
+		1830404 Path that contains a tilde (~) result in faulty control text.<br />
+		....... Fixed issue in GetClassName on Windows 98.<br />
+		1903404 Double URL decoding in Goto().<br />
+		1958882 SelectNoWait is waiting somewhere.<br />
+		1932065 FireEventNoWait hangs when ModalWindow opened.<br />
+		1963035 IE Dispose to long.<br />
+        </p><br />
       </div>
       <div id="rightbar">
         <div id="sidebar">
