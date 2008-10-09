@@ -73,7 +73,7 @@
 		This release is a continuation if the 1.x releases and thus only supports Internet Explorer. In preparation of the final 2.0 release the code base already has changed quit a bit to allow for multiple browser support. This has led to re-organising classes and namespaces as wel as marking some classes, methods and properties with the Obsolete attribute. If you went (way) beyond the basic use of WatiN you might now encounter the new INativeElement, INativeBrowser and INativeElementFinder interfaces implemented by IEElement, IEBrowser and IEElementFinder. These interfaces are not final yet but they are the (internal) way to go for WatiN's multiple browser support (anybody interested in WatiN for Chrome?).
 		</p><p>
 		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines. He contributed the new Find.Near() and Find.ByLabel() features.
-		</p>
+		</p><br />
 		
 		<p><strong>Support for lambda expressions and Linq</strong><br />
 		</p><p>
@@ -103,20 +103,7 @@
 		  }<br />
 		</code>
 		</p><br />
-        <p><strong>New Find.By methods</strong><br /></p>
-		<p>If you still like the Find class and its helper methods better, following is a list of new additions:<br /> 
-		<ul>
-			<li>Find.ByClass(value):<br /> Finds elements with a matching value for the class attribute.</li>
-			<li>Find.First():<br /> A shortcut for Find.ByIndex(0).</li>
-			<li>Find.Near(text):<br /> Finds elements in the area near the specified text. Contributed by Jeremy Wadsack of Seven Simple Machines.</li>
-			<li>Find.ByLabel(text):<br /> Finds elements with a matching Label text. Contributed by Jeremy Wadsack of Seven Simple Machines.<br />
-			<li>Find.ByElement(ICompareElement):<br /> Find an element using your own comparer class implementing ICompareElement. Allows you to access all of the elements properties and methods.</li>
-			<li>Find.ByElement(Predicate):<br /> Same as previous but using a Predicate or lambda expression instead of an interface implementation.</li>
-			<li>Find.ByDefault():<br /> Will use the default constraint as specified by Settings.FindByDefaultFactory.</li>
-		</ul>
-		</p>
-		<br />
-		
+        
 		<p><strong>Breaking Change</strong><br /></p>
 		<p>To support element.WaitUntil(Predicate&lt;T&gt;) for .Net 2.0 and higher, the new classes Element&lt;E&gt; and ElementsContainer&lt;E&gt; are introduced. This is a <i>BREAKING</i> change cause the following syntax won't work any longer (with WatiN for .Net 2.0 and higher):</p>
 		<p><code>
@@ -133,8 +120,22 @@
 		// or for C# 3.0<br />
 		<br />
 		var div = ie.Div(findBy);<br />
-		</code></p>
+		</code></p><br />
 
+		<p><strong>New Find.By methods</strong><br /></p>
+		<p>All this new lambda power is nice but if you like to keep it lightweight than use the Find class. This release offers some new helper methods:<br /> 
+		<ul>
+			<li>Find.ByClass(value):<br /> Finds elements with a matching value for the class attribute.</li>
+			<li>Find.First():<br /> A shortcut for Find.ByIndex(0).</li>
+			<li>Find.Near(text):<br /> Finds elements in the area near the specified text. Contributed by Jeremy Wadsack of Seven Simple Machines.</li>
+			<li>Find.ByLabel(text):<br /> Finds elements with a matching Label text. Contributed by Jeremy Wadsack of Seven Simple Machines.<br />
+			<li>Find.ByElement(ICompareElement):<br /> Find an element using your own comparer class implementing ICompareElement. Allows you to access all of the elements properties and methods.</li>
+			<li>Find.ByElement(Predicate):<br /> Same as previous but using a Predicate or lambda expression instead of an interface implementation.</li>
+			<li>Find.ByDefault():<br /> Will use the default constraint as specified by Settings.FindByDefaultFactory. See also the section about Settings in these release notes.</li>
+		</ul>
+		</p>
+		<br />
+		
         <p><strong>New filtering options on collections</strong><br /></p>
 		<p>All element collections now have the First() and First(BaseConstraint) methods. If you are only interested in the first item of a collection this will give better performance than getting the zero indexed item from a collection (ie.TextFields[0]). Example:</p>
 		<p><code>
@@ -146,8 +147,7 @@
 		<p>Also added a new Filter(predicate) method to all element collections. Using delegates or lamba's this allows more control over the elements that should be in the filter. Example:</p>
 		<p><code>
 		var divs = ie.Divs.Filter(d => d.name.StartsWith("i"));
-		</code></p>
-
+		</code></p><br />
 
         <p><strong>DialogHandler changes</strong><br /></p>
 		<p>Since many people are using the UseDialogOnce class included in the UnitTest project, it has been moved to the Core project. The class
@@ -208,8 +208,8 @@
 		</p><br />
 
         <p><strong>Settings</strong><br /></p>
-		<p>Added new Setting.SleepTime to tweak waiting time when WatiN searches for an element. This value is used when WatiN does call Thread.Sleep during the search for an element. By reducing this time your tests will run (way) faster. I was able to get this down to 30 milliseconds without experiencing problems with a big suite of regression tests. The gained us 5 minutes (from 30 to 25 minutes).</p>
-		<p>In previous releases ie.TextField("something") was basically a shorter notation for ie.TextField(Find.ById("something")). This release introduces to possibility to change the default (id) constraint so that ie.TextField("something") will be the shorter notation for ie.TextField(Find.ByDefault("something")).</p>
+		<p>Added new Setting.SleepTime to tweak waiting time when WatiN searches for an element. This value is used when WatiN does call Thread.Sleep during the search for an element. By reducing this time your tests will run (way) faster. I was able to lower this sleep time to 30 milliseconds without experiencing problems with a big suite of regression tests. The gain was about 5 minutes (from 30 to 25 minutes).</p>
+		<p>In previous releases ie.TextField("something") was basically a shorter notation for ie.TextField(Find.ById("something")). This release introduces the possibility to change the default (id) constraint so that ie.TextField("something") will be the shorter notation for ie.TextField(Find.ByDefault("something")).</p>
 		<p>Following is an example on how to setup WatiN so that it will always use Regex to find an element by id (especially handy when your working with ASP.Net id's).</p>
 		<p><code>
 		// First create a class which implements IFindByDefaultFactory<br />
@@ -231,19 +231,62 @@
 		// Instead of ie.Button(new Regex(".*btn_next$")) you can now write <br />
 		Button nextButton = ie.Button("btn_next");<br />
 		</code></p>
-		<p> Introduced a new (static) Settings class as replacement for IE.Settings. It is basically a wrapper around the class DefaultSettings implementing the new ISettings interface (same pattern as used for Logger/LogWriter). If you did inherit from the old Settings class you should now inherit from DefaultSettings. It is also possible to create your own settings class (implementing ISettings) and assign an instance to the Settings.Instance property.
+		<p> Introduced a new (static) Settings class as replacement for IE.Settings. It is basically a wrapper around the class DefaultSettings implementing the new ISettings interface (same pattern as used for the Logger and LogWriter). If you did inherit from the old Settings class you should now inherit from DefaultSettings. It is also possible to create your own settings class (implementing ISettings) and assign an instance to the Settings.Instance property.
 		</p><br />
 
-        <p><strong>Other changes</strong><br />
-        <p>Moved UseDialogOnce class to WatiN.Core.DialogHandlers</p>
-        <p>Added params argument to Logger.LogAction(message, args). Calls String.Format internally.</p>
-        <p>Added Uri property to Image</p>
-        <p>When running the WatiN UnitTests they will run in stealth mode showing as less windows as possible during the test run.</p>
-        <p>Screen captures are now made with more color info per pixel.</p>
-        <p>Added documentation to the constraint classes and comparers.</p>
-        <p>IE.Back and IE.Forward don't throw COMException anymore when no (forward) history is available. They will return a success boolean.</p>
-		
+        <p><strong>New Wait methods</strong><br />
+		<p>WatiN is always waiting a while for a page to load or an element to appear on the page before it throws an (ElementNotFound)Exception. But there are occasions were you want to skip this build in waiting and take control if succes or failure your self. Following a list of new Wait and NoWait methods:</p>
+		<p>
+		<ul>
+			<li>IE.GoToNoWait(string or Uri). Only available in WatiN for .Net 2.0 and higher. Thanks to Martin Sponholtz for his contribution.</li>
+			<li>IE.AttachtToIENoWait(Findby[, timeout]). Use this for attaching and closing browser windows which show for instance a PDF document.</li>
+			<li>IE.InternetExplorersNoWait(). Use this method if you want WatiN to skip calling the WaitForComplete method on an InternetExplorer instance before it is returned from the collection of open internet explorers.</li>
+			<li>IE.HtmlDialogsNoWait(). Use this method if you want WatiN to skip calling the WaitForComplete method on an Html dialog (model or modelles) before it is returned from the collection of open Html dialogs.</li>
+			<li>Added message to HtmlDialogNotFoundException about possible pop-up blocker being active</li>
+			<li>IE.WaitForComplete(timeout). Use this if you incidentally need a different timeout then specified by IE.Settings.WaitForCompleteTimeOut.</li>
+			<li>Document.WaitUntilContainsText(string[, timeout]) and Document.WaitUntilContainsText(regex[, timeout]), also available on the IE class (and others which inherit from Document)</li>
+			<li>Element.FireEventNoWait(event, eventProperties). To fire an element and proceed without waiting for the event to be completed.</li>
+		</ul>
+		</p><br />
 
+        <p><strong>Other functional changes</strong></p><br />
+		<p><ul>
+		<li>Made a change to improvement performance when searching elements by their exact id.</li>
+        <li>Added Uri property to Image.</li>
+        <li>Added params argument to Logger.LogAction(message, args). Calls String.Format internally.</li>
+        <li>When running the WatiN UnitTests they will run in stealth mode showing as less windows as possible during the test run.</li>
+        <li>Screen captures are now made with more color info per pixel.</li>
+        <li>Added documentation to the constraint classes and comparers.</li>
+        <li>IE.Back and IE.Forward don't throw COMException anymore when no (forward/backward) history is available. They will return a success boolean.</li>
+		<li>Jeff Brown fixed an issue where the IE.InternetExplorers property sometimes picked up Windows Explorer windows in which case a timeout exception was thrown.</li>
+		<li>Added url to the message of ElementNotFoundException.</li>
+		<li>Created a test with a "proof of concept" VisibleAttribute class work. Might be handy when testing AJAX websites (like the ASP.Net AJAX ModalPopupExtender control which is used to test with). This AttributeConstraint might move over to the Core someday.</li>
+		<li>Added possibility to find a Frame or IFrame by any of its (custom) attributes.</li>
+		<li>Added Frame.GetAttributeValue(attributename) to get any of the Frame or IFrame (custom) attributes.</li>
+		<li>Added possibility to find an Ancestor of an Element using a predicate or lambda expression.</li>
+
+		</ul></p><br />
+
+		<p><strong>Other technical changes</strong></p><br />
+		<p><ul>
+		<li>Added BaseConstraint.</li>
+		<li>AttributeConstraint is now a BaseConstraint.</li>
+		<li>Renamed NotAttributeConstraint to NotConstraint. Inherits from BaseConstraint.</li>
+		<li>Renamed IndexAttributeConstraint to IndexConstraint. Inherits from BaseConstraint.</li>
+		<li>Renamed AlwaysTrueAttributeConstraint to AlwaysTrueConstraint. Inherits from BaseConstraint.</li>
+		<li>StringComparer can now do case insensitive compare as well.</li>
+		<li>Added StringComparer.AreEqual static methods to compare culture invariant.</li>
+		<li>Moved constraint classes into their own namespace WatiN.Core.Constraints.</li>
+		<li>Added ElementConstraint.</li>
+		<li>Fixed bug where Constraints with state where not reset before they where reused. Added virtual method Reset to BaseConstraint which gets overridden in IndexConstraint to clear state.</li>
+		<li>ElementConstraint also accepts Element as a valid attributebag.</li>
+		<li>Cleaned up PredicateComparer and renamed it to PredicateStringComparer.</li>
+		<li>Made DomContainer.OnGetHtmlDocument public so DomContainer can be inherited by classes outside of the WatiN assembly.</li>
+		<li>Added static method ElementTag.IsAnInputElement(string tagName).</li>
+		<li>Element implements IAttributeBag.</li>
+		<li>Made DomContainer property on Document public.</li>
+		<li>Added strong name to the Nant build for Core and UnitTests (WatiNKey.snk is not in the repository)</li>
+		</ul></p><br />
         <h1>API <span class="green">Changes</span></h1>
 
         <p>See <a href="api-changes-1-2-0-to-1-3-0.html" target=
@@ -254,22 +297,30 @@
 
         <p><strong>Added Feature requests:</strong></p>
 		<p>
-		1714801 Possibility to highlight an element outside of watin. Made Element.Highlight(bool) public.<br />
+		1714801 Possibility to highlight an element outside of WatiN. Made Element.Highlight(bool) public.<br />
+		1819277 A handler for javascript:prompt dialog.<br />
 		1885867 Improved exception handling for constraints / comparers. The Innerexception of ElementNotFoundException is now set (if an expection occurred during waiting for an element).<br />
+		1886640 Add overloads to Table.FindRow().<br />
+		1899205 Add basic support for Linq.<br />
+		1930882 Support for VBscript dialogs.<br />
 		1943370 IE.AttachToIENoWait() method for handling PDF windows.<br />
+		1974283 Add Ie.GoToNoWait().<br />
         <p>
 		</p><br />
 
         <p><strong>Fixed Bugs:</strong></p>
         <p>
 		1765704 FileDownload Watcher not working.<br />
+		1769956 FileDownloadHandler doesn't hanlde close checkbox.<br />
+		1790886 FileDownloadHandler time out problem.<br />
 		1819233 Globalization problem on element find. Fixed issues with WatiN not working for Turkish culture settings.<br />
 		1830404 Path that contains a tilde (~) result in faulty control text.<br />
-		....... Fixed issue in GetClassName on Windows 98.<br />
+		??????? Fixed issue in GetClassName on Windows 98.<br />
 		1903404 Double URL decoding in Goto().<br />
-		1958882 SelectNoWait is waiting somewhere.<br />
 		1932065 FireEventNoWait hangs when ModalWindow opened.<br />
-		1963035 IE Dispose to long.<br />
+		1958882 SelectNoWait is waiting somewhere.<br />
+		1963035 IE Dispose takes too long.<br />
+		1998693 Get control back over a pdf generated IE window.<br />
         </p><br />
       </div>
       <div id="rightbar">
