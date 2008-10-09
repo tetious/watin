@@ -72,9 +72,10 @@
 		</p><p>
 		This release is a continuation if the 1.x releases and thus only supports Internet Explorer. In preparation of the final 2.0 release the code base already has changed quit a bit to allow for multiple browser support. This has led to re-organising classes and namespaces as wel as marking some classes, methods and properties with the Obsolete attribute. If you went (way) beyond the basic use of WatiN you might now encounter the new INativeElement, INativeBrowser and INativeElementFinder interfaces implemented by IEElement, IEBrowser and IEElementFinder. These interfaces are not final yet but they are the (internal) way to go for WatiN's multiple browser support (anybody interested in WatiN for Chrome?).
 		</p><p>
-		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines who contributed Find.Near() and Find.ByLabel().
-		</p><p>
-		<strong>Support for lambda expressions and Linq</strong><br />
+		<p>I also like to thank all who have contributed to this release with code and suggestions. A special thanks to Jeremy Wadsack of Seven Simple Machines. He contributed the new Find.Near() and Find.ByLabel() features.
+		</p>
+		
+		<p><strong>Support for lambda expressions and Linq</strong><br />
 		</p><p>
 		One of the most exciting new features in this release is support for lambda expressions. If you use WatiN with Visual Studio 2008 you can now use lambda expessions as an alternative to the static ByXXX methods in the Find class. Following is a simple example:
 		<p></br>
@@ -116,6 +117,24 @@
 		</p>
 		<br />
 		
+		<p><strong>Breaking Change</strong><br /></p>
+		<p>To support element.WaitUntil(Predicate&lt;T&gt;) for .Net 2.0 and higher, the new classes Element&lt;E&gt; and ElementsContainer&lt;E&gt; are introduced. This is a <i>BREAKING</i> change cause the following syntax won't work any longer (with WatiN for .Net 2.0 and higher):</p>
+		<p><code>
+		ElementsContainer div = ie.Div(findBy);
+		</code></p>
+		<p>Change it to:</p>
+		<p><code>
+		IElementsContainer div = ie.Div(findBy);<br />
+		<br />
+		// or<br />
+		<br />
+		ElementsContainer&lt;Div&gt; div = ie.Div(findBy);<br />
+		<br />
+		// or for C# 3.0<br />
+		<br />
+		var div = ie.Div(findBy);<br />
+		</code></p>
+
         <p><strong>New filtering options on collections</strong><br /></p>
 		<p>All element collections now have the First() and First(BaseConstraint) methods. If you are only interested in the first item of a collection this will give better performance than getting the zero indexed item from a collection (ie.TextFields[0]). Example:</p>
 		<p><code>
@@ -134,11 +153,6 @@
 		<p>Since many people are using the UseDialogOnce class included in the UnitTest project, it has been moved to the Core project. The class
 		ensures that a dialog handler is removed when it gets disposed. See the examples below on how to use this class.</p>
 		<p>Two new  dialog handlers have been introduced. One to handle the vbscript msgbox dialog (VbScriptMsgBoxDialogHandler). Thanks to Julian Jelfs for this contribution:
-		</p><p>
-				<p>
-		    <input id="showPrompt" onclick="fnPrompt()" type="button" value="Show prompt" />
-		    <input id="promptResult" type="text" />
-		</p>
 
 		<code>
         public void Using_the_VbScriptMsgBoxDialogHandler()<br />
@@ -184,28 +198,41 @@
 		<p><code>
 		ie.Table(findBy).FindRow(cell => Equals(cell.Text, "Some text"));
 		</code></p>
-		<p>With the current Table.TableRows and TableRow.TableCells implementation you get a collection of all these elements, even if they are inside nested tables. In many scenarios a restriction to get only the cells directly related to a row (or only the rows directly related to a table) would make things a lot easier. To accomplish this the following properties are added:
+		<p>With the current Table.TableRows and TableRow.TableCells implementation you get a collection of all these elements, even if they are inside nested tables. In many scenarios a restriction to get only the cells directly related to a row (or only the rows directly related to a table) would make things a lot easier. A nice side effect is a bit of performance gain. To accomplish this the following properties are added:
 		<ul>
 			<li>TableRow.TableCellsDirectChildren</li>
 			<li>Table.TableRowsDirectChildren</li>
 			<li>TableBody.TableRowsDirectChildren</li>
 			<li>Table.FindRowInDirectChildren</li>
 		</ul>
-		</p>
+		</p><br />
 
-        <p><strong>Breaking Changes</strong><br /></p>
-		<p>To support element.WaitUntil(Predicate&lt;T&gt;) for .Net 2.0 and higher, the new classes Element&lt;E&gt; and ElementsContainer&lt;E&gt; are introduced. This is a <i>BREAKING</i> change cause the following syntax won't work any longer (with WatiN for .Net 2.0 and higher):</p>
+        <p><strong>Settings</strong><br /></p>
+		<p>Added new Setting.SleepTime to tweak waiting time when WatiN searches for an element. This value is used when WatiN does call Thread.Sleep during the search for an element. By reducing this time your tests will run (way) faster. I was able to get this down to 30 milliseconds without experiencing problems with a big suite of regression tests. The gained us 5 minutes (from 30 to 25 minutes).</p>
+		<p>In previous releases ie.TextField("something") was basically a shorter notation for ie.TextField(Find.ById("something")). This release introduces to possibility to change the default (id) constraint so that ie.TextField("something") will be the shorter notation for ie.TextField(Find.ByDefault("something")).</p>
+		<p>Following is an example on how to setup WatiN so that it will always use Regex to find an element by id (especially handy when your working with ASP.Net id's).</p>
 		<p><code>
-		ElementsContainer div = ie.Div(findBy);
-		</code></p>
-		<p>Change it into:</p>
-		<p><code>
-		IElementsContainer div = ie.Div(findBy);<br />
+		// First create a class which implements IFindByDefaultFactory<br />
+		// and creates a regex of the given string<br />
+		public class FindByAspIdFactory : IFindByDefaultFactory<br />
+		{<br />
+		&nbsp;public BaseConstaint ByDefault(string value)<br /> 
+		&nbsp;&nbsp;{ return new Find.ById(new Regex(".*" + value + "$") }<br />
 		<br />
-		// or<br />
+		&nbsp;public BaseConstaint ByDefault(Regex value)<br />
+		&nbsp;&nbsp;{ return new Find.ById(value) }<br />
+		}<br />
 		<br />
-		ElementsContainer&lt;Div&gt; div = ie.Div(findBy);<br />
+		// Then assign FindByAspIdFactory to the setting FindByDefaultFactory<br />
+		Settings.FindByDefaultFactory = new FindByAspIdFactory();<br />
+		<br />
+		// Lets assume we are looking for an element<br />
+		// with the id "container1_somemore_btn_next"<br />
+		// Instead of ie.Button(new Regex(".*btn_next$")) you can now write <br />
+		Button nextButton = ie.Button("btn_next");<br />
 		</code></p>
+		<p> Introduced a new (static) Settings class as replacement for IE.Settings. It is basically a wrapper around the class DefaultSettings implementing the new ISettings interface (same pattern as used for Logger/LogWriter). If you did inherit from the old Settings class you should now inherit from DefaultSettings. It is also possible to create your own settings class (implementing ISettings) and assign an instance to the Settings.Instance property.
+		</p><br />
 
         <p><strong>Other changes</strong><br />
         <p>Moved UseDialogOnce class to WatiN.Core.DialogHandlers</p>
