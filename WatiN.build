@@ -62,9 +62,9 @@ Copyright 2006-2007 Jeroen van Menen
   <target name="build">
     <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
 
-    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}" keyfile="${base.dir}\WatiNKey.snk"/>
+    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}" keyfile="${base.dir}\WatiNKey.snk">
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}" >
       <sources>
         <include name="${core.source.dir}\**.cs"/>
       </sources>
@@ -78,14 +78,14 @@ Copyright 2006-2007 Jeroen van Menen
       <nowarn>
         <warning number="0618" />
         <warning number="1591" />
-        <warning number="1616" />
+        <warning number="1616" if="${string::contains('${nant.settings.currentframework}','net-2.0')}"/>
       </nowarn>
     </csc>
 
     <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
     <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}" keyfile="${base.dir}\WatiNKey.snk">
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}" >
       <sources>
         <include name="${unittests.source.dir}\**.cs"/>
       </sources>
@@ -99,7 +99,7 @@ Copyright 2006-2007 Jeroen van Menen
       </references>
       <nowarn>
         <warning number="0618" />
-        <warning number="1616" />
+        <warning number="1616" if="${string::contains('${nant.settings.currentframework}','net-2.0')}"/>
       </nowarn>
     </csc>
 

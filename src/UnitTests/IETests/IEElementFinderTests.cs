@@ -34,12 +34,11 @@ namespace WatiN.Core.UnitTests.IETests
 		private IElementCollection stubElementCollection;
 		private DomContainer domContainer;
 
-		[SetUp]
 		public void SetUp()
 		{
 			mocks = new MockRepository();
-			stubElementCollection = (IElementCollection) mocks.DynamicMock(typeof (IElementCollection));
-			domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer), new object[] { });
+			stubElementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
+			domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer));
 
 			SetupResult.For(stubElementCollection.Elements).Return(null);
 
@@ -55,6 +54,8 @@ namespace WatiN.Core.UnitTests.IETests
 		[Test]
 		public void FindFirstShouldReturnNullIfIElementCollectionIsNull()
 		{
+			SetUp();
+
 			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
 
 			Assert.IsNull(finder.FindFirst());
@@ -63,6 +64,8 @@ namespace WatiN.Core.UnitTests.IETests
 		[Test]
 		public void FindAllShouldReturnEmptyArrayListIfIElementCollectionIsNull()
 		{
+			SetUp();
+			
 			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
 
 			Assert.AreEqual(0, finder.FindAll().Count);
@@ -71,6 +74,8 @@ namespace WatiN.Core.UnitTests.IETests
 		[Test]
 		public void ElementFinderShouldCallConstraintResetBeforeCompare()
 		{
+			SetUp();
+			
 			MyTestConstraint constraint = new MyTestConstraint();
 			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection, domContainer);
 			
@@ -84,6 +89,8 @@ namespace WatiN.Core.UnitTests.IETests
 
 		public void ShouldNotFindElementWithIdofWrongElementType()
 		{
+			SetUp();
+			
 			Assert.That(ie.Span("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
 			Assert.That(ie.Div("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.True);
 		}
@@ -91,12 +98,16 @@ namespace WatiN.Core.UnitTests.IETests
 		[Test]
 		public void ShouldNotFindElementWithByNameWhenSearchingForId()
 		{
+			SetUp();
+			
 			Assert.That(ie.TextField("textinput1").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
 		}
 
 		[Test]
 		public void FindingElementByExactIdShouldBeFasterThenUsingAnyOtherConstraint()
 		{
+			SetUp();
+			
 			// Kick this code off to prevent initialization issues during measurement
 			Assert.IsTrue(ie.Div("divid").Exists);
 
