@@ -72,6 +72,33 @@
 								<File Source="$(var.distdir)src\WatiN.sln" Name="WatiN.sln" Id="WatiN.sln" />
 							</Component>
 							<Directory Id="Core" Name="Core">
+								<Directory Id="CoreInterfaces" Name="CoreInterfaces">
+									<Component Guid="7575D5D9-4A8C-48d8-9C24-051F9ABED8F0" Id="CoreInterfaces" DiskId="1">
+										<File Source="$(var.distdir)src\Core\Interfaces\IAttributeBag.cs" Name="IATTRI_1.CS" Id="IAttributeBag.cs" LongName="IAttributeBag.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\ICompare.cs" Name="ICOMPA_1.CS" Id="ICompare.cs" LongName="ICompare.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\ICompareElement.cs" Name="ICOMPA_2.CS" Id="ICompareElement.cs" LongName="ICompareElement.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IDialogHandler.cs" Name="IDIALO_1.CS" Id="IDialogHandler.cs" LongName="IDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IElementCollection.cs" Name="IELEM_1.CS" Id="IElementCollection.cs" LongName="IElementCollection.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IElementsContainer.cs" Name="IELEM_2.CS" Id="IElementsContainer.cs" LongName="IElementsContainer.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IFindByDefaultFactory.cs" Name="IFINDB_2.CS" Id="IFindByDefaultFactory.cs" LongName="IFindByDefaultFactory.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IHwnd.cs" Name="IHWND.CS" Id="IHwnd.cs" LongName="IHwnd.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\ILogWriter.cs" Name="ILOGWR.CS" Id="ILogWriter.cs" LongName="ILogWriter.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\INativeBrowser.cs" Name="INATIV_1.CS" Id="INativeBrowser.cs" LongName="INativeBrowser.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\INativeElement.cs" Name="INATIV_2.CS" Id="INativeElement.cs" LongName="INativeElement.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\INativeElementFinder.cs" Name="INATIV_3.CS" Id="INativeElementFinder.cs" LongName="INativeElementFinder.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\ISettings.cs" Name="ISETTI_1.CS" Id="ISettings.cs" LongName="ISettings.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\ITextElement.cs" Name="ITEXTE_1.CS" Id="ITextElement.cs" LongName="ITextElement.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\IWait.cs" Name="IWAIT.CS" Id="IWait.cs" LongName="IWait.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="CoreLogging" Name="CoreLogging">
+									<Component Guid="3242FF7C-CCC6-499b-9574-5E95BCABCD92" Id="CoreLogging" DiskId="1">
+										<File Source="$(var.distdir)src\Core\Interfaces\ConsoleLogWriter.cs" Name="CONSOL_1.CS" Id="ConsoleLogWriter.cs" LongName="ConsoleLogWriter.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\DebugLogWriter.cs" Name="DEBUGL_1.CS" Id="DebugLogWriter.cs" LongName="DebugLogWriter.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\Logger.cs" Name="LOGGER.CS" Id="Logger.cs" LongName="Logger.cs" />
+										<File Source="$(var.distdir)src\Core\Interfaces\NoLog.cs" Name="NOLOG.CS" Id="NoLog.cs" LongName="NoLog.cs" />
+									</Component>
+								</Directory>
 								<Component Guid="DD7B6772-5EBD-4BB2-A3AC-7F5B5E49317F" Id="CoreSource" DiskId="1">
 									<File Source="$(var.distdir)src\Core\AssemblyInfo.cs" Name="ASSEMB_1.CS" Id="AssemblyInfo.cs" LongName="AssemblyInfo.cs" />
 									<File Source="$(var.distdir)src\Core\BaseElementCollection.cs" Name="BASEEL_1.CS" Id="BaseElementCollection.cs" LongName="BaseElementCollection.cs" />
