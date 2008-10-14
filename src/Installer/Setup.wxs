@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Wix>
-  <Product Id="45FAAB85-AE66-4D2E-9ADD-5684A23C5118" Name="$(var.productname)" Language="1033" Version="$(var.productversion)" Manufacturer="Jeroen van Menen">
-    <Package Id="8C725124-B2AA-4441-B877-367A95E50798" Description="$(var.productname)" Comments="For more info and the latests version visit http://watin.sourceforge.net" InstallerVersion="200" Compressed="yes" />
+  <Product Id="D4894DAB-64B8-4B5A-83C5-9E63265E97A1" Name="$(var.productname)" Language="1033" Version="$(var.productversion)" Manufacturer="Jeroen van Menen">
+    <Package Id="E56D0DBA-EFDE-4F00-86FD-96140DE07064" Description="$(var.productname)" Comments="For more info and the latests version visit http://watin.sourceforge.net" InstallerVersion="200" Compressed="yes" />
     <!--  Extra info in the Add or Remove Programs Entrie -->
     <Property Id="ARPURLINFOABOUT">http://watin.sourceforge.net</Property>
     <Property Id="ARPURLUPDATEINFO">http://sourceforge.net/project/showfiles.php?group_id=167632</Property>
@@ -23,6 +23,7 @@
         <ComponentRef Id="WatiN.Core.UnitTests.dllConfig" />
         <ComponentRef Id="Microsoft.mshtmlDll" />
         <ComponentRef Id="Rhino.MocksDll" />
+        <ComponentRef Id="nunit.frameworkDll" />
         <ComponentRef Id="Interop.SHDocVwDll" />
         <ComponentRef Id="binhtml" />
         <ComponentRef Id="binhtmliframes" />
@@ -35,10 +36,22 @@
       <Feature Id="SourceCode" Title="Source code" Description="Installs the WatiN.Core and WatiN.UnitTests source code." Level="1000">
         <ComponentRef Id="WatiNSln" />
         <ComponentRef Id="CoreSource" />
+        <ComponentRef Id="CoreComparers" />
+        <ComponentRef Id="CoreConstraints" />
+        <ComponentRef Id="CoreDialogHandlers" />
+        <ComponentRef Id="CoreExceptions" />
+        <ComponentRef Id="CoreIE" />
+        <ComponentRef Id="CoreInterfaces" />
+        <ComponentRef Id="CoreLogging" />
+        <ComponentRef Id="CoreUtilityClasses" />
         <ComponentRef Id="UnitTestsSource" />
         <ComponentRef Id="UnitTestsHTML" />
-        <ComponentRef Id="UnitTestsHTMLIframes" />
-        <ComponentRef Id="UnitTestsHTMLImages" />
+        <ComponentRef Id="UnitTestsHTMLiframes" />
+        <ComponentRef Id="UnitTestsHTMLimages" />
+        <ComponentRef Id="UnitTestsAttributeConstraintTests" />
+        <ComponentRef Id="UnitTestsComparerTests" />
+        <ComponentRef Id="UnitTestsDialogHandlerTests" />
+        <ComponentRef Id="UnitTestsIETests" />
       </Feature>
     </Feature>
   </Product>

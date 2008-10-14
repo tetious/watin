@@ -35,18 +35,26 @@
 							<Component Guid="A37BD5B1-82FC-4D9F-A033-A93C9A5B5390" Id="WatiN.CoreXml" DiskId="1">
 								<File Source="$(var.distdir)bin\WatiN.Core.xml" Name="WATINC_1.XML" Id="WatiN.Core.xml" LongName="WatiN.Core.xml" />
 							</Component>
+							<Component Guid="D2B8DA9B-7E79-4a13-8435-7C0D30B3BCAE" Id="nunit.frameworkDll" DiskId="1">
+								<File Source="$(var.distdir)bin\nunit.framework.dll" Name="nunitf_1.dll" Id="nunit.framework.dll" LongName="nunit.framework.dll" />
+							</Component>
 							<Directory Id="binhtml" Name="html">
 								<Component Guid="0D7542BA-4551-418A-AD14-1766A8485560" Id="binhtml" DiskId="1">
+									<File Source="$(var.distdir)bin\html\~^+{}[].txt" Name="~^A{}AA.TXT" Id="AAAA.txt" LongName="~^+{}[].txt" />
 									<File Source="$(var.distdir)bin\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="CrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />
 									<File Source="$(var.distdir)bin\html\formsubmit.html" Name="FORMSU_1.HTM" Id="formsubmit.html" LongName="formsubmit.html" />
 									<File Source="$(var.distdir)bin\html\Frameset.html" Name="FRAMESET.HTM" Id="Frameset.html" LongName="Frameset.html" />
 									<File Source="$(var.distdir)bin\html\FramesetWithinFrameset.html" Name="FRAMES_1.HTM" Id="FramesetWithinFrameset.html" LongName="FramesetWithinFrameset.html" />
 									<File Source="$(var.distdir)bin\html\images.html" Name="IMAGES.HTM" Id="images.html" LongName="images.html" />
 									<File Source="$(var.distdir)bin\html\Index.html" Name="INDEX.HTM" Id="Index.html" LongName="Index.html" />
+									<File Source="$(var.distdir)bin\html\intro.html" Name="INTRO.HTM" Id="Intro.html" LongName="Intro.html" />
 									<File Source="$(var.distdir)bin\html\main.html" Name="MAIN.HTM" Id="main.html" LongName="main.html" />
+									<File Source="$(var.distdir)bin\html\OnBeforeUnloadJavaDialog.html" Name="ONBEF_1.HTM" Id="OnBeforeUnloadJavaDialog.html" LongName="main.html" />
 									<File Source="$(var.distdir)bin\html\popup.html" Name="POPUP.HTM" Id="popup.html" LongName="popup.html" />
+									<File Source="$(var.distdir)bin\html\ProximityTests.html" Name="PROXI_.HTM" Id="ProximityTests.html" LongName="ProximityTests.html" />
 									<File Source="$(var.distdir)bin\html\Tables.html" Name="TABLES.HTM" Id="Tables.html" LongName="Tables.html" />
 									<File Source="$(var.distdir)bin\html\TestEvents.html" Name="TESTEV_1.HTM" Id="TestEvents.html" LongName="TestEvents.html" />
+									<File Source="$(var.distdir)bin\html\theApp.html" Name="THEAPP.HTM" Id="theApp.html" LongName="theApp.html" />
 								</Component>
 								<Directory Id="biniframes" Name="iframes">
 									<Component Guid="3A5AB06C-1652-4636-A083-2590E311C03A" Id="binhtmliframes" DiskId="1">
@@ -72,7 +80,87 @@
 								<File Source="$(var.distdir)src\WatiN.sln" Name="WatiN.sln" Id="WatiN.sln" />
 							</Component>
 							<Directory Id="Core" Name="Core">
-								<Directory Id="CoreInterfaces" Name="CoreInterfaces">
+								<Directory Id="Comparers" Name="Compar_1" LongName="Comparers">
+									<Component Guid="4EDECB45-610F-4b26-B31C-FDAA08CA03D8" Id="CoreComparers" DiskId="1">
+										<File Source="$(var.distdir)src\Core\Comparers\AlwaysTrueComparer.cs" Name="ALWAYSTR.CS" Id="AlwaysTrueComparer.cs" LongName="AlwaysTrueComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\BaseComparer.cs" Name="BASECOMP.CS" Id="BaseComparer.cs" LongName="BaseComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\BoolComparer.cs" Name="BOOLCOMP.CS" Id="BoolComparer.cs" LongName="BoolComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\PredicateElementComparer.cs" Name="PREDIC_1.CS" Id="PredicateElementComparer.cs" LongName="PredicateElementComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\PredicateStringComparer.cs" Name="PREDIC_2.CS" Id="PredicateStringComparer.cs" LongName="PredicateStringComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\RegexComparer.cs" Name="REGEXC_1.CS" Id="RegexComparer.cs" LongName="RegexComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\StringComparer.cs" Name="STRING_1.CS" Id="StringComparer.cs" LongName="StringComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\StringContainsAndCaseInsensitiveComparer.cs" Name="STRING_2.CS" Id="StringContainsAndCaseInsensitiveComparer.cs" LongName="StringContainsAndCaseInsensitiveComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\StringEqualsAndCaseInsensitiveComparer.cs" Name="STRING_3.CS" Id="StringEqualsAndCaseInsensitiveComparer.cs" LongName="StringEqualsAndCaseInsensitiveComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\TypeComparer.cs" Name="TYPECO_1.CS" Id="TypeComparer.cs" LongName="TypeComparer.cs" />
+										<File Source="$(var.distdir)src\Core\Comparers\UriComparer.cs" Name="URICOM_1.CS" Id="UriComparer.cs" LongName="UriComparer.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="Constraints" Name="Constr_1" LongName="Constraints">
+									<Component Guid="539E0325-80A6-413a-939F-2AFE9F674FF8" Id="CoreConstraints" DiskId="1">
+										<File Source="$(var.distdir)src\Core\Constraints\AlwaysTrueConstraint.cs" Name="ALWAYSTR.CS" Id="AlwaysTrueConstraint.cs" LongName="AlwaysTrueConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\AttributeConstraint.cs" Name="ATTRIB_1.CS" Id="AttributeConstraint.cs" LongName="AttributeConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\BaseConstraint.cs" Name="BASECO_1.CS" Id="BaseConstraint.cs" LongName="BaseConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\ElementConstraint.cs" Name="ELEMEN_1.CS" Id="ElementConstraint.cs" LongName="ElementConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\IndexConstraint.cs" Name="INDEXC_1.CS" Id="IndexConstraint.cs" LongName="IndexConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\LabelTextConstraint.cs" Name="LABELT_1.CS" Id="LabelTextConstraint.cs" LongName="LabelTextConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\NotConstraint.cs" Name="NOTCON_1.CS" Id="NotConstraint.cs" LongName="NotConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\ObsoleteConstraints.cs" Name="OBSOLE_1.CS" Id="ObsoleteConstraints.cs" LongName="ObsoleteConstraints.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\ProximityTextConstraint.cs" Name="PROXIM_1.CS" Id="ProximityTextConstraint.cs" LongName="ProximityTextConstraint.cs" />
+										<File Source="$(var.distdir)src\Core\Constraints\TableRowAttributeConstraint.cs" Name="TABLER_1.CS" Id="TableRowAttributeConstraint.cs" LongName="TableRowAttributeConstraint.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="DialogHandlers" Name="Dialog_1" LongName="DialogHandlers">
+									<Component Guid="B14F25FA-C9C4-4a84-BA04-8192B8472C2D" Id="CoreDialogHandlers" DiskId="1">
+										<File Source="$(var.distdir)src\Core\DialogHandlers\AlertAndConfirmDialogHandler.cs" Name="ALERTA_1.CS" Id="AlertAndConfirmDialogHandler.cs" LongName="AlertAndConfirmDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\AlertDialogHandler.cs" Name="ALERTD_1.CS" Id="AlertDialogHandler.cs" LongName="AlertDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\BaseDialogHandler.cs" Name="BASEDI_1.CS" Id="BaseDialogHandler.cs" LongName="BaseDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\CertificateWarningHandler.cs" Name="CERTIF_1.CS" Id="CertificateWarningHandler.cs" LongName="CertificateWarningHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\ConfirmDialogHandler.cs" Name="CONFIR_1.CS" Id="ConfirmDialogHandler.cs" LongName="ConfirmDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\DialogWatcher.cs" Name="DIALOG_1.CS" Id="DialogWatcher.cs" LongName="DialogWatcher.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\FileDownloadHandler.cs" Name="FILEDO_1.CS" Id="FileDownloadHandler.cs" LongName="FileDownloadHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\FileDownloadOptionEnum.cs" Name="FILEDO_2.CS" Id="FileDownloadOptionEnum.cs" LongName="FileDownloadOptionEnum.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\FileUploadDialogHandler.cs" Name="FILEUP_2.CS" Id="FileUploadDialogHandler.cs" LongName="FileUploadDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\Hwnd.cs" Name="HWND.CS" Id="Hwnd.cs" LongName="Hwnd.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\JavaDialogHandler.cs" Name="JAVADI_1.CS" Id="JavaDialogHandler.cs" LongName="JavaDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\LogonDialogHandler.cs" Name="LOGOND_1.CS" Id="LogonDialogHandler.cs" LongName="LogonDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\PrintDialogHandler.cs" Name="PRINTD_1.CS" Id="PrintDialogHandler.cs" LongName="PrintDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\PromptDialogHandler.cs" Name="PROMPT_1.CS" Id="PromptDialogHandler.cs" LongName="PromptDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\ReturnDialogHandler.cs" Name="RETURN_1.CS" Id="ReturnDialogHandler.cs" LongName="ReturnDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\SecurityAlertDialogHandler.cs" Name="SECURI_1.CS" Id="SecurityAlertDialogHandler.cs" LongName="SecurityAlertDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\SimpleJavaDialogHandler.cs" Name="SIMPLE_1.CS" Id="SimpleJavaDialogHandler.cs" LongName="SimpleJavaDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\UseDialogOnce.cs" Name="USEONC_1.CS" Id="UseDialogOnce.cs" LongName="UseDialogOnce.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\VbScriptMsgBoxDialogHandler.cs" Name="VBSCRI_1.CS" Id="VbScriptMsgBoxDialogHandler.cs" LongName="VbScriptMsgBoxDialogHandler.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\WinButton.cs" Name="WINBUT_1.CS" Id="WinButton.cs" LongName="WinButton.cs" />
+										<File Source="$(var.distdir)src\Core\DialogHandlers\Window.cs" Name="WINDOW.CS" Id="Window.cs" LongName="Window.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="Exceptions" Name="Except_1" LongName="Exceptions">
+									<Component Guid="B1BAEFF3-2059-46fe-86A4-F78CF4003414" Id="CoreExceptions" DiskId="1">
+										<File Source="$(var.distdir)src\Core\Exceptions\ElementDisabledException.cs" Name="ELEMEN_1.CS" Id="ElementDisabledException.cs" LongName="ElementDisabledException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\ElementNotFoundException.cs" Name="ELEMEN_2.CS" Id="ElementNotFoundException.cs" LongName="ElementNotFoundException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\ElementReadOnlyException.cs" Name="ELEMEN_3.CS" Id="ElementReadOnlyException.cs" LongName="ElementReadOnlyException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\FrameNotFoundException.cs" Name="FRAMEN_1.CS" Id="FrameNotFoundException.cs" LongName="FrameNotFoundException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\HtmlDialogNotFoundException.cs" Name="HTMLDI_1.CS" Id="HtmlDialogNotFoundException.cs" LongName="HtmlDialogNotFoundException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\IENotFoundException.cs" Name="IENOTF_1.CS" Id="IENotFoundException.cs" LongName="IENotFoundException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\InvalidAttributException.cs" Name="INVALI_1.CS" Id="InvalidAttributException.cs" LongName="InvalidAttributException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\JavaScriptException.cs" Name="JAVASC_1.CS" Id="JavaScriptException.cs" LongName="JavaScriptException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\MissingAlertException.cs" Name="MISSIN_1.CS" Id="MissingAlertException.cs" LongName="MissingAlertException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\ReEntryException.cs" Name="REENTR_1.CS" Id="ReEntryException.cs" LongName="ReEntryException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\ReferenceCountException.cs" Name="REFRES_1.CS" Id="ReferenceCountException.cs" LongName="ReferenceCountException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\RunScriptException.cs" Name="RUNSCR_1.CS" Id="RunScriptException.cs" LongName="RunScriptException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\SelectListItemNotFoundException.cs" Name="SELECT_1.CS" Id="SelectListItemNotFoundException.cs" LongName="SelectListItemNotFoundException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\TimeoutException.cs" Name="TIMEOU_1.CS" Id="TimeoutException.cs" LongName="TimeoutException.cs" />
+										<File Source="$(var.distdir)src\Core\Exceptions\WatiNException.cs" Name="WATINE_1.CS" Id="WatiNException.cs" LongName="WatiNException.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="IE" Name="IE">
+									<Component Guid="B1BAEFF3-2059-46fe-86A4-F78CF4003414" Id="CoreIE" DiskId="1">
+										<File Source="$(var.distdir)src\Core\IE\IEBrowser.cs" Name="IEBROW_1.CS" Id="IEBrowser.cs" LongName="IEBrowser.cs" />
+										<File Source="$(var.distdir)src\Core\IE\IEElement.cs" Name="IEELEM_1.CS" Id="IEElement.cs" LongName="IEElement.cs" />
+										<File Source="$(var.distdir)src\Core\IE\IEElementFinder.cs" Name="IEELEM_2.CS" Id="IEElementFinder.cs" LongName="IEElementFinder.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="CoreInterfaces" Name="Interf_1" LongName="Interfaces">
 									<Component Guid="7575D5D9-4A8C-48d8-9C24-051F9ABED8F0" Id="CoreInterfaces" DiskId="1">
 										<File Source="$(var.distdir)src\Core\Interfaces\IAttributeBag.cs" Name="IATTRI_1.CS" Id="IAttributeBag.cs" LongName="IAttributeBag.cs" />
 										<File Source="$(var.distdir)src\Core\Interfaces\ICompare.cs" Name="ICOMPA_1.CS" Id="ICompare.cs" LongName="ICompare.cs" />
@@ -91,15 +179,27 @@
 										<File Source="$(var.distdir)src\Core\Interfaces\IWait.cs" Name="IWAIT.CS" Id="IWait.cs" LongName="IWait.cs" />
 									</Component>
 								</Directory>
-								<Directory Id="CoreLogging" Name="CoreLogging">
+								<Directory Id="CoreLogging" Name="Loggin_1" LongName="Logging">
 									<Component Guid="3242FF7C-CCC6-499b-9574-5E95BCABCD92" Id="CoreLogging" DiskId="1">
-										<File Source="$(var.distdir)src\Core\Interfaces\ConsoleLogWriter.cs" Name="CONSOL_1.CS" Id="ConsoleLogWriter.cs" LongName="ConsoleLogWriter.cs" />
-										<File Source="$(var.distdir)src\Core\Interfaces\DebugLogWriter.cs" Name="DEBUGL_1.CS" Id="DebugLogWriter.cs" LongName="DebugLogWriter.cs" />
-										<File Source="$(var.distdir)src\Core\Interfaces\Logger.cs" Name="LOGGER.CS" Id="Logger.cs" LongName="Logger.cs" />
-										<File Source="$(var.distdir)src\Core\Interfaces\NoLog.cs" Name="NOLOG.CS" Id="NoLog.cs" LongName="NoLog.cs" />
+										<File Source="$(var.distdir)src\Core\Logging\ConsoleLogWriter.cs" Name="CONSOL_1.CS" Id="ConsoleLogWriter.cs" LongName="ConsoleLogWriter.cs" />
+										<File Source="$(var.distdir)src\Core\Logging\DebugLogWriter.cs" Name="DEBUGL_1.CS" Id="DebugLogWriter.cs" LongName="DebugLogWriter.cs" />
+										<File Source="$(var.distdir)src\Core\Logging\Logger.cs" Name="LOGGER.CS" Id="Logger.cs" LongName="Logger.cs" />
+										<File Source="$(var.distdir)src\Core\Logging\NoLog.cs" Name="NOLOG.CS" Id="NoLog.cs" LongName="NoLog.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="UtilityClasses" Name="UTILIT_1" LongName="UtilityClasses">
+									<Component Guid="2FF41F40-A416-4463-AA1F-FAF639CE758C" Id="CoreUtilityClasses" DiskId="1">
+										<File Source="$(var.distdir)src\Core\UtilityClasses\CaptureWebPage.cs" Name="CAPTUR_1.CS" Id="CaptureWebPage.cs" LongName="CaptureWebPage.cs" />
+										<File Source="$(var.distdir)src\Core\UtilityClasses\SimpleTimer.cs" Name="SIMPLE_1.CS" Id="SimpleTimer.cs" LongName="SimpleTimer.cs" />
+										<File Source="$(var.distdir)src\Core\UtilityClasses\Utils.cs" Name="UTILS.CS" Id="Utils.cs" />
+										<File Source="$(var.distdir)src\Core\UtilityClasses\Win32.cs" Name="WIN32.CS" Id="Win32.cs" />
+										<File Source="$(var.distdir)src\Core\UtilityClasses\WinInet.cs" Name="WININET.CS" Id="WinInet.cs" />
 									</Component>
 								</Directory>
 								<Component Guid="DD7B6772-5EBD-4BB2-A3AC-7F5B5E49317F" Id="CoreSource" DiskId="1">
+									<File Source="$(var.distdir)src\Core\AllFramesProcessor.cs" Name="ALLFRA_1.CS" Id="AllFramesProcessor.cs" LongName="AllFramesProcessor.cs" />
+									<File Source="$(var.distdir)src\Core\Area.cs" Name="AREA.CS" Id="Area.cs" LongName="Area.cs" />
+									<File Source="$(var.distdir)src\Core\AreaCollection.cs" Name="AREACO_1.CS" Id="AreaCollection.cs" LongName="AreaCollection.cs" />
 									<File Source="$(var.distdir)src\Core\AssemblyInfo.cs" Name="ASSEMB_1.CS" Id="AssemblyInfo.cs" LongName="AssemblyInfo.cs" />
 									<File Source="$(var.distdir)src\Core\BaseElementCollection.cs" Name="BASEEL_1.CS" Id="BaseElementCollection.cs" LongName="BaseElementCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Button.cs" Name="Button.cs" Id="Button.cs" />
@@ -107,37 +207,39 @@
 									<File Source="$(var.distdir)src\Core\CheckBox.cs" Name="CheckBox.cs" Id="CheckBox.cs" />
 									<File Source="$(var.distdir)src\Core\CheckBoxCollection.cs" Name="CHECKB_1.CS" Id="CheckBoxCollection.cs" LongName="CheckBoxCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Core.csproj" Name="CORE.CSP" Id="Core.csproj" LongName="Core.csproj" />
-									<File Source="$(var.distdir)src\Core\DialogWatcher.cs" Name="DIALOG_1.CS" Id="DialogWatcher.cs" LongName="DialogWatcher.cs" />
+									<File Source="$(var.distdir)src\Core\DefaultSettings.cs" Name="DEFAUL_1.CS" Id="DefaultSettings.cs" LongName="DefaultSettings.cs" />
 									<File Source="$(var.distdir)src\Core\Div.cs" Name="Div.cs" Id="Div.cs" />
 									<File Source="$(var.distdir)src\Core\DivCollection.cs" Name="DIVCOL_1.CS" Id="DivCollection.cs" LongName="DivCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Document.cs" Name="Document.cs" Id="Document.cs" />
 									<File Source="$(var.distdir)src\Core\DomContainer.cs" Name="DOMCON_1.CS" Id="DomContainer.cs" LongName="DomContainer.cs" />
 									<File Source="$(var.distdir)src\Core\Element.cs" Name="Element.cs" Id="Element.cs" />
-									<File Source="$(var.distdir)src\Core\ElementCollection.cs" Name="ELEMEN_1.CS" Id="ElementCollection.cs" LongName="ElementCollection.cs" />
-									<File Source="$(var.distdir)src\Core\ElementFinder.cs" Name="ELEMEN_2.CS" Id="ElementFinder.cs" LongName="ElementFinder.cs" />
+									<File Source="$(var.distdir)src\Core\ElementAttributeBag.cs" Name="ELEMEN_1.CS" Id="ElementAttributeBag.cs" LongName="ElementAttributeBag.cs" />
+									<File Source="$(var.distdir)src\Core\ElementCollection.cs" Name="ELEMEN_2.CS" Id="ElementCollection.cs" LongName="ElementCollection.cs" />
 									<File Source="$(var.distdir)src\Core\ElementsContainer.cs" Name="ELEMEN_3.CS" Id="ElementsContainer.cs" LongName="ElementsContainer.cs" />
 									<File Source="$(var.distdir)src\Core\ElementsSupport.cs" Name="ELEMEN_4.CS" Id="ElementsSupport.cs" LongName="ElementsSupport.cs" />
-									<File Source="$(var.distdir)src\Core\Exceptions.cs" Name="EXCEPT_1.CS" Id="Exceptions.cs" LongName="Exceptions.cs" />
+									<File Source="$(var.distdir)src\Core\ElementTag.cs" Name="ELEMEN_5.CS" Id="ElementTag.cs" LongName="ElementTag.cs" />
 									<File Source="$(var.distdir)src\Core\FileUpload.cs" Name="FILEUP_1.CS" Id="FileUpload.cs" LongName="FileUpload.cs" />
 									<File Source="$(var.distdir)src\Core\FileUploadCollection.cs" Name="FILEUP_2.CS" Id="FileUploadCollection.cs" LongName="FileUploadCollection.cs" />
-									<File Source="$(var.distdir)src\Core\FindBy.cs" Name="FindBy.cs" Id="FindBy.cs" />
+									<File Source="$(var.distdir)src\Core\Find.cs" Name="Find.cs" Id="Find.cs" />
+									<File Source="$(var.distdir)src\Core\FindByDefaultFactory.cs" Name="FINDBY_1.cs" Id="FindByDefaultFactory.cs" LongName="FindByDefaultFactory.cs"/>
 									<File Source="$(var.distdir)src\Core\Form.cs" Name="Form.cs" Id="Form.cs" />
 									<File Source="$(var.distdir)src\Core\FormCollection.cs" Name="FORMCO_1.CS" Id="FormCollection.cs" LongName="FormCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Frame.cs" Name="Frame.cs" Id="Frame.cs" />
+									<File Source="$(var.distdir)src\Core\FrameByIndexProcessor.cs" Name="FRAMEB_1.CS" Id="FrameByIndexProcessor.cs" LongName="FrameByIndexProcessor.cs" />
 									<File Source="$(var.distdir)src\Core\FrameCollection.cs" Name="FRAMEC_1.CS" Id="FrameCollection.cs" LongName="FrameCollection.cs" />
+									<File Source="$(var.distdir)src\Core\FrameCountProcessor.cs" Name="FRAMEC_2.CS" Id="FrameCountProcessor.cs" LongName="FrameCountProcessor.cs" />
 									<File Source="$(var.distdir)src\Core\HTMLDialog.cs" Name="HTMLDI_1.CS" Id="HTMLDialog.cs" LongName="HTMLDialog.cs" />
 									<File Source="$(var.distdir)src\Core\HTMLDialogCollection.cs" Name="HTMLDI_2.CS" Id="HTMLDialogCollection.cs" LongName="HTMLDialogCollection.cs" />
 									<File Source="$(var.distdir)src\Core\IE.cs" Name="IE.cs" Id="IE.cs" />
+									<File Source="$(var.distdir)src\Core\IEAttributeBag.cs" Name="IEATTR_1.CS" Id="IEAttributeBag.cs" LongName="IEAttributeBag.cs" />
 									<File Source="$(var.distdir)src\Core\IECollection.cs" Name="IECOLL_1.CS" Id="IECollection.cs" LongName="IECollection.cs" />
-									<File Source="$(var.distdir)src\Core\IElementsContainer.cs" Name="IELEME_1.CS" Id="IElementsContainer.cs" LongName="IElementsContainer.cs" />
+									<File Source="$(var.distdir)src\Core\IEWaitForComplete.cs" Name="IEWAIT_1.CS" Id="IEWaitForComplete.cs" LongName="IEWaitForComplete.cs" />
 									<File Source="$(var.distdir)src\Core\Image.cs" Name="Image.cs" Id="Image.cs" />
 									<File Source="$(var.distdir)src\Core\ImageCollection.cs" Name="IMAGEC_1.CS" Id="ImageCollection.cs" LongName="ImageCollection.cs" />
-									<File Source="$(var.distdir)src\Core\ITextElement.cs" Name="ITEXTE_1.CS" Id="ITextElement.cs" LongName="ITextElement.cs" />
 									<File Source="$(var.distdir)src\Core\Label.cs" Name="Label.cs" Id="Label.cs" />
 									<File Source="$(var.distdir)src\Core\LabelCollection.cs" Name="LABELC_1.CS" Id="LabelCollection.cs" LongName="LabelCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Link.cs" Name="Link.cs" Id="Link.cs" />
 									<File Source="$(var.distdir)src\Core\LinkCollection.cs" Name="LINKCO_1.CS" Id="LinkCollection.cs" LongName="LinkCollection.cs" />
-									<File Source="$(var.distdir)src\Core\Logging.cs" Name="Logging.cs" Id="Logging.cs" />
 									<File Source="$(var.distdir)src\Core\Option.cs" Name="Option.cs" Id="Option.cs" />
 									<File Source="$(var.distdir)src\Core\OptionCollection.cs" Name="OPTION_1.CS" Id="OptionCollection.cs" LongName="OptionCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Para.cs" Name="Para.cs" Id="Para.cs" />
@@ -147,6 +249,7 @@
 									<File Source="$(var.distdir)src\Core\RadioCheck.cs" Name="RADIOC_1.CS" Id="RadioCheck.cs" LongName="RadioCheck.cs" />
 									<File Source="$(var.distdir)src\Core\SelectList.cs" Name="SELECT_1.CS" Id="SelectList.cs" LongName="SelectList.cs" />
 									<File Source="$(var.distdir)src\Core\SelectListCollection.cs" Name="SELECT_2.CS" Id="SelectListCollection.cs" LongName="SelectListCollection.cs" />
+									<File Source="$(var.distdir)src\Core\Settings.cs" Name="SETTIN_2.CS" Id="Settings.cs" LongName="Settings.cs" />
 									<File Source="$(var.distdir)src\Core\Span.cs" Name="Span.cs" Id="Span.cs" />
 									<File Source="$(var.distdir)src\Core\SpanCollection.cs" Name="SPANCO_1.CS" Id="SpanCollection.cs" LongName="SpanCollection.cs" />
 									<File Source="$(var.distdir)src\Core\Style.cs" Name="Style.cs" Id="Style.cs" />
@@ -160,47 +263,132 @@
 									<File Source="$(var.distdir)src\Core\TableRowCollection.cs" Name="TABLER_1.CS" Id="TableRowCollection.cs" LongName="TableRowCollection.cs" />
 									<File Source="$(var.distdir)src\Core\TextField.cs" Name="TEXTFI_1.CS" Id="TextField.cs" LongName="TextField.cs" />
 									<File Source="$(var.distdir)src\Core\TextFieldCollection.cs" Name="TEXTFI_2.CS" Id="TextFieldCollection.cs" LongName="TextFieldCollection.cs" />
-									<File Source="$(var.distdir)src\Core\Utils.cs" Name="Utils.cs" Id="Utils.cs" />
-									<File Source="$(var.distdir)src\Core\Win32.cs" Name="Win32.cs" Id="Win32.cs" />
+									<File Source="$(var.distdir)src\Core\TypedElementFactory.cs" Name="TYPEDE_1.cs" Id="TypedElementFactory.cs" LongName="TypedElementFactory.cs"/>
+									<File Source="$(var.distdir)src\Core\WaitForComplete.cs" Name="WAITFO_1.cs" Id="WaitForComplete.cs" LongName="WaitForComplete.cs" />
 								</Component>
 							</Directory>
 							<Directory Id="UnitTests" Name="UnitTest" LongName="UnitTests">
 								<Component Guid="8045498F-4A16-493C-BA94-5FB4BEBA0B28" Id="UnitTestsSource" DiskId="1">
+									<File Source="$(var.distdir)src\UnitTests\App.config" Name="App.con" Id="App.config" LongName="App.config" />
 									<File Source="$(var.distdir)src\UnitTests\AssemblyInfo.cs" Name="ASSEMB_1.CS" Id="UnitTests.AssemblyInfo.cs" LongName="AssemblyInfo.cs" />
-									<File Source="$(var.distdir)src\UnitTests\Elements.cs" Name="Elements.cs" Id="Elements.cs" />
-									<File Source="$(var.distdir)src\UnitTests\FindElementBy.cs" Name="FINDEL_1.CS" Id="FindElementBy.cs" LongName="FindElementBy.cs" />
+									<File Source="$(var.distdir)src\UnitTests\BaseElementCollectionTest.cs" Name="BASELE_1.CS" Id="BaseElementCollectionTest.cs" LongName="BaseElementCollectionTest.cs" />
+									<File Source="$(var.distdir)src\UnitTests\BaseWatiNTest.cs" Name="BASEWA_1.cs" Id="BaseWatiNTest.cs" LongName="BaseWatiNTest.cs" />
+									<File Source="$(var.distdir)src\UnitTests\BaseWithIETests.cs" Name="BASEWI_1.cs" Id="BaseWithIETests.cs" LongName="BaseWithIETests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ButtonTests.cs" Name="BUTTON_1.cs" Id="ButtonTests.cs" LongName="ButtonTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\CheckBoxTests.cs" Name="CHECKB_1.cs" Id="CheckBoxTests.cs" LongName="CheckBoxTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\DefaultSettingsTests.cs" Name="DEFAUL_1.cs" Id="DefaultSettingsTests.cs" LongName="DefaultSettingsTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\DivTests.cs" Name="DIVTES_1.cs" Id="DivTests.cs" LongName="DivTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\DocumentTests.cs" Name="DOCUME_1.cs" Id="DocumentTests.cs" LongName="DocumentTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\DomContainerTests.cs" Name="DOMCON_1.cs" Id="DomContainerTests.cs" LongName="DomContainerTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\DotNet35Tests.cs" Name="DOTNET_1.cs" Id="DotNet35Tests.cs" LongName="DotNet35Tests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ElementAttributeBagTests.cs" Name="ELEMEN_1.cs" Id="ElementAttributeBagTests.cs" LongName="ElementAttributeBagTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ElementStyleTests.cs" Name="ELEMEN_2.cs" Id="ElementStyleTests.cs" LongName="ElementStyleTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ElementTagTests.cs" Name="ELEMEN_3.cs" Id="ElementTagTests.cs" LongName="ElementTagTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ElementTests.cs" Name="ELEMEN_4.cs" Id="ElementTests.cs" LongName="ElementTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FileUploadTests.cs" Name="FILEUP_1.cs" Id="FileUploadTests.cs" LongName="FileUploadTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FindTests.cs" Name="FINDTE_1.cs" Id="FindTests.cs" LongName="FindTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FormTests.cs" Name="FORMTE_1.cs" Id="FormTests.cs" LongName="FormTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\FrameCrossDomainTests.cs" Name="FRAMEC_1.CS" Id="FrameCrossDomainTests.cs" LongName="FrameCrossDomainTests.cs" />
 									<File Source="$(var.distdir)src\UnitTests\FrameTests.cs" Name="FRAMET_1.CS" Id="FrameTests.cs" LongName="FrameTests.cs" />
-									<File Source="$(var.distdir)src\UnitTests\IEAndMainDocument.cs" Name="IEANDM_1.CS" Id="IEAndMainDocument.cs" LongName="IEAndMainDocument.cs" />
+									<File Source="$(var.distdir)src\UnitTests\HTMLDialogFindByTests.cs" Name="HTMLDI_1.CS" Id="HTMLDialogFindByTests.cs" LongName="HTMLDialogFindByTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\HTMLDialogTests.cs" Name="HTMLDI_2.CS" Id="HTMLDialogTests.cs" LongName="HTMLDialogTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\IETests.cs" Name="IETEST_1.CS" Id="IETests.cs" LongName="IETests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\IFramesTests.cs" Name="IFRAME_1.CS" Id="IFramesTests.cs" LongName="IFramesTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ImageTests.cs" Name="IMAGET_1.CS" Id="ImageTests.cs" LongName="ImageTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\LabelTests.cs" Name="LABELT_1.CS" Id="LabelTests.cs" LongName="LabelTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\LinkTests.cs" Name="LINKTE_1.CS" Id="LinkTests.cs" LongName="LinkTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\LoggerTests.cs" Name="LOGGER_1.CS" Id="LoggerTests.cs" LongName="LoggerTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\MockAttributeBag.cs" Name="MOCKAT_1.CS" Id="MockAttributeBag.cs" LongName="MockAttributeBag.cs" />
+									<File Source="$(var.distdir)src\UnitTests\ParaTests.cs" Name="PARATE_1.CS" Id="ParaTests.cs" LongName="ParaTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\RadioButtonTests.cs" Name="RADIOB_1.CS" Id="RadioButtonTests.cs" LongName="RadioButtonTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\SelectListTests.cs" Name="SELECT_1.CS" Id="SelectListTests.cs" LongName="SelectListTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\SettingsTests.cs" Name="SETTIN_1.CS" Id="SettingsTests.cs" LongName="SettingsTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\SpanTests.cs" Name="SPANTE_1.CS" Id="SpanTests.cs" LongName="SpanTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\TableBodyTests.cs" Name="TABLEB_1.CS" Id="TableBodyTests.cs" LongName="TableBodyTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\TableCellTests.cs" Name="TABLEC_1.CS" Id="TableCellTests.cs" LongName="TableCellTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\TableRowTests.cs" Name="TABLER_1.CS" Id="TableRowTests.cs" LongName="TableRowTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\TableTests.cs" Name="TABLET_1.CS" Id="TableTests.cs" LongName="TableTests.cs" />
+									<File Source="$(var.distdir)src\UnitTests\TextFieldTests.cs" Name="TEXTFI_1.CS" Id="TextFieldTests.cs" LongName="TextFieldTests.cs" />
 									<File Source="$(var.distdir)src\UnitTests\UnitTests.csproj" Name="UNITTE_1.CSP" Id="UnitTests.csproj" LongName="UnitTests.csproj" />
 									<File Source="$(var.distdir)src\UnitTests\Utils.cs" Name="Utils.cs" Id="UnitTests.Utils.cs" />
 									<File Source="$(var.distdir)src\UnitTests\WatiN.Core.UnitTests.dll.config" Name="WATINC_1.CON" Id="UnitTests.WatiN.Core.UnitTests.dll.config" LongName="WatiN.Core.UnitTests.dll.config" />
-									<File Source="$(var.distdir)src\UnitTests\WatiNTest.cs" Name="WATINT_1.CS" Id="WatiNTest.cs" LongName="WatiNTest.cs" />
 								</Component>
+								<Directory Id="AttributeConstraintTests" Name="Attrib_1" LongName="AttributeConstraintTests">
+									<Component Guid="72D1678C-C62E-4aa7-AAFF-76103F71A6D8" Id="UnitTestsAttributeConstraintTests" DiskId="1">
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\BaseConstraintTests.cs" Name="BASECO_1.CS" Id="BaseConstraintTests.cs" LongName="BaseConstraintTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs" Name="COMPLE_1.CS" Id="ComplexMultipleAttributeConstraintTests.cs" LongName="ComplexMultipleAttributeConstraintTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\ElementConstraintTests.cs" Name="ELEMEN_1.CS" Id="ElementConstraintTests.cs" LongName="ElementConstraintTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\EvenMoreComplexMultipleAttributeConstraintsTests.cs" Name="EVENMO_1.CS" Id="EvenMoreComplexMultipleAttributeConstraintsTests.cs" LongName="EvenMoreComplexMultipleAttributeConstraintsTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\FindByMultipleAttributeConstraintsTests.cs" Name="FINDBY_1.CS" Id="FindByMultipleAttributeConstraintsTests.cs" LongName="FindByMultipleAttributeConstraintsTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\IndexConstraintTests.cs" Name="INDEXC_1.CS" Id="IndexConstraintTests.cs" LongName="IndexConstraintTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\MyTestConstraint.cs" Name="MYTEST_1.CS" Id="MyTestConstraint.cs" LongName="MyTestConstraint.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\NotConstraintTests.cs" Name="NOTCON_1.CS" Id="NotConstraintTests.cs" LongName="NotConstraintTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\AttributeConstraintTests\ProximityTests.cs" Name="PROXIM_1.CS" Id="ProximityTests.cs" LongName="ProximityTests.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="ComparerTests" Name="COMPAR_1" LongName="ComparerTests">
+									<Component Guid="523636F6-30FC-4985-A5EC-4142B7869827" Id="UnitTestsComparerTests" DiskId="1">
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\BoolComparerTests.cs" Name="BOOLCO_1.CS" Id="BoolComparerTests.cs" LongName="BoolComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\PredicateComparerTests.cs" Name="PREDIC_1.CS" Id="PredicateComparerTests.cs" LongName="PredicateComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\RegexComparerTests.cs" Name="REGEXC_1.CS" Id="RegexComparerTests.cs" LongName="RegexComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\StringComparerTests.cs" Name="STRING_1.CS" Id="StringComparerTests.cs" LongName="StringComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\StringContainsAndCaseInsensitiveComparerTests.cs" Name="STRING_2.CS" Id="StringContainsAndCaseInsensitiveComparerTests.cs" LongName="StringContainsAndCaseInsensitiveComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\StringEqualsAndCaseInsensitiveComparerTests.cs" Name="STRING_3.CS" Id="StringEqualsAndCaseInsensitiveComparerTests.cs" LongName="StringEqualsAndCaseInsensitiveComparerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\ComparerTests\UriComparerTests.cs" Name="URICOM_1.CS" Id="UriComparerTests.cs" LongName="UriComparerTests.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="DialogHandlerTests" Name="DIALOG_1" LongName="DialogHandlerTests">
+									<Component Guid="6979BDEC-4EEA-4156-BACA-BCA36445AF82" Id="UnitTestsDialogHandlerTests" DiskId="1">
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\AlertAndConfirmDialogHandlerTests.cs" Name="ALERTA_1.CS" Id="AlertAndConfirmDialogHandlerTests.cs" LongName="AlertAndConfirmDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\AlertDialogHandlerTests.cs" Name="ALERTD_1.CS" Id="AlertDialogHandlerTests.cs" LongName="AlertDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\ConfirmDialogHandlerTests.cs" Name="CONFIR_1.CS" Id="ConfirmDialogHandlerTests.cs" LongName="ConfirmDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\DialogWatcherTests.cs" Name="DIALOG_1.CS" Id="DialogWatcherTests.cs" LongName="DialogWatcherTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\FileDownloadHandlerTests.cs" Name="FILEDO_1.CS" Id="FileDownloadHandlerTests.cs" LongName="FileDownloadHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\LogonDialogHandlerTests.cs" Name="LOGOND_1.CS" Id="LogonDialogHandlerTests.cs" LongName="LogonDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\ModalPopupExtenderTests.cs" Name="MODALP_1.CS" Id="ModalPopupExtenderTests.cs" LongName="ModalPopupExtenderTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\PromptDialogHandlerTests.cs" Name="PROMPT_1.CS" Id="PromptDialogHandlerTests.cs" LongName="PromptDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\ReturnJavaDialogHandlerTest.cs" Name="RETURN_1.CS" Id="ReturnJavaDialogHandlerTest.cs" LongName="ReturnJavaDialogHandlerTest.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\SecurityDialogHandlerTests.cs" Name="SECURI_1.CS" Id="SecurityDialogHandlerTests.cs" LongName="SecurityDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\SimpleJavaDialogHandlerTests.cs" Name="SIMPLE_1.CS" Id="SimpleJavaDialogHandlerTests.cs" LongName="SimpleJavaDialogHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\VbScriptMsgBoxHandlerTests.cs" Name="VBSCRI_1.CS" Id="VbScriptMsgBoxHandlerTests.cs" LongName="VbScriptMsgBoxHandlerTests.cs" />
+										<File Source="$(var.distdir)src\UnitTests\DialogHandlerTests\WinButtonTests.cs" Name="WINBUT_1.CS" Id="WinButtonTests.cs" LongName="WinButtonTests.cs" />
+									</Component>
+								</Directory>
+								<Directory Id="IETests" Name="IETests">
+									<Component Guid="91D03EB2-C3A8-48a0-BB18-D452861D88DD" Id="UnitTestsIETests" DiskId="1">
+										<File Source="$(var.distdir)src\UnitTests\IETests\IEElementFinderTests.cs" Name="IEELEM_1.CS" Id="IEElementFinderTests.cs" LongName="IEElementFinderTests.cs" />
+									</Component>
+								</Directory>
 								<Directory Id="html" Name="html">
 									<Component Guid="BC27B511-C0C8-4C22-A333-FAB5ADC1E6F2" Id="UnitTestsHTML" DiskId="1">
-										<File Source="$(var.distdir)src\UnitTests\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="html.CrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\formsubmit.html" Name="FORMSU_1.HTM" Id="html.formsubmit.html" LongName="formsubmit.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\Frameset.html" Name="FRAMESET.HTM" Id="html.Frameset.html" LongName="Frameset.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\FramesetWithinFrameset.html" Name="FRAMES_1.HTM" Id="html.FramesetWithinFrameset.html" LongName="FramesetWithinFrameset.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\images.html" Name="IMAGES.HTM" Id="html.images.html" LongName="images.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\Index.html" Name="INDEX.HTM" Id="html.Index.html" LongName="Index.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\main.html" Name="MAIN.HTM" Id="html.main.html" LongName="main.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\popup.html" Name="POPUP.HTM" Id="html.popup.html" LongName="popup.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\Tables.html" Name="TABLES.HTM" Id="html.Tables.html" LongName="Tables.html" />
-										<File Source="$(var.distdir)src\UnitTests\html\TestEvents.html" Name="TESTEV_1.HTM" Id="html.TestEvents.html" LongName="TestEvents.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\~^+{}[].txt" Name="~^A{}AA.TXT" Id="TAAAA.txt" LongName="~^+{}[].txt" />
+										<File Source="$(var.distdir)src\UnitTests\html\CrossDomainFrameset.html" Name="CROSSD_1.HTM" Id="TCrossDomainFrameset.html" LongName="CrossDomainFrameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\formsubmit.html" Name="FORMSU_1.HTM" Id="Tformsubmit.html" LongName="formsubmit.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Frameset.html" Name="FRAMESET.HTM" Id="TFrameset.html" LongName="Frameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\FramesetWithinFrameset.html" Name="FRAMES_1.HTM" Id="TFramesetWithinFrameset.html" LongName="FramesetWithinFrameset.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\images.html" Name="IMAGES.HTM" Id="Timages.html" LongName="images.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Index.html" Name="INDEX.HTM" Id="TIndex.html" LongName="Index.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\intro.html" Name="INTRO.HTM" Id="TIntro.html" LongName="Intro.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\main.html" Name="MAIN.HTM" Id="Tmain.html" LongName="main.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\OnBeforeUnloadJavaDialog.html" Name="ONBEF_1.HTM" Id="TOnBeforeUnloadJavaDialog.html" LongName="main.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\popup.html" Name="POPUP.HTM" Id="Tpopup.html" LongName="popup.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\ProximityTests.html" Name="PROXI_.HTM" Id="TProximityTests.html" LongName="ProximityTests.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\Tables.html" Name="TABLES.HTM" Id="TTables.html" LongName="Tables.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\TestEvents.html" Name="TESTEV_1.HTM" Id="TTestEvents.html" LongName="TestEvents.html" />
+										<File Source="$(var.distdir)src\UnitTests\html\theApp.html" Name="THEAPP.HTM" Id="TtheApp.html" LongName="theApp.html" />
 									</Component>
-									<Directory Id="iframes" Name="iframes">
-										<Component Guid="B907AE90-C171-44BE-A916-4A6D08945EE4" Id="UnitTestsHTMLIframes" DiskId="1">
-											<File Source="$(var.distdir)src\UnitTests\html\iframes\leftpage.html" Name="LEFTPAGE.HTM" Id="iframes.leftpage.html" LongName="leftpage.html" />
-											<File Source="$(var.distdir)src\UnitTests\html\iframes\main.html" Name="MAIN.HTM" Id="iframes.main1.html" LongName="main.html" />
-											<File Source="$(var.distdir)src\UnitTests\html\iframes\middlepage.html" Name="MIDDLE_1.HTM" Id="iframes.middlepage.html" LongName="middlepage.html" />
-											<File Source="$(var.distdir)src\UnitTests\html\iframes\rightpage.html" Name="RIGHTP_1.HTM" Id="iframes.rightpage.html" LongName="rightpage.html" />
+									<Directory Id="UnitTestsHTMLiframes" Name="iframes">
+										<Component Guid="B907AE90-C171-44BE-A916-4A6D08945EE4" Id="UnitTestsHTMLiframes" DiskId="1">
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\leftpage.html" Name="LEFTPAGE.HTM" Id="Tleftpage.html" LongName="leftpage.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\main.html" Name="MAIN.HTM" Id="Tiframes.main.html" LongName="main.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\middlepage.html" Name="MIDDLE_1.HTM" Id="Tmiddlepage.html" LongName="middlepage.html" />
+											<File Source="$(var.distdir)src\UnitTests\html\iframes\rightpage.html" Name="RIGHTP_1.HTM" Id="Trightpage.html" LongName="rightpage.html" />
 										</Component>
 									</Directory>
-									<Directory Id="images" Name="images">
-										<Component Guid="7A588571-FA8D-4C02-B105-F1BC8957B119" Id="UnitTestsHTMLImages" DiskId="1">
-											<File Source="$(var.distdir)src\UnitTests\html\images\watin.jpg" Name="watin.jpg" Id="images.watin.jpg" />
-											<File Source="$(var.distdir)src\UnitTests\html\images\watinwebsite.jpg" Name="WATINW_1.JPG" Id="images.watinwebsite.jpg" LongName="watinwebsite.jpg" />
+									<Directory Id="UnitTestsHTMLimages" Name="images">
+										<Component Guid="7A588571-FA8D-4C02-B105-F1BC8957B119" Id="UnitTestsHTMLimages" DiskId="1">
+											<File Source="$(var.distdir)src\UnitTests\html\images\watin.jpg" Name="watin.jpg" Id="Twatin.jpg" />
+											<File Source="$(var.distdir)src\UnitTests\html\images\watinwebsite.jpg" Name="WATINW_1.JPG" Id="Twatinwebsite.jpg" LongName="watinwebsite.jpg" />
 										</Component>
 									</Directory>
 								</Directory>

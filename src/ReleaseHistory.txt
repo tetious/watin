@@ -1,4 +1,4 @@
-WatiN 1.3.0.4000 (11 October 2008)
+WatiN 1.3.0.4000 (14 October 2008)
 
 In this release support for lamdba's and Linq is added (for the .Net 2.0 version and higher). New helper methods are added to the Find class, two new DailogHandlers have been added and many smaller changes. This is the last 1.X release and also the last release supporting .Net 1.1. Many thanks to all who contributed to this release!
 
