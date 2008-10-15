@@ -1430,13 +1430,13 @@ namespace WatiN.Core
 		/// <value>The HTML dialogs.</value>
 		public HtmlDialogCollection HtmlDialogsNoWait
 		{
-			get { return GetHtmlDialogs(true); }
+			get { return GetHtmlDialogs(false); }
 		}
 
 		private HtmlDialogCollection GetHtmlDialogs(bool waitForComplete)
 		{
 			Process p = Process.GetProcessById(ProcessID);
-			HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p, true);
+            HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p, waitForComplete);
 
 			return htmlDialogCollection;
 		}
