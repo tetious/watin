@@ -420,7 +420,7 @@ namespace WatiN.Core
 #if !NET11
         public TableCell TableCell(Predicate<TableCell> predicate)
         {
-            return TableCell(predicate);
+            return TableCell(Find.ByElement(predicate));
         }
 #endif
 
