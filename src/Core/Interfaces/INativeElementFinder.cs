@@ -10,6 +10,6 @@ namespace WatiN.Core.Interfaces
 		ArrayList FindAll();
 		ArrayList FindAll(BaseConstraint constraint);
 		string ElementTagsToString { get; }
-		string ConstriantToString { get; }
+		string ConstraintToString { get; }
 	}
 }

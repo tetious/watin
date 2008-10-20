@@ -825,7 +825,7 @@ namespace WatiN.Core.UnitTests
 			LastCall.Throw(new Exception("My innerexception")).Repeat.AtLeastOnce();
 			
 			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
-			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
+			SetupResult.For(elementFinder.ConstraintToString).Return("id=something");
 
 		    IHTMLDocument2 ihtmlDocument = (IHTMLDocument2) mocks.CreateMock(typeof (IHTMLDocument2));
 		    SetupResult.For(ihtmlDocument.url).Return("http://mocked.com");
@@ -863,7 +863,7 @@ namespace WatiN.Core.UnitTests
 			LastCall.Return(null).Repeat.AtLeastOnce();
 			
 			SetupResult.For(elementFinder.ElementTagsToString).Return("button");
-			SetupResult.For(elementFinder.ConstriantToString).Return("id=something");
+			SetupResult.For(elementFinder.ConstraintToString).Return("id=something");
 
             DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof(DomContainer), new object[] { });
 			element = new Element(domContainer, elementFinder);

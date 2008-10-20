@@ -107,7 +107,7 @@ namespace WatiN.Core.InternetExplorer
 			get { return ElementTag.ElementTagsToString(tagsToFind); }
 		}
 
-		public string ConstriantToString
+		public string ConstraintToString
 		{
 			get { return _constraint.ConstraintToString(); }
 		}
