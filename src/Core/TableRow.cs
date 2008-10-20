@@ -25,11 +25,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tr element.
 	/// </summary>
-#if NET11
-    public class TableRow : ElementsContainer
-#else
     public class TableRow : ElementsContainer<TableRow>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -47,8 +43,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public TableRow(DomContainer domContainer, IHTMLTableRow htmlTableRow) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTableRow)) {}
+		public TableRow(DomContainer domContainer, INativeElement htmlTableRow) : base(domContainer, htmlTableRow) {}
 
 		public TableRow(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -81,16 +76,16 @@ namespace WatiN.Core
         {
             get 
             { 
-                IHTMLTableRow row = (IHTMLTableRow)HTMLElement;
+                var row = (IHTMLTableRow)HTMLElement;
 
-                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(row.cells);
+                var list = UtilityClass.IHtmlElementCollectionToArrayList(row.cells);
                 return new TableCellCollection(DomContainer, list);
             }
         }
 
-        internal new static Element New(DomContainer domContainer, IHTMLElement element)
+        internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new TableRow(domContainer, (IHTMLTableRow) element);
+			return new TableRow(domContainer, element);
 		}
 	}
 }

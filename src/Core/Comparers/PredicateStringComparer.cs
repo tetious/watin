@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-#if !NET11
 using System;
 
 namespace WatiN.Core.Comparers
@@ -48,4 +47,3 @@ namespace WatiN.Core.Comparers
 		}
 	}
 }
-#endif

@@ -201,7 +201,6 @@ namespace WatiN.Core.UnitTests
             ie.GoTo(TestPageUri);
         }
 
-#if !NET11
         [Test, Ignore("TODO")]
         public void TestAreaPredicateOverload()
         {
@@ -331,8 +330,7 @@ namespace WatiN.Core.UnitTests
         [Test, Ignore("TODO")]
         public void TestTableBodyPredicateOverload()
         {
-            //            TableBody TableBody = ie.TableBody(t => t.Name == "q");
-            TableBody TableBody = ie.TableBody(delegate(TableBody t) { return t.Id == "readonlytext"; });
+            var TableBody = ie.TableBody(t => t.Id == "readonlytext");
 
             Assert.That(TableBody.Id, Iz.EqualTo("readonlytext"));
         }
@@ -372,9 +370,6 @@ namespace WatiN.Core.UnitTests
 
             Assert.That(Image.Id, Iz.EqualTo("readonlytext"));
         }
-
-#endif 
-
 	}
 
     internal class HTMLInjector

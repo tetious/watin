@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="CheckBox" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class CheckBoxCollection : BaseElementCollection
-#else
     public class CheckBoxCollection : BaseElementCollection<CheckBox>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public CheckBoxCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(CheckBox.New)) {}
+		public CheckBoxCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, CheckBox.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public CheckBoxCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(CheckBox.New)) {}
+		public CheckBoxCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, CheckBox.New) {}
 
 		/// <summary>
 		/// Gets the <see cref="CheckBox"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public CheckBox this[int index]
 		{
-			get { return (CheckBox) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public CheckBoxCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new CheckBoxCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public CheckBoxCollection Filter(Predicate<CheckBox> predicate)
         {
             return new CheckBoxCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

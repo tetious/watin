@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-    public class ElementCollection : BaseElementCollection
-#else
     public class ElementCollection : BaseElementCollection <Element>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ElementCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Element.New)) {}
+		public ElementCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Element.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public ElementCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Element.New)) {}
+		public ElementCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Element.New) {}
 
 		/// <summary>
 		/// Gets the <see cref="Element"/> at the specified index.
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new ElementCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public ElementCollection Filter(Predicate<Element> predicate)
         {
             return new ElementCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

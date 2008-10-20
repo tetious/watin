@@ -77,9 +77,7 @@ namespace WatiN.Core.UnitTests
 			Form form = ie.Form("Form2");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), form);
-#if !NET11
 			Assert.IsInstanceOfType(typeof (ElementsContainer<Form>), form);
-#endif
             Assert.AreEqual("Form2", form.Id, "Unexpected Id");
 			Assert.AreEqual("form2name", form.Name, "Unexpected Name");
 			Assert.AreEqual("Form title", form.Title, "Unexpected Title");

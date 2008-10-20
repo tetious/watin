@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Image" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class ImageCollection : BaseElementCollection
-#else
     public class ImageCollection : BaseElementCollection<Image>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImageCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ImageCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Image.New)) {}
+		public ImageCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Image.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImageCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public ImageCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Image.New)) {}
+		public ImageCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Image.New) {}
 
 		/// <summary>
 		/// Gets the <see cref="Image"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Image this[int index]
 		{
-			get { return (Image) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public ImageCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new ImageCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public ImageCollection Filter(Predicate<Image> predicate)
         {
             return new ImageCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

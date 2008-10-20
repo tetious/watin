@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML para element.
 	/// </summary>
-#if NET11
-	public class Para : ElementsContainer
-#else
     public class Para : ElementsContainer<Para>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -39,16 +34,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("p"));
+					elementTags = new ArrayList {new ElementTag("p")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public Para(DomContainer domContainer, IHTMLParaElement htmlParaElement) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlParaElement)) {}
+		public Para(DomContainer domContainer, INativeElement htmlParaElement) : base(domContainer, htmlParaElement) {}
 
 		public Para(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -58,9 +51,9 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Para(Element element) : base(element, ElementTags) {}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Para(domContainer, (IHTMLParaElement) element);
+			return new Para(domContainer, element);
 		}
 	}
 }

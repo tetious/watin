@@ -44,25 +44,24 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
         private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
         {
-            MockRepository mocks = new MockRepository();
-            IHTMLElement IHTMLElementStub = (IHTMLElement) mocks.DynamicMock(typeof(IHTMLElement));
-            DomContainer domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
-            ElementAttributeBag elementAttributeBag = new ElementAttributeBag(domContainer, IHTMLElementStub);
+            var mocks = new MockRepository();
+            var INativeElementStub = (INativeElement) mocks.DynamicMock(typeof(INativeElement));
+            var domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
+            var elementAttributeBag = new ElementAttributeBag(domContainer, INativeElementStub);
 
-            SetupResult.For(IHTMLElementStub.getAttribute("tagName", 0)).Return("testtagname");
+            SetupResult.For(INativeElementStub.GetAttributeValue("tagName")).Return("testtagname");
             SetupResult.For(domContainer.NativeBrowser).Return(new IEBrowser(domContainer));
 			
             mocks.ReplayAll();
 
-            ElementComparerMock elementComparerMock = new ElementComparerMock(tagname);
-            ElementConstraint elementConstraint = new ElementConstraint(elementComparerMock);
+            var elementComparerMock = new ElementComparerMock(tagname);
+            var elementConstraint = new ElementConstraint(elementComparerMock);
 			
             Assert.That(elementConstraint.Compare(elementAttributeBag) == expectedResult);
 
             mocks.VerifyAll();
         }
 
-#if !NET11
         [Test]
         public void ShouldEvaluateAlsoTheAndConstraint()
         {
@@ -74,7 +73,6 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             Assert.That(link1.Url, Iz.EqualTo("http://watin.sourceforge.net/"));
             Assert.That(link2.Url, Iz.EqualTo("http://www.microsoft.com/"));
         }
-#endif
 
         public class ElementComparerMock : ICompareElement 
         {

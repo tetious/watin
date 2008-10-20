@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// Represents an area of an image map.
 	/// </summary>
-#if NET11
-	public class Area : Element
-#else
     public class Area : Element<Area>
-#endif
     {
 		private static ArrayList elementTags;
 
@@ -39,8 +34,7 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("area"));
+					elementTags = new ArrayList {new ElementTag("area")};
 				}
 
 				return elementTags;
@@ -53,8 +47,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="element">The element.</param>
-		public Area(DomContainer domContainer, IHTMLAreaElement element) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) {}
+		public Area(DomContainer domContainer, INativeElement element) : base(domContainer, element) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area" /> class.
@@ -102,9 +95,9 @@ namespace WatiN.Core
 			get { return GetAttributeValue("shape"); }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Area(domContainer, (IHTMLAreaElement) element);
+			return new Area(domContainer, element);
 		}
 	}
 }

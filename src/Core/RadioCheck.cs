@@ -27,14 +27,9 @@ namespace WatiN.Core
 	/// Base class for <see cref="CheckBox"/> and <see cref="RadioButton"/> provides
 	/// support for common functionality.
 	/// </summary>
-#if NET11
-    public class RadioCheck : Element
-#else
     public class RadioCheck<E> : Element<E> where E : Element
-#endif
 	{
-        public RadioCheck(DomContainer domContainer, IHTMLInputElement element) :
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
+        public RadioCheck(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
 		public RadioCheck(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 

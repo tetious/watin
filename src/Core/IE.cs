@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -64,14 +63,7 @@ namespace WatiN.Core
 		private SHDocVw.InternetExplorer ie;
 
 		private bool autoClose = true;
-		private bool isDisposed = false;
-
-        [Obsolete("Use Settings.Instance instead")]
-		public static ISettings Settings
-		{
-			set { Core.Settings.Instance = value; }
-			get { return Core.Settings.Instance; }
-		}
+		private bool isDisposed;
 
 		/// <summary>
 		/// Attach to an existing Internet Explorer. 
@@ -606,7 +598,7 @@ namespace WatiN.Core
 		{
 			CheckThreadApartmentStateIsSTA();
 
-			SHDocVw.InternetExplorer internetExplorer = shDocVwInternetExplorer as SHDocVw.InternetExplorer;
+			var internetExplorer = shDocVwInternetExplorer as SHDocVw.InternetExplorer;
 
 			if (shDocVwInternetExplorer == null)
 			{
@@ -616,7 +608,7 @@ namespace WatiN.Core
 			InitIEAndStartDialogWatcher(internetExplorer);
 		}
 
-		private void CreateNewIEAndGoToUri(Uri uri, LogonDialogHandler logonDialogHandler, bool createInNewProcess)
+		private void CreateNewIEAndGoToUri(Uri uri, IDialogHandler logonDialogHandler, bool createInNewProcess)
 		{
 			CheckThreadApartmentStateIsSTA();
 
@@ -646,17 +638,17 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		private SHDocVw.InternetExplorer CreateIEInNewProcess()
+		private static SHDocVw.InternetExplorer CreateIEInNewProcess()
 		{
-			Process m_Proc = Process.Start("IExplore.exe", "about:blank");
+			var m_Proc = Process.Start("IExplore.exe", "about:blank");
 
 			const int timeout = 5000;
-			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+			var timeoutTimer = new SimpleTimer(timeout);
 
 			do
 			{
 				m_Proc.Refresh();
-				int mainWindowHandle = (int) m_Proc.MainWindowHandle;
+				var mainWindowHandle = (int) m_Proc.MainWindowHandle;
 
 				if (mainWindowHandle != 0)
 				{
@@ -670,13 +662,7 @@ namespace WatiN.Core
 
 		private static void CheckThreadApartmentStateIsSTA()
 		{
-#if NET11      
-			// Code for .Net 1.1
-			bool isSTA = (Thread.CurrentThread.ApartmentState == ApartmentState.STA);
-#else
-            // Code for .Net 2.0
             bool isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
-#endif
 			if (!isSTA)
 			{
 				throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
@@ -840,7 +826,6 @@ namespace WatiN.Core
 			GoTo(CreateUri(url));
 		}
 
-#if !NET11
         /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" /> 
         /// without waiting for the page load to be finished.
@@ -902,7 +887,6 @@ namespace WatiN.Core
             thread.Start(url);
             thread.Join(500);
         }
-#endif
 
         [STAThread]
         private void GoToNoWaitInternal(object urlOrUri)

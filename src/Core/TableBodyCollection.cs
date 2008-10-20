@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,19 +26,15 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
 	/// </summary>
-#if NET11
-	public class TableBodyCollection : BaseElementCollection
-#else
     public class TableBodyCollection : BaseElementCollection<TableBody>
-#endif
     {
-		public TableBodyCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TableBody.New)) {}
+        public TableBodyCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TableBody.New) { }
 
-		public TableBodyCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableBody.New)) {}
+		public TableBodyCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TableBody.New) {}
 
 		public TableBody this[int index]
 		{
-			get { return (TableBody) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
         public TableBodyCollection Filter(BaseConstraint findBy)
@@ -46,12 +42,9 @@ namespace WatiN.Core
             return new TableBodyCollection(domContainer, DoFilter(findBy));
         }
 
-#if !NET11
         public TableBodyCollection Filter(Predicate<TableBody> predicate)
         {
             return new TableBodyCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

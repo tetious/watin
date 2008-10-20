@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML label element.
 	/// </summary>
-#if NET11
-	public class Label : ElementsContainer
-#else
     public class Label : ElementsContainer<Label>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -39,16 +34,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("label"));
+					elementTags = new ArrayList {new ElementTag("label")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public Label(DomContainer domContainer, IHTMLLabelElement labelElement) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(labelElement)) {}
+		public Label(DomContainer domContainer, INativeElement labelElement) : base(domContainer, labelElement) {}
 
 		public Label(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -68,9 +61,9 @@ namespace WatiN.Core
 			get { return GetAttributeValue("htmlFor"); }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Label(domContainer, (IHTMLLabelElement) element);
+			return new Label(domContainer, element);
 		}
 	}
 }

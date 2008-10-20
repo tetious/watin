@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML span element.
 	/// </summary>
-#if NET11
-    public class Span : ElementsContainer
-#else
     public class Span : ElementsContainer<Span>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -39,16 +34,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("span"));
+					elementTags = new ArrayList {new ElementTag("span")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public Span(DomContainer domContainer, IHTMLSpanElement htmlSpanElement) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlSpanElement)) {}
+		public Span(DomContainer domContainer, INativeElement htmlSpanElement) : base(domContainer, htmlSpanElement) {}
 
 		public Span(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -58,9 +51,9 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Span(Element element) : base(element, ElementTags) {}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Span(domContainer, (IHTMLSpanElement) element);
+			return new Span(domContainer, element);
 		}
 	}
 }

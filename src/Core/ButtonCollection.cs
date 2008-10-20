@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Button" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11      
-	public class ButtonCollection : BaseElementCollection
-#else
     public class ButtonCollection : BaseElementCollection<Button>
-#endif
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ButtonCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Button.New)) {}
+		public ButtonCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Button.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public ButtonCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Button.New)) {}
+		public ButtonCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Button.New) {}
 
 		/// <summary>
 		/// Gets the <see cref="Button"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Button this[int index]
 		{
-			get { return (Button) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public ButtonCollection Filter(BaseConstraint findBy)
@@ -62,11 +58,9 @@ namespace WatiN.Core
 			return new ButtonCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public ButtonCollection Filter(Predicate<Button> predicate)
         {
             return new ButtonCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
 	}
 }

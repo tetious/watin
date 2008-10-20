@@ -23,6 +23,7 @@ using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Comparers;
+using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
@@ -153,11 +154,7 @@ namespace WatiN.Core.UnitTests
 			Element parent = ie.Form("Form").Parent;
 		    IElementsContainer container = parent as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
-#if NET11
-            Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer)), "Should implement ElementsContainer");
-#else
             Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
-#endif
         }
 
 		[Test]
@@ -178,11 +175,7 @@ namespace WatiN.Core.UnitTests
 			Element previous = ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
 		    IElementsContainer container = previous as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
-#if NET11
-            Assert.IsTrue(previous.GetType().Equals(typeof(ElementsContainer)), "Should implement ElementsContainer");
-#else
             Assert.IsTrue(previous.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
-#endif
         }
 
 		[Test]
@@ -205,11 +198,7 @@ namespace WatiN.Core.UnitTests
 			Element next = ie.Div("NextAndPreviousTests").Span("second").NextSibling;
 		    IElementsContainer container = next as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
-#if NET11
-			Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer)), "Should be ElementsContainer");
-#else
             Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
-#endif
         }
 
 		[Test]
@@ -253,11 +242,7 @@ namespace WatiN.Core.UnitTests
 
 		    IElementsContainer container = element as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Should implement IElementsContainer");
-#if NET11
-			Assert.IsAssignableFrom(typeof(ElementsContainer), element, "The returned object form ie.Element should be castable to ElementsContainer");
-#else
             Assert.IsAssignableFrom(typeof(ElementsContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
-#endif
 
 			Assert.IsNotNull(element, "Element not found");
 
@@ -319,11 +304,7 @@ namespace WatiN.Core.UnitTests
 
 		    IElementsContainer container = elements[2] as IElementsContainer;
             Assert.That(container, Iz.Not.Null, "Element 2 should be an IElementsContainer");
-#if NET11
-            Assert.IsTrue(elements[2].GetType().Equals(typeof (ElementsContainer)), "Element 2 should be an ElementsContainer");
-#else
             Assert.IsTrue(elements[2].GetType().Equals(typeof(ElementsContainer<Element>)), "Element 2 should be an ElementsContainer<Element>");
-#endif
             Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
 		}
 
@@ -897,7 +878,6 @@ namespace WatiN.Core.UnitTests
             ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
         }
 
-#if !NET11
         [Test]
         public void AncestorGenericType()
         {
@@ -933,7 +913,6 @@ namespace WatiN.Core.UnitTests
             Assert.That(ancestor.Id, Iz.EqualTo("Table1"));
         }
 
-#if !NET11
         [Test]
         public void AncestorGenericTypeAndPredicateShouldReturnTypedElement()
         {
@@ -959,13 +938,9 @@ namespace WatiN.Core.UnitTests
             Table table3 = ie.Table("table1");
             table3.WaitUntil(IsEnabled);
         }
-#endif
         private static bool IsEnabled(Table table)
         {
             return table.Enabled;
         }
-
-
-#endif
 	}
 }

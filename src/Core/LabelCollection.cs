@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Label" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class LabelCollection : BaseElementCollection
-#else
     public class LabelCollection : BaseElementCollection<Label>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public LabelCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Label.New)) {}
+		public LabelCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Label.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public LabelCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Label.New)) {}
+        public LabelCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Label.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="Label"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Label this[int index]
 		{
-			get { return (Label) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public LabelCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new LabelCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public LabelCollection Filter(Predicate<Label> predicate)
         {
             return new LabelCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

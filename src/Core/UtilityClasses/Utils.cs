@@ -18,12 +18,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Threading;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -183,14 +185,14 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="elementCollection">The element collection.</param>
 		/// <returns>an array list with all the elements found in the element collection</returns>
-		internal static ArrayList IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
+		internal static IEnumerable<INativeElement> IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
 		{
-			ArrayList elements = new ArrayList();
-			int length = elementCollection.length;
+			var elements = new List<INativeElement>();
+			var length = elementCollection.length;
 
-			for (int index = 0; index < length; index++)
+			for (var index = 0; index < length; index++)
 			{
-				elements.Add(elementCollection.item(index, null));
+				elements.Add(new IEElement(elementCollection.item(index, null)));
 			}
 
 			return elements;
@@ -302,11 +304,7 @@ namespace WatiN.Core
         public static void AsyncActionOnBrowser(ThreadStart action)
         {
             Thread clickButton = new Thread(action);
-#if !NET11
             clickButton.SetApartmentState(ApartmentState.STA);
-#else
-            clickButton.ApartmentState = ApartmentState.STA;
-#endif
             clickButton.Start();
             clickButton.Join(500);
         }

@@ -84,11 +84,7 @@ namespace WatiN.Core
 	/// }
 	/// </code>
 	/// </example>
-#if !NET11
 	public static class Settings
-#else
-	public class Settings
-#endif
     {
         private static ISettings _instance = CreateDefaultSettings();
 

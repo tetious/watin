@@ -18,7 +18,6 @@
 
 using System.Collections;
 using System.IO;
-using mshtml;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
 
@@ -28,11 +27,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element 
 	/// of type file. 
 	/// </summary>
-#if NET11
-	public class FileUpload : Element
-#else
 	public class FileUpload : Element<FileUpload>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -42,16 +37,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("input", "file"));
+					elementTags = new ArrayList {new ElementTag("input", "file")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public FileUpload(DomContainer domContainer, IHTMLInputFileElement element) :
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
+		public FileUpload(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
 		public FileUpload(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -68,13 +61,13 @@ namespace WatiN.Core
 
 		public void Set(string fileName)
 		{
-			FileInfo info = new FileInfo(fileName);
+			var info = new FileInfo(fileName);
 			if (!info.Exists)
 			{
 				throw new FileNotFoundException("File does not exist", fileName);
 			}
 
-			FileUploadDialogHandler uploadDialogHandler = new FileUploadDialogHandler(fileName);
+			var uploadDialogHandler = new FileUploadDialogHandler(fileName);
 			DomContainer.AddDialogHandler(uploadDialogHandler);
 
 			try
@@ -87,9 +80,9 @@ namespace WatiN.Core
 			}
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new FileUpload(domContainer, (IHTMLInputFileElement) element);
+			return new FileUpload(domContainer, element);
 		}
 	}
 }

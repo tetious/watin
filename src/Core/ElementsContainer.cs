@@ -28,15 +28,8 @@ namespace WatiN.Core
     /// <summary>
 	/// Summary description for ElementsContainer.
 	/// </summary>
-#if NET11
-    public class ElementsContainer : Element, IElementsContainer, IElementCollection
-#else
     public class ElementsContainer<E> : Element<E>, IElementsContainer, IElementCollection where E : Element
-#endif
-	{
-        [Obsolete("Use the constructor accepting INativeElement instead")]
-        public ElementsContainer(DomContainer domContainer, object element) : this(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
-		
+	{		
 		public ElementsContainer(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement) {}
 
 		public ElementsContainer(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
@@ -61,12 +54,10 @@ namespace WatiN.Core
             return ElementsSupport.Area(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Area Area(Predicate<Area> predicate)
         {
             return Area(Find.ByElement(predicate));
         }
-#endif
 
         public AreaCollection Areas
         {
@@ -88,12 +79,11 @@ namespace WatiN.Core
             return ElementsSupport.Button(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Button Button(Predicate<Button> predicate)
         {
             return Button(Find.ByElement(predicate));
         }
-#endif
+
         public ButtonCollection Buttons
         {
             get { return ElementsSupport.Buttons(DomContainer, this); }
@@ -114,12 +104,10 @@ namespace WatiN.Core
             return ElementsSupport.CheckBox(DomContainer, findBy, this);
         }
 
-#if !NET11
         public CheckBox CheckBox(Predicate<CheckBox> predicate)
         {
             return CheckBox(Find.ByElement(predicate));
         }
-#endif
 
         public CheckBoxCollection CheckBoxes
         {
@@ -141,13 +129,10 @@ namespace WatiN.Core
             return ElementsSupport.Element(DomContainer, findBy, this);
         }
 
-
-#if !NET11
         public Element Element(Predicate<Element> predicate)
         {
             return Element(Find.ByElement(predicate));
         }
-#endif
 
         public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
         {
@@ -174,12 +159,10 @@ namespace WatiN.Core
             return ElementsSupport.FileUpload(DomContainer, findBy, this);
         }
 
-#if !NET11
         public FileUpload FileUpload(Predicate<FileUpload> predicate)
         {
             return FileUpload(Find.ByElement(predicate));
         }
-#endif
 
         public FileUploadCollection FileUploads
         {
@@ -201,12 +184,10 @@ namespace WatiN.Core
             return ElementsSupport.Form(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Form Form(Predicate<Form> predicate)
         {
             return Form(Find.ByElement(predicate));
         }
-#endif
 
         public FormCollection Forms
         {
@@ -228,12 +209,10 @@ namespace WatiN.Core
             return ElementsSupport.Label(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Label Label(Predicate<Label> predicate)
         {
             return Label(Find.ByElement(predicate));
         }
-#endif
 
         public LabelCollection Labels
         {
@@ -255,12 +234,10 @@ namespace WatiN.Core
             return ElementsSupport.Link(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Link Link(Predicate<Link> predicate)
         {
             return Link(Find.ByElement(predicate));
         }
-#endif
 
         public LinkCollection Links
         {
@@ -282,12 +259,10 @@ namespace WatiN.Core
             return ElementsSupport.Para(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Para Para(Predicate<Para> predicate)
         {
             return Para(Find.ByElement(predicate));
         }
-#endif
 
         public ParaCollection Paras
         {
@@ -309,12 +284,10 @@ namespace WatiN.Core
             return ElementsSupport.RadioButton(DomContainer, findBy, this);
         }
 
-#if !NET11
         public RadioButton RadioButton(Predicate<RadioButton> predicate)
         {
             return RadioButton(Find.ByElement(predicate));
         }
-#endif
 
         public RadioButtonCollection RadioButtons
         {
@@ -336,12 +309,10 @@ namespace WatiN.Core
             return ElementsSupport.SelectList(DomContainer, findBy, this);
         }
 
-#if !NET11
         public SelectList SelectList(Predicate<SelectList> predicate)
         {
             return SelectList(Find.ByElement(predicate));
         }
-#endif
 
         public SelectListCollection SelectLists
         {
@@ -363,12 +334,10 @@ namespace WatiN.Core
             return ElementsSupport.Table(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Table Table(Predicate<Table> predicate)
         {
             return Table(Find.ByElement(predicate));
         }
-#endif
 
         public TableCollection Tables
         {
@@ -390,12 +359,10 @@ namespace WatiN.Core
             return ElementsSupport.TableBody(DomContainer, findBy, this);
         }
 
-#if !NET11
         public virtual TableBody TableBody(Predicate<TableBody> predicate)
         {
             return TableBody(Find.ByElement(predicate));
         }
-#endif
 
         public virtual TableBodyCollection TableBodies
         {
@@ -417,12 +384,10 @@ namespace WatiN.Core
             return ElementsSupport.TableCell(DomContainer, findBy, this);
         }
 
-#if !NET11
         public TableCell TableCell(Predicate<TableCell> predicate)
         {
             return TableCell(Find.ByElement(predicate));
         }
-#endif
 
 		/// <summary>
 		/// Finds a TableCell by the n-th index of an id. 
@@ -463,12 +428,10 @@ namespace WatiN.Core
             return ElementsSupport.TableRow(DomContainer, findBy, this);
         }
 
-#if !NET11
         public virtual TableRow TableRow(Predicate<TableRow> predicate)
         {
             return TableRow(Find.ByElement(predicate));
         }
-#endif
 
         public virtual TableRowCollection TableRows
         {
@@ -490,12 +453,11 @@ namespace WatiN.Core
             return ElementsSupport.TextField(DomContainer, findBy, this);
         }
 
-#if !NET11
         public TextField TextField(Predicate<TextField> predicate)
         {
             return TextField(Find.ByElement(predicate));
         }
-#endif
+
         public TextFieldCollection TextFields
         {
             get { return ElementsSupport.TextFields(DomContainer, this); }
@@ -516,12 +478,10 @@ namespace WatiN.Core
             return ElementsSupport.Span(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Span Span(Predicate<Span> predicate)
         {
             return Span(Find.ByElement(predicate));
         }
-#endif
 
         public SpanCollection Spans
         {
@@ -543,12 +503,10 @@ namespace WatiN.Core
             return ElementsSupport.Div(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Div Div(Predicate<Div> predicate)
         {
             return Div(Find.ByElement(predicate));
         }
-#endif
 
         public DivCollection Divs
         {
@@ -570,12 +528,10 @@ namespace WatiN.Core
             return ElementsSupport.Image(DomContainer, findBy, this);
         }
 
-#if !NET11
         public Image Image(Predicate<Image> predicate)
         {
             return Image(Find.ByElement(predicate));
         }
-#endif
 
         public ImageCollection Images
         {

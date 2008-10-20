@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -68,7 +69,8 @@ namespace WatiN.Core.UnitTests.IETests
 			
 			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
 
-			Assert.AreEqual(0, finder.FindAll().Count);
+		    var all = new List<INativeElement>(finder.FindAll());
+		    Assert.AreEqual(0, all.Count);
 		}
 
 		[Test]
@@ -76,7 +78,7 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			MyTestConstraint constraint = new MyTestConstraint();
+			var constraint = new MyTestConstraint();
 			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection, domContainer);
 			
 			finder.FindFirst();

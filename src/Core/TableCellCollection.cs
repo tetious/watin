@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableCell" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class TableCellCollection : BaseElementCollection
-#else
     public class TableCellCollection : BaseElementCollection<TableCell>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableCellCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TableCellCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TableCell.New)) {}
+		public TableCellCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TableCell.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableCellCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public TableCellCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TableCell.New)) {}
+        public TableCellCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TableCell.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="TableCell"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public TableCell this[int index]
 		{
-			get { return (TableCell) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public TableCellCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new TableCellCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public TableCellCollection Filter(Predicate<TableCell> predicate)
         {
             return new TableCellCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

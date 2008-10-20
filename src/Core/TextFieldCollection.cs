@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TextField" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class TextFieldCollection : BaseElementCollection
-#else
     public class TextFieldCollection : BaseElementCollection<TextField>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TextFieldCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(TextField.New)) {}
+		public TextFieldCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TextField.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public TextFieldCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(TextField.New)) {}
+        public TextFieldCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TextField.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="TextField"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public TextField this[int index]
 		{
-			get { return (TextField) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public TextFieldCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new TextFieldCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public TextFieldCollection Filter(Predicate<TextField> predicate)
         {
             return new TextFieldCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

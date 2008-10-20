@@ -19,9 +19,7 @@
 using System;
 using System.Runtime.InteropServices;
 using WatiN.Core.Logging;
-#if !NET11
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
-#endif
 
 namespace WatiN.Core
 {

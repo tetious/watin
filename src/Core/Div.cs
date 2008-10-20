@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML div element.
 	/// </summary>
-#if NET11
-	public class Div : ElementsContainer
-#else
     public class Div : ElementsContainer<Div>
-#endif 
 	{
 		private static ArrayList elementTags;
 
@@ -39,8 +34,7 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("div"));
+					elementTags = new ArrayList {new ElementTag("div")};
 				}
 
 				return elementTags;
@@ -53,8 +47,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="htmlDivElement">The HTML div element.</param>
-		public Div(DomContainer domContainer, IHTMLDivElement htmlDivElement) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlDivElement)) {}
+		public Div(DomContainer domContainer, INativeElement htmlDivElement) : base(domContainer, htmlDivElement) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.
@@ -70,9 +63,9 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public Div(Element element) : base(element, ElementTags) {}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Div(domContainer, (IHTMLDivElement) element);
+			return new Div(domContainer, element);
 		}
 	}
 }

@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML link element.
 	/// </summary>
-#if NET11
-	public class Link : Element
-#else
     public class Link : Element<Link>
-#endif 
 	{
 		private static ArrayList elementTags;
 
@@ -39,16 +34,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("a"));
+					elementTags = new ArrayList {new ElementTag("a")};
 				}
 
 				return elementTags;
 			}
 		}
 
-        public Link(DomContainer domContainer, IHTMLAnchorElement element) :
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
+        public Link(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
 		public Link(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -63,9 +56,9 @@ namespace WatiN.Core
 			get { return GetAttributeValue("href"); }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Link(domContainer, (IHTMLAnchorElement) element);
+			return new Link(domContainer, element);
 		}
 	}
 }

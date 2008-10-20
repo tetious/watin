@@ -257,7 +257,6 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
-#if !NET11
         [Test]
         public void TextFieldOfElementE()
         {
@@ -265,6 +264,5 @@ namespace WatiN.Core.UnitTests
 //            textField.WaitUntil(t => t.Enabled);
             textField.WaitUntil(delegate(TextField t) { return t.Enabled; });
         }
-#endif
 	}
 }

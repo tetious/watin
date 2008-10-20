@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="FileUpload" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class FileUploadCollection : BaseElementCollection
-#else
     public class FileUploadCollection : BaseElementCollection<FileUpload>
-#endif
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FileUploadCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(FileUpload.New)) {}
+		public FileUploadCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, FileUpload.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public FileUploadCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(FileUpload.New)) {}
+        public FileUploadCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, FileUpload.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="FileUpload"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public FileUpload this[int index]
 		{
-			get { return (FileUpload) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public FileUploadCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new FileUploadCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public FileUploadCollection Filter(Predicate<FileUpload> predicate)
         {
             return new FileUploadCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

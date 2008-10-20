@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Link" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-	public class LinkCollection : BaseElementCollection
-#else
     public class LinkCollection : BaseElementCollection<Link>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LinkCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public LinkCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Link.New)) {}
+		public LinkCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Link.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LinkCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public LinkCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Link.New)) {}
+        public LinkCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Link.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="Link"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Link this[int index]
 		{
-			get { return (Link) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public LinkCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new LinkCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public LinkCollection Filter(Predicate<Link> predicate)
         {
             return new LinkCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

@@ -27,18 +27,13 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tbody element. 
 	/// </summary>
-#if NET11
-    public class TableBody : ElementsContainer
-#else
     public class TableBody : ElementsContainer<TableBody>
-#endif
 	{
 		private static ArrayList elementTags;
 
 		public TableBody(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
-		public TableBody(DomContainer domContainer, IHTMLTableSection element) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) {}
+		public TableBody(DomContainer domContainer, INativeElement element) : base(domContainer, element) {}
 
 		public TableBody(Element element) : base(element, elementTags) {}
 
@@ -61,7 +56,7 @@ namespace WatiN.Core
         {
             get
             {
-                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows);
+                var list = UtilityClass.IHtmlElementCollectionToArrayList(HtmlBody.rows);
                 return new TableRowCollection(DomContainer, list);
             }
         }
@@ -77,7 +72,6 @@ namespace WatiN.Core
 			return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
 		}
 
-#if !NET11
         /// <summary>
 		/// Returns the table row belonging to this table body (not including table rows 
 		/// from tables nested in this table body).
@@ -88,7 +82,6 @@ namespace WatiN.Core
 		{
 			return TableRow(Find.ByElement(predicate));
 		}
-#endif
 
 		public static ArrayList ElementTags
 		{
@@ -96,8 +89,7 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("tbody"));
+					elementTags = new ArrayList {new ElementTag("tbody")};
 				}
 
 				return elementTags;
@@ -111,7 +103,7 @@ namespace WatiN.Core
 
 	    private class Rows : IElementCollection
 		{
-			private TableBody tableBody;
+			private readonly TableBody tableBody;
 
 			public Rows(TableBody tableBody)
 			{
@@ -124,9 +116,9 @@ namespace WatiN.Core
 			}
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new TableBody(domContainer, (IHTMLTableSection) element);
+			return new TableBody(domContainer, element);
 		}
 	}
 }

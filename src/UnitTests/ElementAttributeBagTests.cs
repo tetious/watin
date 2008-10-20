@@ -19,6 +19,7 @@
 using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using Iz = NUnit.Framework.SyntaxHelpers.Is;
 
@@ -29,7 +30,7 @@ namespace WatiN.Core.UnitTests
 	{
 		private MockRepository mocks;
 		private IHTMLStyle mockHTMLStyle;
-		private IHTMLElement mockHTMLElement;
+		private INativeElement mockNativeElement;
 	    private DomContainer domContainer;
 
 		[SetUp]
@@ -37,7 +38,7 @@ namespace WatiN.Core.UnitTests
 		{
 			mocks = new MockRepository();
 			mockHTMLStyle = (IHTMLStyle) mocks.CreateMock(typeof (IHTMLStyle));
-            mockHTMLElement = (IHTMLElement)mocks.CreateMock(typeof(IHTMLElement)); 
+            mockNativeElement = (INativeElement)mocks.CreateMock(typeof(INativeElement)); 
             domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer));
 		}
 
@@ -53,11 +54,11 @@ namespace WatiN.Core.UnitTests
 			const string cssText = "COLOR: white; FONT-STYLE: italic";
 
 			Expect.Call(mockHTMLStyle.cssText).Return(cssText);
-			Expect.Call(mockHTMLElement.style).Return(mockHTMLStyle);
+			Expect.Call(mockNativeElement.GetAttributeValue("style")).Return(mockHTMLStyle);
 
 			mocks.ReplayAll();
 
-            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
+            var attributeBag = new ElementAttributeBag(domContainer, mockNativeElement);
 
 			Assert.AreEqual(cssText, attributeBag.GetValue("style"));
 		}
@@ -69,11 +70,11 @@ namespace WatiN.Core.UnitTests
 			const string styleAttributeName = "color";
 
 			Expect.Call(mockHTMLStyle.getAttribute(styleAttributeName, 0)).Return(styleAttributeValue);
-			Expect.Call(mockHTMLElement.style).Return(mockHTMLStyle);
+			Expect.Call(mockNativeElement.GetAttributeValue("style")).Return(mockHTMLStyle);
 
 			mocks.ReplayAll();
 
-            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
+            var attributeBag = new ElementAttributeBag(domContainer, mockNativeElement);
 
 			Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
 		}
@@ -81,22 +82,22 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void CachedElementPropertiesShouldBeClearedIfNewHtmlElementIsSet()
         {
-            Expect.Call(mockHTMLElement.getAttribute("id", 0)).Return("one").Repeat.Any();
-            Expect.Call(mockHTMLElement.getAttribute("tagName", 0)).Return("li").Repeat.Any();
+            Expect.Call(mockNativeElement.GetAttributeValue("id")).Return("one").Repeat.Any();
+            Expect.Call(mockNativeElement.GetAttributeValue("tagName")).Return("li").Repeat.Any();
             
-            IHTMLElement mockHTMLElement2 = (IHTMLElement)mocks.CreateMock(typeof(IHTMLElement));
-            Expect.Call(mockHTMLElement2.getAttribute("id", 0)).Return("two").Repeat.Any();
-            Expect.Call(mockHTMLElement2.getAttribute("tagName", 0)).Return("li").Repeat.Any();
+            var mockHTMLElement2 = (INativeElement)mocks.CreateMock(typeof(INativeElement));
+            Expect.Call(mockHTMLElement2.GetAttributeValue("id")).Return("two").Repeat.Any();
+            Expect.Call(mockHTMLElement2.GetAttributeValue("tagName")).Return("li").Repeat.Any();
             Expect.Call(domContainer.NativeBrowser).Return(new IEBrowser(domContainer)).Repeat.Any();
 
             mocks.ReplayAll();
 
-            ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer, mockHTMLElement);
+            var attributeBag = new ElementAttributeBag(domContainer, mockNativeElement);
 
             Assert.That(attributeBag.Element.Id, Iz.EqualTo("one"), "Unexpected Element");
             Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("one"), "Unexpected ElementTyped");
 
-            attributeBag.IHTMLElement = mockHTMLElement2;
+            attributeBag.INativeElement = mockHTMLElement2;
 
             Assert.That(attributeBag.Element.Id, Iz.EqualTo("two"), "Unexpected Element");
             Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("two"), "Unexpected ElementTyped");

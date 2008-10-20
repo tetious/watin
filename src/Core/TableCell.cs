@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -25,11 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML td element.
 	/// </summary>
-#if NET11
-    public class TableCell : ElementsContainer
-#else
     public class TableCell : ElementsContainer<TableCell>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -39,16 +34,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("td"));
+					elementTags = new ArrayList {new ElementTag("td")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public TableCell(DomContainer domContainer, IHTMLTableCell htmlTableCell) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTableCell)) {}
+		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
 
 		public TableCell(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -76,9 +69,9 @@ namespace WatiN.Core
 			get { return int.Parse(GetAttributeValue("cellindex")); }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new TableCell(domContainer, (IHTMLTableCell) element);
+			return new TableCell(domContainer, element);
 		}
 	}
 }

@@ -25,11 +25,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML option element.
 	/// </summary>
-#if NET11
-	public class Option : Element
-#else
     public class Option : Element<Option>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -43,8 +39,7 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("option"));
+					elementTags = new ArrayList {new ElementTag("option")};
 				}
 
 				return elementTags;
@@ -56,8 +51,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
         /// <param name="element">The option element.</param>
-        public Option(DomContainer domContainer, IHTMLOptionElement element) :
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
+        public Option(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.
@@ -189,9 +183,9 @@ namespace WatiN.Core
 			get { return (IHTMLOptionElement) HTMLElement; }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Option(domContainer, (IHTMLOptionElement) element);
+			return new Option(domContainer, element);
 		}
 	}
 }

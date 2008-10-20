@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-#if NET11
-    public class FormCollection : BaseElementCollection
-#else
     public class FormCollection : BaseElementCollection<Form>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FormCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Form.New)) {}
+		public FormCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Form.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public FormCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Form.New)) {}
+        public FormCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Form.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="Form"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Form this[int index]
 		{
-			get { return (Form) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		public FormCollection Filter(BaseConstraint findBy)
@@ -62,12 +58,9 @@ namespace WatiN.Core
 			return new FormCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public FormCollection Filter(Predicate<Form> predicate)
         {
             return new FormCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

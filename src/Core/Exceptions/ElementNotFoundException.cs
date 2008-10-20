@@ -25,16 +25,8 @@ namespace WatiN.Core.Exceptions
 	/// </summary>
 	public class ElementNotFoundException : WatiNException
 	{
-        [Obsolete("Use new constructor which also accepts a url")]
-		public ElementNotFoundException(string tagName, string criteria) :
-			base(CreateMessage(tagName, criteria, null, null)) {}
-
 		public ElementNotFoundException(string tagName, string criteria, string url) :
 			base(CreateMessage(tagName, criteria, url, null)) {}
-
-        [Obsolete("Use new constructor which also accepts a url")]
-        public ElementNotFoundException(string tagName, string criteria, Exception innerexception) :
-			base(CreateMessage(tagName, criteria, null, innerexception.Message), innerexception) {}
 
 		public ElementNotFoundException(string tagName, string criteria, string url, Exception innerexception) :
 			base(CreateMessage(tagName, criteria, url, innerexception.Message), innerexception) {}

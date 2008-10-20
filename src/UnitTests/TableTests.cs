@@ -207,7 +207,6 @@ namespace WatiN.Core.UnitTests
             Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");
         }
 
-#if !NET11
         [Test]
         public void FindTableBodyUsingPredicateT()
         {
@@ -240,7 +239,5 @@ namespace WatiN.Core.UnitTests
 
             Assert.That(tableRow, Is.Not.Null);
         }
-
-#endif
 	}
 }

@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML Form element.
 	/// </summary>
-#if NET11
-	public class Form : ElementsContainer
-#else
 	public class Form : ElementsContainer<Form>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -40,16 +36,14 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("form"));
+					elementTags = new ArrayList {new ElementTag("form")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public Form(DomContainer domContainer, IHTMLFormElement htmlFormElement) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlFormElement)) {}
+		public Form(DomContainer domContainer, INativeElement htmlFormElement) : base(domContainer, htmlFormElement) {}
 
 		public Form(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -94,9 +88,9 @@ namespace WatiN.Core
 			get { return (IHTMLFormElement) HTMLElement; }
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Form(domContainer, (IHTMLFormElement) element);
+			return new Form(domContainer, element);
 		}
 	}
 }

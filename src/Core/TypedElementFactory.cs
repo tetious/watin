@@ -36,12 +36,12 @@ namespace WatiN.Core
 				_elementConstructors = CreateElementConstructorHashTable();
 			}
 
-			ElementTag elementTag = new ElementTag(ieNativeElement);
-            Element returnElement = GetDefaultReturnElement(domContainer, ieNativeElement);
+			var elementTag = new ElementTag(ieNativeElement);
+            var returnElement = GetDefaultReturnElement(domContainer, ieNativeElement);
 
 		    if (_elementConstructors.Contains(elementTag))
 			{
-				ConstructorInfo constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
+				var constructorInfo = (ConstructorInfo)_elementConstructors[elementTag];
 				return (Element)constructorInfo.Invoke(new object[] { returnElement });
 			}
 
@@ -50,29 +50,25 @@ namespace WatiN.Core
 
 	    public static Element GetDefaultReturnElement(DomContainer domContainer, INativeElement ieNativeElement)
 	    {
-#if NET11
-			return new ElementsContainer(domContainer, ieNativeElement);
-#else
 	        return new ElementsContainer<Element>(domContainer, ieNativeElement);
-#endif
 	    }
 
 	    internal static Hashtable CreateElementConstructorHashTable()
 		{
-			Hashtable elementConstructors = new Hashtable();
-			Assembly assembly = Assembly.GetExecutingAssembly();
+			var elementConstructors = new Hashtable();
+			var assembly = Assembly.GetExecutingAssembly();
 
-			foreach (Type type in assembly.GetTypes())
+			foreach (var type in assembly.GetTypes())
 			{
 				if (!type.IsSubclassOf(typeof (Element))) continue;
                 
-				PropertyInfo property = type.GetProperty("ElementTags");
+				var property = type.GetProperty("ElementTags");
 				if (property == null) continue;
                 
-				ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Element) });
+				var constructor = type.GetConstructor(new[] { typeof(Element) });
 				if (constructor == null) continue;
                 
-				ArrayList elementTags = (ArrayList)property.GetValue(type, null);
+				var elementTags = (ArrayList)property.GetValue(type, null);
 				if (elementTags == null) continue;
                 
 				elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
@@ -102,7 +98,7 @@ namespace WatiN.Core
 
 		private static ArrayList CreateUniqueElementTagsForInputTypes(ArrayList elementTags)
 		{
-			ArrayList uniqueElementTags = new ArrayList();
+			var uniqueElementTags = new ArrayList();
 
 			foreach (ElementTag elementTag in elementTags)
 			{
@@ -124,12 +120,12 @@ namespace WatiN.Core
 			}
 		}
 
-		private static void AddElementTagForEachInputType(ElementTag elementTag, ArrayList uniqueElementTags)
+		private static void AddElementTagForEachInputType(ElementTag elementTag, IList uniqueElementTags)
 		{
-			string[] inputtypes = elementTag.InputTypes.Split(" ".ToCharArray());
-			foreach (string inputtype in inputtypes)
+			var inputtypes = elementTag.InputTypes.Split(" ".ToCharArray());
+			foreach (var inputtype in inputtypes)
 			{
-				ElementTag inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
+				var inputtypeElementTag = new ElementTag(elementTag.TagName, inputtype);
 				uniqueElementTags.Add(inputtypeElementTag);
 			}
 		}

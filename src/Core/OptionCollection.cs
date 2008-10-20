@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,11 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Option" /> elements within a <see cref="SelectList"/>.
 	/// </summary>
-#if NET11
-	public class OptionCollection : BaseElementCollection
-#else	
     public class OptionCollection : BaseElementCollection<Option>
-#endif
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.
@@ -38,7 +34,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public OptionCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, new CreateElementInstance(Option.New)) {}
+		public OptionCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Option.New) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.
@@ -46,7 +42,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
-		public OptionCollection(DomContainer domContainer, ArrayList elements) : base(domContainer, elements, new CreateElementInstance(Option.New)) {}
+        public OptionCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Option.New) { }
 
 		/// <summary>
 		/// Gets the <see cref="Span"/> at the specified index.
@@ -54,7 +50,7 @@ namespace WatiN.Core
 		/// <value></value>
 		public Option this[int index]
 		{
-			get { return (Option) ElementsTyped(index); }
+			get { return ElementsTyped(index); }
 		}
 
 		/// <summary>
@@ -67,12 +63,9 @@ namespace WatiN.Core
 			return new OptionCollection(domContainer, DoFilter(findBy));
 		}
 
-#if !NET11
         public OptionCollection Filter(Predicate<Option> predicate)
         {
             return new OptionCollection(domContainer, DoFilter(Find.ByElement(predicate)));
         }
-#endif
-
 	}
 }

@@ -20,6 +20,7 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using SHDocVw;
+using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core.UnitTests

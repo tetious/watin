@@ -56,9 +56,7 @@ namespace WatiN.Core.UnitTests
 			Span Span = ie.Span("spanid1");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), Span);
-#if !NET11
             Assert.IsInstanceOfType(typeof (ElementsContainer<Span>), Span);
-#endif
 
 			Assert.IsNotNull(Span, "Span should bot be null");
 			Assert.AreEqual("spanid1", Span.Id, "Unexpected id");

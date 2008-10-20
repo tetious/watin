@@ -29,11 +29,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// text password textarea hidden and for a HTML textarea element.
 	/// </summary>
-#if NET11
-	public class TextField : Element
-#else 
     public class TextField : Element<TextField>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -43,9 +39,11 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("input", "text password textarea hidden"));
-					elementTags.Add(new ElementTag("textarea"));
+					elementTags = new ArrayList
+					                  {
+					                      new ElementTag("input", "text password textarea hidden"),
+					                      new ElementTag("textarea")
+					                  };
 				}
 
 				return elementTags;
@@ -54,8 +52,7 @@ namespace WatiN.Core
 
 		private ITextElement _textElement;
 
-		public TextField(DomContainer domContainer, IHTMLElement element) :
-            base(domContainer, domContainer.NativeBrowser.CreateElement(element)) { }
+		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
 		public TextField(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -247,7 +244,7 @@ namespace WatiN.Core
 			}
 		}
 
-		private bool ShouldEventBeFired(Object value)
+		private static bool ShouldEventBeFired(Object value)
 		{
 			return (value != DBNull.Value);
 		}
@@ -257,7 +254,7 @@ namespace WatiN.Core
 		/// </summary>
 		private class TextAreaElement : ITextElement
 		{
-			private IHTMLTextAreaElement htmlTextAreaElement;
+			private readonly IHTMLTextAreaElement htmlTextAreaElement;
 
 			public TextAreaElement(IHTMLTextAreaElement htmlTextAreaElement)
 			{
@@ -297,7 +294,7 @@ namespace WatiN.Core
 
 		private class TextFieldElement : ITextElement
 		{
-			private IHTMLInputElement inputElement;
+			private readonly IHTMLInputElement inputElement;
 
 			public TextFieldElement(IHTMLInputElement htmlInputElement)
 			{
@@ -335,7 +332,7 @@ namespace WatiN.Core
 			}
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
 			return new TextField(domContainer, element);
 		}

@@ -56,9 +56,7 @@ namespace WatiN.Core.UnitTests
 			Para para = ie.Para("links");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), para);
-#if !NET11
             Assert.IsInstanceOfType(typeof (ElementsContainer<Para>), para);
-#endif
 
 			Assert.IsNotNull(para);
 			Assert.AreEqual("links", para.Id);

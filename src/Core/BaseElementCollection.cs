@@ -18,9 +18,7 @@
 
 using System;
 using System.Collections;
-#if !NET11
-    using System.Collections.Generic;
-#endif
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Constraints;
@@ -28,32 +26,21 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-#if NET11
-	/// <summary>
-	/// This delegate is mainly used by <see cref="BaseElementCollection"/> to 
-    /// delegate the creation of a specialized element type. 
-	/// </summary>
-#else
     /// <summary>
     /// This delegate is mainly used by BaseElementCollectionT to 
     /// delegate the creation of a specialized element type. 
 	/// </summary>
-#endif
-    public delegate Element CreateElementInstance(DomContainer domContainer, IHTMLElement element);
+    public delegate Element CreateElementInstance(DomContainer domContainer, INativeElement element);
 
 	/// <summary>
 	/// This class is mainly used by Watin internally as the base class for all 
 	/// of the element collections.
 	/// </summary>
-#if NET11
-    public abstract class BaseElementCollection : IEnumerable
-#else
     public abstract class BaseElementCollection<T> : IEnumerable<T> where T:Element
-#endif
 	{
 		protected DomContainer domContainer;
 
-		private ArrayList elements;
+		private List<INativeElement> elements;
 		private readonly CreateElementInstance createElementInstance;
 		protected INativeElementFinder finder;
 
@@ -65,7 +52,7 @@ namespace WatiN.Core
 		/// <param name="finder">The finder.</param>
 		/// <param name="createElementInstance">The create element instance.</param>
 		protected BaseElementCollection(DomContainer domContainer, INativeElementFinder finder, CreateElementInstance createElementInstance) :
-			this(domContainer, (ArrayList) null, createElementInstance)
+			this(domContainer, (IEnumerable<INativeElement>) null, createElementInstance)
 		{
 			this.finder = finder;
 		}
@@ -77,12 +64,12 @@ namespace WatiN.Core
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="elements">The elements.</param>
 		/// <param name="createElementInstance">The create element instance.</param>
-		protected BaseElementCollection(DomContainer domContainer, ArrayList elements, CreateElementInstance createElementInstance)
+		protected BaseElementCollection(DomContainer domContainer, IEnumerable<INativeElement> elements, CreateElementInstance createElementInstance)
 		{
             if (domContainer == null) throw new ArgumentNullException("domContainer");
 
-			this.elements = elements;
-			this.domContainer = domContainer;
+		    if (elements != null) this.elements = new List<INativeElement>(elements);
+		    this.domContainer = domContainer;
 			this.createElementInstance = createElementInstance;
 		}
 
@@ -95,31 +82,24 @@ namespace WatiN.Core
 			get { return Elements.Count; }
 		}
 
-#if NET11
-        protected Element ElementsTyped(int index)
-		{
-			return CreateElementInstance((IHTMLElement) Elements[index]); 
-		}
-#else
         protected T ElementsTyped(int index)
 		{
-            return (T)CreateElementInstance((IHTMLElement)Elements[index]); 
+            return (T)CreateElementInstance(Elements[index]); 
 		}
-#endif
 
-        private Element CreateElementInstance(IHTMLElement element)
+        private Element CreateElementInstance(INativeElement element)
         {
             return createElementInstance(domContainer, element);
         }
 
-		
-		protected ArrayList Elements
+
+        protected List<INativeElement> Elements
 		{
 			get
 			{
 				if (elements == null)
 				{
-					elements = finder != null ? finder.FindAll() : new ArrayList();
+					elements = finder != null ? new List<INativeElement>(finder.FindAll()) : new List<INativeElement>();
 				}
 
 				return elements;
@@ -138,11 +118,11 @@ namespace WatiN.Core
 
 		public bool Exists(BaseConstraint findBy)
 		{
-			ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
+			var attributeBag = new ElementAttributeBag(domContainer);
 
-			foreach (IHTMLElement element in Elements)
+			foreach (var element in Elements)
 			{
-				attributeBag.IHTMLElement = element;
+				attributeBag.INativeElement = element;
 				if (findBy.Compare(attributeBag))
 				{
 					return true;
@@ -152,24 +132,11 @@ namespace WatiN.Core
 			return false;
 		}
 
-#if !NET11
         public bool Exists(Predicate<T> predicate)
         {
             return Exists(Find.ByElement(predicate));
         }
-#endif
 
-#if NET11
-        public Element First()
-        {
-            return FindFirst(Find.First());
-        }
-
-        public Element First(BaseConstraint findBy)
-        {
-            return FindFirst(findBy);
-        }
-#else
         public T First()
         {
             return (T)FindFirst(Find.First());
@@ -184,39 +151,33 @@ namespace WatiN.Core
         {
             return (T)FindFirst(Find.ByElement(predicate));
         }
-#endif
 
         private Element FindFirst(BaseConstraint findBy)
         {
             if (elements == null)
-                return finder != null ? CreateElementInstance((IHTMLElement)finder.FindFirst(findBy).NativeElement) : null;
+                return finder != null ? CreateElementInstance(finder.FindFirst(findBy)) : null;
 
             return ElementsTyped(0);
         }
 
-		protected ArrayList DoFilter(BaseConstraint findBy)
+		protected IEnumerable<INativeElement> DoFilter(BaseConstraint findBy)
 		{
 			if (elements == null)
 			{
-			    if (finder != null)
-				{
-					return finder.FindAll(findBy);
-				}
-			    
-                return new ArrayList();
+			    return finder != null ? finder.FindAll(findBy) : new List<INativeElement>();
 			}
-		    
-            return FilterElements(findBy);
+
+		    return FilterElements(findBy);
 		}
 
-	    private ArrayList FilterElements(BaseConstraint findBy)
+	    private IEnumerable<INativeElement> FilterElements(BaseConstraint findBy)
 	    {
-	        ArrayList returnElements = new ArrayList();
-	        ElementAttributeBag attributeBag = new ElementAttributeBag(domContainer);
+	        var returnElements = new List<INativeElement>();
+	        var attributeBag = new ElementAttributeBag(domContainer);
 
-	        foreach (IHTMLElement element in Elements)
+	        foreach (var element in Elements)
 	        {
-	            attributeBag.IHTMLElement = element;
+	            attributeBag.INativeElement = element;
 
 	            if (findBy.Compare(attributeBag))
 	            {
@@ -230,116 +191,23 @@ namespace WatiN.Core
 	    /// <exclude />
 		public IEnumerator GetEnumerator()
 		{
-			return new Enumerator(domContainer, Elements, createElementInstance);
+	        foreach (var element in Elements)
+	        {
+	            yield return createElementInstance(domContainer, element);
+	        }
 		}
 
-#if !NET11
 	    IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			return new EnumeratorT(domContainer, Elements, createElementInstance);
+            foreach (var element in Elements)
+            {
+                yield return (T)createElementInstance(domContainer, element);
+            }
 		}
-#endif
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
-
-		/// <exclude />
-		public class Enumerator : IEnumerator
-		{
-			private readonly ArrayList children;
-			private readonly DomContainer domContainer;
-			private readonly CreateElementInstance createElementInstance;
-			private int index;
-
-			/// <exclude />
-			public Enumerator(DomContainer domContainer, ArrayList children, CreateElementInstance createElementInstance)
-			{
-				this.children = children;
-				this.domContainer = domContainer;
-				this.createElementInstance = createElementInstance;
-
-				Reset();
-			}
-
-			/// <exclude />
-			public void Reset()
-			{
-				index = -1;
-			}
-
-			/// <exclude />
-			public bool MoveNext()
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			/// <exclude />
-			public virtual object Current
-			{
-				get { return createElementInstance(domContainer, (IHTMLElement) children[index]); }
-			}
-
-			/// <exclude />
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
-		}
-
-#if !NET11
-        /// <exclude />
-        public class EnumeratorT : IEnumerator<T>
-        {
-            private ArrayList children;
-            private DomContainer domContainer;
-            private CreateElementInstance createElementInstance;
-            private int index;
-
-            /// <exclude />
-            public EnumeratorT(DomContainer domContainer, ArrayList children, CreateElementInstance createElementInstance)
-            {
-                this.children = children;
-                this.domContainer = domContainer;
-                this.createElementInstance = createElementInstance;
-
-                Reset();
-            }
-
-            public void Dispose()
-            {
-                children = null;
-                domContainer = null;
-                createElementInstance = null;
-            }
-
-            /// <exclude />
-            public void Reset()
-            {
-                index = -1;
-            }
-
-            /// <exclude />
-            public bool MoveNext()
-            {
-                ++index;
-                return index < children.Count;
-            }
-
-            /// <exclude />
-            public virtual T Current
-            {
-                get { return (T)createElementInstance(domContainer, (IHTMLElement)children[index]); }
-            }
-
-            /// <exclude />
-            object IEnumerator.Current
-            {
-                get { return Current; }
-            }
-        }
-#endif
 	}
 }

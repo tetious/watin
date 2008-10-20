@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core.Interfaces
@@ -7,8 +7,8 @@ namespace WatiN.Core.Interfaces
 	{
 		INativeElement FindFirst();
 	    INativeElement FindFirst(BaseConstraint constraint);
-		ArrayList FindAll();
-		ArrayList FindAll(BaseConstraint constraint);
+        IEnumerable<INativeElement> FindAll();
+        IEnumerable<INativeElement> FindAll(BaseConstraint constraint);
 		string ElementTagsToString { get; }
 		string ConstraintToString { get; }
 	}

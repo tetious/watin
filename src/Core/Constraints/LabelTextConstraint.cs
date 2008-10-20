@@ -60,7 +60,7 @@ namespace WatiN.Core.Constraints
         protected override bool DoCompare(Interfaces.IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-			IHTMLElement element = ((ElementAttributeBag) attributeBag).IHTMLElement;
+			IHTMLElement element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.NativeElement;
 			
 			// Get all elements and filter this for Labels
             if (labelIdsWithMatchingText == null)

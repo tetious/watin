@@ -30,7 +30,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{
-		private IHTMLElement _htmlElement;
+		private INativeElement _htmlElement;
 		private Element _element;
 		private Element _elementTyped;
 	    private DomContainer _domContainer;
@@ -38,17 +38,17 @@ namespace WatiN.Core
         public ElementAttributeBag(DomContainer domContainer) : this (domContainer, null)
         {}
 
-		public ElementAttributeBag(DomContainer domContainer, IHTMLElement element)
+		public ElementAttributeBag(DomContainer domContainer, INativeElement element)
 		{
             _domContainer = domContainer;
-            IHTMLElement = element;
+            INativeElement = element;
 		}
 
 		/// <summary>
 		/// Gets or sets the IHTMLelement from which the attribute values are read.
 		/// </summary>
 		/// <value>The IHTMLelement.</value>
-		public IHTMLElement IHTMLElement
+		public INativeElement INativeElement
 		{
 			get { return _htmlElement; }
 			set 
@@ -75,7 +75,7 @@ namespace WatiN.Core
 			{
 				if (_element == null)
 				{
-				    _element = TypedElementFactory.GetDefaultReturnElement(DomContainer, DomContainer.NativeBrowser.CreateElement(IHTMLElement));
+				    _element = TypedElementFactory.GetDefaultReturnElement(DomContainer, INativeElement);
 				}
 
 				return _element;
@@ -92,7 +92,7 @@ namespace WatiN.Core
 			{
 				if (_elementTyped == null)
 				{
-                    _elementTyped = TypedElementFactory.CreateTypedElement(DomContainer, DomContainer.NativeBrowser.CreateElement(IHTMLElement));
+                    _elementTyped = TypedElementFactory.CreateTypedElement(DomContainer, INativeElement);
 				    _element = _elementTyped;
 				}
 
@@ -109,18 +109,19 @@ namespace WatiN.Core
 		{
 			if (StringComparer.AreEqual(attributename, "style", true))
 			{
-				return _htmlElement.style.cssText;
+				return _htmlElement.GetAttributeValue("style");
 			}
 
-			object attributeValue;
+			object attributeValue = null;
 
 			if (attributename.ToLower(CultureInfo.InvariantCulture).StartsWith("style."))
 			{
-				attributeValue = Style.GetAttributeValue(attributename.Substring(6), _htmlElement.style);
+                // TODO: Implement Style on INativeElement
+//				attributeValue = Style.GetAttributeValue(attributename.Substring(6), _htmlElement.style);
 			}
 			else
 			{
-				attributeValue = _htmlElement.getAttribute(attributename, 0);
+                attributeValue = _htmlElement.GetAttributeValue(attributename);
 			}
 
             if (attributeValue == DBNull.Value || attributeValue == null)

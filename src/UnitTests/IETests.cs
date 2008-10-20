@@ -52,14 +52,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TestRunnerApartmentStateMustBeSTA()
 		{
-#if NET11
-			// Code for .Net 1.1
-			Assert.IsTrue(Thread.CurrentThread.ApartmentState == ApartmentState.STA);
-
-#else
-            // Code for .Net 2.0 and higher
             Assert.IsTrue(Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
-#endif
 		}
 
 		[Test]
@@ -256,7 +249,6 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-#if !NET11
 		[Test]
 		public void GoToUrlNoWait()
 		{
@@ -272,7 +264,6 @@ namespace WatiN.Core.UnitTests
                 Assert.AreEqual(MainURI, new Uri(ie.Url));
             }
 		}
-#endif
 
 		[Test]
 		public void GoToUri()

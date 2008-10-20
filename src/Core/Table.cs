@@ -23,7 +23,6 @@ using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -31,11 +30,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
-#if NET11
-    public class Table : ElementsContainer
-#else
 	public class Table : ElementsContainer<Table>
-#endif
 	{
 		private static ArrayList elementTags;
 
@@ -45,16 +40,15 @@ namespace WatiN.Core
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("table"));
+					elementTags = new ArrayList {new ElementTag("table")};
 				}
 
 				return elementTags;
 			}
 		}
 
-		public Table(DomContainer domContainer, IHTMLTable htmlTable) : 
-            base(domContainer, domContainer.NativeBrowser.CreateElement(htmlTable)) {}
+		public Table(DomContainer domContainer, INativeElement htmlTable) : 
+            base(domContainer, htmlTable) {}
 
 		public Table(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -87,14 +81,14 @@ namespace WatiN.Core
         {
             get
             {
-                ArrayList list = UtilityClass.IHtmlElementCollectionToArrayList(GetTableRows());
+                var list = UtilityClass.IHtmlElementCollectionToArrayList(GetTableRows());
                 return new TableRowCollection(DomContainer, list);
             }
         }
 
 	    private IHTMLElementCollection GetTableRows()
 	    {
-	        IHTMLTable table = (IHTMLTable)HTMLElement;
+	        var table = (IHTMLTable)HTMLElement;
 	        return table.rows;
 	    }
 
@@ -119,7 +113,6 @@ namespace WatiN.Core
 			return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this));
 		}
 
-#if !NET11
         /// <summary>
 		/// Returns the table body section belonging to this table (not including table body sections 
 		/// from tables nested in this table).
@@ -130,7 +123,6 @@ namespace WatiN.Core
 		{
 			return TableBody(Find.ByElement(predicate));
 		}
-#endif
 
 		private IHTMLElement GetFirstTBody()
 		{
@@ -154,13 +146,9 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findText, inColumn);
+			var constraint = new TableRowAttributeConstraint(findText, inColumn);
 
-            if (TextIsInBody(constraint))
-			{
-                return FindRow(constraint);
-			}
-		    return null;
+            return TextIsInBody(constraint) ? FindRow(constraint) : null;
 		}
 
 		/// <summary>
@@ -175,13 +163,9 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findText, inColumn);
+			var constraint = new TableRowAttributeConstraint(findText, inColumn);
 
-            if (TextIsInBody(constraint))
-			{
-                return FindRowInDirectChildren(constraint);
-			}
-		    return null;
+            return TextIsInBody(constraint) ? FindRowInDirectChildren(constraint) : null;
 		}
 
         private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
@@ -203,7 +187,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
+			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
 			return FindRow(constraint);
 		}
@@ -220,7 +204,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
+			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
 			return FindRowInDirectChildren(constraint);
 		}
@@ -237,7 +221,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(comparer, inColumn);
+			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
 
 			return FindRow(constraint);
         }
@@ -254,12 +238,11 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
 
-			TableRowAttributeConstraint constraint = new TableRowAttributeConstraint(comparer, inColumn);
+			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
 
             return FindRowInDirectChildren(constraint);
         }
 
-#if !NET11
         /// <summary>
         /// Finds te first row that matches <paramref name="predicate"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
@@ -311,7 +294,6 @@ namespace WatiN.Core
         {
             return FindRowInDirectChildren(new PredicateElementComparer<TableCell>(predicate), inColumn);
         }
-#endif
 
 		public override string ToString()
 		{
@@ -344,16 +326,11 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRowInDirectChildren(TableRowAttributeConstraint findBy)
 		{
-            ElementAttributeBag attributeBag = new ElementAttributeBag(DomContainer);
+            var elements = DomContainer.NativeBrowser.CreateElementFinder(Core.TableRow.ElementTags, new Rows(this));
 
-            ArrayList elements = IEElementFinder.FindElements(findBy, (ElementTag)Core.TableRow.ElementTags[0], attributeBag, true, new Rows(this));
-
-            if (elements.Count > 0)
-            {
-                return new TableRow(DomContainer, (IHTMLTableRow) elements[0]);
-            }
-
-            return null;
+            var element = elements.FindFirst(findBy);
+            
+            return element != null ? new TableRow(DomContainer, element) : null;
 		}
 
 		public abstract class TableElementCollectionsBase : IElementCollection
@@ -401,9 +378,9 @@ namespace WatiN.Core
 			}
 		}
 
-		internal new static Element New(DomContainer domContainer, IHTMLElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
-			return new Table(domContainer, (IHTMLTable) element);
+			return new Table(domContainer, element);
 		}
 	}
 }

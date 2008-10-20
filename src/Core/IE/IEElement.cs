@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Specialized;
-using System.Text;
-using System.Threading;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -17,6 +15,7 @@ namespace WatiN.Core.InternetExplorer
 
 		public IEElement(object element)
 		{
+            if (element is INativeElement) throw new Exception("INativeElement not allowed");
 			_element = element;
 		}
 
@@ -46,10 +45,10 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get
 			{
-				IHTMLDOMNode node = domNode.nextSibling;
+				var node = domNode.nextSibling;
 				while (node != null)
 				{
-					IHTMLElement nextSibling = node as IHTMLElement;
+					var nextSibling = node as IHTMLElement;
 					if (nextSibling != null)
 					{
 						return new IEElement(nextSibling);
@@ -69,10 +68,10 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get
 			{
-				IHTMLDOMNode node = domNode.previousSibling;
+				var node = domNode.previousSibling;
 				while (node != null)
 				{
-					IHTMLElement previousSibling = node as IHTMLElement;
+					var previousSibling = node as IHTMLElement;
 					if (previousSibling != null)
 					{
 						return new IEElement(previousSibling);
@@ -114,12 +113,8 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get
 			{
-				IHTMLElement parentNode = domNode.parentNode as IHTMLElement;
-				if (parentNode != null)
-				{
-					return new IEElement(parentNode);
-				}
-				return null;
+				var parentNode = domNode.parentNode as IHTMLElement;
+				return parentNode != null ? new IEElement(parentNode) : null;
 			}
 		}
 
@@ -137,7 +132,7 @@ namespace WatiN.Core.InternetExplorer
 		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
 		public string GetAttributeValue(string attributeName)
 		{
-			object attributeValue = htmlElement.getAttribute(attributeName, 0);
+			var attributeValue = htmlElement.getAttribute(attributeName, 0);
 
 			if (attributeValue == DBNull.Value || attributeValue == null)
 			{
@@ -171,12 +166,12 @@ namespace WatiN.Core.InternetExplorer
 
         public void FireEventAsync(string eventName, NameValueCollection eventProperties)
         {
-            StringBuilder scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
-            IHTMLWindow2 window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
+            var scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
+            var window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
 
-            AsyncScriptRunner asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
+            var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
 
-            UtilityClass.AsyncActionOnBrowser(new ThreadStart(asyncScriptRunner.FireEvent));
+            UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
         }
 
 		protected IHTMLElement htmlElement
@@ -214,14 +209,13 @@ namespace WatiN.Core.InternetExplorer
 			get { return _element; }
 		}
 
-
 	    public IAttributeBag GetAttributeBag(DomContainer domContainer)
 	    {
 	        if (_attributeBag == null)
 	        {
 	            _attributeBag = new ElementAttributeBag(domContainer);
 	        }
-	        _attributeBag.IHTMLElement = htmlElement;
+	        _attributeBag.INativeElement = this;
 	        return _attributeBag;
 	    }
 

@@ -32,9 +32,9 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementTag
 	{
-		public readonly string TagName = null;
+		public readonly string TagName;
 		public readonly string InputTypes;
-		public readonly bool IsInputElement = false;
+		public readonly bool IsInputElement;
 
 		public ElementTag(string tagName) : this(tagName, null) {}
 
@@ -50,28 +50,22 @@ namespace WatiN.Core
 			IsInputElement = IsAnInputElement(tagName);
 
 			// Check arguments
-			if (IsInputElement)
-			{
-				if (UtilityClass.IsNullOrEmpty(inputTypes))
-				{
-					throw new ArgumentNullException("inputTypes", String.Format("inputTypes must be set when tagName is '{0}'", tagName));
-				}
+		    if (!IsInputElement) return;
+		    
+            if (UtilityClass.IsNullOrEmpty(inputTypes))
+		    {
+		        throw new ArgumentNullException("inputTypes", String.Format("inputTypes must be set when tagName is '{0}'", tagName));
+		    }
 
-				InputTypes = inputTypes.ToLower(CultureInfo.InvariantCulture);
-			}
+		    InputTypes = inputTypes.ToLower(CultureInfo.InvariantCulture);
 		}
 
 		private static string getInputType(INativeElement ieNativeElement)
 		{
-			if(IsAnInputElement(ieNativeElement.TagName))
-			{
-				return ieNativeElement.GetAttributeValue("type");
-			}
-
-			return null;
+		    return IsAnInputElement(ieNativeElement.TagName) ? ieNativeElement.GetAttributeValue("type") : null;
 		}
 
-		public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
+	    public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
 		{
 			if (elements == null) return null;
 
@@ -84,11 +78,11 @@ namespace WatiN.Core
 		{
 			if (elements == null) return null;
 
-            IHTMLElementCollection3 elementCollection3 = elements as IHTMLElementCollection3;
+            var elementCollection3 = elements as IHTMLElementCollection3;
             
             if (elementCollection3 == null) return null;
             
-            object item = elementCollection3.namedItem(id);
+            var item = elementCollection3.namedItem(id);
             IHTMLElement element = null;
 
             if ((item as IHTMLElement) != null) element = (IHTMLElement) item;
@@ -105,28 +99,18 @@ namespace WatiN.Core
 
 			if (CompareTagName(nativeElement))
 			{
-				if (IsInputElement)
-				{
-					return CompareInputTypes(nativeElement);
-				}
-
-				return true;
+			    return !IsInputElement || CompareInputTypes(nativeElement);
 			}
 
-			return false;
+		    return false;
 		}
 
 		public override string ToString()
 		{
 			if (TagName != null)
 			{
-				string tagName = TagName.ToUpper(CultureInfo.InvariantCulture);
-				if (IsInputElement)
-				{
-					return String.Format("{0} ({1})", tagName, InputTypes);
-				}
-
-				return tagName;
+				var tagName = TagName.ToUpper(CultureInfo.InvariantCulture);
+				return IsInputElement ? String.Format("{0} ({1})", tagName, InputTypes) : tagName;
 			}
 
 			return string.Empty;
@@ -134,14 +118,12 @@ namespace WatiN.Core
 
 		private bool CompareTagName(INativeElement nativeElement)
 		{
-			if (TagName == null) return true;
-
-			return StringComparer.AreEqual(TagName, nativeElement.TagName, true);
+		    return TagName == null || StringComparer.AreEqual(TagName, nativeElement.TagName, true);
 		}
 
 	    public bool CompareInputTypes(INativeElement element)
 		{
-			string inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
+			var inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
 
 			return (InputTypes.IndexOf(inputElementType) >= 0);
 		}
@@ -154,11 +136,11 @@ namespace WatiN.Core
 		public override bool Equals(object obj)
 		{
 			if (this == obj) return true;
-			ElementTag elementTag = obj as ElementTag;
+			
+            var elementTag = obj as ElementTag;
 			if (elementTag == null) return false;
-			if (!Equals(TagName, elementTag.TagName)) return false;
-			if (!Equals(InputTypes, elementTag.InputTypes)) return false;
-			return true;
+			
+            return Equals(TagName, elementTag.TagName) && Equals(InputTypes, elementTag.InputTypes);
 		}
 
 		public static bool IsValidElement(INativeElement nativeElement, ArrayList elementTags)
@@ -193,7 +175,7 @@ namespace WatiN.Core
 
 		public static string ElementTagsToString(ArrayList elementTags)
 		{
-			string elementTagsString = String.Empty;
+			var elementTagsString = String.Empty;
 
 			foreach (ElementTag elementTag in elementTags)
 			{
@@ -201,7 +183,7 @@ namespace WatiN.Core
 				{
 					elementTagsString = elementTagsString + " or ";
 				}
-				elementTagsString = elementTagsString + elementTag.ToString();
+				elementTagsString = elementTagsString + elementTag;
 			}
 
 			return elementTagsString;
