@@ -36,7 +36,7 @@ namespace WatiN.Core.Constraints
 	/// </example>
 	public class LabelTextConstraint : AttributeConstraint
 	{
-		private string labelText = string.Empty;
+		private readonly string labelText;
         private Hashtable labelIdsWithMatchingText;
 		
 		/// <summary>
@@ -60,7 +60,7 @@ namespace WatiN.Core.Constraints
         protected override bool DoCompare(Interfaces.IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-			IHTMLElement element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.NativeElement;
+			var element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.NativeElement;
 			
 			// Get all elements and filter this for Labels
             if (labelIdsWithMatchingText == null)
@@ -68,26 +68,26 @@ namespace WatiN.Core.Constraints
                 InitLabelIdsWithMatchingText(element);
             }
 
-            return labelIdsWithMatchingText.Contains(element.id);
+            return labelIdsWithMatchingText != null ? labelIdsWithMatchingText.Contains(element.id) : false;
 		}
 
         private void InitLabelIdsWithMatchingText(IHTMLElement element)
         {
             labelIdsWithMatchingText = new Hashtable();
             
-            IHTMLDocument2 htmlDocument = (IHTMLDocument2)element.document;
-            IHTMLElementCollection labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
+            var htmlDocument = (IHTMLDocument2)element.document;
+            var labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
 
             // Get the list of id's of controls that these labels are for
-            for (int i = 0; i < labelElements.length; i++)
+            for (var i = 0; i < labelElements.length; i++)
             {
-                IHTMLElement label = (IHTMLElement) labelElements.item(i, null);
+                var label = (IHTMLElement) labelElements.item(i, null);
+                
                 // Store the id if there is a label text match
-                if (StringComparer.AreEqual(label.innerText.Trim(), labelText))
-                {
-                    string htmlFor = ((IHTMLLabelElement)label).htmlFor;
-                    labelIdsWithMatchingText.Add(htmlFor,htmlFor);
-                }
+                if (!StringComparer.AreEqual(label.innerText.Trim(), labelText)) continue;
+                
+                var htmlFor = ((IHTMLLabelElement)label).htmlFor;
+                labelIdsWithMatchingText.Add(htmlFor,htmlFor);
             }
         }
 

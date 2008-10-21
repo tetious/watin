@@ -406,15 +406,6 @@
     <Compile Include="IEWaitForComplete.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IE\IEBrowser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IE\IEElement.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IE\IEElementFinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Image.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -466,6 +457,9 @@
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InternetExplorer\IEBrowser.cs" />
+    <Compile Include="InternetExplorer\IEElement.cs" />
+    <Compile Include="InternetExplorer\IEElementFinder.cs" />
     <Compile Include="Label.cs">
       <SubType>Code</SubType>
     </Compile>

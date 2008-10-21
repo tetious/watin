@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 

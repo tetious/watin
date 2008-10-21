@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Comparers;
@@ -31,8 +30,8 @@ namespace WatiN.Core.Constraints
 	/// </summary>
 	public class TableRowAttributeConstraint : AttributeConstraint
 	{
-		private int columnIndex;
-		private ICompare containsText;
+		private readonly int columnIndex;
+		private readonly ICompare containsText;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableRowAttributeConstraint"/> class.
@@ -70,12 +69,13 @@ namespace WatiN.Core.Constraints
 		public override bool Compare(IAttributeBag attributeBag)
 		{
 		    var elementAttributeBag = (ElementAttributeBag) attributeBag;
-		    var element = (IHTMLElement) elementAttributeBag.INativeElement.NativeElement;
+		    var element = elementAttributeBag.Element;
+            var nativeElement = (IHTMLElement)element.NativeElement;
 			
-			if (IsTextContainedIn(element.innerText))
+			if (IsTextContainedIn(element.Text))
 			{
 				// Get all elements and filter this for TableCells
-				var tableRowElement = (IHTMLTableRow)element;
+                var tableRowElement = (IHTMLTableRow)nativeElement;
 				var tableCellElements = tableRowElement.cells;
 
 				if (tableCellElements.length - 1 >= columnIndex)
