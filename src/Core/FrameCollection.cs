@@ -27,11 +27,11 @@ namespace WatiN.Core
 	/// </summary>
 	public class FrameCollection : IEnumerable
 	{
-		private ArrayList elements;
+		private readonly ArrayList elements;
 
 		public FrameCollection(DomContainer domContainer, IHTMLDocument2 htmlDocument)
 		{
-			AllFramesProcessor processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument);
+			var processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument);
 
 			NativeMethods.EnumIWebBrowser2Interfaces(processor);
 
@@ -63,48 +63,17 @@ namespace WatiN.Core
 		}
 
 		/// <exclude />
-		public Enumerator GetEnumerator()
+        public IEnumerator GetEnumerator()
 		{
-			return new Enumerator(elements);
+			foreach(var element in elements)
+			{
+			    yield return element;
+			}
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
-		}
-
-		/// <exclude />
-		public class Enumerator : IEnumerator
-		{
-			private ArrayList children;
-			private int index;
-
-			public Enumerator(ArrayList children)
-			{
-				this.children = children;
-				Reset();
-			}
-
-			public void Reset()
-			{
-				index = -1;
-			}
-
-			public bool MoveNext()
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public Frame Current
-			{
-				get { return (Frame) children[index]; }
-			}
-
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
 		}
 	}
 }

@@ -276,6 +276,7 @@
     <Compile Include="FrameCrossDomainTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FramesetWithinFrameSetTests.cs" />
     <Compile Include="FrameTests.cs">
       <SubType>Code</SubType>
     </Compile>
