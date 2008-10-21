@@ -68,7 +68,7 @@ namespace WatiN.Core
 			{
 				if (_textElement == null)
 				{
-					if (ElementTag.IsAnInputElement(htmlElement.tagName))
+					if (ElementTag.IsAnInputElement(TagName))
 					{
 						_textElement = new TextFieldElement((IHTMLInputElement) HTMLElement);
 					}
@@ -190,11 +190,8 @@ namespace WatiN.Core
 			{
 				return Id;
 			}
-			if (UtilityClass.IsNotNullOrEmpty(Name))
-			{
-				return Name;
-			}
-			return base.ToString();
+
+			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();
 		}
 
 		public string Name
@@ -209,23 +206,25 @@ namespace WatiN.Core
 
 		private void doKeyPress(string value)
 		{
-			bool doKeydown = ShouldEventBeFired(htmlElement.onkeydown);
-			bool doKeyPress = ShouldEventBeFired(htmlElement.onkeypress);
-			bool doKeyUp = ShouldEventBeFired(htmlElement.onkeyup);
+            var element = (IHTMLElement)NativeElement.NativeElement;
 
-			int length = value.Length;
+            var doKeydown = ShouldEventBeFired(element.onkeydown);
+            var doKeyPress = ShouldEventBeFired(element.onkeypress);
+            var doKeyUp = ShouldEventBeFired(element.onkeyup);
+
+			var length = value.Length;
 			if (MaxLength != 0 && length > MaxLength)
 			{
 				length = MaxLength;
 			}
 
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				//TODO: Make typing speed a variable
 				//        Thread.Sleep(0); 
 
-				string subString = value.Substring(i, 1);
-				char character = char.Parse(subString);
+				var subString = value.Substring(i, 1);
+				var character = char.Parse(subString);
 
 				setValue(Value + subString);
 

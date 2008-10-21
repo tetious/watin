@@ -21,12 +21,10 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Threading;
-using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 
 namespace WatiN.Core
@@ -74,8 +72,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class Element : IAttributeBag
 	{
-		private DomContainer _domContainer;
-		private INativeElement _nativeElement;
+        private INativeElement _nativeElement;
 		private INativeElementFinder _nativeElementFinder;
 
 		private Stack _originalcolor;
@@ -109,7 +106,7 @@ namespace WatiN.Core
 		{
 			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
 			{
-				initElement(element._domContainer, element._nativeElement, element._nativeElementFinder);
+				initElement(element.DomContainer, element._nativeElement, element._nativeElementFinder);
 			}
 			else
 			{
@@ -121,7 +118,7 @@ namespace WatiN.Core
 		{
             if (domContainer == null) throw new ArgumentNullException("domContainer");
 
-			_domContainer = domContainer;
+			DomContainer = domContainer;
 			_nativeElement = nativeElement;
 			_nativeElementFinder = elementFinder;
 		}
@@ -251,7 +248,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.NextSibling);
+                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.NextSibling);
 			}
         }
 
@@ -263,7 +260,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.PreviousSibling);
+                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.PreviousSibling);
 			}
 		}
 
@@ -297,7 +294,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(_domContainer, NativeElement.Parent);
+                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.Parent);
             }
         }
 
@@ -633,23 +630,13 @@ namespace WatiN.Core
 			catch{}
 		}
 
-		// TODO: Remove this property or move it to IEElement
-		protected IHTMLElement htmlElement
-		{
-			get { return (IHTMLElement) HTMLElement; }
-		}
+        /// <summary>
+        /// Gets the DOMcontainer for this element.
+        /// </summary>
+        /// <value>The DOM container.</value>
+        public DomContainer DomContainer { get; private set; }
 
-		/// <summary>
-		/// Gets the DOMcontainer for this element.
-		/// </summary>
-		/// <value>The DOM container.</value>
-		public DomContainer DomContainer
-		{
-			get { return _domContainer; }
-		}
-
-		//TODO: Should return INativeElement instead of object
-
+        //TODO: Should be removed
 		/// <summary>
 		/// Gets the DOM HTML element for this instance as an object. Cast it to 
 		/// the interface you need. Most of the time the object supports IHTMLELement, 
@@ -662,7 +649,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				return ((IEElement)NativeElement).NativeElement;
+				return NativeElement.NativeElement;
 			}
 		}
 
@@ -688,9 +675,9 @@ namespace WatiN.Core
 					{
 					    if(e.InnerException == null)
 						{
-							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, _domContainer.Url);
+							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, DomContainer.Url);
 						}
-                        throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, _domContainer.Url, e.InnerException);
+                        throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, DomContainer.Url, e.InnerException);
 					}
 				}
 
@@ -836,7 +823,7 @@ namespace WatiN.Core
 					// against some cached reference.
 					if (Exists)
 					{
-						if (constraint.Compare(NativeElement.GetAttributeBag(_domContainer)))
+						if (constraint.Compare(NativeElement.GetAttributeBag(DomContainer)))
 						{
 							return;
 						}
@@ -1000,7 +987,7 @@ namespace WatiN.Core
 		/// </summary>
 		public void WaitForComplete()
 		{
-			_domContainer.WaitForComplete();
+			DomContainer.WaitForComplete();
 		}
 
 
@@ -1201,7 +1188,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			return NativeElement.GetAttributeBag(_domContainer).GetValue(attributename);
+			return NativeElement.GetAttributeBag(DomContainer).GetValue(attributename);
 		}
 
 		internal static Element New(DomContainer domContainer, INativeElement element)

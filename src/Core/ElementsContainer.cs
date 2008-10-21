@@ -547,7 +547,7 @@ namespace WatiN.Core
 				{
 					if (Exists)
 					{
-						return (IHTMLElementCollection) htmlElement.all;
+						return (IHTMLElementCollection) ((IHTMLElement) NativeElement.NativeElement).all;
 					}
 
 					return null;

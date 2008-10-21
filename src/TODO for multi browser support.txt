@@ -1,0 +1,24 @@
+TODO for multiple browser support:
+
+** FRAMES
+- Abstract current AllFramesProcessor used in FramesCollection away
+- FramesCollection constructor should not depend on mshtml.HTMLDocument
+
+** IE specific Constraint classes (TableRowAttributeConstraint, LabelTextConstraint, ProximityTextConstraint)
+- Move to InternetExplorer.Constraints namespace
+- remove from Find class and expose them using extension methods on Find
+- See if some/all can be changed to work with FireFox. If so revert above changes for these Constraints
+
+** IElementCollection
+- property IElementCollection.Elements should return IEnumarable<INativeElement>
+
+** Document class
+- Depends heavily on mshtml.HtmlDocument. These dependencies should be removed or be moved to browser specific implementation(s).
+
+** DomContainer class
+- Depends on mshtml.HtmlDocument because its an intermediar to Document. Might be solved if Document is changed.
+
+** Element class
+- Remove HTMLElement property and change all code depending on it.
+
+ 
