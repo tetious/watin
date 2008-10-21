@@ -31,10 +31,9 @@ namespace WatiN.Core
 	public abstract class DomContainer : Document
 	{
 		private IHTMLDocument2 _htmlDocument;
-		private DialogWatcher _dialogWatcher;
-		private bool _disposed = false;
+	    private bool _disposed;
 
-		public DomContainer()
+	    protected DomContainer()
 		{
 			DomContainer = this;
 		}
@@ -83,23 +82,19 @@ namespace WatiN.Core
 		/// </summary>
 		protected void StartDialogWatcher()
 		{
-			if (Settings.AutoStartDialogWatcher && _dialogWatcher == null)
-			{
-				_dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
-				_dialogWatcher.IncreaseReferenceCount();
-			}
+		    if (!Settings.AutoStartDialogWatcher || DialogWatcher != null) return;
+		    
+            DialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+		    DialogWatcher.IncreaseReferenceCount();
 		}
 
-		/// <summary>
-		/// Gets the dialog watcher.
-		/// </summary>
-		/// <value>The dialog watcher.</value>
-		public DialogWatcher DialogWatcher
-		{
-			get { return _dialogWatcher; }
-		}
+	    /// <summary>
+	    /// Gets the dialog watcher.
+	    /// </summary>
+	    /// <value>The dialog watcher.</value>
+	    public DialogWatcher DialogWatcher { get; private set; }
 
-		public abstract INativeBrowser NativeBrowser
+	    public abstract INativeBrowser NativeBrowser
 		{
 			get;
 		}
@@ -128,18 +123,17 @@ namespace WatiN.Core
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
-			if (!_disposed)
-			{
-				_htmlDocument = null;
-				if (_dialogWatcher != null)
-				{
-					DialogWatcher.DecreaseReferenceCount();
-					_dialogWatcher = null;
-				}
-				_disposed = true;
+		    if (_disposed) return;
+		    
+            _htmlDocument = null;
+		    if (DialogWatcher != null)
+		    {
+		        DialogWatcher.DecreaseReferenceCount();
+		        DialogWatcher = null;
+		    }
+		    _disposed = true;
 
-				base.Dispose(true);
-			}
+		    base.Dispose(true);
 		}
 
 		/// <summary>
@@ -178,7 +172,7 @@ namespace WatiN.Core
 		/// <param name="filename">The filename.</param>
         public void CaptureWebPageToFile(string filename)
 		{
-			CaptureWebPage captureWebPage = new CaptureWebPage(this);
+			var captureWebPage = new CaptureWebPage(this);
 			captureWebPage.CaptureWebPageToFile(filename, false, false, 100, 100);
 		}
 
