@@ -21,4 +21,6 @@ TODO for multiple browser support:
 ** Element class
 - Remove HTMLElement property and change all code depending on it.
 
+** ElementAttributeBag
+- Reimplement style support in GetValue(attributename)
  

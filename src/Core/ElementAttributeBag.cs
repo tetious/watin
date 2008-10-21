@@ -18,7 +18,6 @@
 
 using System;
 using System.Globalization;
-using mshtml;
 using WatiN.Core.Constraints;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Interfaces;
@@ -26,21 +25,20 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// Wrapper around the <see cref="mshtml.IHTMLElement"/> object. Used by <see cref="BaseConstraint.Compare"/>.
+	/// Wrapper around the <see cref="INativeElement"/> object. Used by <see cref="BaseConstraint.Compare"/>.
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{
 		private INativeElement _htmlElement;
 		private Element _element;
 		private Element _elementTyped;
-	    private DomContainer _domContainer;
 
-        public ElementAttributeBag(DomContainer domContainer) : this (domContainer, null)
+	    public ElementAttributeBag(DomContainer domContainer) : this (domContainer, null)
         {}
 
 		public ElementAttributeBag(DomContainer domContainer, INativeElement element)
 		{
-            _domContainer = domContainer;
+            DomContainer = domContainer;
             INativeElement = element;
 		}
 
@@ -59,13 +57,9 @@ namespace WatiN.Core
             }
 		}
 
-        public DomContainer DomContainer
-        {
-            get { return _domContainer; }
-            set { _domContainer = value; }
-        }
-        
-        /// <summary>
+	    public DomContainer DomContainer { get; set; }
+
+	    /// <summary>
 		/// Returns a typed Element instance that can be cast to an ElementsContainer.
 		/// </summary>
 		/// <value>The element.</value>
