@@ -192,9 +192,10 @@ namespace WatiN.Core.InternetExplorer
 
 	    private bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> children)
 	    {            
-	        waitUntilElementReadyStateIsComplete(element);
-
             var nativeElement = _domContainer.NativeBrowser.CreateElement(element);
+            
+            waitUntilElementReadyStateIsComplete(nativeElement);
+
             attributeBag.INativeElement = nativeElement;
 
 	        var validElementType = true;
@@ -224,7 +225,7 @@ namespace WatiN.Core.InternetExplorer
                    attributeConstraint.Comparer.GetType() == typeof(StringComparer);
 		}
 
-	    private static void waitUntilElementReadyStateIsComplete(IHTMLElement element)
+	    private static void waitUntilElementReadyStateIsComplete(INativeElement element)
 		{
 			//TODO: See if this method could be dropped, it seems to give
 			//      more trouble (uninitialized state of elements)
@@ -242,17 +243,17 @@ namespace WatiN.Core.InternetExplorer
 			// Like for elements that could not load an image or ico
 			// or some other bits not part of the HTML page.     
 	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
-            var ihtmlElement2 = ((IHTMLElement2)element);
+            var ihtmlElement2 = ((IHTMLElement2)element.NativeElement);
             var success = tryActionUntilTimeOut.Try(() =>
             {
                 var readyState = ihtmlElement2.readyStateValue;
                 return (readyState == 0 || readyState == 4);
             });
 
-            if (!success)
-            {
-                throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
-            }
+	        if (success) return;
+
+            var ihtmlElement = ((IHTMLElement) element.NativeElement);
+            throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
 		}
 	}
 }
