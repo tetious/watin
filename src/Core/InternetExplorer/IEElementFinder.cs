@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -240,21 +241,18 @@ namespace WatiN.Core.InternetExplorer
 			// it's quite probable that it will never reach Complete.
 			// Like for elements that could not load an image or ico
 			// or some other bits not part of the HTML page.     
-			var timeoutTimer = new SimpleTimer(30);
+	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
+            var ihtmlElement2 = ((IHTMLElement2)element);
+            var success = tryActionUntilTimeOut.Try(() =>
+            {
+                var readyState = ihtmlElement2.readyStateValue;
+                return (readyState == 0 || readyState == 4);
+            });
 
-			do
-			{
-				var readyState = ((IHTMLElement2) element).readyStateValue;
-
-				if (readyState == 0 || readyState == 4)
-				{
-					return;
-				}
-
-				Thread.Sleep(Settings.SleepTime);
-			} while (!timeoutTimer.Elapsed);
-
-			throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
+            if (!success)
+            {
+                throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + element.outerText);
+            }
 		}
 	}
 }

@@ -562,6 +562,7 @@
     <Compile Include="UtilityClasses\SimpleTimer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\TryActionUntilTimeOut.cs" />
     <Compile Include="UtilityClasses\Utils.cs">
       <SubType>Code</SubType>
     </Compile>

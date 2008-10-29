@@ -40,6 +40,7 @@ using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {
@@ -438,16 +439,13 @@ namespace WatiN.Core.DialogHandlers
 			// Wait untill window is visible so all properties
 			// of the window class (like Style and StyleInHex)
 			// will return valid values.
-			SimpleTimer timer = new SimpleTimer(Settings.WaitForCompleteTimeOut);
+		    var tryActionUntilTimeOut = new TryActionUntilTimeOut(Settings.WaitForCompleteTimeOut);
+		    var success = tryActionUntilTimeOut.Try(() => window.Visible );
 
-			do
-			{
-				if (window.Visible) return;
-
-				Thread.Sleep(50);
-			} while (!timer.Elapsed);
-
-			Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, Settings.WaitForCompleteTimeOut);
+            if (!success)
+            {
+                Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, Settings.WaitForCompleteTimeOut);
+            }
 		}
 
 		#region IDisposable Members

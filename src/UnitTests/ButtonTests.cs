@@ -65,6 +65,8 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(ie.Button("disabledid").Exists);
 			// Test <Button />
 			Assert.IsTrue(ie.Button("buttonelementid").Exists);
+			
+            Assert.IsTrue(ie.Button(b => b.Id == "buttonelementid").Exists);
 
 			Assert.IsFalse(ie.Button("noneexistingbuttonid").Exists);
 		}

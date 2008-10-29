@@ -69,18 +69,20 @@ namespace WatiN.Core
 
         private void SetDefaults()
         {
-            settings = new settingsStruct();
-            settings.attachToIETimeOut = 30;
-            settings.waitUntilExistsTimeOut = 30;
-            settings.waitForCompleteTimeOut = 30;
-            settings.sleepTime = 100;
-            settings.highLightElement = true;
-            settings.highLightColor = "yellow";
-            settings.autoCloseDialogs = true;
-            settings.autoStartDialogWatcher = true;
-            settings.autoMoveMousePointerToTopLeft = true;
-            settings.makeNewIEInstanceVisible = true;
-            settings.findByDefaultFactory = new FindByDefaultFactory();
+            settings = new settingsStruct
+                           {
+                               attachToIETimeOut = 30,
+                               waitUntilExistsTimeOut = 30,
+                               waitForCompleteTimeOut = 30,
+                               sleepTime = 100,
+                               highLightElement = true,
+                               highLightColor = "yellow",
+                               autoCloseDialogs = true,
+                               autoStartDialogWatcher = true,
+                               autoMoveMousePointerToTopLeft = true,
+                               makeNewIEInstanceVisible = true,
+                               findByDefaultFactory = new FindByDefaultFactory()
+                           };
         }
 
         /// <summary>

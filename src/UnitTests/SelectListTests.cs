@@ -260,7 +260,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindOptionUsingPredicateT()
         {
-            Option option = ie.SelectList("Select2").Option(delegate(Option o) { return o.Text == "Third Listitem"; });
+            Option option = ie.SelectList("Select2").Option(o => o.Text == "Third Listitem");
             Assert.That(option.Exists);
         }
 	}

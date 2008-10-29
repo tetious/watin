@@ -219,7 +219,7 @@ namespace WatiN.Core
 				// to do further processing seems to solve this problem.
 				try
 				{
-					string readyState = document.readyState;
+					var readyState = document.readyState;
 					return true;
 				}
 				catch {}

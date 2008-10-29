@@ -26,6 +26,7 @@ using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -809,44 +810,15 @@ namespace WatiN.Core
 		/// <param name="timeout">The timeout.</param>
 		public void WaitUntil(BaseConstraint constraint, int timeout)
 		{
-			Exception lastException;
-			var timeoutTimer = new SimpleTimer(timeout);
+			// Calling Exists will refresh the reference to the html element
+			// so the compare is against the current html element (and not 
+			// against some cached reference.
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeout)
+            {
+                ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ConstraintToString())
+            };
 
-			do
-			{
-				lastException = null;
-
-				try
-				{
-					// Calling Exists will refresh the reference to the html element
-					// so the compare is against the current html element (and not 
-					// against some cached reference.
-					if (Exists)
-					{
-						if (constraint.Compare(NativeElement.GetAttributeBag(DomContainer)))
-						{
-							return;
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					lastException = e;
-				}
-
-				Thread.Sleep(200);
-			} while (!timeoutTimer.Elapsed);
-
-			ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ConstraintToString()));
-		}
-
-		private static void ThrowTimeOutException(Exception lastException, string message)
-		{
-		    if (lastException != null)
-			{
-				throw new Exceptions.TimeoutException(message, lastException);
-			}
-		    throw new Exceptions.TimeoutException(message);
+            tryActionUntilTimeOut.Try(() => Exists && constraint.Compare(NativeElement.GetAttributeBag(DomContainer)));
 		}
 
 	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
@@ -877,29 +849,13 @@ namespace WatiN.Core
 
         private void LoopUntilExistsEqualsWaitUntilExistsArgument(bool waitUntilExists, int timeout)
         {
-            Exception lastException;
-            var timeoutTimer = new SimpleTimer(timeout);
-
-            do
-            {
-                lastException = null;
-
-                try
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeout)
                 {
-                    if (Exists == waitUntilExists)
-                    {
-                        return;
-                    }
-                }
-                catch (Exception e)
-                {
-                    lastException = e;
-                }
+                    ExceptionMessage = () => string.Format("waiting {0} seconds for element to {1}.", timeout,
+                                                  waitUntilExists ? "show up" : "disappear")
+                };
 
-                Thread.Sleep(200);
-            } while (!timeoutTimer.Elapsed);
-
-            ThrowTimeOutException(lastException, string.Format("waiting {0} seconds for element to {1}.", timeout, waitUntilExists ? "show up" : "disappear"));
+            tryActionUntilTimeOut.Try(() => Exists == waitUntilExists);
         }
 
         /// <summary>

@@ -19,6 +19,7 @@
 using System;
 using System.Threading;
 using WatiN.Core.Exceptions;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {
@@ -79,13 +80,9 @@ namespace WatiN.Core.DialogHandlers
 
 		public void WaitUntilExists(int waitDurationInSeconds)
 		{
-			SimpleTimer timeoutTimer = new SimpleTimer(waitDurationInSeconds);
-
-			while (!Exists() && !timeoutTimer.Elapsed)
-			{
-				Thread.Sleep(200);
-			}
-
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(waitDurationInSeconds);
+            tryActionUntilTimeOut.Try(Exists);
+            
 			if (!Exists())
 			{
 				throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));

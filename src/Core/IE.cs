@@ -652,7 +652,7 @@ namespace WatiN.Core
 
 				if (mainWindowHandle != 0)
 				{
-					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Core.Settings.AttachToIETimeOut);
+					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Settings.AttachToIETimeOut);
 				}
 			    Thread.Sleep(500);
 			} while (!timeoutTimer.Elapsed);

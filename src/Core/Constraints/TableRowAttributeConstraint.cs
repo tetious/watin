@@ -70,7 +70,7 @@ namespace WatiN.Core.Constraints
 		{
 		    var elementAttributeBag = (ElementAttributeBag) attributeBag;
 		    var element = elementAttributeBag.Element;
-            var nativeElement = (IHTMLElement)element.NativeElement;
+            var nativeElement = (IHTMLElement)element.NativeElement.NativeElement;
 			
 			if (IsTextContainedIn(element.Text))
 			{

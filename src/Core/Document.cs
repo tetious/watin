@@ -26,6 +26,7 @@ using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -254,16 +255,12 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(string text, int timeOut)
         {
-            SimpleTimer timer = new SimpleTimer(timeOut);
-
-            do
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
             {
-                if (ContainsText(text)) { return; }
-
-                Thread.Sleep(50);
-            } while (!timer.Elapsed);
-
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.WaitUntilExistsTimeOut, text));
+                SleepTime = 50,
+                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.WaitUntilExistsTimeOut, text)
+            };
+            tryActionUntilTimeOut.Try(() => ContainsText(text));
         }
 
         /// <summary>
@@ -289,16 +286,12 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex, int timeOut)
         {
-            SimpleTimer timer = new SimpleTimer(timeOut);
-
-            do
+	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
             {
-                if (ContainsText(regex)) { return; }
-
-                Thread.Sleep(50);
-            } while (!timer.Elapsed);
-
-            throw new WatiN.Core.Exceptions.TimeoutException(string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex));
+                SleepTime = 50,
+                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex)
+            };
+            tryActionUntilTimeOut.Try(() => ContainsText(regex));
         }
 
 		/// <summary>

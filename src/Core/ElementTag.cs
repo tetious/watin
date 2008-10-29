@@ -160,15 +160,15 @@ namespace WatiN.Core
 
 		public static bool IsValidElement(object element, ArrayList elementTags)
 		{
-			return IsValidElement(new IEElement(element), elementTags);
+            return element != null && IsValidElement(new IEElement(element), elementTags);
 		}
 
 		public static bool IsValidElement(IHTMLElement element, ArrayList elementTags)
 		{
-			return IsValidElement(new IEElement(element), elementTags);
+		    return element != null && IsValidElement(new IEElement(element), elementTags);
 		}
 
-		public static bool IsAnInputElement(string tagName)
+	    public static bool IsAnInputElement(string tagName)
 		{
 			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
 		}
