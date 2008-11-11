@@ -23,4 +23,9 @@ TODO for multiple browser support:
 
 ** ElementAttributeBag
 - Reimplement style support in GetValue(attributename)
+
+** Document
+- Remove dependencies on IHTMLDocument2
+- Remove dependencies on IHTMLElement for attributes values from Body element
+- Move GetPropertyValue to nativeBrowser class? Is Com interop specific
  

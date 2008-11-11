@@ -21,7 +21,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
 using System.Text.RegularExpressions;
-using System.Threading;
 using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -68,7 +67,7 @@ namespace WatiN.Core
 		/// and set DomContainer before accessing any method or property of 
 		/// this class.
 		/// </summary>
-		public Document() {}
+		protected Document() {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Document"/> class.
@@ -76,7 +75,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="htmlDocument">The HTML document.</param>
-		public Document(DomContainer domContainer, IHTMLDocument2 htmlDocument)
+		protected Document(DomContainer domContainer, IHTMLDocument2 htmlDocument)
 		{
 			ArgumentRequired(domContainer, "domContainer");
 			ArgumentRequired(htmlDocument, "htmlDocument");
@@ -117,9 +116,7 @@ namespace WatiN.Core
 			{
 				IHTMLElement body = HtmlDocument.body;
 
-				if (body == null) return null;
-
-				return body.outerHTML;
+				return body == null ? null : body.outerHTML;
 			}
 		}
 
@@ -133,9 +130,7 @@ namespace WatiN.Core
 			{
 				IHTMLElement body = HtmlDocument.body;
 
-				if (body == null) return null;
-
-				return body.innerText;
+				return body == null ? null : body.innerText;
 			}
 		}
 
@@ -224,11 +219,9 @@ namespace WatiN.Core
 		/// </returns>
 		public bool ContainsText(Regex regex)
 		{
-			string innertext = Text;
+			var innertext = Text;
 
-			if (innertext == null) return false;
-
-			return (regex.Match(innertext).Success);
+            return innertext != null && (regex.Match(innertext).Success);
 		}
 
 
@@ -264,7 +257,7 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
+        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element.
         /// Will time out after <see name="Settings.WaitUntilExistsTimeOut" />
         /// </summary>
         /// <param name="regex">The regular expression to match with.</param>
@@ -277,7 +270,7 @@ namespace WatiN.Core
         }
 
 	    /// <summary>
-        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element contains the given <paramref name="text" />.
+        /// Waits until the <paramref name="regex" /> matches some text inside the HTML Body element.
         /// </summary>
         /// <param name="regex">The regular expression to match with.</param>
         /// <param name="timeOut">The number of seconds to wait</param>
@@ -286,7 +279,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex, int timeOut)
         {
-	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
             {
                 SleepTime = 50,
                 ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex)
@@ -301,7 +294,7 @@ namespace WatiN.Core
 		/// <returns>The matching text, or null if none.</returns>
 		public string FindText(Regex regex)
 		{
-			Match match = regex.Match(Text);
+			var match = regex.Match(Text);
 
 			return match.Success ? match.Value : null;
 		}
@@ -324,11 +317,9 @@ namespace WatiN.Core
 			get
 			{
 				IHTMLElement activeElement = HtmlDocument.activeElement;
-				if (activeElement != null)
-				{
-                    return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
-				}
-				return null;
+			    if (activeElement == null) return null;
+			    
+                return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
 			}
 		}
 
@@ -942,7 +933,7 @@ namespace WatiN.Core
 			const string resultPropertyName = "___expressionResult___";
 			const string errorPropertyName = "___expressionError___";
 
-			string exprWithAssignment = "try {\n"
+			var exprWithAssignment = "try {\n"
 			                            + "document." + resultPropertyName + "= String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))\n"
 			                            + "} catch (error) {\n"
 			                            + "document." + errorPropertyName + "= 'message' in error ? error.name + ': ' + error.message : String(error)\n"
@@ -952,7 +943,7 @@ namespace WatiN.Core
 			RunScript(exprWithAssignment);
 
 			// See if an error occured.
-			string error = GetPropertyValue(errorPropertyName);
+			var error = GetPropertyValue(errorPropertyName);
 			if (error != null)
 			{
 				throw new JavaScriptException(error);
@@ -964,9 +955,9 @@ namespace WatiN.Core
 
 		private string GetPropertyValue(string propertyName)
 		{
-			IExpando domDocumentExpando = (IExpando) HtmlDocument;
+			var domDocumentExpando = (IExpando) HtmlDocument;
 
-			PropertyInfo errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
+			var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
 			if (errorProperty != null)
 			{
 				try
