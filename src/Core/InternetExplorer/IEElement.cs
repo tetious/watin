@@ -119,11 +119,6 @@ namespace WatiN.Core.InternetExplorer
 			}
 		}
 
-		public Style Style
-		{
-			get { return new Style(htmlElement.style); }
-		}
-
 		/// <summary>
 		/// This methode can be used if the attribute isn't available as a property of
 		/// Element or a subclass of Element.
@@ -173,6 +168,40 @@ namespace WatiN.Core.InternetExplorer
             var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
 
             UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
+        }
+
+        /// <summary>
+        /// This methode can be used if the attribute isn't available as a property of
+        /// of this <see cref="Style"/> class.
+        /// </summary>
+        /// <param name="attributeName">The attribute name. This could be different then named in
+        /// the HTML. It should be the name of the property exposed by IE on it's style object.</param>
+        /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
+        public string GetStyleAttributeValue(string attributeName)
+        {
+            if (UtilityClass.IsNullOrEmpty(attributeName))
+            {
+                throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
+            }
+
+            var attributeValue = GetStyleAttributeValue(attributeName, htmlElement.style);
+
+            if (attributeValue == DBNull.Value || attributeValue == null)
+            {
+                return null;
+            }
+
+            return attributeValue.ToString();
+        }
+
+        internal static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)
+        {
+            if (attributeName.IndexOf(Char.Parse("-")) > 0)
+            {
+                attributeName = attributeName.Replace("-", "");
+            }
+
+            return style.getAttribute(attributeName, 0);
         }
 
 		protected IHTMLElement htmlElement

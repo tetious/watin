@@ -22,10 +22,13 @@ TODO for multiple browser support:
 - Remove HTMLElement property and change all code depending on it.
 
 ** ElementAttributeBag
-- Reimplement style support in GetValue(attributename)
+DONE JVM - Reimplement style support in GetValue(attributename)
 
 ** Document
 - Remove dependencies on IHTMLDocument2
 - Remove dependencies on IHTMLElement for attributes values from Body element
 - Move GetPropertyValue to nativeBrowser class? Is Com interop specific
- 
+
+
+** Style
+DONE JVM - Remove depenency on IHTMLStyle 

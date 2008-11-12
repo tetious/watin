@@ -16,10 +16,7 @@
 
 #endregion Copyright
 
-using System;
-using System.Globalization;
 using WatiN.Core.Constraints;
-using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -29,7 +26,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class ElementAttributeBag : IAttributeBag
 	{
-		private INativeElement _htmlElement;
+		private INativeElement _nativeElement;
 		private Element _element;
 		private Element _elementTyped;
 
@@ -48,10 +45,10 @@ namespace WatiN.Core
 		/// <value>The IHTMLelement.</value>
 		public INativeElement INativeElement
 		{
-			get { return _htmlElement; }
+			get { return _nativeElement; }
 			set 
             { 
-                _htmlElement = value;
+                _nativeElement = value;
                 _element = null;
                 _elementTyped = null;
             }
@@ -101,29 +98,7 @@ namespace WatiN.Core
 		/// <returns>The value of the attribute</returns>
 		public string GetValue(string attributename)
 		{
-			if (StringComparer.AreEqual(attributename, "style", true))
-			{
-				return _htmlElement.GetAttributeValue("style");
-			}
-
-			object attributeValue = null;
-
-			if (attributename.ToLower(CultureInfo.InvariantCulture).StartsWith("style."))
-			{
-                // TODO: Implement Style on INativeElement
-//				attributeValue = Style.GetAttributeValue(attributename.Substring(6), _htmlElement.style);
-			}
-			else
-			{
-                attributeValue = _htmlElement.GetAttributeValue(attributename);
-			}
-
-            if (attributeValue == DBNull.Value || attributeValue == null)
-			{
-				return null;
-			}
-
-			return attributeValue.ToString();
-		}
+	        return Element.GetAttributeValue(attributename, _nativeElement);
+        }
 	}
 }

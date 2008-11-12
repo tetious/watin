@@ -24,7 +24,7 @@ namespace WatiN.Core.UnitTests
 {
 	public abstract class BaseWatiNTest
 	{
-		private static Uri htmlTestBaseURI = null;
+		private static Uri htmlTestBaseURI;
 		private ISettings backupSettings;
 
 		public static Uri MainURI = new Uri(HtmlTestBaseURI, "main.html");

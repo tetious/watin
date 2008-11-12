@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WatiN.Core.Comparers;
@@ -301,8 +302,7 @@ namespace WatiN.Core
 
 		public Style Style
 		{
-			//TODO: Style class should also delegate to a browser specific instance
-			get { return NativeElement.Style; }
+            get { return new Style(NativeElement); }
 		}
 
 		/// <summary>
@@ -312,19 +312,31 @@ namespace WatiN.Core
 		/// <param name="attributeName">The attribute name. This could be different then named in
 		/// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
 		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
-		public string GetAttributeValue(string attributeName)
+        public string GetAttributeValue(string attributeName)
+		{
+		    return GetAttributeValue(attributeName, NativeElement);
+		}
+
+        public static string GetAttributeValue(string attributeName, INativeElement nativeElement)
 		{
 			if (UtilityClass.IsNullOrEmpty(attributeName))
 			{
 				throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
 			}
 
-			if (string.Compare(attributeName, "style", true) == 0)
+            var toLowerInvariant = attributeName.ToLowerInvariant();
+            
+            if (toLowerInvariant == "style")
 			{
-				return Style.CssText;
+                return nativeElement.GetStyleAttributeValue("csstext");
 			}
 
-			return NativeElement.GetAttributeValue(attributeName);
+            if (toLowerInvariant.StartsWith("style."))
+            {
+                return nativeElement.GetStyleAttributeValue(attributeName.Substring(6));
+            }
+
+			return nativeElement.GetAttributeValue(attributeName);
 		}
 
 		/// <summary>
@@ -1032,20 +1044,14 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(BaseConstraint findBy)
 		{
-			Element parentElement = Parent;
+			var parentElement = Parent;
 
             if (parentElement == null)
             {
                 return null;
             }
             
-            if (findBy.Compare(parentElement))
-            {
-                return parentElement;
-            }
-
-            return parentElement.Ancestor(findBy);
-
+            return findBy.Compare(parentElement) ? parentElement : parentElement.Ancestor(findBy);
 		}
 
 		/// <summary>
@@ -1092,7 +1098,7 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(string tagName, BaseConstraint findBy)
 		{
-			BaseConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+			var findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
 			                                   && findBy;
 
 			return Ancestor(findAncestor);
@@ -1117,7 +1123,7 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(string tagName, Predicate<Element> predicate)
 		{
-			BaseConstraint findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+			var findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
                                                && Find.ByElement(predicate);
 
 			return Ancestor(findAncestor);

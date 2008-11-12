@@ -56,8 +56,6 @@ namespace WatiN.Core.Interfaces
 		/// </example>
 		INativeElement Parent { get; }
 
-		Style Style { get; }
-
 		/// <summary>
 		/// This methode can be used if the attribute isn't available as a property of
 		/// Element or a subclass of Element.
@@ -66,6 +64,8 @@ namespace WatiN.Core.Interfaces
 		/// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
 		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
 		string GetAttributeValue(string attributeName);
+
+	    string GetStyleAttributeValue(string attributeName);
 
 		void ClickOnElement();
 		void SetFocus();

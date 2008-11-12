@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using mshtml;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -26,15 +26,15 @@ namespace WatiN.Core
 	/// </summary>
 	public class Style
 	{
-		private readonly IHTMLStyle style;
+	    private readonly INativeElement _nativeElement;
 
-		/// <summary>
+        /// <summary>
 		/// Initializes a new instance of the <see cref="Style"/> class.
 		/// </summary>
-		/// <param name="style">The underlying <see cref="IHTMLStyle"/>.</param>
-		public Style(IHTMLStyle style)
+		/// <param name="nativeElement">The underlying <see cref="IHTMLStyle"/>.</param>
+		public Style(INativeElement nativeElement)
 		{
-			this.style = style;
+			_nativeElement = nativeElement;
 		}
 
 		/// <summary>
@@ -140,24 +140,7 @@ namespace WatiN.Core
 				throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
 			}
 
-			object attributeValue = GetAttributeValue(attributeName, style);
-
-			if (attributeValue == DBNull.Value || attributeValue == null)
-			{
-				return null;
-			}
-
-			return attributeValue.ToString();
-		}
-
-		internal static object GetAttributeValue(string attributeName, IHTMLStyle style)
-		{
-			if (attributeName.IndexOf(Char.Parse("-")) > 0)
-			{
-				attributeName = attributeName.Replace("-", "");
-			}
-
-			return style.getAttribute(attributeName, 0);
+            return _nativeElement.GetStyleAttributeValue(attributeName);
 		}
 	}
 }
