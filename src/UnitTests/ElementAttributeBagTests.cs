@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using mshtml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WatiN.Core.Interfaces;
@@ -29,16 +28,14 @@ namespace WatiN.Core.UnitTests
 	public class ElementAttributeBagTests
 	{
 		private MockRepository mocks;
-		private IHTMLStyle mockHTMLStyle;
-		private INativeElement mockNativeElement;
+	    private INativeElement mockNativeElement;
 	    private DomContainer domContainer;
 
 		[SetUp]
 		public void SetUp()
 		{
 			mocks = new MockRepository();
-			mockHTMLStyle = (IHTMLStyle) mocks.CreateMock(typeof (IHTMLStyle));
-            mockNativeElement = (INativeElement)mocks.CreateMock(typeof(INativeElement)); 
+		    mockNativeElement = (INativeElement)mocks.CreateMock(typeof(INativeElement)); 
             domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer));
 		}
 
@@ -70,6 +67,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void StyleDotStyleAttributeNameShouldReturnStyleAttribute()
 		{
+            // GIVEN
 			const string styleAttributeValue = "white";
 
 		    Expect.Call(mockNativeElement.GetStyleAttributeValue("color")).Return(styleAttributeValue);
@@ -78,18 +76,24 @@ namespace WatiN.Core.UnitTests
 
             var attributeBag = new ElementAttributeBag(domContainer, mockNativeElement);
 
-			Assert.AreEqual(styleAttributeValue, attributeBag.GetValue("style.color"));
+            // WHEN
+		    var value = attributeBag.GetValue("style.color");
+
+            // THEN
+		    Assert.AreEqual(styleAttributeValue, value);
 		}
 
         [Test]
         public void CachedElementPropertiesShouldBeClearedIfNewHtmlElementIsSet()
         {
+            // GIVEN
             Expect.Call(mockNativeElement.GetAttributeValue("id")).Return("one").Repeat.Any();
             Expect.Call(mockNativeElement.TagName).Return("li").Repeat.Any();
             
             var mockNativeElement2 = (INativeElement)mocks.CreateMock(typeof(INativeElement));
             Expect.Call(mockNativeElement2.GetAttributeValue("id")).Return("two").Repeat.Any();
             Expect.Call(mockNativeElement2.TagName).Return("li").Repeat.Any();
+            
             Expect.Call(domContainer.NativeBrowser).Return(new IEBrowser(domContainer)).Repeat.Any();
 
             mocks.ReplayAll();
@@ -99,11 +103,12 @@ namespace WatiN.Core.UnitTests
             Assert.That(attributeBag.Element.Id, Iz.EqualTo("one"), "Unexpected Element");
             Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("one"), "Unexpected ElementTyped");
 
+            // WHEN
             attributeBag.INativeElement = mockNativeElement2;
 
+            // THEN
             Assert.That(attributeBag.Element.Id, Iz.EqualTo("two"), "Unexpected Element");
             Assert.That(attributeBag.ElementTyped.Id, Iz.EqualTo("two"), "Unexpected ElementTyped");
-
         }
 	}
 }
