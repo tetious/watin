@@ -98,7 +98,7 @@ namespace WatiN.Core
 
 		private IHTMLTableSection HtmlBody
 		{
-			get { return (IHTMLTableSection) HTMLElement; }
+            get { return (IHTMLTableSection)NativeElement.NativeElement; }
 		}
 
 	    private class Rows : IElementCollection

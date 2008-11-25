@@ -68,16 +68,18 @@ namespace WatiN.Core
 			{
 				if (_textElement == null)
 				{
-					if (ElementTag.IsAnInputElement(TagName))
+                    var nativeElement = NativeElement.NativeElement;
+
+				    if (ElementTag.IsAnInputElement(TagName))
 					{
-						_textElement = new TextFieldElement((IHTMLInputElement) HTMLElement);
+						_textElement = new TextFieldElement((IHTMLInputElement) nativeElement);
 					}
 					else
 					{
-						_textElement = new TextAreaElement((IHTMLTextAreaElement) HTMLElement);
+						_textElement = new TextAreaElement((IHTMLTextAreaElement) nativeElement);
 					}
 				}
-				return _textElement;
+			    return _textElement;
 			}
 		}
 

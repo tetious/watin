@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using WatiN.Core.UnitTests.AttributeConstraintTests;
@@ -110,25 +111,27 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			// Kick this code off to prevent initialization issues during measurement
+			// Kick this code off to exclude initialization time during measurement
 			Assert.IsTrue(ie.Div("divid").Exists);
 
-			long ticks = DateTime.Now.Ticks;
-			for (int index = 0; index < 100; index++ )
-				Assert.IsTrue(ie.Div("divid").Exists);
-			ticks = DateTime.Now.Ticks - ticks;
+			var ticksByExactId = GetTicks(Find.ById("divid"));
+            var ticksByRegExId = GetTicks(Find.ById(new Regex("divid")));
 
-			long ticksWithRegEx = DateTime.Now.Ticks;
-			for (int index = 0; index < 100; index++)
-				Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
-			ticksWithRegEx = DateTime.Now.Ticks - ticksWithRegEx;
-
-			Console.WriteLine("Find.By exact id: " + ticks);
-			Console.WriteLine("Find.By regex id: " + ticksWithRegEx);
-			Assert.That(ticks, NUnit.Framework.SyntaxHelpers.Is.LessThan(ticksWithRegEx), "Lost performance gain");
+            Console.WriteLine("Find.By exact id: " + ticksByExactId);
+            Console.WriteLine("Find.By regex id: " + ticksByRegExId);
+			
+            Assert.That(ticksByExactId, NUnit.Framework.SyntaxHelpers.Is.LessThan(ticksByRegExId), "Lost performance gain");
 		}
 
-		public override Uri TestPageUri
+	    private long GetTicks(BaseConstraint findBy)
+	    {
+	        var ticks = DateTime.Now.Ticks;
+	        for (var index = 0; index < 100; index++ ) Assert.IsTrue(ie.Div(findBy).Exists);
+	        ticks = DateTime.Now.Ticks - ticks;
+	        return ticks;
+	    }
+
+	    public override Uri TestPageUri
 		{
 			get { return MainURI; }
 		}

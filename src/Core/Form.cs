@@ -85,7 +85,7 @@ namespace WatiN.Core
 
 		private IHTMLFormElement HtmlFormElement
 		{
-			get { return (IHTMLFormElement) HTMLElement; }
+            get { return (IHTMLFormElement)NativeElement.NativeElement; }
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

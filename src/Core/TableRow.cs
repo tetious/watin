@@ -76,7 +76,7 @@ namespace WatiN.Core
         {
             get 
             { 
-                var row = (IHTMLTableRow)HTMLElement;
+                var row = (IHTMLTableRow)NativeElement.NativeElement;
 
                 var list = UtilityClass.IHtmlElementCollectionToArrayList(row.cells);
                 return new TableCellCollection(DomContainer, list);

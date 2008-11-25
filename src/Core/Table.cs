@@ -88,7 +88,7 @@ namespace WatiN.Core
 
 	    private IHTMLElementCollection GetTableRows()
 	    {
-	        var table = (IHTMLTable)HTMLElement;
+            var table = (IHTMLTable)NativeElement.NativeElement;
 	        return table.rows;
 	    }
 
@@ -131,7 +131,7 @@ namespace WatiN.Core
 
 		private IHTMLTable HTMLTable
 		{
-			get { return (IHTMLTable) HTMLElement; }
+            get { return (IHTMLTable)NativeElement.NativeElement; }
 		}
 
 		/// <summary>
@@ -373,7 +373,7 @@ namespace WatiN.Core
 			{
 				get
                 {
-                    return ((IHTMLTable)table.HTMLElement).rows;
+                    return ((IHTMLTable)table.NativeElement.NativeElement).rows;
 				}
 			}
 		}

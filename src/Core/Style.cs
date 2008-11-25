@@ -31,7 +31,7 @@ namespace WatiN.Core
         /// <summary>
 		/// Initializes a new instance of the <see cref="Style"/> class.
 		/// </summary>
-		/// <param name="nativeElement">The underlying <see cref="IHTMLStyle"/>.</param>
+        /// <param name="nativeElement">The underlying <see cref="INativeElement"/>.</param>
 		public Style(INativeElement nativeElement)
 		{
 			_nativeElement = nativeElement;

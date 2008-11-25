@@ -19,7 +19,6 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WatiN.Core.Comparers;
@@ -65,7 +64,6 @@ namespace WatiN.Core
 		{
             WaitUntil(Find.ByElement(predicate), timeout);
         }
-
 	}
 
     /// <summary>
@@ -597,7 +595,7 @@ namespace WatiN.Core
 		/// <param name="numberOfFlashes">The number of flashes.</param>
 		public void Flash(int numberOfFlashes)
 		{
-			for (int counter = 0; counter < numberOfFlashes; counter++)
+			for (var counter = 0; counter < numberOfFlashes; counter++)
 			{
 				Highlight(true);
 				Thread.Sleep(250);
@@ -612,26 +610,25 @@ namespace WatiN.Core
 		/// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
 		public void Highlight(bool doHighlight)
 		{
-			if (Settings.HighLightElement)
-			{
-				if (_originalcolor == null)
-				{
-					_originalcolor = new Stack();
-				}
+		    if (!Settings.HighLightElement) return;
+		    
+            if (_originalcolor == null)
+		    {
+		        _originalcolor = new Stack();
+		    }
 
-				if (doHighlight)
-				{
-					_originalcolor.Push(NativeElement.BackgroundColor);
-					SetBackgroundColor(Settings.HighLightColor);
-				}
-				else
-				{
-					if(_originalcolor.Count > 0)
-					{
-						SetBackgroundColor(_originalcolor.Pop() as string);
-					}
-				}
-			}
+		    if (doHighlight)
+		    {
+		        _originalcolor.Push(NativeElement.BackgroundColor);
+		        SetBackgroundColor(Settings.HighLightColor);
+		    }
+		    else
+		    {
+		        if(_originalcolor.Count > 0)
+		        {
+		            SetBackgroundColor(_originalcolor.Pop() as string);
+		        }
+		    }
 		}
 
 		private void SetBackgroundColor(string color) 
@@ -644,36 +641,13 @@ namespace WatiN.Core
 		}
 
         /// <summary>
-        /// Gets the DOMcontainer for this element.
+        /// Gets the DomContainer for this element.
         /// </summary>
-        /// <value>The DOM container.</value>
         public DomContainer DomContainer { get; private set; }
 
-        //TODO: Should be removed
 		/// <summary>
-		/// Gets the DOM HTML element for this instance as an object. Cast it to 
-		/// the interface you need. Most of the time the object supports IHTMLELement, 
-		/// IHTMLElement2 and IHTMLElement3 but you can also cast it to a more
-		/// specific interface. You should reference the microsoft.MSHTML.dll 
-		/// assembly to cast it to a valid type.
+		/// Gets a reference to the wrapper which incapsulates a native element in the browser.
 		/// </summary>
-		/// <value>The DOM element.</value>
-		public object HTMLElement
-		{
-			get
-			{
-				return NativeElement.NativeElement;
-			}
-		}
-
-		/// <summary>
-		/// Gets the DOM HTML element for this instance as an object. Cast it to 
-		/// the interface you need. Most of the time the object supports IHTMLELement, 
-		/// IHTMLElement2 and IHTMLElement3 but you can also cast it to a more
-		/// specific interface. You should reference the microsoft.MSHTML.dll 
-		/// assembly to cast it to a valid type.
-		/// </summary>
-		/// <value>The DOM element.</value>
 		public INativeElement NativeElement
 		{
 			get

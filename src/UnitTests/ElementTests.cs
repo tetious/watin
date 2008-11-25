@@ -701,7 +701,7 @@ namespace WatiN.Core.UnitTests
 		private static int position(Element element, string attributename)
 		{
 			int pos = 0;
-			IHTMLElement offsetParent = ((IHTMLElement)element.HTMLElement).offsetParent;
+            IHTMLElement offsetParent = ((IHTMLElement)element.NativeElement.NativeElement).offsetParent;
 			if (offsetParent != null)
 			{
 			    DomContainer domContainer = element.DomContainer;

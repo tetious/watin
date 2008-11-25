@@ -19,7 +19,7 @@ TODO for multiple browser support:
 - Depends on mshtml.HtmlDocument because its an intermediar to Document. Might be solved if Document is changed.
 
 ** Element class
-- Remove HTMLElement property and change all code depending on it.
+DONE JVM - Remove HTMLElement property and change all code depending on it.
 
 ** ElementAttributeBag
 DONE JVM - Reimplement style support in GetValue(attributename)

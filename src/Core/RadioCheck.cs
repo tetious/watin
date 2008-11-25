@@ -61,7 +61,7 @@ namespace WatiN.Core
 
 		private IHTMLInputElement inputElement
 		{
-			get { return ((IHTMLInputElement) HTMLElement); }
+            get { return ((IHTMLInputElement)NativeElement.NativeElement); }
 		}
 	}
 }

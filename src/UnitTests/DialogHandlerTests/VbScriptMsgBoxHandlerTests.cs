@@ -21,7 +21,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.DialogHandlers;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
 	public class VbScriptMsgBoxDialogHandlerTests : BaseWithIETests
