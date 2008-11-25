@@ -861,7 +861,7 @@ namespace WatiN.Core
 			set { domContainer = value; }
 		}
 
-		IHTMLElementCollection IElementCollection.Elements
+		object IElementCollection.Elements
 		{
 			get
 			{

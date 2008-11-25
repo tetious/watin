@@ -157,7 +157,7 @@ namespace WatiN.Core.InternetExplorer
 
 	    public List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
-	        var elements = elementTag.GetElementCollection(elementCollection.Elements);
+	        var elements = elementTag.GetElementCollection((IHTMLElementCollection)elementCollection.Elements);
             var children = new List<INativeElement>();
 
 	        if (elements != null)
@@ -181,7 +181,7 @@ namespace WatiN.Core.InternetExplorer
 	    {
             var children = new List<INativeElement>();
 
-	        var element = elementTag.GetElementById(elementCollection.Elements, ((AttributeConstraint)constraint).Value);
+	        var element = elementTag.GetElementById((IHTMLElementCollection)elementCollection.Elements, ((AttributeConstraint)constraint).Value);
 
 	        if (element != null)
 	        {

@@ -343,7 +343,7 @@ namespace WatiN.Core
 				selectlist = selectList;
 			}
 
-			public IHTMLElementCollection Elements
+			public object Elements
 			{
 				get
 				{

@@ -342,14 +342,14 @@ namespace WatiN.Core
 				this.table = table;
 			}
 
-			public abstract IHTMLElementCollection Elements { get; }
+			public abstract object Elements { get; }
 		}
 
 		public class TBodies : TableElementCollectionsBase
 		{
 			public TBodies(Table table) : base(table) {}
 
-			public override IHTMLElementCollection Elements
+			public override object Elements
 			{
 				get { return table.HTMLTable.tBodies; }
 			}
@@ -359,7 +359,7 @@ namespace WatiN.Core
 		{
 			public ElementsInFirstTBody(Table table) : base(table) {}
 
-			public override IHTMLElementCollection Elements
+			public override object Elements
 			{
 				get { return (IHTMLElementCollection) table.GetFirstTBody().all; }
 			}
@@ -369,7 +369,7 @@ namespace WatiN.Core
 		{
 			public Rows(Table table) : base(table) {}
 
-			public override IHTMLElementCollection Elements
+			public override object Elements
 			{
 				get
                 {

@@ -160,7 +160,12 @@ namespace WatiN.Core.InternetExplorer
 			}
 		}
 
-        public void FireEventAsync(string eventName, NameValueCollection eventProperties)
+	    public object NativeElements
+	    {
+            get { return htmlElement.all; }
+	    }
+
+	    public void FireEventAsync(string eventName, NameValueCollection eventProperties)
         {
             var scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
             var window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;

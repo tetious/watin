@@ -19,7 +19,6 @@
 using System;
 using System.Collections;
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -539,18 +538,13 @@ namespace WatiN.Core
         }
         #endregion
 
-		IHTMLElementCollection IElementCollection.Elements
+		object IElementCollection.Elements
 		{
 			get
 			{
 				try
 				{
-					if (Exists)
-					{
-						return (IHTMLElementCollection) ((IHTMLElement) NativeElement.NativeElement).all;
-					}
-
-					return null;
+				    return Exists ? NativeElement.NativeElements : null;
 				}
 				catch
 				{

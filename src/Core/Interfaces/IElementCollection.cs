@@ -16,12 +16,10 @@
 
 #endregion Copyright
 
-using mshtml;
-
 namespace WatiN.Core.Interfaces
 {
 	public interface IElementCollection
 	{
-		IHTMLElementCollection Elements { get; }
+		object Elements { get; }
 	}
 }

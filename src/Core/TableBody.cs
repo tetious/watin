@@ -110,7 +110,7 @@ namespace WatiN.Core
 				this.tableBody = tableBody;
 			}
 
-			public IHTMLElementCollection Elements
+			public object Elements
 			{
 				get { return tableBody.HtmlBody.rows; }
 			}
