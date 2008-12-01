@@ -17,17 +17,14 @@
 #endregion Copyright
 
 using NUnit.Framework;
-using Rhino.Mocks;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
     [TestFixture]
     public class ComplexMultipleAttributeConstraintTests
     {
-        private MockRepository mocks;
-        private IAttributeBag mockAttributeBag;
+        private MockAttributeBag mockAttributeBag;
 
         private BaseConstraint findBy1;
         private BaseConstraint findBy2;
@@ -40,8 +37,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
+            mockAttributeBag = new MockAttributeBag("1", "true");
+            mockAttributeBag.Add("2","false");
+            mockAttributeBag.Add("4", "true");
+            mockAttributeBag.Add("5", "false");
+
             findBy = null;
 
             findBy1 = Find.By("1", "true");
@@ -78,32 +78,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [TearDown]
         public void TearDown()
         {
-            Expect.Call(mockAttributeBag.GetValue("1")).Return("true");
-            Expect.Call(mockAttributeBag.GetValue("2")).Return("false");
-            Expect.Call(mockAttributeBag.GetValue("4")).Return("true");
-            Expect.Call(mockAttributeBag.GetValue("5")).Return("false");
-
-            mocks.ReplayAll();
-
             Assert.IsFalse(findBy.Compare(mockAttributeBag));
-
-            mocks.VerifyAll();
         }
-
-//    [Test]
-//    public void testAndOr()
-//    {
-//      Assert.IsTrue(EchoBoolean(1) && EchoBoolean(5) && EchoBoolean(3) || EchoBoolean(2) && EchoBoolean(6));
-//    }
-//
-//    public bool EchoBoolean(int value)
-//    {
-//      System.Diagnostics.Debug.WriteLine(value.ToString());
-//      if (value==1) return true;
-//      if (value==2) return true;
-//      if (value==3) return true;
-//      if (value==4) return true;
-//      return false;
-//    }
     }
 }

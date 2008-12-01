@@ -55,7 +55,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Returns a new <see cref="AreaCollection" /> filtered by the given <see cref="predicate" />.
+		/// Returns a new <see cref="AreaCollection" /> filtered by the given <paramref name="predicate" />.
 		/// </summary>
 		/// <param name="predicate">A predicate which filters the elements.</param>
 		/// <returns>The filtered collection.</returns>

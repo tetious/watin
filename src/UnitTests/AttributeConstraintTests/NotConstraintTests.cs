@@ -16,8 +16,9 @@
 
 #endregion Copyright
 
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,39 +27,37 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     [TestFixture]
     public class NotConstraintTests
     {
-        private MockRepository mocks;
-        private BaseConstraint _base;
-        private IAttributeBag attributeBag;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-            _base = (BaseConstraint) mocks.DynamicMock(typeof (BaseConstraint));
-            attributeBag = (IAttributeBag) mocks.DynamicMock(typeof (IAttributeBag));
-
-            SetupResult.For(_base.Compare(null)).IgnoreArguments().Return(false);
-            mocks.ReplayAll();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            mocks.VerifyAll();
-        }
-
         [Test]
         public void NotTest()
         {
-            NotConstraint notConstraint = new NotConstraint(_base);
-            Assert.IsTrue(notConstraint.Compare(attributeBag));
+            // Given
+            var baseConstraintMock = new Mock<BaseConstraint>();
+            baseConstraintMock.Expect(constraint => constraint.Compare(null)).Returns(false);
+
+            var attributeBag = new Mock<IAttributeBag>().Object;
+
+            var notConstraint = new NotConstraint(baseConstraintMock.Object);
+
+            // WHEN
+            var result = notConstraint.Compare(attributeBag);
+            
+            // THEN
+            Assert.That(result, Is.True);
         }
 
         [Test]
         public void AttributeOperatorNotOverload()
         {
-            BaseConstraint attributenot = !_base;
+            // Given
+            var baseConstraintMock = new Mock<BaseConstraint>();
+            baseConstraintMock.Expect(constraint => constraint.Compare(null)).Returns(false);
 
+            var attributeBag = new Mock<IAttributeBag>().Object;
+
+            // WHEN
+            var attributenot = !baseConstraintMock.Object;
+
+            // THEN
             Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
             Assert.IsTrue(attributenot.Compare(attributeBag));
         }

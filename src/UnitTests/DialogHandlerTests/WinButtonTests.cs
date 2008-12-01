@@ -16,10 +16,10 @@
 
 #endregion Copyright
 
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using WatiN.Core.DialogHandlers;
-using Iz = NUnit.Framework.SyntaxHelpers.Is;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
@@ -29,39 +29,35 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
         [Test]
         public void ExistShouldReturnFalseIfWindowIsNotAButton()
         {
-            MockRepository mocks = new MockRepository();
+            // GIVEN
+            var hwndMock = new Mock<IHwnd>();
 
-            IHwnd hwnd = (IHwnd) mocks.CreateMock(typeof (IHwnd));
+            hwndMock.Expect(hwnd => hwnd.IsWindow).Returns(true);
+            hwndMock.Expect(hwnd => hwnd.ClassName).Returns("NoButton");
+
+            // WHEN
+            var button = new WinButton(hwndMock.Object);
             
-            Expect.Call(hwnd.IsWindow).Return(true);
-            Expect.Call(hwnd.ClassName).Return("NoButton");
-
-            mocks.ReplayAll();
-
-            WinButton button = new WinButton(hwnd);
-            
-            Assert.That(button.Exists(), Iz.False);
-
-            mocks.VerifyAll();
+            // THEN
+            Assert.That(button.Exists(), Is.False);
+            hwndMock.VerifyAll();
         }
 
         [Test]
         public void ExistShouldReturnTrueIfWindowIsAButton()
         {
-            MockRepository mocks = new MockRepository();
+            // GIVEN
+            var hwndMock = new Mock<IHwnd>();
 
-            IHwnd hwnd = (IHwnd) mocks.CreateMock(typeof (IHwnd));
-            
-            Expect.Call(hwnd.IsWindow).Return(true);
-            Expect.Call(hwnd.ClassName).Return("Button");
+            hwndMock.Expect(hwnd => hwnd.IsWindow).Returns(true);
+            hwndMock.Expect(hwnd => hwnd.ClassName).Returns("Button");
 
-            mocks.ReplayAll();
+            // WHEN
+            var button = new WinButton(hwndMock.Object);
 
-            WinButton button = new WinButton(hwnd);
-            
-            Assert.That(button.Exists(), Iz.True);
-
-            mocks.VerifyAll();
+            // THEN
+            Assert.That(button.Exists(), Is.True);
+            hwndMock.VerifyAll();
         }
     }
 }

@@ -17,9 +17,9 @@
 #endregion Copyright
 
 using System.Text.RegularExpressions;
+using Moq;
 using mshtml;
 using NUnit.Framework;
-using Rhino.Mocks;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
@@ -27,52 +27,45 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class DomContainerTests
 	{
-		private MockRepository _mockRepository;
-		private SHDocVw.InternetExplorer _mockInternetExplorer;
+		private Mock<SHDocVw.InternetExplorer> _mockInternetExplorer;
 		private IE _ie;
-		private IHTMLDocument2 _mockHTMLDocument2;
+		private Mock<IHTMLDocument2> _mockHTMLDocument2;
 
-		private IWait _mockWait;
-		private IHTMLElement _mockIHTMLElement;
+		private Mock<IWait> _mockWait;
+		private Mock<IHTMLElement> _mockIHTMLElement;
 
 		[SetUp]
 		public void Setup()
 		{
 			Settings.AutoStartDialogWatcher = false;
-			_mockRepository = new MockRepository();
 
-			_mockInternetExplorer = (SHDocVw.InternetExplorer) _mockRepository.DynamicMock(typeof (SHDocVw.InternetExplorer));
-			_mockHTMLDocument2 = (IHTMLDocument2) _mockRepository.DynamicMock(typeof (IHTMLDocument2));
-			_mockIHTMLElement = (IHTMLElement) _mockRepository.DynamicMock(typeof (IHTMLElement));
+			_mockInternetExplorer = new Mock<SHDocVw.InternetExplorer>();
+			_mockHTMLDocument2 = new Mock<IHTMLDocument2>();
+			_mockIHTMLElement = new Mock<IHTMLElement>();
 
-			SetupResult.For(_mockInternetExplorer.Document).Return(_mockHTMLDocument2);
-			SetupResult.For(_mockHTMLDocument2.body).Return(_mockIHTMLElement);
-			SetupResult.For(_mockIHTMLElement.innerText).Return("Test 'Contains text in DIV' text");
+			_mockInternetExplorer.Expect(ie => ie.Document).Returns(_mockHTMLDocument2.Object);
+			_mockHTMLDocument2.Expect(doc => doc.body).Returns(_mockIHTMLElement.Object);
+			_mockIHTMLElement.Expect(element => element.innerText).Returns("Test 'Contains text in DIV' text");
 
-			_mockRepository.Replay(_mockIHTMLElement);
-			_mockRepository.Replay(_mockHTMLDocument2);
-			_mockRepository.Replay(_mockInternetExplorer);
+			_ie = new IE(_mockInternetExplorer.Object);
 
-			_ie = new IE(_mockInternetExplorer);
-			_mockWait = (IWait) _mockRepository.CreateMock(typeof (IWait));
+            _mockWait = new Mock<IWait>();
 		}
 
 		[Test]
 		public void WaitForCompletUsesGivenWaitClass()
 		{
-			_mockWait.DoWait();
+			_mockWait.Expect(wait => wait.DoWait());
 
-			_mockRepository.Replay(_mockWait);
+			_ie.WaitForComplete(_mockWait.Object);
 
-			_ie.WaitForComplete(_mockWait);
-
-			_mockRepository.Verify(_mockWait);
+			_mockWait.VerifyAll();
 		}
 
 	    [Test]
 	    public void WaitForCompleteShouldUseTimeOutProvidedThroughtTheConstructor()
 	    {
-	        WaitForCompleteMock waitForCompleteMock = new WaitForCompleteMock(_ie, 333);
+	        var waitForCompleteMock = new WaitForCompleteMock(_ie, 333);
 
             Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
 
@@ -84,9 +77,9 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void WaitForCompleteShouldUseWaitForCompleteTimeOutSetting()
 	    {
-	        int expectedWaitForCompleteTimeOut = Settings.WaitForCompleteTimeOut;
+	        var expectedWaitForCompleteTimeOut = Settings.WaitForCompleteTimeOut;
 
-	        WaitForCompleteMock waitForCompleteMock = new WaitForCompleteMock(_ie);
+	        var waitForCompleteMock = new WaitForCompleteMock(_ie);
 
             Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
 

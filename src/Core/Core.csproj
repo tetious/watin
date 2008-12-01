@@ -108,9 +108,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.SHDocVw">
-      <Name>Interop.SHDocVw</Name>
-      <HintPath>..\..\lib\Net\1.1\Interop.SHDocVw.dll</HintPath>
+    <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Net\3.5\Interop.SHDocVw.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.mshtml">
       <Name>Microsoft.mshtml</Name>
@@ -120,17 +120,11 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +436,7 @@
     <Compile Include="Interfaces\INativeBrowser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\INativeDocument.cs" />
     <Compile Include="Interfaces\INativeElement.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -458,6 +453,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InternetExplorer\IEBrowser.cs" />
+    <Compile Include="InternetExplorer\IEDocument.cs" />
     <Compile Include="InternetExplorer\IEElement.cs" />
     <Compile Include="InternetExplorer\IEElementFinder.cs" />
     <Compile Include="Label.cs">

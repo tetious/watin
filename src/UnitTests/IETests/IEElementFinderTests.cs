@@ -19,38 +19,34 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using WatiN.Core.UnitTests.AttributeConstraintTests;
-using Iz=NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests.IETests
 {
 	[TestFixture]
 	public class IEElementFinderTests : BaseWithIETests
 	{
-		private MockRepository mocks;
-		private IElementCollection stubElementCollection;
-		private DomContainer domContainer;
+		private Mock<IElementCollection> stubElementCollection;
+		private Mock<DomContainer> domContainerMock;
 
 		public void SetUp()
 		{
-			mocks = new MockRepository();
-			stubElementCollection = (IElementCollection) mocks.CreateMock(typeof (IElementCollection));
-			domContainer = (DomContainer)mocks.DynamicMock(typeof(DomContainer));
+			stubElementCollection = new Mock<IElementCollection>();
+			domContainerMock = new Mock<DomContainer>();
 
-			SetupResult.For(stubElementCollection.Elements).Return(null);
-
-			mocks.ReplayAll();
+			stubElementCollection.Expect(elements => elements.Elements).Returns(null);
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			mocks.VerifyAll();
+			domContainerMock.VerifyAll();
 		}
 
 		[Test]
@@ -58,7 +54,7 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
+			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection.Object, domContainerMock.Object);
 
 			Assert.IsNull(finder.FindFirst());
 		}
@@ -68,7 +64,7 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection, domContainer);
+			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection.Object, domContainerMock.Object);
 
 		    var all = new List<INativeElement>(finder.FindAll());
 		    Assert.AreEqual(0, all.Count);
@@ -80,12 +76,12 @@ namespace WatiN.Core.UnitTests.IETests
 			SetUp();
 			
 			var constraint = new MyTestConstraint();
-			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection, domContainer);
+			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection.Object, domContainerMock.Object);
 			
 			finder.FindFirst();
 
-			Assert.That(constraint.CallsToReset, Iz.EqualTo(1), "Unexpected number of calls to reset");
-			Assert.That(constraint.CallsToCompare, Iz.EqualTo(0), "Unexpected number of calls to compare");
+			Assert.That(constraint.CallsToReset, Is.EqualTo(1), "Unexpected number of calls to reset");
+			Assert.That(constraint.CallsToCompare, Is.EqualTo(0), "Unexpected number of calls to compare");
 		}
 
 		// TODO: More tests to cover positive find results		[Test]
@@ -94,8 +90,8 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			Assert.That(ie.Span("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
-			Assert.That(ie.Div("divid").Exists, NUnit.Framework.SyntaxHelpers.Is.True);
+			Assert.That(ie.Span("divid").Exists, Is.False);
+			Assert.That(ie.Div("divid").Exists, Is.True);
 		}
 
 		[Test]
@@ -103,7 +99,7 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			Assert.That(ie.TextField("textinput1").Exists, NUnit.Framework.SyntaxHelpers.Is.False);
+			Assert.That(ie.TextField("textinput1").Exists, Is.False);
 		}
 
 		[Test]
@@ -120,7 +116,7 @@ namespace WatiN.Core.UnitTests.IETests
             Console.WriteLine("Find.By exact id: " + ticksByExactId);
             Console.WriteLine("Find.By regex id: " + ticksByRegExId);
 			
-            Assert.That(ticksByExactId, NUnit.Framework.SyntaxHelpers.Is.LessThan(ticksByRegExId), "Lost performance gain");
+            Assert.That(ticksByExactId, Is.LessThan(ticksByRegExId), "Lost performance gain");
 		}
 
 	    private long GetTicks(BaseConstraint findBy)

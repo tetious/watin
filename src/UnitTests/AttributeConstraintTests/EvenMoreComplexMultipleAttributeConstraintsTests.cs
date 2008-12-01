@@ -16,8 +16,8 @@
 
 #endregion Copyright
 
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -26,8 +26,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     [TestFixture]
     public class EvenMoreComplexMultipleAttributeConstraintsTests
     {
-        private MockRepository mocks;
-        private IAttributeBag mockAttributeBag;
+        private Mock<IAttributeBag> mockAttributeBag;
 
         private BaseConstraint findBy1;
         private BaseConstraint findBy2;
@@ -42,8 +41,8 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            mockAttributeBag = (IAttributeBag) mocks.CreateMock(typeof (IAttributeBag));
+
+            mockAttributeBag = new Mock<IAttributeBag>();
             findBy = null;
 
             findBy1 = Find.By("1", "true");
@@ -77,18 +76,16 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [TearDown]
         public void TearDown()
         {
-            Expect.Call(mockAttributeBag.GetValue("1")).Return("true");
-            Expect.Call(mockAttributeBag.GetValue("2")).Return("false");
-            Expect.Call(mockAttributeBag.GetValue("4")).Return("true");
-            Expect.Call(mockAttributeBag.GetValue("5")).Return("false");
-            Expect.Call(mockAttributeBag.GetValue("7")).Return("true");
-            Expect.Call(mockAttributeBag.GetValue("8")).Return("true");
+            mockAttributeBag.Expect(bag => bag.GetValue("1")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetValue("2")).Returns("false");
+            mockAttributeBag.Expect(bag => bag.GetValue("4")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetValue("5")).Returns("false");
+            mockAttributeBag.Expect(bag => bag.GetValue("7")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetValue("8")).Returns("true");
+            
+            Assert.IsTrue(findBy.Compare(mockAttributeBag.Object));
 
-            mocks.ReplayAll();
-
-            Assert.IsTrue(findBy.Compare(mockAttributeBag));
-
-            mocks.VerifyAll();
+            mockAttributeBag.VerifyAll();
         }
     }
 }

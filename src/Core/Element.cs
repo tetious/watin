@@ -944,7 +944,7 @@ namespace WatiN.Core
 	    /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;;
 	    /// </code>
 	    /// </example>
-       public T Ancestor<T>() where T : Element
+        public T Ancestor<T>() where T : Element
         {
     	    return (T)Ancestor(typeof(T));
         }

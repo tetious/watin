@@ -17,13 +17,11 @@
 #endregion Copyright
 
 using System;
-using mshtml;
+using Moq;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
-using Rhino.Mocks;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
-using Iz = NUnit.Framework.SyntaxHelpers.Is;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
@@ -44,34 +42,28 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
         private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
         {
-            var mocks = new MockRepository();
-            var INativeElementStub = (INativeElement) mocks.DynamicMock(typeof(INativeElement));
-            var domContainer = (DomContainer) mocks.DynamicMock(typeof (DomContainer));
-            var elementAttributeBag = new ElementAttributeBag(domContainer, INativeElementStub);
+            var INativeElementStub = new Mock<INativeElement>();
+            var domContainerMock = new Mock<DomContainer>();
+            var elementAttributeBag = new ElementAttributeBag(domContainerMock.Object, INativeElementStub.Object);
 
-            SetupResult.For(INativeElementStub.GetAttributeValue("tagName")).Return("testtagname");
-            SetupResult.For(domContainer.NativeBrowser).Return(new IEBrowser(domContainer));
+            INativeElementStub.Expect(native => native.GetAttributeValue("tagName")).Returns("testtagname");
 			
-            mocks.ReplayAll();
-
             var elementComparerMock = new ElementComparerMock(tagname);
             var elementConstraint = new ElementConstraint(elementComparerMock);
 			
             Assert.That(elementConstraint.Compare(elementAttributeBag) == expectedResult);
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void ShouldEvaluateAlsoTheAndConstraint()
         {
-            Link link1 = ie.Link(Find.ByElement(
-                                     delegate(Element l) { return l.Id != null && l.Id.StartsWith("testlink"); }) && Find.ByUrl("http://watin.sourceforge.net"));
-            Link link2 = ie.Link(Find.ByElement(
-                                     delegate(Element l) { return l.Id != null && l.Id.StartsWith("testlink"); }) && Find.ByUrl("http://www.microsoft.com/"));
+            var link1 = ie.Link(Find.ByElement(
+                                    l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://watin.sourceforge.net"));
+            var link2 = ie.Link(Find.ByElement(
+                                    l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://www.microsoft.com/"));
 
-            Assert.That(link1.Url, Iz.EqualTo("http://watin.sourceforge.net/"));
-            Assert.That(link2.Url, Iz.EqualTo("http://www.microsoft.com/"));
+            Assert.That(link1.Url, Is.EqualTo("http://watin.sourceforge.net/"));
+            Assert.That(link2.Url, Is.EqualTo("http://www.microsoft.com/"));
         }
 
         public class ElementComparerMock : ICompareElement 

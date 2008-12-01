@@ -32,5 +32,10 @@ namespace WatiN.Core.InternetExplorer
 		{
 			return new IEElement(element);
 		}
+
+	    public INativeDocument CreateDocument(object document)
+	    {
+	        return new IEDocument(document);
+	    }
 	}
 }
