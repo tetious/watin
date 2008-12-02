@@ -339,6 +339,7 @@
     <Compile Include="TextFieldTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\CaptureWebPageToFileTests.cs" />
     <Compile Include="UtilityClasses\TryActionUntilTimeOutTests.cs" />
     <Compile Include="UtilityClasses\Utils.cs">
       <SubType>Code</SubType>
