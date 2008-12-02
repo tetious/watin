@@ -19,7 +19,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
@@ -110,7 +109,7 @@ namespace WatiN.Core
 		/// Enumeration of the different ways of showing a window using 
 		/// ShowWindow
 		/// </summary>
-		public enum WindowShowStyle : int
+		public enum WindowShowStyle
 		{
 			/// <summary>Hides the window and activates another window.</summary>
 			/// <remarks>See SW_HIDE</remarks>
@@ -169,7 +168,7 @@ namespace WatiN.Core
 			ForceMinimized = 11
 		}
 
-		[Flags()]
+		[Flags]
 		internal enum tagOLECONTF
 		{
 			OLECONTF_EMBEDDINGS = 1,
@@ -369,68 +368,66 @@ namespace WatiN.Core
 
 		internal static void EnumIWebBrowser2Interfaces(IWebBrowser2Processor processor)
 		{
-			IOleContainer oc = processor.HTMLDocument() as IOleContainer;
+			var oc = processor.HTMLDocument() as IOleContainer;
 
-			if (oc != null)
-			{
-				IEnumUnknown eu;
-				int hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
-				Marshal.ThrowExceptionForHR(hr);
+		    if (oc == null) return;
+	        
+            IEnumUnknown eu;
+            var hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+	        Marshal.ThrowExceptionForHR(hr);
 
-				if (eu != null)
-				{
-					try
-					{
-						object pUnk;
-						int fetched;
-						const int MAX_FETCH_COUNT = 1;
+		    if (eu == null) return;
+	        
+            try
+	        {
+	            object pUnk;
+	            int fetched;
+	            const int MAX_FETCH_COUNT = 1;
 
-						// get the first embedded object
-						// pUnk alloc
-						hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-						Marshal.ThrowExceptionForHR(hr);
+	            // get the first embedded object
+	            // pUnk alloc
+	            hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+	            Marshal.ThrowExceptionForHR(hr);
 
-						while (hr == 0)
-						{
-							// Query Interface pUnk for the IWebBrowser2 interface
-							IWebBrowser2 brow = pUnk as IWebBrowser2;
+	            while (hr == 0)
+	            {
+	                // Query Interface pUnk for the IWebBrowser2 interface
+	                var brow = pUnk as IWebBrowser2;
 
-							try
-							{
-								if (brow != null)
-								{
-									processor.Process(brow);
-									if (!processor.Continue())
-									{
-										break;
-									}
-									// free brow
-									ReleaseComObjectButIgnoreNull(brow);
-								}
-							}
-							catch
-							{
-								// free brow
-								ReleaseComObjectButIgnoreNull(brow);
-								ReleaseComObjectButIgnoreNull(pUnk);
-							}
+	                try
+	                {
+	                    if (brow != null)
+	                    {
+	                        processor.Process(brow);
+	                        if (!processor.Continue())
+	                        {
+	                            break;
+	                        }
+	                        // free brow
+	                        ReleaseComObjectButIgnoreNull(brow);
+	                    }
+	                }
+	                catch
+	                {
+	                    // free brow
+	                    ReleaseComObjectButIgnoreNull(brow);
+	                    ReleaseComObjectButIgnoreNull(pUnk);
+	                }
 
-							// pUnk free
-							ReleaseComObjectButIgnoreNull(pUnk);
+	                // pUnk free
+	                ReleaseComObjectButIgnoreNull(pUnk);
 
-							// get the next embedded object
-							// pUnk alloc
-							hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
-							Marshal.ThrowExceptionForHR(hr);
-						}
-					}
-					finally
-					{
-						// eu free
-						ReleaseComObjectButIgnoreNull(eu);
-					}
-				}
-			}
+	                // get the next embedded object
+	                // pUnk alloc
+	                hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+	                Marshal.ThrowExceptionForHR(hr);
+	            }
+	        }
+	        finally
+	        {
+	            // eu free
+	            ReleaseComObjectButIgnoreNull(eu);
+	        }
 		}
 
 		public static void ReleaseComObjectButIgnoreNull(object comObject)
@@ -450,8 +447,8 @@ namespace WatiN.Core
 		/// <returns>Text of the window</returns>
 		internal static string GetWindowText(IntPtr hwnd)
 		{
-			int length = GetWindowTextLength(hwnd) + 1;
-			StringBuilder buffer = new StringBuilder(length);
+			var length = GetWindowTextLength(hwnd) + 1;
+			var buffer = new StringBuilder(length);
 			GetWindowText(hwnd, buffer, length);
 
 			return buffer.ToString();
@@ -468,20 +465,15 @@ namespace WatiN.Core
 		{
 			const int maxCapacity = 255;
 
-			StringBuilder className = new StringBuilder(maxCapacity);
-
-			Int32 lRes = GetClassName(hwnd, className, maxCapacity);
-			if (lRes == 0)
-			{
-				return String.Empty;
-			}
-
-			return className.ToString();
+			var className = new StringBuilder(maxCapacity);
+			var lRes = GetClassName(hwnd, className, maxCapacity);
+			
+            return lRes == 0 ? String.Empty : className.ToString();
 		}
 
 		internal static Int64 GetWindowStyle(IntPtr hwnd)
 		{
-			WINDOWINFO info = new WINDOWINFO();
+			var info = new WINDOWINFO();
 			info.cbSize = (uint) Marshal.SizeOf(info);
 			GetWindowInfo(hwnd, ref info);
 
@@ -490,20 +482,19 @@ namespace WatiN.Core
 
 		internal static void ClickDialogButton(int buttonid, IntPtr parentHwnd)
 		{
-			IntPtr buttonPtr = GetDlgItem(parentHwnd, buttonid);
+			var buttonPtr = GetDlgItem(parentHwnd, buttonid);
 			SendMessage(buttonPtr, BM_CLICK, 0, 0);
 		}
 
-		public static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
+        public static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
 		{
-			IntPtr hWnd = IntPtr.Zero;
+			var hWnd = IntPtr.Zero;
 			enumChildWindowClassName = className;
 
 			// Go throught the child windows of the dialog window
-			EnumChildProc childProc = new EnumChildProc(EnumChildWindows);
+			EnumChildProc childProc = EnumChildWindows;
 			EnumChildWindows(parentHwnd, childProc, ref hWnd);
 
-			// If a logon dialog window is found hWnd will be set.
 			return hWnd;
 		}
 

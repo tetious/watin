@@ -287,7 +287,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			while (keepRunning)
 			{
-				Process process = getProcess(ProcessId);
+				var process = getProcess(ProcessId);
 
 				if (process != null)
 				{
@@ -302,7 +302,7 @@ namespace WatiN.Core.DialogHandlers
 					}
 
 					// Keep DialogWatcher responsive during 1 second sleep period
-					int count = 0;
+					var count = 0;
 					while (keepRunning && count < 5)
 					{
 						Thread.Sleep(200);

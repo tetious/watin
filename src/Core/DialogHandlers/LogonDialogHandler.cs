@@ -37,8 +37,8 @@ namespace WatiN.Core.DialogHandlers
 	/// </example>
 	public class LogonDialogHandler : BaseDialogHandler
 	{
-		private string userName;
-		private string password;
+		private readonly string userName;
+		private readonly string password;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogonDialogHandler"/> class.
@@ -49,16 +49,8 @@ namespace WatiN.Core.DialogHandlers
 		{
 			checkArgument("Username must be specified", userName, "username");
 
-			this.userName = UtilityClass.EscapeSendKeysCharacters(userName);
-
-			if (password == null)
-			{
-				this.password = String.Empty;
-			}
-			else
-			{
-				this.password = UtilityClass.EscapeSendKeysCharacters(password);
-			}
+		    this.userName = UtilityClass.EscapeSendKeysCharacters(userName);
+			this.password = password == null ? String.Empty : UtilityClass.EscapeSendKeysCharacters(password);
 		}
 
 		public override bool HandleDialog(Window window)
@@ -66,8 +58,8 @@ namespace WatiN.Core.DialogHandlers
 			if (IsLogonDialog(window))
 			{
 				// Find Handle of the "Frame" and then the combo username entry box inside the frame
-				IntPtr inputFrameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
-				IntPtr usernameControlHandle = NativeMethods.GetChildWindowHwnd(inputFrameHandle, "ComboBoxEx32");
+				var inputFrameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
+				var usernameControlHandle = NativeMethods.GetChildWindowHwnd(inputFrameHandle, "ComboBoxEx32");
 
 				NativeMethods.SetActiveWindow(usernameControlHandle);
 				Thread.Sleep(50);
@@ -75,10 +67,12 @@ namespace WatiN.Core.DialogHandlers
 				NativeMethods.SetForegroundWindow(usernameControlHandle);
 				Thread.Sleep(50);
 
+                // TODO: Replace by Hwnd.Setfocus and Hwnd.SendString()
 				System.Windows.Forms.SendKeys.SendWait(userName + "{TAB}");
 				Thread.Sleep(500);
 
-				System.Windows.Forms.SendKeys.SendWait(password + "{ENTER}");
+                // TODO: Replace by Hwnd.SetFocus, Hwnd.SendString() and WinButton(1, window.Hwnd).Click
+                System.Windows.Forms.SendKeys.SendWait(password + "{ENTER}");
 
 				return true;
 			}

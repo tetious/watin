@@ -77,14 +77,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SimpleTimerWithZeroTimoutIsAllowed()
 		{
-			SimpleTimer timer = new SimpleTimer(0);
+			var timer = new SimpleTimer(0);
 			Assert.IsTrue(timer.Elapsed);
 		}
 
 		[Test]
 		public void SimpleTimerOneSecond()
 		{
-			SimpleTimer timer = new SimpleTimer(1);
+			var timer = new SimpleTimer(1);
 			Thread.Sleep(1200);
 			Assert.IsTrue(timer.Elapsed);
 		}
@@ -92,7 +92,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SimpleTimerThreeSeconds()
 		{
-			SimpleTimer timer = new SimpleTimer(3);
+			var timer = new SimpleTimer(3);
 			Thread.Sleep(2500);
 			Assert.IsFalse(timer.Elapsed);
 			Thread.Sleep(1000);
@@ -110,8 +110,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldEscapeSendKeysCharacters()
 		{
-			string original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
-			string expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
+			var original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
+			var expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
 
 			Assert.AreEqual(expected, UtilityClass.EscapeSendKeysCharacters(original));
 		}
@@ -119,7 +119,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldNotEscapeCharacters()
 		{
-			string original = "just a test";
+			var original = "just a test";
 
 			Assert.AreEqual(original, UtilityClass.EscapeSendKeysCharacters(original));
 		}

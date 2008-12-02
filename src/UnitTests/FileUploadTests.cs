@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -102,19 +103,23 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void FileUploadOfFileWithSendKeysEscapeCharactersInFilename()
+		public void FileUploadOfFileWithSpecialCharactersInFilenameShouldBeHandledOK()
 		{
+            // GIVEN
 			ie.Refresh();
 
 			var fileUpload = ie.FileUpload("upload");
 
-			Assert.That(fileUpload.Exists);
-			Assert.IsNull(fileUpload.FileName);
+			Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
+			Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");
 
 			var file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
-			fileUpload.Set(file);
 
-			Assert.AreEqual(file, fileUpload.FileName);
+            // WHEN
+            fileUpload.Set(file);
+
+            // THEN
+			Assert.That(fileUpload.FileName, Is.EqualTo(file), "Unexpected filename");
 		}
 
 		public override Uri TestPageUri

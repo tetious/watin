@@ -58,7 +58,7 @@ namespace WatiN.Core.DialogHandlers
 			}
 
 			_optionEnum = FileDownloadOptionEnum.Save;
-			saveAsFilename = UtilityClass.EscapeSendKeysCharacters(filename);
+			saveAsFilename = filename;
 		}
 
 	    /// <summary>
@@ -310,12 +310,14 @@ namespace WatiN.Core.DialogHandlers
 
 		private void HandleFileSaveDialog(Window window)
 		{
-			var usernameControlHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "Edit");
+            var fileNameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "Edit");
+            var fileNameHwnd = new Hwnd(fileNameHandle);
 
-			NativeMethods.SetForegroundWindow(usernameControlHandle);
-			NativeMethods.SetActiveWindow(usernameControlHandle);
+            fileNameHwnd.SetFocus();
+            fileNameHwnd.SendString(saveAsFilename);
 
-			System.Windows.Forms.SendKeys.SendWait(saveAsFilename + "{ENTER}");
+            var openButton = new WinButton(1, window.Hwnd);
+            openButton.Click();
 		}
 	}
 }
