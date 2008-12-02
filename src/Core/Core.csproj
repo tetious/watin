@@ -555,6 +555,7 @@
     <Compile Include="UtilityClasses\CaptureWebPage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IWebBrowser2Processor.cs" />
     <Compile Include="UtilityClasses\SimpleTimer.cs">
       <SubType>Code</SubType>
     </Compile>

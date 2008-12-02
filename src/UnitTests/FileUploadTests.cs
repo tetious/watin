@@ -37,8 +37,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateFileUploadFromElement()
 		{
-			Element element = ie.Element("upload");
-			FileUpload fileUpload = new FileUpload(element);
+			var element = ie.Element("upload");
+			var fileUpload = new FileUpload(element);
 			Assert.AreEqual("upload", fileUpload.Id);
 		}
 
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FileUploadTest()
 		{
-			FileUpload fileUpload = ie.FileUpload("upload");
+			var fileUpload = ie.FileUpload("upload");
 
 			Assert.That(fileUpload.Exists);
 			Assert.IsNull(fileUpload.FileName);
@@ -66,7 +66,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (System.IO.FileNotFoundException))]
 		public void FileUploadFileNotFoundException()
 		{
-			FileUpload fileUpload = ie.FileUpload("upload");
+			var fileUpload = ie.FileUpload("upload");
 			fileUpload.Set("nonexistingfile.nef");
 		}
 
@@ -77,20 +77,20 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(expectedFileUploadsCount, ie.FileUploads.Length, "Unexpected number of FileUploads");
 
 			// Collection.Length
-			FileUploadCollection formFileUploads = ie.FileUploads;
+			var formFileUploads = ie.FileUploads;
 
 			// Collection items by index
 			Assert.AreEqual("upload", ie.FileUploads[0].Id);
 
 			IEnumerable FileUploadEnumerable = formFileUploads;
-			IEnumerator FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
+			var FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
 
 			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
+			var count = 0;
 			foreach (FileUpload inputFileUpload in formFileUploads)
 			{
 				FileUploadEnumerator.MoveNext();
-				object enumFileUpload = FileUploadEnumerator.Current;
+				var enumFileUpload = FileUploadEnumerator.Current;
 
 				Assert.IsInstanceOfType(inputFileUpload.GetType(), enumFileUpload, "Types are not the same");
 				Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload) enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
@@ -106,12 +106,12 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.Refresh();
 
-			FileUpload fileUpload = ie.FileUpload("upload");
+			var fileUpload = ie.FileUpload("upload");
 
 			Assert.That(fileUpload.Exists);
 			Assert.IsNull(fileUpload.FileName);
 
-			string file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
+			var file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
 			fileUpload.Set(file);
 
 			Assert.AreEqual(file, fileUpload.FileName);

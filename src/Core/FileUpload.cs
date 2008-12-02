@@ -68,16 +68,10 @@ namespace WatiN.Core
 			}
 
 			var uploadDialogHandler = new FileUploadDialogHandler(fileName);
-			DomContainer.AddDialogHandler(uploadDialogHandler);
-
-			try
-			{
+			using(new UseDialogOnce(DomContainer.DialogWatcher, uploadDialogHandler))
+            {
 				Click();
-			}
-			finally
-			{
-				DomContainer.RemoveDialogHandler(uploadDialogHandler);
-			}
+            }
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

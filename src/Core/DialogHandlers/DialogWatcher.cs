@@ -16,24 +16,6 @@
 
 #endregion Copyright
 
-#region WatiN Copyright (C) 2006-2008 Jeroen van Menen
-
-//Copyright 2006-2008 Jeroen van Menen
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//       http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
-
-#endregion Copyright
-
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -51,14 +33,13 @@ namespace WatiN.Core.DialogHandlers
 	/// </summary>
 	public class DialogWatcher : IDisposable
 	{
-		private int ieProcessId;
+		private readonly int ieProcessId;
 		private bool keepRunning = true;
-		private ArrayList handlers = new ArrayList();
-		private Thread watcherThread;
+		private readonly ArrayList handlers = new ArrayList();
+		private readonly Thread watcherThread;
 		private bool closeUnhandledDialogs = Settings.AutoCloseDialogs;
-		private int referenceCount = 0;
 
-		private static ArrayList dialogWatchers = new ArrayList();
+	    private static ArrayList dialogWatchers = new ArrayList();
 		private Exception lastException;
 
 		/// <summary>
@@ -103,7 +84,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public static void CleanupDialogWatcherCache()
 		{
-			ArrayList cleanedupDialogWatcherCache = new ArrayList();
+			var cleanedupDialogWatcherCache = new ArrayList();
 
 			foreach (DialogWatcher dialogWatcher in dialogWatchers)
 			{
@@ -133,7 +114,7 @@ namespace WatiN.Core.DialogHandlers
 			handlers = new ArrayList();
 
 			// Create thread to watch windows
-			watcherThread = new Thread(new ThreadStart(Start));
+			watcherThread = new Thread(Start);
 			// Start the thread.
 			watcherThread.Start();
 		}
@@ -143,7 +124,7 @@ namespace WatiN.Core.DialogHandlers
 		/// </summary>
 		public void IncreaseReferenceCount()
 		{
-			referenceCount++;
+			ReferenceCount++;
 		}
 
 		/// <summary>
@@ -156,7 +137,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			if (ReferenceCount > 0)
 			{
-				referenceCount--;
+				ReferenceCount--;
 			}
 			else
 			{
@@ -266,7 +247,7 @@ namespace WatiN.Core.DialogHandlers
 
 		/// <summary>
 		/// Gets or sets a value indicating whether unhandled dialogs should be closed automaticaly.
-		/// The initial value is set to the value of <paramref name="Settings.AutoCloseDialogs" />.
+		/// The initial value is set to the value of <cref name="Settings.AutoCloseDialogs" />.
 		/// </summary>
 		/// <value>
 		/// 	<c>true</c> if unhandled dialogs should be closed automaticaly; otherwise, <c>false</c>.
@@ -314,9 +295,9 @@ namespace WatiN.Core.DialogHandlers
 					{
                         if (!keepRunning) return;
 
-						int threadId = t.Id;
+						var threadId = t.Id;
 
-						NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(myEnumThreadWindowsProc);
+						NativeMethods.EnumThreadProc callbackProc = myEnumThreadWindowsProc;
 						NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
 					}
 
@@ -350,12 +331,9 @@ namespace WatiN.Core.DialogHandlers
 			get { return (getProcess(ProcessId) != null); }
 		}
 
-		public int ReferenceCount
-		{
-			get { return referenceCount; }
-		}
+	    public int ReferenceCount { get; private set; }
 
-		private Process getProcess(int processId)
+	    private static Process getProcess(int processId)
 		{
 			Process process;
 			try
@@ -400,38 +378,36 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="window">The window.</param>
 		public void HandleWindow(Window window)
 		{
-			if (window.IsDialog())
-			{
-				WaitUntilVisibleOrTimeOut(window);
+		    if (!window.IsDialog()) return;
 
-				// Lock the thread and see if a handler will handle
-				// this dialog window
-				lock (this)
-				{
-					foreach (IDialogHandler dialogHandler in handlers)
-					{
-						try
-						{
-							if (dialogHandler.HandleDialog(window)) return;
-						}
-						catch (Exception e)
-						{
-							lastException = e;
+            WaitUntilVisibleOrTimeOut(window);
 
-							Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog:");
-							Logger.LogAction(e.ToString());
-						}
-					}
+		    // Lock the thread and see if a handler will handle
+		    // this dialog window
+		    lock (this)
+		    {
+		        foreach (IDialogHandler dialogHandler in handlers)
+		        {
+		            try
+		            {
+		                if (dialogHandler.HandleDialog(window)) return;
+		            }
+		            catch (Exception e)
+		            {
+		                lastException = e;
 
-					// If no handler handled the dialog, see if the dialog
-					// should be closed automatically.
-					if (CloseUnhandledDialogs)
-					{
-						Logger.LogAction("Auto closing dialog with title '{0}'.", window.Title);
-						window.ForceClose();
-					}
-				}
-			}
+		                Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog:");
+		                Logger.LogAction(e.ToString());
+		            }
+		        }
+
+		        // If no handler handled the dialog, see if the dialog
+		        // should be closed automatically.
+		        if (!CloseUnhandledDialogs) return;
+		        
+                Logger.LogAction("Auto closing dialog with title '{0}'.", window.Title);
+		        window.ForceClose();
+		    }
 		}
 
 		private static void WaitUntilVisibleOrTimeOut(Window window)

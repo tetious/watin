@@ -303,8 +303,9 @@ namespace WatiN.Core
 
         public static void AsyncActionOnBrowser(ThreadStart action)
         {
-            Thread clickButton = new Thread(action);
+            var clickButton = new Thread(action);
             clickButton.SetApartmentState(ApartmentState.STA);
+            
             clickButton.Start();
             clickButton.Join(500);
         }
@@ -336,11 +337,11 @@ namespace WatiN.Core
 					if(sendKeysCharactersToBeEscaped.IndexOf(c) != -1)
 					{
 						// Escape sendkeys special characters
-						returnvalue = returnvalue + "{" + c.ToString() + "}";
+						returnvalue = returnvalue + "{" + c + "}";
 					}
 					else
 					{
-						returnvalue = returnvalue + c.ToString();
+						returnvalue = returnvalue + c;
 					}
 				}
 				return returnvalue;
