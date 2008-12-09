@@ -30,7 +30,7 @@ namespace WatiN.Core
 	/// </summary>
 	public abstract class DomContainer : Document
 	{
-		private IHTMLDocument2 _htmlDocument;
+		private INativeDocument _nativeDocument;
 	    private bool _disposed;
 
 	    protected DomContainer()
@@ -59,21 +59,21 @@ namespace WatiN.Core
 		/// <summary>
 		/// This method must be overriden by all sub classes
 		/// </summary>
-		public abstract IHTMLDocument2 OnGetHtmlDocument();
+		public abstract INativeDocument OnGetNativeDocument();
 
 		/// <summary>
 		/// Returns the 'raw' html document for the internet explorer DOM.
 		/// </summary>
-		public override IHTMLDocument2 HtmlDocument
+		public override INativeDocument NativeDocument
 		{
 			get
 			{
-				if (_htmlDocument == null)
+				if (_nativeDocument == null)
 				{
-					_htmlDocument = OnGetHtmlDocument();
+					_nativeDocument = OnGetNativeDocument();
 				}
 
-				return _htmlDocument;
+				return _nativeDocument;
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace WatiN.Core
 		{
 		    if (_disposed) return;
 		    
-            _htmlDocument = null;
+            _nativeDocument = null;
 		    if (DialogWatcher != null)
 		    {
 		        DialogWatcher.DecreaseReferenceCount();

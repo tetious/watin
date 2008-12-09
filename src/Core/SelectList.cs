@@ -347,7 +347,7 @@ namespace WatiN.Core
 			{
 				get
 				{
-				    var element = (IHTMLElement) selectlist.NativeElement.NativeElement;
+				    var element = (IHTMLElement) selectlist.NativeElement.Object;
                     return (IHTMLElementCollection)element.all;
 				}
 			}

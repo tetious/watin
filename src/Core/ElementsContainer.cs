@@ -544,7 +544,7 @@ namespace WatiN.Core
 			{
 				try
 				{
-				    return Exists ? NativeElement.NativeElements : null;
+				    return Exists ? NativeElement.Objects : null;
 				}
 				catch
 				{

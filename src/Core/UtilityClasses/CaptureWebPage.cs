@@ -99,7 +99,7 @@ namespace WatiN.Core
 
 	    public System.Drawing.Image CaptureWebPageImage(bool writeUrl, bool showGuides, int scalePercentage)
 		{
-			return CaptureWebPageImage(_domContainer.hWnd, _domContainer.HtmlDocument, writeUrl, showGuides, scalePercentage);
+			return CaptureWebPageImage(_domContainer.hWnd, (IHTMLDocument2) _domContainer.NativeDocument.Object, writeUrl, showGuides, scalePercentage);
 		}
 
 		private static System.Drawing.Image CaptureWebPageImage(IntPtr browserHWND, IHTMLDocument2 myDoc, bool writeUrl, bool showGuides, int scalePercentage)

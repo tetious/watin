@@ -669,7 +669,7 @@ namespace WatiN.Core.UnitTests
 			var top = position(button, "Top");
 			var height = int.Parse(button.GetAttributeValue("clientHeight"));
 			
-			var window = (IHTMLWindow3) ie.HtmlDocument.parentWindow;
+			var window = (IHTMLWindow3) ((IHTMLDocument2)ie.NativeDocument.Object).parentWindow;
 			
 			left = left + window.screenLeft;
 			top = top + window.screenTop;
@@ -681,7 +681,7 @@ namespace WatiN.Core.UnitTests
 		private static int position(Element element, string attributename)
 		{
 			var pos = 0;
-            var offsetParent = ((IHTMLElement)element.NativeElement.NativeElement).offsetParent;
+            var offsetParent = ((IHTMLElement)element.NativeElement.Object).offsetParent;
 			if (offsetParent != null)
 			{
 			    var domContainer = element.DomContainer;
@@ -785,11 +785,11 @@ namespace WatiN.Core.UnitTests
 			elementFinderMock.Expect(finder => finder.ElementTagsToString).Returns("button");
             elementFinderMock.Expect(finder => finder.ConstraintToString).Returns("id=something");
 
-		    var ihtmlDocumentMock = new Mock<IHTMLDocument2>();
-		    ihtmlDocumentMock.Expect(doc => doc.url).Returns("http://mocked.com");
             
             var domContainerMock = new Mock<DomContainer>(new object[] { });
-		    domContainerMock.Expect(container => container.HtmlDocument).Returns(ihtmlDocumentMock.Object);
+		    var nativeDocumentMock = new Mock<INativeDocument>();
+            nativeDocumentMock.Expect(doc => doc.Url).Returns("http://mocked.com");
+            domContainerMock.Expect(container => container.NativeDocument).Returns(nativeDocumentMock.Object);
 			element = new Element(domContainerMock.Object, elementFinderMock.Object);
 
 			try
@@ -805,7 +805,7 @@ namespace WatiN.Core.UnitTests
 			}
 
             elementFinderMock.VerifyAll();
-            ihtmlDocumentMock.VerifyAll();
+            nativeDocumentMock.VerifyAll();
             domContainerMock.VerifyAll();
 		}
 
@@ -823,9 +823,9 @@ namespace WatiN.Core.UnitTests
             var domContainerMock = new Mock<DomContainer>( new object[] { });
 			element = new Element(domContainerMock.Object, elementFinderMock.Object);
 
-		    var ihtmlDocument2Mock = new Mock<IHTMLDocument2>();
-		    domContainerMock.Expect(container => container.HtmlDocument).Returns(ihtmlDocument2Mock.Object);
-		    ihtmlDocument2Mock.Expect(doc => doc.url).Returns("http://mock.value.com");
+		    var nativeDocumentMock = new Mock<INativeDocument>();
+		    domContainerMock.Expect(container => container.NativeDocument).Returns(nativeDocumentMock.Object);
+            nativeDocumentMock.Expect(doc => doc.Url).Returns("http://mock.value.com");
 
 			try
 			{
@@ -840,8 +840,8 @@ namespace WatiN.Core.UnitTests
 			}
 
             elementFinderMock.VerifyAll();
+            nativeDocumentMock.VerifyAll();
             domContainerMock.VerifyAll();
-            ihtmlDocument2Mock.VerifyAll();
 		}
 
         [Test]

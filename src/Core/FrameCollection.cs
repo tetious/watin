@@ -19,6 +19,7 @@
 using System.Collections;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
@@ -29,9 +30,9 @@ namespace WatiN.Core
 	{
 		private readonly ArrayList elements;
 
-		public FrameCollection(DomContainer domContainer, IHTMLDocument2 htmlDocument)
+		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
 		{
-			var processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument);
+			var processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument.Object);
 
 			NativeMethods.EnumIWebBrowser2Interfaces(processor);
 

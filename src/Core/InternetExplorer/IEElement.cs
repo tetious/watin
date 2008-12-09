@@ -160,7 +160,7 @@ namespace WatiN.Core.InternetExplorer
 			}
 		}
 
-	    public object NativeElements
+	    public object Objects
 	    {
             get { return htmlElement.all; }
 	    }
@@ -239,7 +239,7 @@ namespace WatiN.Core.InternetExplorer
 			set { htmlElement.style.backgroundColor = value; }
 		}
 
-		public object NativeElement
+		public object Object
 		{
 			get { return _element; }
 		}

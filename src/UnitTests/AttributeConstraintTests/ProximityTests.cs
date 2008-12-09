@@ -19,6 +19,7 @@
 // This class is kindly donated by Seven Simple Machines
 
 using System;
+using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
@@ -147,12 +148,13 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // don't think that the inserted style is being applied.
         public void ShouldNotBeAffectedByStyles() {
             // Create a style that drastically affects the span tags
-            ie.HtmlDocument.body.insertAdjacentHTML( "afterBegin", "<style type=\"text/css\">span {display:block; position:absolute; left:0; top:0;}</style>" );
+            var body = ((IHTMLDocument2)ie.NativeDocument.Object).body;
+            body.insertAdjacentHTML( "afterBegin", "<style type=\"text/css\">span {display:block; position:absolute; left:0; top:0;}</style>" );
 			
             // Test that text near an element is not then confused with another, closer element
             // The search text should be moved to the top right, nearer to many other elements than
             // the search field.
-            TextField inputSearch = ie.TextField(new ProximityTextConstraint("Search"));
+            var inputSearch = ie.TextField(new ProximityTextConstraint("Search"));
             Assert.AreEqual("inputSearch", inputSearch.Id, "Absoloute positioned proximity for text did not find correct field.");
 			
             // Cleanup by re-loading the page
@@ -169,16 +171,18 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         //		<SPAN id=spanValidateCode><SPAN id=spanValidateCode>Code</SPAN> and Confirm Code must match!</SPAN>
         // Note that this test would also be caught be the more general test that makes sure the HTML isn't changed.
         public void ShouldNotDuplicateSpanElementsPrecedingTheText() {
-            mshtml.IHTMLElement span = (mshtml.IHTMLElement)ie.HtmlDocument.all.item("spanValidateCode", null);
-            string originalContent = span.outerHTML;
+            var document = (IHTMLDocument2)ie.NativeDocument.Object;
+            var span = (IHTMLElement)document.all.item("spanValidateCode", null);
+            var originalContent = span.outerHTML;
 			
-            TextField inputCode = ie.TextField(new ProximityTextConstraint("Code"));
+            var inputCode = ie.TextField(new ProximityTextConstraint("Code"));
             Assert.AreEqual("inputCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
 
-            object obj = ie.HtmlDocument.all.item( "spanValidateCode", null );
+            document = (IHTMLDocument2)ie.NativeDocument.Object;
+            var obj = document.all.item( "spanValidateCode", null );
             Assert.IsNotNull( obj, "Enclosing span element no longer exists or is not unique.");
             Assert.That(obj, Is.TypeOf(typeof(mshtml.HTMLSpanElementClass)), "Enclosing span element no longer exists or is not unique.");
-            span = (mshtml.IHTMLElement)obj;
+            span = (IHTMLElement)obj;
             Assert.AreEqual( originalContent, span.outerHTML, "Content of enclosing span changed during testing." );
         }
 		
@@ -186,7 +190,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldFailWhenLabelContainsHtml() {
 			
             Settings.WaitUntilExistsTimeOut = 1;
-            TextField inputFirstName = ie.TextField(new ProximityTextConstraint("First Name:<br />"));
+            var inputFirstName = ie.TextField(new ProximityTextConstraint("First Name:<br />"));
             inputFirstName.TypeText( "" );	// To activate the lookup
 			
         }

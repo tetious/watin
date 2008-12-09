@@ -1346,9 +1346,9 @@ namespace WatiN.Core
 			return true;
 		}
 
-		public override IHTMLDocument2 OnGetHtmlDocument()
+		public override INativeDocument OnGetNativeDocument()
 		{
-			return (IHTMLDocument2) ie.Document;
+			return NativeBrowser.CreateDocument(ie.Document);
 		}
 
 		/// <summary>

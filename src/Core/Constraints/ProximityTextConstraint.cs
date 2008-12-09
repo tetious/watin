@@ -88,7 +88,7 @@ namespace WatiN.Core.Constraints
         public override bool Compare(Interfaces.IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-			IHTMLElement element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.NativeElement;
+			IHTMLElement element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.Object;
 			IHTMLDocument2 document = (IHTMLDocument2)element.document;
 			
 			// Only supports input and textarea elements

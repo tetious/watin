@@ -68,7 +68,7 @@ namespace WatiN.Core
 			{
 				if (_textElement == null)
 				{
-                    var nativeElement = NativeElement.NativeElement;
+                    var nativeElement = NativeElement.Object;
 
 				    if (ElementTag.IsAnInputElement(TagName))
 					{
@@ -208,7 +208,7 @@ namespace WatiN.Core
 
 		private void doKeyPress(string value)
 		{
-            var element = (IHTMLElement)NativeElement.NativeElement;
+            var element = (IHTMLElement)NativeElement.Object;
 
             var doKeydown = ShouldEventBeFired(element.onkeydown);
             var doKeyPress = ShouldEventBeFired(element.onkeypress);

@@ -31,8 +31,8 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class DocumentTests : BaseWithIETests
 	{
-		private Mock<IHTMLDocument2> _mockHtmlDocument;
-		private Mock<IHTMLWindow2> _mockHtmlWindow2;
+		private Mock<INativeDocument> _nativeDocumentMock;
+		private Mock<IHTMLWindow2> _htmlWindow2Mock;
 	    private int _originalWaitUntilExistsTimeOut;
 
 		public override Uri TestPageUri
@@ -42,8 +42,8 @@ namespace WatiN.Core.UnitTests
 
         private void InitMocks() 
 		{
-			_mockHtmlDocument = new Mock<IHTMLDocument2>();
-			_mockHtmlWindow2 = new Mock<IHTMLWindow2>();
+			_nativeDocumentMock = new Mock<INativeDocument>();
+			_htmlWindow2Mock = new Mock<IHTMLWindow2>();
 			_originalWaitUntilExistsTimeOut = Settings.WaitUntilExistsTimeOut;
 		}
 
@@ -69,22 +69,25 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void RunScriptShouldCallHtmlDocumentProperty()
+		public void RunScriptShouldCallNativeDocumentProperty()
 		{
 			InitMocks();
 
-			var mockDocument = new Mock<Document>();
+			var documentMock = new Mock<Document>();
+		    var htmlDocument2Mock = new Mock<IHTMLDocument2>();
 
-			mockDocument.Expect(document => document.HtmlDocument).Returns(_mockHtmlDocument.Object).AtMostOnce();
-			_mockHtmlDocument.Expect(htmldoc => htmldoc.parentWindow).Returns(_mockHtmlWindow2.Object).AtMostOnce();
-			_mockHtmlWindow2.Expect(htmlwindow => htmlwindow.execScript("alert('hello')", "javascript")).Returns(null);
+            documentMock.Expect(document => document.NativeDocument).Returns(_nativeDocumentMock.Object).AtMostOnce();
+            _nativeDocumentMock.Expect(nativedoc => nativedoc.Object).Returns(htmlDocument2Mock.Object);
+            htmlDocument2Mock.Expect(htmldoc => htmldoc.parentWindow).Returns(_htmlWindow2Mock.Object).AtMostOnce();
+			
+            _htmlWindow2Mock.Expect(htmlwindow => htmlwindow.execScript("alert('hello')", "javascript")).Returns(null);
 
-		    var document1 = mockDocument.Object;
+		    var document1 = documentMock.Object;
 
 		    document1.RunScript("alert('hello')");
 
-			_mockHtmlDocument.VerifyAll();
-			_mockHtmlWindow2.VerifyAll();
+			_nativeDocumentMock.VerifyAll();
+			_htmlWindow2Mock.VerifyAll();
 		}
 
 		[Test]
@@ -111,14 +114,14 @@ namespace WatiN.Core.UnitTests
 		{
 			InitMocks();
 
-			var _mockHTMLElement = new Mock<IHTMLElement>();
-			var mockDocument = new Mock<Document>();
+			var nativeElementMock = new Mock<INativeElement>();
+			var documentMock = new Mock<Document>( new Mock<DomContainer>().Object, _nativeDocumentMock.Object);
 
-			mockDocument.Expect(doc => doc.HtmlDocument).Returns(_mockHtmlDocument.Object).AtMostOnce();
-			_mockHtmlDocument.Expect(htmldoc => htmldoc.body).Returns(_mockHTMLElement.Object);
-			_mockHTMLElement.Expect(element => element.innerText).Returns("Document innertext returned");
+			documentMock.Expect(doc => doc.NativeDocument).Returns(_nativeDocumentMock.Object);
+		    _nativeDocumentMock.Expect(nativeDoc => nativeDoc.Body).Returns(nativeElementMock.Object);
+            nativeElementMock.Expect(element => element.GetAttributeValue("innertext")).Returns("Document innertext returned");
 
-		    var document = mockDocument.Object;
+		    var document = documentMock.Object;
 
 		    Assert.That(document.Text, Is.EqualTo("Document innertext returned"));
 		}
@@ -147,6 +150,8 @@ namespace WatiN.Core.UnitTests
 			result = ie.Eval("window.document.write('java script has run');4+4;");
 			Assert.AreEqual("8", result);
 			Assert.That(ie.Text, Is.EqualTo("java script has run"));
+
+		    ie.GoTo(TestPageUri);
 		}
 
 		[Test]
@@ -156,6 +161,23 @@ namespace WatiN.Core.UnitTests
 			var result = ie.Eval("myVar;");
 			Assert.AreEqual("5", result);
 		}
+
+        [Test]
+        public void ContainsText()
+        {
+            Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
+            Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
+
+            Assert.IsTrue(ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
+            Assert.IsFalse(ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
+        }
+
+        [Test]
+        public void FindText()
+        {
+            Assert.AreEqual("Contains text in DIV", ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
+            Assert.IsNull(ie.FindText(new Regex("abcde")), "Text incorrectly found");
+        }
 
         [Test, ExpectedException(typeof(Exceptions.TimeoutException))]
         public void WaitUntilContainsTextShouldThrowTimeOutException()
@@ -370,7 +392,7 @@ namespace WatiN.Core.UnitTests
 
             try
             {
-                _document.HtmlDocument.writeln(_html);
+                ((IHTMLDocument2)_document.NativeDocument.Object).writeln(_html);
             }
             catch { }
         }

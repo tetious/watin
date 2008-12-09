@@ -482,7 +482,8 @@ namespace WatiN.Core.UnitTests
 
 		private static string GetHtmlSource(IE ie)
 		{
-			return ie.HtmlDocument.body.parentElement.outerHTML;
+		    var document = (IHTMLDocument2) ie.NativeDocument.Object;
+			return document.body.parentElement.outerHTML;
 		}
 
 		[Test, Category("InternetConnectionNeeded")]
@@ -772,7 +773,8 @@ namespace WatiN.Core.UnitTests
 
 			using(IE ie = new IE())
 			{
-				ie.HtmlDocument.writeln(html);
+			    var document = (IHTMLDocument2) ie.NativeDocument.Object;
+				document.writeln(html);
 
 				Assert.That(ie.Button(Find.ByName("btnSomething")).Exists);
 			}

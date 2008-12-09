@@ -180,7 +180,7 @@ namespace WatiN.Core
 
 		private IHTMLOptionElement optionElement
 		{
-            get { return (IHTMLOptionElement)NativeElement.NativeElement; }
+            get { return (IHTMLOptionElement)NativeElement.Object; }
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

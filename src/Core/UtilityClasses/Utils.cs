@@ -162,7 +162,7 @@ namespace WatiN.Core
 
 		private static IHTMLElementCollection elementCollection(Document document)
 		{
-			return document.HtmlDocument.all;
+			return ((IHTMLDocument2)document.NativeDocument.Object).all;
 		}
 
 		/// <summary>

@@ -82,8 +82,8 @@ namespace WatiN.Core
 		protected virtual void WaitForCompleteOrTimeout()
 		{
 			WaitWhileMainDocumentNotAvailable(_domContainer);
-			WaitWhileDocumentStateNotComplete(_domContainer.HtmlDocument);
-			WaitForFramesToComplete(_domContainer.HtmlDocument);
+			WaitWhileDocumentStateNotComplete((IHTMLDocument2) _domContainer.NativeDocument.Object);
+			WaitForFramesToComplete((IHTMLDocument2) _domContainer.NativeDocument.Object);
 		}
 
 		protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
@@ -202,7 +202,7 @@ namespace WatiN.Core
 		{
 			try
 			{
-				return domContainer.HtmlDocument;
+				return (IHTMLDocument2) domContainer.NativeDocument.Object;
 			}
 			catch
 			{

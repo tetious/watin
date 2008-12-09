@@ -59,11 +59,11 @@ namespace WatiN.Core
 	public abstract class Document : IElementsContainer, IDisposable, IElementCollection
 	{
 		private DomContainer domContainer;
-		private IHTMLDocument2 htmlDocument;
+		private INativeDocument _nativeDocument;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Document"/> class.
-		/// Mainly used by WatiN internally. You should override HtmlDocument
+		/// Mainly used by WatiN internally. You should override NativeDocument
 		/// and set DomContainer before accessing any method or property of 
 		/// this class.
 		/// </summary>
@@ -74,14 +74,14 @@ namespace WatiN.Core
 		/// Mainly used by WatiN internally.
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="htmlDocument">The HTML document.</param>
-		protected Document(DomContainer domContainer, IHTMLDocument2 htmlDocument)
+		/// <param name="nativeDocument">The HTML document.</param>
+		protected Document(DomContainer domContainer, INativeDocument nativeDocument)
 		{
 			ArgumentRequired(domContainer, "domContainer");
-			ArgumentRequired(htmlDocument, "htmlDocument");
+			ArgumentRequired(nativeDocument, "nativeDocument");
 
 			DomContainer = domContainer;
-			this.htmlDocument = htmlDocument;
+			_nativeDocument = nativeDocument;
 		}
 
 		public void Dispose()
@@ -92,18 +92,17 @@ namespace WatiN.Core
 		protected virtual void Dispose(bool disposing)
 		{
 			DomContainer = null;
-			htmlDocument = null;
+			_nativeDocument = null;
 		}
 
 		/// <summary>
-		/// Gives access to the wrapped IHTMLDocument2 interface. This makes it
-		/// possible to get even more control of the webpage by using the MSHTML
-		/// Dom objectmodel.
+        /// Gives access to the wrapped INativeDocument interface. This makes it
+		/// possible to get even more control of the webpage by using wrapped element
 		/// </summary>
-		/// <value>The HTML document.</value>
-		public virtual IHTMLDocument2 HtmlDocument
+		/// <value>The NativeDocument.</value>
+		public virtual INativeDocument NativeDocument
 		{
-			get { return htmlDocument; }
+			get { return _nativeDocument; }
 		}
 
 		/// <summary>
@@ -114,11 +113,19 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement body = HtmlDocument.body;
-
-				return body == null ? null : body.outerHTML;
+			    return Body != null ? Body.OuterHtml : null;
 			}
 		}
+
+	    private Element Body
+	    {
+	        get
+	        {
+                var body = NativeDocument.Body;
+                return body != null ? new Element(DomContainer, body) : null;
+
+	        }
+	    }
 
 		/// <summary>
 		/// Gets the inner text of the Body part of the webpage.
@@ -128,9 +135,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement body = HtmlDocument.body;
-
-				return body == null ? null : body.innerText;
+				return Body != null ? Body.Text : null;
 			}
 		}
 
@@ -161,7 +166,7 @@ namespace WatiN.Core
 		/// </example>
 		public Uri Uri
 		{
-			get { return new Uri(HtmlDocument.url); }
+			get { return new Uri(NativeDocument.Url); }
 		}
 
 		/// <summary>
@@ -191,7 +196,7 @@ namespace WatiN.Core
 		/// </example>
 		public string Url
 		{
-			get { return HtmlDocument.url; }
+			get { return NativeDocument.Url; }
 		}
 
 		/// <summary>
@@ -203,7 +208,7 @@ namespace WatiN.Core
 		/// </returns>
 		public bool ContainsText(string text)
 		{
-			string innertext = Text;
+			var innertext = Text;
 
 			if (innertext == null) return false;
 
@@ -305,7 +310,7 @@ namespace WatiN.Core
 		/// <value>The title.</value>
 		public string Title
 		{
-			get { return HtmlDocument.title; }
+			get { return NativeDocument.Title; }
 		}
 
 		/// <summary>
@@ -316,7 +321,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				IHTMLElement activeElement = HtmlDocument.activeElement;
+				var activeElement = NativeDocument.ActiveElement;
 			    if (activeElement == null) return null;
 			    
                 return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
@@ -358,7 +363,7 @@ namespace WatiN.Core
 		/// </summary>
 		public FrameCollection Frames
 		{
-			get { return new FrameCollection(DomContainer, HtmlDocument); }
+			get { return new FrameCollection(DomContainer, NativeDocument); }
 		}
 
 		#region IElementsContainer
@@ -867,7 +872,7 @@ namespace WatiN.Core
 			{
 				try
 				{
-					return HtmlDocument.all;
+					return ((IHTMLDocument2)NativeDocument.Object).all;
 				}
 				catch
 				{
@@ -900,7 +905,7 @@ namespace WatiN.Core
 		/// <param name="language">The language.</param>
 		public void RunScript(string scriptCode, string language)
 		{
-			UtilityClass.RunScript(scriptCode, language, HtmlDocument.parentWindow);
+			UtilityClass.RunScript(scriptCode, language, ((IHTMLDocument2)NativeDocument.Object).parentWindow);
 		}
 
 		/// <summary>
@@ -955,7 +960,7 @@ namespace WatiN.Core
 
 		private string GetPropertyValue(string propertyName)
 		{
-			var domDocumentExpando = (IExpando) HtmlDocument;
+			var domDocumentExpando = (IExpando) NativeDocument.Object;
 
 			var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
 			if (errorProperty != null)

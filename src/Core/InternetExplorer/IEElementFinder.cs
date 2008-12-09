@@ -243,7 +243,7 @@ namespace WatiN.Core.InternetExplorer
 			// Like for elements that could not load an image or ico
 			// or some other bits not part of the HTML page.     
 	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
-            var ihtmlElement2 = ((IHTMLElement2)element.NativeElement);
+            var ihtmlElement2 = ((IHTMLElement2)element.Object);
             var success = tryActionUntilTimeOut.Try(() =>
             {
                 var readyState = ihtmlElement2.readyStateValue;
@@ -252,7 +252,7 @@ namespace WatiN.Core.InternetExplorer
 
 	        if (success) return;
 
-            var ihtmlElement = ((IHTMLElement) element.NativeElement);
+            var ihtmlElement = ((IHTMLElement) element.Object);
             throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
 		}
 	}

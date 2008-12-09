@@ -16,9 +16,8 @@
 
 #endregion Copyright
 
-using System.Text.RegularExpressions;
+using System;
 using Moq;
-using mshtml;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
 
@@ -27,39 +26,30 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class DomContainerTests
 	{
-		private Mock<SHDocVw.InternetExplorer> _mockInternetExplorer;
+		private Mock<SHDocVw.InternetExplorer> _internetExplorerMock;
 		private IE _ie;
-		private Mock<IHTMLDocument2> _mockHTMLDocument2;
-
-		private Mock<IWait> _mockWait;
-		private Mock<IHTMLElement> _mockIHTMLElement;
+		private Mock<IWait> _waitMock;
 
 		[SetUp]
 		public void Setup()
 		{
 			Settings.AutoStartDialogWatcher = false;
 
-			_mockInternetExplorer = new Mock<SHDocVw.InternetExplorer>();
-			_mockHTMLDocument2 = new Mock<IHTMLDocument2>();
-			_mockIHTMLElement = new Mock<IHTMLElement>();
+            _internetExplorerMock = new Mock<SHDocVw.InternetExplorer>();
+            _ie = new IE(_internetExplorerMock.Object);
 
-			_mockInternetExplorer.Expect(ie => ie.Document).Returns(_mockHTMLDocument2.Object);
-			_mockHTMLDocument2.Expect(doc => doc.body).Returns(_mockIHTMLElement.Object);
-			_mockIHTMLElement.Expect(element => element.innerText).Returns("Test 'Contains text in DIV' text");
+            _waitMock = new Mock<IWait>();
 
-			_ie = new IE(_mockInternetExplorer.Object);
-
-            _mockWait = new Mock<IWait>();
 		}
 
-		[Test]
+        [Test]
 		public void WaitForCompletUsesGivenWaitClass()
 		{
-			_mockWait.Expect(wait => wait.DoWait());
+			_waitMock.Expect(wait => wait.DoWait());
 
-			_ie.WaitForComplete(_mockWait.Object);
+			_ie.WaitForComplete(_waitMock.Object);
 
-			_mockWait.VerifyAll();
+			_waitMock.VerifyAll();
 		}
 
 	    [Test]
@@ -94,48 +84,58 @@ namespace WatiN.Core.UnitTests
 			Assert.IsInstanceOfType(typeof (Document), _ie);
 		}
 
-		[Test]
-		public void Text()
-		{
-			Assert.IsTrue(_ie.Text.IndexOf("Contains text in DIV") >= 0, "Text property did not return expected contents.");
-		}
+	    [Test]
+	    public void NativeDocumentShouldCallOnGetNativeDocument()
+	    {
+	        // GIVEN
+	        var nativeDocument = new Mock<INativeDocument>().Object;
+	        var myTestDomContainer = new MyTestDomContainer {ReturnNativeDocument = nativeDocument};
 
-		[Test]
-		public void ContainsText()
-		{
-			Assert.IsTrue(_ie.ContainsText("Contains text in DIV"), "Text not found");
-			Assert.IsFalse(_ie.ContainsText("abcde"), "Text incorrectly found");
+	        // WHEN
+	        var result = myTestDomContainer.NativeDocument;
 
-			Assert.IsTrue(_ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
-			Assert.IsFalse(_ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
-		}
+	        // THEN
+	        Assert.That(ReferenceEquals(nativeDocument, result), "Unexpected instance");
+	    }
 
-		[Test]
-		public void FindText()
-		{
-			Assert.AreEqual("Contains text in DIV", _ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
-			Assert.IsNull(_ie.FindText(new Regex("abcde")), "Text incorrectly found");
-		}
 
-		[TearDown]
+	    [TearDown]
 		public virtual void TearDown()
 		{
 			_ie.Dispose();
 			Settings.Reset();
 		}
+
+        private class MyTestDomContainer : DomContainer
+        {
+            public INativeDocument ReturnNativeDocument { get; set; }
+
+            public override IntPtr hWnd
+            {
+                get { throw new System.NotImplementedException(); }
+            }
+
+            public override INativeDocument OnGetNativeDocument()
+            {
+                return ReturnNativeDocument;
+            }
+
+            public override INativeBrowser NativeBrowser
+            {
+                get { throw new System.NotImplementedException(); }
+            }
+        }
 	}
 
     public class WaitForCompleteMock : WaitForComplete
     {
-        private int _timeout;
-
         public WaitForCompleteMock(DomContainer domContainer) : base(domContainer) {}
 
         public WaitForCompleteMock(DomContainer domContainer, int waitForCompleteTimeOut) : base(domContainer, waitForCompleteTimeOut) {}
 
         protected override SimpleTimer InitTimeout()
         {
-            _timeout = base.InitTimeout().Timeout;
+            Timeout = base.InitTimeout().Timeout;
             return null;
         }
 
@@ -144,9 +144,6 @@ namespace WatiN.Core.UnitTests
             // Finished;
         }
 
-        public int Timeout
-        {
-            get { return _timeout; }
-        }
+        public int Timeout { get; private set; }
     }
 }
