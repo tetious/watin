@@ -167,7 +167,7 @@ namespace WatiN.Core.InternetExplorer
 	            for (var index = 0; index < length; index++ )
                 {
                     var element = (IHTMLElement)elements.item(index, null);
-                    if (FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, children))
+                    if (element != null && FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, children))
                     {
                         return children;
                     }

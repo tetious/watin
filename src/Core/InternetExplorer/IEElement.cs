@@ -273,8 +273,13 @@ namespace WatiN.Core.InternetExplorer
 
 		public string TagName
 		{
-			get { return GetAttributeValue("tagName"); }
+			get { return htmlElement.tagName; }
 		}
+
+//		public string TagName
+//		{
+//			get { return GetAttributeValue("tagName"); }
+//		}
 	}
 
     public class AsyncScriptRunner
