@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstructorWithValueAndUriCompare()
 		{
-			UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
 
 			// Uri Compare
 			Assert.IsTrue(comparer.Compare(new Uri("http://watin.sourceforge.net")), "Uri: Exact match should pass.");
@@ -67,7 +67,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IgnoreQueryStringCompareWithQueryStringInValueToBeFound()
 		{
-			UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net/here.aspx?query"), true);
+			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net/here.aspx?query"), true);
 
 			Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/here.aspx"), "Uri: Match ignoring querystring.");
 			Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/here.aspx?query"),
@@ -83,7 +83,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IgnoreQueryStringCompareWithNoQueryStringInValueToBeFound()
 		{
-			UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"), true);
+			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"), true);
 
 			Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net/"), "Same site should match");
 
@@ -108,7 +108,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ToStringTest()
 		{
-			UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
 
 			Assert.AreEqual("http://watin.sourceforge.net/", comparer.ToString());
 		}
@@ -116,28 +116,58 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ToStringTestWithEncodedQueryString()
 		{
-            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
 
-			UriComparer comparer = new UriComparer(new Uri(url));
+			var comparer = new UriComparer(new Uri(url));
 
 			Assert.That(comparer.ToString(), Is.EqualTo(url));
 		}
+
+	    [Test]
+	    public void WhenEncounteringABadUrlCompareShouldReturnFalse()
+	    {
+	        // GIVEN
+	        var badUrl = "bad.formated@url";
+	        try
+	        {
+	            new Uri(badUrl);
+                Assert.Fail("Precondition failed");
+	        }
+            catch (UriFormatException)
+	        {
+	            // OK;
+	        }
+            catch(Exception e)
+            {
+                Assert.Fail("Precondition: Unexpected exception " + e);
+            }
+
+            var comparer = new UriComparer(new Uri("http://www.watin.net"));
+
+	        // WHEN
+	        var compare = comparer.Compare(badUrl);
+
+	        // THEN
+	        Assert.That(compare, Is.False);
+
+	    }
+
 
 		[Test]
 		public void CompareShouldBeCultureInvariant()
 		{
 			// Get the tr-TR (Turkish-Turkey) culture.
-			CultureInfo turkish = new CultureInfo("tr-TR");
+			var turkish = new CultureInfo("tr-TR");
 
 			// Get the culture that is associated with the current thread.
-			CultureInfo thisCulture = Thread.CurrentThread.CurrentCulture;
+			var thisCulture = Thread.CurrentThread.CurrentCulture;
 
 			try
 			{
 				// Set the culture to Turkish
 				Thread.CurrentThread.CurrentCulture = turkish;
 
-				UriComparer comparer = new UriComparer(new Uri("http://watin.sourceforge.net"), true);
+				var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"), true);
 
 				Assert.IsTrue(comparer.Compare("http://WATIN.sourceforge.net/"), "Same site should match");
 			}
@@ -151,7 +181,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void ShoudlFindMatchUrlWithEncodedQueryString()
         {
-            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
 
             ICompare comparer = new UriComparer(new Uri(url));
             Assert.That(comparer.Compare(url), Is.True);

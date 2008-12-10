@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -57,7 +56,7 @@ namespace WatiN.Core
 		public static void DumpElements(Document document, ILogWriter logWriter)
 		{
 			logWriter.LogAction("Dump:");
-			IHTMLElementCollection elements = elementCollection(document);
+			var elements = elementCollection(document);
 			foreach (IHTMLElement e in elements)
 			{
 				logWriter.LogAction("id = " + e.id);
@@ -81,7 +80,7 @@ namespace WatiN.Core
 		public static void DumpElementsWithHtmlSource(Document document, ILogWriter logWriter)
 		{
 			logWriter.LogAction("Dump:==================================================");
-			IHTMLElementCollection elements = elementCollection(document);
+			var elements = elementCollection(document);
 			foreach (IHTMLElement e in elements)
 			{
 				logWriter.LogAction("------------------------- " + e.id);
@@ -105,14 +104,14 @@ namespace WatiN.Core
 		/// <param name="logWriter">The log writer.</param>
 		public static void DumpFrames(Document document, ILogWriter logWriter)
 		{
-			FrameCollection frames = document.Frames;
+			var frames = document.Frames;
 
-			logWriter.LogAction("There are " + frames.Length.ToString() + " Frames");
+			logWriter.LogAction("There are " + frames.Length + " Frames");
 
-			int index = 0;
+			var index = 0;
 			foreach (Frame frame in frames)
 			{
-				logWriter.LogAction("Frame index: " + index.ToString());
+				logWriter.LogAction("Frame index: " + index);
 				logWriter.LogAction(" name: " + frame.Name);
 				logWriter.LogAction(" scr: " + frame.Url);
 
@@ -129,7 +128,7 @@ namespace WatiN.Core
 		/// </returns>
 		public static bool IsNullOrEmpty(string value)
 		{
-			return (value == null || value.Length == 0);
+			return (string.IsNullOrEmpty(value));
 		}
 
 		/// <summary>
@@ -175,7 +174,7 @@ namespace WatiN.Core
 		{
 			if (hWnd == IntPtr.Zero) return false;
 
-			string className = NativeMethods.GetClassName(hWnd);
+			var className = NativeMethods.GetClassName(hWnd);
 
 			return className.Equals(expectedClassName);
 		}
@@ -222,7 +221,7 @@ namespace WatiN.Core
 			}
 			catch (Exception ex)
 			{
-				throw new WatiN.Core.Exceptions.RunScriptException(ex);
+				throw new RunScriptException(ex);
 			}
 		}
 
@@ -233,10 +232,9 @@ namespace WatiN.Core
 		/// <param name="eventName">Name of the event to fire</param>
 		public static void FireEvent(DispHTMLBaseElement element, string eventName)
 		{
-			NameValueCollection collection = new NameValueCollection();
-			collection.Add("button", "1");
+			var collection = new NameValueCollection {{"button", "1"}};
 
-			FireEvent(element, eventName, collection);
+		    FireEvent(element, eventName, collection);
 		}
 
 		/// <summary>
@@ -247,11 +245,11 @@ namespace WatiN.Core
 		/// <param name="eventObjectProperties">The event object properties.</param>
 		public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
 		{
-		    StringBuilder scriptCode = CreateJavaScriptFireEventCode(eventObjectProperties, element, eventName);
+		    var scriptCode = CreateJavaScriptFireEventCode(eventObjectProperties, element, eventName);
 
 		    try
 			{
-				IHTMLWindow2 window = ((IHTMLDocument2) element.document).parentWindow;
+				var window = ((IHTMLDocument2) element.document).parentWindow;
 				RunScript(scriptCode.ToString(), window);
 			}
 			catch (RunScriptException)
@@ -262,12 +260,12 @@ namespace WatiN.Core
 				object dummyEvt = null;
 				object parentEvt = ((IHTMLDocument4) element.document).CreateEventObject(ref dummyEvt);
 
-				IHTMLEventObj2 eventObj = (IHTMLEventObj2) parentEvt;
+				var eventObj = (IHTMLEventObj2) parentEvt;
 
-				for (int index = 0; index < eventObjectProperties.Count; index++)
+				for (var index = 0; index < eventObjectProperties.Count; index++)
 				{
-					string property = eventObjectProperties.GetKey(index);
-					string value = eventObjectProperties.GetValues(index)[0];
+					var property = eventObjectProperties.GetKey(index);
+					var value = eventObjectProperties.GetValues(index)[0];
 
 					eventObj.setAttribute(property, value, 0);
 				}
@@ -278,7 +276,7 @@ namespace WatiN.Core
 
 	    public static StringBuilder CreateJavaScriptFireEventCode(NameValueCollection eventObjectProperties, DispHTMLBaseElement element, string eventName)
 	    {
-	        StringBuilder scriptCode = new StringBuilder();
+	        var scriptCode = new StringBuilder();
 	        scriptCode.Append("var newEvt = document.createEventObject();");
 
 	        CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
@@ -291,7 +289,7 @@ namespace WatiN.Core
 	    {
             if (eventObjectProperties == null) return;
 
-            for (int index = 0; index < eventObjectProperties.Count; index++)
+            for (var index = 0; index < eventObjectProperties.Count; index++)
 	        {
 	            scriptCode.Append("newEvt.");
 	            scriptCode.Append(eventObjectProperties.GetKey(index));
@@ -312,10 +310,10 @@ namespace WatiN.Core
 
 	    public static string StringArrayToString(string[] inputtypes, string seperator)
 		{
-			string inputtypesString = "";
+			var inputtypesString = "";
 			if (inputtypes.Length > 0)
 			{
-				foreach (string inputtype in inputtypes)
+				foreach (var inputtype in inputtypes)
 				{
 					inputtypesString += inputtype + seperator;
 				}
@@ -332,7 +330,7 @@ namespace WatiN.Core
 			{
 				string returnvalue = null;
 
-				foreach (char c in value)
+				foreach (var c in value)
 				{
 					if(sendKeysCharactersToBeEscaped.IndexOf(c) != -1)
 					{
@@ -349,5 +347,20 @@ namespace WatiN.Core
 
 			return value;
 		}
+
+	    public static Uri CreateUri(string url)
+        {
+            Uri uri;
+            try
+            {
+                uri = new Uri(url);
+            }
+            catch (UriFormatException)
+            {
+                uri = new Uri("http://" + url);
+            }
+            return uri;
+        }
+
 	}
 }
