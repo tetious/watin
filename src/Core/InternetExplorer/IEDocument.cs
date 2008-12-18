@@ -20,6 +20,11 @@ namespace WatiN.Core.InternetExplorer
             get { return _nativeDocument; }
         }
 
+        public object Objects
+        {
+            get { return _nativeDocument.all; }
+        }
+
         public INativeElement Body
         {
             get
@@ -41,6 +46,11 @@ namespace WatiN.Core.InternetExplorer
         public INativeElement ActiveElement
         {
             get { return new IEElement(_nativeDocument.activeElement); }
+        }
+
+        public void RunScript(string scriptCode, string language)
+        {
+            UtilityClass.RunScript(scriptCode, language, _nativeDocument.parentWindow);
         }
     }
 }

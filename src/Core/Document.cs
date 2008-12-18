@@ -21,7 +21,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -872,7 +871,7 @@ namespace WatiN.Core
 			{
 				try
 				{
-					return ((IHTMLDocument2)NativeDocument.Object).all;
+					return NativeDocument.Objects;
 				}
 				catch
 				{
@@ -905,17 +904,7 @@ namespace WatiN.Core
 		/// <param name="language">The language.</param>
 		public void RunScript(string scriptCode, string language)
 		{
-			UtilityClass.RunScript(scriptCode, language, ((IHTMLDocument2)NativeDocument.Object).parentWindow);
-		}
-
-		/// <summary>
-		/// Fires the given event on the given element.
-		/// </summary>
-		/// <param name="element">Element to fire the event on</param>
-		/// <param name="eventName">Name of the event to fire</param>
-		public virtual void FireEvent(DispHTMLBaseElement element, string eventName)
-		{
-			UtilityClass.FireEvent(element, eventName);
+		    NativeDocument.RunScript(scriptCode, language);
 		}
 
 		/// <summary>
