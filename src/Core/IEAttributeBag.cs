@@ -18,10 +18,10 @@
 
 using System.Globalization;
 using mshtml;
-using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -30,30 +30,24 @@ namespace WatiN.Core
 	/// </summary>
 	public class IEAttributeBag : IAttributeBag
 	{
-		private SHDocVw.InternetExplorer internetExplorer = null;
+	    public SHDocVw.InternetExplorer InternetExplorer { get; set; }
 
-		public SHDocVw.InternetExplorer	 InternetExplorer
+	    public string GetValue(string attributename)
 		{
-			get { return internetExplorer; }
-			set { internetExplorer = value; }
-		}
-
-		public string GetValue(string attributename)
-		{
-			string name = attributename.ToLower(CultureInfo.InvariantCulture);
+			var name = attributename.ToLower(CultureInfo.InvariantCulture);
 			string value;
 
 			if (name.Equals("href"))
 			{
-				value = GetUrl();
+                value = TryOtherwiseReturnNull(() => InternetExplorer.LocationURL);
 			}
 			else if (name.Equals("title"))
 			{
-				value = GetTitle();
+                value = TryOtherwiseReturnNull(() => ((HTMLDocument)InternetExplorer.Document).title);
 			}
 			else if (name.Equals("hwnd"))
 			{
-				value = GetHwnd();
+			    value = TryOtherwiseReturnNull(() => InternetExplorer.HWND.ToString());
 			}
 			else
 			{
@@ -63,34 +57,14 @@ namespace WatiN.Core
 			return value;
 		}
 
-		private string GetHwnd()
-		{
-			try
-			{
-				return InternetExplorer.HWND.ToString();
-			}
-			catch {}
-			return null;
-		}
-
-		private string GetTitle()
-		{
-			try
-			{
-				return ((HTMLDocument) InternetExplorer.Document).title;
-			}
-			catch {}
-			return null;
-		}
-
-		private string GetUrl()
-		{
-			try
-			{
-				return InternetExplorer.LocationURL;
-			}
-			catch {}
-			return null;
-		}
+	    private static string TryOtherwiseReturnNull(TryAction<string> action )
+	    {
+	        try
+	        {
+	            return action.Invoke();
+	        }
+	        catch {}
+	        return null;
+	    }
 	}
 }
