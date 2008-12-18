@@ -97,6 +97,21 @@ namespace WatiN.Core.UnitTests.IETests
 
         }
 
+        [Test]
+        public void RunScriptShouldCallNativeDocumentProperty()
+        {
+            // GIVEN
+            var htmlDocumentMock = new Mock<IHTMLDocument2>();
+            var parentWindowMock = new Mock<IHTMLWindow2>();
+            htmlDocumentMock.Expect(doc => doc.parentWindow).Returns(parentWindowMock.Object);
+            var htmlDocument = htmlDocumentMock.Object;
+            var ieDocument = new IEDocument(htmlDocument);
 
+            // WHEN
+            ieDocument.RunScript("Somescript", "javascript");
+
+            // THEN
+            parentWindowMock.Verify(window => window.execScript("Somescript", "javascript"));
+        }
     }
 }

@@ -10,13 +10,13 @@ TODO for multiple browser support:
 - See if some/all can be changed to work with FireFox. If so revert above changes for these Constraints
 
 ** IElementCollection
-- property IElementCollection.Elements should return IEnumarable<INativeElement>
+DONE JVM - property IElementCollection.Elements should return object
 
 ** Document class
-- Depends heavily on mshtml.HtmlDocument. These dependencies should be removed or be moved to browser specific implementation(s).
+DONE JVM - Depends heavily on mshtml.HtmlDocument. These dependencies should be removed or be moved to browser specific implementation(s).
 
 ** DomContainer class
-- Depends on mshtml.HtmlDocument because its an intermediar to Document. Might be solved if Document is changed.
+DONE JVM - Depends on mshtml.HtmlDocument because its an intermediar to Document. Might be solved if Document is changed.
 
 ** Element class
 DONE JVM - Remove HTMLElement property and change all code depending on it.
@@ -25,10 +25,28 @@ DONE JVM - Remove HTMLElement property and change all code depending on it.
 DONE JVM - Reimplement style support in GetValue(attributename)
 
 ** Document
-- Remove dependencies on IHTMLDocument2
-- Remove dependencies on IHTMLElement for attributes values from Body element
+DONE JVM - Remove dependencies on IHTMLDocument2
+DONE JVM - Remove dependencies on IHTMLElement for attributes values from Body element
 - Move GetPropertyValue to nativeBrowser class? Is Com interop specific
 
 
 ** Style
 DONE JVM - Remove depenency on IHTMLStyle 
+
+** Form
+- Move Submit to NativeElement
+
+** Move IE specific classes to speicif folder(s) and namespace(s)
+
+** Option
+- Move select to NativeElement
+
+** RadioCheck
+- Move checked to NativeElement
+
+** Table, TableBody, TableRow
+- Multiple issues
+
+** TextField
+- remove dependencies in wrappers around TextArea or input text 
+

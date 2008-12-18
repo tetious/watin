@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -83,7 +82,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Clearing selection(s) in " + GetType().Name + " '" + Id + "'");
 
-			OptionCollection options = Options.Filter(GetIsSelectedAttribute());
+			var options = Options.Filter(GetIsSelectedAttribute());
 
 			foreach (Option option in options)
 			{
@@ -199,7 +198,7 @@ namespace WatiN.Core
 		/// <returns></returns>
 		public Option Option(BaseConstraint findBy)
 		{
-			return ElementsSupport.Option(DomContainer, findBy, new ElementCollection(this));
+			return ElementsSupport.Option(DomContainer, findBy, new OptionCollection(this));
 		}
 
         /// <summary>
@@ -215,9 +214,9 @@ namespace WatiN.Core
 		/// <summary>
 		/// Returns all the <see cref="Core.Option"/> elements in the <see cref="SelectList"/>.
 		/// </summary>
-		public OptionCollection Options
+		public Core.OptionCollection Options
 		{
-			get { return ElementsSupport.Options(DomContainer, new ElementCollection(this)); }
+			get { return ElementsSupport.Options(DomContainer, new OptionCollection(this)); }
 		}
 
 		/// <summary>
@@ -270,10 +269,8 @@ namespace WatiN.Core
 		{
 			get
 			{
-				Option option = SelectedOption;
-				if (option == null) return null;
-
-				return option.Text;
+				var option = SelectedOption;
+				return option == null ? null : option.Text;
 			}
 		}
 
@@ -286,14 +283,9 @@ namespace WatiN.Core
 		{
 			get
 			{
-				Option option = Option(GetIsSelectedAttribute());
+				var option = Option(GetIsSelectedAttribute());
 
-				if (option.Exists)
-				{
-					return option;
-				}
-
-				return null;
+				return option.Exists ? option : null;
 			}
 		}
 
@@ -315,7 +307,7 @@ namespace WatiN.Core
 
 		private void SelectByTextOrValue(BaseConstraint findBy)
 		{
-			OptionCollection options = Options.Filter(findBy);
+			var options = Options.Filter(findBy);
 
 			foreach (Option option in options)
 			{
@@ -334,11 +326,11 @@ namespace WatiN.Core
 		}
 
 
-		public class ElementCollection : IElementCollection
+		public class OptionCollection : IElementCollection
 		{
 			private readonly SelectList selectlist;
 
-			public ElementCollection(SelectList selectList)
+			public OptionCollection(SelectList selectList)
 			{
 				selectlist = selectList;
 			}
@@ -347,8 +339,7 @@ namespace WatiN.Core
 			{
 				get
 				{
-				    var element = (IHTMLElement) selectlist.NativeElement.Object;
-                    return (IHTMLElementCollection)element.all;
+				    return selectlist.NativeElement.Objects;
 				}
 			}
 		}

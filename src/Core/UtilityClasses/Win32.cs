@@ -248,7 +248,6 @@ namespace WatiN.Core
         [DllImport("user32.dll")]
         internal static extern IntPtr SetFocus(IntPtr hWnd);
 
-
 		[DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildProc lpEnumFunc, ref IntPtr lParam);
 

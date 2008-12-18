@@ -286,6 +286,7 @@
     <Compile Include="HTMLDialogTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IETests\IEHtmlInjector.cs" />
     <Compile Include="IETests.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -18,21 +18,18 @@
 
 using System;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Moq;
-using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UnitTests.IETests;
 
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
 	public class DocumentTests : BaseWithIETests
 	{
-		private Mock<INativeDocument> _nativeDocumentMock;
-		private Mock<IHTMLWindow2> _htmlWindow2Mock;
 	    private int _originalWaitUntilExistsTimeOut;
 
 		public override Uri TestPageUri
@@ -40,11 +37,11 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
-        private void InitMocks() 
+        [SetUp]
+        public override void TestSetUp() 
 		{
-			_nativeDocumentMock = new Mock<INativeDocument>();
-			_htmlWindow2Mock = new Mock<IHTMLWindow2>();
-			_originalWaitUntilExistsTimeOut = Settings.WaitUntilExistsTimeOut;
+            base.TestSetUp();
+            _originalWaitUntilExistsTimeOut = Settings.WaitUntilExistsTimeOut;
 		}
 
 		[TearDown]
@@ -52,7 +49,6 @@ namespace WatiN.Core.UnitTests
 	    {
 	        Settings.WaitUntilExistsTimeOut = _originalWaitUntilExistsTimeOut;
 	    }
-
 
 		[Test]
         public void DocumentIsIElementsContainer()
@@ -69,25 +65,21 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void RunScriptShouldCallNativeDocumentProperty()
+		public void RunScriptShouldCallRunScriptOnNativeDocument()
 		{
-			InitMocks();
+            // GIVEN
+		    var domContainer = new Mock<DomContainer>().Object;
+		    var nativeDocumentMock = new Mock<INativeDocument>();
+		    var nativeDocument = nativeDocumentMock.Object;
+		    var document = new TestDocument(domContainer, nativeDocument);
 
-			var documentMock = new Mock<Document>();
-		    var htmlDocument2Mock = new Mock<IHTMLDocument2>();
+            var scriptCode = "alert('hello')";
 
-            documentMock.Expect(document => document.NativeDocument).Returns(_nativeDocumentMock.Object).AtMostOnce();
-            _nativeDocumentMock.Expect(nativedoc => nativedoc.Object).Returns(htmlDocument2Mock.Object);
-            htmlDocument2Mock.Expect(htmldoc => htmldoc.parentWindow).Returns(_htmlWindow2Mock.Object).AtMostOnce();
-			
-            _htmlWindow2Mock.Expect(htmlwindow => htmlwindow.execScript("alert('hello')", "javascript")).Returns(null);
+		    // WHEN
+		    document.RunScript(scriptCode);
 
-		    var document1 = documentMock.Object;
-
-		    document1.RunScript("alert('hello')");
-
-			_nativeDocumentMock.VerifyAll();
-			_htmlWindow2Mock.VerifyAll();
+            // THEN
+            nativeDocumentMock.Verify(doc => doc.RunScript(scriptCode, "javascript"));
 		}
 
 		[Test]
@@ -112,18 +104,20 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Text()
 		{
-			InitMocks();
+            // GIVEN
+		    var nativeDocumentMock = new Mock<INativeDocument>();
+		    var nativeElementMock = new Mock<INativeElement>();
+		    nativeElementMock.Expect(element => element.GetAttributeValue("innertext")).Returns("Something");
+		    nativeDocumentMock.Expect(native => native.Body).Returns(nativeElementMock.Object);
 
-			var nativeElementMock = new Mock<INativeElement>();
-			var documentMock = new Mock<Document>( new Mock<DomContainer>().Object, _nativeDocumentMock.Object);
+		    var domContainer = new Mock<DomContainer>().Object;
+		    var document = new TestDocument(domContainer, nativeDocumentMock.Object);
 
-			documentMock.Expect(doc => doc.NativeDocument).Returns(_nativeDocumentMock.Object);
-		    _nativeDocumentMock.Expect(nativeDoc => nativeDoc.Body).Returns(nativeElementMock.Object);
-            nativeElementMock.Expect(element => element.GetAttributeValue("innertext")).Returns("Document innertext returned");
+		    // WHEN
+		    var text = document.Text;
 
-		    var document = documentMock.Object;
-
-		    Assert.That(document.Text, Is.EqualTo("Document innertext returned"));
+            // THEN
+		    Assert.That(text, Is.EqualTo("Something"));
 		}
 
 		[Test]
@@ -184,7 +178,7 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 1;
 
-			HTMLInjector.Start(ie, "some text 1", 2);
+			IEHtmlInjector.Start(ie, "some text 1", 2);
             ie.WaitUntilContainsText("some text 1");
             ie.GoTo(TestPageUri);
         }
@@ -194,7 +188,7 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 2;
 
-			HTMLInjector.Start(ie, "some text 2", 1);
+			IEHtmlInjector.Start(ie, "some text 2", 1);
             ie.WaitUntilContainsText("some text 2");
             ie.GoTo(TestPageUri);
         }
@@ -204,7 +198,7 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 1;
 
-			HTMLInjector.Start(ie, "some text 3", 2);
+			IEHtmlInjector.Start(ie, "some text 3", 2);
             ie.WaitUntilContainsText(new Regex("me text 3"));
             ie.GoTo(TestPageUri);
         }
@@ -214,7 +208,7 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 2;
 
-			HTMLInjector.Start(ie, "some text 4", 1);
+			IEHtmlInjector.Start(ie, "some text 4", 1);
             ie.WaitUntilContainsText(new Regex("me text 4"));
             ie.GoTo(TestPageUri);
         }
@@ -373,44 +367,8 @@ namespace WatiN.Core.UnitTests
         }
 	}
 
-    internal class HTMLInjector
+    public class TestDocument : Document
     {
-        private readonly string _html;
-        private readonly int _numberOfSecondsToWaitBeforeInjection;
-        private readonly Document _document;
-
-        public HTMLInjector(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
-        {
-            _document = document;
-            _html = html;
-            _numberOfSecondsToWaitBeforeInjection = numberOfSecondsToWaitBeforeInjection;
-        }
-
-        public void Inject()
-        {
-            Thread.Sleep(_numberOfSecondsToWaitBeforeInjection * 1000);
-
-            try
-            {
-                ((IHTMLDocument2)_document.NativeDocument.Object).writeln(_html);
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// Starts a new thread and injects the html into the document after numberOfSecondsToWaitBeforeInjection.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="html"></param>
-        /// <param name="numberOfSecondsToWaitBeforeInjection"></param>
-        public static void Start(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
-        {
-            var htmlInjector = new HTMLInjector(document, html, numberOfSecondsToWaitBeforeInjection);
-
-            ThreadStart start = htmlInjector.Inject;
-            var thread = new Thread(start);
-            thread.Start();
-        }
-
+        public TestDocument(DomContainer container, INativeDocument document) : base(container, document) {}
     }
 }
