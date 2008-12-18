@@ -416,7 +416,7 @@ namespace WatiN.Core.DialogHandlers
 			// of the window class (like Style and StyleInHex)
 			// will return valid values.
 		    var tryActionUntilTimeOut = new TryActionUntilTimeOut(Settings.WaitForCompleteTimeOut);
-		    var success = tryActionUntilTimeOut.Try(() => window.Visible );
+            var success = tryActionUntilTimeOut.Try(() => window.Visible);
 
             if (!success)
             {

@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace WatiN.Core.UtilityClasses
 {
-    public delegate bool TryAction();
+    public delegate T TryAction<T>();
     public delegate string BuildTimeOutExceptionMessage();
     
     public class TryActionUntilTimeOut
@@ -20,11 +20,13 @@ namespace WatiN.Core.UtilityClasses
             SleepTime = Settings.SleepTime;
         }
 
-        public bool Try(TryAction action)
+        public T Try<T>(TryAction<T> action)
         {
             if (action == null) throw new ArgumentNullException("action");
 
             var timeoutTimer = new SimpleTimer(Timeout);
+
+            var defaultT = default(T);
 
             do
             {
@@ -32,7 +34,8 @@ namespace WatiN.Core.UtilityClasses
 
                 try
                 {
-                    if (action.Invoke()) return true;
+                    var result = action.Invoke();
+                    if (!result.Equals(defaultT)) return result;
                 }
                 catch (Exception e)
                 {
@@ -46,10 +49,10 @@ namespace WatiN.Core.UtilityClasses
 
             if (ExceptionMessage != null)
             {
-                ThrowTimeOutException(LastException, ExceptionMessage.Invoke() );
+                ThrowTimeOutException(LastException, ExceptionMessage.Invoke());
             }
 
-            return false;
+            return defaultT;
         }
 
         protected virtual void Sleep(int sleepTime)

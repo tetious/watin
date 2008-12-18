@@ -22,7 +22,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using mshtml;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
@@ -30,6 +29,7 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -92,7 +92,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIENoWait(BaseConstraint findBy)
 		{
-			return findIE(findBy, Core.Settings.AttachToIETimeOut, false);
+			return findIE(findBy, Settings.AttachToIETimeOut, false);
 		}
 		
 		/// <summary>
@@ -122,7 +122,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIE(BaseConstraint findBy)
 		{
-			return findIE(findBy, Core.Settings.AttachToIETimeOut, true);
+			return findIE(findBy, Settings.AttachToIETimeOut, true);
 		}
 
 		/// <summary>
@@ -670,17 +670,17 @@ namespace WatiN.Core
 			{
 				navigateTo(uri);
 			}
-			ie.Visible = Core.Settings.MakeNewIeInstanceVisible;
+			ie.Visible = Settings.MakeNewIeInstanceVisible;
 			StartDialogWatcher();
 		}
 
 		private static IE findIE(BaseConstraint findBy, int timeout, bool waitForComplete)
 		{
-			SHDocVw.InternetExplorer internetExplorer = findInternetExplorer(findBy, timeout);
+			var internetExplorer = findInternetExplorer(findBy, timeout);
 
 			if (internetExplorer != null)
 			{
-				IE ie = new IE(internetExplorer);
+				var ie = new IE(internetExplorer);
                 if (waitForComplete)
                 {
 			        ie.WaitForComplete();
@@ -696,31 +696,20 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ConstraintToString());
 
-			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
+		    var action = new TryActionUntilTimeOut(timeout) {SleepTime = 500};
+		    var internetExplorer = action.Try(() => findInternetExplorer(findBy));
 
-			do
-			{
-				Thread.Sleep(500);
-
-				SHDocVw.InternetExplorer internetExplorer = findInternetExplorer(findBy);
-
-				if (internetExplorer != null)
-				{
-					return internetExplorer;
-				}
-			} while (!timeoutTimer.Elapsed);
-
-			return null;
+		    return internetExplorer;
 		}
 
 		private static SHDocVw.InternetExplorer findInternetExplorer(BaseConstraint findBy)
 		{
-			ShellWindows allBrowsers = new ShellWindows();
+			var allBrowsers = new ShellWindows();
 
-			int browserCount = allBrowsers.Count;
-			int browserCounter = 0;
+			var browserCount = allBrowsers.Count;
+			var browserCounter = 0;
 
-			IEAttributeBag attributeBag = new IEAttributeBag();
+			var attributeBag = new IEAttributeBag();
 
 			while (browserCounter < browserCount)
 			{
@@ -737,9 +726,9 @@ namespace WatiN.Core
 			return null;
 		}
 
-		private void MoveMousePoinerToTopLeft()
+		private static void MoveMousePoinerToTopLeft()
 		{
-			if (Core.Settings.AutoMoveMousePointerToTopLeft)
+			if (Settings.AutoMoveMousePointerToTopLeft)
 			{
 				Cursor.Position = new Point(0, 0);
 			}
@@ -868,16 +857,16 @@ namespace WatiN.Core
         /// </example>
         public void GoToNoWait(Uri url)
         {
-            Thread thread = new Thread(GoToNoWaitInternal);
+            var thread = new Thread(GoToNoWaitInternal);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start(url);
             thread.Join(500);
         }
 
         [STAThread]
-        private void GoToNoWaitInternal(object urlOrUri)
+        private void GoToNoWaitInternal(object uriIn)
         {
-            Uri uri = (Uri)urlOrUri;
+            var uri = (Uri)uriIn;
             navigateTo(uri);
         }
 
@@ -952,28 +941,24 @@ namespace WatiN.Core
 		/// </summary>
 		public void PressTab()
 		{
-			if (!Debugger.IsAttached)
-			{
-				int intThreadIDIE;
-				int intCurrentThreadID;
+		    if (Debugger.IsAttached) return;
 
-				NativeMethods.WindowShowStyle currentStyle = GetWindowStyle();
+		    var currentStyle = GetWindowStyle();
 
-				ShowWindow(NativeMethods.WindowShowStyle.Restore);
-				BringToFront();
+		    ShowWindow(NativeMethods.WindowShowStyle.Restore);
+		    BringToFront();
 
-				intThreadIDIE = ProcessID;
-				intCurrentThreadID = NativeMethods.GetCurrentThreadId();
+		    var intThreadIDIE = ProcessID;
+		    var intCurrentThreadID = NativeMethods.GetCurrentThreadId();
 
-				NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, true);
+		    NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, true);
 
-				NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY, 0);
-				NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP, 0);
+		    NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY, 0);
+		    NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP, 0);
 
-				NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, false);
+		    NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, false);
 
-				ShowWindow(currentStyle);
-			}
+		    ShowWindow(currentStyle);
 		}
 
 		/// <summary>
@@ -1002,7 +987,7 @@ namespace WatiN.Core
 		/// <returns>The style currently applied to the ie window.</returns>
 		public NativeMethods.WindowShowStyle GetWindowStyle()
 		{
-			NativeMethods.WINDOWPLACEMENT placement = new NativeMethods.WINDOWPLACEMENT();
+			var placement = new NativeMethods.WINDOWPLACEMENT();
 			placement.length = Marshal.SizeOf(placement);
 
 			NativeMethods.GetWindowPlacement(hWnd, ref placement);
@@ -1322,7 +1307,7 @@ namespace WatiN.Core
 				// Call a property of the
 				// ie instance to see of it isn't disposed by 
 				// another IE instance.
-				int hwndDummy = ie.HWND;
+				var hwndDummy = ie.HWND;
 			}
 			catch
 			{
@@ -1405,8 +1390,8 @@ namespace WatiN.Core
 
 		private HtmlDialogCollection GetHtmlDialogs(bool waitForComplete)
 		{
-			Process p = Process.GetProcessById(ProcessID);
-            HtmlDialogCollection htmlDialogCollection = new HtmlDialogCollection(p, waitForComplete);
+			var p = Process.GetProcessById(ProcessID);
+            var htmlDialogCollection = new HtmlDialogCollection(p, waitForComplete);
 
 			return htmlDialogCollection;
 		}
@@ -1428,7 +1413,7 @@ namespace WatiN.Core
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
 		public HtmlDialog HtmlDialog(BaseConstraint findBy)
 		{
-			return findHtmlDialog(findBy, Core.Settings.AttachToIETimeOut);
+			return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
 		}
 
 		/// <summary>
@@ -1446,22 +1431,15 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ConstraintToString());
 
-			SimpleTimer timeoutTimer = new SimpleTimer(timeout);
-
-			do
-			{
-				Thread.Sleep(500);
-
-				foreach (HtmlDialog htmlDialog in HtmlDialogs)
-				{
-					if (findBy.Compare(htmlDialog))
-					{
-						return htmlDialog;
-					}
-				}
-			} while (!timeoutTimer.Elapsed);
-
-			throw new HtmlDialogNotFoundException(findBy.ConstraintToString(), timeout);
+		    var action = new TryActionUntilTimeOut(timeout){SleepTime = 500};
+            var result = action.Try(() => HtmlDialogs.Filter(findBy));
+            
+            if (result == null)
+            {
+                throw new HtmlDialogNotFoundException(findBy.ConstraintToString(), timeout);
+            }
+            
+            return result;
 		}
 	}
 }

@@ -39,7 +39,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.Button("modalid").ClickNoWait();
 
-			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+			using (var htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
 			{
 				Assert.IsInstanceOfType(typeof (DomContainer), htmlDialog);
 
@@ -56,7 +56,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.Button("modalid").ClickNoWait();
 
-			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			using (var htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
 				Assert.IsNotNull(htmlDialog, "Dialog not found");
 				Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests
 			// and the HtmlDialog instance gets disposed
 			ie.Button("modalid").ClickNoWait();
 
-			using (HtmlDialog htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			using (var htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
 				Assert.IsNotNull(htmlDialog, "Dialog not found");
 			}
@@ -100,9 +100,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HTMLDialogNotFoundException()
 		{
-			DateTime startTime = DateTime.Now;
-			const int timeoutTime = 5;
-			string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' with value 'popuptest'. (Search expired after '5' seconds). Is there a popup blocker active?";
+			const int timeoutTime = 2;
+			const string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' with value 'popuptest'. (Search expired after '2' seconds). Is there a popup blocker active?";
+
+            var startTime = DateTime.Now;
 
 			try
 			{
@@ -126,7 +127,7 @@ namespace WatiN.Core.UnitTests
 			ie.Button("popupid").Click();
 			using (Document dialog = ie.HtmlDialogs[0])
 			{
-				string value = dialog.TextField("dims").Value;
+				var value = dialog.TextField("dims").Value;
 				Assert.AreEqual("47", value);
 			}
 		}

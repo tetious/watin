@@ -20,7 +20,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             // When
             try
             {
-                timeout.Try(null);
+                timeout.Try<object>(null);
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             var timeOut = new TryActionUntilTimeOut(1);
             
             // WHEN
-            timeOut.Try( () => false );
+            timeOut.Try(() => false );
 
             // THEN
             Assert.That(timeOut.DidTimeOut, Is.True, "Expected timout");
@@ -98,7 +98,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             // WHEN
             try
             {
-                timeOut.Try(() => false );
+                timeOut.Try(() => false);
             }
             catch(Exception e)
             {

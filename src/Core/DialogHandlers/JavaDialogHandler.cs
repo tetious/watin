@@ -81,7 +81,7 @@ namespace WatiN.Core.DialogHandlers
 		public void WaitUntilExists(int waitDurationInSeconds)
 		{
             var tryActionUntilTimeOut = new TryActionUntilTimeOut(waitDurationInSeconds);
-            tryActionUntilTimeOut.Try(Exists);
+            tryActionUntilTimeOut.Try(() => Exists());
             
 			if (!Exists())
 			{

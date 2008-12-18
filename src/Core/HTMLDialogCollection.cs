@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using WatiN.Core.Constraints;
 
@@ -29,20 +30,20 @@ namespace WatiN.Core
 	public class HtmlDialogCollection : IEnumerable
 	{
 		private readonly bool _waitForComplete;
-		private ArrayList htmlDialogs;
+		private readonly List<HtmlDialog> htmlDialogs;
 
 		public HtmlDialogCollection(Process ieProcess, bool waitForComplete)
 		{
 			_waitForComplete = waitForComplete;
-			htmlDialogs = new ArrayList();
+			htmlDialogs = new List<HtmlDialog>();
 
-			IntPtr hWnd = IntPtr.Zero;
+			var hWnd = IntPtr.Zero;
 
 			foreach (ProcessThread t in ieProcess.Threads)
 			{
-				int threadId = t.Id;
+				var threadId = t.Id;
 
-				NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
+				NativeMethods.EnumThreadProc callbackProc = EnumChildForTridentDialogFrame;
 				NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
 			}
 		}
@@ -51,13 +52,12 @@ namespace WatiN.Core
 		{
 			if (HtmlDialog.IsIETridentDlgFrame(hWnd))
 			{
-				HtmlDialog htmlDialog = new HtmlDialog(hWnd);
+				var htmlDialog = new HtmlDialog(hWnd);
 				htmlDialogs.Add(htmlDialog);
 			}
 
 			return true;
 		}
-
 
 		public int Length
 		{
@@ -79,7 +79,7 @@ namespace WatiN.Core
 			//      implementation.
 
 			// Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
-			foreach (HtmlDialog htmlDialog in htmlDialogs)
+			foreach (var htmlDialog in htmlDialogs)
 			{
 				htmlDialog.Close();
 			}
@@ -87,7 +87,7 @@ namespace WatiN.Core
 
 		public bool Exists(BaseConstraint findBy)
 		{
-			foreach (HtmlDialog htmlDialog in htmlDialogs)
+			foreach (var htmlDialog in htmlDialogs)
 			{
 				if (findBy.Compare(htmlDialog))
 				{
@@ -98,9 +98,21 @@ namespace WatiN.Core
 			return false;
 		}
 
-		private static HtmlDialog GetHTMLDialogByIndex(ArrayList htmlDialogs, int index, bool waitForComplete)
+        public HtmlDialog Filter(BaseConstraint constraint)
+        {
+            foreach (var htmlDialog in htmlDialogs)
+			{
+				if (constraint.Compare(htmlDialog))
+				{
+					return htmlDialog;
+				}
+			}
+            return null;
+        }
+
+		private static HtmlDialog GetHTMLDialogByIndex(IList htmlDialogs, int index, bool waitForComplete)
 		{
-			HtmlDialog htmlDialog = (HtmlDialog) htmlDialogs[index];
+			var htmlDialog = (HtmlDialog) htmlDialogs[index];
 			if (waitForComplete)
 			{
 				htmlDialog.WaitForComplete();
@@ -123,13 +135,13 @@ namespace WatiN.Core
 		/// <exclude />
 		public class Enumerator : IEnumerator
 		{
-			private ArrayList htmlDialogs;
+			private readonly List<HtmlDialog> _htmlDialogs;
 			private readonly bool _waitForComplete;
 			private int index;
 
-			public Enumerator(ArrayList htmlDialogs, bool waitForComplete)
+			public Enumerator(List<HtmlDialog> htmlDialogs, bool waitForComplete)
 			{
-				this.htmlDialogs = htmlDialogs;
+				_htmlDialogs = htmlDialogs;
 				_waitForComplete = waitForComplete;
 				Reset();
 			}
@@ -142,12 +154,12 @@ namespace WatiN.Core
 			public bool MoveNext()
 			{
 				++index;
-				return index < htmlDialogs.Count;
+				return index < _htmlDialogs.Count;
 			}
 
 			public HtmlDialog Current
 			{
-				get { return GetHTMLDialogByIndex(htmlDialogs, index, _waitForComplete); }
+				get { return GetHTMLDialogByIndex(_htmlDialogs, index, _waitForComplete); }
 			}
 
 			object IEnumerator.Current
