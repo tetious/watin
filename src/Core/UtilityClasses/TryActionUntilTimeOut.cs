@@ -5,28 +5,73 @@ namespace WatiN.Core.UtilityClasses
 {
     public delegate T TryAction<T>();
     public delegate string BuildTimeOutExceptionMessage();
-    
+
+    /// <summary>
+    /// This class provides an easy way of retrying an action for a given number of seconds.
+    /// <example>
+    /// The following code shows a basic usage:
+    /// <code>
+    /// var action = new TryActionUntilTimeOut(5);
+    /// var result = action.Try(() => false == true);
+    /// </code>
+    /// </example>
+    /// </summary>
     public class TryActionUntilTimeOut
     {
+        /// <summary>
+        /// Gets or sets the interval between retries of the action..
+        /// </summary>
+        /// <value>The sleep time in milliseconds.</value>
         public int SleepTime { get; set; }
+        
+        /// <summary>
+        /// Returns the time out period in seconds.
+        /// </summary>
+        /// <value>The timeout.</value>
         public int Timeout { get; private set; }
+        
+        /// <summary>
+        /// Returns the last exception (thrown by the action) before the time out occured.
+        /// </summary>
+        /// <value>The last exception.</value>
         public Exception LastException { get; private set; }
+        
+        /// <summary>
+        /// Returns a value indicating whether a time out occured.
+        /// </summary>
+        /// <value><c>true</c> if did time out; otherwise, <c>false</c>.</value>
         public bool DidTimeOut { get; private set; }
+        
+        /// <summary>
+        /// Gets or sets the exception message. If set a <see cref="TimeoutException"/> will be thrown
+        /// if the action did time out.
+        /// </summary>
+        /// <value>The exception message.</value>
         public BuildTimeOutExceptionMessage ExceptionMessage { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TryActionUntilTimeOut"/> class.
+        /// </summary>
+        /// <param name="timeout">The timeout in seconds.</param>
         public TryActionUntilTimeOut(int timeout)
         {
             Timeout = timeout;
             SleepTime = Settings.SleepTime;
         }
 
+        /// <summary>
+        /// Tries the specified action until the result of the action is not equal to <c>default(T)</c>
+        /// or the time out is reached.
+        /// </summary>
+        /// <typeparam name="T">The result type of the action</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns>The result of the action of <c>default(T)</c> when time out occured.</returns>
         public T Try<T>(TryAction<T> action)
         {
             if (action == null) throw new ArgumentNullException("action");
 
-            var timeoutTimer = new SimpleTimer(Timeout);
-
             var defaultT = default(T);
+            var timeoutTimer = new SimpleTimer(Timeout);
 
             do
             {
@@ -45,14 +90,19 @@ namespace WatiN.Core.UtilityClasses
                 Sleep(SleepTime);
             } while (!timeoutTimer.Elapsed);
 
+            HandleTimeOut();
+
+            return defaultT;
+        }
+
+        private void HandleTimeOut()
+        {
             DidTimeOut = true;
 
             if (ExceptionMessage != null)
             {
                 ThrowTimeOutException(LastException, ExceptionMessage.Invoke());
             }
-
-            return defaultT;
         }
 
         protected virtual void Sleep(int sleepTime)

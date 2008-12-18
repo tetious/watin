@@ -44,12 +44,12 @@ namespace WatiN.Core
 	{
 		private Timer clock;
 
-	    private int _timeout;
+	    private readonly int _timeout;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleTimer"/> class.
 		/// </summary>
-		/// <param name="timeout">The timeout.</param>
+		/// <param name="timeout">The timeout in seconds.</param>
 		public SimpleTimer(int timeout)
 		{
 			if (timeout < 0)
