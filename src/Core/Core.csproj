@@ -452,6 +452,7 @@
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InternetExplorer\ElementFinderBase.cs" />
     <Compile Include="InternetExplorer\IEBrowser.cs" />
     <Compile Include="InternetExplorer\IEDocument.cs" />
     <Compile Include="InternetExplorer\IEElement.cs" />

@@ -65,34 +65,6 @@ namespace WatiN.Core
 		    return IsAnInputElement(ieNativeElement.TagName) ? ieNativeElement.GetAttributeValue("type") : null;
 		}
 
-	    public IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements)
-		{
-			if (elements == null) return null;
-
-			if (TagName == null) return elements;
-
-			return (IHTMLElementCollection) elements.tags(TagName);
-		}
-
-        public IHTMLElement GetElementById(IHTMLElementCollection elements, string id)
-		{
-			if (elements == null) return null;
-
-            var elementCollection3 = elements as IHTMLElementCollection3;
-            
-            if (elementCollection3 == null) return null;
-            
-            var item = elementCollection3.namedItem(id);
-            IHTMLElement element = null;
-
-            if ((item as IHTMLElement) != null) element = (IHTMLElement) item;
-            else if ((item as IHTMLElementCollection) != null) element = (IHTMLElement)((IHTMLElementCollection)item).item(null, 0);
-
-            if (element !=null && Compare(new IEElement(element))) return element;
-
-            return null;
-		}
-
 		public bool Compare(INativeElement nativeElement)
 		{
 			if (nativeElement == null) return false;

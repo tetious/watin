@@ -16,148 +16,34 @@
 
 #endregion Copyright
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.UtilityClasses;
-using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.InternetExplorer
 {
-	/// <summary>
+    /// <summary>
 	/// This class is mainly used internally by WatiN to find elements in
 	/// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
 	/// the given <see cref="BaseConstraint"/>.
 	/// </summary>
-	public class IEElementFinder : INativeElementFinder
+	public class IEElementFinder : ElementFinderBase, INativeElementFinder
 	{
-		private readonly ArrayList tagsToFind = new ArrayList();
+        public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, elementCollection, domContainer) {}
 
-		protected BaseConstraint _constraint;
-		protected IElementCollection _elementCollection;
-	    protected DomContainer _domContainer;
+	    public IEElementFinder(ArrayList elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, constraint, elementCollection, domContainer) {}
 
-	    public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : this(elementTags, null, elementCollection, domContainer) {}
-	    public IEElementFinder(ArrayList elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
+		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : base(tagName, inputType, elementCollection, domContainer) {}
+		
+        public IEElementFinder(string tagName, string inputType, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(tagName, inputType, constraint, elementCollection, domContainer) {}
+
+        protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
-            CheckAndInitPrivateFields(elementCollection, domContainer, constraint);
-
-	        if (elementTags != null)
-			{
-				tagsToFind = elementTags;
-			}
-			else
-			{
-				AddElementTag(null, null);
-			}
-	    }
-
-		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : this(tagName, inputType, null, elementCollection, domContainer) {}
-		public IEElementFinder(string tagName, string inputType, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
-		{
-            CheckAndInitPrivateFields(elementCollection, domContainer, constraint);
-
-			AddElementTag(tagName, inputType);
-		}
-
-	    private void CheckAndInitPrivateFields(IElementCollection elementCollection, DomContainer domContainer, BaseConstraint constraint)
-	    {
-	        if (elementCollection == null) throw new ArgumentNullException("elementCollection");
-	        if (domContainer == null) throw new ArgumentNullException("domContainer");
-
-            _constraint = GetConstraint(constraint);
-	        _elementCollection = elementCollection;
-	        _domContainer = domContainer;
-	    }
-
-        private static BaseConstraint GetConstraint(BaseConstraint constraint)
-        {
-            return constraint ?? new AlwaysTrueConstraint();
-        }
-
-	    public virtual INativeElement FindFirst()
-		{
-		    return FindFirst(_constraint);
-		}
-
-        public virtual INativeElement FindFirst(BaseConstraint constraint)
-		{
-			foreach (ElementTag elementTag in tagsToFind)
-			{
-				var elements = findElementsByAttribute(elementTag, constraint, true);
-
-				if (elements.Count > 0)
-				{
-					return elements[0];
-				}
-			}
-
-			return null;
-		}
-
-		public string ElementTagsToString
-		{
-			get { return ElementTag.ElementTagsToString(tagsToFind); }
-		}
-
-		public string ConstraintToString
-		{
-			get { return _constraint.ConstraintToString(); }
-		}
-
-		public void AddElementTag(string tagName, string inputType)
-		{
-			tagsToFind.Add(new ElementTag(tagName, inputType));
-		}
-
-		public IEnumerable<INativeElement> FindAll()
-		{
-			return FindAll(_constraint);
-		}
-
-		public IEnumerable<INativeElement> FindAll(BaseConstraint constraint)
-		{
-		    if (tagsToFind.Count == 1)
-			{
-				return findElementsByAttribute((ElementTag) tagsToFind[0], constraint, false);
-			}
-
-		    return FindAllWithMultipleTags(constraint);
-		}
-
-	    private IEnumerable<INativeElement> FindAllWithMultipleTags(BaseConstraint constraint)
-	    {
-	        var elements = new List<INativeElement>();
-
-	        foreach (ElementTag elementTag in tagsToFind)
-	        {
-	            elements.AddRange(findElementsByAttribute(elementTag, constraint, false));
-	        }
-
-	        return elements;
-	    }
-
-		private List<INativeElement> findElementsByAttribute(ElementTag elementTag, BaseConstraint constraint, bool returnAfterFirstMatch)
-		{
-			// Get elements with the tagname from the page
-		    constraint.Reset();
-            var attributeBag = new ElementAttributeBag(_domContainer);
-
-            if (FindByExactMatchOnIdPossible(constraint))
-            {
-                return FindElementById(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
-            }
-            return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
-		}
-
-	    public List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
-	    {
-	        var elements = elementTag.GetElementCollection((IHTMLElementCollection)elementCollection.Elements);
+            var elements = GetElementCollection((IHTMLElementCollection)elementCollection.Elements, elementTag.TagName);
             var children = new List<INativeElement>();
 
 	        if (elements != null)
@@ -177,11 +63,11 @@ namespace WatiN.Core.InternetExplorer
 	        return children;
 	    }
 
-        private List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
+	    protected override List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
             var children = new List<INativeElement>();
 
-	        var element = elementTag.GetElementById((IHTMLElementCollection)elementCollection.Elements, ((AttributeConstraint)constraint).Value);
+            var element = GetElementById((IHTMLElementCollection)elementCollection.Elements, ((AttributeConstraint)constraint).Value, elementTag);
 
 	        if (element != null)
 	        {
@@ -190,42 +76,14 @@ namespace WatiN.Core.InternetExplorer
 	        return children;
 	    }
 
-	    private bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> children)
-	    {            
+        protected bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> children)
+        {
             var nativeElement = _domContainer.NativeBrowser.CreateElement(element);
-            
-            waitUntilElementReadyStateIsComplete(nativeElement);
 
-            attributeBag.INativeElement = nativeElement;
+            return FinishedAddingChildrenThatMetTheConstraints(nativeElement, attributeBag, elementTag, constraint, children, returnAfterFirstMatch);
+        }
 
-	        var validElementType = true;
-            if (elementTag.IsInputElement)
-            {
-                validElementType = elementTag.CompareInputTypes(nativeElement);
-            }
-
-	        if (validElementType && constraint.Compare(attributeBag))
-	        {
-	            children.Add(nativeElement);
-	            if (returnAfterFirstMatch)
-	            {
-	                return true;
-	            }
-	        }
-	        return false;
-	    }
-
-	    private static bool FindByExactMatchOnIdPossible(BaseConstraint constraint)
-	    {
-            var attributeConstraint = constraint as AttributeConstraint;
-			
-            return attributeConstraint != null && 
-                   StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) && 
-                   !(constraint.HasAnd || constraint.HasOr) && 
-                   attributeConstraint.Comparer.GetType() == typeof(StringComparer);
-		}
-
-	    private static void waitUntilElementReadyStateIsComplete(INativeElement element)
+        protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
 		{
 			//TODO: See if this method could be dropped, it seems to give
 			//      more trouble (uninitialized state of elements)
@@ -255,5 +113,37 @@ namespace WatiN.Core.InternetExplorer
             var ihtmlElement = ((IHTMLElement) element.Object);
             throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
 		}
+
+        private static IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements, string tagName)
+        {
+            if (elements == null) return null;
+
+            if (tagName == null) return elements;
+
+            return (IHTMLElementCollection)elements.tags(tagName);
+        }
+
+        private static IHTMLElement GetElementById(IHTMLElementCollection elements, string id, ElementTag elementTag)
+        {
+            if (elements == null) return null;
+
+            var elementCollection3 = elements as IHTMLElementCollection3;
+
+            if (elementCollection3 == null) return null;
+
+            var item = elementCollection3.namedItem(id);
+            
+            var element = item as IHTMLElement;
+
+            if (element == null && (item as IHTMLElementCollection) != null)
+            {
+                element = (IHTMLElement) ((IHTMLElementCollection) item).item(null, 0);
+            }
+
+            if (element != null && elementTag.Compare(new IEElement(element))) return element;
+
+            return null;
+        }
+
 	}
 }
