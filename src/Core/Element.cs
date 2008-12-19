@@ -1132,5 +1132,10 @@ namespace WatiN.Core
 		{
             return TypedElementFactory.CreateTypedElement(domContainer, element);
 		}
+
+        public void SetAttributeValue(string attributeName, string value)
+        {
+            NativeElement.SetAttributeValue(attributeName, value);
+        }
 	}
 }

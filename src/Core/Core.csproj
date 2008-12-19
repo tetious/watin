@@ -446,9 +446,6 @@
     <Compile Include="Interfaces\ISettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\ITextElement.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>

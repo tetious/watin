@@ -42,7 +42,7 @@ namespace WatiN.Core
 					elementTags = new List<ElementTag>
 					                  {
 					                      new ElementTag("input", "text password textarea hidden"),
-					                      new ElementTag("textarea")
+					                      CreateElementTagForTextArea()
 					                  };
 				}
 
@@ -50,7 +50,10 @@ namespace WatiN.Core
 			}
 		}
 
-		private ITextElement _textElement;
+	    private static ElementTag CreateElementTagForTextArea()
+	    {
+	        return new ElementTag("textarea");
+	    }
 
 		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
@@ -62,33 +65,25 @@ namespace WatiN.Core
 		/// <param name="element">The element.</param>
 		public TextField(Element element) : base(element, ElementTags) {}
 
-		private ITextElement textElement
+		public int MaxLength
 		{
 			get
 			{
-				if (_textElement == null)
-				{
-				    if (ElementTag.IsAnInputElement(TagName))
-					{
-                        _textElement = new TextFieldElement(NativeElement);
-					}
-					else
-					{
-						_textElement = new TextAreaElement((IHTMLTextAreaElement) NativeElement.Object);
-					}
-				}
-			    return _textElement;
-			}
-		}
+                var tagForTextArea = CreateElementTagForTextArea();
+                if (tagForTextArea.Compare(NativeElement)) return 0;
 
-		public int MaxLength
-		{
-			get { return textElement.MaxLength; }
+                var value = GetAttributeValue("maxLength");
+                return string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
+			}
 		}
 
 		public bool ReadOnly
 		{
-			get { return textElement.ReadOnly; }
+			get
+			{
+                var value = GetAttributeValue("readOnly");
+                return string.IsNullOrEmpty(value) ? false : bool.Parse(value);
+            }
 		}
 
 		public void TypeText(string value)
@@ -156,7 +151,10 @@ namespace WatiN.Core
 
 		public string Value
 		{
-			get { return textElement.Value; }
+			get
+			{
+                return GetAttributeValue("value");
+			}
 			// Don't use this set property internally (in this class) but use setValue. 
 			set
 			{
@@ -176,7 +174,7 @@ namespace WatiN.Core
 
 		public void Select()
 		{
-			textElement.Select();
+            NativeElement.Select();
 			FireEvent("onSelect");
 		}
 
@@ -196,21 +194,29 @@ namespace WatiN.Core
 
 		public string Name
 		{
-			get { return textElement.Name; }
+            get { return GetAttributeValue("name"); }
 		}
 
 		private void setValue(string value)
 		{
-			textElement.SetValue(value);
+            SetAttributeValue("value", value);
 		}
 
-		private void doKeyPress(string value)
+	    private void doKeyPress(string value)
 		{
-            var element = (IHTMLElement)NativeElement.Object;
+            // TODO "Move" ShouldEventBeFired to INativeElement + implementations 
+            var element = NativeElement.Object as IHTMLElement;
 
-            var doKeydown = ShouldEventBeFired(element.onkeydown);
-            var doKeyPress = ShouldEventBeFired(element.onkeypress);
-            var doKeyUp = ShouldEventBeFired(element.onkeyup);
+            var doKeydown = true;
+            var doKeyPress = true;
+            var doKeyUp = true;
+            
+            if (element != null)
+	        {
+	            doKeydown = ShouldEventBeFired(element.onkeydown);
+	            doKeyPress = ShouldEventBeFired(element.onkeypress);
+	            doKeyUp = ShouldEventBeFired(element.onkeyup);
+	        }
 
 			var length = value.Length;
 			if (MaxLength != 0 && length > MaxLength)
@@ -246,100 +252,6 @@ namespace WatiN.Core
 		private static bool ShouldEventBeFired(Object value)
 		{
 			return (value != DBNull.Value);
-		}
-
-		/// <summary>
-		/// Summary description for TextFieldElement.
-		/// </summary>
-		private class TextAreaElement : ITextElement
-		{
-			private readonly IHTMLTextAreaElement htmlTextAreaElement;
-
-			public TextAreaElement(IHTMLTextAreaElement htmlTextAreaElement)
-			{
-				this.htmlTextAreaElement = htmlTextAreaElement;
-			}
-
-			public int MaxLength
-			{
-				get { return 0; }
-			}
-
-			public bool ReadOnly
-			{
-				get { return htmlTextAreaElement.readOnly; }
-			}
-
-			public string Value
-			{
-				get { return htmlTextAreaElement.value; }
-			}
-
-			public void Select()
-			{
-				htmlTextAreaElement.select();
-			}
-
-			public void SetValue(string value)
-			{
-				htmlTextAreaElement.value = value;
-			}
-
-			public string Name
-			{
-				get { return htmlTextAreaElement.name; }
-			}
-		}
-
-		private class TextFieldElement : ITextElement
-		{
-			private readonly INativeElement nativeElement;
-
-			public TextFieldElement(INativeElement htmlInputElement)
-			{
-				nativeElement = htmlInputElement;
-			}
-
-			public int MaxLength
-			{
-				get
-				{
-				    var value = nativeElement.GetAttributeValue("maxLength");
-				    return string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
-				}
-			}
-
-			public bool ReadOnly
-			{
-				get
-				{
-                    var value = nativeElement.GetAttributeValue("readOnly");
-                    return string.IsNullOrEmpty(value) ? false : bool.Parse(value);
-				}
-			}
-
-            /// <summary>
-            /// Don't use this set property internally (in this class) but use setValue.
-            /// </summary>
-            public string Value
-			{
-				get { return nativeElement.GetAttributeValue("value"); }  
-			}
-
-			public void Select()
-			{
-				nativeElement.Select();
-			}
-
-			public void SetValue(string value)
-			{
-				nativeElement.SetAttributeValue("value", value);
-			}
-
-			public string Name
-			{
-				get { return nativeElement.GetAttributeValue("name"); }
-			}
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

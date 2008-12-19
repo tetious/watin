@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using mshtml;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.InternetExplorer
@@ -200,8 +201,21 @@ namespace WatiN.Core.InternetExplorer
 
 	    public void Select()
 	    {
-            inputElement.select();
-	    }
+	        var input = _element as IHTMLInputElement;
+            if (input != null)
+            {
+                input.select();
+                return;
+            }
+	        var textarea = _element as IHTMLTextAreaElement;
+            if (textarea != null)
+            {
+                textarea.select();
+                return;
+            }
+
+            throw new WatiNException("Select not supported on " + _element.GetType());
+        }
 
 	    /// <summary>
         /// This methode can be used if the attribute isn't available as a property of
