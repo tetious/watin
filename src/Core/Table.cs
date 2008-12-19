@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Comparers;
@@ -32,15 +32,15 @@ namespace WatiN.Core
 	/// </summary>
 	public class Table : ElementsContainer<Table>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("table")};
+                    elementTags = new List<ElementTag> { new ElementTag("table") };
 				}
 
 				return elementTags;
@@ -170,7 +170,7 @@ namespace WatiN.Core
 
         private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
         {
-            string innertext = GetFirstTBody().innerText;
+            var innertext = GetFirstTBody().innerText;
 
             return (innertext != null && attributeConstraint.IsTextContainedIn(innertext));
         }
@@ -308,14 +308,8 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRow(TableRowAttributeConstraint findBy)
 		{
-			TableRow row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
-
-			if (row.Exists)
-			{
-				return row;
-			}
-
-			return null;
+			var row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
+			return row.Exists ? row : null;
 		}
 
         /// <summary>
@@ -361,7 +355,7 @@ namespace WatiN.Core
 
 			public override object Elements
 			{
-				get { return (IHTMLElementCollection) table.GetFirstTBody().all; }
+				get { return table.GetFirstTBody().all; }
 			}
 		}
 

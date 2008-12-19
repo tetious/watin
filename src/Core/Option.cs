@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -27,19 +27,19 @@ namespace WatiN.Core
 	/// </summary>
     public class Option : Element<Option>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
 		/// <summary>
 		/// Gets the element tags supported by this element
 		/// </summary>
 		/// <value>The element tags.</value>
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("option")};
+                    elementTags = new List<ElementTag> { new ElementTag("option") };
 				}
 
 				return elementTags;

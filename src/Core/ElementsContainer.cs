@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
@@ -33,7 +33,7 @@ namespace WatiN.Core
 
 		public ElementsContainer(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
-		public ElementsContainer(Element element, ArrayList elementTags) : base(element, elementTags) {}
+        public ElementsContainer(Element element, List<ElementTag> elementTags) : base(element, elementTags) { }
 
 		#region IElementsContainer
 

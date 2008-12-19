@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -26,15 +26,15 @@ namespace WatiN.Core
 	/// </summary>
     public class Div : ElementsContainer<Div>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("div")};
+                    elementTags = new List<ElementTag> { new ElementTag("div") };
 				}
 
 				return elementTags;

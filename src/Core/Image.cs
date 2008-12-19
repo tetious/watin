@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -27,15 +27,15 @@ namespace WatiN.Core
 	/// </summary>
     public class Image : Element<Image>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("img"), new ElementTag("input", "image")};
+                    elementTags = new List<ElementTag> { new ElementTag("img"), new ElementTag("input", "image") };
 				}
 
 				return elementTags;

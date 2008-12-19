@@ -33,9 +33,9 @@ namespace WatiN.Core.InternetExplorer
 	/// </summary>
 	public class IEElementFinder : ElementFinderBase, INativeElementFinder
 	{
-        public IEElementFinder(ArrayList elementTags, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, elementCollection, domContainer) {}
+        public IEElementFinder(List<ElementTag> elementTags, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, elementCollection, domContainer) { }
 
-	    public IEElementFinder(ArrayList elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, constraint, elementCollection, domContainer) {}
+        public IEElementFinder(List<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, constraint, elementCollection, domContainer) { }
 
 		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : base(tagName, inputType, elementCollection, domContainer) {}
 		

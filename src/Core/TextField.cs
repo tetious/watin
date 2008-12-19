@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -31,15 +31,15 @@ namespace WatiN.Core
 	/// </summary>
     public class TextField : Element<TextField>
 	{
-		private static ArrayList elementTags;
+		private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+		public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList
+					elementTags = new List<ElementTag>
 					                  {
 					                      new ElementTag("input", "text password textarea hidden"),
 					                      new ElementTag("textarea")
@@ -68,15 +68,13 @@ namespace WatiN.Core
 			{
 				if (_textElement == null)
 				{
-                    var nativeElement = NativeElement.Object;
-
 				    if (ElementTag.IsAnInputElement(TagName))
 					{
-						_textElement = new TextFieldElement((IHTMLInputElement) nativeElement);
+                        _textElement = new TextFieldElement(NativeElement);
 					}
 					else
 					{
-						_textElement = new TextAreaElement((IHTMLTextAreaElement) nativeElement);
+						_textElement = new TextAreaElement((IHTMLTextAreaElement) NativeElement.Object);
 					}
 				}
 			    return _textElement;
@@ -295,41 +293,52 @@ namespace WatiN.Core
 
 		private class TextFieldElement : ITextElement
 		{
-			private readonly IHTMLInputElement inputElement;
+			private readonly INativeElement nativeElement;
 
-			public TextFieldElement(IHTMLInputElement htmlInputElement)
+			public TextFieldElement(INativeElement htmlInputElement)
 			{
-				inputElement = htmlInputElement;
+				nativeElement = htmlInputElement;
 			}
 
 			public int MaxLength
 			{
-				get { return inputElement.maxLength; }
+				get
+				{
+				    var value = nativeElement.GetAttributeValue("maxLength");
+				    return string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
+				}
 			}
 
 			public bool ReadOnly
 			{
-				get { return inputElement.readOnly; }
+				get
+				{
+                    var value = nativeElement.GetAttributeValue("readOnly");
+                    return string.IsNullOrEmpty(value) ? false : bool.Parse(value);
+				}
 			}
 
-			public string Value
+            /// <summary>
+            /// Don't use this set property internally (in this class) but use setValue.
+            /// </summary>
+            public string Value
 			{
-				get { return inputElement.value; } // Don't use this set property internally (in this class) but use setValue. 
+				get { return nativeElement.GetAttributeValue("value"); }  
 			}
 
 			public void Select()
 			{
-				inputElement.select();
+				nativeElement.Select();
 			}
 
 			public void SetValue(string value)
 			{
-				inputElement.value = value;
+				nativeElement.SetAttributeValue("value", value);
 			}
 
 			public string Name
 			{
-				get { return inputElement.name; }
+				get { return nativeElement.GetAttributeValue("name"); }
 			}
 		}
 

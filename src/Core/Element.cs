@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace WatiN.Core
 	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
 	    {}
 
-	    public Element(Element element, ArrayList elementTags) : base(element, elementTags)
+	    public Element(Element element, List<ElementTag> elementTags) : base(element, elementTags)
 	    {}
 
 	    public Element(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder)
@@ -102,7 +103,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementTags">The element tags the element should match with.</param>
-		public Element(Element element, ArrayList elementTags)
+		public Element(Element element, List<ElementTag> elementTags)
 		{
 			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
 			{
@@ -140,7 +141,7 @@ namespace WatiN.Core
 		{
 			get
 		{
-				string readyStateValue = GetAttributeValue("readyStateValue"); 
+				var readyStateValue = GetAttributeValue("readyStateValue"); 
 				if (readyStateValue != null)
 				{
 					return int.Parse(readyStateValue) == 4;

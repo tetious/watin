@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
@@ -29,7 +29,7 @@ namespace WatiN.Core
 	/// </summary>
     public class TableBody : ElementsContainer<TableBody>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
 		public TableBody(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
 
@@ -83,13 +83,13 @@ namespace WatiN.Core
 			return TableRow(Find.ByElement(predicate));
 		}
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("tbody")};
+                    elementTags = new List<ElementTag> { new ElementTag("tbody") };
 				}
 
 				return elementTags;

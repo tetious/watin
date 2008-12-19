@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -27,15 +27,15 @@ namespace WatiN.Core
 	/// </summary>
     public class Button : Element<Button>
     {
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList
+                    elementTags = new List<ElementTag>
 					                  {
 					                      new ElementTag("input", "button submit image reset"), 
                                           new ElementTag("button")
@@ -97,7 +97,7 @@ namespace WatiN.Core
 			return Value;
 		}
 
-		internal static Element New(DomContainer domContainer, INativeElement element)
+		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{
 			return new Button(domContainer, element);
 		}

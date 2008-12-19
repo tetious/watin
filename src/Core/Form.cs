@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
@@ -28,15 +28,15 @@ namespace WatiN.Core
 	/// </summary>
 	public class Form : ElementsContainer<Form>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("form")};
+                    elementTags = new List<ElementTag> { new ElementTag("form") };
 				}
 
 				return elementTags;

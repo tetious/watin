@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using WatiN.Core.Interfaces;
 
@@ -68,11 +69,11 @@ namespace WatiN.Core
 				var constructor = type.GetConstructor(new[] { typeof(Element) });
 				if (constructor == null) continue;
                 
-				var elementTags = (ArrayList)property.GetValue(type, null);
+				var elementTags = (List<ElementTag>)property.GetValue(type, null);
 				if (elementTags == null) continue;
                 
 				elementTags = CreateUniqueElementTagsForInputTypes(elementTags);
-				foreach (ElementTag elementTag in elementTags)
+				foreach (var elementTag in elementTags)
 				{
 					// This is a terrible hack, but it will do for now.
 					// Button and Image both support input/image. If
@@ -96,11 +97,11 @@ namespace WatiN.Core
 			return elementConstructors;
 		}
 
-		private static ArrayList CreateUniqueElementTagsForInputTypes(ArrayList elementTags)
+		private static List<ElementTag> CreateUniqueElementTagsForInputTypes(IEnumerable<ElementTag> elementTags)
 		{
-			var uniqueElementTags = new ArrayList();
+			var uniqueElementTags = new List<ElementTag>();
 
-			foreach (ElementTag elementTag in elementTags)
+			foreach (var elementTag in elementTags)
 			{
 				AddElementTag(elementTag, uniqueElementTags);
 			}
@@ -108,7 +109,7 @@ namespace WatiN.Core
 			return uniqueElementTags;
 		}
 
-		private static void AddElementTag(ElementTag elementTag, ArrayList uniqueElementTags)
+		private static void AddElementTag(ElementTag elementTag, List<ElementTag> uniqueElementTags)
 		{
 			if (elementTag.IsInputElement)
 			{

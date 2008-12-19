@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using WatiN.Core.Interfaces;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
@@ -113,11 +113,11 @@ namespace WatiN.Core
             return Equals(TagName, elementTag.TagName) && Equals(InputTypes, elementTag.InputTypes);
 		}
 
-		public static bool IsValidElement(INativeElement nativeElement, ArrayList elementTags)
+		public static bool IsValidElement(INativeElement nativeElement, List<ElementTag> elementTags)
 		{
 			if (nativeElement == null) return false;
 
-			foreach (ElementTag elementTag in elementTags)
+			foreach (var elementTag in elementTags)
 			{
 				if (elementTag.Compare(nativeElement))
 				{
@@ -133,11 +133,11 @@ namespace WatiN.Core
 			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
 		}
 
-		public static string ElementTagsToString(ArrayList elementTags)
+        public static string ElementTagsToString(List<ElementTag> elementTags)
 		{
 			var elementTagsString = String.Empty;
 
-			foreach (ElementTag elementTag in elementTags)
+			foreach (var elementTag in elementTags)
 			{
 				if (elementTagsString.Length > 0)
 				{

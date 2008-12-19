@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -27,15 +27,15 @@ namespace WatiN.Core
     /// </summary>
     public class CheckBox : RadioCheck<CheckBox>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("input", "checkbox")};
+                    elementTags = new List<ElementTag> { new ElementTag("input", "checkbox") };
 				}
 
 				return elementTags;

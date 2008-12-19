@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Interfaces;
 
@@ -27,16 +27,15 @@ namespace WatiN.Core
 	/// </summary>
     public class TableRow : ElementsContainer<TableRow>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList();
-					elementTags.Add(new ElementTag("tr"));
+                    elementTags = new List<ElementTag> {new ElementTag("tr")};
 				}
 
 				return elementTags;

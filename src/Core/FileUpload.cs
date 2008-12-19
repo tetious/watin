@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
@@ -29,15 +29,15 @@ namespace WatiN.Core
 	/// </summary>
 	public class FileUpload : Element<FileUpload>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
-		public static ArrayList ElementTags
+		public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("input", "file")};
+                    elementTags = new List<ElementTag> { new ElementTag("input", "file") };
 				}
 
 				return elementTags;

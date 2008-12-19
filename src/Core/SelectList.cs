@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
@@ -33,19 +34,19 @@ namespace WatiN.Core
 	/// </summary>
     public class SelectList : Element<SelectList>
 	{
-		private static ArrayList elementTags;
+        private static List<ElementTag> elementTags;
 
 		/// <summary>
 		/// Gets the element tags supported by this element
 		/// </summary>
 		/// <value>Arraylist with ElementTag instances.</value>
-		public static ArrayList ElementTags
+        public static List<ElementTag> ElementTags
 		{
 			get
 			{
 				if (elementTags == null)
 				{
-					elementTags = new ArrayList {new ElementTag("select")};
+                    elementTags = new List<ElementTag> { new ElementTag("select") };
 				}
 
 				return elementTags;

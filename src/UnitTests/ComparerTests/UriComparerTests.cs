@@ -97,14 +97,6 @@ namespace WatiN.Core.UnitTests
 			new UriComparer(null);
 		}
 
-		[Test, ExpectedException(typeof (UriFormatException))]
-		public void StringCompareOnlyExceptsValidUrl()
-		{
-			ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
-
-			comparer.Compare("watin");
-		}
-
 		[Test]
 		public void ToStringTest()
 		{

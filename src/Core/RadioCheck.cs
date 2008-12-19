@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
@@ -38,7 +38,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="elementTags">The element tags the element should match with.</param>
-		public RadioCheck(Element element, ArrayList elementTags) : base(element, elementTags) {}
+        public RadioCheck(Element element, List<ElementTag> elementTags) : base(element, elementTags) { }
 
 		public bool Checked
 		{

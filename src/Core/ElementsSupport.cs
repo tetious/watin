@@ -69,7 +69,7 @@ namespace WatiN.Core
 
 		public static Element Element(DomContainer domContainer, string tagname, BaseConstraint findBy, IElementCollection elements, params string[] inputtypes)
 		{
-			string inputtypesString = UtilityClass.StringArrayToString(inputtypes, ",");
+			var inputtypesString = UtilityClass.StringArrayToString(inputtypes, ",");
 
             return new ElementsContainer<Element>(domContainer, domContainer.NativeBrowser.CreateElementFinder(tagname, inputtypesString, findBy, elements));
 		}

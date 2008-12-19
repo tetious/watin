@@ -301,15 +301,6 @@ namespace WatiN.Core.UnitTests
 			Find.ByUrl("www.xyz.nl");
 		}
 
-		[Test, ExpectedException(typeof (UriFormatException))]
-		public void FindByUrlInvalidCompare()
-		{
-            BaseConstraint value = Find.ByUrl(WatiNURI.AbsoluteUri);
-			var attributeBag = new MockAttributeBag(_href, "watin.sourceforge.net");
-
-			value.Compare(attributeBag);
-		}
-
 		[Test]
 		public void FindByTitle()
 		{

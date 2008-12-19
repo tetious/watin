@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Moq;
@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IsValidElementWithNullElementShouldReturnFalse()
 		{
-			Assert.IsFalse(ElementTag.IsValidElement(null, new ArrayList()));
+            Assert.IsFalse(ElementTag.IsValidElement(null, new List<ElementTag>()));
 		}
 
 		[Test]

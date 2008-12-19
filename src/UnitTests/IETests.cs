@@ -58,7 +58,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IEIsIEAndDomContainer()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				Assert.IsInstanceOfType(typeof (IE), ie, "Should be an IE instance");
 				Assert.IsInstanceOfType(typeof (DomContainer), ie, "Should be a DomContainer instance");
@@ -72,7 +72,7 @@ namespace WatiN.Core.UnitTests
 			// the debug window in VS
 			Logger.LogWriter = new DebugLogWriter();
 
-			using (IE ie = new IE(GoogleUrl))
+			using (var ie = new IE(GoogleUrl))
 			{
 				ie.TextField(Find.ByName("q")).TypeText("WatiN");
 				ie.Button(Find.ByName("btnG")).Click();
@@ -88,13 +88,13 @@ namespace WatiN.Core.UnitTests
 			// the debug window in VS
 			Logger.LogWriter = new DebugLogWriter();
 
-            string url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
 
-            using (IE ie = new IE(url))
+            using (var ie = new IE(url))
 			{
                 Assert.That(ie.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
 			}
-            using (IE ie = new IE())
+            using (var ie = new IE())
 			{
                 ie.GoTo(url);
                 Assert.That(ie.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
@@ -104,11 +104,11 @@ namespace WatiN.Core.UnitTests
 		[Test, Ignore("Second assert fails in nunit console mode.")]
 		public void PressTabAndActiveElement()
 		{
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				ie.TextField("name").Focus();
 
-				Element element = ie.ActiveElement;
+				var element = ie.ActiveElement;
 				Assert.AreEqual("name", element.Id);
 
 				ie.PressTab();
@@ -121,18 +121,18 @@ namespace WatiN.Core.UnitTests
 		[Test, Category("InternetConnectionNeeded")]
 		public void AddProtocolToUrlIfOmmitted()
 		{
-			using (IE ie = new IE("www.google.com"))
+			using (var ie = new IE("www.google.com"))
 			{
-				Assert.That(ie.Url, NUnit.Framework.SyntaxHelpers.Text.StartsWith("http://"));
+				Assert.That(ie.Url, Text.StartsWith("http://"));
 			}
 		}
 
 		[Test]
 		public void WindowStyle()
 		{
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
-				NativeMethods.WindowShowStyle currentStyle = ie.GetWindowStyle();
+				var currentStyle = ie.GetWindowStyle();
 
 				ie.ShowWindow(NativeMethods.WindowShowStyle.Maximize);
 				Assert.AreEqual(NativeMethods.WindowShowStyle.Maximize.ToString(), ie.GetWindowStyle().ToString(), "Not maximized");
@@ -151,19 +151,19 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AutoMoveMousePointerToTopLeft()
 		{
-			Point notTopLeftPoint = new Point(50, 50);
+			var notTopLeftPoint = new Point(50, 50);
 			Cursor.Position = notTopLeftPoint;
 			Settings.AutoMoveMousePointerToTopLeft = false;
 
 			using (new IE())
 			{
-				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(notTopLeftPoint));
+				Assert.That(Cursor.Position, Is.EqualTo(notTopLeftPoint));
 			}
 
 			Settings.AutoMoveMousePointerToTopLeft = true;
 			using (new IE())
 			{
-				Assert.That(Cursor.Position, NUnit.Framework.SyntaxHelpers.Is.EqualTo(new Point(0, 0)));
+				Assert.That(Cursor.Position, Is.EqualTo(new Point(0, 0)));
 			}
 		}
 
@@ -173,17 +173,17 @@ namespace WatiN.Core.UnitTests
 			Settings.MakeNewIeInstanceVisible = true;
 			Assert.That(Settings.MakeNewIeInstanceVisible, "Default should be true");
 
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
 			}
 
 			Settings.MakeNewIeInstanceVisible = false;
-			Assert.That(Settings.MakeNewIeInstanceVisible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "should be false");
+			Assert.That(Settings.MakeNewIeInstanceVisible, Is.EqualTo(false), "should be false");
 
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
-				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, NUnit.Framework.SyntaxHelpers.Is.EqualTo(false), "IE Should be visible");
+				Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, Is.EqualTo(false), "IE Should be visible");
 			}
 		}
 
@@ -193,7 +193,7 @@ namespace WatiN.Core.UnitTests
 			DialogWatcher dialogWatcher;
 			int ReferenceCount;
 
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				ReferenceCount = ie.DialogWatcher.ReferenceCount;
 
@@ -215,16 +215,16 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "NewIEWithUrlAndLogonDialogHandler");
 
-            string url = MainURI.AbsoluteUri;
-			LogonDialogHandler logon = new LogonDialogHandler("y", "z");
+            var url = MainURI.AbsoluteUri;
+			var logon = new LogonDialogHandler("y", "z");
 
-			using (IE ie = new IE(url, logon))
+			using (var ie = new IE(url, logon))
 			{
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
 				Assert.IsTrue(ie.DialogWatcher.Contains(logon));
 				Assert.AreEqual(1, ie.DialogWatcher.Count);
 
-				using (IE ie1 = new IE(url, logon))
+				using (var ie1 = new IE(url, logon))
 				{
 					Assert.AreEqual(MainURI, new Uri(ie1.Url));
 					Assert.IsTrue(ie.DialogWatcher.Contains(logon));
@@ -239,9 +239,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GoToUrl()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
-                string url = MainURI.AbsoluteUri;
+                var url = MainURI.AbsoluteUri;
 
 				ie.GoTo(url);
 
@@ -252,9 +252,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GoToUrlNoWait()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
-                string url = MainURI.AbsoluteUri;
+                var url = MainURI.AbsoluteUri;
 
                 ie.GoToNoWait(url);
 
@@ -268,7 +268,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GoToUri()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				ie.GoTo(MainURI);
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
@@ -278,9 +278,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NewIEInSameProcess()
 		{
-			using (IE ie1 = new IE())
+			using (var ie1 = new IE())
 			{
-				using (IE ie2 = new IE())
+				using (var ie2 = new IE())
 				{
 					Assert.AreEqual(ie1.ProcessID, ie2.ProcessID);
 				}
@@ -290,9 +290,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NewIEInNewProcess()
 		{
-			using (IE ie1 = new IE())
+			using (var ie1 = new IE())
 			{
-				using (IE ie2 = new IE(true))
+				using (var ie2 = new IE(true))
 				{
 					Assert.IsNotNull(ie2, "create ie in new process returned null");
 					Assert.AreNotEqual(ie1.ProcessID, ie2.ProcessID, "process id problem");
@@ -303,7 +303,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NewIE()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				Assert.AreEqual("about:blank", ie.Url);
 			}
@@ -312,7 +312,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NewIEWithUri()
 		{
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
 			}
@@ -333,7 +333,7 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "NewIEWithUriNotAutoClose");
 
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				Assert.IsTrue(ie.AutoClose);
 				ie.AutoClose = false;
@@ -349,9 +349,9 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "NewIEWithUrl");
 
-            string url = MainURI.AbsoluteUri;
+            var url = MainURI.AbsoluteUri;
 
-			using (IE ie = new IE(url))
+			using (var ie = new IE(url))
 			{
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
 				Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
@@ -365,11 +365,11 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "Reopen");
 
-            string url = MainURI.AbsoluteUri;
-			using (IE ie = new IE(url))
+            var url = MainURI.AbsoluteUri;
+			using (var ie = new IE(url))
 			{
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
-				object oldIEObj = ie.InternetExplorer;
+				var oldIEObj = ie.InternetExplorer;
 
 				ie.Reopen();
 				Assert.AreNotSame(oldIEObj, ie.InternetExplorer, "Reopen should create a new browser.");
@@ -383,16 +383,16 @@ namespace WatiN.Core.UnitTests
 		{
 			FailIfIEWindowExists("main", "ReopenWithUrlAndLogonDialogHandler");
 
-			LogonDialogHandler logon = new LogonDialogHandler("y", "z");
+			var logon = new LogonDialogHandler("y", "z");
 
-			using (IE ie1 = new IE())
+			using (var ie1 = new IE())
 			{
-				using (IE ie2 = new IE())
+				using (var ie2 = new IE())
 				{
 					Assert.AreEqual(ie1.ProcessID, ie2.ProcessID, "process id problem");
 
 					Assert.AreEqual("about:blank", ie2.Url);
-					object oldIEObj = ie2.InternetExplorer;
+					var oldIEObj = ie2.InternetExplorer;
 
 					ie2.Reopen(MainURI, logon, true);
 					Assert.AreNotSame(oldIEObj, ie2.InternetExplorer, "Reopen should create a new browser.");
@@ -411,7 +411,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RefreshWithNeverExpiredPage()
 		{
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				ie.TextField("name").TypeText("refresh test");
 
@@ -424,7 +424,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Cookies()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				// Clear all cookies.
 				ie.ClearCookies();
@@ -458,7 +458,7 @@ namespace WatiN.Core.UnitTests
 		[Test, Ignore("Experiencing problems. Test fails and following tests also fail. Need to look into ti")]
 		public void ClearCache()
 		{
-			using (IE ie = new IE(GoogleUrl))
+			using (var ie = new IE(GoogleUrl))
 			{
 				// Testing cache clearing directly is a little difficult because we cannot
 				// easily enumerate its contents without using system APIs.
@@ -467,7 +467,7 @@ namespace WatiN.Core.UnitTests
 				// Fortunately Google has already done it for us.
 
 				// Save the original page html.
-				string oldHtml = GetHtmlSource(ie);
+				var oldHtml = GetHtmlSource(ie);
 
 				// If we navigate to the page again, we should see identical Html.
 				ie.GoTo(GoogleUrl);
@@ -480,7 +480,7 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
-		private static string GetHtmlSource(IE ie)
+		private static string GetHtmlSource(Document ie)
 		{
 		    var document = (IHTMLDocument2) ie.NativeDocument.Object;
 			return document.body.parentElement.outerHTML;
@@ -489,7 +489,7 @@ namespace WatiN.Core.UnitTests
 		[Test, Category("InternetConnectionNeeded")]
 		public void RefreshWithImmediatelyExpiredPage()
 		{
-			using (IE ie = new IE(GoogleUrl))
+			using (var ie = new IE(GoogleUrl))
 			{
 				ie.TextField(Find.ByName("q")).TypeText("refresh test");
 
@@ -502,7 +502,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void BackAndForward()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 				ie.GoTo(MainURI);
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
@@ -510,11 +510,11 @@ namespace WatiN.Core.UnitTests
 				ie.Link(Find.ByUrl(IndexURI)).Click();
 				Assert.AreEqual(IndexURI, new Uri(ie.Url));
 
-				bool wentBack = ie.Back();
+				var wentBack = ie.Back();
 				Assert.AreEqual(MainURI, new Uri(ie.Url));
                 Assert.That(wentBack, "Expected went back");
 
-				bool wentFoward = ie.Forward();
+				var wentFoward = ie.Forward();
 				Assert.AreEqual(IndexURI, new Uri(ie.Url));
 				Assert.That(wentFoward, "Expected went forward");
 			}
@@ -523,11 +523,11 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void BackShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 			    try
 			    {
-			        bool wentBack = ie.Back();
+			        var wentBack = ie.Back();
                     Assert.That(wentBack, Is.False, "Expected no navigation back");
 			    }
 			    catch (Exception e)
@@ -540,11 +540,11 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void ForwardShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
 			    try
 			    {
-			        bool wentForward = ie.Forward();
+			        var wentForward = ie.Forward();
                     Assert.That(wentForward, Is.False, "Expected no navigation forward");
                 }
 			    catch (Exception e)
@@ -557,10 +557,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IEExistsByHWND()
 		{
-			string hwnd = "0";
+			var hwnd = "0";
 			Assert.IsFalse(IE.Exists(Find.By("hwnd", hwnd)), "hwnd = 0 should not be found");
 
-			using (IE ie = new IE(MainURI))
+			using (var ie = new IE(MainURI))
 			{
 				hwnd = ie.hWnd.ToString();
 				Assert.IsTrue(IE.Exists(Find.By("hwnd", hwnd)), "hwnd of ie instance should be found");
@@ -603,7 +603,7 @@ namespace WatiN.Core.UnitTests
 			// Create a new IE instance so we can find it.
 			using (new IE(MainURI))
 			{
-				DateTime startTime = DateTime.Now;
+				var startTime = DateTime.Now;
 				using (IE.AttachToIE(Find.ByUrl(MainURI), 0))
 				{
 					// Should return (within 1 second).
@@ -625,7 +625,7 @@ namespace WatiN.Core.UnitTests
 
 			using (new IE(MainURI))
 			{
-				using (IE ieMainByTitle = IE.AttachToIE(Find.ByTitle("Ai")))
+				using (var ieMainByTitle = IE.AttachToIE(Find.ByTitle("Ai")))
 				{
 					Assert.AreEqual(MainURI, ieMainByTitle.Uri);
 				}
@@ -639,7 +639,7 @@ namespace WatiN.Core.UnitTests
 
 			using (new IE(MainURI))
 			{
-				using (IE ieMainByUri = IE.AttachToIE(Find.ByUrl(MainURI)))
+				using (var ieMainByUri = IE.AttachToIE(Find.ByUrl(MainURI)))
 				{
 					Assert.AreEqual(MainURI, ieMainByUri.Uri);
 				}
@@ -653,7 +653,7 @@ namespace WatiN.Core.UnitTests
 
 			using (new IE(MainURI))
 			{
-				using (IE ie = IE.AttachToIE(Find.ByTitle("main")))
+				using (var ie = IE.AttachToIE(Find.ByTitle("main")))
 				{
 					Assert.AreEqual(MainURI, new Uri(ie.Url));
 				}
@@ -665,7 +665,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IENotFoundException()
 		{
-			DateTime startTime = DateTime.Now;
+			var startTime = DateTime.Now;
 			const int timeoutTime = 5;
 			const string ieTitle = "Non Existing IE Title";
 			const string expectedMessage = "Could not find an IE window matching constraint: Attribute 'title' with value 'non existing ie title'. Search expired after '5' seconds.";
@@ -692,14 +692,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void NewUriAboutBlank()
 		{
-			Uri uri = new Uri("about:blank");
+			var uri = new Uri("about:blank");
             Assert.AreEqual("about:blank", uri.AbsoluteUri);
 		}
 
 		[Test]
 		public void CallingIEDisposeAfterIECloseShouldNotThrowAnExeption()
 		{
-			IE ie = new IE();
+			var ie = new IE();
 			ie.Close();
 			ie.Dispose();
 		}
@@ -707,7 +707,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ObjectDisposedException))]
 		public void CallingIEForceCloseAfterIECloseShouldThrowAnExeption()
 		{
-			IE ie = new IE();
+			var ie = new IE();
 			ie.Close();
 			ie.ForceClose();
 		}
@@ -721,11 +721,9 @@ namespace WatiN.Core.UnitTests
 		public void IECollectionExcludesWindowsExplorerWindows()
 		{
 			// Bring up an Explorer window and wait for it to become visible.
-			ProcessStartInfo info = new ProcessStartInfo("explorer.exe");
-			info.UseShellExecute = false;
-			info.CreateNoWindow = true;
+			var info = new ProcessStartInfo("explorer.exe") {UseShellExecute = false, CreateNoWindow = true};
 
-			Process p = Process.Start(info);
+		    var p = Process.Start(info);
 
 			try
 			{
@@ -740,13 +738,14 @@ namespace WatiN.Core.UnitTests
 				// become available.
 				Assert.GreaterOrEqual(IE.InternetExplorers().Length, 1);
 
-				foreach (IE ie in IE.InternetExplorers())
+				foreach (var ie in IE.InternetExplorers())
 					ie.Close();
 			}
 			finally
 			{
-				if (! p.HasExited)
-					p.Kill();
+			    if (p != null)
+			        if (! p.HasExited)
+			            p.Kill();
 			}
 		}
 
@@ -769,9 +768,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TestWatiNWithInjectedHTMLCode()
 		{
-			string html = "<HTML><input name=txtSomething><input type=button name=btnSomething value=Click></HTML>";
+			var html = "<HTML><input name=txtSomething><input type=button name=btnSomething value=Click></HTML>";
 
-			using(IE ie = new IE())
+			using(var ie = new IE())
 			{
 			    var document = (IHTMLDocument2) ie.NativeDocument.Object;
 				document.writeln(html);
@@ -793,28 +792,26 @@ namespace WatiN.Core.UnitTests
 
 		public void ItterateProcesses()
 		{
-			IntPtr hWnd = IntPtr.Zero;
+			var hWnd = IntPtr.Zero;
 
-			Process[] processes = Process.GetProcesses();
+			var processes = Process.GetProcesses();
 			Console.WriteLine("#processes = " + processes.Length);
 
-			foreach (Process process in processes)
+			foreach (var process in processes)
 			{
 
 				foreach (ProcessThread t in process.Threads)
 				{
-					int threadId = t.Id;
+					var threadId = t.Id;
 
-					NativeMethods.EnumThreadProc callbackProc = new NativeMethods.EnumThreadProc(EnumChildForTridentDialogFrame);
+					NativeMethods.EnumThreadProc callbackProc = EnumChildForTridentDialogFrame;
 					NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
 				}
 			}
 		}
 
-		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
+		private static bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
 		{
-//			Console.WriteLine(NativeMethods.GetClassName(hWnd));
-
 			if (IsIEFrame(hWnd))
 			{
 				Console.WriteLine("Is IE Window: " + ((long)hWnd).ToString("X"));
@@ -827,13 +824,11 @@ namespace WatiN.Core.UnitTests
 
 		internal static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)
 		{
-			Guid IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
+			var IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
 
-			Int32 lRes = 0;
-			Int32 lMsg;
-			Int32 hr;
+			var lRes = 0;
 
-			//if (IsIETridentDlgFrame(hWnd))
+		    //if (IsIETridentDlgFrame(hWnd))
 			//{
 
 			while (!IsIEServerWindow(hWnd))
@@ -845,7 +840,7 @@ namespace WatiN.Core.UnitTests
 			if (IsIEServerWindow(hWnd))
 			{
 				// Register the message
-				lMsg = NativeMethods.RegisterWindowMessage("WM_HTML_GETOBJECT");
+				var lMsg = NativeMethods.RegisterWindowMessage("WM_HTML_GETOBJECT");
 
 				// Get the object
 				NativeMethods.SendMessageTimeout(hWnd, lMsg, 0, 0, NativeMethods.SMTO_ABORTIFHUNG, 1000, ref lRes);
@@ -855,7 +850,7 @@ namespace WatiN.Core.UnitTests
 					// Get the object from lRes
 					IHTMLDocument2 ieDOMFromhWnd = null;
 
-					hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
+					var hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
 
 					if (hr != 0)
 					{
