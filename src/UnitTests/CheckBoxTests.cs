@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.Constraints;
 
-
 namespace WatiN.Core.UnitTests
 {
     [TestFixture]
@@ -32,15 +31,15 @@ namespace WatiN.Core.UnitTests
         public void CheckBoxElementTags()
         {
             Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
-            Assert.AreEqual("input", ((ElementTag)CheckBox.ElementTags[0]).TagName);
-            Assert.AreEqual("checkbox", ((ElementTag)CheckBox.ElementTags[0]).InputTypes);
+            Assert.AreEqual("input", CheckBox.ElementTags[0].TagName);
+            Assert.AreEqual("checkbox", CheckBox.ElementTags[0].InputTypes);
         }
 
         [Test]
         public void CheckBoxFromElement()
         {
-            Element element = ie.Element("Checkbox1");
-            CheckBox checkBox = new CheckBox(element);
+            var element = ie.Element("Checkbox1");
+            var checkBox = new CheckBox(element);
             Assert.AreEqual("Checkbox1", checkBox.Id);
         }
 
@@ -55,7 +54,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void CheckBoxTest()
         {
-            CheckBox checkbox1 = ie.CheckBox("Checkbox1");
+            var checkbox1 = ie.CheckBox("Checkbox1");
 
             Assert.AreEqual("Checkbox1", checkbox1.Id, "Found wrong checkbox");
             Assert.AreEqual("Checkbox1", checkbox1.ToString(), "ToString didn't return Id");
@@ -73,7 +72,7 @@ namespace WatiN.Core.UnitTests
         {
             Assert.AreEqual(5, ie.CheckBoxes.Length, "Unexpected number of checkboxes");
 
-            CheckBoxCollection formCheckBoxs = ie.Form("FormCheckboxes").CheckBoxes;
+            var formCheckBoxs = ie.Form("FormCheckboxes").CheckBoxes;
 
             // Collection items by index
             Assert.AreEqual(3, formCheckBoxs.Length, "Wrong number off checkboxes");
@@ -83,13 +82,13 @@ namespace WatiN.Core.UnitTests
 
             // Collection iteration and comparing the result with Enumerator
             IEnumerable checkboxEnumerable = formCheckBoxs;
-            IEnumerator checkboxEnumerator = checkboxEnumerable.GetEnumerator();
+            var checkboxEnumerator = checkboxEnumerable.GetEnumerator();
 
-            int count = 0;
+            var count = 0;
             foreach (CheckBox checkBox in formCheckBoxs)
             {
                 checkboxEnumerator.MoveNext();
-                object enumCheckbox = checkboxEnumerator.Current;
+                var enumCheckbox = checkboxEnumerator.Current;
 
                 Assert.IsInstanceOfType(checkBox.GetType(), enumCheckbox, "Types are not the same");
                 Assert.AreEqual(checkBox.OuterHtml, ((CheckBox)enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
@@ -110,17 +109,17 @@ namespace WatiN.Core.UnitTests
         {
             // The control to test against
             Assert.IsTrue(ie.CheckBox("Checkbox21").Exists, "Checkbox21 missing.");
-            CheckBox checkBox21a = ie.CheckBox("Checkbox21");
+            var checkBox21a = ie.CheckBox("Checkbox21");
 
             // The new way to do this
-            CheckBox checkBox21b = ie.CheckBox(new LabelTextConstraint("label for Checkbox21"));
+            var checkBox21b = ie.CheckBox(new LabelTextConstraint("label for Checkbox21"));
             Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
 
             // The old way to do this
             // Using this method is about 10% slower than the new one and much more complicated to read/write
-            Label label = ie.Label(Find.ByText("label for Checkbox21"));
+            var label = ie.Label(Find.ByText("label for Checkbox21"));
             Assert.IsNotNull(label, "Missing label for Checkbox21 or text has changed.");
-            CheckBox checkBox21c = ie.CheckBox(label.For);
+            var checkBox21c = ie.CheckBox(label.For);
             Assert.AreEqual(checkBox21c.Id, checkBox21b.Id, "Label for Checkbox21b did not attach to correct checkbox.");
 
         }

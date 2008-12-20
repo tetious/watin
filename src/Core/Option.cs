@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections.Generic;
-using mshtml;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -164,24 +163,23 @@ namespace WatiN.Core
 
 		private void setSelected(bool value, bool WaitForComplete)
 		{
-			if (optionElement.selected != value)
-			{
-				optionElement.selected = value;
-				if (WaitForComplete)
-				{
-					ParentSelectList.FireEvent("onchange");
-				}
-				else
-				{
-					ParentSelectList.FireEventNoWait("onchange");
-				}
-			}
+		    if (bool.Parse(GetAttributeValue("selected")) == value) return;
+
+            SetAttributeValue("selected", value.ToString());
+		    if (WaitForComplete)
+		    {
+		        ParentSelectList.FireEvent("onchange");
+		    }
+		    else
+		    {
+		        ParentSelectList.FireEventNoWait("onchange");
+		    }
 		}
 
-		private IHTMLOptionElement optionElement
-		{
-            get { return (IHTMLOptionElement)NativeElement.Object; }
-		}
+//		private IHTMLOptionElement optionElement
+//		{
+//            get { return (IHTMLOptionElement)NativeElement.Object; }
+//		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{

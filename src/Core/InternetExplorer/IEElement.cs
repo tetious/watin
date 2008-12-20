@@ -159,10 +159,23 @@ namespace WatiN.Core.InternetExplorer
 
         public void SetAttributeValue(string attributeName, string value)
         {
+            value = HandleAttributesWhichHaveNoValuePart(attributeName, value);
+            
             htmlElement.setAttribute(attributeName, value, 0);
         }
 
-		public void ClickOnElement()
+	    private static string HandleAttributesWhichHaveNoValuePart(string attributeName, string value)
+	    {
+            // selected is attribute of Option
+            // checked is attribute of RadioButton and CheckBox
+	        if (attributeName == "selected" || attributeName == "checked")
+	        {
+	            value = bool.Parse(value) ? "true" : "";
+	        }
+	        return value;
+	    }
+
+	    public void ClickOnElement()
 		{
 			DispHtmlBaseElement.click();
 		}
@@ -265,11 +278,6 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get { return (IHTMLDOMNode) _element; }
 		}
-
-	    private IHTMLInputElement inputElement
-	    {
-            get { return (IHTMLInputElement) _element; }
-	    }
 
 		/// <summary>
 		/// Gets the DispHtmlBaseElement />.

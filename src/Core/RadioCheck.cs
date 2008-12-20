@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections.Generic;
-using mshtml;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
@@ -48,7 +47,7 @@ namespace WatiN.Core
 				Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");
 
 				Highlight(true);
-				inputElement.@checked = value;
+				SetAttributeValue("checked", value.ToString().ToLowerInvariant());
 				FireEvent("onClick");
 				Highlight(false);
 			}
@@ -57,11 +56,6 @@ namespace WatiN.Core
 		public override string ToString()
 		{
 			return Id;
-		}
-
-		private IHTMLInputElement inputElement
-		{
-            get { return ((IHTMLInputElement)NativeElement.Object); }
 		}
 	}
 }

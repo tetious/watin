@@ -30,15 +30,15 @@ namespace WatiN.Core.UnitTests
 		public void RadioButtonElementTags()
 		{
 			Assert.AreEqual(1, RadioButton.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("input", ((ElementTag) RadioButton.ElementTags[0]).TagName);
-			Assert.AreEqual("radio", ((ElementTag) RadioButton.ElementTags[0]).InputTypes);
+			Assert.AreEqual("input", RadioButton.ElementTags[0].TagName);
+			Assert.AreEqual("radio", RadioButton.ElementTags[0].InputTypes);
 		}
 
 		[Test]
 		public void CreateRadioButtonFromElement()
 		{
-			Element element = ie.Element("Radio1");
-			RadioButton radioButton = new RadioButton(element);
+			var element = ie.Element("Radio1");
+			var radioButton = new RadioButton(element);
 			Assert.AreEqual("Radio1", radioButton.Id);
 		}
 
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RadioButtonTest()
 		{
-			RadioButton RadioButton1 = ie.RadioButton("Radio1");
+			var RadioButton1 = ie.RadioButton("Radio1");
 
 			Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
 			Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
@@ -71,7 +71,7 @@ namespace WatiN.Core.UnitTests
 		{
 			Assert.AreEqual(3, ie.RadioButtons.Length, "Unexpected number of RadioButtons");
 
-			RadioButtonCollection formRadioButtons = ie.Form("FormRadioButtons").RadioButtons;
+			var formRadioButtons = ie.Form("FormRadioButtons").RadioButtons;
 
 			Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
 			Assert.AreEqual("Radio2", formRadioButtons[0].Id);
@@ -79,13 +79,13 @@ namespace WatiN.Core.UnitTests
 
 			// Collection iteration and comparing the result with Enumerator
 			IEnumerable radiobuttonEnumerable = formRadioButtons;
-			IEnumerator radiobuttonEnumerator = radiobuttonEnumerable.GetEnumerator();
+			var radiobuttonEnumerator = radiobuttonEnumerable.GetEnumerator();
 
-			int count = 0;
+			var count = 0;
 			foreach (RadioButton radioButton in formRadioButtons)
 			{
 				radiobuttonEnumerator.MoveNext();
-				object enumRadioButton = radiobuttonEnumerator.Current;
+				var enumRadioButton = radiobuttonEnumerator.Current;
 
 				Assert.IsInstanceOfType(radioButton.GetType(), enumRadioButton, "Types are not the same");
 				Assert.AreEqual(radioButton.OuterHtml, ((RadioButton) enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");

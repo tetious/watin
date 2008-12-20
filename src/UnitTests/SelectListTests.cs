@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
@@ -33,14 +32,14 @@ namespace WatiN.Core.UnitTests
 		public void SupportedElementTags()
 		{
 			Assert.AreEqual(1, SelectList.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("select", ((ElementTag) SelectList.ElementTags[0]).TagName);
+			Assert.AreEqual("select", SelectList.ElementTags[0].TagName);
 		}
 
 		[Test]
 		public void SelectListFromElement()
 		{
-			Element element = ie.Element("Select2");
-			SelectList selectList = new SelectList(element);
+			var element = ie.Element("Select2");
+			var selectList = new SelectList(element);
 			Assert.AreEqual("Select2", selectList.Id);
 		}
 
@@ -55,11 +54,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MultipleSelectList()
 		{
-			SelectList selectList = ie.SelectList("Select2");
+			var selectList = ie.SelectList("Select2");
 
-			Assert.IsNotNull(selectList, "SelectList niet aangetroffen");
-
-			StringCollection items = selectList.AllContents;
+			var items = selectList.AllContents;
 
 			Assert.AreEqual(4, items.Count);
 			Assert.AreEqual("First Listitem", items[0], "First Listitem not found");
@@ -67,7 +64,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("Third Listitem", items[2], "Third Listitem not found");
 			Assert.AreEqual("Fourth Listitem", items[3], "Fourth Listitem not found");
 
-			Assert.IsTrue(selectList.Multiple, "'Select 2' must be allow multiple selection to pass the next tests");
+			Assert.IsTrue(selectList.Multiple, "'Select 2' must allow multiple selects to pass the next tests");
 
 			// Second Listitem is selected by default/loading the page
 			Assert.AreEqual(1, selectList.SelectedItems.Count, "SelectedItem not selected on page load");
@@ -93,14 +90,14 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (SelectListItemNotFoundException), ExpectedMessage = "No item was found in the selectlist matching constraint: Attribute 'innertext' with value 'None existing item'")]
 		public void SelectItemNotFoundException()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 			selectList.Select("None existing item");
 		}
 
 		[Test, ExpectedException(typeof (SelectListItemNotFoundException))]
 		public void SelectPartialTextMatchItemNotFoundException()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 			selectList.Select("Second");
 		}
 
@@ -110,7 +107,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(2, ie.SelectLists.Length);
 
 			// Collections
-			SelectListCollection selectLists = ie.SelectLists;
+			var selectLists = ie.SelectLists;
 
 			Assert.AreEqual(2, selectLists.Length);
 
@@ -119,14 +116,14 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("Select2", selectLists[1].Id);
 
 			IEnumerable selectListEnumerable = selectLists;
-			IEnumerator selectListEnumerator = selectListEnumerable.GetEnumerator();
+			var selectListEnumerator = selectListEnumerable.GetEnumerator();
 
 			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
+			var count = 0;
 			foreach (SelectList selectList in selectLists)
 			{
 				selectListEnumerator.MoveNext();
-				object enumSelectList = selectListEnumerator.Current;
+				var enumSelectList = selectListEnumerator.Current;
 
 				Assert.IsInstanceOfType(selectList.GetType(), enumSelectList, "Types are not the same");
 				Assert.AreEqual(selectList.OuterHtml, ((SelectList) enumSelectList).OuterHtml, "foreach and IEnumator don't act the same.");
@@ -152,7 +149,7 @@ namespace WatiN.Core.UnitTests
 			// the page) is the right one.
 			ie.GoTo(ie.Url);
 
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 
 			Assert.IsNotNull(selectList, "SelectList niet aangetroffen");
 
@@ -179,7 +176,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SelectTextWithRegex()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 
 			selectList.Select(new Regex("cond te"));
 			Assert.IsTrue(selectList.HasSelectedItems, "Selected item expected");
@@ -191,7 +188,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SelectValueWithRegex()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 
 			selectList.SelectByValue(new Regex("twee"));
 			Assert.AreEqual("Second text", selectList.SelectedItem, "Unexpected SelectedItem");
@@ -200,7 +197,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void OptionExists()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 
 			Assert.IsTrue(selectList.Options.Exists(Find.ByText("First text")));
 			Assert.IsTrue(selectList.Options.Exists(Find.ByValue("tweede tekst")));
@@ -212,7 +209,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void OptionsInSingelSelectList()
 		{
-			SelectList selectList = ie.SelectList("Select1");
+			var selectList = ie.SelectList("Select1");
 
 			Assert.IsFalse(selectList.Option("Third text").Selected);
 			selectList.Option("Third text").Select();
@@ -227,7 +224,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.GoTo(MainURI);
 
-			SelectList selectList = ie.SelectList("Select2");
+			var selectList = ie.SelectList("Select2");
 
 			Assert.IsFalse(selectList.Option("Third Listitem").Selected, "Third listitem is selected");
 			selectList.Option("Third Listitem").Select();
@@ -242,7 +239,7 @@ namespace WatiN.Core.UnitTests
         {
             ie.GoTo(TestEventsURI);
 
-            ConfirmDialogHandler confirm = new ConfirmDialogHandler();
+            var confirm = new ConfirmDialogHandler();
             using (new UseDialogOnce(ie.DialogWatcher, confirm))
             {
                 ie.SelectList(Find.ById("selectList")).Option(Find.ByValue("2")).SelectNoWait();
@@ -260,7 +257,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindOptionUsingPredicateT()
         {
-            Option option = ie.SelectList("Select2").Option(o => o.Text == "Third Listitem");
+            var option = ie.SelectList("Select2").Option(o => o.Text == "Third Listitem");
             Assert.That(option.Exists);
         }
 	}

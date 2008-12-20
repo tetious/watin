@@ -29,7 +29,6 @@ DONE JVM - Remove dependencies on IHTMLDocument2
 DONE JVM - Remove dependencies on IHTMLElement for attributes values from Body element
 - Move GetPropertyValue to nativeBrowser class? Is Com interop specific
 
-
 ** Style
 DONE JVM - Remove depenency on IHTMLStyle 
 
@@ -39,14 +38,14 @@ DONE JVM - Remove depenency on IHTMLStyle
 ** Move IE specific classes to speicif folder(s) and namespace(s)
 
 ** Option
-- Move select to NativeElement
+DONE JVM - Handle selected with NativeElement
 
 ** RadioCheck
-- Move checked to NativeElement
+DONE JVM - Move checked to NativeElement
 
 ** Table, TableBody, TableRow
 - Multiple issues
 
 ** TextField
-- remove dependencies in wrappers around TextArea or input text 
+DONE JVM - remove dependencies in wrappers around TextArea or input text 
 
