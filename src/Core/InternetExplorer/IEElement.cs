@@ -230,6 +230,17 @@ namespace WatiN.Core.InternetExplorer
             throw new WatiNException("Select not supported on " + _element.GetType());
         }
 
+	    public void SubmitForm()
+	    {
+            HtmlFormElement.submit();
+
+	    }
+
+        private IHTMLFormElement HtmlFormElement
+        {
+            get { return (IHTMLFormElement)_element; }
+        }
+
 	    /// <summary>
         /// This methode can be used if the attribute isn't available as a property of
         /// of this <see cref="Style"/> class.

@@ -96,5 +96,6 @@ namespace WatiN.Core.Interfaces
         object Objects { get; }
         void FireEventAsync(string eventName, NameValueCollection eventProperties);
 	    void Select();
+	    void SubmitForm();
 	}
 }

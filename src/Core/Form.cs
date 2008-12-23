@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System.Collections.Generic;
-using mshtml;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 
@@ -57,7 +56,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");
 
-			HtmlFormElement.submit();
+		    NativeElement.SubmitForm();
 			WaitForComplete();
 		}
 
@@ -71,21 +70,13 @@ namespace WatiN.Core
 			{
 				return Id;
 			}
-			if (UtilityClass.IsNotNullOrEmpty(Name))
-			{
-				return Name;
-			}
-			return base.ToString();
+
+			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();
 		}
 
 		public string Name
 		{
-			get { return HtmlFormElement.name; }
-		}
-
-		private IHTMLFormElement HtmlFormElement
-		{
-            get { return (IHTMLFormElement)NativeElement.Object; }
+			get { return GetAttributeValue("name"); }
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

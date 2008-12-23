@@ -36,14 +36,14 @@ namespace WatiN.Core.UnitTests
 		public void FormElementTags()
 		{
 			Assert.AreEqual(1, Form.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("form", ((ElementTag) Form.ElementTags[0]).TagName);
+			Assert.AreEqual("form", Form.ElementTags[0].TagName);
 		}
 
 		[Test]
 		public void ImageFromElementImage()
 		{
-			Element element = ie.Element("Form1");
-			Form form = new Form(element);
+			var element = ie.Element("Form1");
+			var form = new Form(element);
 			Assert.AreEqual("Form1", form.Id);
 		}
 
@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FormTest()
 		{
-			Form form = ie.Form("Form2");
+			var form = ie.Form("Form2");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), form);
 			Assert.IsInstanceOfType(typeof (ElementsContainer<Form>), form);
@@ -90,7 +90,7 @@ namespace WatiN.Core.UnitTests
 
 			Assert.AreEqual(6, ie.Forms.Length, "Unexpected number of forms");
 
-			FormCollection forms = ie.Forms;
+			var forms = ie.Forms;
 
 			// Collection items by index
 			Assert.AreEqual("Form", forms[0].Id);
@@ -102,13 +102,13 @@ namespace WatiN.Core.UnitTests
 
 			// Collection iteration and comparing the result with Enumerator
 			IEnumerable checkboxEnumerable = forms;
-			IEnumerator checkboxEnumerator = checkboxEnumerable.GetEnumerator();
+			var checkboxEnumerator = checkboxEnumerable.GetEnumerator();
 
-			int count = 0;
+			var count = 0;
 			foreach (Form form in forms)
 			{
 				checkboxEnumerator.MoveNext();
-				object enumCheckbox = checkboxEnumerator.Current;
+				var enumCheckbox = checkboxEnumerator.Current;
 
 				Assert.IsInstanceOfType(form.GetType(), enumCheckbox, "Types are not the same");
 				Assert.AreEqual(form.OuterHtml, ((Form) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
