@@ -35,7 +35,7 @@ DONE JVM - Remove depenency on IHTMLStyle
 ** Form
 - Move Submit to NativeElement
 
-** Move IE specific classes to speicif folder(s) and namespace(s)
+** Move IE specific classes to specific folder(s) and namespace(s)
 
 ** Option
 DONE JVM - Handle selected with NativeElement
@@ -48,4 +48,14 @@ DONE JVM - Move checked to NativeElement
 
 ** TextField
 DONE JVM - remove dependencies in wrappers around TextArea or input text 
+
+** Changes to test suite
+- Make sure none browser specific tests are executed for IE and FireFox
+- other option would be to create a in memory browser (mock) to run the general test against and 
+  test the browser specific classes seperately (will speed up the test suite, but it
+  is possible some integration issues will be missed....)
+
+** Interfaces
+- Add interfaces to all elements and elementcollections (like in the current 2.0 CTP). Mainly to provide a way to mock out WatiN in testing tools using Watin (like stormwind)
+
 
