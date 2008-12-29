@@ -16,34 +16,14 @@
 
 #endregion Copyright
 
-using SHDocVw;
+using System;
+using WatiN.Core.Exceptions;
 
-namespace WatiN.Core
+namespace WatiN.Core.Mozilla
 {
-	public class IEWaitForComplete : WaitForComplete
-	{
-		protected IE _ie;
-
-		public IEWaitForComplete(IE ie) : base(ie)
-		{
-			_ie = ie;
-		}
-
-	    public IEWaitForComplete(IE ie, int waitForCompleteTimeOut) : base(ie, waitForCompleteTimeOut)
-	    {
-            _ie = ie;
-        }
-
-	    public override void DoWait()
-		{
-//			Sleep("DoWait IEWaitForComplete");
-
-			InitTimeout();
-
-			WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
-			waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
-
-			WaitForCompleteOrTimeout();
-		}
-	}
+    internal class FireFoxException : WatiNException
+    {
+        public FireFoxException(string message) : base(message) { }
+        public FireFoxException(string message, Exception innerexception) : base(message, innerexception) { }
+    }
 }

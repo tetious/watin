@@ -49,6 +49,14 @@ DONE JVM - Move checked to NativeElement
 ** TextField
 DONE JVM - remove dependencies in wrappers around TextArea or input text 
 
+** Check for and replace 
+-  new IEElement by DomContainer.NativeBrowser.CreateElement
+
+*** FIREFOX
+- Wrapp WaitForComplete implementation and override DomContainer methods
+- move RunScript to FFBrowser
+- move Eval to FFBrowser (and IEBrowser)
+- what to do with Settings.CloseExistingBrowserInstances
 ** Changes to test suite
 - Make sure none browser specific tests are executed for IE and FireFox
 - other option would be to create a in memory browser (mock) to run the general test against and 

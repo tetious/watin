@@ -184,7 +184,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="elementCollection">The element collection.</param>
 		/// <returns>an array list with all the elements found in the element collection</returns>
-		internal static IEnumerable<INativeElement> IHtmlElementCollectionToArrayList(IHTMLElementCollection elementCollection)
+        internal static IEnumerable<INativeElement> IHtmlElementCollectionToList(IHTMLElementCollection elementCollection)
 		{
 			var elements = new List<INativeElement>();
 			var length = elementCollection.length;

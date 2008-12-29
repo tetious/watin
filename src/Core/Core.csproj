@@ -120,12 +120,14 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllFramesProcessor.cs">
@@ -364,6 +366,14 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mozilla\FFDocument.cs" />
+    <Compile Include="Mozilla\FFElement.cs" />
+    <Compile Include="Mozilla\FFElementFinder.cs" />
+    <Compile Include="FireFox.cs" />
+    <Compile Include="Browser.cs" />
+    <Compile Include="Mozilla\FireFoxClientPort.cs" />
+    <Compile Include="Mozilla\FireFoxException.cs" />
+    <Compile Include="Mozilla\FFBrowser.cs" />
     <Compile Include="Form.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -449,7 +459,7 @@
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InternetExplorer\ElementFinderBase.cs" />
+    <Compile Include="ElementFinderBase.cs" />
     <Compile Include="InternetExplorer\IEBrowser.cs" />
     <Compile Include="InternetExplorer\IEDocument.cs" />
     <Compile Include="InternetExplorer\IEElement.cs" />

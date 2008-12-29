@@ -58,7 +58,7 @@ namespace WatiN.Core
 	///  }
 	/// </code>
 	/// </example>
-	public class IE : DomContainer
+	public class IE : Browser
 	{
 		private SHDocVw.InternetExplorer ie;
 
@@ -648,7 +648,7 @@ namespace WatiN.Core
 
 		private static void CheckThreadApartmentStateIsSTA()
 		{
-            bool isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
+            var isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 			if (!isSTA)
 			{
 				throw new ThreadStateException("The CurrentThread needs to have it's ApartmentState set to ApartmentState.STA to be able to automate Internet Explorer.");
@@ -935,67 +935,7 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		/// <summary>
-		/// Sends a Tab key to the IE window to simulate tabbing through
-		/// the elements (and adres bar).
-		/// </summary>
-		public void PressTab()
-		{
-		    if (Debugger.IsAttached) return;
-
-		    var currentStyle = GetWindowStyle();
-
-		    ShowWindow(NativeMethods.WindowShowStyle.Restore);
-		    BringToFront();
-
-		    var intThreadIDIE = ProcessID;
-		    var intCurrentThreadID = NativeMethods.GetCurrentThreadId();
-
-		    NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, true);
-
-		    NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY, 0);
-		    NativeMethods.keybd_event(NativeMethods.KEYEVENTF_TAB, 0x45, NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP, 0);
-
-		    NativeMethods.AttachThreadInput(intCurrentThreadID, intThreadIDIE, false);
-
-		    ShowWindow(currentStyle);
-		}
-
-		/// <summary>
-		/// Brings the referenced Internet Explorer to the front (makes it the top window)
-		/// </summary>
-		public void BringToFront()
-		{
-			if (NativeMethods.GetForegroundWindow() != hWnd)
-			{
-				NativeMethods.SetForegroundWindow(hWnd);
-			}
-		}
-
-		/// <summary>
-		/// Make the referenced Internet Explorer full screen, minimized, maximized and more.
-		/// </summary>
-		/// <param name="showStyle">The style to apply.</param>
-		public void ShowWindow(NativeMethods.WindowShowStyle showStyle)
-		{
-			NativeMethods.ShowWindow(hWnd, (int) showStyle);
-		}
-
-		/// <summary>
-		/// Gets the window style.
-		/// </summary>
-		/// <returns>The style currently applied to the ie window.</returns>
-		public NativeMethods.WindowShowStyle GetWindowStyle()
-		{
-			var placement = new NativeMethods.WINDOWPLACEMENT();
-			placement.length = Marshal.SizeOf(placement);
-
-			NativeMethods.GetWindowPlacement(hWnd, ref placement);
-
-			return (NativeMethods.WindowShowStyle) placement.showCmd;
-		}
-
-		/// <summary>
+	    /// <summary>
 		/// Closes the referenced Internet Explorer. Almost
 		/// all other functionality in this class and the element classes will give
 		/// exceptions when used after closing the browser.
@@ -1023,15 +963,14 @@ namespace WatiN.Core
 		/// </example>
 		public void Close()
 		{
-			if (!isDisposed)
-			{
-				if (IsInternetExplorerStillAvailable())
-				{
-					Logger.LogAction("Closing browser '" + Title + "'");
-				}
+	        if (isDisposed) return;
+	        
+            if (IsInternetExplorerStillAvailable())
+	        {
+	            Logger.LogAction("Closing browser '" + Title + "'");
+	        }
 
-				DisposeAndCloseIE(true);
-			}
+	        DisposeAndCloseIE(true);
 		}
 
 		/// <summary>
@@ -1158,7 +1097,7 @@ namespace WatiN.Core
 
 			Logger.LogAction("Force closing all IE instances");
 
-			int iePid = ProcessID;
+			var iePid = ProcessID;
 
 			DisposeAndCloseIE(true);
 

@@ -270,6 +270,7 @@
     <Compile Include="FindTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FireFoxTests\FireFoxTests.cs" />
     <Compile Include="FormTests.cs">
       <SubType>Code</SubType>
     </Compile>

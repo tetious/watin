@@ -81,7 +81,7 @@ namespace WatiN.Core
         {
             get
             {
-                var list = UtilityClass.IHtmlElementCollectionToArrayList(GetTableRows());
+                var list = UtilityClass.IHtmlElementCollectionToList(GetTableRows());
                 return new TableRowCollection(DomContainer, list);
             }
         }
@@ -99,7 +99,7 @@ namespace WatiN.Core
 		/// <value>The table bodies.</value>
 		public override TableBodyCollection TableBodies
 		{
-			get { return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToArrayList(HTMLTable.tBodies)); }
+            get { return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToList(HTMLTable.tBodies)); }
 		}
 
 		/// <summary>
@@ -122,11 +122,6 @@ namespace WatiN.Core
 		public override TableBody TableBody(Predicate<TableBody> predicate)
 		{
 			return TableBody(Find.ByElement(predicate));
-		}
-
-		private IHTMLElement GetFirstTBody()
-		{
-			return (IHTMLElement) HTMLTable.tBodies.item(0, null);
 		}
 
 		private IHTMLTable HTMLTable
@@ -170,7 +165,7 @@ namespace WatiN.Core
 
         private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
         {
-            var innertext = GetFirstTBody().innerText;
+            var innertext = TableBody(Find.First()).Text;
 
             return (innertext != null && attributeConstraint.IsTextContainedIn(innertext));
         }
@@ -355,7 +350,7 @@ namespace WatiN.Core
 
 			public override object Elements
 			{
-				get { return table.GetFirstTBody().all; }
+				get { return table.TableBody(Find.First()).NativeElement.Objects; }
 			}
 		}
 

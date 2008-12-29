@@ -30,7 +30,11 @@ namespace WatiN.Core
 	public abstract class DomContainer : Document
 	{
 		private INativeDocument _nativeDocument;
-	    private bool _disposed;
+
+        /// <summary>
+        /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
+        /// </summary>
+        protected bool IsDisposed { get; set; }
 
 	    protected DomContainer()
 		{
@@ -122,7 +126,7 @@ namespace WatiN.Core
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
-		    if (_disposed) return;
+		    if (IsDisposed) return;
 		    
             _nativeDocument = null;
 		    if (DialogWatcher != null)
@@ -130,7 +134,7 @@ namespace WatiN.Core
 		        DialogWatcher.DecreaseReferenceCount();
 		        DialogWatcher = null;
 		    }
-		    _disposed = true;
+		    IsDisposed = true;
 
 		    base.Dispose(true);
 		}
@@ -182,7 +186,7 @@ namespace WatiN.Core
 		{
 			Dispose(true);
 			DomContainer = this;
-			_disposed = false;
+			IsDisposed = false;
 		}
 	}
 }

@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using mshtml;
@@ -88,35 +87,34 @@ namespace WatiN.Core
 
 		protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
 		{
-			HTMLDocument mainHtmlDocument = (HTMLDocument) maindocument;
+			var mainHtmlDocument = (HTMLDocument) maindocument;
 
-			int framesCount = WatiN.Core.Frame.GetFrameCountFromHTMLDocument(mainHtmlDocument);
+			var framesCount = Frame.GetFrameCountFromHTMLDocument(mainHtmlDocument);
 
-			for (int i = 0; i != framesCount; ++i)
+			for (var i = 0; i != framesCount; ++i)
 			{
-				IWebBrowser2 frame = WatiN.Core.Frame.GetFrameFromHTMLDocument(i, mainHtmlDocument);
+				var frame = Frame.GetFrameFromHTMLDocument(i, mainHtmlDocument);
 
-				if (frame != null)
-				{
-					IHTMLDocument2 document;
+			    if (frame == null) continue;
+			    
+                IHTMLDocument2 document;
 
-					try
-					{
-						WaitWhileIEBusy(frame);
-						waitWhileIEStateNotComplete(frame);
-						WaitWhileFrameDocumentNotAvailable(frame);
+			    try
+			    {
+			        WaitWhileIEBusy(frame);
+			        waitWhileIEStateNotComplete(frame);
+			        WaitWhileFrameDocumentNotAvailable(frame);
 
-						document = (IHTMLDocument2) frame.Document;
-					}
-					finally
-					{
-						// free frame
-						Marshal.ReleaseComObject(frame);
-					}
+			        document = (IHTMLDocument2) frame.Document;
+			    }
+			    finally
+			    {
+			        // free frame
+			        Marshal.ReleaseComObject(frame);
+			    }
 
-					WaitWhileDocumentStateNotComplete(document);
-					WaitForFramesToComplete(document);
-				}
+			    WaitWhileDocumentStateNotComplete(document);
+			    WaitForFramesToComplete(document);
 			}
 		}
 
@@ -133,7 +131,7 @@ namespace WatiN.Core
 
 		protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
 		{
-			HTMLDocument document = (HTMLDocument) htmlDocument;
+			var document = (HTMLDocument) htmlDocument;
 			while (document.readyState != "complete")
 			{
 				ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");

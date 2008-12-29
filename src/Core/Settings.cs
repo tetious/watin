@@ -87,6 +87,7 @@ namespace WatiN.Core
 	public static class Settings
     {
         private static ISettings _instance = CreateDefaultSettings();
+        public static bool CloseExistingBrowserInstances;
 
         private static DefaultSettings CreateDefaultSettings()
         {
@@ -98,11 +99,7 @@ namespace WatiN.Core
             get { return _instance; }
             set
 			{
-				_instance = value;
-                if (_instance == null)
-				{
-                    _instance = CreateDefaultSettings();
-				}
+				_instance = value ?? CreateDefaultSettings();
 			}
         }
 

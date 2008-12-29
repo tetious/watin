@@ -22,9 +22,9 @@ using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using StringComparer=WatiN.Core.Comparers.StringComparer;
 
-namespace WatiN.Core.InternetExplorer
+namespace WatiN.Core
 {
-    public abstract class ElementFinderBase
+    public abstract class ElementFinderBase : INativeElementFinder
     {
         private readonly List<ElementTag> tagsToFind = new List<ElementTag>();
         protected BaseConstraint _constraint;

@@ -68,7 +68,7 @@ namespace WatiN.Core
 
 		public override INativeDocument OnGetNativeDocument()
 		{
-			return DomContainer.NativeBrowser.CreateDocument(IEDOMFromhWnd(hwnd));
+			return NativeBrowser.CreateDocument(IEDOMFromhWnd(hwnd));
 		}
 
 		private static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)

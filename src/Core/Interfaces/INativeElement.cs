@@ -94,7 +94,7 @@ namespace WatiN.Core.Interfaces
 		string TagName { get; }
         object Object { get; }
         object Objects { get; }
-        void FireEventAsync(string eventName, NameValueCollection eventProperties);
+        void FireEventNoWait(string eventName, NameValueCollection eventProperties);
 	    void Select();
 	    void SubmitForm();
 	}

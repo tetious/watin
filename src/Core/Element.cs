@@ -576,7 +576,7 @@ namespace WatiN.Core
             }
             else
             {
-                NativeElement.FireEventAsync(eventName, eventProperties);
+                NativeElement.FireEventNoWait(eventName, eventProperties);
             }
 
 			Highlight(false);

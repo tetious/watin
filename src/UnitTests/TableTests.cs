@@ -41,14 +41,14 @@ namespace WatiN.Core.UnitTests
 		public void TableElementTags()
 		{
 			Assert.AreEqual(1, Table.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("table", ((ElementTag) Table.ElementTags[0]).TagName);
+			Assert.AreEqual("table", Table.ElementTags[0].TagName);
 		}
 
 		[Test]
 		public void TableFromElement()
 		{
-			Element element = ie.Element(tableId);
-			Table table = new Table(element);
+			var element = ie.Element(tableId);
+			var table = new Table(element);
 			Assert.AreEqual(tableId, table.Id);
 		}
 
@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowGetParentTable()
 		{
-			TableRow tableRow = ie.TableRow("row0");
+			var tableRow = ie.TableRow("row0");
 			Assert.IsInstanceOfType(typeof (TableBody), tableRow.Parent, "Parent should be a TableBody Type");
 			Assert.IsInstanceOfType(typeof (Table), tableRow.ParentTable, "Should be a Table Type");
 			Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
@@ -73,12 +73,12 @@ namespace WatiN.Core.UnitTests
 		{
 			Assert.AreEqual(tableId, ie.Table(Find.ById(tableId)).Id);
 
-			Table table = ie.Table(tableId);
+			var table = ie.Table(tableId);
 			Assert.AreEqual(tableId, table.Id);
 			Assert.AreEqual(tableId, table.ToString());
 			Assert.AreEqual(3, table.TableRows.Length, "Unexpected number of rows");
 
-			TableRow row = table.FindRow("a1", 0);
+			var row = table.FindRow("a1", 0);
 			Assert.IsNotNull(row, "Row with a1 expected");
 			Assert.AreEqual("a1", row.TableCells[0].Text, "Unexpected text in cell");
 
@@ -94,10 +94,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableFindRowShouldIgnoreTHtagsInTBody()
 		{
-			Table table = ie.Table(tableId);
+			var table = ie.Table(tableId);
 			Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
 
-			TableRow row = table.FindRow(new Regex("a"), 0);
+			var row = table.FindRow(new Regex("a"), 0);
 			Assert.IsNotNull(row, "row expected");
 			Assert.AreEqual("a1", row.TableCells[0].Text);
 		}
@@ -105,10 +105,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableFindRowWithTextIgnoreCase()
 		{
-			Table table = ie.Table(tableId);
+			var table = ie.Table(tableId);
 
 			// test: ignore case of the text to find
-			TableRow row = table.FindRow("A2", 1);
+			var row = table.FindRow("A2", 1);
 			Assert.IsNotNull(row, "Row with a1 expected");
 			Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
 		}
@@ -116,19 +116,19 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableFindRowWithTextNoPartialMatch()
 		{
-			Table table = ie.Table(tableId);
+			var table = ie.Table(tableId);
 
 			// test: ignore case of the text to find
-			TableRow row = table.FindRow("a", 1);
+			var row = table.FindRow("a", 1);
 			Assert.IsNull(row, "No row expected");
 		}
 
 		[Test]
 		public void TableFindRowWithRegex()
 		{
-			Table table = ie.Table(tableId);
+			var table = ie.Table(tableId);
 
-			TableRow row = table.FindRow(new Regex("b"), 1);
+			var row = table.FindRow(new Regex("b"), 1);
 
 			Assert.IsNotNull(row, "Row with b1 expected");
 			Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
@@ -139,7 +139,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.GoTo(TablesUri);
 
-			Table table = ie.Table("Table1");
+			var table = ie.Table("Table1");
 
 			Assert.That(table.FindRow("12", 999), Is.Null);
 		}
@@ -149,7 +149,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.GoTo(TablesUri);
 
-			Table table = ie.Table("Table1");
+			var table = ie.Table("Table1");
 
 			Assert.That(table.FindRow("2", 0), Is.Not.Null);
 		}
@@ -159,7 +159,7 @@ namespace WatiN.Core.UnitTests
 		{
 			ie.GoTo(TablesUri);
 
-			Table table = ie.Table("Table1");
+			var table = ie.Table("Table1");
 
 			Assert.That(table.FindRowInDirectChildren("2", 0), Is.Null);
 		}
@@ -168,7 +168,7 @@ namespace WatiN.Core.UnitTests
 		public void Tables()
 		{
 			// Collection.length
-			TableCollection tables = ie.Tables;
+			var tables = ie.Tables;
 
 			Assert.AreEqual(2, tables.Length);
 
@@ -177,14 +177,14 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("table2", tables[1].Id);
 
 			IEnumerable tableEnumerable = tables;
-			IEnumerator tableEnumerator = tableEnumerable.GetEnumerator();
+			var tableEnumerator = tableEnumerable.GetEnumerator();
 
 			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
+			var count = 0;
 			foreach (Table table in tables)
 			{
 				tableEnumerator.MoveNext();
-				object enumTable = tableEnumerator.Current;
+				var enumTable = tableEnumerator.Current;
 
 				Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
 				Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumerator don't act the same.");
@@ -200,7 +200,7 @@ namespace WatiN.Core.UnitTests
         {
             ie.GoTo(TablesUri);
 
-            Table table = ie.Table("Table1");
+            var table = ie.Table("Table1");
             Assert.That(table.TableRowsDirectChildren.Length, Is.EqualTo(3), "Unexpected number of TableRows");
             Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
             Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
@@ -211,7 +211,7 @@ namespace WatiN.Core.UnitTests
         public void FindTableBodyUsingPredicateT()
         {
             ie.GoTo(TablesUri);
-            TableBody tableBody = ie.Table("Table1").TableBody(delegate(TableBody t) { return t.Id == "tbody3"; });
+            var tableBody = ie.Table("Table1").TableBody(t => t.Id == "tbody3");
 
             Assert.That(tableBody.Exists);
         }
@@ -219,11 +219,10 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindRowWithNoResultUsingPredicateT()
         {
-            Table table = ie.Table(tableId);
+            var table = ie.Table(tableId);
             Assert.That(table.Exists);
 
-            TableRow tableRow = table.FindRow(delegate(TableCell c) { return c.Text == "b"; }, 1);
-//            TableRow tableRow = table.FindRow(c => c.Text == "b", 1);
+            var tableRow = table.FindRow(c => c.Text == "b", 1);
 
             Assert.That(tableRow, Is.Null);
         }
@@ -231,11 +230,10 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindRowUsingPredicateT()
         {
-            Table table = ie.Table(tableId);
+            var table = ie.Table(tableId);
             Assert.That(table.Exists);
 
-            TableRow tableRow = table.FindRow(delegate(TableCell c) { return c.Text == "b2"; }, 1);
-//            TableRow tableRow = table.FindRow(c => c.Text == "b2", 1);
+            var tableRow = table.FindRow(c => c.Text == "b2", 1);
 
             Assert.That(tableRow, Is.Not.Null);
         }
