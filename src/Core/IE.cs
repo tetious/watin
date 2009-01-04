@@ -734,38 +734,7 @@ namespace WatiN.Core
 			}
 		}
 
-		/// <summary>
-		/// Navigates Internet Explorer to the given <paramref name="url" />.
-		/// </summary>
-		/// <param name="url">The URL specified as a wel formed Uri.</param>
-		/// <example>
-		/// The following example creates an Uri and Internet Explorer instance and navigates to
-		/// the WatiN Project website on SourceForge.
-		/// <code>
-		/// using WatiN.Core;
-		/// using System;
-		/// 
-		/// namespace NewIEExample
-		/// {
-		///    public class WatiNWebsite
-		///    {
-		///      public WatiNWebsite()
-		///      {
-		///        Uri URL = new Uri("http://watin.sourceforge.net");
-		///        IE ie = new IE();
-		///        ie.GoTo(URL);
-		///      }
-		///    }
-		///  }
-		/// </code>
-		/// </example>
-		public void GoTo(Uri url)
-		{
-			navigateTo(url);
-			WaitForComplete();
-		}
-
-		private void navigateTo(Uri url)
+	    protected override void navigateTo(Uri url)
 		{
 			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
 
@@ -773,35 +742,7 @@ namespace WatiN.Core
 			ie.Navigate(url.AbsoluteUri, ref nil, ref nil, ref nil, ref nil);
 		}
 
-		/// <summary>
-		/// Navigates Internet Explorer to the given <paramref name="url" />.
-		/// </summary>
-		/// <param name="url">The URL to GoTo.</param>
-		/// <example>
-		/// The following example creates a new Internet Explorer instance and navigates to
-		/// the WatiN Project website on SourceForge.
-		/// <code>
-		/// using WatiN.Core;
-		/// 
-		/// namespace NewIEExample
-		/// {
-		///    public class WatiNWebsite
-		///    {
-		///      public WatiNWebsite()
-		///      {
-		///        IE ie = new IE();
-		///        ie.GoTo("http://watin.sourceforge.net");
-		///      }
-		///    }
-		///  }
-		/// </code>
-		/// </example>
-		public void GoTo(string url)
-		{
-			GoTo(UtilityClass.CreateUri(url));
-		}
-
-        /// <summary>
+	    /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" /> 
         /// without waiting for the page load to be finished.
         /// </summary>

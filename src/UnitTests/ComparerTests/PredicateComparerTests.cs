@@ -26,7 +26,7 @@ namespace WatiN.Core.UnitTests
     using Comparers;
 
     [TestFixture]
-    public class PredicateComparerTests : BaseWithIETests
+    public class PredicateComparerTests : BaseWithBrowserTests
     {
         private bool _called;
         private string _value;
@@ -82,7 +82,7 @@ namespace WatiN.Core.UnitTests
         [Test, ExpectedException(typeof(WatiNException), ExpectedMessage = "Exception during execution of predicate for <INPUT type=button value=\"Button with no Id\">")]
         public void IfExceptionDuringExecutionOfPredicateItShouldBeClearThatThisAProblemInThePredicate()
         {
-            Button button = ie.Button(delegate(Button b) { return b.Id.Contains("somethingoiojdoijsdf"); });
+            Button button = Ie.Button(delegate(Button b) { return b.Id.Contains("somethingoiojdoijsdf"); });
             
             //trigger search of the button
             bool exists = button.Exists;

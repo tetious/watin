@@ -26,7 +26,7 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TextFieldTests : BaseWithIETests
+	public class TextFieldTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void TextFieldElementTags()
@@ -40,7 +40,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateTextFieldFromElementInput()
 		{
-			var element = ie.Element("name");
+			var element = Ie.Element("name");
 			var textField = new TextField(element);
 			Assert.AreEqual("name", textField.Id);
 		}
@@ -48,7 +48,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateTextFieldFromElementTextArea()
 		{
-			var element = ie.Element("Textarea1");
+			var element = Ie.Element("Textarea1");
 			var textField = new TextField(element);
 			Assert.AreEqual("Textarea1", textField.Id);
 		}
@@ -56,15 +56,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldExists()
 		{
-			Assert.IsTrue(ie.TextField("name").Exists);
-			Assert.IsTrue(ie.TextField(new Regex("name")).Exists);
-			Assert.IsFalse(ie.TextField("nonexistingtextfield").Exists);
+			Assert.IsTrue(Ie.TextField("name").Exists);
+			Assert.IsTrue(Ie.TextField(new Regex("name")).Exists);
+			Assert.IsFalse(Ie.TextField("nonexistingtextfield").Exists);
 		}
 
 		[Test]
 		public void TextFieldTypTextShouldHandleNewLineInputCorrect()
 		{
-			var textfieldName = ie.TextField("Textarea1");
+			var textfieldName = Ie.TextField("Textarea1");
 			var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
 			textfieldName.TypeText(textWithNewLine);
@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldTypTextShouldHonourMaxLength()
 		{
-			var textField = ie.TextField("name");
+			var textField = Ie.TextField("name");
 			var maxLenght = textField.MaxLength;
 
 			textField.TypeText("1".PadLeft(maxLenght));
@@ -89,7 +89,7 @@ namespace WatiN.Core.UnitTests
 		{
 			const string value = "Hello world!";
 			const string appendValue = " This is WatiN!";
-			var textfieldName = ie.TextField("name");
+			var textfieldName = Ie.TextField("name");
 
 			Assert.AreEqual("name", textfieldName.Id);
 			Assert.AreEqual("textinput1", textfieldName.Name);
@@ -110,8 +110,8 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(value, textfieldName.Text, "Text not OK");
 
 			Assert.AreEqual("Textfield title", textfieldName.ToString(), "Expected Title");
-			Assert.AreEqual("readonlytext", ie.TextField("readonlytext").ToString(), "Expected Id");
-			Assert.AreEqual("disabledtext", ie.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
+			Assert.AreEqual("readonlytext", Ie.TextField("readonlytext").ToString(), "Expected Id");
+			Assert.AreEqual("disabledtext", Ie.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
 		}
 
 		[Test]
@@ -157,11 +157,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldTextAreaElement()
 		{
-			ie.GoTo(ie.Uri);
+			Ie.GoTo(Ie.Uri);
 
 			const string value = "Hello world!";
 			const string appendValue = " This is WatiN!";
-			var textfieldName = ie.TextField("Textarea1");
+			var textfieldName = Ie.TextField("Textarea1");
 
 			Assert.AreEqual("Textarea1", textfieldName.Id);
 			Assert.AreEqual("TextareaName", textfieldName.Name);
@@ -187,14 +187,14 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ElementReadOnlyException), ExpectedMessage = "Element with Id:readonlytext is readonly")]
 		public void TextFieldReadyOnlyException()
 		{
-			var textField = ie.TextField("readonlytext");
+			var textField = Ie.TextField("readonlytext");
 			textField.TypeText("This should go wrong");
 		}
 
 		[Test, ExpectedException(typeof (ElementDisabledException), ExpectedMessage = "Element with Id:disabledtext is disabled")]
 		public void TextFieldDisabledException()
 		{
-			var textField = ie.TextField(Find.ByName("disabledtext"));
+			var textField = Ie.TextField(Find.ByName("disabledtext"));
 			textField.TypeText("This should go wrong");
 		}
 
@@ -204,7 +204,7 @@ namespace WatiN.Core.UnitTests
 		    try
 		    {
 		        Settings.WaitUntilExistsTimeOut = 1;
-		        ie.TextField("noneexistingtextfieldid").TypeText("");
+		        Ie.TextField("noneexistingtextfieldid").TypeText("");
                 Assert.Fail("Expected ElementNotFoundException");
             }
 		    catch (ElementNotFoundException e)
@@ -218,15 +218,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFields()
 		{
-			Assert.AreEqual(6, ie.TextFields.Length, "Unexpected number of TextFields");
+			Assert.AreEqual(6, Ie.TextFields.Length, "Unexpected number of TextFields");
 
 			// Collection items by index
-			var mainForm = ie.Form("FormHiddens");
+			var mainForm = Ie.Form("FormHiddens");
 			Assert.AreEqual(2, mainForm.TextFields.Length, "Wrong number of textfields in collectionTestForm");
 			Assert.AreEqual("first", mainForm.TextFields[0].Value);
 			Assert.AreEqual("second", mainForm.TextFields[1].Value);
 
-			var form = ie.Form("Form");
+			var form = Ie.Form("Form");
 
 			// Collection.length
 			var textfields = form.TextFields;
@@ -260,7 +260,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TextFieldOfElementE()
         {
-            var textField = ie.TextField("name");
+            var textField = Ie.TextField("name");
             textField.WaitUntil(t => t.Enabled);
         }
 	}

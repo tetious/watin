@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FileUploadTests : BaseWithIETests
+	public class FileUploadTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void FileUploadElementTags()
@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateFileUploadFromElement()
 		{
-			var element = ie.Element("upload");
+			var element = Ie.Element("upload");
 			var fileUpload = new FileUpload(element);
 			Assert.AreEqual("upload", fileUpload.Id);
 		}
@@ -46,15 +46,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FileUploadExists()
 		{
-			Assert.IsTrue(ie.FileUpload("upload").Exists);
-			Assert.IsTrue(ie.FileUpload(new Regex("upload")).Exists);
-			Assert.IsFalse(ie.FileUpload("noneexistingupload").Exists);
+			Assert.IsTrue(Ie.FileUpload("upload").Exists);
+			Assert.IsTrue(Ie.FileUpload(new Regex("upload")).Exists);
+			Assert.IsFalse(Ie.FileUpload("noneexistingupload").Exists);
 		}
 
 		[Test]
 		public void FileUploadTest()
 		{
-			var fileUpload = ie.FileUpload("upload");
+			var fileUpload = Ie.FileUpload("upload");
 
 			Assert.That(fileUpload.Exists);
 			Assert.IsNull(fileUpload.FileName);
@@ -67,7 +67,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (System.IO.FileNotFoundException))]
 		public void FileUploadFileNotFoundException()
 		{
-			var fileUpload = ie.FileUpload("upload");
+			var fileUpload = Ie.FileUpload("upload");
 			fileUpload.Set("nonexistingfile.nef");
 		}
 
@@ -75,13 +75,13 @@ namespace WatiN.Core.UnitTests
 		public void FileUploads()
 		{
 			const int expectedFileUploadsCount = 1;
-			Assert.AreEqual(expectedFileUploadsCount, ie.FileUploads.Length, "Unexpected number of FileUploads");
+			Assert.AreEqual(expectedFileUploadsCount, Ie.FileUploads.Length, "Unexpected number of FileUploads");
 
 			// Collection.Length
-			var formFileUploads = ie.FileUploads;
+			var formFileUploads = Ie.FileUploads;
 
 			// Collection items by index
-			Assert.AreEqual("upload", ie.FileUploads[0].Id);
+			Assert.AreEqual("upload", Ie.FileUploads[0].Id);
 
 			IEnumerable FileUploadEnumerable = formFileUploads;
 			var FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
@@ -106,9 +106,9 @@ namespace WatiN.Core.UnitTests
 		public void FileUploadOfFileWithSpecialCharactersInFilenameShouldBeHandledOK()
 		{
             // GIVEN
-			ie.Refresh();
+			Ie.Refresh();
 
-			var fileUpload = ie.FileUpload("upload");
+			var fileUpload = Ie.FileUpload("upload");
 
 			Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
 			Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");

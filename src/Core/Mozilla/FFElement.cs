@@ -16,7 +16,7 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className"
+                    "selected", "textContent", "className", "disabled"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
@@ -28,6 +28,7 @@ namespace WatiN.Core.Mozilla
         }
 
         private ElementAttributeBag _attributeBag;
+        private string _tagName;
         private const int NodeType_Text = 3;
 
         public string ElementReference { get; private set; }
@@ -95,35 +96,35 @@ namespace WatiN.Core.Mozilla
 
         public string GetAttributeValue(string attributeName)
         {
-            if (UtilityClass.IsNullOrEmpty(attributeName))
-            {
-                throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
-            }
-
-            if (string.IsNullOrEmpty(ElementReference))
-            {
-                throw new FireFoxException("Element does not exist, element variable was empty");
-            }
-
+            // Special casese
+            if (attributeName.ToLowerInvariant() == "tagname") return TagName;
+            
+            // Translate to FireFox html syntax
             if (watiNAttributeMap.ContainsKey(attributeName))
             {
                 attributeName = watiNAttributeMap[attributeName];
             }
 
+            // Handle properties different from attributes
             if (knownAttributeOverrides.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
             {
                 return GetProperty(attributeName);
             }
 
+            // Retrieve attribute value
             var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", ElementReference, attributeName);
-            ClientPort.Write(getAttributeWrite);
+            var lastResponse = ClientPort.WriteAndRead(getAttributeWrite);
 
-            return ClientPort.LastResponseIsNull ? null : ClientPort.LastResponse;
+            // Post processing
+            if (attributeName.ToLowerInvariant() == "type") { lastResponse = lastResponse ?? "text"; }
+
+            // return result
+            return lastResponse;
         }
 
         public void SetAttributeValue(string attributeName, string value)
         {
-            throw new System.NotImplementedException();
+            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
         }
 
         public string GetStyleAttributeValue(string attributeName)
@@ -133,12 +134,12 @@ namespace WatiN.Core.Mozilla
 
         public void ClickOnElement()
         {
-            throw new System.NotImplementedException();
+            ExecuteMethod("click");
         }
 
         public void SetFocus()
         {
-            throw new System.NotImplementedException();
+            ExecuteMethod("focus");
         }
 
         public void FireEvent(string eventName, NameValueCollection eventProperties)
@@ -147,10 +148,11 @@ namespace WatiN.Core.Mozilla
             ExecuteEvent(eventName);
         }
 
+        // TODO: implement backgroundcolor
         public string BackgroundColor
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return string.Empty; }
+            set {  }
         }
 
         public IAttributeBag GetAttributeBag(DomContainer domContainer)
@@ -175,7 +177,15 @@ namespace WatiN.Core.Mozilla
 
         public string TagName
         {
-            get { return GetProperty("tagName"); }
+            get
+            {
+                if (_tagName == null)
+                {
+                    _tagName = GetProperty("tagName");
+                }
+
+                return _tagName;
+            }
         }
 
         public object Object
@@ -197,12 +207,12 @@ namespace WatiN.Core.Mozilla
 
         public void Select()
         {
-            throw new System.NotImplementedException();
+            ExecuteMethod("select");
         }
 
         public void SubmitForm()
         {
-            throw new System.NotImplementedException();
+            ExecuteMethod("submit");
         }
 
         /// <summary>
@@ -215,6 +225,15 @@ namespace WatiN.Core.Mozilla
                     "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
                     "event.initEvent(\"" + eventName + "\",true,true);\n" +
                     "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false};");
+        }
+
+        /// <summary>
+        /// Executes a method with no parameters.
+        /// </summary>
+        /// <param name="methodName">Name of the method to execute.</param>
+        private void ExecuteMethod(string methodName)
+        {
+            ClientPort.Write("{0}.{1}();", ElementReference, methodName);
         }
 
         /// <summary>

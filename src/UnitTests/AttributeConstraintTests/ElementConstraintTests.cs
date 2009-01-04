@@ -26,7 +26,7 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
     [TestFixture]
-    public class ElementConstraintTest : BaseWithIETests
+    public class ElementConstraintTest : BaseWithBrowserTests
     {
         [Test]
         public void ElementConstraintShouldCallComparerAndReturnTrue()
@@ -57,9 +57,9 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [Test]
         public void ShouldEvaluateAlsoTheAndConstraint()
         {
-            var link1 = ie.Link(Find.ByElement(
+            var link1 = Ie.Link(Find.ByElement(
                                     l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://watin.sourceforge.net"));
-            var link2 = ie.Link(Find.ByElement(
+            var link2 = Ie.Link(Find.ByElement(
                                     l => l.Id != null && l.Id.StartsWith("testlink")) && Find.ByUrl("http://www.microsoft.com/"));
 
             Assert.That(link1.Url, Is.EqualTo("http://watin.sourceforge.net/"));

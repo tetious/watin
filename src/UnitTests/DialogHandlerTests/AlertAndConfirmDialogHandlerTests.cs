@@ -24,22 +24,22 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
-	public class AlertAndConfirmDialogHandlerTests : BaseWithIETests
+	public class AlertAndConfirmDialogHandlerTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void AlertAndConfirmDialogHandler()
 		{
 			DialogWatcher dialogWatcher;
 
-			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
+			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
 
 			// Create handler for Alert dialogs and register it.
 			AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
-			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+			using (new UseDialogOnce(Ie.DialogWatcher, dialogHandler))
 			{
 				Assert.AreEqual(0, dialogHandler.Count);
 
-				ie.Button("helloid").Click();
+				Ie.Button("helloid").Click();
 
 				Assert.AreEqual(1, dialogHandler.Count);
 				Assert.AreEqual("hello", dialogHandler.Alerts[0]);
@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 				Assert.AreEqual(0, dialogHandler.Count);
 
 				// Test Clear
-				ie.Button("helloid").Click();
+				Ie.Button("helloid").Click();
 
 				Assert.AreEqual(1, dialogHandler.Count);
 
@@ -58,7 +58,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 
 				Assert.AreEqual(0, dialogHandler.Count);
 
-				dialogWatcher = ie.DialogWatcher;
+				dialogWatcher = Ie.DialogWatcher;
 			}
 
 			Assert.AreEqual(0, dialogWatcher.Count, "DialogWatcher count should be zero after test");
@@ -67,10 +67,10 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		[Test, ExpectedException(typeof (MissingAlertException))]
 		public void MissingAlertExceptionTest()
 		{
-			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
+			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
 
 			AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
-			using (new UseDialogOnce(ie.DialogWatcher, dialogHandler))
+			using (new UseDialogOnce(Ie.DialogWatcher, dialogHandler))
 			{
 				dialogHandler.Pop();
 			}

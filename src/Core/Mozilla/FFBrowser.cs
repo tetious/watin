@@ -56,7 +56,7 @@ namespace WatiN.Core.Mozilla
         /// <param name="url">The URL to laod.</param>
         public void LoadUri(Uri url)
         {
-            ClientPort.Write("{0}.loadURI(\"{1}\");", FireFoxClientPort.BrowserVariableName, url);
+            ClientPort.Write("{0}.loadURI(\"{1}\");", FireFoxClientPort.BrowserVariableName, url.AbsoluteUri);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace WatiN.Core.Mozilla
 
         public INativeDocument CreateDocument(object document)
         {
-            throw new System.NotImplementedException();
+            return new FFDocument(ClientPort);
         }
     }
 }

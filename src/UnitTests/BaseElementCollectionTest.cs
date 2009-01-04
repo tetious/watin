@@ -23,7 +23,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class BaseElementCollectionTest : BaseWithIETests
+	public class BaseElementCollectionTest : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -33,7 +33,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FirstWithAttributConstraint()
 		{
-			var elements = ie.Elements;
+			var elements = Ie.Elements;
 			var element = elements.First(Find.ById("popupid"));
 			Assert.That(element.Exists, Is.True);
 			Assert.That(element, Is.TypeOf(typeof(Button)));
@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void First()
 		{
-			var buttons = ie.Buttons;
+			var buttons = Ie.Buttons;
 			Element element = buttons.First();
 
 			Assert.That(element.Exists, Is.True);
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void ExistUsingPredicateT()
         {
-            Assert.That(ie.Buttons.Exists(b => b.Id == "helloid"));
+            Assert.That(Ie.Buttons.Exists(b => b.Id == "helloid"));
         }
 	}
 }

@@ -7,7 +7,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
     [TestFixture]
-    public class CaptureWebPageToFileTests : BaseWithIETests
+    public class CaptureWebPageToFileTests : BaseWithBrowserTests
     {
         public override Uri TestPageUri
         {
@@ -101,7 +101,7 @@ namespace WatiN.Core.UnitTests
         private void AssertImageTypeVersusEncoderMimeType(string imageFileName, string expectedMimeType)
         {
             // GIVEN
-            var captureWebPage = new CaptureWebPageMock(ie.DomContainer);
+            var captureWebPage = new CaptureWebPageMock(Ie.DomContainer);
 
             // WHEN
             captureWebPage.CaptureWebPageToFile(imageFileName, true, true, 100, 100);
@@ -113,7 +113,7 @@ namespace WatiN.Core.UnitTests
         private void CaptureWebPageToFileAndAssert(string imageFileName, string expectedImageType)
         {
             // GIVEN
-            var captureWebPage = new CaptureWebPageMock(ie.DomContainer) { CallBaseCaptureWebPageToFile = false };
+            var captureWebPage = new CaptureWebPageMock(Ie.DomContainer) { CallBaseCaptureWebPageToFile = false };
 
             // WHEN
             captureWebPage.CaptureWebPageToFile(imageFileName, true, true, 100, 100);

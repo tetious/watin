@@ -147,6 +147,8 @@ namespace WatiN.Core.InternetExplorer
 		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
 		public string GetAttributeValue(string attributeName)
 		{
+            if (attributeName.ToLowerInvariant() == "tagname") return TagName;
+
 			var attributeValue = htmlElement.getAttribute(attributeName, 0);
 
 			if (attributeValue == DBNull.Value || attributeValue == null)
@@ -341,11 +343,6 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get { return htmlElement.tagName; }
 		}
-
-//		public string TagName
-//		{
-//			get { return GetAttributeValue("tagName"); }
-//		}
 	}
 
     public class AsyncScriptRunner

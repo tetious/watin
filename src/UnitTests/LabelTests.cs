@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class LabelTests : BaseWithIETests
+	public class LabelTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void LabelElementTags()
@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelFromElement()
 		{
-			Element element = ie.Element("label", Find.ByFor("Checkbox21"));
+			Element element = Ie.Element("label", Find.ByFor("Checkbox21"));
 			Label label = new Label(element);
 			Assert.AreEqual("Checkbox21", label.For);
 		}
@@ -44,15 +44,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelExists()
 		{
-			Assert.IsTrue(ie.Label(Find.ByFor("Checkbox21")).Exists);
-			Assert.IsTrue(ie.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
-			Assert.IsFalse(ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
+			Assert.IsTrue(Ie.Label(Find.ByFor("Checkbox21")).Exists);
+			Assert.IsTrue(Ie.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
+			Assert.IsFalse(Ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
 		}
 
 		[Test]
 		public void LabelByFor()
 		{
-			Label label = ie.Label(Find.ByFor("Checkbox21"));
+			Label label = Ie.Label(Find.ByFor("Checkbox21"));
 
 			Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
 			Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
@@ -62,9 +62,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelByForWithElement()
 		{
-			CheckBox checkBox = ie.CheckBox("Checkbox21");
+			CheckBox checkBox = Ie.CheckBox("Checkbox21");
 
-			Label label = ie.Label(Find.ByFor(checkBox));
+			Label label = Ie.Label(Find.ByFor(checkBox));
 
 			Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
 			Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
@@ -74,8 +74,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelWrapped()
 		{
-			LabelCollection labelCollection = ie.Labels;
-			Assert.AreEqual(2, ie.Labels.Length, "Unexpected number of labels");
+			LabelCollection labelCollection = Ie.Labels;
+			Assert.AreEqual(2, Ie.Labels.Length, "Unexpected number of labels");
 
 			Label label = labelCollection[1];
 
@@ -90,9 +90,9 @@ namespace WatiN.Core.UnitTests
 		{
 			const int expectedLabelCount = 2;
 
-			Assert.AreEqual(expectedLabelCount, ie.Labels.Length, "Unexpected number of labels");
+			Assert.AreEqual(expectedLabelCount, Ie.Labels.Length, "Unexpected number of labels");
 
-			LabelCollection labelCollection = ie.Labels;
+			LabelCollection labelCollection = Ie.Labels;
 
 			// Collection items by index
 			Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");

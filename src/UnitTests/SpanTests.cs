@@ -25,14 +25,14 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class SpanTests : BaseWithIETests
+	public class SpanTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void SpanExists()
 		{
-			Assert.IsTrue(ie.Span("spanid1").Exists);
-			Assert.IsTrue(ie.Span(new Regex("spanid1")).Exists);
-			Assert.IsFalse(ie.Span("nonexistingspanid1").Exists);
+			Assert.IsTrue(Ie.Span("spanid1").Exists);
+			Assert.IsTrue(Ie.Span(new Regex("spanid1")).Exists);
+			Assert.IsFalse(Ie.Span("nonexistingspanid1").Exists);
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateSpanFromElement()
 		{
-			Element element = ie.Element("spanid1");
+			Element element = Ie.Element("spanid1");
 			Span span = new Span(element);
 			Assert.AreEqual("spanid1", span.Id);
 		}
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SpanTest()
 		{
-			Span Span = ie.Span("spanid1");
+			Span Span = Ie.Span("spanid1");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), Span);
             Assert.IsInstanceOfType(typeof (ElementsContainer<Span>), Span);
@@ -66,14 +66,14 @@ namespace WatiN.Core.UnitTests
 		public void Spans()
 		{
 			const int expectedSpansCount = 3;
-			Assert.AreEqual(expectedSpansCount, ie.Spans.Length, "Unexpected number of Spans");
+			Assert.AreEqual(expectedSpansCount, Ie.Spans.Length, "Unexpected number of Spans");
 
 			// Collection.Length
-			SpanCollection formSpans = ie.Spans;
+			SpanCollection formSpans = Ie.Spans;
 
 			// Collection items by index
-			Assert.AreEqual("spanid1", ie.Spans[0].Id);
-			Assert.AreEqual("Span1", ie.Spans[1].Id);
+			Assert.AreEqual("spanid1", Ie.Spans[0].Id);
+			Assert.AreEqual("Span1", Ie.Spans[1].Id);
 
 			IEnumerable SpanEnumerable = formSpans;
 			IEnumerator SpanEnumerator = SpanEnumerable.GetEnumerator();

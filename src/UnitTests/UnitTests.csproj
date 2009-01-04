@@ -170,7 +170,7 @@
     <Compile Include="BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseWithIETests.cs">
+    <Compile Include="BaseWithBrowserTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ButtonTests.cs">

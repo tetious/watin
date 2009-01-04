@@ -26,7 +26,7 @@ using WatiN.Core.Comparers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TableRowTests : BaseWithIETests
+	public class TableRowTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void TableRowElementTags()
@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowFromElement()
 		{
-			Element element = ie.Element("row0");
+			Element element = Ie.Element("row0");
 			TableRow tableRow = new TableRow(element);
 			Assert.AreEqual("row0", tableRow.Id);
 		}
@@ -46,16 +46,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowExists()
 		{
-			Assert.IsTrue(ie.TableRow("row0").Exists);
-			Assert.IsTrue(ie.TableRow(new Regex("row0")).Exists);
-			Assert.IsFalse(ie.TableRow("nonexistingtr").Exists);
+			Assert.IsTrue(Ie.TableRow("row0").Exists);
+			Assert.IsTrue(Ie.TableRow(new Regex("row0")).Exists);
+			Assert.IsFalse(Ie.TableRow("nonexistingtr").Exists);
 		}
 
 		[Test]
 		public void TableRows()
 		{
 			// Collection.Length
-			TableRowCollection rows = ie.Table("table1").TableRows;
+			TableRowCollection rows = Ie.Table("table1").TableRows;
 
 			Assert.AreEqual(3, rows.Length);
 
@@ -85,8 +85,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowRowIndex()
 		{
-			Assert.AreEqual(1, ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("a1"))).Index);
-			Assert.AreEqual(2, ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("b2"))).Index);
+			Assert.AreEqual(1, Ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("a1"))).Index);
+			Assert.AreEqual(2, Ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("b2"))).Index);
 		}
 
 		public override Uri TestPageUri
@@ -97,9 +97,9 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void TableRowDirectChildren()
 	    {
-	        ie.GoTo(TablesUri);
+	        Ie.GoTo(TablesUri);
 
-	        TableRow tableRow = ie.TableRow("1");
+	        TableRow tableRow = Ie.TableRow("1");
 
             Assert.That(tableRow.TableCellsDirectChildren.Length, Is.EqualTo(2));
             Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));

@@ -26,7 +26,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 	/// Summary description for IndexConstraintTests.
 	/// </summary>
 	[TestFixture]
-	public class IndexConstraintTests : BaseWithIETests
+	public class IndexConstraintTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -36,13 +36,13 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 		[Test]
 		public void ShouldBeAbleToFindElementsByTheirIndex()
 		{
-			Assert.That(ie.TextField(Find.ByIndex(3)).Id, Is.EqualTo("readonlytext"));
+			Assert.That(Ie.TextField(Find.ByIndex(3)).Id, Is.EqualTo("readonlytext"));
 		}
 
 		[Test]
 		public void ShouldBeAbleToRefindElementByIndexAfterCallingRefresh()
 		{
-			TextField textField = ie.TextField(Find.ByIndex(3));
+			TextField textField = Ie.TextField(Find.ByIndex(3));
 			Assert.That(textField.Id, Is.EqualTo("readonlytext"));
 
 			textField.Refresh();

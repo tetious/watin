@@ -30,7 +30,7 @@ using WatiN.Core.UnitTests.AttributeConstraintTests;
 namespace WatiN.Core.UnitTests.IETests
 {
 	[TestFixture]
-	public class IEElementFinderTests : BaseWithIETests
+	public class IEElementFinderTests : BaseWithBrowserTests
 	{
 		private Mock<IElementCollection> stubElementCollection;
 		private Mock<DomContainer> domContainerMock;
@@ -90,8 +90,8 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			Assert.That(ie.Span("divid").Exists, Is.False);
-			Assert.That(ie.Div("divid").Exists, Is.True);
+			Assert.That(Ie.Span("divid").Exists, Is.False);
+			Assert.That(Ie.Div("divid").Exists, Is.True);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			Assert.That(ie.TextField("textinput1").Exists, Is.False);
+			Assert.That(Ie.TextField("textinput1").Exists, Is.False);
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace WatiN.Core.UnitTests.IETests
 			SetUp();
 			
 			// Kick this code off to exclude initialization time during measurement
-			Assert.IsTrue(ie.Div("divid").Exists);
+			Assert.IsTrue(Ie.Div("divid").Exists);
 
 			var ticksByExactId = GetTicks(Find.ById("divid"));
             var ticksByRegExId = GetTicks(Find.ById(new Regex("divid")));
@@ -122,7 +122,7 @@ namespace WatiN.Core.UnitTests.IETests
 	    private long GetTicks(BaseConstraint findBy)
 	    {
 	        var ticks = DateTime.Now.Ticks;
-	        for (var index = 0; index < 100; index++ ) Assert.IsTrue(ie.Div(findBy).Exists);
+	        for (var index = 0; index < 100; index++ ) Assert.IsTrue(Ie.Div(findBy).Exists);
 	        ticks = DateTime.Now.Ticks - ticks;
 	        return ticks;
 	    }

@@ -22,7 +22,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class HTMLDialogFindByTests : BaseWithIETests
+	public class HTMLDialogFindByTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -33,14 +33,14 @@ namespace WatiN.Core.UnitTests
 		public override void FixtureSetup()
 		{
 			base.FixtureSetup();
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 		}
 
 		[TestFixtureTearDown]
 		public override void FixtureTearDown()
 		{
-			ie.HtmlDialogs.CloseAll();
-			ie.WaitForComplete();
+			Ie.HtmlDialogs.CloseAll();
+			Ie.WaitForComplete();
 		
 			base.FixtureTearDown();		
 		}
@@ -48,31 +48,31 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
 		public void HTMLDialogGettingWithNegativeTimeoutNotAllowed()
 		{
-			ie.HtmlDialog(Find.ByUrl(PopUpURI), -1);
+			Ie.HtmlDialog(Find.ByUrl(PopUpURI), -1);
 		}
 
 		[Test]
 		public void HTMLDialogFindByTitle()
 		{
-			AssertHTMLDialog(ie.HtmlDialog(Find.ByTitle("PopUpTest")));
+			AssertHTMLDialog(Ie.HtmlDialog(Find.ByTitle("PopUpTest")));
 		}
 
 		[Test]
 		public void HTMLDialogFindByUrl()
 		{
-			AssertHTMLDialog(ie.HtmlDialog(Find.ByUrl(PopUpURI)));
+			AssertHTMLDialog(Ie.HtmlDialog(Find.ByUrl(PopUpURI)));
 		}
 
 		[Test]
 		public void HTMLDialogFindByTitleAndWithTimeout()
 		{
-			AssertHTMLDialog(ie.HtmlDialog(Find.ByTitle("PopUpTest"), 10));
+			AssertHTMLDialog(Ie.HtmlDialog(Find.ByTitle("PopUpTest"), 10));
 		}
 
 		[Test]
 		public void HTMLDialogFindByUrlAndWithTimeout()
 		{
-			AssertHTMLDialog(ie.HtmlDialog(Find.ByUrl(PopUpURI), 10));
+			AssertHTMLDialog(Ie.HtmlDialog(Find.ByUrl(PopUpURI), 10));
 		}
 
 		private static void AssertHTMLDialog(HtmlDialog htmlDialog)

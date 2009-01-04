@@ -26,20 +26,20 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class HTMLDialogTests : BaseWithIETests
+	public class HTMLDialogTests : BaseWithBrowserTests
 	{
 		[TearDown]
 		public void TearDown()
 		{
-			ie.HtmlDialogs.CloseAll();
+			Ie.HtmlDialogs.CloseAll();
 		}
 
 		[Test]
 		public void HTMLDialogModalByTitle()
 		{
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
-			using (var htmlDialog = ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+			using (var htmlDialog = Ie.HtmlDialog(Find.ByTitle("PopUpTest")))
 			{
 				Assert.IsInstanceOfType(typeof (DomContainer), htmlDialog);
 
@@ -54,9 +54,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HTMLDialogModalByUrl()
 		{
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
-			using (var htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			using (var htmlDialog = Ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
 				Assert.IsNotNull(htmlDialog, "Dialog not found");
 				Assert.AreEqual("PopUpTest", htmlDialog.Title, "Unexpected title");
@@ -67,20 +67,20 @@ namespace WatiN.Core.UnitTests
 		public void HTMLDialogShouldBeClosedWhenDisposed()
 		{
 			// Given no HtmlDialog is shown
-			Assert.That(ie.HtmlDialogs.Length, Is.EqualTo(0));
+			Assert.That(Ie.HtmlDialogs.Length, Is.EqualTo(0));
 			
 			// When I open an HtmlDialog
 			// and verify it exists
 			// and the HtmlDialog instance gets disposed
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
-			using (var htmlDialog = ie.HtmlDialog(Find.ByUrl(PopUpURI)))
+			using (var htmlDialog = Ie.HtmlDialog(Find.ByUrl(PopUpURI)))
 			{
 				Assert.IsNotNull(htmlDialog, "Dialog not found");
 			}
 
 			// Then again there should be no HtmlDialog open
-			Assert.That(ie.HtmlDialogs.Length, Is.EqualTo(0));
+			Assert.That(Ie.HtmlDialogs.Length, Is.EqualTo(0));
 		}
 
 
@@ -88,13 +88,13 @@ namespace WatiN.Core.UnitTests
 		public void HTMLDialogsExists()
 		{
 			BaseConstraint findBy = Find.ByUrl(PopUpURI);
-			Assert.IsFalse(ie.HtmlDialogs.Exists(findBy));
+			Assert.IsFalse(Ie.HtmlDialogs.Exists(findBy));
 
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
 			Thread.Sleep(1000);
 
-			Assert.IsTrue(ie.HtmlDialogs.Exists(findBy));
+			Assert.IsTrue(Ie.HtmlDialogs.Exists(findBy));
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace WatiN.Core.UnitTests
 			{
 				// Time out after timeoutTime seconds
 				startTime = DateTime.Now;
-				ie.HtmlDialog(Find.ByTitle("PopUpTest"), timeoutTime);
+				Ie.HtmlDialog(Find.ByTitle("PopUpTest"), timeoutTime);
 				Assert.Fail("PopUpTest should not be found");
 			}
 			catch (Exception e)
@@ -124,8 +124,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HTMLDialogModeless()
 		{
-			ie.Button("popupid").Click();
-			using (Document dialog = ie.HtmlDialogs[0])
+			Ie.Button("popupid").Click();
+			using (Document dialog = Ie.HtmlDialogs[0])
 			{
 				var value = dialog.TextField("dims").Value;
 				Assert.AreEqual("47", value);

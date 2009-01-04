@@ -33,7 +33,7 @@ using StringComparer=WatiN.Core.Comparers.StringComparer;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ElementTests : BaseWithIETests
+	public class ElementTests : BaseWithBrowserTests
 	{
 		private Element element;
 
@@ -57,28 +57,28 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()
 		{
-			var tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(typeof (Div)));
 		}
 
 		[Test]
 		public void AncestorTagNameShouldReturnTypedElement()
 		{
-			var tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor("Div"));
 		}
 
 		[Test]
 		public void AncestorAttributeConstraintShouldReturnTypedElement()
 		{
-			var tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(Find.ById("divid")));
 		}
 
 		[Test]
 		public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
 		{
-		    var tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+		    var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
             var ancestor = tableCell.Ancestor(typeof(Div), Find.ById("divid"));
 
             Assert.IsInstanceOfType(typeof(Div), ancestor);
@@ -138,7 +138,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementParentReturningTypedParent()
 		{
-			var tableCell = ie.TableCell(Find.ByText("Contains text in DIV"));
+			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			
             Assert.IsInstanceOfType(typeof (TableRow), tableCell.Parent);
 		}
@@ -146,7 +146,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementParentReturnsElementsContainerForUnknownElement()
 		{
-			var parent = ie.Form("Form").Parent;
+			var parent = Ie.Form("Form").Parent;
 		    var container = parent as IElementsContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
@@ -156,19 +156,19 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
 		{
-			Assert.IsNull(ie.Div("NextAndPreviousTests").Div("first").PreviousSibling);
+			Assert.IsNull(Ie.Div("NextAndPreviousTests").Div("first").PreviousSibling);
 		}
 
 		[Test]
 		public void ElementPreviousSiblingReturningTypedParent()
 		{
-			Assert.IsTrue(ie.RadioButton("Radio1").PreviousSibling.GetType().Equals(typeof (CheckBox)));
+			Assert.IsTrue(Ie.RadioButton("Radio1").PreviousSibling.GetType().Equals(typeof (CheckBox)));
 		}
 
 		[Test]
 		public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
 		{
-			var previous = ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
+			var previous = Ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
 		    var container = previous as IElementsContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
@@ -178,7 +178,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNextSiblingShouldReturnNullWhenLastSibling()
 		{
-			var next = ie.Div("NextAndPreviousTests").Div("last").NextSibling;
+			var next = Ie.Div("NextAndPreviousTests").Div("last").NextSibling;
 			
             Assert.IsNull(next);
 		}
@@ -186,7 +186,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNextSiblingReturningTypedParent()
 		{
-			var next = ie.Div("NextAndPreviousTests").Div("first").NextSibling;
+			var next = Ie.Div("NextAndPreviousTests").Div("first").NextSibling;
 			
             Assert.IsTrue(next.GetType().Equals(typeof (Span)));
 		}
@@ -194,7 +194,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
 		{
-			var next = ie.Div("NextAndPreviousTests").Span("second").NextSibling;
+			var next = Ie.Div("NextAndPreviousTests").Span("second").NextSibling;
 		    var container = next as IElementsContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
@@ -225,14 +225,14 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ArgumentException))]
 		public void AncestorTypeShouldOnlyExceptTypesInheritingElement()
 		{
-			element = ie.Form("Form");
+			element = Ie.Form("Form");
 			element.Ancestor(typeof (String));
 		}
 
 		[Test]
 		public void Element()
 		{
-			element = ie.Element(Find.ById("table1"));
+			element = Ie.Element(Find.ById("table1"));
 
 		    var container = element as IElementsContainer;
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
@@ -250,7 +250,7 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("table", element.TagName.ToLower(), "Invalid tagname");
 
 			// Textbefore and TextAfter tests
-			var checkBox = ie.CheckBox("Checkbox21");
+			var checkBox = Ie.CheckBox("Checkbox21");
 			
             Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
 			Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
@@ -259,41 +259,41 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementByTagNameAndInputType()
 		{
-			element = ie.Element("input", Find.By("id", "name"), "text");
+			element = Ie.Element("input", Find.By("id", "name"), "text");
 			Assert.IsTrue(element.Exists);
 		}
 
 		[Test]
 		public void ElementByTagName()
 		{
-			element = ie.Element("a", Find.By("id", "testlinkid"));
+			element = Ie.Element("a", Find.By("id", "testlinkid"));
 			Assert.IsTrue(element.Exists);
 		}
 
 		[Test]
 		public void FindHeadElementByTagName()
 		{
-			element = ie.Element("head", Find.ByIndex(0));
+			element = Ie.Element("head", Find.ByIndex(0));
 			Assert.IsTrue(element.Exists);
 		}
 
 		[Test]
 		public void ElementFindByShouldNeverThrowInvalidAttributeException()
 		{
-			element = ie.Element(Find.ByFor("Checkbox21"));
+			element = Ie.Element(Find.ByFor("Checkbox21"));
 			Assert.IsTrue(element.Exists);
 		}
 
 		[Test]
 		public void ElementCollectionExistsShouldNeverThrowInvalidAttributeException()
 		{
-			Assert.IsTrue(ie.Elements.Exists(Find.ByFor("Checkbox21")));
+			Assert.IsTrue(Ie.Elements.Exists(Find.ByFor("Checkbox21")));
 		}
 
 		[Test]
 		public void ElementCollectionShouldReturnTypedElements()
 		{
-			var elements = ie.Div("NextAndPreviousTests").Elements;
+			var elements = Ie.Div("NextAndPreviousTests").Elements;
 			Assert.IsTrue(elements[0].GetType().Equals(typeof (Div)), "Element 0 should be a div");
 			Assert.IsTrue(elements[1].GetType().Equals(typeof (Span)), "Element 1 should be a span");
 
@@ -306,7 +306,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementCollectionSecondFilterShouldNeverThrowInvalidAttributeException()
 		{
-			var elements = ie.Elements.Filter(Find.ById("testlinkid"));
+			var elements = Ie.Elements.Filter(Find.ById("testlinkid"));
 			var elements2 = elements.Filter(Find.ByFor("Checkbox21"));
 			Assert.AreEqual(0, elements2.Length);
 		}
@@ -314,49 +314,49 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GetInvalidAttribute()
 		{
-			Element helloButton = ie.Button("helloid");
+			Element helloButton = Ie.Button("helloid");
 			Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
 		}
 
 		[Test]
 		public void GetValidButUndefiniedAttribute()
 		{
-			Element helloButton = ie.Button("helloid");
+			Element helloButton = Ie.Button("helloid");
 			Assert.IsNull(helloButton.GetAttributeValue("title"));
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfNullThrowsArgumentNullException()
 		{
-			Element helloButton = ie.Button("helloid");
+			Element helloButton = Ie.Button("helloid");
 			Assert.IsNull(helloButton.GetAttributeValue(null));
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfEmptyStringThrowsArgumentNullException()
 		{
-			Element helloButton = ie.Button("helloid");
+			Element helloButton = Ie.Button("helloid");
 			Assert.IsNull(helloButton.GetAttributeValue(String.Empty));
 		}
 
 		[Test]
 		public void Flash()
 		{
-			ie.TextField("name").Flash();
+			Ie.TextField("name").Flash();
 		}
 
 		[Test]
 		public void ElementExists()
 		{
-			Assert.IsTrue(ie.Div("divid").Exists);
-			Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
-			Assert.IsFalse(ie.Button("noneexistingelementid").Exists);
+			Assert.IsTrue(Ie.Div("divid").Exists);
+			Assert.IsTrue(Ie.Div(new Regex("divid")).Exists);
+			Assert.IsFalse(Ie.Button("noneexistingelementid").Exists);
 		}
 
 		[Test]
 		public void WaitUntilElementExistsTestElementAlreadyExists()
 		{
-			var button = ie.Button("disabledid");
+			var button = Ie.Button("disabledid");
 
 			Assert.IsTrue(button.Exists);
 			button.WaitUntilExists();
@@ -423,7 +423,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element to show up.")]
 		public void WaitUntilElementExistsTimeOutException()
 		{
-			ie.Button("nonexistingbutton").WaitUntilExists(1);
+			Ie.Button("nonexistingbutton").WaitUntilExists(1);
 		}
 
 		[Test]
@@ -570,7 +570,7 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'True'")]
 		public void WaitUntilTimesOut()
 		{
-			element = ie.Form("Form");
+			element = Ie.Form("Form");
 			Assert.That(element.GetAttributeValue("disabled"), Is.EqualTo(false.ToString()), "Expected enabled form");
 
 			element.WaitUntil(new AttributeConstraint("disabled", true.ToString()), 1);
@@ -579,28 +579,28 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementShouldBeFoundAfterRedirect()
 		{
-			ie.GoTo(new Uri(HtmlTestBaseURI, "intro.html"));
+			Ie.GoTo(new Uri(HtmlTestBaseURI, "intro.html"));
 
-			Assert.IsFalse(ie.TextField("TheTextBox").Exists);
+			Assert.IsFalse(Ie.TextField("TheTextBox").Exists);
 
-			ie.TextField("TheTextBox").WaitUntilExists(10);
+			Ie.TextField("TheTextBox").WaitUntilExists(10);
 
-			Assert.IsTrue(ie.TextField("TheTextBox").Exists);
+			Assert.IsTrue(Ie.TextField("TheTextBox").Exists);
 		}
 
 		[Test]
 		public void GetAttributeValueOfTypeInt()
 		{
-			Assert.AreEqual("10", ie.Form("Form").GetAttributeValue("sourceIndex"));
+			Assert.AreEqual("10", Ie.Form("Form").GetAttributeValue("sourceIndex"));
 		}
 
 		[Test]
 		public void FireKeyDownEventOnElementWithNoId()
 		{
-			ie.GoTo(TestEventsURI);
+			Ie.GoTo(TestEventsURI);
 
-			var report = ie.TextField("Report");
-			var button = ie.Button(Find.ByValue("Button without id"));
+			var report = Ie.TextField("Report");
+			var button = Ie.Button(Find.ByValue("Button without id"));
 
 			Assert.IsNull(button.Id, "Button id not null before click event");
 			Assert.IsNull(report.Text, "Report not empty");
@@ -616,17 +616,17 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FireEventAlwaysSetsLeftMouseOnEventObject()
 		{
-			ie.GoTo(TestEventsURI);
+			Ie.GoTo(TestEventsURI);
 			
 			// test in standard IE window
-			ie.Button(Find.ByValue("Button without id")).KeyDown();
+			Ie.Button(Find.ByValue("Button without id")).KeyDown();
 
-			Assert.AreEqual("1", ie.TextField("eventButtonValue").Value, "Event.button not left");
+			Assert.AreEqual("1", Ie.TextField("eventButtonValue").Value, "Event.button not left");
 
 			// test in HTMLDialog window
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
-			using (var htmlDialog = ie.HtmlDialog(Find.ByIndex(0), 2))
+			using (var htmlDialog = Ie.HtmlDialog(Find.ByIndex(0), 2))
 			{
 				htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 
@@ -637,10 +637,10 @@ namespace WatiN.Core.UnitTests
 		[Test, Ignore("Work in progress")] // Category("InternetConnectionNeeded")]
 		public void PositionMousePointerInMiddleOfElement()
 		{
-			ie.GoTo(GoogleUrl);
+			Ie.GoTo(GoogleUrl);
 
-			var button = ie.Button(Find.ByName("btnG"));
-			PositionMousePointerInMiddleOfElement(button, ie);
+			var button = Ie.Button(Find.ByName("btnG"));
+			PositionMousePointerInMiddleOfElement(button, Ie);
 			button.Flash();
 			MouseMove(50, 50, true);
 			Thread.Sleep(2000);
@@ -715,17 +715,17 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FireEventAlwaysSetsSrcElementOnEventObject()
 		{
-			ie.GoTo(TestEventsURI);
+			Ie.GoTo(TestEventsURI);
 
 			// test in standard IE window
-			ie.Button(Find.ByValue("Button without id")).KeyDown();
+			Ie.Button(Find.ByValue("Button without id")).KeyDown();
 
-			Assert.AreEqual("Button without id", ie.TextField("eventScrElement").Value, "Unexpected Event.scrElement.value");
+			Assert.AreEqual("Button without id", Ie.TextField("eventScrElement").Value, "Unexpected Event.scrElement.value");
 
 			// test in HTMLDialog window
-			ie.Button("modalid").ClickNoWait();
+			Ie.Button("modalid").ClickNoWait();
 
-			using (var htmlDialog = ie.HtmlDialog(Find.ByIndex(0), 2))
+			using (var htmlDialog = Ie.HtmlDialog(Find.ByIndex(0), 2))
 			{
 				htmlDialog.Button(Find.ByValue("Button without id")).KeyDown();
 
@@ -739,7 +739,7 @@ namespace WatiN.Core.UnitTests
 			Settings.HighLightElement = true;
 			Settings.HighLightColor = "red";
 
-			var textField = ie.TextField("name");
+			var textField = Ie.TextField("name");
 			var _originalcolor = textField.Style.BackgroundColor;
 
 			textField.Highlight(true);
@@ -761,7 +761,7 @@ namespace WatiN.Core.UnitTests
 			Settings.HighLightElement = true;
 			Settings.HighLightColor = "red";
 
-			var textField = ie.TextField("name");
+			var textField = Ie.TextField("name");
 			var _originalcolor = textField.Style.BackgroundColor;
 
 			textField.Highlight(true);
@@ -847,9 +847,9 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Bug_1932065_FireEventNoWait_hangs_when_ModalWindow_opened()
         {
-            ie.GoTo(PopUpURI);
-            ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
-            ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+            Ie.GoTo(PopUpURI);
+            Ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+            Ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
         }
 
         [Test]
@@ -879,8 +879,8 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AncestorGenericTypeAndAttributeConstraintShouldReturnTypedElement()
         {
-            ie.GoTo(TablesUri);
-            var tableRow = ie.TableRow(Find.ById("2"));
+            Ie.GoTo(TablesUri);
+            var tableRow = Ie.TableRow(Find.ById("2"));
             Element ancestor = tableRow.Ancestor<Table>(Find.ById("Table1"));
           
             Assert.IsInstanceOfType (typeof (Table), ancestor);
@@ -890,8 +890,8 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AncestorGenericTypeAndPredicateShouldReturnTypedElement()
         {
-            ie.GoTo(TablesUri);
-            var tableRow = ie.TableRow(Find.ById("2"));
+            Ie.GoTo(TablesUri);
+            var tableRow = Ie.TableRow(Find.ById("2"));
             Element ancestor = tableRow.Ancestor<Table>(delegate(Table table) { return table.Id == "Table1"; });
           
             Assert.IsInstanceOfType (typeof (Table), ancestor);
@@ -901,13 +901,13 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TableOfElementE()
         {
-            Element table = ie.Table("table1");
+            Element table = Ie.Table("table1");
             table.WaitUntil((Table table1) => table1.Enabled);
 
-            ElementsContainer<Table> table2 = ie.Table("table1");
+            ElementsContainer<Table> table2 = Ie.Table("table1");
             table2.WaitUntil(t => t.Enabled);
 
-            var table3 = ie.Table("table1");
+            var table3 = Ie.Table("table1");
             table3.WaitUntil(IsEnabled);
         }
         private static bool IsEnabled(Table table)

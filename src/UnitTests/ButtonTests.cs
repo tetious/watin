@@ -26,198 +26,295 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ButtonTests : BaseWithIETests
+	public class ButtonTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void ButtonCollectionSecondFilterAndOthersShouldNeverThrowInvalidAttributeException()
 		{
-			ButtonCollection buttons = ie.Buttons.Filter(Find.ById("testlinkid"));
-			ButtonCollection buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
-			Assert.AreEqual(0, buttons2.Length);
+            ExecuteTest(browser =>
+                            {
+                                var buttons = browser.Buttons.Filter(Find.ById("testlinkid"));
+                                var buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
+                                Assert.AreEqual(0, buttons2.Length);
+                                
+                            });
 		}
 
 		[Test, ExpectedException(typeof (ElementDisabledException))]
 		public void ButtonDisabledException()
 		{
-			ie.Button("disabledid").Click();
+		    ExecuteTest(browser => browser.Button("disabledid").Click());
+
 		}
 
 		[Test]
 		public void ButtonElementNotFoundException()
 		{
-            try
-            {
-                Settings.WaitUntilExistsTimeOut = 1;
-                ie.Button("noneexistingbuttonid").Click();
-                Assert.Fail("Expected ElementNotFoundException");
-            }
-            catch (ElementNotFoundException e)
-            {
-                Assert.That(e.Message, Text.StartsWith("Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid' at file://"));
-                Assert.That(e.Message, Text.EndsWith("main.html"));
-            }
-        }
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+		                            Settings.WaitUntilExistsTimeOut = 1;
+		                            browser.Button("noneexistingbuttonid").Click();
+		                            Assert.Fail("Expected ElementNotFoundException");
+		                        }
+		                        catch (ElementNotFoundException e)
+		                        {
+		                            Assert.That(e.Message, Text.StartsWith("Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid' at file://"));
+		                            Assert.That(e.Message, Text.EndsWith("main.html"));
+		                        }
+
+		                    });
+
+		}
 
 		[Test]
 		public void ButtonExists()
 		{
-			// Test <input type=button />
-			Assert.IsTrue(ie.Button("disabledid").Exists);
-			// Test <Button />
-			Assert.IsTrue(ie.Button("buttonelementid").Exists);
-			
-            Assert.IsTrue(ie.Button(b => b.Id == "buttonelementid").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        // Test <input type=button />
+		                        Assert.IsTrue(browser.Button("disabledid").Exists);
+		                        // Test <Button />
+                                Assert.IsTrue(browser.Button("buttonelementid").Exists);
 
-			Assert.IsFalse(ie.Button("noneexistingbuttonid").Exists);
+                                Assert.IsTrue(browser.Button(b => b.Id == "buttonelementid").Exists);
+
+                                Assert.IsFalse(browser.Button("noneexistingbuttonid").Exists);
+
+		                    });
+
 		}
 
 		[Test]
 		public void CreateButtonFromInputHTMLElement()
 		{
-			Element element = ie.Element("input", Find.ById("disabledid"), "button");
-//			Element element = ie.Element(Find.ById("disabledid"));
-			Button button = new Button(element);
-			Assert.AreEqual("disabledid", button.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var element = browser.Element("input", Find.ById("disabledid"), "button");
+		                        var button = new Button(element);
+		                        Assert.AreEqual("disabledid", button.Id);
+		                    });
+
 		}
 
 		[Test]
 		public void CreateButtonFromButtonHTMLElement()
 		{
-			Element element = ie.Element("button", Find.ById("buttonelementid"));
-			Button button = new Button(element);
-			Assert.AreEqual("buttonelementid", button.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var element = browser.Element("button", Find.ById("buttonelementid"));
+		                        var button = new Button(element);
+		                        Assert.AreEqual("buttonelementid", button.Id);
+		                    });
+
 		}
 
-		[Test, ExpectedException(typeof (ArgumentException))]
+		[Test]
 		public void ButtonFromElementArgumentException()
 		{
-			Element element = ie.Element("Checkbox1");
-			new Button(element);
+		    ExecuteTest(browser =>
+		                    {
+                                // GIVEN
+		                        var element = browser.Element("Checkbox1");
+
+
+		                        try
+		                        {
+                                    // WHEN
+		                            new Button(element);
+
+                                    // THEN
+		                            Assert.Fail("Expected an exception");
+		                        }
+                                catch (ArgumentException)
+		                        {
+		                            // OK;
+		                        }
+		                    });
 		}
 
 		[Test]
 		public void Buttons()
 		{
-			const int expectedButtonsCount = 6;
-			Assert.AreEqual(expectedButtonsCount, ie.Buttons.Length, "Unexpected number of buttons");
+		    ExecuteTest(browser =>
+		                    {
+		                        const int expectedButtonsCount = 6;
+		                        Assert.AreEqual(expectedButtonsCount, browser.Buttons.Length, "Unexpected number of buttons");
 
-			const int expectedFormButtonsCount = 5;
-			Form form = ie.Form("Form");
+		                        const int expectedFormButtonsCount = 5;
+		                        var form = browser.Form("Form");
 
-			// Collection.Length
-			ButtonCollection formButtons = form.Buttons;
+		                        // Collection.Length
+		                        var formButtons = form.Buttons;
 
-			Assert.AreEqual(expectedFormButtonsCount, formButtons.Length);
+		                        Assert.AreEqual(expectedFormButtonsCount, formButtons.Length);
 
-			// Collection items by index
-			Assert.AreEqual("popupid", form.Buttons[0].Id);
-			Assert.AreEqual("modalid", form.Buttons[1].Id);
-			Assert.AreEqual("helloid", form.Buttons[2].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("popupid", form.Buttons[0].Id);
+		                        Assert.AreEqual("modalid", form.Buttons[1].Id);
+		                        Assert.AreEqual("helloid", form.Buttons[2].Id);
 
-			// Exists
-			Assert.IsTrue(form.Buttons.Exists("modalid"));
-			Assert.IsTrue(form.Buttons.Exists(new Regex("modalid")));
-			Assert.IsFalse(form.Buttons.Exists("nonexistingid"));
+		                        // Exists
+		                        Assert.IsTrue(form.Buttons.Exists("modalid"));
+		                        Assert.IsTrue(form.Buttons.Exists(new Regex("modalid")));
+		                        Assert.IsFalse(form.Buttons.Exists("nonexistingid"));
 
-			IEnumerable buttonEnumerable = formButtons;
-			IEnumerator buttonEnumerator = buttonEnumerable.GetEnumerator();
+		                        IEnumerable buttonEnumerable = formButtons;
+		                        var buttonEnumerator = buttonEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
-			foreach (Button inputButton in formButtons)
-			{
-				buttonEnumerator.MoveNext();
-				object enumButton = buttonEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (Button inputButton in formButtons)
+		                        {
+		                            buttonEnumerator.MoveNext();
+		                            var enumButton = buttonEnumerator.Current;
 
-				Assert.IsInstanceOfType(inputButton.GetType(), enumButton, "Types are not the same");
-				Assert.AreEqual(inputButton.OuterHtml, ((Button) enumButton).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(inputButton.GetType(), enumButton, "Types are not the same");
+		                            Assert.AreEqual(inputButton.OuterHtml, ((Button) enumButton).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(buttonEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedFormButtonsCount, count);
+		                        Assert.IsFalse(buttonEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedFormButtonsCount, count);
+		                    });
+
 		}
 
 		[Test]
 		public void ButtonsFilterOnHTMLElementCollection()
 		{
-			ButtonCollection buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
-			Assert.AreEqual(2, buttons.Length);
-			Assert.AreEqual("disabledid", buttons[0].Id);
-			Assert.AreEqual("buttonelementid", buttons[1].Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var buttons = browser.Buttons.Filter(Find.ById(new Regex("le")));
+		                        Assert.AreEqual(2, buttons.Length);
+		                        Assert.AreEqual("disabledid", buttons[0].Id);
+		                        Assert.AreEqual("buttonelementid", buttons[1].Id);
+		                    });
+
 		}
 
 		[Test]
 		public void ButtonsFilterOnArrayListElements()
 		{
-			ButtonCollection buttons = ie.Buttons;
-			Assert.AreEqual(6, buttons.Length);
+		    ExecuteTest(browser =>
+		                    {
+		                        var buttons = browser.Buttons;
+		                        Assert.AreEqual(6, buttons.Length);
 
-			buttons = ie.Buttons.Filter(Find.ById(new Regex("le")));
-			Assert.AreEqual(2, buttons.Length);
-			Assert.AreEqual("disabledid", buttons[0].Id);
-			Assert.AreEqual("buttonelementid", buttons[1].Id);
+		                        buttons = browser.Buttons.Filter(Find.ById(new Regex("le")));
+		                        Assert.AreEqual(2, buttons.Length);
+		                        Assert.AreEqual("disabledid", buttons[0].Id);
+		                        Assert.AreEqual("buttonelementid", buttons[1].Id);
+		                    });
+
 		}
 
 		[Test]
 		public void ButtonElementTags()
 		{
-			Assert.AreEqual(2, Button.ElementTags.Count, "2 elementtags expected");
-			Assert.AreEqual("input", ((ElementTag) Button.ElementTags[0]).TagName);
-			Assert.AreEqual("button submit image reset", ((ElementTag) Button.ElementTags[0]).InputTypes);
-			Assert.AreEqual("button", ((ElementTag) Button.ElementTags[1]).TagName);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.AreEqual(2, Button.ElementTags.Count, "2 elementtags expected");
+		                        Assert.AreEqual("input", Button.ElementTags[0].TagName);
+		                        Assert.AreEqual("button submit image reset", Button.ElementTags[0].InputTypes);
+		                        Assert.AreEqual("button", Button.ElementTags[1].TagName);
+		                    });
+
 		}
 
 		[Test]
 		public void ButtonFromInputElement()
 		{
-			const string popupValue = "Show modeless dialog";
-			Button button = ie.Button(Find.ById("popupid"));
+		    ExecuteTest(browser =>
+		                    {
+		                        const string popupValue = "Show modeless dialog";
+		                        var button = browser.Button(Find.ById("popupid"));
 
-			Assert.IsInstanceOfType(typeof (Element), button);
-			Assert.IsInstanceOfType(typeof (Button), button);
+		                        Assert.IsInstanceOfType(typeof (Element), button);
+		                        Assert.IsInstanceOfType(typeof (Button), button);
 
-			Assert.AreEqual(popupValue, button.Value);
-			Assert.AreEqual(popupValue, ie.Button("popupid").Value);
-			Assert.AreEqual(popupValue, ie.Button("popupid").ToString());
-			Assert.AreEqual(popupValue, ie.Button(Find.ByName("popupname")).Value);
+		                        Assert.AreEqual(popupValue, button.Value);
+		                        Assert.AreEqual(popupValue, browser.Button("popupid").Value);
+		                        Assert.AreEqual(popupValue, browser.Button("popupid").ToString());
+		                        Assert.AreEqual(popupValue, browser.Button(Find.ByName("popupname")).Value);
 
-			Button helloButton = ie.Button("helloid");
-			Assert.AreEqual("Show allert", helloButton.Value);
-			Assert.AreEqual(helloButton.Value, helloButton.Text);
+		                        var helloButton = browser.Button("helloid");
+		                        Assert.AreEqual("Show allert", helloButton.Value);
+		                        Assert.AreEqual(helloButton.Value, helloButton.Text);
 
-			Assert.IsTrue(ie.Button(new Regex("popupid")).Exists);
+		                        Assert.IsTrue(browser.Button(new Regex("popupid")).Exists);
+		                    });
+
 		}
 
 		[Test]
 		public void ButtonFromButtonElement()
 		{
-			const string Value = "Button Element";
+		    ExecuteTest(browser =>
+		                    {
+                                var Value = "Button Element";
+                                if (browser.GetType().Equals(typeof(FireFox)))
+                                {
+                                    Value = "ButtonElementValue";
+                                }
 
-			Button button = ie.Button(Find.ById("buttonelementid"));
+		                        var button = browser.Button(Find.ById("buttonelementid"));
 
-			Assert.IsInstanceOfType(typeof (Element), button);
-			Assert.IsInstanceOfType(typeof (Button), button);
+		                        Assert.IsInstanceOfType(typeof (Element), button);
+		                        Assert.IsInstanceOfType(typeof (Button), button);
 
-			Assert.AreEqual(Value, button.Value);
-			Assert.AreEqual(Value, ie.Button("buttonelementid").Value);
-			Assert.AreEqual(Value, ie.Button("buttonelementid").ToString());
-			Assert.AreEqual(Value, ie.Button(Find.ByName("buttonelementname")).Value);
+		                        Assert.AreEqual(Value, browser.Button("buttonelementid").Value);
+		                        Assert.AreEqual(Value, browser.Button("buttonelementid").ToString());
+		                        Assert.AreEqual(Value, browser.Button(Find.ByName("buttonelementname")).Value);
 
-			Assert.AreEqual(Value, ie.Button(Find.ByText("Button Element")).Value);
-			// OK, this one is weird. The HTML says value="ButtonElementValue"
-			// but the value attribute seems to return the innertext(!)
-			// <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
-			Assert.AreEqual(Value, ie.Button(Find.ByValue("Button Element")).Value);
+		                        Assert.AreEqual(Value, browser.Button(Find.ByText("Button Element")).Value);
+		                        
+		                        Assert.IsTrue(browser.Button(new Regex("buttonelementid")).Exists);
+		                    });
 
-			Assert.IsTrue(ie.Button(new Regex("buttonelementid")).Exists);
 		}
+
+	    [Test]
+	    public void FindByValueBehavesDifferentlyForIE6And7ThenFireFoxAndIE8()
+	    {
+            // OK, this one is weird. The HTML says value="ButtonElementValue"
+            // but the value attribute returns the innertext(!) in IE6 and IE7.
+            // But FireFox and IE8 do return the value attribute.....
+            // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
+
+            const string ie6And7Value = "Button Element";
+            const string actualValue = "ButtonElementValue";
+
+            Assert.That(Ie.Button(Find.ByValue(ie6And7Value)).Exists, Is.True, "IE issue");
+            Assert.That(Firefox.Button(Find.ByValue(actualValue)).Exists, Is.True, "Firefox issue");
+	    }
+
+	    [Test]
+	    public void ValueReturnsDifferentValueForIE6And7ThenFireFoxAndIE8()
+	    {
+            // OK, this one is weird. The HTML says value="ButtonElementValue"
+            // but the value attribute returns the innertext(!) in IE6 and IE7.
+            // But FireFox and IE8 do return the value attribute.....
+            // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
+
+            const string ie6And7Value = "Button Element";
+            const string actualValue = "ButtonElementValue";
+
+            Assert.AreEqual(ie6And7Value, Ie.Button("buttonelementid").Value, "IE issue");
+            Assert.AreEqual(actualValue, Firefox.Button("buttonelementid").Value, "FireFox issue");
+	    }
+
 
         [Test]
         public void SimpleButtonTest()
         {
-            Assert.That(ie.Button("buttonelementid").Id, Is.EqualTo("buttonelementid"));
-            Assert.That(ie.Button(Find.ByName("buttonelementname")).Id, Is.EqualTo("buttonelementid"));
+            ExecuteTest(browser =>
+                            {
+                                Assert.That(browser.Button("buttonelementid").Id, Is.EqualTo("buttonelementid"));
+                                Assert.That(browser.Button(Find.ByName("buttonelementname")).Id, Is.EqualTo("buttonelementid"));
+                            });
+
         }
 
 		public override Uri TestPageUri

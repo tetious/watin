@@ -26,16 +26,16 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ModalPopupExtenderTests : BaseWithIETests
+	public class ModalPopupExtenderTests : BaseWithBrowserTests
 	{
 		[Test, Category("InternetConnectionNeeded")]
 		public void ModalPopupExtenderTest()
 		{
-            Div modalDialog = ie.Div("ctl00_SampleContent_Panel1");
+            Div modalDialog = Ie.Div("ctl00_SampleContent_Panel1");
 		    Assert.That(modalDialog.Parent.Style.Display, Is.EqualTo("none"), "modaldialog should not be visible");
 
 			// Show the modaldialog
-            ie.Link("ctl00_SampleContent_LinkButton1").Click();
+            Ie.Link("ctl00_SampleContent_LinkButton1").Click();
 
 			modalDialog.WaitUntil(new VisibleAttribute(true), 5);
 			Assert.IsTrue(modalDialog.Style.Display != "none", "modaldialog should be visible");

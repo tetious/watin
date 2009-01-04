@@ -27,7 +27,7 @@ using WatiN.Core.Constraints;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FramesetTests : BaseWithIETests
+	public class FramesetTests : BaseWithBrowserTests
 	{
 		private const string frameNameContents = "contents";
 		private const string frameNameMain = "main";
@@ -40,55 +40,55 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IEFrameIsAFrame()
 		{
-			Assert.IsInstanceOfType(typeof (Frame), ie.Frame("mainid"));
+			Assert.IsInstanceOfType(typeof (Frame), Ie.Frame("mainid"));
 		}
 
 		[Test]
 		public void FrameIsADocument()
 		{
-			Assert.IsInstanceOfType(typeof (Document), ie.Frame("mainid"));
+			Assert.IsInstanceOfType(typeof (Document), Ie.Frame("mainid"));
 		}
 
 		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingFrameID'")]
 		public void ExpectFrameNotFoundException()
 		{
-			ie.Frame(Find.ById("NonExistingFrameID"));
+			Ie.Frame(Find.ById("NonExistingFrameID"));
 		}
 
 		[Test]
 		public void FramesCollectionExists()
 		{
-			Assert.IsTrue(ie.Frames.Exists(Find.ByName("contents")));
-			Assert.IsFalse(ie.Frames.Exists(Find.ByName("nonexisting")));
+			Assert.IsTrue(Ie.Frames.Exists(Find.ByName("contents")));
+			Assert.IsFalse(Ie.Frames.Exists(Find.ByName("nonexisting")));
 		}
 
 		[Test]
 		public void ContentsFrame()
 		{
-			Frame contentsFrame = ie.Frame(Find.ByName("contents"));
+			Frame contentsFrame = Ie.Frame(Find.ByName("contents"));
 			Assert.IsNotNull(contentsFrame, "Frame expected");
 			Assert.AreEqual("contents", contentsFrame.Name);
 			Assert.AreEqual(null, contentsFrame.Id);
 
-			AssertFindFrame(ie, Find.ByUrl(IndexURI), frameNameContents);
+			AssertFindFrame(Ie, Find.ByUrl(IndexURI), frameNameContents);
 		}
 
 		[Test]
 		public void MainFrame()
 		{
-			Frame mainFrame = ie.Frame(Find.ById("mainid"));
+			Frame mainFrame = Ie.Frame(Find.ById("mainid"));
 			Assert.IsNotNull(mainFrame, "Frame expected");
 			Assert.AreEqual("main", mainFrame.Name);
 			Assert.AreEqual("mainid", mainFrame.Id);
 
-			AssertFindFrame(ie, Find.ByName(frameNameMain), frameNameMain);
+			AssertFindFrame(Ie, Find.ByName(frameNameMain), frameNameMain);
 		}
 
 		[Test]
 		public void FrameHTMLShouldNotReturnParentHTML()
 		{
-			Frame contentsFrame = ie.Frame(Find.ByName("contents"));
-			Assert.AreNotEqual(ie.Html, contentsFrame.Html, "Html should be from the frame page.");
+			Frame contentsFrame = Ie.Frame(Find.ByName("contents"));
+			Assert.AreNotEqual(Ie.Html, contentsFrame.Html, "Html should be from the frame page.");
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace WatiN.Core.UnitTests
 		public void Frames()
 		{
 			const int expectedFramesCount = 2;
-			FrameCollection frames = ie.Frames;
+			FrameCollection frames = Ie.Frames;
 
 			Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
@@ -135,27 +135,27 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldBeAbleToAccessCustomAttributeInFrameSetElement()
 		{
-			string value = ie.Frame("mainid").GetAttributeValue("mycustomattribute");
+			string value = Ie.Frame("mainid").GetAttributeValue("mycustomattribute");
 			Assert.That(value, Is.EqualTo("WatiN"));
 		}
 
 		[Test]
 		public void ShouldBeAbleToFindFrameUsingCustomAttributeInFrameSetElement()
 		{
-			Frame frame = ie.Frame(Find.By("mycustomattribute","WatiN"));
+			Frame frame = Ie.Frame(Find.By("mycustomattribute","WatiN"));
 			Assert.That(frame.Id, Is.EqualTo("mainid"));
 		}
 
 		[Test, ExpectedException(typeof(FrameNotFoundException))]
 		public void ShouldThrowFrameNotFoundExceptionWhenFindingFrameWithNonExistingAttribute()
 		{
-			ie.Frame(Find.By("nonexisting","something"));
+			Ie.Frame(Find.By("nonexisting","something"));
 		}
 
 		[Test]
 		public void ShowFrames()
 		{
-			UtilityClass.DumpFrames(ie);
+			UtilityClass.DumpFrames(Ie);
 		}
 
 		private static void AssertFindFrame(IE ie, AttributeConstraint findBy, string expectedFrameName)
@@ -172,12 +172,12 @@ namespace WatiN.Core.UnitTests
 	}
 
     [TestFixture]
-	public class NoFramesTest : BaseWithIETests
+	public class NoFramesTest : BaseWithBrowserTests
 	{
 		[Test]
 		public void HasNoFrames()
 		{
-			Assert.AreEqual(0, ie.Frames.Length);
+			Assert.AreEqual(0, Ie.Frames.Length);
 		}
 
 		public override Uri TestPageUri

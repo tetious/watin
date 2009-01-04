@@ -8,7 +8,7 @@ using WatiN.Core.InternetExplorer;
 namespace WatiN.Core.UnitTests.IETests
 {
     [TestFixture]
-    public class IEDocumentTests : BaseWithIETests
+    public class IEDocumentTests : BaseWithBrowserTests
     {
         public override Uri TestPageUri
         {
@@ -61,7 +61,7 @@ namespace WatiN.Core.UnitTests.IETests
         public void UrlShouldReturnUrlOfCurrentDocument()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
 
             // WHEN
             var url = ieDocument.Url;
@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests.IETests
         public void TitleShouldReturnTitleofThePage()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
 
             // WHEN
             var title = ieDocument.Title;
@@ -86,8 +86,8 @@ namespace WatiN.Core.UnitTests.IETests
         [Test] public void ActiveElementShouldReturnActiveElement()
         {
             // GIVEN
-            ie.CheckBox("Checkbox1").Focus();
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)ie.InternetExplorer).Document);
+            Ie.CheckBox("Checkbox1").Focus();
+            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
 
             // WHEN
             var activeElement = ieDocument.ActiveElement;

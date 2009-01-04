@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class DivTests : BaseWithIETests
+	public class DivTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void DivElementTags()
@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateDivFromElement()
 		{
-			Element element = ie.Element("divid");
+			Element element = Ie.Element("divid");
 			Div div = new Div(element);
 			Assert.AreEqual("divid", div.Id);
 		}
@@ -45,25 +45,25 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void DivExists()
 		{
-			Assert.IsTrue(ie.Div("divid").Exists);
-			Assert.IsTrue(ie.Div(new Regex("divid")).Exists);
-			Assert.IsFalse(ie.Div("noneexistingdivid").Exists);
+			Assert.IsTrue(Ie.Div("divid").Exists);
+			Assert.IsTrue(Ie.Div(new Regex("divid")).Exists);
+			Assert.IsFalse(Ie.Div("noneexistingdivid").Exists);
 		}
 
 
 		[Test]
 		public void DivTest()
 		{
-			Assert.AreEqual("divid", ie.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
-			Assert.AreEqual("divid", ie.Div("divid").Id, "Find Div by ie.Div()");
+			Assert.AreEqual("divid", Ie.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
+			Assert.AreEqual("divid", Ie.Div("divid").Id, "Find Div by ie.Div()");
 		}
 
 		[Test]
 		public void Divs()
 		{
-			Assert.AreEqual(4, ie.Divs.Length, "Unexpected number of Divs");
+			Assert.AreEqual(4, Ie.Divs.Length, "Unexpected number of Divs");
 
-			DivCollection divs = ie.Divs;
+			DivCollection divs = Ie.Divs;
 
 			// Collection items by index
 			Assert.AreEqual("divid", divs[0].Id);

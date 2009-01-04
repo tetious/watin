@@ -25,7 +25,7 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ParaTests : BaseWithIETests
+	public class ParaTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void ParaElementTags()
@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateParaFromElement()
 		{
-			Element element = ie.Element("links");
+			Element element = Ie.Element("links");
 			Para para = new Para(element);
 			Assert.AreEqual("links", para.Id);
 		}
@@ -45,15 +45,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ParaExists()
 		{
-			Assert.IsTrue(ie.Para("links").Exists);
-			Assert.IsTrue(ie.Para(new Regex("links")).Exists);
-			Assert.IsFalse(ie.Para("nonexistinglinks").Exists);
+			Assert.IsTrue(Ie.Para("links").Exists);
+			Assert.IsTrue(Ie.Para(new Regex("links")).Exists);
+			Assert.IsFalse(Ie.Para("nonexistinglinks").Exists);
 		}
 
 		[Test]
 		public void ParaTest()
 		{
-			Para para = ie.Para("links");
+			Para para = Ie.Para("links");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), para);
             Assert.IsInstanceOfType(typeof (ElementsContainer<Para>), para);
@@ -66,16 +66,16 @@ namespace WatiN.Core.UnitTests
 		public void Paras()
 		{
 			const int expectedParasCount = 4;
-			Assert.AreEqual(expectedParasCount, ie.Paras.Length, "Unexpected number of Paras");
+			Assert.AreEqual(expectedParasCount, Ie.Paras.Length, "Unexpected number of Paras");
 
 			// Collection.Length
-			ParaCollection formParas = ie.Paras;
+			ParaCollection formParas = Ie.Paras;
 
 			// Collection items by index
-			Assert.IsNull(ie.Paras[0].Id);
-			Assert.AreEqual("links", ie.Paras[1].Id);
-			Assert.IsNull(ie.Paras[2].Id);
-			Assert.IsNull(ie.Paras[3].Id);
+			Assert.IsNull(Ie.Paras[0].Id);
+			Assert.AreEqual("links", Ie.Paras[1].Id);
+			Assert.IsNull(Ie.Paras[2].Id);
+			Assert.IsNull(Ie.Paras[3].Id);
 
 			IEnumerable ParaEnumerable = formParas;
 			IEnumerator ParaEnumerator = ParaEnumerable.GetEnumerator();

@@ -110,7 +110,10 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public string LastResponse
         {
-            get { return lastResponse; }
+            get
+            {
+                return LastResponseIsNull ? null : lastResponse;
+            }
         }
 
         /// <summary>
@@ -129,7 +132,7 @@ namespace WatiN.Core.Mozilla
         {
             get
             {
-                return LastResponse.Equals("null", StringComparison.OrdinalIgnoreCase);
+                return lastResponse.Equals("null", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -186,7 +189,7 @@ namespace WatiN.Core.Mozilla
                        DocumentVariableName + ".activeElement = event.target;}, false);\n}}");
         }
 
-        public void Connect()
+        public void Connect(string arguments)
         {
             ValidateCanConnect();
             disposed = false;
@@ -194,7 +197,7 @@ namespace WatiN.Core.Mozilla
             lastResponse = string.Empty;
             response = new StringBuilder();
 
-            Process = FireFox.CreateProcess("-jssh", true);
+            Process = FireFox.CreateProcess(arguments + " -jssh", true);
 
             if (!IsMainWindowVisible)
             {
@@ -222,6 +225,7 @@ namespace WatiN.Core.Mozilla
             connected = true;
             WriteLine();
             Logger.LogAction("Successfully connected to FireFox using jssh.");
+//            Write("setProtocol(synchronous)");
             DefineDefaultJSVariables();
 
         }
@@ -470,25 +474,28 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         private void ReadResponse()
         {
+            var stream = new NetworkStream(telnetSocket);
             lastResponse = string.Empty;
 
             var buffer = new byte[1024];
-            int read;
-            var stream = new NetworkStream(telnetSocket);
-            while (!stream.DataAvailable)
+            while (!stream.CanRead)
+//            while (!stream.DataAvailable)
             {
                 // Hack: need to work out a better way for this
                 System.Threading.Thread.Sleep(200);
             }
 
+            string readData;
             do
             {
-                read = stream.Read(buffer, 0, 1024);
-                var readData = UnicodeEncoding.UTF8.GetString(buffer, 0, read);
+                var read = stream.Read(buffer, 0, 1024);
+//                readData = UnicodeEncoding.ASCII.GetString(buffer, 0, read);
+                readData = UnicodeEncoding.UTF8.GetString(buffer, 0, read);
 
-                Logger.LogAction("jssh says: " + readData);
+                Logger.LogAction("jssh says: '" + readData + "'");
                 lastResponse += CleanTelnetResponse(readData);
-            } while (read == 1024);
+            } while (!readData.EndsWith("> "));
+//            } while (read == 1024);
 
             lastResponse = lastResponse.Trim();
             if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||

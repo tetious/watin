@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class RadioButtonTests : BaseWithIETests
+	public class RadioButtonTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void RadioButtonElementTags()
@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateRadioButtonFromElement()
 		{
-			var element = ie.Element("Radio1");
+			var element = Ie.Element("Radio1");
 			var radioButton = new RadioButton(element);
 			Assert.AreEqual("Radio1", radioButton.Id);
 		}
@@ -45,15 +45,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RadioButtonExists()
 		{
-			Assert.IsTrue(ie.RadioButton("Radio1").Exists);
-			Assert.IsTrue(ie.RadioButton(new Regex("Radio1")).Exists);
-			Assert.IsFalse(ie.RadioButton("nonexistingRadio1").Exists);
+			Assert.IsTrue(Ie.RadioButton("Radio1").Exists);
+			Assert.IsTrue(Ie.RadioButton(new Regex("Radio1")).Exists);
+			Assert.IsFalse(Ie.RadioButton("nonexistingRadio1").Exists);
 		}
 
 		[Test]
 		public void RadioButtonTest()
 		{
-			var RadioButton1 = ie.RadioButton("Radio1");
+			var RadioButton1 = Ie.RadioButton("Radio1");
 
 			Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
 			Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
@@ -69,9 +69,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RadioButtons()
 		{
-			Assert.AreEqual(3, ie.RadioButtons.Length, "Unexpected number of RadioButtons");
+			Assert.AreEqual(3, Ie.RadioButtons.Length, "Unexpected number of RadioButtons");
 
-			var formRadioButtons = ie.Form("FormRadioButtons").RadioButtons;
+			var formRadioButtons = Ie.Form("FormRadioButtons").RadioButtons;
 
 			Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
 			Assert.AreEqual("Radio2", formRadioButtons[0].Id);

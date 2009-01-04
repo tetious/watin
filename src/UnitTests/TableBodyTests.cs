@@ -25,7 +25,7 @@ namespace WatiN.Core.UnitTests
 	/// Summary description for TableBodyTests.
 	/// </summary>
 	[TestFixture]
-	public class TableBodyTests : BaseWithIETests 
+	public class TableBodyTests : BaseWithBrowserTests 
 	{
 		public override Uri TestPageUri
 		{
@@ -35,7 +35,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableTableBodiesExcludesBodiesFromNestedTables()
 		{
-			TableBodyCollection tableBodies = ie.Table("Table1").TableBodies;
+			TableBodyCollection tableBodies = Ie.Table("Table1").TableBodies;
 			Assert.AreEqual(2, tableBodies.Length, "Unexpected number of tbodies");
 			Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
 			Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
@@ -44,7 +44,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableBodyExcludesRowsFromNestedTables()
 		{
-			TableBody tableBody = ie.Table("Table1").TableBodies[0];
+			TableBody tableBody = Ie.Table("Table1").TableBodies[0];
 
 			Assert.AreEqual(1, tableBody.Tables.Length, "Expected nested table");
 			Assert.AreEqual(2, tableBody.TableRows.Length, "Expected 2 rows");
@@ -55,7 +55,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FindTableRowUsingPredicateT()
         {
-            TableRow tableRow = ie.Table("Table2").TableBody("tbody2").TableRow(
+            TableRow tableRow = Ie.Table("Table2").TableBody("tbody2").TableRow(
                 delegate(TableRow r) { return r.Id == "2"; });
 
             Assert.That(tableRow.Exists);

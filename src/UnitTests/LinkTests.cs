@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class LinkTests : BaseWithIETests
+	public class LinkTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void LinkElementTags()
@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LinkFromElement()
 		{
-			Element element = ie.Element("testlinkid");
+			Element element = Ie.Element("testlinkid");
 			Link link = new Link(element);
 			Assert.AreEqual("testlinkid", link.Id);
 		}
@@ -45,19 +45,19 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LinkExists()
 		{
-			Assert.IsTrue(ie.Link("testlinkid").Exists);
-			Assert.IsTrue(ie.Link(new Regex("testlinkid")).Exists);
-			Assert.IsFalse(ie.Link("nonexistingtestlinkid").Exists);
+			Assert.IsTrue(Ie.Link("testlinkid").Exists);
+			Assert.IsTrue(Ie.Link(new Regex("testlinkid")).Exists);
+			Assert.IsFalse(Ie.Link("nonexistingtestlinkid").Exists);
 		}
 
 		[Test]
 		public void LinkTest()
 		{
-			Assert.AreEqual(WatiNURI, ie.Link(Find.ById("testlinkid")).Url);
-			Assert.AreEqual(WatiNURI, ie.Link("testlinkid").Url);
-			Assert.AreEqual(WatiNURI, ie.Link(Find.ByName("testlinkname")).Url);
-			Assert.AreEqual(WatiNURI, ie.Link(Find.ByUrl(WatiNURI)).Url);
-			Assert.AreEqual("Microsoft", ie.Link(Find.ByText("Microsoft")).Text);
+			Assert.AreEqual(WatiNURI, Ie.Link(Find.ById("testlinkid")).Url);
+			Assert.AreEqual(WatiNURI, Ie.Link("testlinkid").Url);
+			Assert.AreEqual(WatiNURI, Ie.Link(Find.ByName("testlinkname")).Url);
+			Assert.AreEqual(WatiNURI, Ie.Link(Find.ByUrl(WatiNURI)).Url);
+			Assert.AreEqual("Microsoft", Ie.Link(Find.ByText("Microsoft")).Text);
 		}
 
 		[Test]
@@ -65,9 +65,9 @@ namespace WatiN.Core.UnitTests
 		{
 			const int expectedLinkCount = 3;
 
-			Assert.AreEqual(expectedLinkCount, ie.Links.Length, "Unexpected number of links");
+			Assert.AreEqual(expectedLinkCount, Ie.Links.Length, "Unexpected number of links");
 
-			LinkCollection links = ie.Links;
+			LinkCollection links = Ie.Links;
 
 			// Collection items by index
 			Assert.AreEqual(expectedLinkCount, links.Length, "Wrong number off links");

@@ -24,7 +24,7 @@ using WatiN.Core.DialogHandlers;
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
-	public class VbScriptMsgBoxDialogHandlerTests : BaseWithIETests
+	public class VbScriptMsgBoxDialogHandlerTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void TestOkOnly()
@@ -96,15 +96,15 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 
 		private string GetResultFromMsgBox(int buttons, VbScriptMsgBoxDialogHandler.Button buttonToPush) 
 		{
-			ie.TextField("msgBoxButtons").TypeText(buttons.ToString());
+			Ie.TextField("msgBoxButtons").TypeText(buttons.ToString());
 			VbScriptMsgBoxDialogHandler handler = new VbScriptMsgBoxDialogHandler(buttonToPush);
-			using(new UseDialogOnce(ie.DialogWatcher, handler ))
+			using(new UseDialogOnce(Ie.DialogWatcher, handler ))
 			{
-				ie.Button("vbScriptMsgBox").ClickNoWait();
+				Ie.Button("vbScriptMsgBox").ClickNoWait();
 				handler.WaitUntilHandled(10);
 
                 Assert.That(handler.HasHandledDialog, "Should have handled dialog");
-				return ie.TextField("msgBoxReturnValue").Value;
+				return Ie.TextField("msgBoxReturnValue").Value;
 			}
 		}
 

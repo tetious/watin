@@ -22,7 +22,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture, Category("InternetConnectionNeeded")]
-	public class FrameCrossDomainTests : BaseWithIETests
+	public class FrameCrossDomainTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -34,15 +34,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ie.Frames[1].TextField(Find.ByName("q"));
+				Ie.Frames[1].TextField(Find.ByName("q"));
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("mainid", ie.Frames[1].Id, "Unexpected id");
-			Assert.AreEqual("main", ie.Frames[1].Name, "Unexpected name");
+			Assert.AreEqual("mainid", Ie.Frames[1].Id, "Unexpected id");
+			Assert.AreEqual("main", Ie.Frames[1].Name, "Unexpected name");
 		}
 
 		[Test]
@@ -50,15 +50,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ie.Frame("mainid").TextField(Find.ByName("q"));
+				Ie.Frame("mainid").TextField(Find.ByName("q"));
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("mainid", ie.Frame("mainid").Id, "Unexpected Id");
-			Assert.AreEqual("main", ie.Frame("mainid").Name, "Unexpected name");
+			Assert.AreEqual("mainid", Ie.Frame("mainid").Id, "Unexpected Id");
+			Assert.AreEqual("main", Ie.Frame("mainid").Name, "Unexpected name");
 		}
 
 		[Test]
@@ -66,15 +66,15 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ie.Frame("contentsid").Link("googlelink");
+				Ie.Frame("contentsid").Link("googlelink");
 			}
 			catch (UnauthorizedAccessException)
 			{
 				Assert.Fail("UnauthorizedAccessException");
 			}
 
-			Assert.AreEqual("contentsid", ie.Frame("contentsid").Id, "Unexpected Id");
-			Assert.AreEqual("contents", ie.Frame("contentsid").Name, "Unexpected name");
+			Assert.AreEqual("contentsid", Ie.Frame("contentsid").Id, "Unexpected Id");
+			Assert.AreEqual("contents", Ie.Frame("contentsid").Name, "Unexpected name");
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ie.Frame(Find.ByName("main"));
+				Ie.Frame(Find.ByName("main"));
 			}
 			catch (UnauthorizedAccessException)
 			{
@@ -95,7 +95,7 @@ namespace WatiN.Core.UnitTests
 		{
 			try
 			{
-				ie.Frame(Find.ByName("contents"));
+				Ie.Frame(Find.ByName("contents"));
 			}
 			catch (UnauthorizedAccessException)
 			{

@@ -24,7 +24,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ImageTests : BaseWithIETests
+	public class ImageTests : BaseWithBrowserTests
 	{
 		private Uri watinwebsiteImage = new Uri(HtmlTestBaseURI, "images\\watinwebsite.jpg");
 		private Uri watinwebsiteLogoImage = new Uri(HtmlTestBaseURI, "images\\watin.jpg");
@@ -57,7 +57,7 @@ namespace WatiN.Core.UnitTests
 
 		private void AssertImageFromElement(string id)
 		{
-			Element element = ie.Element(id);
+			Element element = Ie.Element(id);
 			Image image = new Image(element);
 			Assert.AreEqual(id, image.Id);
 		}
@@ -65,15 +65,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageExists()
 		{
-			Assert.IsTrue(ie.Image("Image2").Exists);
-			Assert.IsTrue(ie.Image(new Regex("Image2")).Exists);
-			Assert.IsFalse(ie.Image("nonexistingImage").Exists);
+			Assert.IsTrue(Ie.Image("Image2").Exists);
+			Assert.IsTrue(Ie.Image(new Regex("Image2")).Exists);
+			Assert.IsFalse(Ie.Image("nonexistingImage").Exists);
 		}
 
 		[Test]
 		public void ImageTag()
 		{
-			Image image = ie.Image("Image2");
+			Image image = Ie.Image("Image2");
 
 			Assert.AreEqual("img", image.TagName.ToLower(), "Should be image element");
 			Assert.AreEqual("Image2", image.Id, "Unexpected id");
@@ -86,7 +86,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageInputTag()
 		{
-			Image image = ie.Image("Image4");
+			Image image = Ie.Image("Image4");
 
 			Assert.AreEqual("input", image.TagName.ToLower(), "Should be input element");
 			Assert.AreEqual("Image4", image.Id, "Unexpected id");
@@ -98,23 +98,23 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageReadyStateUninitializedButShouldReturn()
 		{
-			Assert.IsFalse(ie.Image("Image3").Complete);
+			Assert.IsFalse(Ie.Image("Image3").Complete);
 		}
 
 		[Test]
 		public void Images()
 		{
 			const int expectedImagesCount = 4;
-			Assert.AreEqual(expectedImagesCount, ie.Images.Length, "Unexpected number of Images");
+			Assert.AreEqual(expectedImagesCount, Ie.Images.Length, "Unexpected number of Images");
 
 			// Collection.Length
-			ImageCollection formImages = ie.Images;
+			ImageCollection formImages = Ie.Images;
 
 			// Collection items by index
-			Assert.AreEqual("Image1", ie.Images[0].Id);
-			Assert.AreEqual("Image2", ie.Images[1].Id);
-			Assert.AreEqual("Image3", ie.Images[2].Id);
-			Assert.AreEqual("Image4", ie.Images[3].Id);
+			Assert.AreEqual("Image1", Ie.Images[0].Id);
+			Assert.AreEqual("Image2", Ie.Images[1].Id);
+			Assert.AreEqual("Image3", Ie.Images[2].Id);
+			Assert.AreEqual("Image4", Ie.Images[3].Id);
 
 			IEnumerable ImageEnumerable = formImages;
 			IEnumerator ImageEnumerator = ImageEnumerable.GetEnumerator();
@@ -138,7 +138,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ButtonFromInputImage()
 		{
-			Button button = ie.Button(Find.BySrc(new Regex("images/watin.jpg")));
+			Button button = Ie.Button(Find.BySrc(new Regex("images/watin.jpg")));
 
 			Assert.IsTrue(button.Exists, "Button should exist");
 			Assert.AreEqual("Image4", button.Id, "Unexpected id");
@@ -155,7 +155,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AreaFromElement()
 		{
-			Element element = ie.Element("Area1");
+			Element element = Ie.Element("Area1");
 			Area area = new Area(element);
 			Assert.AreEqual("Area1", area.Id);
 		}
@@ -163,15 +163,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AreaExists()
 		{
-			Assert.IsTrue(ie.Area("Area1").Exists);
-			Assert.IsTrue(ie.Area(new Regex("Area1")).Exists);
-			Assert.IsFalse(ie.Area("noneexistingArea1id").Exists);
+			Assert.IsTrue(Ie.Area("Area1").Exists);
+			Assert.IsTrue(Ie.Area(new Regex("Area1")).Exists);
+			Assert.IsFalse(Ie.Area("noneexistingArea1id").Exists);
 		}
 
 		[Test]
 		public void AreaTest()
 		{
-			Area area1 = ie.Area("Area1");
+			Area area1 = Ie.Area("Area1");
 
 			Assert.AreEqual("Area1", area1.Id, "Found wrong area");
 
@@ -185,7 +185,7 @@ namespace WatiN.Core.UnitTests
 		public void Areas()
 		{
 			// Collection items by index
-			AreaCollection areas = ie.Areas;
+			AreaCollection areas = Ie.Areas;
 			Assert.AreEqual(2, areas.Length, "Unexpected number of areas");
 			Assert.AreEqual("Area1", areas[0].Id);
 			Assert.AreEqual("Area2", areas[1].Id);

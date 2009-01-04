@@ -44,25 +44,27 @@ namespace WatiN.Core
         /// </summary>
         public FireFox()
         {
-            CreateFireFoxInstance();
+            CreateFireFoxInstance("");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
         /// <param name="url">The url to go to</param>
-        public FireFox(string url) : this ()
+        public FireFox(string url)
         {
-            GoTo(url);
+            CreateFireFoxInstance(url);
+            WaitForComplete();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
         /// <param name="uri">The url to go to</param>
-        public FireFox(Uri uri) : this ()
+        public FireFox(Uri uri)
         {
-            GoTo(uri);
+            CreateFireFoxInstance(uri.AbsoluteUri);
+            WaitForComplete();
         }
 
         /// <summary>
@@ -150,63 +152,9 @@ namespace WatiN.Core
             }
         }
 
-        /// <summary>
-        /// Navigates to the given <paramref name="url" />.
-        /// </summary>
-        /// <param name="url">The URL to GoTo.</param>
-        /// <example>
-        /// The following example creates a new Internet Explorer instance and navigates to
-        /// the WatiN Project website on SourceForge.
-        /// <code>
-        /// using WatiN.Core;
-        /// 
-        /// namespace NewIEExample
-        /// {
-        ///    public class WatiNWebsite
-        ///    {
-        ///      public WatiNWebsite()
-        ///      {
-        ///        FireFox ff = new FireFox();
-        ///        ff.GoTo("http://watin.sourceforge.net");
-        ///      }
-        ///    }
-        ///  }
-        /// </code>
-        /// </example>
-        public void GoTo(string url)
-        {
-            GoTo(CreateUri(url));
-        }
-
-        /// <summary>
-        /// Navigates Internet Explorer to the given <paramref name="url" />.
-        /// </summary>
-        /// <param name="url">The URL specified as a wel formed Uri.</param>
-        /// <example>
-        /// The following example creates an Uri and Internet Explorer instance and navigates to
-        /// the WatiN Project website on SourceForge.
-        /// <code>
-        /// using WatiN.Core;
-        /// using System;
-        /// 
-        /// namespace NewIEExample
-        /// {
-        ///    public class WatiNWebsite
-        ///    {
-        ///      public WatiNWebsite()
-        ///      {
-        ///        Uri URL = new Uri("http://watin.sourceforge.net");
-        ///        IE ie = new IE();
-        ///        ie.GoTo(URL);
-        ///      }
-        ///    }
-        ///  }
-        /// </code>
-        /// </example>
-        public void GoTo(Uri url)
+        protected override void navigateTo(Uri url)
         {
             _ffBrowser.LoadUri(url);
-            WaitForComplete();
         }
 
         public override IntPtr hWnd
@@ -397,7 +345,7 @@ namespace WatiN.Core
         public void Reopen()
         {
             ClientPort.Dispose();
-            ClientPort.Connect();
+            ClientPort.Connect(string.Empty);
         }
 
 //        /// <summary>
@@ -472,12 +420,12 @@ namespace WatiN.Core
             return uri;
         }
 
-        private void CreateFireFoxInstance()
+        private void CreateFireFoxInstance(string url)
         {
             Logger.LogAction("Creating new FireFox instance");
             
             ClientPort = new FireFoxClientPort();
-            ClientPort.Connect();
+            ClientPort.Connect(url);
 
             _ffBrowser = new FFBrowser(ClientPort, this);
         }

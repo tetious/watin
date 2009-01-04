@@ -22,7 +22,7 @@ using NUnit.Framework;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class ElementStyleTests : BaseWithIETests
+	public class ElementStyleTests : BaseWithBrowserTests
 	{
 		private const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
 		private TextField element;
@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests
 		public override void TestSetUp()
 		{
 			base.TestSetUp ();
-			element = ie.TextField("Textarea1");
+			element = Ie.TextField("Textarea1");
 		}
 
 		[Test]

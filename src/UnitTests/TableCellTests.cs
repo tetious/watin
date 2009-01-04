@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class TableCellTests : BaseWithIETests
+	public class TableCellTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void TableCellElementTags()
@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableCellFromElement()
 		{
-			Element element = ie.Element("td1");
+			Element element = Ie.Element("td1");
 			TableCell tableCell = new TableCell(element);
 			Assert.AreEqual("td1", tableCell.Id);
 		}
@@ -45,31 +45,31 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableCellExists()
 		{
-			Assert.IsTrue(ie.TableCell("td1").Exists);
-			Assert.IsTrue(ie.TableCell(new Regex("td1")).Exists);
-			Assert.IsFalse(ie.Table("nonexistingtd1").Exists);
+			Assert.IsTrue(Ie.TableCell("td1").Exists);
+			Assert.IsTrue(Ie.TableCell(new Regex("td1")).Exists);
+			Assert.IsFalse(Ie.Table("nonexistingtd1").Exists);
 		}
 
 		[Test]
 		public void TableCellByIndexExists()
 		{
-			Assert.IsTrue(ie.TableCell("td1", 0).Exists);
-			Assert.IsTrue(ie.TableCell(new Regex("td1"), 0).Exists);
-			Assert.IsFalse(ie.TableCell("td1", 100).Exists);
+			Assert.IsTrue(Ie.TableCell("td1", 0).Exists);
+			Assert.IsTrue(Ie.TableCell(new Regex("td1"), 0).Exists);
+			Assert.IsFalse(Ie.TableCell("td1", 100).Exists);
 		}
 
 		[Test]
 		public void TableCellByIndex()
 		{
 			// accessing several occurences with equal id
-			Assert.AreEqual("a1", ie.TableCell("td1", 0).Text);
-			Assert.AreEqual("b1", ie.TableCell("td1", 1).Text);
+			Assert.AreEqual("a1", Ie.TableCell("td1", 0).Text);
+			Assert.AreEqual("b1", Ie.TableCell("td1", 1).Text);
 		}
 
 		[Test]
 		public void TableCellGetParentTableRow()
 		{
-			TableCell tableCell = ie.TableCell(Find.ByText("b1"));
+			TableCell tableCell = Ie.TableCell(Find.ByText("b1"));
 			Assert.IsInstanceOfType(typeof (TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
 			Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
 		}
@@ -77,15 +77,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableCellCellIndex()
 		{
-			Assert.AreEqual(0, ie.TableCell(Find.ByText("b1")).Index);
-			Assert.AreEqual(1, ie.TableCell(Find.ByText("b2")).Index);
+			Assert.AreEqual(0, Ie.TableCell(Find.ByText("b1")).Index);
+			Assert.AreEqual(1, Ie.TableCell(Find.ByText("b2")).Index);
 		}
 
 		[Test]
 		public void TableCells()
 		{
 			// Collection.Length
-			TableCellCollection cells = ie.Table("table1").TableRows[1].TableCells;
+			TableCellCollection cells = Ie.Table("table1").TableRows[1].TableCells;
 
 			Assert.AreEqual(2, cells.Length);
 

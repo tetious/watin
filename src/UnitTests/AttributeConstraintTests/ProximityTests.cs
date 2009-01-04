@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     /// Tests for identifying text-field correlation by proximity
     /// </summary>
     [TestFixture]
-    public class ProximityTests : BaseWithIETests
+    public class ProximityTests : BaseWithBrowserTests
     {
         private string _startingHtml;
 
@@ -47,7 +47,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             base.TestSetUp();
 
             // Store the HTML for testing on TestTearDown (see note below)
-            _startingHtml = ie.Html;
+            _startingHtml = Ie.Html;
         }
 
         [TearDown]
@@ -62,10 +62,10 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 //                outp.Write( ie.Html );
 //            }
 			
-            string endingHtml = ie.Html;
+            string endingHtml = Ie.Html;
 			
             // If these don't match, reset the browser so further tests are not affected by this one
-            if( endingHtml != _startingHtml ) ie = new IE(ProximityURI);
+            if (endingHtml != _startingHtml) CreateNewIeInstance();
 
             // Now record the test result
             Assert.That( endingHtml, Is.EqualTo( _startingHtml ), "HTML in the page changed while the test executed." );
@@ -75,7 +75,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // Verify absolute left/right positioning of text and field
         public void ShouldWorkWithAbsolutePositionedFields() 
         {
-            TextField inputSearch = ie.TextField(new ProximityTextConstraint("Search"));
+            TextField inputSearch = Ie.TextField(new ProximityTextConstraint("Search"));
             Assert.AreEqual("inputSearch", inputSearch.Id, "Absoloute positioned proximity for text did not find correct field.");
         }
 		
@@ -84,10 +84,10 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldWorkWithLabelLeftAndFieldRight() 
         {
 			
-            TextField inputUsername = ie.TextField(new ProximityTextConstraint("User Name"));
+            TextField inputUsername = Ie.TextField(new ProximityTextConstraint("User Name"));
             Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find correct field.");
 
-            TextField inputPassword = ie.TextField(new ProximityTextConstraint("Password"));
+            TextField inputPassword = Ie.TextField(new ProximityTextConstraint("Password"));
             Assert.AreEqual("inputPassword", inputPassword.Id, "Left/right proximity for text did not find correct field.");
 			
         }
@@ -97,13 +97,13 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldWorkWithLabelTopAndFieldRight() 
         {
 			
-            TextField inputFirstName = ie.TextField(new ProximityTextConstraint("First Name"));
+            TextField inputFirstName = Ie.TextField(new ProximityTextConstraint("First Name"));
             Assert.AreEqual("inputFirstName", inputFirstName.Id, "Top/bottom proximity for text did not find correct field.");
 
-            TextField inputLastName = ie.TextField(new ProximityTextConstraint("Last Name"));
+            TextField inputLastName = Ie.TextField(new ProximityTextConstraint("Last Name"));
             Assert.AreEqual("inputLastName", inputLastName.Id, "Top/bottom proximity for text did not find correct field.");
 
-            TextField inputEmail = ie.TextField(new ProximityTextConstraint("Email"));
+            TextField inputEmail = Ie.TextField(new ProximityTextConstraint("Email"));
             Assert.AreEqual("inputEmail", inputEmail.Id, "Top/bottom proximity for text did not find correct field.");
 			
         }
@@ -112,7 +112,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldWorkWithTableLayout() 
         {
 			
-            TextField inputConfirmCode = ie.TextField(new ProximityTextConstraint("Confirm Code"));
+            TextField inputConfirmCode = Ie.TextField(new ProximityTextConstraint("Confirm Code"));
             Assert.AreEqual("inputConfirmCode", inputConfirmCode.Id, "Proximity for table layout of text and field did not find correct field.");
 			
         }
@@ -121,7 +121,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldWorkWithValidationMessage() 
         {
 			
-            TextField inputCode = ie.TextField(new ProximityTextConstraint("Code"));
+            TextField inputCode = Ie.TextField(new ProximityTextConstraint("Code"));
             Assert.AreEqual("inputCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
 			
         }
@@ -130,7 +130,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldFailWhenTextIsNotOnPage() {
 			
             Settings.WaitUntilExistsTimeOut = 1;
-            TextField inputDoesNotExist = ie.TextField( new ProximityTextConstraint(  "Aldm4em9dj54bnsvk49sk4ndlkDKj 4KVj FDS" ) );
+            TextField inputDoesNotExist = Ie.TextField( new ProximityTextConstraint(  "Aldm4em9dj54bnsvk49sk4ndlkDKj 4KVj FDS" ) );
             inputDoesNotExist.TypeText( "" );	// To activate the lookup
         }
 		
@@ -139,7 +139,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         {
 			
             Settings.WaitUntilExistsTimeOut = 1;
-            TextField inputDoesNotExist = ie.TextField( new ProximityTextConstraint( "submitTable" ) );
+            TextField inputDoesNotExist = Ie.TextField( new ProximityTextConstraint( "submitTable" ) );
             inputDoesNotExist.TypeText( "" );	// To activate the lookup
         }
 
@@ -148,17 +148,17 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // don't think that the inserted style is being applied.
         public void ShouldNotBeAffectedByStyles() {
             // Create a style that drastically affects the span tags
-            var body = ((IHTMLDocument2)ie.NativeDocument.Object).body;
+            var body = ((IHTMLDocument2)Ie.NativeDocument.Object).body;
             body.insertAdjacentHTML( "afterBegin", "<style type=\"text/css\">span {display:block; position:absolute; left:0; top:0;}</style>" );
 			
             // Test that text near an element is not then confused with another, closer element
             // The search text should be moved to the top right, nearer to many other elements than
             // the search field.
-            var inputSearch = ie.TextField(new ProximityTextConstraint("Search"));
+            var inputSearch = Ie.TextField(new ProximityTextConstraint("Search"));
             Assert.AreEqual("inputSearch", inputSearch.Id, "Absoloute positioned proximity for text did not find correct field.");
 			
             // Cleanup by re-loading the page
-            ie.GoTo(ProximityURI);
+            Ie.GoTo(ProximityURI);
         }
 
         [Test]
@@ -171,14 +171,14 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         //		<SPAN id=spanValidateCode><SPAN id=spanValidateCode>Code</SPAN> and Confirm Code must match!</SPAN>
         // Note that this test would also be caught be the more general test that makes sure the HTML isn't changed.
         public void ShouldNotDuplicateSpanElementsPrecedingTheText() {
-            var document = (IHTMLDocument2)ie.NativeDocument.Object;
+            var document = (IHTMLDocument2)Ie.NativeDocument.Object;
             var span = (IHTMLElement)document.all.item("spanValidateCode", null);
             var originalContent = span.outerHTML;
 			
-            var inputCode = ie.TextField(new ProximityTextConstraint("Code"));
+            var inputCode = Ie.TextField(new ProximityTextConstraint("Code"));
             Assert.AreEqual("inputCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
 
-            document = (IHTMLDocument2)ie.NativeDocument.Object;
+            document = (IHTMLDocument2)Ie.NativeDocument.Object;
             var obj = document.all.item( "spanValidateCode", null );
             Assert.IsNotNull( obj, "Enclosing span element no longer exists or is not unique.");
             Assert.That(obj, Is.TypeOf(typeof(mshtml.HTMLSpanElementClass)), "Enclosing span element no longer exists or is not unique.");
@@ -190,7 +190,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void ShouldFailWhenLabelContainsHtml() {
 			
             Settings.WaitUntilExistsTimeOut = 1;
-            var inputFirstName = ie.TextField(new ProximityTextConstraint("First Name:<br />"));
+            var inputFirstName = Ie.TextField(new ProximityTextConstraint("First Name:<br />"));
             inputFirstName.TypeText( "" );	// To activate the lookup
 			
         }

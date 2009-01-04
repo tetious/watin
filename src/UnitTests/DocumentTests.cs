@@ -28,7 +28,7 @@ using WatiN.Core.UnitTests.IETests;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class DocumentTests : BaseWithIETests
+	public class DocumentTests : BaseWithBrowserTests
 	{
 	    private int _originalWaitUntilExistsTimeOut;
 
@@ -53,15 +53,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
         public void DocumentIsIElementsContainer()
 		{
-			Assert.IsInstanceOfType(typeof (IElementsContainer), ie);
+			Assert.IsInstanceOfType(typeof (IElementsContainer), Ie);
 		}
 
 		[Test]
 		public void DocumentUrlandUri()
 		{
-			var uri = new Uri(ie.Url);
+			var uri = new Uri(Ie.Url);
 			Assert.AreEqual(MainURI, uri);
-			Assert.AreEqual(ie.Uri, uri);
+			Assert.AreEqual(Ie.Uri, uri);
 		}
 
 		[Test]
@@ -85,14 +85,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RunJavaScript()
 		{
-			ie.GoTo(IndexURI);
+			Ie.GoTo(IndexURI);
 
-			ie.RunScript("window.document.write('java script has run');");
-			Assert.That(ie.Text, Is.EqualTo("java script has run"));
+			Ie.RunScript("window.document.write('java script has run');");
+			Assert.That(Ie.Text, Is.EqualTo("java script has run"));
 
 			try
 			{
-				ie.RunScript("a+1");
+				Ie.RunScript("a+1");
 				Assert.Fail("Expected RunScriptException");
 			}
 			catch (RunScriptException)
@@ -123,16 +123,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TestEval()
 		{
-			var result = ie.Eval("2+5");
+			var result = Ie.Eval("2+5");
 			Assert.That(result, Is.EqualTo("7"));
 
-			result = ie.Eval("'te' + 'st'");
+			result = Ie.Eval("'te' + 'st'");
 			Assert.That(result, Is.EqualTo("test"));
 
 
 			try
 			{
-				ie.Eval("a+1");
+				Ie.Eval("a+1");
 				Assert.Fail("Expected JavaScriptException");
 			}
 			catch (JavaScriptException)
@@ -141,36 +141,36 @@ namespace WatiN.Core.UnitTests
 			}
 
 			// Make sure a valid eval after a failed eval executes OK.
-			result = ie.Eval("window.document.write('java script has run');4+4;");
+			result = Ie.Eval("window.document.write('java script has run');4+4;");
 			Assert.AreEqual("8", result);
-			Assert.That(ie.Text, Is.EqualTo("java script has run"));
+			Assert.That(Ie.Text, Is.EqualTo("java script has run"));
 
-		    ie.GoTo(TestPageUri);
+		    Ie.GoTo(TestPageUri);
 		}
 
 		[Test]
 		public void RunScriptAndEval()
 		{
-			ie.RunScript("var myVar = 5;");
-			var result = ie.Eval("myVar;");
+			Ie.RunScript("var myVar = 5;");
+			var result = Ie.Eval("myVar;");
 			Assert.AreEqual("5", result);
 		}
 
         [Test]
         public void ContainsText()
         {
-            Assert.IsTrue(ie.ContainsText("Contains text in DIV"), "Text not found");
-            Assert.IsFalse(ie.ContainsText("abcde"), "Text incorrectly found");
+            Assert.IsTrue(Ie.ContainsText("Contains text in DIV"), "Text not found");
+            Assert.IsFalse(Ie.ContainsText("abcde"), "Text incorrectly found");
 
-            Assert.IsTrue(ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
-            Assert.IsFalse(ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
+            Assert.IsTrue(Ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
+            Assert.IsFalse(Ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
         }
 
         [Test]
         public void FindText()
         {
-            Assert.AreEqual("Contains text in DIV", ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
-            Assert.IsNull(ie.FindText(new Regex("abcde")), "Text incorrectly found");
+            Assert.AreEqual("Contains text in DIV", Ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
+            Assert.IsNull(Ie.FindText(new Regex("abcde")), "Text incorrectly found");
         }
 
         [Test, ExpectedException(typeof(Exceptions.TimeoutException))]
@@ -178,9 +178,9 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 1;
 
-			IEHtmlInjector.Start(ie, "some text 1", 2);
-            ie.WaitUntilContainsText("some text 1");
-            ie.GoTo(TestPageUri);
+			IEHtmlInjector.Start(Ie, "some text 1", 2);
+            Ie.WaitUntilContainsText("some text 1");
+            Ie.GoTo(TestPageUri);
         }
 
         [Test]
@@ -188,9 +188,9 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 2;
 
-			IEHtmlInjector.Start(ie, "some text 2", 1);
-            ie.WaitUntilContainsText("some text 2");
-            ie.GoTo(TestPageUri);
+			IEHtmlInjector.Start(Ie, "some text 2", 1);
+            Ie.WaitUntilContainsText("some text 2");
+            Ie.GoTo(TestPageUri);
         }
 
         [Test, ExpectedException(typeof(Exceptions.TimeoutException))]
@@ -198,9 +198,9 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 1;
 
-			IEHtmlInjector.Start(ie, "some text 3", 2);
-            ie.WaitUntilContainsText(new Regex("me text 3"));
-            ie.GoTo(TestPageUri);
+			IEHtmlInjector.Start(Ie, "some text 3", 2);
+            Ie.WaitUntilContainsText(new Regex("me text 3"));
+            Ie.GoTo(TestPageUri);
         }
 
         [Test]
@@ -208,16 +208,16 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 2;
 
-			IEHtmlInjector.Start(ie, "some text 4", 1);
-            ie.WaitUntilContainsText(new Regex("me text 4"));
-            ie.GoTo(TestPageUri);
+			IEHtmlInjector.Start(Ie, "some text 4", 1);
+            Ie.WaitUntilContainsText(new Regex("me text 4"));
+            Ie.GoTo(TestPageUri);
         }
 
         [Test, Ignore("TODO")]
         public void TestAreaPredicateOverload()
         {
             //            Area Area = ie.Area(t => t.Name == "q");
-            var Area = ie.Area(t => t.Id == "readonlytext");
+            var Area = Ie.Area(t => t.Id == "readonlytext");
 
             Assert.That(Area.Id, Is.EqualTo("readonlytext"));
         }
@@ -225,7 +225,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestButtonPredicateOverload()
         {
-            var Button = ie.Button(t => t.Id == "popupid");
+            var Button = Ie.Button(t => t.Id == "popupid");
 
             Assert.That(Button.Id, Is.EqualTo("popupid"));
         }
@@ -233,7 +233,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestCheckBoxPredicateOverload()
         {
-            var CheckBox = ie.CheckBox(t => t.Id == "Checkbox2");
+            var CheckBox = Ie.CheckBox(t => t.Id == "Checkbox2");
 
             Assert.That(CheckBox.Id, Is.EqualTo("Checkbox2"));
         }
@@ -241,7 +241,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestElementPredicateOverload()
         {
-            var Element = ie.Element(t => t.Id == "Radio1");
+            var Element = Ie.Element(t => t.Id == "Radio1");
 
             Assert.That(Element.Id, Is.EqualTo("Radio1"));
         }
@@ -249,7 +249,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestFileUploadPredicateOverload()
         {
-            var FileUpload = ie.FileUpload(t => t.Id == "upload");
+            var FileUpload = Ie.FileUpload(t => t.Id == "upload");
 
             Assert.That(FileUpload.Id, Is.EqualTo("upload"));
         }
@@ -257,7 +257,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestFormPredicateOverload()
         {
-            var Form = ie.Form(t => t.Id == "Form");
+            var Form = Ie.Form(t => t.Id == "Form");
 
             Assert.That(Form.Id, Is.EqualTo("Form"));
         }
@@ -265,7 +265,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestLabelPredicateOverload()
         {
-            var Label = ie.Label(t => t.For == "Checkbox21");
+            var Label = Ie.Label(t => t.For == "Checkbox21");
 
             Assert.That(Label.For, Is.EqualTo("Checkbox21"));
         }
@@ -273,7 +273,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestLinkPredicateOverload()
         {
-            var Link = ie.Link(t => t.Id == "testlinkid");
+            var Link = Ie.Link(t => t.Id == "testlinkid");
 
             Assert.That(Link.Id, Is.EqualTo("testlinkid"));
         }
@@ -281,7 +281,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestParaPredicateOverload()
         {
-            var Para = ie.Para(t => t.Id == "links");
+            var Para = Ie.Para(t => t.Id == "links");
 
             Assert.That(Para.Id, Is.EqualTo("links"));
         }
@@ -289,7 +289,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestRadioButtonPredicateOverload()
         {
-            var RadioButton = ie.RadioButton(t => t.Id == "Radio1");
+            var RadioButton = Ie.RadioButton(t => t.Id == "Radio1");
 
             Assert.That(RadioButton.Id, Is.EqualTo("Radio1"));
         }
@@ -297,7 +297,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestSelectListPredicateOverload()
         {
-            var SelectList = ie.SelectList(t => t.Id == "Select1");
+            var SelectList = Ie.SelectList(t => t.Id == "Select1");
 
             Assert.That(SelectList.Id, Is.EqualTo("Select1"));
         }
@@ -305,7 +305,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestTablePredicateOverload()
         {
-            var Table = ie.Table(t => t.Id == "table1");
+            var Table = Ie.Table(t => t.Id == "table1");
 
             Assert.That(Table.Id, Is.EqualTo("table1"));
         }
@@ -313,7 +313,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestTableCellPredicateOverload()
         {
-            var TableCell = ie.TableCell(t => t.Id == "td2");
+            var TableCell = Ie.TableCell(t => t.Id == "td2");
 
             Assert.That(TableCell.Id, Is.EqualTo("td2"));
         }
@@ -321,7 +321,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestTableRowPredicateOverload()
         {
-            var TableRow = ie.TableRow(t => t.Id == "row0");
+            var TableRow = Ie.TableRow(t => t.Id == "row0");
 
             Assert.That(TableRow.Id, Is.EqualTo("row0"));
         }
@@ -329,7 +329,7 @@ namespace WatiN.Core.UnitTests
         [Test, Ignore("TODO")]
         public void TestTableBodyPredicateOverload()
         {
-            var TableBody = ie.TableBody(t => t.Id == "readonlytext");
+            var TableBody = Ie.TableBody(t => t.Id == "readonlytext");
 
             Assert.That(TableBody.Id, Is.EqualTo("readonlytext"));
         }
@@ -337,7 +337,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestTextFieldPredicateOverload()
         {
-            var textField = ie.TextField(t => t.Id == "readonlytext");
+            var textField = Ie.TextField(t => t.Id == "readonlytext");
 
             Assert.That(textField.Id, Is.EqualTo("readonlytext"));
         }
@@ -345,7 +345,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestSpanPredicateOverload()
         {
-            var Span = ie.Span(t => t.Id == "Span1");
+            var Span = Ie.Span(t => t.Id == "Span1");
 
             Assert.That(Span.Id, Is.EqualTo("Span1"));
         }
@@ -353,7 +353,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TestDivPredicateOverload()
         {
-            var Div = ie.Div(t => t.Id == "NextAndPreviousTests");
+            var Div = Ie.Div(t => t.Id == "NextAndPreviousTests");
 
             Assert.That(Div.Id, Is.EqualTo("NextAndPreviousTests"));
         }
@@ -361,7 +361,7 @@ namespace WatiN.Core.UnitTests
         [Test, Ignore("TODO")]
         public void TestImagePredicateOverload()
         {
-            var Image = ie.Image(t => t.Id == "readonlytext");
+            var Image = Ie.Image(t => t.Id == "readonlytext");
 
             Assert.That(Image.Id, Is.EqualTo("readonlytext"));
         }

@@ -23,24 +23,24 @@ using WatiN.Core.DialogHandlers;
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
 	[TestFixture]
-	public class AlertDialogHandlerTests : BaseWithIETests
+	public class AlertDialogHandlerTests : BaseWithBrowserTests
 	{
 		[Test]
 		public void AlertDialogHandler()
 		{
-			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
 			AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
-			using (new UseDialogOnce(ie.DialogWatcher, alertDialogHandler))
+			using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler))
 			{
-				ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+				Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
 				alertDialogHandler.WaitUntilExists();
 
 				string message = alertDialogHandler.Message;
 				alertDialogHandler.OKButton.Click();
 
-				ie.WaitForComplete();
+				Ie.WaitForComplete();
 
 				Assert.AreEqual("This is an alert!", message, "Unexpected message");
 				Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");
@@ -50,22 +50,22 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		[Test]
 		public void AlertDialogHandlerWithoutAutoCloseDialogs()
 		{
-			Assert.AreEqual(0, ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
-			ie.DialogWatcher.CloseUnhandledDialogs = false;
+			Ie.DialogWatcher.CloseUnhandledDialogs = false;
 
-			ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+			Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
 			AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
 
-			using (new UseDialogOnce(ie.DialogWatcher, alertDialogHandler))
+			using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler))
 			{
 				alertDialogHandler.WaitUntilExists();
 
 				string message = alertDialogHandler.Message;
 				alertDialogHandler.OKButton.Click();
 
-				ie.WaitForComplete();
+				Ie.WaitForComplete();
 
 				Assert.AreEqual("This is an alert!", message, "Unexpected message");
 				Assert.IsFalse(alertDialogHandler.Exists(), "Alert Dialog should be closed.");

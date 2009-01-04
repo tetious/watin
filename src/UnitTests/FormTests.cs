@@ -25,7 +25,7 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class FormTests : BaseWithIETests
+	public class FormTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageFromElementImage()
 		{
-			var element = ie.Element("Form1");
+			var element = Ie.Element("Form1");
 			var form = new Form(element);
 			Assert.AreEqual("Form1", form.Id);
 		}
@@ -50,31 +50,31 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FormExists()
 		{
-			Assert.IsTrue(ie.Form("Form1").Exists);
-			Assert.IsTrue(ie.Form(new Regex("Form1")).Exists);
-			Assert.IsFalse(ie.Form("nonexistingForm").Exists);
+			Assert.IsTrue(Ie.Form("Form1").Exists);
+			Assert.IsTrue(Ie.Form(new Regex("Form1")).Exists);
+			Assert.IsFalse(Ie.Form("nonexistingForm").Exists);
 		}
 
 		[Test]
 		public void FormSubmit()
 		{
-			ie.Form("Form1").Submit();
+			Ie.Form("Form1").Submit();
 
-			Assert.AreEqual(ie.Uri, MainURI);
+			Assert.AreEqual(Ie.Uri, MainURI);
 		}
 
 		[Test]
 		public void FormSubmitBySubmitButton()
 		{
-			ie.Button("submitbutton").Click();
+			Ie.Button("submitbutton").Click();
 
-			Assert.AreEqual(ie.Uri, MainURI);
+			Assert.AreEqual(Ie.Uri, MainURI);
 		}
 
 		[Test]
 		public void FormTest()
 		{
-			var form = ie.Form("Form2");
+			var form = Ie.Form("Form2");
 
 			Assert.IsInstanceOfType(typeof (IElementsContainer), form);
 			Assert.IsInstanceOfType(typeof (ElementsContainer<Form>), form);
@@ -86,11 +86,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Forms()
 		{
-			ie.GoTo(MainURI);
+			Ie.GoTo(MainURI);
 
-			Assert.AreEqual(6, ie.Forms.Length, "Unexpected number of forms");
+			Assert.AreEqual(6, Ie.Forms.Length, "Unexpected number of forms");
 
-			var forms = ie.Forms;
+			var forms = Ie.Forms;
 
 			// Collection items by index
 			Assert.AreEqual("Form", forms[0].Id);
@@ -122,10 +122,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FormToStringWithTitleIdAndName()
 		{
-			Assert.AreEqual("Form title", ie.Form("Form2").ToString(), "Title expected");
-			Assert.AreEqual("Form3", ie.Form("Form3").ToString(), "Id expected");
-			Assert.AreEqual("form4name", ie.Form(Find.ByName("form4name")).ToString(), "Name expected");
-			Assert.AreEqual("This is a form with no ID, Title or name.", ie.Forms[4].ToString(), "Text expected");
+			Assert.AreEqual("Form title", Ie.Form("Form2").ToString(), "Title expected");
+			Assert.AreEqual("Form3", Ie.Form("Form3").ToString(), "Id expected");
+			Assert.AreEqual("form4name", Ie.Form(Find.ByName("form4name")).ToString(), "Name expected");
+			Assert.AreEqual("This is a form with no ID, Title or name.", Ie.Forms[4].ToString(), "Text expected");
 		}
 
 	}

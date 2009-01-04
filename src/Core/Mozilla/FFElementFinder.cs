@@ -44,11 +44,10 @@ namespace WatiN.Core.Mozilla
             return;
         }
 
-        // TODO: get parentElement (IElementsCollection) into the loop
         private List<INativeElement> FindMatchingElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection parentElement)
         {
             var elementArrayName = FireFoxClientPort.CreateVariableName();
-            var elementToSearchFrom = FireFoxClientPort.DocumentVariableName;
+            var elementToSearchFrom = parentElement.Elements.ToString(); // FireFoxClientPort.DocumentVariableName;
 
             var elementReferences = new List<INativeElement>();
 
@@ -71,7 +70,8 @@ namespace WatiN.Core.Mozilla
 
         private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)
         {
-            var command = string.Format("{0} = {1}.getElementsByTagName(\"{2}\"); ", elementArrayName, elementToSearchFrom, tagName);
+            var tagToFind = string.IsNullOrEmpty(tagName) ? "*" : tagName;
+            var command = string.Format("{0} = {1}.getElementsByTagName(\"{2}\"); ", elementArrayName, elementToSearchFrom, tagToFind);
 
             // TODO: Can't get this to work, otherwise the TypeIsOk check could be removed.
             //            if (this.type != null)

@@ -25,7 +25,7 @@ using WatiN.Core.Exceptions;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class IFramesTests : BaseWithIETests
+	public class IFramesTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{
@@ -35,40 +35,40 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingIFrameID'")]
 		public void ExpectFrameNotFoundException()
 		{
-			ie.Frame(Find.ById("NonExistingIFrameID"));
+			Ie.Frame(Find.ById("NonExistingIFrameID"));
 		}
 
 		[Test]
 		public void LeftFrame()
 		{
-			Frame leftFrame = ie.Frame(Find.ByName("left"));
+			Frame leftFrame = Ie.Frame(Find.ByName("left"));
 			Assert.IsNotNull(leftFrame, "Frame expected");
 			Assert.AreEqual("left", leftFrame.Name);
 			Assert.AreEqual(null, leftFrame.Id);
 
-			leftFrame = ie.Frame(Find.ByUrl(IFramesLeftURI));
+			leftFrame = Ie.Frame(Find.ByUrl(IFramesLeftURI));
 			Assert.AreEqual("left", leftFrame.Name);
 		}
 
 		[Test]
 		public void MiddleFrame()
 		{
-			Frame middleFrame = ie.Frame(Find.ByName("middle"));
+			Frame middleFrame = Ie.Frame(Find.ByName("middle"));
 			Assert.IsNotNull(middleFrame, "Frame expected");
 			Assert.AreEqual("middle", middleFrame.Name);
 			Assert.AreEqual("iframe2", middleFrame.Id);
 
-			middleFrame = ie.Frame(Find.ByUrl(IFramesMiddleURI));
+			middleFrame = Ie.Frame(Find.ByUrl(IFramesMiddleURI));
 			Assert.AreEqual("middle", middleFrame.Name);
 
-			middleFrame = ie.Frame(Find.ById("iframe2"));
+			middleFrame = Ie.Frame(Find.ById("iframe2"));
 			Assert.AreEqual("middle", middleFrame.Name);
 		}
 
 		[Test]
 		public void RightFrame()
 		{
-			Frame rightFrame = ie.Frame(Find.ByUrl(IFramesRightURI));
+			Frame rightFrame = Ie.Frame(Find.ByUrl(IFramesRightURI));
 			Assert.IsNotNull(rightFrame, "Frame expected");
 			Assert.AreEqual(null, rightFrame.Name);
 			Assert.AreEqual(null, rightFrame.Id);
@@ -78,7 +78,7 @@ namespace WatiN.Core.UnitTests
 		public void Frames()
 		{
 			const int expectedFramesCount = 3;
-			FrameCollection frames = ie.Frames;
+			FrameCollection frames = Ie.Frames;
 
 			Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
@@ -109,14 +109,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldBeAbleToAccessCustomAttributeInIFrameElement()
 		{
-			string value = ie.Frame("iframe2").GetAttributeValue("mycustomattribute");
+			string value = Ie.Frame("iframe2").GetAttributeValue("mycustomattribute");
 			Assert.That(value, Is.EqualTo("WatiN"));
 		}
 
 		[Test]
 		public void ShouldBeAbleToFindFrameUsingCustomAttributeInIFrameElement()
 		{
-			Frame frame = ie.Frame(Find.By("mycustomattribute","WatiN"));
+			Frame frame = Ie.Frame(Find.By("mycustomattribute","WatiN"));
 			Assert.That(frame.Id, Is.EqualTo("iframe2"));
 		}
 

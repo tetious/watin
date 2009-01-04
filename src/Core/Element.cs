@@ -229,7 +229,7 @@ namespace WatiN.Core
 		/// <value>The name of the tag.</value>
 		public string TagName
 		{
-			get { return GetAttributeValue("tagName"); }
+			get { return NativeElement.TagName; }
 		}
 
 		/// <summary>
