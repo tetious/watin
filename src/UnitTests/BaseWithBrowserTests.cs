@@ -118,7 +118,7 @@ namespace WatiN.Core.UnitTests
         protected void ExecuteTest(BrowserTest testMethod)
         {
             ExecuteTest(testMethod, Firefox);
-//            ExecuteTest(testMethod, Ie);
+            ExecuteTest(testMethod, Ie);
         }
 
         private static void ExecuteTest(BrowserTest testMethod, Browser browser)
