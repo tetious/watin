@@ -132,7 +132,7 @@ namespace WatiN.Core
 		{
 			if (value != null)
 			{
-				value = value.Replace(Environment.NewLine, "\r");
+				value = value.Replace(Environment.NewLine, "\n");
 			}
 			return value;
 		}
@@ -153,9 +153,10 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return GetAttributeValue("value");
+			    var value = GetAttributeValue("value");
+			    return string.IsNullOrEmpty(value) ? null : value;
 			}
-			// Don't use this set property internally (in this class) but use setValue. 
+		    // Don't use this set property internally (in this class) but use setValue. 
 			set
 			{
 				Logger.LogAction("Setting " + GetType().Name + " '" + ToString() + "' to '" + value + "'");
@@ -180,13 +181,16 @@ namespace WatiN.Core
 
 		public override string ToString()
 		{
-			if (UtilityClass.IsNotNullOrEmpty(Title))
+		    var title = Title;
+		    if (UtilityClass.IsNotNullOrEmpty(title))
 			{
-				return Title;
+				return title;
 			}
-			if (UtilityClass.IsNotNullOrEmpty(Id))
+
+		    var id = Id;
+		    if (UtilityClass.IsNotNullOrEmpty(id))
 			{
-				return Id;
+				return id;
 			}
 
 			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();

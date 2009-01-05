@@ -402,7 +402,7 @@ namespace WatiN.Core.Mozilla
                     response = response.Substring(3);
                 }
 
-                response = response.Trim();
+//                response = response.Trim();
             }
             return response;
         }
@@ -511,7 +511,7 @@ namespace WatiN.Core.Mozilla
                 lastResponse += CleanTelnetResponse(readData);
             } while (!readData.EndsWith("> ") || stream.DataAvailable);
 
-            lastResponse = lastResponse.Trim();
+//            lastResponse = lastResponse.Trim();
             if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
                 lastResponse.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
                 lastResponse.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase))

@@ -16,7 +16,7 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className", "disabled"
+                    "selected", "textContent", "className", "disabled", "checked"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
@@ -124,7 +124,7 @@ namespace WatiN.Core.Mozilla
 
         public void SetAttributeValue(string attributeName, string value)
         {
-            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
+            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value, "\n");
         }
 
         public string GetStyleAttributeValue(string attributeName)
