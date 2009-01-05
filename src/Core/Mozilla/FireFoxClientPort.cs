@@ -37,11 +37,6 @@ namespace WatiN.Core.Mozilla
         private static long elementCounter;
 
         /// <summary>
-        /// <c>true</c> if we have successfully connected to FireFox
-        /// </summary>
-        private bool connected;
-
-        /// <summary>
         /// Underlying socket used to create a <see cref="NetworkStream"/>.
         /// </summary>
         private Socket telnetSocket;
@@ -101,15 +96,12 @@ namespace WatiN.Core.Mozilla
         /// <summary>
         /// <c>true</c> if we have successfully connected to FireFox
         /// </summary>
-        public bool Connected
-        {
-            get { return connected; }
-        }
+        public bool Connected { get; private set; }
 
         /// <summary>
         /// The last reponse recieved from the jssh server
         /// </summary>
-        public string LastResponse
+        private string LastResponse
         {
             get
             {
@@ -129,7 +121,7 @@ namespace WatiN.Core.Mozilla
         /// Gets a value indicating whether last response is null.
         /// </summary>
         /// <value><c>true</c> if last response is null; otherwise, <c>false</c>.</value>
-        public bool LastResponseIsNull
+        private bool LastResponseIsNull
         {
             get
             {
@@ -140,7 +132,7 @@ namespace WatiN.Core.Mozilla
         /// <summary>
         /// Retruns the last reponse as a Boolen, default to false if converting <see cref="LastResponse"/> fails.
         /// </summary>
-        public bool LastResponseAsBool
+        private bool LastResponseAsBool
         {
             get
             {
@@ -222,7 +214,7 @@ namespace WatiN.Core.Mozilla
                 throw new FireFoxException("Unable to connect to jssh server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
             }
 
-            connected = true;
+            Connected = true;
             WaitForConnectionEstablished();
             Logger.LogAction("Successfully connected to FireFox using jssh.");
 //            WriteAndRead("setProtocol('synchronous')");
@@ -232,7 +224,7 @@ namespace WatiN.Core.Mozilla
 
         private void ValidateCanConnect()
         {
-            if (connected)
+            if (Connected)
             {
                 throw new FireFoxException("Already connected to jssh server.");
             }
@@ -271,7 +263,7 @@ namespace WatiN.Core.Mozilla
             }
         }
 
-        public int LastResponseAsInt
+        private int LastResponseAsInt
         {
             get { return string.IsNullOrEmpty(LastResponse) ? 0 : int.Parse(lastResponse); }
         }
@@ -339,7 +331,7 @@ namespace WatiN.Core.Mozilla
             }
 
             disposed = true;
-            connected = false;
+            Connected = false;
         }
 
         #endregion Protected instance methods
@@ -427,14 +419,14 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         private void WaitForConnectionEstablished()
         {
-            DoWrite("\n");
+            SendCommand("\n");
             
             var rawResponse = string.Empty;
             var responseToWaitFor = "Welcome to the Mozilla JavaScript Shell!\n\n> \n> \n> "; //.Replace("\n", Environment.NewLine);
 
             while (rawResponse != responseToWaitFor)
             {
-                ReadResponse();
+                ReadResponse(true);
                 rawResponse += lastResponseRaw;
             }
         }
@@ -443,15 +435,31 @@ namespace WatiN.Core.Mozilla
         /// Writes the specified data to the jssh server.
         /// </summary>
         /// <param name="data">The data.</param>
-        internal void Write(string data)
+        /// <param name="resultExpected"></param>
+        private void SendAndRead(string data, bool resultExpected)
         {
-            DoWrite(data);
-            ReadResponse();
+            SendCommand(data);
+            ReadResponse(resultExpected);
         }
 
-        private void DoWrite(string data)
+        /// <summary>
+        /// Writes the specified data to the jssh server.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="resultExpected"></param>
+        /// <param name="args"></param>
+        private void SendAndRead(string data, bool resultExpected, params object[] args)
         {
-            if (!connected)
+            var command = data;
+            if (args != null && args.Length > 0) command = string.Format(data, args);
+
+            SendCommand(command);
+            ReadResponse(resultExpected);
+        }
+
+        private void SendCommand(string data)
+        {
+            if (!Connected)
             {
                 throw new FireFoxException("You must connect before writing to the server.");
             }
@@ -471,27 +479,39 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
-        internal void Write(string data, params object[] args)
+        public void Write(string data, params object[] args)
         {
-            Write(string.Format(data, args));
+            SendAndRead(data, false, args);
         }
 
-        internal string WriteAndRead(string data, params object[] args)
+        public string WriteAndRead(string data, params object[] args)
         {
-            Write(data, args);
+            SendAndRead(data, false, args);
             return LastResponse;
+        }
+
+        public bool WriteAndReadAsBool(string data, params object[] args)
+        {
+            SendAndRead(data, true, args);
+            return LastResponseAsBool;
+        }
+
+        public int WriteAndReadAsInt(string data, params object[] args)
+        {
+            SendAndRead(data, true, args);
+            return LastResponseAsInt;
         }
 
         /// <summary>
         /// Reads the response from the jssh server.
         /// </summary>
-        private void ReadResponse()
+        private void ReadResponse(bool resultExpected)
         {
             var stream = new NetworkStream(telnetSocket);
             lastResponse = string.Empty;
             lastResponseRaw = string.Empty;
 
-            var bufferSize = 1024;
+            var bufferSize = 4096;
             var buffer = new byte[bufferSize];
 
             while (!stream.CanRead)
@@ -509,7 +529,8 @@ namespace WatiN.Core.Mozilla
                 Logger.LogAction("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
                 lastResponseRaw += readData;
                 lastResponse += CleanTelnetResponse(readData);
-            } while (!readData.EndsWith("> ") || stream.DataAvailable);
+//            } while (!readData.EndsWith("> ") || stream.DataAvailable);
+            } while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(lastResponse)));
 
 //            lastResponse = lastResponse.Trim();
             if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||

@@ -40,12 +40,16 @@ function keyDown() {
     checkbox.checked = true;
     return true
 }
-function keyPress() {
+function keyPress(e) {
     checkbox = document.getElementById("chkKeyPress");
     checkbox.checked = true;
     
+	var keycode;
     keycodes = document.getElementById("txtKeycodeId");
-    keycode = window.event.keyCode;
+    if (!e) e = window.event;
+	if (e.keyCode) keycode = e.keyCode;
+	else if (e.which) keycode = e.which; 
+	//keycode = e.keycode; 
     charfromkeycode = String.fromCharCode(keycode); 
     keycodes.value = keycodes.value + charfromkeycode;
     
@@ -133,7 +137,7 @@ function fnPrompt()
 			<input type="text" id="msgBoxReturnValue" value="" />
 		</p>
 		<p>
-			<input id="textfieldid" type="text" onkeydown="javascript:keyDown()" onkeypress="javascript:keyPress()" onkeyup="javascript:keyUp()" /> 
+			<input id="textfieldid" type="text" onkeydown="javascript:keyDown()" onkeypress="javascript:keyPress(event)" onkeyup="javascript:keyUp()" /> 
 			<label><input type="checkbox" id="chkKeyDown" /> KeyDown</label>
 			<label><input type="checkbox" id="chkKeyPress" /> KeyPress</label> 
 			<label><input type="checkbox" id="chkKeyUp" /> KeyUp</label> 

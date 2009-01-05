@@ -25,6 +25,7 @@ namespace WatiN.Core.Mozilla
         {
             watiNAttributeMap.Add("innertext", "textContent");
             watiNAttributeMap.Add("classname", "className");
+//            watiNAttributeMap.Add("readOnly", "readonly");
         }
 
         private ElementAttributeBag _attributeBag;
@@ -124,7 +125,7 @@ namespace WatiN.Core.Mozilla
 
         public void SetAttributeValue(string attributeName, string value)
         {
-            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value, "\n");
+            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
         }
 
         public string GetStyleAttributeValue(string attributeName)
@@ -170,9 +171,8 @@ namespace WatiN.Core.Mozilla
             if (UtilityClass.IsNullOrEmpty(ElementReference)) return false;
 
             var command = string.Format("{0} != null; ", ElementReference);
-            ClientPort.Write(command);
 
-            return ClientPort.LastResponseAsBool;
+            return ClientPort.WriteAndReadAsBool(command);
         }
 
         public string TagName
@@ -224,7 +224,7 @@ namespace WatiN.Core.Mozilla
             ClientPort.Write(
                     "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
                     "event.initEvent(\"" + eventName + "\",true,true);\n" +
-                    "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false};");
+                    "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");
         }
 
         /// <summary>
@@ -266,9 +266,9 @@ namespace WatiN.Core.Mozilla
 
             var elementvar = FireFoxClientPort.CreateVariableName();
             var command = string.Format("{0}={1}.{2};", elementvar, ElementReference, propertyName);
-            ClientPort.Write(command);
+            var result = ClientPort.WriteAndRead(command);
 
-            return !ClientPort.LastResponseIsNull ? new FFElement(elementvar, ClientPort) : null;
+            return result != null ? new FFElement(elementvar, ClientPort) : null;
         }
 
         private bool IsTextNodeType()

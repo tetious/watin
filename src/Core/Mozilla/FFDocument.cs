@@ -58,15 +58,15 @@ namespace WatiN.Core.Mozilla
 
                 var elementvar = FireFoxClientPort.CreateVariableName();
                 var command = string.Format("{0}={1}.{2};{0}==null", elementvar, FireFoxClientPort.DocumentVariableName, propertyName);
-                ClientPort.Write(command);
+                var result = ClientPort.WriteAndReadAsBool(command);
 
-                return !ClientPort.LastResponseAsBool ? new FFElement(elementvar, ClientPort) : null;
+                return !result ? new FFElement(elementvar, ClientPort) : null;
             }
         }
 
         public void RunScript(string scriptCode, string language)
         {
-            ClientPort.Write(scriptCode);
+            ClientPort.Write(scriptCode, true);
         }
     }
 }

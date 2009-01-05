@@ -79,7 +79,8 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
                                 var textfieldName = browser.TextField("Textarea1");
-		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
+		                        var textWithNewLine = @"Line1\\n\Line2";
+//		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
 		                        textfieldName.TypeText(textWithNewLine);
 		                        Assert.AreEqual(textWithNewLine, textfieldName.Value);
@@ -212,14 +213,25 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-		[Test, ExpectedException(typeof (ElementReadOnlyException), ExpectedMessage = "Element with Id:readonlytext is readonly")]
+		[Test]
 		public void TextFieldReadyOnlyException()
 		{
 		    ExecuteTest(browser =>
 		                    {
+                                // GIVEN
 		                        var textField = browser.TextField("readonlytext");
-		                        textField.TypeText("This should go wrong");
 
+		                        try
+		                        {
+                                    // WHEN
+		                            textField.TypeText("This should go wrong");
+                                    Assert.Fail("Expected ElementReadOnlyException");
+		                        }
+		                        catch (Exception e)
+		                        {
+		                            Assert.That(e.GetType(), Is.InstanceOfType(typeof(ElementReadOnlyException)), "Unexpected exception");
+		                            Assert.That(e.Message, Is.EqualTo("Element with Id:readonlytext is readonly"));
+		                        }
 		                    });
 		}
 
