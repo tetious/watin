@@ -209,8 +209,7 @@ namespace WatiN.Core.Mozilla
                 }
             }
 
-            telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
-                                    {Blocking = true};
+            telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {Blocking = true};
 
             try
             {
@@ -225,7 +224,7 @@ namespace WatiN.Core.Mozilla
             connected = true;
             WriteLine();
             Logger.LogAction("Successfully connected to FireFox using jssh.");
-//            Write("setProtocol(synchronous)");
+//            WriteAndRead("setProtocol('synchronous')");
             DefineDefaultJSVariables();
 
         }
@@ -271,6 +270,11 @@ namespace WatiN.Core.Mozilla
             }
         }
 
+        public int LastResponseAsInt
+        {
+            get { return string.IsNullOrEmpty(LastResponse) ? 0 : int.Parse(lastResponse); }
+        }
+
         ///<summary>
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         ///</summary>
@@ -310,7 +314,7 @@ namespace WatiN.Core.Mozilla
                         try
                         {
                             Logger.LogAction("Closing connection to jssh");
-                            Write(string.Format("{0}.close()", WindowVariableName), false);
+                            Write(string.Format("{0}.close()", WindowVariableName));
                             telnetSocket.Close();
                             Process.WaitForExit(5000);
                         }
@@ -411,8 +415,10 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         private void DefineDefaultJSVariables()
         {
-            Write("var w0 = getWindows()[0]; var {0} = w0.content;", WindowVariableName);
-            Write("var {0} = {1}.document; var {2} = w0.getBrowser()", DocumentVariableName, WindowVariableName, BrowserVariableName);
+            Write("var w0 = getWindows()[0];", WindowVariableName);
+            Write("var {0} = w0.content;", WindowVariableName);
+            Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
+            Write("var {0} = w0.getBrowser();", BrowserVariableName);
         }
 
         /// <summary>
@@ -420,28 +426,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         private void WriteLine()
         {
-            Write("\n", true);
-        }
-
-        private void Write(string data, bool readResponse)
-        {
-            if (!connected)
-            {
-                throw new FireFoxException("You must connect before writing to the server.");
-            }
-
-            var bytes = ASCIIEncoding.ASCII.GetBytes(data + "\n");
-
-            Logger.LogAction("sending: {0}", data);
-            using (var networkStream = new NetworkStream(telnetSocket))
-            {
-                networkStream.Write(bytes, 0, bytes.Length);
-            }
-
-            if (readResponse)
-            {
-                ReadResponse();
-            }
+            Write("\n");
         }
 
         /// <summary>
@@ -450,7 +435,20 @@ namespace WatiN.Core.Mozilla
         /// <param name="data">The data.</param>
         internal void Write(string data)
         {
-            Write(data, true);
+            if (!connected)
+            {
+                throw new FireFoxException("You must connect before writing to the server.");
+            }
+
+            var bytes = Encoding.ASCII.GetBytes(data + "\n");
+
+            Logger.LogAction("sending: {0}", data);
+            using (var networkStream = new NetworkStream(telnetSocket))
+            {
+                networkStream.Write(bytes, 0, bytes.Length);
+            }
+
+            ReadResponse();
         }
 
         /// <summary>
@@ -460,7 +458,7 @@ namespace WatiN.Core.Mozilla
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         internal void Write(string data, params object[] args)
         {
-            Write(string.Format(data, args), true);
+            Write(string.Format(data, args));
         }
 
         internal string WriteAndRead(string data, params object[] args)
@@ -477,7 +475,8 @@ namespace WatiN.Core.Mozilla
             var stream = new NetworkStream(telnetSocket);
             lastResponse = string.Empty;
 
-            var buffer = new byte[1024];
+            var bufferSize = 4096;
+            var buffer = new byte[bufferSize];
             while (!stream.CanRead)
 //            while (!stream.DataAvailable)
             {
@@ -488,13 +487,13 @@ namespace WatiN.Core.Mozilla
             string readData;
             do
             {
-                var read = stream.Read(buffer, 0, 1024);
+                var read = stream.Read(buffer, 0, bufferSize);
 //                readData = UnicodeEncoding.ASCII.GetString(buffer, 0, read);
-                readData = UnicodeEncoding.UTF8.GetString(buffer, 0, read);
+                readData = Encoding.UTF8.GetString(buffer, 0, read);
 
-                Logger.LogAction("jssh says: '" + readData + "'");
+                Logger.LogAction("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
                 lastResponse += CleanTelnetResponse(readData);
-            } while (!readData.EndsWith("> "));
+            } while (!readData.EndsWith("> ") || stream.DataAvailable);
 //            } while (read == 1024);
 
             lastResponse = lastResponse.Trim();

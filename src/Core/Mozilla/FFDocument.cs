@@ -36,7 +36,12 @@ namespace WatiN.Core.Mozilla
 
         public string Url
         {
-            get { return ClientPort.WriteAndRead("{0}.location.href", FireFoxClientPort.WindowVariableName); }
+            get
+            {
+                var url = ClientPort.WriteAndRead("{0}.location.href", FireFoxClientPort.WindowVariableName);
+                url = string.IsNullOrEmpty(url) ? "about:blank" : url;
+                return url;
+            }
         }
 
         public string Title

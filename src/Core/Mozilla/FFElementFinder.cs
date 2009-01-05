@@ -82,7 +82,7 @@ namespace WatiN.Core.Mozilla
             command = command + string.Format("{0}.length;", elementArrayName);
             _clientPort.Write(command);
 
-            return int.Parse(_clientPort.LastResponse);
+            return _clientPort.LastResponseAsInt;
         }
 
         // TODO: Can't get this to work, but if it does then the TypeIsOk check 
