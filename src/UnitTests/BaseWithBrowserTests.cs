@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		public override void FixtureSetup()
 		{
 		    base.FixtureSetup();
-//		    Logger.LogWriter = new ConsoleLogWriter();
+		    Logger.LogWriter = new ConsoleLogWriter();
 		    CreateNewIeInstance();
 		}
 

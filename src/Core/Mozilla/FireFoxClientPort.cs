@@ -50,6 +50,7 @@ namespace WatiN.Core.Mozilla
         /// The last reponse recieved from the jssh server
         /// </summary>
         private string lastResponse;
+        private string lastResponseRaw;
 
         /// <summary>
         /// The entire response from the jssh server so far.
@@ -222,7 +223,7 @@ namespace WatiN.Core.Mozilla
             }
 
             connected = true;
-            WriteLine();
+            WaitForConnectionEstablished();
             Logger.LogAction("Successfully connected to FireFox using jssh.");
 //            WriteAndRead("setProtocol('synchronous')");
             DefineDefaultJSVariables();
@@ -424,9 +425,18 @@ namespace WatiN.Core.Mozilla
         /// <summary>
         /// Writes a line to the jssh server.
         /// </summary>
-        private void WriteLine()
+        private void WaitForConnectionEstablished()
         {
-            Write("\n");
+            DoWrite("\n");
+            
+            var rawResponse = string.Empty;
+            var responseToWaitFor = "Welcome to the Mozilla JavaScript Shell!\n\n> \n> \n> "; //.Replace("\n", Environment.NewLine);
+
+            while (rawResponse != responseToWaitFor)
+            {
+                ReadResponse();
+                rawResponse += lastResponseRaw;
+            }
         }
 
         /// <summary>
@@ -434,6 +444,12 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="data">The data.</param>
         internal void Write(string data)
+        {
+            DoWrite(data);
+            ReadResponse();
+        }
+
+        private void DoWrite(string data)
         {
             if (!connected)
             {
@@ -446,9 +462,8 @@ namespace WatiN.Core.Mozilla
             using (var networkStream = new NetworkStream(telnetSocket))
             {
                 networkStream.Write(bytes, 0, bytes.Length);
+                networkStream.Flush();
             }
-
-            ReadResponse();
         }
 
         /// <summary>
@@ -474,27 +489,27 @@ namespace WatiN.Core.Mozilla
         {
             var stream = new NetworkStream(telnetSocket);
             lastResponse = string.Empty;
+            lastResponseRaw = string.Empty;
 
-            var bufferSize = 4096;
+            var bufferSize = 1024;
             var buffer = new byte[bufferSize];
+
             while (!stream.CanRead)
-//            while (!stream.DataAvailable)
             {
                 // Hack: need to work out a better way for this
-                System.Threading.Thread.Sleep(200);
+                System.Threading.Thread.Sleep(10);
             }
 
             string readData;
             do
             {
                 var read = stream.Read(buffer, 0, bufferSize);
-//                readData = UnicodeEncoding.ASCII.GetString(buffer, 0, read);
                 readData = Encoding.UTF8.GetString(buffer, 0, read);
 
                 Logger.LogAction("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
+                lastResponseRaw += readData;
                 lastResponse += CleanTelnetResponse(readData);
             } while (!readData.EndsWith("> ") || stream.DataAvailable);
-//            } while (read == 1024);
 
             lastResponse = lastResponse.Trim();
             if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
@@ -505,7 +520,6 @@ namespace WatiN.Core.Mozilla
             }
 
             response.Append(lastResponse);
-
         }
 
         #endregion private instance methods
