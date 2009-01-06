@@ -60,7 +60,7 @@ namespace WatiN.Core.Constraints
         protected override bool DoCompare(Interfaces.IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-			var element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.Object;
+            var element = ((ElementAttributeBag) attributeBag).Element;
 			
 			// Get all elements and filter this for Labels
             if (labelIdsWithMatchingText == null)
@@ -68,27 +68,42 @@ namespace WatiN.Core.Constraints
                 InitLabelIdsWithMatchingText(element);
             }
 
-            return labelIdsWithMatchingText != null ? labelIdsWithMatchingText.Contains(element.id) : false;
+            return labelIdsWithMatchingText != null ? labelIdsWithMatchingText.Contains(element.Id) : false;
 		}
 
-        private void InitLabelIdsWithMatchingText(IHTMLElement element)
+        private void InitLabelIdsWithMatchingText(Element element)
         {
             labelIdsWithMatchingText = new Hashtable();
-            
-            var htmlDocument = (IHTMLDocument2)element.document;
-            var labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
 
-            // Get the list of id's of controls that these labels are for
-            for (var i = 0; i < labelElements.length; i++)
+            var domContainer = element.DomContainer;
+
+            var labels = domContainer.Labels.Filter(e =>
+                                                        {
+                                                            var text = e.Text;
+                                                            if (string.IsNullOrEmpty(text)) return false;
+                                                            return StringComparer.AreEqual(text.Trim(), labelText);
+                                                        });
+
+            foreach (Label label in labels)
             {
-                var label = (IHTMLElement) labelElements.item(i, null);
-                
-                // Store the id if there is a label text match
-                if (!StringComparer.AreEqual(label.innerText.Trim(), labelText)) continue;
-                
-                var htmlFor = ((IHTMLLabelElement)label).htmlFor;
-                labelIdsWithMatchingText.Add(htmlFor,htmlFor);
+                var forElementWithId = label.For;
+                labelIdsWithMatchingText.Add(forElementWithId, forElementWithId);
             }
+
+//            var htmlDocument = (IHTMLDocument2)element.document;
+//            var labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
+//
+//            // Get the list of id's of controls that these labels are for
+//            for (var i = 0; i < labelElements.length; i++)
+//            {
+//                var label = (IHTMLElement) labelElements.item(i, null);
+//                
+//                // Store the id if there is a label text match
+//                if (!StringComparer.AreEqual(label.innerText.Trim(), labelText)) continue;
+//                
+//                var htmlFor = ((IHTMLLabelElement)label).htmlFor;
+//                labelIdsWithMatchingText.Add(htmlFor,htmlFor);
+//            }
         }
 
         /// <summary>

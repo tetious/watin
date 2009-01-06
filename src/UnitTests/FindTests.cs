@@ -177,11 +177,11 @@ namespace WatiN.Core.UnitTests
 			var value = Find.ByText("textvalue");
 
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Text class should inherit Attribute class");
-			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(RegexComparer)), "Unexpected comparer");
 
 			const string innertext = "innertext";
 			Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("textvalue", value.Value, "Wrong value");
+			Assert.AreEqual("^ *textvalue *$", value.Value, "Wrong value");
 
 			var regex = new Regex("lue$");
 			value = Find.ByText(regex);
@@ -197,7 +197,42 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Compare(attributeBag), Is.True, "PredicateComparer not used");
 		}
 
-		[Test]
+
+        [Test]
+        public void FindByTextOnTextShouldIgnoreSpacesBeforeOrAfterText()
+        {
+            const string innertext = "innertext";
+
+            var value = Find.ByText("textvalue");
+            var attributeBag = new MockAttributeBag(innertext, "textvalue");
+            Assert.That(value.Compare(attributeBag), Is.True, "Exact match expected");
+
+            attributeBag = new MockAttributeBag(innertext, " textvalue");
+            Assert.That(value.Compare(attributeBag), Is.True, "1 Space before should match");
+            
+            attributeBag = new MockAttributeBag(innertext, "  textvalue");
+            Assert.That(value.Compare(attributeBag), Is.True, "2 Spaces before should match");
+            
+            attributeBag = new MockAttributeBag(innertext, "textvalue ");
+            Assert.That(value.Compare(attributeBag), Is.True, "1 Spaces after should match");
+            
+            attributeBag = new MockAttributeBag(innertext, "textvalue  ");
+            Assert.That(value.Compare(attributeBag), Is.True, "2 Spaces after should match");
+            
+            attributeBag = new MockAttributeBag(innertext, " textvalue ");
+            Assert.That(value.Compare(attributeBag), Is.True, "1 Space before and 1 after should match");
+
+            attributeBag = new MockAttributeBag(innertext, "a textvalue");
+            Assert.That(value.Compare(attributeBag), Is.False, "should only match with only spaces before searched text");
+            
+            attributeBag = new MockAttributeBag(innertext, "textvalue z");
+            Assert.That(value.Compare(attributeBag), Is.False, "should only match with only spaces after searched text");
+            
+            attributeBag = new MockAttributeBag(innertext, "a textvalue z");
+            Assert.That(value.Compare(attributeBag), Is.False, "should not match");
+        }
+
+	    [Test]
 		public void FindByStyle()
 		{
 			const string attributeName = "background-color";

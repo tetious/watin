@@ -175,7 +175,7 @@ namespace WatiN.Core
 		/// <value>The innertext.</value>
 		public virtual string Text
 		{
-			get { return InnerHtml; }
+            get { return GetAttributeValue("innertext"); }
 		}
 
 		/// <summary>

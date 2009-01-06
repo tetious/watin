@@ -25,6 +25,7 @@ namespace WatiN.Core.Mozilla
         {
             watiNAttributeMap.Add("innertext", "textContent");
             watiNAttributeMap.Add("classname", "className");
+            watiNAttributeMap.Add("htmlFor", "for");
 //            watiNAttributeMap.Add("readOnly", "readonly");
         }
 
@@ -125,6 +126,19 @@ namespace WatiN.Core.Mozilla
 
         public void SetAttributeValue(string attributeName, string value)
         {
+            // Translate to FireFox html syntax
+            if (watiNAttributeMap.ContainsKey(attributeName))
+            {
+                attributeName = watiNAttributeMap[attributeName];
+            }
+
+            // Handle properties different from attributes
+            if (knownAttributeOverrides.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
+            {
+                SetProperty(attributeName, value);
+                return;
+            }
+
             ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
         }
 
@@ -243,13 +257,19 @@ namespace WatiN.Core.Mozilla
         /// <returns></returns>
         private string GetProperty(string propertyName)
         {
-            if (UtilityClass.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException("propertyName", "Null or Empty not allowed.");
-            }
-
             var command = string.Format("{0}.{1};", ElementReference, propertyName);
             return ClientPort.WriteAndRead(command);
+        }
+
+        /// <summary>
+        /// Sets the property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        protected void SetProperty(string propertyName, string value)
+        {
+            var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
+            ClientPort.Write(command);
         }
 
         /// <summary>

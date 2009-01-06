@@ -37,63 +37,75 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CreateRadioButtonFromElement()
 		{
-			var element = Ie.Element("Radio1");
-			var radioButton = new RadioButton(element);
-			Assert.AreEqual("Radio1", radioButton.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var element = browser.Element("Radio1");
+		                        var radioButton = new RadioButton(element);
+		                        Assert.AreEqual("Radio1", radioButton.Id);
+		                    });
 		}
 
 		[Test]
 		public void RadioButtonExists()
 		{
-			Assert.IsTrue(Ie.RadioButton("Radio1").Exists);
-			Assert.IsTrue(Ie.RadioButton(new Regex("Radio1")).Exists);
-			Assert.IsFalse(Ie.RadioButton("nonexistingRadio1").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.RadioButton("Radio1").Exists);
+		                        Assert.IsTrue(browser.RadioButton(new Regex("Radio1")).Exists);
+		                        Assert.IsFalse(browser.RadioButton("nonexistingRadio1").Exists);
+		                    });
 		}
 
 		[Test]
 		public void RadioButtonTest()
 		{
-			var RadioButton1 = Ie.RadioButton("Radio1");
+		    ExecuteTest(browser =>
+		                    {
+		                        var RadioButton1 = browser.RadioButton("Radio1");
 
-			Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
-			Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
-			Assert.IsTrue(RadioButton1.Checked, "Should initially be checked");
+		                        Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
+		                        Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
+		                        Assert.IsTrue(RadioButton1.Checked, "Should initially be checked");
 
-			RadioButton1.Checked = false;
-			Assert.IsFalse(RadioButton1.Checked, "Should not be checked");
+		                        RadioButton1.Checked = false;
+		                        Assert.IsFalse(RadioButton1.Checked, "Should not be checked");
 
-			RadioButton1.Checked = true;
-			Assert.IsTrue(RadioButton1.Checked, "Should be checked");
+		                        RadioButton1.Checked = true;
+		                        Assert.IsTrue(RadioButton1.Checked, "Should be checked");
+		                    });
 		}
 
 		[Test]
 		public void RadioButtons()
 		{
-			Assert.AreEqual(3, Ie.RadioButtons.Length, "Unexpected number of RadioButtons");
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.AreEqual(3, browser.RadioButtons.Length, "Unexpected number of RadioButtons");
 
-			var formRadioButtons = Ie.Form("FormRadioButtons").RadioButtons;
+		                        var formRadioButtons = browser.Form("FormRadioButtons").RadioButtons;
 
-			Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
-			Assert.AreEqual("Radio2", formRadioButtons[0].Id);
-			Assert.AreEqual("Radio3", formRadioButtons[1].Id);
+		                        Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
+		                        Assert.AreEqual("Radio2", formRadioButtons[0].Id);
+		                        Assert.AreEqual("Radio3", formRadioButtons[1].Id);
 
-			// Collection iteration and comparing the result with Enumerator
-			IEnumerable radiobuttonEnumerable = formRadioButtons;
-			var radiobuttonEnumerator = radiobuttonEnumerable.GetEnumerator();
+		                        // Collection iteration and comparing the result with Enumerator
+		                        IEnumerable radiobuttonEnumerable = formRadioButtons;
+		                        var radiobuttonEnumerator = radiobuttonEnumerable.GetEnumerator();
 
-			var count = 0;
-			foreach (RadioButton radioButton in formRadioButtons)
-			{
-				radiobuttonEnumerator.MoveNext();
-				var enumRadioButton = radiobuttonEnumerator.Current;
+		                        var count = 0;
+		                        foreach (RadioButton radioButton in formRadioButtons)
+		                        {
+		                            radiobuttonEnumerator.MoveNext();
+		                            var enumRadioButton = radiobuttonEnumerator.Current;
 
-				Assert.IsInstanceOfType(radioButton.GetType(), enumRadioButton, "Types are not the same");
-				Assert.AreEqual(radioButton.OuterHtml, ((RadioButton) enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(radioButton.GetType(), enumRadioButton, "Types are not the same");
+		                            Assert.AreEqual(radioButton.OuterHtml, ((RadioButton) enumRadioButton).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(radiobuttonEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(2, count);
+		                        Assert.IsFalse(radiobuttonEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(2, count);
+		                    });
 		}
 
 		public override Uri TestPageUri

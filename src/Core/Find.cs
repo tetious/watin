@@ -42,8 +42,6 @@ namespace WatiN.Core
 		internal const string hrefAttribute = "href";
 		internal const string classNameAttribute = "classname";
 
-	    private IFindByDefaultFactory findByDefaultFactory = new FindByDefaultFactory();
-
 		/// <summary>
 		/// Finds an element by its alt text.
 		/// </summary>
@@ -320,7 +318,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(string text)
 		{
-			return new AttributeConstraint(textAttribute, text);
+            return new AttributeConstraint(textAttribute, new Regex("^ *" + text + " *$"));
 		}
 
 		/// <param name="regex">Regular expression to find a matching Text.</param>
