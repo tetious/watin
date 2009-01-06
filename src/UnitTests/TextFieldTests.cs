@@ -229,20 +229,33 @@ namespace WatiN.Core.UnitTests
 		                        }
 		                        catch (Exception e)
 		                        {
-		                            Assert.That(e.GetType(), Is.InstanceOfType(typeof(ElementReadOnlyException)), "Unexpected exception");
+		                            Assert.That(e, Is.InstanceOfType(typeof(ElementReadOnlyException)), "Unexpected exception");
 		                            Assert.That(e.Message, Is.EqualTo("Element with Id:readonlytext is readonly"));
 		                        }
 		                    });
 		}
 
-		[Test, ExpectedException(typeof (ElementDisabledException), ExpectedMessage = "Element with Id:disabledtext is disabled")]
+		[Test]
 		public void TextFieldDisabledException()
 		{
 		    ExecuteTest(browser =>
 		                    {
+                                // GIVEN
 		                        var textField = browser.TextField(Find.ByName("disabledtext"));
-		                        textField.TypeText("This should go wrong");
 
+		                        try
+		                        {
+		                            // WHEN
+		                            textField.TypeText("This should go wrong");
+
+                                    // THEN
+                                    Assert.Fail("Expected " + typeof(ElementDisabledException));
+		                        }
+		                        catch (Exception e)
+		                        {
+		                            Assert.That(e, Is.InstanceOfType(typeof(ElementDisabledException)), "Unexpected exception");
+                                    Assert.That(e.Message, Is.EqualTo("Element with Id:disabledtext is disabled"), "Unexpected message");
+		                        }
 		                    });
 		}
 

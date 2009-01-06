@@ -16,7 +16,7 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className", "disabled", "checked"
+                    "selected", "textContent", "className", "disabled", "checked", "readOnly"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
@@ -26,7 +26,6 @@ namespace WatiN.Core.Mozilla
             watiNAttributeMap.Add("innertext", "textContent");
             watiNAttributeMap.Add("classname", "className");
             watiNAttributeMap.Add("htmlFor", "for");
-//            watiNAttributeMap.Add("readOnly", "readonly");
         }
 
         private ElementAttributeBag _attributeBag;
@@ -235,7 +234,7 @@ namespace WatiN.Core.Mozilla
         /// <param name="eventName">Name of the event to fire.</param>
         private void ExecuteEvent(string eventName)
         {
-            ClientPort.Write(
+            ClientPort.WriteAndReadAsBool(
                     "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
                     "event.initEvent(\"" + eventName + "\",true,true);\n" +
                     "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");

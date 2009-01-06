@@ -40,10 +40,27 @@ namespace WatiN.Core.UnitTests
                             });
 		}
 
-		[Test, ExpectedException(typeof (ElementDisabledException))]
+		[Test]
 		public void ButtonDisabledException()
 		{
-		    ExecuteTest(browser => browser.Button("disabledid").Click());
+		    ExecuteTest(browser =>
+		                    {
+                                // GIVEN
+		                        var button = browser.Button("disabledid");
+		                        
+                                try
+		                        {
+                                    // WHEN
+		                            button.Click();
+                                    
+                                    // THEN
+                                    Assert.Fail("Expected ElementDisabledException");
+		                        }
+		                        catch (Exception e)
+		                        {
+		                            Assert.That(e, Is.InstanceOfType(typeof(ElementDisabledException)), "Unexpected exception");
+		                        }
+		                    });
 
 		}
 

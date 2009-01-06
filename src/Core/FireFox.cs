@@ -240,7 +240,7 @@ namespace WatiN.Core
 
             if (waitForMainWindow)
             {
-                var action = new TryActionUntilTimeOut(5) { SleepTime = 200};
+                var action = new TryActionUntilTimeOut(Settings.WaitForCompleteTimeOut) { SleepTime = 200};
                 var result = action.Try(() =>
                                             {
                                                 ffProcess.Refresh();

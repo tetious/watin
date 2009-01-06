@@ -481,7 +481,7 @@ namespace WatiN.Core.Mozilla
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         public void Write(string data, params object[] args)
         {
-            SendAndRead(data, false, args);
+            SendAndRead(data + " true;", true, args);
         }
 
         public string WriteAndRead(string data, params object[] args)
