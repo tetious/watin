@@ -79,7 +79,6 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
                                 var textfieldName = Ie.TextField("Textarea1");
-//		                        var textWithNewLine = @"Line1\nLine2";
 		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
 		                        textfieldName.TypeText(textWithNewLine);

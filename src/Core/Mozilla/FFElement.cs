@@ -220,12 +220,12 @@ namespace WatiN.Core.Mozilla
 
         public void Select()
         {
-            ExecuteMethod("select");
+            FireEvent("select", null);
         }
 
         public void SubmitForm()
         {
-            ExecuteMethod("submit");
+            FireEvent("submit", null);
         }
 
         /// <summary>
@@ -234,10 +234,34 @@ namespace WatiN.Core.Mozilla
         /// <param name="eventName">Name of the event to fire.</param>
         private void ExecuteEvent(string eventName)
         {
-            ClientPort.WriteAndReadAsBool(
-                    "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
-                    "event.initEvent(\"" + eventName + "\",true,true);\n" +
-                    "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");
+            // See http://www.howtocreate.co.uk/tutorials/javascript/domevents
+            // for more info about manually firing events
+
+            var eventname = eventName.ToLowerInvariant();
+            string command;
+
+            if (eventname.Contains("mouse") || eventname == "click")
+            {
+                //initMouseEvent( 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
+
+                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
+                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+            }
+            else if (eventname.Contains("key"))
+            {
+
+                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"KeyEvents\");\n" +
+                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+            }
+            else
+            {
+                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"HTMLEvents\");\n" +
+                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+            }
+
+            ClientPort.WriteAndReadAsBool
+                (command + "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");
+
         }
 
         /// <summary>

@@ -4,10 +4,10 @@ TODO for multiple browser support:
 - Abstract current AllFramesProcessor used in FramesCollection away
 - FramesCollection constructor should not depend on mshtml.HTMLDocument
 
-** IE specific Constraint classes (TableRowAttributeConstraint, LabelTextConstraint, ProximityTextConstraint)
+** IE specific Constraint classes (TableRowAttributeConstraint, ProximityTextConstraint)
 - Move to InternetExplorer.Constraints namespace
 - remove from Find class and expose them using extension methods on Find
-- See if some/all can be changed to work with FireFox. If so revert above changes for these Constraints
+DONE JVM - LabelTextConstraint is browser independent
 
 ** IElementCollection
 DONE JVM - property IElementCollection.Elements should return object
@@ -54,14 +54,21 @@ DONE JVM - remove dependencies in wrappers around TextArea or input text
 
 *** FIREFOX
 - Wrapp WaitForComplete implementation and override DomContainer methods
-- move RunScript to FFBrowser
+DONE JVM - move RunScript to FFBrowser
 - move Eval to FFBrowser (and IEBrowser)
 - what to do with Settings.CloseExistingBrowserInstances
+
 ** Changes to test suite
 - Make sure none browser specific tests are executed for IE and FireFox
+  DONE: ButtonTests
+  DONE: CheckBoxTests
+  DONE: RadioButtonTests
+  Almost DONE: TextFieldTest (TextFieldTypeTextEventsInFrame can be done after Frames are implemented for FF)
+  
 - other option would be to create a in memory browser (mock) to run the general test against and 
   test the browser specific classes seperately (will speed up the test suite, but it
   is possible some integration issues will be missed....)
+
 - Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
 
 ** Interfaces
