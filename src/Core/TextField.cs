@@ -111,7 +111,7 @@ namespace WatiN.Core
 		{
 			CheckIfTypingIsPossibleInThisTextField();
 
-			value = ReplaceNewLineWithCorrectCharacters(value);
+            value = ReplaceNewLineWithCorrectCharacters(value);
 
 			Highlight(true);
 			Focus();
