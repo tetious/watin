@@ -38,13 +38,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    base.FixtureSetup();
 		    Logger.LogWriter = new ConsoleLogWriter();
-		    CreateNewIeInstance();
 		}
-
-	    public void CreateNewIeInstance()
-	    {
-	        ie = new IE(TestPageUri);
-	    }
 
 	    [TestFixtureTearDown]
 		public override void FixtureTearDown()
@@ -56,21 +50,31 @@ namespace WatiN.Core.UnitTests
 
 	    private void CloseBrowsers()
 	    {
-	        if (ie != null)
-	        {
-	            ie.Close();
-	            ie = null;
-	        }
-	        
-            if (firefox == null) return;
+	        CloseFireFox();
+	        CloseIe();
+	    }
+
+	    public void CloseFireFox()
+	    {
+	        if (firefox == null) return;
 	        firefox.Dispose();
 	        firefox = null;
+	    }
+
+	    public void CloseIe()
+	    {
+	        if (ie == null) return;
+	        ie.Close();
+	        ie = null;
 	    }
 
 	    [SetUp]
 		public virtual void TestSetUp()
 	    {
 	        Settings.Reset();
+
+            GoToTestPage(firefox);
+            GoToTestPage(ie);
 	    }
 
 	    private void GoToTestPage(Browser browser)
@@ -89,8 +93,7 @@ namespace WatiN.Core.UnitTests
 	        {
                 if (ie == null)
                 {
-                    ie = new IE();
-                    GoToTestPage(ie);
+                    ie = new IE(TestPageUri);
                 }
 
                 return ie;
@@ -103,8 +106,7 @@ namespace WatiN.Core.UnitTests
 	        {
                 if (firefox == null)
                 {
-                    firefox = new FireFox();
-                    GoToTestPage(firefox);
+                    firefox = new FireFox(TestPageUri);
                 }
 
                 return firefox;

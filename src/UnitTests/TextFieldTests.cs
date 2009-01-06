@@ -78,9 +78,9 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                var textfieldName = browser.TextField("Textarea1");
-		                        var textWithNewLine = @"Line1\\n\Line2";
-//		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
+                                var textfieldName = Ie.TextField("Textarea1");
+//		                        var textWithNewLine = @"Line1\nLine2";
+		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
 		                        textfieldName.TypeText(textWithNewLine);
 		                        Assert.AreEqual(textWithNewLine, textfieldName.Value);
@@ -163,21 +163,20 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldTypeTextEventsInFrame()
 		{
-			using (var ie1 = new IE(FramesetURI))
-			{
-				var frame = ie1.Frames[1];
-				frame.RunScript("window.document.location.href='TestEvents.html';");
+            Ie.GoTo(FramesetURI);
 
-				Assert.IsFalse(frame.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
-				Assert.IsFalse(frame.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
-				Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
+            var frame = Ie.Frames[1];
+			frame.RunScript("window.document.location.href='TestEvents.html';");
 
-				frame.TextField("textfieldid").TypeText("test");
+			Assert.IsFalse(frame.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
+			Assert.IsFalse(frame.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
+			Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
 
-				Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
-				Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
-				Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
-			}
+			frame.TextField("textfieldid").TypeText("test");
+
+			Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
+			Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
+			Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
 		}
 
 		[Test]

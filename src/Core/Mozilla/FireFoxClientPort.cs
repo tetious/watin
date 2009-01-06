@@ -307,7 +307,7 @@ namespace WatiN.Core.Mozilla
                         try
                         {
                             Logger.LogAction("Closing connection to jssh");
-                            Write(string.Format("{0}.close()", WindowVariableName));
+                            Write(string.Format("{0}.close();", WindowVariableName));
                             telnetSocket.Close();
                             Process.WaitForExit(5000);
                         }
@@ -426,7 +426,7 @@ namespace WatiN.Core.Mozilla
 
             while (rawResponse != responseToWaitFor)
             {
-                ReadResponse(true);
+                ReadResponse(false);
                 rawResponse += lastResponseRaw;
             }
         }
