@@ -16,7 +16,7 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className", "disabled", "checked", "readOnly"
+                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();

@@ -63,7 +63,8 @@ DONE JVM - move RunScript to FFBrowser
   DONE: ButtonTests
   DONE: CheckBoxTests
   DONE: RadioButtonTests
-  Almost DONE: TextFieldTest (TextFieldTypeTextEventsInFrame can be done after Frames are implemented for FF)
+  Almost DONE: TextFieldTests (TextFieldTypeTextEventsInFrame can be done after Frames are implemented for FF)
+  Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can be done after support for javascript confirm dialog for FF is implemented)
   
 - other option would be to create a in memory browser (mock) to run the general test against and 
   test the browser specific classes seperately (will speed up the test suite, but it

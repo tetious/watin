@@ -303,7 +303,7 @@ namespace WatiN.Core
 
 		private static AttributeConstraint GetIsSelectedAttribute()
 		{
-			return new AttributeConstraint("selected", true.ToString());
+			return new AttributeConstraint("selected", new Comparers.StringComparer(true.ToString(), true));
 		}
 
 		private void SelectByTextOrValue(BaseConstraint findBy)

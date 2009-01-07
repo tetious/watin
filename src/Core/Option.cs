@@ -165,7 +165,7 @@ namespace WatiN.Core
 		{
 		    if (bool.Parse(GetAttributeValue("selected")) == value) return;
 
-            SetAttributeValue("selected", value.ToString());
+            SetAttributeValue("selected", value.ToString().ToLowerInvariant());
 		    if (WaitForComplete)
 		    {
 		        ParentSelectList.FireEvent("onchange");
