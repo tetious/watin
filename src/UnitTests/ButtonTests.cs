@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -63,6 +64,23 @@ namespace WatiN.Core.UnitTests
 		                    });
 
 		}
+
+        [Test]
+        public void ButtonClick()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(ButtonTestsUri);
+
+                                // WHEN
+                                browser.Button("button1").Click();
+
+                                // THEN
+                                var value = browser.TextField("report").Value;
+                                Assert.That(value, Is.EqualTo("clicked"));
+                            });
+        }
 
 		[Test]
 		public void ButtonElementNotFoundException()

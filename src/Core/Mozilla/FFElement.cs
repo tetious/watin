@@ -148,7 +148,7 @@ namespace WatiN.Core.Mozilla
 
         public void ClickOnElement()
         {
-            ExecuteMethod("click");
+            FireEvent("click", null);
         }
 
         public void SetFocus()

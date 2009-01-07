@@ -348,6 +348,7 @@
     <Compile Include="UtilityClasses\Utils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="html\ButtonTests.html" />
     <Content Include="html\CrossDomainFrameset.html" />
     <Content Include="html\formsubmit.html" />
     <Content Include="html\Frameset.html" />

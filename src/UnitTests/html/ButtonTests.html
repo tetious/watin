@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+        <title>ButtonTests</title>
+        
+        <script type="text/javascript">
+
+        function clicked() {
+            report = document.getElementById("report");
+            report.value = "clicked";
+
+            return true;
+        }
+
+        </script>
+
+    </head>
+    <body>
+        <div>
+            <input type="button" id="button1" onclick="return reportId(this)" />
+			<input id="report" type="text" style="WIDTH: 280px; HEIGHT: 22px" size="41" />
+        </div>
+    </body>
+</html>
