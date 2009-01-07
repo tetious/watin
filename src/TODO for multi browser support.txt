@@ -53,6 +53,7 @@ DONE JVM - remove dependencies in wrappers around TextArea or input text
 -  new IEElement by DomContainer.NativeBrowser.CreateElement
 
 *** FIREFOX
+- Implement propper handling of firing events
 - Wrapp WaitForComplete implementation and override DomContainer methods
 DONE JVM - move RunScript to FFBrowser
 - move Eval to FFBrowser (and IEBrowser)

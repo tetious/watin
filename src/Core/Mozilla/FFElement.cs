@@ -16,7 +16,7 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple"
+                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
@@ -159,7 +159,7 @@ namespace WatiN.Core.Mozilla
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
             // TODO: can FireFox handle eventProperties?
-            ExecuteEvent(eventName);
+            ExecuteEvent(eventName, eventProperties);
         }
 
         // TODO: implement backgroundcolor
@@ -215,7 +215,7 @@ namespace WatiN.Core.Mozilla
         {
             // TODO: Make it not wait
             // TODO: Can FireFox handle eventProperties?
-            ExecuteEvent(eventName);
+            ExecuteEvent(eventName, eventProperties);
         }
 
         public void Select()
@@ -232,36 +232,87 @@ namespace WatiN.Core.Mozilla
         /// Executes the event.
         /// </summary>
         /// <param name="eventName">Name of the event to fire.</param>
-        private void ExecuteEvent(string eventName)
+        private void ExecuteEvent(string eventName, NameValueCollection eventProperties)
         {
             // See http://www.howtocreate.co.uk/tutorials/javascript/domevents
             // for more info about manually firing events
 
-            var eventname = eventName.ToLowerInvariant();
+            var eventname = CleanupEventName(eventName);
+
             string command;
 
             if (eventname.Contains("mouse") || eventname == "click")
             {
-                //initMouseEvent( 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
-
-                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");\n" +
-                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+                command = CreateMouseEventCommand(eventname);
             }
             else if (eventname.Contains("key"))
             {
-
-                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"KeyEvents\");\n" +
-                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+                command = CreateKeyEventCommand(eventname, eventProperties);
             }
             else
             {
-                command = "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"HTMLEvents\");\n" +
-                          "event.initEvent(\"" + eventname + "\",true,true);\n";
+                command = CreateHTMLEventCommand(eventname);
             }
 
             ClientPort.WriteAndReadAsBool
                 (command + "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");
 
+        }
+
+        private string CleanupEventName(string eventName)
+        {
+            var eventname = eventName.ToLowerInvariant();
+
+            if (eventname.StartsWith("on"))
+            {
+                eventname = eventname.Substring(2);
+            }
+            return eventname;
+        }
+
+        private string CreateHTMLEventCommand(string eventname)
+        {
+            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"HTMLEvents\");" +
+                   "event.initEvent(\"" + eventname + "\",true,true);";
+        }
+
+        private string CreateMouseEventCommand(string eventname)
+        {
+            // Params for the initMouseEvent:
+            // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
+
+            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");" +
+                   "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
+        }
+
+        private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
+        {
+            // Params for the initKeyEvent:
+            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
+
+            var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
+            var keyChar = keyCode;
+            
+            // After a lot of searching it seems that keyCode is not supported in keypress event
+            // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
+            if (eventname == "keypress") keyCode = "0";
+            
+            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"KeyboardEvent\");" +
+                   "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + keyChar + " );";
+        }
+
+        private string GetEventPropertyValue(NameValueCollection eventProperties, string propertyName, string defaultValue)
+        {
+            if (eventProperties != null)
+            {
+                var values = eventProperties.GetValues(propertyName);
+                if (values != null && values.Length > 0)
+                {
+                    return values[0];
+                }
+            }
+
+            return defaultValue;
         }
 
         /// <summary>
@@ -291,6 +342,8 @@ namespace WatiN.Core.Mozilla
         /// <param name="value">The value.</param>
         protected void SetProperty(string propertyName, string value)
         {
+            if (propertyName == "value") value = "'" + value + "'";
+            
             var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
             ClientPort.Write(command);
         }

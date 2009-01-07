@@ -154,7 +154,7 @@ namespace WatiN.Core.UnitTests
                                 Assert.IsTrue(browser.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
                                 Assert.IsTrue(browser.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
 
-                                Assert.AreEqual(text, browser.TextField("txtKeycodeId").Value, "KeyUp event expected");
+                                Assert.AreEqual(text, browser.TextField("txtKeycodeId").Value, "Unexpected value");
 		                    });
 		}
 

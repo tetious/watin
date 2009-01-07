@@ -117,7 +117,6 @@ namespace WatiN.Core
 			Focus();
 			if (!append) Select();
 			if (!append) setValue("");
-			if (!append) KeyPress();
 			if (!clear) doKeyPress(value);
 			Highlight(false);
 			if (!append) Change();
