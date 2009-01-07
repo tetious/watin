@@ -587,11 +587,10 @@ namespace WatiN.Core.UnitTests
             Assert.That(Find.First().ConstraintToString(), Is.EqualTo("Index = 0"));
         }
 		
+        // TODO: Make it a multi browser test when ProximityTextConstraint is none IE specific
 		[Test]
 		public void ShouldFindFormElementsByNearbyText() 
 		{
-			// Because ProximityTextConstraint requires a ElementAttribute bag with a fairly complete DOM
-			// we can't use the MockAttributeBag to test this.
 		    var inputUsername = Ie.TextField(Find.Near("User Name"));
 		    Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find 'User Name' field.");
 
@@ -606,21 +605,24 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldFindFormElementsByLabelText() 
 		{
-			// Because Find.ByLabelText requires a ElementAttribute bag with a fairly complete DOM
-			// we can't use the MockAttributeBag to test this.
-            Ie.GoTo(MainURI);
+		    ExecuteTest(browser =>
+		                    {
+                                // GIVEN
+                                browser.GoTo(MainURI);
 			
-			// The control to test against
-			Assert.IsTrue(Ie.CheckBox("Checkbox21").Exists, "Checkbox21 missing.");
-			var checkBox21a = Ie.CheckBox("Checkbox21");
+		                        // The control to test against
+                                var checkBox21a = browser.CheckBox("Checkbox21");
+                                Assert.That(checkBox21a.Exists, Is.True, "Checkbox21 missing.");
 			
-			// Test with Find.ByLabelText
-			var checkBox21b = Ie.CheckBox(Find.ByLabelText("label for Checkbox21"));
-			Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
+		                        // Test with Find.ByLabelText
+                                var checkBox21b = browser.CheckBox(Find.ByLabelText("label for Checkbox21"));
+		                        Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
 			
-			// Test with a constraint
-			var checkBox21c = Ie.CheckBox(new LabelTextConstraint("label for Checkbox21"));
-			Assert.AreEqual(checkBox21b.Id, checkBox21c.Id, "Using a LabelTextContraint did not return the same as Find.ByLabelText for Checkbox21.");
+		                        // Test with a constraint
+                                var checkBox21c = browser.CheckBox(new LabelTextConstraint("label for Checkbox21"));
+		                        Assert.AreEqual(checkBox21b.Id, checkBox21c.Id, "Using a LabelTextContraint did not return the same as Find.ByLabelText for Checkbox21.");
+
+		                    });
 		}
 		
         [Test]
