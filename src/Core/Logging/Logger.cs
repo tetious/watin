@@ -30,10 +30,7 @@ namespace WatiN.Core.Logging
 		private static ILogWriter mLogWriter = DefaultLogWriter();
 
 		/// <summary>
-		/// Logs the action. It replaces the format item(s) in the 
-		/// <paramref name="message"/> with the text equivalent  of the value
-		/// of a corresponding Object instance in the <paramref name="args"/>
-		/// array.
+		/// Logs the action. These should be messages about "user" actions done by WatiN. 
 		/// </summary>
 		/// <param name="message">A message containing zero or more format items.</param>
 		/// <param name="args">An object array containing zero or more objects to format</param>
@@ -51,6 +48,27 @@ namespace WatiN.Core.Logging
 		public static void LogAction(string message, params object[] args)
 		{
 			LogWriter.LogAction(string.Format(message, args));
+		}
+
+		/// <summary>
+		/// Logs the debug message. These should be technical messages from within WatiN.
+		/// </summary>
+		/// <param name="message">A message containing zero or more format items.</param>
+		/// <param name="args">An object array containing zero or more objects to format</param>
+		/// <example>
+		/// Call this function from your code like this:
+		/// <code>
+        /// Logger.LogDebug("Some message");
+		/// </code>
+		/// or
+		/// <code>
+        /// Logger.LogDebug("Some message with an {0} to {1}, "item", "format");
+		/// </code>
+		/// 
+		/// </example>
+		public static void LogDebug(string message, params object[] args)
+		{
+			LogWriter.LogDebug(string.Format(message, args));
 		}
 
 		/// <summary>

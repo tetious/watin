@@ -25,5 +25,6 @@ namespace WatiN.Core.Interfaces
 	public interface ILogWriter
 	{
 		void LogAction(string message);
+		void LogDebug(string message);
 	}
 }

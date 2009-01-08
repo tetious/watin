@@ -23,5 +23,6 @@ namespace WatiN.Core.Logging
 	public class NoLog : ILogWriter
 	{
 	    public void LogAction(string message) {}
+	    public void LogDebug(string message) {}
 	}
 }

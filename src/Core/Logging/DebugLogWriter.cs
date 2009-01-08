@@ -35,7 +35,12 @@ namespace WatiN.Core.Logging
 	{
 		public void LogAction(string message)
 		{
-			System.Diagnostics.Debug.WriteLine(message);
+			System.Diagnostics.Debug.WriteLine("[Action]: " + message);
 		}
+
+	    public void LogDebug(string message)
+	    {
+            System.Diagnostics.Debug.WriteLine("[Debug] : " + message);
+        }
 	}
 }

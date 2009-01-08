@@ -186,7 +186,7 @@ namespace WatiN.Core.Mozilla
         {
             ValidateCanConnect();
             disposed = false;
-            Logger.LogAction("Attempting to connect to jssh server on localhost port 9997.");
+            Logger.LogDebug("Attempting to connect to jssh server on localhost port 9997.");
             lastResponse = string.Empty;
             response = new StringBuilder();
 
@@ -210,13 +210,13 @@ namespace WatiN.Core.Mozilla
             }
             catch (SocketException sockException)
             {
-                Logger.LogAction(string.Format("Failed connecting to jssh server.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
+                Logger.LogDebug(string.Format("Failed connecting to jssh server.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
                 throw new FireFoxException("Unable to connect to jssh server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
             }
 
             Connected = true;
             WaitForConnectionEstablished();
-            Logger.LogAction("Successfully connected to FireFox using jssh.");
+            Logger.LogDebug("Successfully connected to FireFox using jssh.");
 //            WriteAndRead("setProtocol('synchronous')");
             DefineDefaultJSVariables();
 
@@ -306,14 +306,14 @@ namespace WatiN.Core.Mozilla
                     {
                         try
                         {
-                            Logger.LogAction("Closing connection to jssh");
+                            Logger.LogDebug("Closing connection to jssh");
                             Write(string.Format("{0}.close();", WindowVariableName));
                             telnetSocket.Close();
                             Process.WaitForExit(5000);
                         }
                         catch (IOException ex)
                         {
-                            Logger.LogAction("Error communicating with jssh server to innitiate shut down, message: " + ex.Message);
+                            Logger.LogDebug("Error communicating with jssh server to innitiate shut down, message: " + ex.Message);
                         }
                     }
                 }
@@ -324,7 +324,7 @@ namespace WatiN.Core.Mozilla
                 {
                     if (!Process.HasExited)
                     {
-                        Logger.LogAction("Closing FireFox");
+                        Logger.LogDebug("Closing FireFox");
                         Process.Kill();
                     }
                 }
@@ -466,7 +466,7 @@ namespace WatiN.Core.Mozilla
 
             var bytes = Encoding.ASCII.GetBytes(data + "\n");
 
-            Logger.LogAction("sending: {0}", data);
+            Logger.LogDebug("sending: {0}", data);
             using (var networkStream = new NetworkStream(telnetSocket))
             {
                 networkStream.Write(bytes, 0, bytes.Length);
@@ -526,7 +526,7 @@ namespace WatiN.Core.Mozilla
                 var read = stream.Read(buffer, 0, bufferSize);
                 readData = Encoding.UTF8.GetString(buffer, 0, read);
 
-                Logger.LogAction("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
+                Logger.LogDebug("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
                 lastResponseRaw += readData;
                 lastResponse += CleanTelnetResponse(readData);
 //            } while (!readData.EndsWith("> ") || stream.DataAvailable);
