@@ -211,13 +211,11 @@ namespace WatiN.Core
             var element = NativeElement.Object as IHTMLElement;
 
             var doKeyDown = true;
-            var doKeyPress = true;
             var doKeyUp = true;
             
             if (element != null)
 	        {
 	            doKeyDown = ShouldEventBeFired(element.onkeydown);
-	            doKeyPress = ShouldEventBeFired(element.onkeypress);
 	            doKeyUp = ShouldEventBeFired(element.onkeyup);
 	        }
 
@@ -235,17 +233,14 @@ namespace WatiN.Core
 				var subString = value.Substring(i, 1);
 				var character = char.Parse(subString);
 
-				setValue(Value + subString);
-
 				if (doKeyDown)
 				{
 					KeyDown(character);
 				}
-				if (doKeyPress)
-				{
-					KeyPress(character);
-				}
-				if (doKeyUp)
+				
+                KeyPress(character);
+
+                if (doKeyUp)
 				{
 					KeyUp(character);
 				}

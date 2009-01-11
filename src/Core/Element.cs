@@ -456,7 +456,7 @@ namespace WatiN.Core
 
 		private static NameValueCollection GetKeyCodeEventProperty(char character)
 		{
-		    return new NameValueCollection(1)
+		    return new NameValueCollection
 		               {
 		                   {"keyCode", ((int) character).ToString()},
 		                   {"charCode", ((int) character).ToString()}

@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using mshtml;
 using WatiN.Core.Exceptions;
@@ -189,13 +190,20 @@ namespace WatiN.Core.InternetExplorer
 
 		public void FireEvent(string eventName, NameValueCollection eventProperties)
 		{
-			if (eventProperties == null)
+		    if (eventProperties == null)
 			{
 				UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
 			}
 			else
 			{
-				UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
+				if (eventName == "onKeyPress")
+				{
+				    var addChar = eventProperties.GetValues("keyCode")[0];
+				    var newValue = GetAttributeValue("value") + ((char) int.Parse(addChar));
+				    SetAttributeValue("value", newValue);
+				}
+
+			    UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
 			}
 		}
 

@@ -291,6 +291,8 @@ namespace WatiN.Core
 
             for (var index = 0; index < eventObjectProperties.Count; index++)
 	        {
+                if (eventObjectProperties.GetKey(index) == "charCode") continue;
+
 	            scriptCode.Append("newEvt.");
 	            scriptCode.Append(eventObjectProperties.GetKey(index));
 	            scriptCode.Append(" = ");
