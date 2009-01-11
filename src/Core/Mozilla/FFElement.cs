@@ -291,14 +291,14 @@ namespace WatiN.Core.Mozilla
             // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
 
             var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
-            var keyChar = keyCode;
+            var charCode = GetEventPropertyValue(eventProperties, "charCode", "0");
             
             // After a lot of searching it seems that keyCode is not supported in keypress event
             // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
             if (eventname == "keypress") keyCode = "0";
             
             return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"KeyboardEvent\");" +
-                   "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + keyChar + " );";
+                   "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
         }
 
         private string GetEventPropertyValue(NameValueCollection eventProperties, string propertyName, string defaultValue)

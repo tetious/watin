@@ -210,13 +210,13 @@ namespace WatiN.Core
             // TODO "Move" ShouldEventBeFired to INativeElement + implementations 
             var element = NativeElement.Object as IHTMLElement;
 
-            var doKeydown = true;
+            var doKeyDown = true;
             var doKeyPress = true;
             var doKeyUp = true;
             
             if (element != null)
 	        {
-	            doKeydown = ShouldEventBeFired(element.onkeydown);
+	            doKeyDown = ShouldEventBeFired(element.onkeydown);
 	            doKeyPress = ShouldEventBeFired(element.onkeypress);
 	            doKeyUp = ShouldEventBeFired(element.onkeyup);
 	        }
@@ -237,7 +237,7 @@ namespace WatiN.Core
 
 				setValue(Value + subString);
 
-				if (doKeydown)
+				if (doKeyDown)
 				{
 					KeyDown(character);
 				}

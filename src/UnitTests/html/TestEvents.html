@@ -44,12 +44,9 @@ function keyPress(e) {
     checkbox = document.getElementById("chkKeyPress");
     checkbox.checked = true;
     
-	var keycode;
     keycodes = document.getElementById("txtKeycodeId");
     if (!e) e = window.event;
-	if (e.keyCode) keycode = e.keyCode;
-	else if (e.which) keycode = e.which; 
-	//keycode = e.keycode; 
+    var keycode = e.charCode || e.keyCode;
     charfromkeycode = String.fromCharCode(keycode); 
     keycodes.value = keycodes.value + charfromkeycode;
     

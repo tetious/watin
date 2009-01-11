@@ -116,7 +116,7 @@ namespace WatiN.Core.UnitTests
 		                        Assert.AreEqual("name", textfieldName.Id);
 		                        Assert.AreEqual("textinput1", textfieldName.Name);
 
-		                        Assert.AreEqual(200, textfieldName.MaxLength, "Unexpected maxlenght");
+		                        Assert.AreEqual(50, textfieldName.MaxLength, "Unexpected maxlenght");
 
 		                        textfieldName.TypeText(value);
 		                        Assert.AreEqual(value, textfieldName.Value, "TypeText not OK");
@@ -154,7 +154,8 @@ namespace WatiN.Core.UnitTests
                                 Assert.IsTrue(browser.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
                                 Assert.IsTrue(browser.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
 
-                                Assert.AreEqual(text, browser.TextField("txtKeycodeId").Value, "Unexpected value");
+                                Assert.AreEqual(text, browser.TextField("textfieldid").Value, "Unexpected value in textfieldid");
+                                Assert.AreEqual(text, browser.TextField("txtKeycodeId").Value, "Unexpected value in txtKeycodeId");
 		                    });
 		}
 

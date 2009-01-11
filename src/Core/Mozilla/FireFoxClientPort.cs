@@ -217,9 +217,7 @@ namespace WatiN.Core.Mozilla
             Connected = true;
             WaitForConnectionEstablished();
             Logger.LogDebug("Successfully connected to FireFox using jssh.");
-//            WriteAndRead("setProtocol('synchronous')");
             DefineDefaultJSVariables();
-
         }
 
         private void ValidateCanConnect()
@@ -393,9 +391,8 @@ namespace WatiN.Core.Mozilla
                 {
                     response = response.Substring(3);
                 }
-
-//                response = response.Trim();
             }
+
             return response;
         }
 
@@ -429,17 +426,6 @@ namespace WatiN.Core.Mozilla
                 ReadResponse(false);
                 rawResponse += lastResponseRaw;
             }
-        }
-
-        /// <summary>
-        /// Writes the specified data to the jssh server.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="resultExpected"></param>
-        private void SendAndRead(string data, bool resultExpected)
-        {
-            SendCommand(data);
-            ReadResponse(resultExpected);
         }
 
         /// <summary>
@@ -529,10 +515,8 @@ namespace WatiN.Core.Mozilla
                 Logger.LogDebug("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
                 lastResponseRaw += readData;
                 lastResponse += CleanTelnetResponse(readData);
-//            } while (!readData.EndsWith("> ") || stream.DataAvailable);
             } while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(lastResponse)));
 
-//            lastResponse = lastResponse.Trim();
             if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
                 lastResponse.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
                 lastResponse.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase))
