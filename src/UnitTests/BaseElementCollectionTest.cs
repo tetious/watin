@@ -33,27 +33,38 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FirstWithAttributConstraint()
 		{
-			var elements = Ie.Elements;
-			var element = elements.First(Find.ById("popupid"));
-			Assert.That(element.Exists, Is.True);
-			Assert.That(element, Is.TypeOf(typeof(Button)));
+		    ExecuteTest(browser =>
+		                    {
+		                        var elements = browser.Elements;
+		                        var element = elements.First(Find.ById("popupid"));
+		                        Assert.That(element.Exists, Is.True);
+		                        Assert.That(element, Is.TypeOf(typeof(Button)));
+
+		                    });
+
 		}
 
 		[Test]
 		public void First()
 		{
-			var buttons = Ie.Buttons;
-			Element element = buttons.First();
+		    ExecuteTest(browser =>
+		                    {
+		                        var buttons = browser.Buttons;
+		                        Element element = buttons.First();
 
-			Assert.That(element.Exists, Is.True);
-			Assert.That(element.Id, Is.EqualTo("popupid"));
-			Assert.That(element, Is.TypeOf(typeof(Button)));
+		                        Assert.That(element.Exists, Is.True);
+		                        Assert.That(element.Id, Is.EqualTo("popupid"));
+		                        Assert.That(element, Is.TypeOf(typeof(Button)));
+
+		                    });
+
 		}
 
         [Test]
         public void ExistUsingPredicateT()
         {
-            Assert.That(Ie.Buttons.Exists(b => b.Id == "helloid"));
+            ExecuteTest(browser => Assert.That(browser.Buttons.Exists(b => b.Id == "helloid")));
+
         }
 	}
 }

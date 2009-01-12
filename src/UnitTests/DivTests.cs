@@ -31,60 +31,71 @@ namespace WatiN.Core.UnitTests
 		public void DivElementTags()
 		{
 			Assert.AreEqual(1, Div.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("div", ((ElementTag) Div.ElementTags[0]).TagName);
+			Assert.AreEqual("div", Div.ElementTags[0].TagName);
 		}
 
 		[Test]
 		public void CreateDivFromElement()
 		{
-			Element element = Ie.Element("divid");
-			Div div = new Div(element);
-			Assert.AreEqual("divid", div.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var element = browser.Element("divid");
+		                        var div = new Div(element);
+		                        Assert.AreEqual("divid", div.Id);
+		                    });
 		}
 
 		[Test]
 		public void DivExists()
 		{
-			Assert.IsTrue(Ie.Div("divid").Exists);
-			Assert.IsTrue(Ie.Div(new Regex("divid")).Exists);
-			Assert.IsFalse(Ie.Div("noneexistingdivid").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.Div("divid").Exists);
+		                        Assert.IsTrue(browser.Div(new Regex("divid")).Exists);
+		                        Assert.IsFalse(browser.Div("noneexistingdivid").Exists);
+		                    });
 		}
-
 
 		[Test]
 		public void DivTest()
 		{
-			Assert.AreEqual("divid", Ie.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
-			Assert.AreEqual("divid", Ie.Div("divid").Id, "Find Div by ie.Div()");
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.AreEqual("divid", browser.Div(Find.ById("divid")).Id, "Find Div by Find.ById");
+		                        Assert.AreEqual("divid", browser.Div("divid").Id, "Find Div by ie.Div()");
+		                    });
 		}
 
 		[Test]
 		public void Divs()
 		{
-			Assert.AreEqual(4, Ie.Divs.Length, "Unexpected number of Divs");
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.AreEqual(4, browser.Divs.Length, "Unexpected number of Divs");
 
-			DivCollection divs = Ie.Divs;
+		                        var divs = browser.Divs;
 
-			// Collection items by index
-			Assert.AreEqual("divid", divs[0].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("divid", divs[0].Id);
 
-			// Collection iteration and comparing the result with Enumerator
-			IEnumerable divEnumerable = divs;
-			IEnumerator divEnumerator = divEnumerable.GetEnumerator();
+		                        // Collection iteration and comparing the result with Enumerator
+		                        IEnumerable divEnumerable = divs;
+		                        var divEnumerator = divEnumerable.GetEnumerator();
 
-			int count = 0;
-			foreach (Div div in divs)
-			{
-				divEnumerator.MoveNext();
-				object enumDiv = divEnumerator.Current;
+		                        var count = 0;
+		                        foreach (Div div in divs)
+		                        {
+		                            divEnumerator.MoveNext();
+		                            var enumDiv = divEnumerator.Current;
 
-				Assert.IsInstanceOfType(div.GetType(), enumDiv, "Types are not the same");
-				Assert.AreEqual(div.OuterHtml, ((Div) enumDiv).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(div.GetType(), enumDiv, "Types are not the same");
+		                            Assert.AreEqual(div.OuterHtml, ((Div) enumDiv).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(4, count);
+		                        Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(4, count);
+		                    });
 		}
 
 		public override Uri TestPageUri

@@ -27,13 +27,12 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Properties()
         {
-            ISettings settings = new DefaultSettings();
+            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
 
-            settings.AttachToIETimeOut = 111;
-            bool autoCloseDialogs = !settings.AutoCloseDialogs;
+            var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
             settings.HighLightColor = "strange color";
-            bool highLightElement = !settings.HighLightElement;
+            var highLightElement = !settings.HighLightElement;
             settings.HighLightElement = highLightElement;
             settings.WaitForCompleteTimeOut = 222;
             settings.WaitUntilExistsTimeOut = 333;
