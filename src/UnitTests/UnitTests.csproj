@@ -264,6 +264,7 @@
     <Compile Include="ElementTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FFBrowserTestManager.cs" />
     <Compile Include="FileUploadTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -287,6 +288,8 @@
     <Compile Include="HTMLDialogTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IBrowserTestManager.cs" />
+    <Compile Include="IEBrowserTestManager.cs" />
     <Compile Include="IETests\IEHtmlInjector.cs" />
     <Compile Include="IETests.cs">
       <SubType>Code</SubType>
@@ -328,6 +331,7 @@
     <Compile Include="SpanTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StealthSettings.cs" />
     <Compile Include="TableBodyTests.cs">
       <SubType>Code</SubType>
     </Compile>

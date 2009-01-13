@@ -17,9 +17,11 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using WatiN.Core.UnitTests.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,51 +32,46 @@ namespace WatiN.Core.UnitTests
         /// </summary>
         protected delegate void BrowserTest(Browser browser);
 
-	    private IE ie;
-	    private FireFox firefox;
+	    private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
+	    private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
+
+	    public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
 
 		[TestFixtureSetUp]
 		public override void FixtureSetup()
 		{
-		    base.FixtureSetup();
-		    Logger.LogWriter = new ConsoleLogWriter();
+            base.FixtureSetup();
+
+            BrowsersToTestWith.Add(ieManager);
+            BrowsersToTestWith.Add(ffManager);
+
+            Logger.LogWriter = new ConsoleLogWriter();
 		}
 
 	    [TestFixtureTearDown]
 		public override void FixtureTearDown()
 	    {
-	        CloseBrowsers();
-
+            BrowsersToTestWith.ForEach(manager => manager.CloseBrowser());
 	        base.FixtureTearDown();
-	    }
-
-	    private void CloseBrowsers()
-	    {
-	        CloseFireFox();
-	        CloseIe();
-	    }
-
-	    public void CloseFireFox()
-	    {
-	        if (firefox == null) return;
-	        firefox.Dispose();
-	        firefox = null;
-	    }
-
-	    public void CloseIe()
-	    {
-	        if (ie == null) return;
-	        ie.Close();
-	        ie = null;
 	    }
 
 	    [SetUp]
 		public virtual void TestSetUp()
 	    {
 	        Settings.Reset();
+            BrowsersToTestWith.ForEach(browser => GoToTestPage(browser.GetBrowser(TestPageUri)));
+	    }
 
-            GoToTestPage(firefox);
-            GoToTestPage(ie);
+        // TODO: remove this property in time
+	    public IE Ie
+	    {
+            get { return (IE) ieManager.GetBrowser(TestEventsURI);  }
+	    }
+
+        // TODO: remove this property in time
+	    public FireFox Firefox
+	    {
+            get { return (FireFox) ffManager.GetBrowser(TestEventsURI); }
 	    }
 
 	    private void GoToTestPage(Browser browser)
@@ -87,40 +84,13 @@ namespace WatiN.Core.UnitTests
 
 	    public abstract Uri TestPageUri { get; }
 
-	    public IE Ie
-	    {
-	        get
-	        {
-                if (ie == null)
-                {
-                    ie = new IE(TestPageUri);
-                }
-
-                return ie;
-	        }
-	    }
-
-	    public FireFox Firefox
-	    {
-	        get
-	        {
-                if (firefox == null)
-                {
-                    firefox = new FireFox(TestPageUri);
-                }
-
-                return firefox;
-	        }
-	    }
-
         /// <summary>
         /// Executes the test using both FireFox and Internet Explorer.
         /// </summary>
         /// <param name="testMethod">The test method.</param>
         protected void ExecuteTest(BrowserTest testMethod)
         {
-            ExecuteTest(testMethod, Firefox);
-            ExecuteTest(testMethod, Ie);
+            BrowsersToTestWith.ForEach(browser => ExecuteTest(testMethod, browser.GetBrowser(TestPageUri)));
         }
 
         private static void ExecuteTest(BrowserTest testMethod, Browser browser)
@@ -139,27 +109,5 @@ namespace WatiN.Core.UnitTests
                 throw new WatiNException(browser.GetType() + " exception", e);
             }
         }
-
-	}
-
-	public class StealthSettings : DefaultSettings
-	{
-		public StealthSettings()
-		{
-			SetDefaults();
-		}
-
-		public override void Reset()
-		{
-			SetDefaults();
-		}
-
-		private void SetDefaults()
-		{
-			base.Reset();
-			AutoMoveMousePointerToTopLeft = false;
-			HighLightElement = false;
-			MakeNewIeInstanceVisible = false;
-		}
 	}
 }
