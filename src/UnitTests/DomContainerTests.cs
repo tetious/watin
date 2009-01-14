@@ -26,8 +26,7 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class DomContainerTests
 	{
-		private Mock<SHDocVw.InternetExplorer> _internetExplorerMock;
-		private IE _ie;
+        private MyTestDomContainer myTestDomContainer;
 		private Mock<IWait> _waitMock;
 
 		[SetUp]
@@ -35,8 +34,7 @@ namespace WatiN.Core.UnitTests
 		{
 			Settings.AutoStartDialogWatcher = false;
 
-            _internetExplorerMock = new Mock<SHDocVw.InternetExplorer>();
-            _ie = new IE(_internetExplorerMock.Object);
+            myTestDomContainer = new MyTestDomContainer();
 
             _waitMock = new Mock<IWait>();
 
@@ -47,7 +45,7 @@ namespace WatiN.Core.UnitTests
 		{
 			_waitMock.Expect(wait => wait.DoWait());
 
-			_ie.WaitForComplete(_waitMock.Object);
+			myTestDomContainer.WaitForComplete(_waitMock.Object);
 
 			_waitMock.VerifyAll();
 		}
@@ -55,7 +53,7 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void WaitForCompleteShouldUseTimeOutProvidedThroughtTheConstructor()
 	    {
-	        var waitForCompleteMock = new WaitForCompleteMock(_ie, 333);
+	        var waitForCompleteMock = new WaitForCompleteMock(myTestDomContainer, 333);
 
             Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
 
@@ -69,7 +67,7 @@ namespace WatiN.Core.UnitTests
 	    {
 	        var expectedWaitForCompleteTimeOut = Settings.WaitForCompleteTimeOut;
 
-	        var waitForCompleteMock = new WaitForCompleteMock(_ie);
+	        var waitForCompleteMock = new WaitForCompleteMock(myTestDomContainer);
 
             Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
 
@@ -81,7 +79,7 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 		public void DomContainerIsDocument()
 		{
-			Assert.IsInstanceOfType(typeof (Document), _ie);
+			Assert.IsInstanceOfType(typeof (Document), myTestDomContainer);
 		}
 
 	    [Test]
@@ -89,7 +87,7 @@ namespace WatiN.Core.UnitTests
 	    {
 	        // GIVEN
 	        var nativeDocument = new Mock<INativeDocument>().Object;
-	        var myTestDomContainer = new MyTestDomContainer {ReturnNativeDocument = nativeDocument};
+	        myTestDomContainer.ReturnNativeDocument = nativeDocument;
 
 	        // WHEN
 	        var result = myTestDomContainer.NativeDocument;
@@ -102,7 +100,7 @@ namespace WatiN.Core.UnitTests
 	    [TearDown]
 		public virtual void TearDown()
 		{
-			_ie.Dispose();
+			myTestDomContainer.Dispose();
 			Settings.Reset();
 		}
 
@@ -112,7 +110,7 @@ namespace WatiN.Core.UnitTests
 
             public override IntPtr hWnd
             {
-                get { throw new System.NotImplementedException(); }
+                get { throw new NotImplementedException(); }
             }
 
             public override INativeDocument OnGetNativeDocument()
@@ -122,7 +120,7 @@ namespace WatiN.Core.UnitTests
 
             public override INativeBrowser NativeBrowser
             {
-                get { throw new System.NotImplementedException(); }
+                get { throw new NotImplementedException(); }
             }
         }
 	}
