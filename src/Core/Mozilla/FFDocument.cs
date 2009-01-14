@@ -1,4 +1,6 @@
-﻿using WatiN.Core.Interfaces;
+﻿using System;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Mozilla
 {
@@ -66,7 +68,31 @@ namespace WatiN.Core.Mozilla
 
         public void RunScript(string scriptCode, string language)
         {
-            ClientPort.Write(scriptCode, true);
+            try
+            {
+                ClientPort.Write(scriptCode);
+            }
+            catch (FireFoxException e)
+            {
+                throw new RunScriptException(e);
+            }
+        }
+
+        public string JavaScriptVariableName
+        {
+            get { return FireFoxClientPort.DocumentVariableName; }
+        }
+
+        public string GetPropertyValue(string propertyName)
+        {
+            var command = string.Format("{0}.{1};", FireFoxClientPort.DocumentVariableName, propertyName);
+            
+            if (propertyName == Document.ERROR_PROPERTY_NAME)
+            {
+                return ClientPort.WriteAndReadIgnoreError(command);
+            }
+
+            return ClientPort.WriteAndRead(command);
         }
     }
 }

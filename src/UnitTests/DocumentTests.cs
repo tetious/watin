@@ -24,6 +24,7 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UnitTests.IETests;
+using TimeoutException=WatiN.Core.Exceptions.TimeoutException;
 
 namespace WatiN.Core.UnitTests
 {
@@ -53,15 +54,25 @@ namespace WatiN.Core.UnitTests
 		[Test]
         public void DocumentIsIElementsContainer()
 		{
-			Assert.IsInstanceOfType(typeof (IElementsContainer), Ie);
+		    // GIVEN
+            var documentType = typeof(Document);
+            
+            // WHEN 
+            var actual = documentType.GetInterface(typeof(IElementsContainer).ToString());
+
+            // THEN
+		    Assert.That(actual, Is.Not.Null, "document should implement IElementsContainer");
 		}
 
-		[Test]
+	    [Test]
 		public void DocumentUrlandUri()
 		{
-			var uri = new Uri(Ie.Url);
-			Assert.AreEqual(MainURI, uri);
-			Assert.AreEqual(Ie.Uri, uri);
+		    ExecuteTest(browser =>
+		                    {
+		                        var uri = new Uri(browser.Url);
+		                        Assert.AreEqual(MainURI, uri);
+		                        Assert.AreEqual(browser.Uri, uri);
+		                    });
 		}
 
 		[Test]
@@ -85,20 +96,22 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RunJavaScript()
 		{
-			Ie.GoTo(IndexURI);
+		    ExecuteTest(browser =>
+		                    {
+		                        var documentVariableName = browser.NativeDocument.JavaScriptVariableName;
+                                browser.RunScript(documentVariableName + ".getElementById('last').innerHTML = 'java script has run';");
+                                Assert.That(browser.Div("last").Text, Is.EqualTo("java script has run"));
 
-			Ie.RunScript("window.document.write('java script has run');");
-			Assert.That(Ie.Text, Is.EqualTo("java script has run"));
-
-			try
-			{
-				Ie.RunScript("a+1");
-				Assert.Fail("Expected RunScriptException");
-			}
-			catch (RunScriptException)
-			{
-				// OK;
-			}
+		                        try
+		                        {
+		                            browser.RunScript("a+1");
+		                            Assert.Fail("Expected RunScriptException");
+		                        }
+		                        catch (RunScriptException)
+		                        {
+		                            // OK;
+		                        }
+		                    });
 		}
 
 		[Test]
@@ -123,84 +136,139 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TestEval()
 		{
-			var result = Ie.Eval("2+5");
-			Assert.That(result, Is.EqualTo("7"));
+		    ExecuteTest(browser =>
+            {
+		                        var result = browser.Eval("2+5");
+		                        Assert.That(result, Is.EqualTo("7"));
 
-			result = Ie.Eval("'te' + 'st'");
-			Assert.That(result, Is.EqualTo("test"));
+		                        result = browser.Eval("'te' + 'st'");
+		                        Assert.That(result, Is.EqualTo("test"));
 
 
-			try
-			{
-				Ie.Eval("a+1");
-				Assert.Fail("Expected JavaScriptException");
-			}
-			catch (JavaScriptException)
-			{
-				//;
-			}
+		                        try
+		                        {
+		                            browser.Eval("a+1");
+		                            Assert.Fail("Expected JavaScriptException");
+		                        }
+		                        catch (JavaScriptException)
+		                        {
+		                            //;
+		                        }
 
-			// Make sure a valid eval after a failed eval executes OK.
-			result = Ie.Eval("window.document.write('java script has run');4+4;");
-			Assert.AreEqual("8", result);
-			Assert.That(Ie.Text, Is.EqualTo("java script has run"));
+		                        // Make sure a valid eval after a failed eval executes OK.
+                                var documentVariableName = browser.NativeDocument.JavaScriptVariableName;
+                                result = browser.Eval(documentVariableName + ".getElementById('last').innerHTML = 'java script has run';4+4;");
 
-		    Ie.GoTo(TestPageUri);
+                                Assert.AreEqual("8", result);
+                                Assert.That(browser.Div("last").Text, Is.EqualTo("java script has run"));
+
+		                        browser.GoTo(TestPageUri);
+		                    }
+            );
 		}
 
 		[Test]
 		public void RunScriptAndEval()
 		{
-			Ie.RunScript("var myVar = 5;");
-			var result = Ie.Eval("myVar;");
-			Assert.AreEqual("5", result);
+		    ExecuteTest(browser =>
+		                    {
+		                        browser.RunScript("var myVar = 5;");
+		                        var result = browser.Eval("myVar;");
+		                        Assert.AreEqual("5", result);
+		                    });
 		}
 
         [Test]
         public void ContainsText()
         {
-            Assert.IsTrue(Ie.ContainsText("Contains text in DIV"), "Text not found");
-            Assert.IsFalse(Ie.ContainsText("abcde"), "Text incorrectly found");
+            ExecuteTest(browser =>
+                            {
+                                Assert.IsTrue(browser.ContainsText("Contains text in DIV"), "Text not found");
+                                Assert.IsFalse(browser.ContainsText("abcde"), "Text incorrectly found");
 
-            Assert.IsTrue(Ie.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
-            Assert.IsFalse(Ie.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
+                                Assert.IsTrue(browser.ContainsText(new Regex("Contains text in DIV")), "Regex: Text not found");
+                                Assert.IsFalse(browser.ContainsText(new Regex("abcde")), "Regex: Text incorrectly found");
+                            });
         }
 
         [Test]
         public void FindText()
         {
-            Assert.AreEqual("Contains text in DIV", Ie.FindText(new Regex("Contains .* in DIV")), "Text not found");
-            Assert.IsNull(Ie.FindText(new Regex("abcde")), "Text incorrectly found");
+            ExecuteTest(browser =>
+                            {
+                                Assert.AreEqual("Contains text in DIV", browser.FindText(new Regex("Contains .* in DIV")), "Text not found");
+                                Assert.IsNull(browser.FindText(new Regex("abcde")), "Text incorrectly found");
+                            });
         }
 
-        [Test, ExpectedException(typeof(Exceptions.TimeoutException))]
+        [Test] //, ExpectedException(typeof(Exceptions.TimeoutException))]
         public void WaitUntilContainsTextShouldThrowTimeOutException()
         {
-            Settings.WaitUntilExistsTimeOut = 1;
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                Settings.WaitUntilExistsTimeOut = 1;
+                                HtmlInjector.Start(browser, "some text 1", 2);
 
-			IEHtmlInjector.Start(Ie, "some text 1", 2);
-            Ie.WaitUntilContainsText("some text 1");
-            Ie.GoTo(TestPageUri);
+                                try
+                                {
+                                    browser.WaitUntilContainsText("some text 1");
+
+                                    // THEN
+                                    Assert.Fail("Expected " + typeof(TimeoutException));
+                                }
+                                catch (Exception e)
+                                {
+                                    Assert.That(e, Is.InstanceOfType(typeof(TimeoutException)));
+                                }
+                                finally
+                                {
+                                    browser.GoTo(TestPageUri);
+                                }
+                            });
         }
 
         [Test]
         public void WaitUntilContainsTextShouldReturn()
         {
-            Settings.WaitUntilExistsTimeOut = 2;
+            ExecuteTest(browser =>
+                            {
+                                Settings.WaitUntilExistsTimeOut = 2;
 
-			IEHtmlInjector.Start(Ie, "some text 2", 1);
-            Ie.WaitUntilContainsText("some text 2");
-            Ie.GoTo(TestPageUri);
+                                HtmlInjector.Start(browser, "some text 2", 1);
+                                browser.WaitUntilContainsText("some text 2");
+                                browser.GoTo(TestPageUri);
+                            });
         }
 
-        [Test, ExpectedException(typeof(Exceptions.TimeoutException))]
+        [Test] //, ExpectedException(typeof(Exceptions.TimeoutException))]
         public void WaitUntilContainsTextRegexShouldThrowTimeOutException()
         {
-            Settings.WaitUntilExistsTimeOut = 1;
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                Settings.WaitUntilExistsTimeOut = 1;
+                                HtmlInjector.Start(browser, "some text 3", 2);
 
-			IEHtmlInjector.Start(Ie, "some text 3", 2);
-            Ie.WaitUntilContainsText(new Regex("me text 3"));
-            Ie.GoTo(TestPageUri);
+                                // WHEN
+
+                                try
+                                {
+                                    browser.WaitUntilContainsText(new Regex("me text 3"));
+                                    
+                                    // THEN
+                                    Assert.Fail("Expected " + typeof(TimeoutException));
+                                }
+                                catch (Exception e)
+                                {
+                                    Assert.That(e, Is.InstanceOfType(typeof(TimeoutException)));
+                                }
+                                finally
+                                {
+                                    browser.GoTo(TestPageUri);
+                                }
+
+                            });
         }
 
         [Test]
@@ -208,162 +276,221 @@ namespace WatiN.Core.UnitTests
         {
             Settings.WaitUntilExistsTimeOut = 2;
 
-			IEHtmlInjector.Start(Ie, "some text 4", 1);
-            Ie.WaitUntilContainsText(new Regex("me text 4"));
-            Ie.GoTo(TestPageUri);
+            ExecuteTest(browser =>
+                            {
+                                HtmlInjector.Start(browser, "some text 4", 1);
+                                browser.WaitUntilContainsText(new Regex("me text 4"));
+                                browser.GoTo(TestPageUri);
+                            });
         }
 
         [Test, Ignore("TODO")]
         public void TestAreaPredicateOverload()
         {
-            //            Area Area = ie.Area(t => t.Name == "q");
-            var Area = Ie.Area(t => t.Id == "readonlytext");
+            ExecuteTest(browser =>
+                            {
+                                var Area = browser.Area(t => t.Id == "readonlytext");
 
-            Assert.That(Area.Id, Is.EqualTo("readonlytext"));
+                                Assert.That(Area.Id, Is.EqualTo("readonlytext"));
+                            });
         }
 
         [Test]
         public void TestButtonPredicateOverload()
         {
-            var Button = Ie.Button(t => t.Id == "popupid");
+            ExecuteTest(browser =>
+                            {
+                                var Button = browser.Button(t => t.Id == "popupid");
 
-            Assert.That(Button.Id, Is.EqualTo("popupid"));
+                                Assert.That(Button.Id, Is.EqualTo("popupid"));
+                            });
         }
 
         [Test]
         public void TestCheckBoxPredicateOverload()
         {
-            var CheckBox = Ie.CheckBox(t => t.Id == "Checkbox2");
+            ExecuteTest(browser =>
+                            {
+                                var CheckBox = browser.CheckBox(t => t.Id == "Checkbox2");
 
-            Assert.That(CheckBox.Id, Is.EqualTo("Checkbox2"));
+                                Assert.That(CheckBox.Id, Is.EqualTo("Checkbox2"));
+                            });
         }
 
         [Test]
         public void TestElementPredicateOverload()
         {
-            var Element = Ie.Element(t => t.Id == "Radio1");
+            ExecuteTest(browser =>
+                            {
+                                var Element = browser.Element(t => t.Id == "Radio1");
 
-            Assert.That(Element.Id, Is.EqualTo("Radio1"));
+                                Assert.That(Element.Id, Is.EqualTo("Radio1"));
+                            });
         }
 
         [Test]
         public void TestFileUploadPredicateOverload()
         {
-            var FileUpload = Ie.FileUpload(t => t.Id == "upload");
+            ExecuteTest(browser =>
+                            {
+                                var FileUpload = browser.FileUpload(t => t.Id == "upload");
 
-            Assert.That(FileUpload.Id, Is.EqualTo("upload"));
+                                Assert.That(FileUpload.Id, Is.EqualTo("upload"));
+                            });
         }
 
         [Test]
         public void TestFormPredicateOverload()
         {
-            var Form = Ie.Form(t => t.Id == "Form");
+            ExecuteTest(browser =>
+                            {
+                                var Form = browser.Form(t => t.Id == "Form");
 
-            Assert.That(Form.Id, Is.EqualTo("Form"));
+                                Assert.That(Form.Id, Is.EqualTo("Form"));
+                            });
         }
 
         [Test]
         public void TestLabelPredicateOverload()
         {
-            var Label = Ie.Label(t => t.For == "Checkbox21");
+            ExecuteTest(browser =>
+                            {
+                                var Label = browser.Label(t => t.For == "Checkbox21");
 
-            Assert.That(Label.For, Is.EqualTo("Checkbox21"));
+                                Assert.That(Label.For, Is.EqualTo("Checkbox21"));
+                            });
         }
 
         [Test]
         public void TestLinkPredicateOverload()
         {
-            var Link = Ie.Link(t => t.Id == "testlinkid");
+            ExecuteTest(browser =>
+                            {
+                                var Link = browser.Link(t => t.Id == "testlinkid");
 
-            Assert.That(Link.Id, Is.EqualTo("testlinkid"));
+                                Assert.That(Link.Id, Is.EqualTo("testlinkid"));
+                            });
         }
 
         [Test]
         public void TestParaPredicateOverload()
         {
-            var Para = Ie.Para(t => t.Id == "links");
+            ExecuteTest(browser =>
+                            {
+                                var Para = browser.Para(t => t.Id == "links");
 
-            Assert.That(Para.Id, Is.EqualTo("links"));
+                                Assert.That(Para.Id, Is.EqualTo("links"));
+                            });
         }
 
         [Test]
         public void TestRadioButtonPredicateOverload()
         {
-            var RadioButton = Ie.RadioButton(t => t.Id == "Radio1");
+            ExecuteTest(browser =>
+                            {
+                                var RadioButton = browser.RadioButton(t => t.Id == "Radio1");
 
-            Assert.That(RadioButton.Id, Is.EqualTo("Radio1"));
+                                Assert.That(RadioButton.Id, Is.EqualTo("Radio1"));
+                            });
         }
 
         [Test]
         public void TestSelectListPredicateOverload()
         {
-            var SelectList = Ie.SelectList(t => t.Id == "Select1");
+            ExecuteTest(browser =>
+                            {
+                                var SelectList = browser.SelectList(t => t.Id == "Select1");
 
-            Assert.That(SelectList.Id, Is.EqualTo("Select1"));
+                                Assert.That(SelectList.Id, Is.EqualTo("Select1"));
+                            });
         }
 
         [Test]
         public void TestTablePredicateOverload()
         {
-            var Table = Ie.Table(t => t.Id == "table1");
+            ExecuteTest(browser =>
+                            {
+                                var Table = browser.Table(t => t.Id == "table1");
 
-            Assert.That(Table.Id, Is.EqualTo("table1"));
+                                Assert.That(Table.Id, Is.EqualTo("table1"));
+                            });
         }
 
         [Test]
         public void TestTableCellPredicateOverload()
         {
-            var TableCell = Ie.TableCell(t => t.Id == "td2");
+            ExecuteTest(browser =>
+                            {
+                                var TableCell = browser.TableCell(t => t.Id == "td2");
 
-            Assert.That(TableCell.Id, Is.EqualTo("td2"));
+                                Assert.That(TableCell.Id, Is.EqualTo("td2"));
+                            });
         }
 
         [Test]
         public void TestTableRowPredicateOverload()
         {
-            var TableRow = Ie.TableRow(t => t.Id == "row0");
+            ExecuteTest(browser =>
+                            {
+                                var TableRow = browser.TableRow(t => t.Id == "row0");
 
-            Assert.That(TableRow.Id, Is.EqualTo("row0"));
+                                Assert.That(TableRow.Id, Is.EqualTo("row0"));
+                            });
         }
 
         [Test, Ignore("TODO")]
         public void TestTableBodyPredicateOverload()
         {
-            var TableBody = Ie.TableBody(t => t.Id == "readonlytext");
+            ExecuteTest(browser =>
+                            {
+                                var TableBody = browser.TableBody(t => t.Id == "readonlytext");
 
-            Assert.That(TableBody.Id, Is.EqualTo("readonlytext"));
+                                Assert.That(TableBody.Id, Is.EqualTo("readonlytext"));
+                            });
         }
 
         [Test]
         public void TestTextFieldPredicateOverload()
         {
-            var textField = Ie.TextField(t => t.Id == "readonlytext");
+            ExecuteTest(browser =>
+                            {
+                                var textField = browser.TextField(t => t.Id == "readonlytext");
 
-            Assert.That(textField.Id, Is.EqualTo("readonlytext"));
+                                Assert.That(textField.Id, Is.EqualTo("readonlytext"));
+                            });
         }
 
         [Test]
         public void TestSpanPredicateOverload()
         {
-            var Span = Ie.Span(t => t.Id == "Span1");
+            ExecuteTest(browser =>
+                            {
+                                var Span = browser.Span(t => t.Id == "Span1");
 
-            Assert.That(Span.Id, Is.EqualTo("Span1"));
+                                Assert.That(Span.Id, Is.EqualTo("Span1"));
+                            });
         }
 
         [Test]
         public void TestDivPredicateOverload()
         {
-            var Div = Ie.Div(t => t.Id == "NextAndPreviousTests");
+            ExecuteTest(browser =>
+                            {
+                                var Div = browser.Div(t => t.Id == "NextAndPreviousTests");
 
-            Assert.That(Div.Id, Is.EqualTo("NextAndPreviousTests"));
+                                Assert.That(Div.Id, Is.EqualTo("NextAndPreviousTests"));
+                            });
         }
 
         [Test, Ignore("TODO")]
         public void TestImagePredicateOverload()
         {
-            var Image = Ie.Image(t => t.Id == "readonlytext");
+            ExecuteTest(browser =>
+                            {
+                                var Image = browser.Image(t => t.Id == "readonlytext");
 
-            Assert.That(Image.Id, Is.EqualTo("readonlytext"));
+                                Assert.That(Image.Id, Is.EqualTo("readonlytext"));
+                            });
         }
 	}
 

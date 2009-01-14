@@ -27,5 +27,8 @@ namespace WatiN.Core.Interfaces
         string Title { get; }
         INativeElement ActiveElement { get; }
         void RunScript(string scriptCode, string language);
+        string JavaScriptVariableName {get;}
+
+        string GetPropertyValue(string propertyName);
     }
 }

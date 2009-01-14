@@ -3,13 +3,13 @@ using mshtml;
 
 namespace WatiN.Core.UnitTests.IETests
 {
-    internal class IEHtmlInjector
+    internal class HtmlInjector
     {
         private readonly string _html;
         private readonly int _numberOfSecondsToWaitBeforeInjection;
         private readonly Document _document;
 
-        public IEHtmlInjector(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
+        public HtmlInjector(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
         {
             _document = document;
             _html = html;
@@ -18,13 +18,15 @@ namespace WatiN.Core.UnitTests.IETests
 
         public void Inject()
         {
-            Thread.Sleep(_numberOfSecondsToWaitBeforeInjection * 1000);
+            var sleepTime = _numberOfSecondsToWaitBeforeInjection*1000;
+            var documentVariableName = _document.NativeDocument.JavaScriptVariableName;
 
-            try
-            {
-                ((IHTMLDocument2)_document.NativeDocument.Object).writeln(_html);
-            }
-            catch { }
+            var script = "window.setTimeout(function()" +
+                         "{" +
+                         documentVariableName +".body.innerHTML = '" + _html +"';" +
+                         "}, " + sleepTime +");";
+
+            _document.RunScript(script);
         }
 
         /// <summary>
@@ -35,12 +37,8 @@ namespace WatiN.Core.UnitTests.IETests
         /// <param name="numberOfSecondsToWaitBeforeInjection"></param>
         public static void Start(Document document, string html, int numberOfSecondsToWaitBeforeInjection)
         {
-            var htmlInjector = new IEHtmlInjector(document, html, numberOfSecondsToWaitBeforeInjection);
-
-            ThreadStart start = htmlInjector.Inject;
-            var thread = new Thread(start);
-            thread.Start();
+            var htmlInjector = new HtmlInjector(document, html, numberOfSecondsToWaitBeforeInjection);
+            htmlInjector.Inject();
         }
-
     }
 }

@@ -17,8 +17,12 @@
 #endregion Copyright
 
 using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Expando;
 using mshtml;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Logging;
 
 namespace WatiN.Core.InternetExplorer
 {
@@ -68,7 +72,33 @@ namespace WatiN.Core.InternetExplorer
 
         public void RunScript(string scriptCode, string language)
         {
+            Logger.LogDebug(scriptCode);
             UtilityClass.RunScript(scriptCode, language, _nativeDocument.parentWindow);
+        }
+
+        public string JavaScriptVariableName
+        {
+            get { return "document"; }
+        }
+
+        public string GetPropertyValue(string propertyName)
+        {
+            var domDocumentExpando = (IExpando)_nativeDocument;
+
+            var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
+            if (errorProperty != null)
+            {
+                try
+                {
+                    return (string)errorProperty.GetValue(domDocumentExpando, null);
+                }
+                catch (COMException)
+                {
+                    return null;
+                }
+            }
+
+            return null;
         }
     }
 }

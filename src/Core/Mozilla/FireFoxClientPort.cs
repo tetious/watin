@@ -423,7 +423,7 @@ namespace WatiN.Core.Mozilla
 
             while (rawResponse != responseToWaitFor)
             {
-                ReadResponse(false);
+                ReadResponse(false, true);
                 rawResponse += lastResponseRaw;
             }
         }
@@ -433,14 +433,14 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="resultExpected"></param>
+        /// <param name="checkForErrors"></param>
         /// <param name="args"></param>
-        private void SendAndRead(string data, bool resultExpected, params object[] args)
+        private void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
-            var command = data;
-            if (args != null && args.Length > 0) command = string.Format(data, args);
+            var command = UtilityClass.StringFormat(data, args);
 
             SendCommand(command);
-            ReadResponse(resultExpected);
+            ReadResponse(resultExpected, checkForErrors);
         }
 
         private void SendCommand(string data)
@@ -467,33 +467,41 @@ namespace WatiN.Core.Mozilla
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         public void Write(string data, params object[] args)
         {
-            SendAndRead(data + " true;", true, args);
+            var command = data.EndsWith(";") == false ? data + ";" : data;
+            SendAndRead(command + " true;", true, true, args);
+        }
+
+        public string WriteAndReadIgnoreError(string data, params object[] args)
+        {
+            SendAndRead(data, false, false, args);
+            return LastResponse;
         }
 
         public string WriteAndRead(string data, params object[] args)
         {
-            SendAndRead(data, false, args);
+            SendAndRead(data, false, true, args);
             return LastResponse;
         }
 
         public bool WriteAndReadAsBool(string data, params object[] args)
         {
-            SendAndRead(data, true, args);
+            SendAndRead(data, true, true, args);
             return LastResponseAsBool;
         }
 
         public int WriteAndReadAsInt(string data, params object[] args)
         {
-            SendAndRead(data, true, args);
+            SendAndRead(data, true, true, args);
             return LastResponseAsInt;
         }
 
         /// <summary>
         /// Reads the response from the jssh server.
         /// </summary>
-        private void ReadResponse(bool resultExpected)
+        private void ReadResponse(bool resultExpected, bool checkForErrors)
         {
             var stream = new NetworkStream(telnetSocket);
+            
             lastResponse = string.Empty;
             lastResponseRaw = string.Empty;
 
@@ -517,14 +525,24 @@ namespace WatiN.Core.Mozilla
                 lastResponse += CleanTelnetResponse(readData);
             } while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(lastResponse)));
 
-            if (lastResponse.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
-                lastResponse.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
-                lastResponse.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase))
+            response.Append(lastResponse);
+
+            if (checkForErrors)
             {
-                throw new FireFoxException(string.Format("Error sending last message to jssh server: {0}", lastResponse));
+                CheckForError(lastResponse);
             }
 
-            response.Append(lastResponse);
+        }
+
+        private static void CheckForError(string response)
+        {
+            if (response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new FireFoxException(string.Format("Error sending last message to jssh server: {0}", response));
+            }
         }
 
         #endregion private instance methods

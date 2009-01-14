@@ -290,7 +290,7 @@
     </Compile>
     <Compile Include="IBrowserTestManager.cs" />
     <Compile Include="IEBrowserTestManager.cs" />
-    <Compile Include="IETests\IEHtmlInjector.cs" />
+    <Compile Include="IETests\HtmlInjector.cs" />
     <Compile Include="IETests.cs">
       <SubType>Code</SubType>
     </Compile>

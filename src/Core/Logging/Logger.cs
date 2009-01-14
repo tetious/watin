@@ -47,7 +47,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogAction(string message, params object[] args)
 		{
-			LogWriter.LogAction(string.Format(message, args));
+			LogWriter.LogAction(UtilityClass.StringFormat(message, args));
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogDebug(string message, params object[] args)
 		{
-			LogWriter.LogDebug(string.Format(message, args));
+            LogWriter.LogDebug(UtilityClass.StringFormat(message, args));
 		}
 
 		/// <summary>

@@ -180,7 +180,7 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRow(Regex findTextRegex, int inColumn)
 		{
-			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
 
 			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
@@ -197,7 +197,7 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRowInDirectChildren(Regex findTextRegex, int inColumn)
 		{
-			Logger.LogAction("Matching regular expression'" + findTextRegex + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
 
 			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
 
@@ -214,7 +214,7 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRow(ICompare comparer, int inColumn)
 		{
-			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+			Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
 
 			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
 
@@ -231,7 +231,7 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public TableRow FindRowInDirectChildren(ICompare comparer, int inColumn)
 		{
-			Logger.LogAction("Matching comparer'" + comparer + "' with text in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
 
 			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
 

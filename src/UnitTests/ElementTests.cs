@@ -264,6 +264,9 @@ namespace WatiN.Core.UnitTests
 		                        Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
 		                        Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
 
+		                        var label = checkBox.Parent;
+		                        Assert.That(label, Is.InstanceOfType(typeof(Label)), "Expected a label");
+                                Assert.That(label.TextAfter.Trim(), Is.Empty, "Unexpected label.TextAfter");
 		                    });
 		}
 

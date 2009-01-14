@@ -30,12 +30,24 @@ namespace WatiN.Core.UnitTests
         /// <summary>
         /// The test method to execute.
         /// </summary>
-        protected delegate void BrowserTest(Browser browser);
+        public delegate void BrowserTest(Browser browser);
 
 	    private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
 	    private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
 
 	    public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
+
+        // TODO: remove this property in time
+        public IE Ie
+        {
+            get { return (IE)ieManager.GetBrowser(TestEventsURI); }
+        }
+
+        // TODO: remove this property in time
+        public FireFox Firefox
+        {
+            get { return (FireFox)ffManager.GetBrowser(TestEventsURI); }
+        }
 
 		[TestFixtureSetUp]
 		public override void FixtureSetup()
@@ -62,18 +74,6 @@ namespace WatiN.Core.UnitTests
             BrowsersToTestWith.ForEach(browser => GoToTestPage(browser.GetBrowser(TestPageUri)));
 	    }
 
-        // TODO: remove this property in time
-	    public IE Ie
-	    {
-            get { return (IE) ieManager.GetBrowser(TestEventsURI);  }
-	    }
-
-        // TODO: remove this property in time
-	    public FireFox Firefox
-	    {
-            get { return (FireFox) ffManager.GetBrowser(TestEventsURI); }
-	    }
-
 	    private void GoToTestPage(Browser browser)
 	    {
 	        if ( browser != null && !browser.Uri.Equals(TestPageUri))
@@ -88,7 +88,7 @@ namespace WatiN.Core.UnitTests
         /// Executes the test using both FireFox and Internet Explorer.
         /// </summary>
         /// <param name="testMethod">The test method.</param>
-        protected void ExecuteTest(BrowserTest testMethod)
+        public void ExecuteTest(BrowserTest testMethod)
         {
             BrowsersToTestWith.ForEach(browser => ExecuteTest(testMethod, browser.GetBrowser(TestPageUri)));
         }

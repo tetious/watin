@@ -57,7 +57,10 @@ namespace WatiN.Core
 	/// </example>
 	public abstract class Document : IElementsContainer, IDisposable, IElementCollection
 	{
-		private DomContainer domContainer;
+	    private const string RESULT_PROPERTY_NAME = "watinExpressionResult";
+        public const string ERROR_PROPERTY_NAME = "watinExpressionError";
+
+        private DomContainer domContainer;
 		private INativeDocument _nativeDocument;
 
 		/// <summary>
@@ -934,47 +937,30 @@ namespace WatiN.Core
 		/// or throws an exception during evaluation</exception>
 		public string Eval(string javaScriptCode)
 		{
-			const string resultPropertyName = "___expressionResult___";
-			const string errorPropertyName = "___expressionError___";
+		    var documentVariableName = NativeDocument.JavaScriptVariableName;
 
-			var exprWithAssignment = "try {\n"
-			                            + "document." + resultPropertyName + "= String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))\n"
-			                            + "} catch (error) {\n"
-			                            + "document." + errorPropertyName + "= 'message' in error ? error.name + ': ' + error.message : String(error)\n"
-			                            + "}";
+		    var resultVar = documentVariableName + "." + RESULT_PROPERTY_NAME;
+		    var errorVar = documentVariableName + "." + ERROR_PROPERTY_NAME;
+
+			var exprWithAssignment = resultVar + " = '';" + errorVar + " = '';"
+                                        + "try {"
+			                            +  resultVar + " = String(eval('" + javaScriptCode.Replace("'", "\\'") + "'))"
+			                            + "} catch (error) {"
+                                        + errorVar + " = 'message' in error ? error.name + ': ' + error.message : String(error)"
+			                            + "};";
 
 			// Run the script.
 			RunScript(exprWithAssignment);
 
 			// See if an error occured.
-			var error = GetPropertyValue(errorPropertyName);
-			if (error != null)
+            var error = NativeDocument.GetPropertyValue(ERROR_PROPERTY_NAME);
+			if (!string.IsNullOrEmpty(error))
 			{
 				throw new JavaScriptException(error);
 			}
 
 			// Return the result
-			return GetPropertyValue(resultPropertyName);
-		}
-
-		private string GetPropertyValue(string propertyName)
-		{
-			var domDocumentExpando = (IExpando) NativeDocument.Object;
-
-			var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
-			if (errorProperty != null)
-			{
-				try
-				{
-					return (string) errorProperty.GetValue(domDocumentExpando, null);
-				}
-				catch (COMException)
-				{
-					return null;
-				}
-			}
-
-			return null;
+            return NativeDocument.GetPropertyValue(RESULT_PROPERTY_NAME);
 		}
 	}
 }

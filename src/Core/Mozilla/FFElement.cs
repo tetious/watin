@@ -44,14 +44,41 @@ namespace WatiN.Core.Mozilla
             ClientPort = clientPort;
         }
 
+        /// <summary>
+        /// This not supported in FireFox
+        /// </summary>
         public string TextAfter
         {
-            get { return GetProperty("getAdjacentText('afterEnd')"); }
+            get
+            {
+                var element = GetElementByProperty("nextSibling");
+
+                if (element == null || !element.IsTextNodeType()) return string.Empty;
+
+                return CleanUpText(element);
+            }
         }
 
+        /// <summary>
+        /// This not supported in FireFox
+        /// </summary>
         public string TextBefore
         {
-            get { return GetProperty("getAdjacentText('beforeBegin')"); }
+            get
+            {
+                var element = GetElementByProperty("previousSibling");
+
+                if (element == null || !element.IsTextNodeType()) return string.Empty;
+
+                return CleanUpText(element);
+            }
+        }
+
+        private static string CleanUpText(INativeElement element)
+        {
+            var value = element.GetAttributeValue("textContent");
+
+            return string.IsNullOrEmpty(value) ? string.Empty : value.Split(Convert.ToChar("\n"))[0];
         }
 
         public INativeElement NextSibling
@@ -109,7 +136,7 @@ namespace WatiN.Core.Mozilla
             // Handle properties different from attributes
             if (knownAttributeOverrides.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
             {
-                return GetProperty(attributeName);
+                return GetPropertyValue(attributeName);
             }
 
             // Retrieve attribute value
@@ -194,7 +221,7 @@ namespace WatiN.Core.Mozilla
             {
                 if (_tagName == null)
                 {
-                    _tagName = GetProperty("tagName");
+                    _tagName = GetPropertyValue("tagName");
                 }
 
                 return _tagName;
@@ -329,7 +356,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns></returns>
-        private string GetProperty(string propertyName)
+        private string GetPropertyValue(string propertyName)
         {
             var command = string.Format("{0}.{1};", ElementReference, propertyName);
             return ClientPort.WriteAndRead(command);
@@ -369,7 +396,7 @@ namespace WatiN.Core.Mozilla
 
         private bool IsTextNodeType()
         {
-            var nodeTypeValue = GetProperty("nodeType");
+            var nodeTypeValue = GetPropertyValue("nodeType");
             return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
         }
 

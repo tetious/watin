@@ -364,5 +364,18 @@ namespace WatiN.Core
             return uri;
         }
 
+
+        /// <summary>
+        /// Formats the string in the same sense as string.Format but checks 
+        /// if args is null before calling string.Format to prevent FormatException
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        public static string StringFormat(string format, params object[] args)
+        {
+            if (args != null && args.Length > 0) return string.Format(format, args);
+            return format;
+        }
 	}
 }
