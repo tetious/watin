@@ -156,10 +156,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
 		{
-			Assert.IsNull(Ie.Div("NextAndPreviousTests").Div("first").PreviousSibling);
+		    ExecuteTest(browser =>
+		                    {
+                                var first = browser.Div("NextAndPreviousTests").Div("first").PreviousSibling;
+		                        Assert.IsNull(first);
+		                    });
 		}
 
-		[Test]
+	    [Test]
 		public void ElementPreviousSiblingReturningTypedParent()
 		{
 			Assert.IsTrue(Ie.RadioButton("Radio1").PreviousSibling.GetType().Equals(typeof (CheckBox)));
@@ -178,9 +182,12 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementNextSiblingShouldReturnNullWhenLastSibling()
 		{
-			var next = Ie.Div("NextAndPreviousTests").Div("last").NextSibling;
+		    ExecuteTest(browser =>
+		                    {
+		                        var next = browser.Div("NextAndPreviousTests").Div("last").NextSibling;
 			
-            Assert.IsNull(next);
+		                        Assert.IsNull(next);
+		                    });
 		}
 
 		[Test]
@@ -232,28 +239,32 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Element()
 		{
-			element = Ie.Element(Find.ById("table1"));
+		    ExecuteTest(browser =>
+		                    {
+                                element = browser.Element(Find.ById("table1"));
 
-		    var container = element as IElementsContainer;
-            Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-            Assert.IsAssignableFrom(typeof(ElementsContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
+		                        var container = element as IElementsContainer;
+		                        Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
+		                        Assert.IsAssignableFrom(typeof(ElementsContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
 
-			Assert.IsNotNull(element, "Element not found");
+		                        Assert.IsNotNull(element, "Element not found");
 
-			// check behavior for standard attribute
-			Assert.AreEqual("table1", element.GetAttributeValue("id"), "GetAttributeValue id failed");
-			// check behavior for non existing attribute
-			Assert.IsNull(element.GetAttributeValue("watin"), "GetAttributeValue watin should return null");
-			// check behavior for custom attribute
-			Assert.AreEqual("myvalue", element.GetAttributeValue("myattribute"), "GetAttributeValue myattribute should return myvalue");
+		                        // check behavior for standard attribute
+		                        Assert.AreEqual("table1", element.GetAttributeValue("id"), "GetAttributeValue id failed");
+		                        // check behavior for non existing attribute
+		                        Assert.IsNull(element.GetAttributeValue("watin"), "GetAttributeValue watin should return null");
+		                        // check behavior for custom attribute
+		                        Assert.AreEqual("myvalue", element.GetAttributeValue("myattribute"), "GetAttributeValue myattribute should return myvalue");
 
-			Assert.AreEqual("table", element.TagName.ToLower(), "Invalid tagname");
+		                        Assert.AreEqual("table", element.TagName.ToLower(), "Invalid tagname");
 
-			// Textbefore and TextAfter tests
-			var checkBox = Ie.CheckBox("Checkbox21");
+		                        // Textbefore and TextAfter tests
+                                var checkBox = browser.CheckBox("Checkbox21");
 			
-            Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
-			Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
+		                        Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
+		                        Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
+
+		                    });
 		}
 
 		[Test]

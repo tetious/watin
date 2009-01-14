@@ -72,7 +72,7 @@ namespace WatiN.Core.UnitTests
 		}
 
         [Test]
-        public void CachedElementPropertiesShouldBeClearedIfNewHtmlElementIsSet()
+        public void CachedElementInstancesShouldBeClearedWhenINativeElementIsSet()
         {
             // GIVEN
             var mockNativeElement = new Mock<INativeElement>();

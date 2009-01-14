@@ -46,12 +46,12 @@ namespace WatiN.Core.Mozilla
 
         public string TextAfter
         {
-            get { throw new System.NotImplementedException(); }
+            get { return GetProperty("getAdjacentText('afterEnd')"); }
         }
 
         public string TextBefore
         {
-            get { throw new System.NotImplementedException(); }
+            get { return GetProperty("getAdjacentText('beforeBegin')"); }
         }
 
         public INativeElement NextSibling
@@ -62,7 +62,7 @@ namespace WatiN.Core.Mozilla
 
                 while (true)
                 {
-                    if (element == null || element.IsTextNodeType())
+                    if (element == null || !element.IsTextNodeType())
                     {
                         return element;
                     }
@@ -80,7 +80,7 @@ namespace WatiN.Core.Mozilla
 
                 while (true)
                 {
-                    if (element == null || element.IsTextNodeType())
+                    if (element == null || !element.IsTextNodeType())
                     {
                         return element;
                     }
