@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -65,13 +66,37 @@ namespace WatiN.Core.UnitTests
 
 		                        Assert.AreEqual("Radio1", RadioButton1.Id, "Found wrong RadioButton.");
 		                        Assert.AreEqual("Radio1", RadioButton1.ToString(), "ToString didn't return the Id.");
+		                    });
+		}
+		[Test]
+		public void RadioButtonWhichIsCheckedOnPageLoadShouldReturnChecked()
+		{
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TestPageUri);
+		                        var RadioButton1 = browser.RadioButton("Radio1");
 		                        Assert.IsTrue(RadioButton1.Checked, "Should initially be checked");
+		                    });
+		}
 
-		                        RadioButton1.Checked = false;
-		                        Assert.IsFalse(RadioButton1.Checked, "Should not be checked");
+        [Test]
+		public void RadioButtonsWithSameNameShouldSwitchCheckedWhenClickedOn()
+		{
+		    ExecuteTest(browser =>
+		                    {
+		                        var RadioButton2 = browser.RadioButton("Radio2");
+		                        var RadioButton3 = browser.RadioButton("Radio3");
 
-		                        RadioButton1.Checked = true;
-		                        Assert.IsTrue(RadioButton1.Checked, "Should be checked");
+		                        Assert.That(RadioButton2.Checked, Is.False, "Radio2 should not be checked");
+		                        Assert.That(RadioButton3.Checked, Is.False, "Radio3 should not be checked");
+
+		                        RadioButton2.Checked = true;
+		                        Assert.That(RadioButton2.Checked, Is.True, "Radio2 Should be checked");
+		                        Assert.That(RadioButton3.Checked, Is.False, "Radio3 Should not be checked (when radio2 is selected)");
+
+                                RadioButton3.Checked = true;
+                                Assert.That(RadioButton2.Checked, Is.False, "Radio2 Should not be checked (when radio2 is selected)");
+		                        Assert.That(RadioButton3.Checked, Is.True, "Radio3 Should be checked");
 		                    });
 		}
 

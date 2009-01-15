@@ -152,6 +152,11 @@ namespace WatiN.Core.Mozilla
 
         public void SetAttributeValue(string attributeName, string value)
         {
+            // Ignores
+            // Checked is set be the click event on RadioButton.Checked and CheckBox.Checked
+            // for CheckBox.Checked it in resulted in setting and re-setting
+            if (attributeName == "checked") return;
+
             // Translate to FireFox html syntax
             if (watiNAttributeMap.ContainsKey(attributeName))
             {
