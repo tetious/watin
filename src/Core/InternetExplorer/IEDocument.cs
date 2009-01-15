@@ -23,6 +23,7 @@ using System.Runtime.InteropServices.Expando;
 using mshtml;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.InternetExplorer
 {

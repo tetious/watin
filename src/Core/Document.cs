@@ -17,9 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Expando;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;

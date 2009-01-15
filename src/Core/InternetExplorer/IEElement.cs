@@ -17,11 +17,11 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.InternetExplorer
 {

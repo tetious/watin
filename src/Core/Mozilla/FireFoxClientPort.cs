@@ -24,6 +24,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Mozilla
 {

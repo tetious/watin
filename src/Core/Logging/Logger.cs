@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Logging
 {

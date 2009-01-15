@@ -32,7 +32,7 @@ namespace WatiN.Core
 		private INativeDocument _nativeDocument;
 
         /// <summary>
-        /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
+        /// <c>true</c> if the <see cref="Dispose"/> method has been called to release resources.
         /// </summary>
         protected bool IsDisposed { get; set; }
 

@@ -22,6 +22,7 @@ using System.Text;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {

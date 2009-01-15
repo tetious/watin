@@ -19,6 +19,7 @@
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core

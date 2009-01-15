@@ -27,8 +27,8 @@ namespace WatiN.Core
 	/// </summary>
 	public class IECollection : IEnumerable
 	{
-		private ArrayList internetExplorers;
-		private bool _waitForComplete;
+		private readonly ArrayList internetExplorers;
+		private readonly bool _waitForComplete;
 
 		public IECollection() : this(true) {}
 
@@ -38,7 +38,7 @@ namespace WatiN.Core
 
 			internetExplorers = new ArrayList();
 
-			ShellWindows allBrowsers = new ShellWindows();
+			var allBrowsers = new ShellWindows();
 
 			foreach (SHDocVw.InternetExplorer internetExplorer in allBrowsers)
 			{
@@ -46,7 +46,7 @@ namespace WatiN.Core
 				{
 					if (internetExplorer.Document is IHTMLDocument2)
 					{
-						IE ie = new IE(internetExplorer);
+						var ie = new IE(internetExplorer);
 						internetExplorers.Add(ie);
 					}
 				}
@@ -64,9 +64,9 @@ namespace WatiN.Core
 			get { return GetIEByIndex(internetExplorers, index, _waitForComplete); }
 		}
 
-		private static IE GetIEByIndex(ArrayList internetExplorers, int index, bool waitForComplete)
+		private static IE GetIEByIndex(IList internetExplorers, int index, bool waitForComplete)
 		{
-			IE ie = (IE) internetExplorers[index];
+			var ie = (IE) internetExplorers[index];
 			if (waitForComplete)
 			{
 				ie.WaitForComplete();
@@ -89,7 +89,7 @@ namespace WatiN.Core
 		/// <exclude />
 		public class Enumerator : IEnumerator
 		{
-			private ArrayList children;
+			private readonly ArrayList children;
 			private readonly bool _waitForComplete;
 			private int index;
 

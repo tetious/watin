@@ -22,6 +22,7 @@ using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -120,11 +121,7 @@ namespace WatiN.Core
 			if (!clear) doKeyPress(value);
 			Highlight(false);
 			if (!append) Change();
-			try
-			{
-				if (!append) Blur();
-			}
-			catch {}
+            if (!append) UtilityClass.TryActionIgnoreException(Blur);
 		}
 
 		private static string ReplaceNewLineWithCorrectCharacters(string value)

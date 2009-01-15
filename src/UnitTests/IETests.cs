@@ -30,6 +30,7 @@ using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
 {

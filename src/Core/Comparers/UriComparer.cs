@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Comparers
 {

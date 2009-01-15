@@ -3,7 +3,8 @@ using System.Threading;
 
 namespace WatiN.Core.UtilityClasses
 {
-    public delegate T TryAction<T>();
+    public delegate T TryFunc<T>();
+    public delegate void TryAction();
     public delegate string BuildTimeOutExceptionMessage();
 
     /// <summary>
@@ -64,11 +65,11 @@ namespace WatiN.Core.UtilityClasses
         /// or the time out is reached.
         /// </summary>
         /// <typeparam name="T">The result type of the action</typeparam>
-        /// <param name="action">The action.</param>
+        /// <param name="func">The action.</param>
         /// <returns>The result of the action of <c>default(T)</c> when time out occured.</returns>
-        public T Try<T>(TryAction<T> action)
+        public T Try<T>(TryFunc<T> func)
         {
-            if (action == null) throw new ArgumentNullException("action");
+            if (func == null) throw new ArgumentNullException("func");
 
             var defaultT = default(T);
             var timeoutTimer = new SimpleTimer(Timeout);
@@ -79,7 +80,7 @@ namespace WatiN.Core.UtilityClasses
 
                 try
                 {
-                    var result = action.Invoke();
+                    var result = func.Invoke();
                     if (!result.Equals(defaultT)) return result;
                 }
                 catch (Exception e)

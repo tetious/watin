@@ -406,20 +406,6 @@ namespace WatiN.Core
 
         #region Private static methods
 
-        private static Uri CreateUri(string url)
-        {
-            Uri uri;
-            try
-            {
-                uri = new Uri(url);
-            }
-            catch (UriFormatException)
-            {
-                uri = new Uri("http://" + url);
-            }
-            return uri;
-        }
-
         private void CreateFireFoxInstance(string url)
         {
             Logger.LogAction("Creating new FireFox instance");

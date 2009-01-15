@@ -20,6 +20,7 @@ using System;
 using System.Runtime.InteropServices;
 using mshtml;
 using WatiN.Core.InternetExplorer;
+using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
@@ -122,19 +123,11 @@ namespace WatiN.Core
 
 			if (StringComparer.AreEqual(attributename, "href", true))
 			{
-				try
-				{
-					value = Url;
-				}
-				catch {}
+                UtilityClass.TryActionIgnoreException(() => value = Url);
 			}
 			else if (StringComparer.AreEqual(attributename, "title", true))
 			{
-				try
-				{
-					value = Title;
-				}
-				catch {}
+                UtilityClass.TryActionIgnoreException(() => value = Title);
 			}
 			else
 			{
@@ -143,5 +136,5 @@ namespace WatiN.Core
 
 			return value;
 		}
-	}
+    }
 }

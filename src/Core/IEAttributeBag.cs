@@ -35,19 +35,19 @@ namespace WatiN.Core
 	    public string GetValue(string attributename)
 		{
 			var name = attributename.ToLower(CultureInfo.InvariantCulture);
-			string value;
+			string value = null;
 
 			if (name.Equals("href"))
 			{
-                value = TryOtherwiseReturnNull(() => InternetExplorer.LocationURL);
+                UtilityClass.TryActionIgnoreException(() => value = InternetExplorer.LocationURL);
 			}
 			else if (name.Equals("title"))
 			{
-                value = TryOtherwiseReturnNull(() => ((HTMLDocument)InternetExplorer.Document).title);
+                UtilityClass.TryActionIgnoreException(() => value = ((HTMLDocument)InternetExplorer.Document).title);
 			}
 			else if (name.Equals("hwnd"))
 			{
-			    value = TryOtherwiseReturnNull(() => InternetExplorer.HWND.ToString());
+                UtilityClass.TryActionIgnoreException(() => value = InternetExplorer.HWND.ToString());
 			}
 			else
 			{
@@ -56,15 +56,5 @@ namespace WatiN.Core
 
 			return value;
 		}
-
-	    private static string TryOtherwiseReturnNull(TryAction<string> action )
-	    {
-	        try
-	        {
-	            return action.Invoke();
-	        }
-	        catch {}
-	        return null;
-	    }
 	}
 }

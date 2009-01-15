@@ -24,10 +24,10 @@ namespace WatiN.Core
 {
 	internal class FrameByIndexProcessor : IWebBrowser2Processor
 	{
-		private HTMLDocument htmlDocument;
-		private int index;
-		private int counter = 0;
-		private IWebBrowser2 iWebBrowser2 = null;
+		private readonly HTMLDocument htmlDocument;
+		private readonly int index;
+		private int counter;
+		private IWebBrowser2 iWebBrowser2;
 
 		public FrameByIndexProcessor(int index, HTMLDocument htmlDocument)
 		{

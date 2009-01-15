@@ -24,27 +24,23 @@ namespace WatiN.Core
 {
 	internal class FrameCountProcessor : IWebBrowser2Processor
 	{
-		private HTMLDocument htmlDocument;
-		private int counter = 0;
+		private readonly HTMLDocument htmlDocument;
 
-		public FrameCountProcessor(HTMLDocument htmlDocument)
+	    public FrameCountProcessor(HTMLDocument htmlDocument)
 		{
 			this.htmlDocument = htmlDocument;
 		}
 
-		public int FramesCount
-		{
-			get { return counter; }
-		}
+	    public int FramesCount { get; private set; }
 
-		public HTMLDocument HTMLDocument()
+	    public HTMLDocument HTMLDocument()
 		{
 			return htmlDocument;
 		}
 
 		public void Process(IWebBrowser2 webBrowser2)
 		{
-			counter++;
+			FramesCount++;
 		}
 
 		public bool Continue()

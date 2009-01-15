@@ -18,6 +18,7 @@
 
 using System;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
