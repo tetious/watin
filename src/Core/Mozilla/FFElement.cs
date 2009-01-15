@@ -394,10 +394,10 @@ namespace WatiN.Core.Mozilla
             }
 
             var elementvar = FireFoxClientPort.CreateVariableName();
-            var command = string.Format("{0}={1}.{2};", elementvar, ElementReference, propertyName);
-            var result = ClientPort.WriteAndRead(command);
+            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
+            var exists = ClientPort.WriteAndReadAsBool(command);
 
-            return result != null ? new FFElement(elementvar, ClientPort) : null;
+            return exists ? new FFElement(elementvar, ClientPort) : null;
         }
 
         private bool IsTextNodeType()
