@@ -84,11 +84,13 @@ namespace WatiN.Core.Interfaces
 		string GetAttributeValue(string attributeName);
 
         void SetAttributeValue(string attributeName, string value);
+
         string GetStyleAttributeValue(string attributeName);
-		void ClickOnElement();
+        void SetStyleAttributeValue(string attributeName, string value);
+        
+        void ClickOnElement();
 		void SetFocus();
 		void FireEvent(string eventName, NameValueCollection eventProperties);
-		string BackgroundColor { get; set; }
 	    IAttributeBag GetAttributeBag(DomContainer domContainer);
 	    bool IsElementReferenceStillValid();
 		string TagName { get; }

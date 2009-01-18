@@ -178,6 +178,7 @@ namespace WatiN.Core.InternetExplorer
 	        return value;
 	    }
 
+
 	    public void ClickOnElement()
 		{
 			DispHtmlBaseElement.click();
@@ -284,12 +285,16 @@ namespace WatiN.Core.InternetExplorer
 
         internal static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)
         {
-            if (attributeName.IndexOf(Char.Parse("-")) > 0)
-            {
-                attributeName = attributeName.Replace("-", "");
-            }
+            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
             return style.getAttribute(attributeName, 0);
+        }
+
+        public void SetStyleAttributeValue(string attributeName, string value)
+        {
+            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
+
+            htmlElement.style.setAttribute(attributeName, value, 0);
         }
 
 		protected IHTMLElement htmlElement
@@ -314,12 +319,6 @@ namespace WatiN.Core.InternetExplorer
 		private DispHTMLBaseElement DispHtmlBaseElement
 		{
 			get { return (DispHTMLBaseElement) _element; }
-		}
-
-		public string BackgroundColor
-		{
-			get { return (string) htmlElement.style.backgroundColor; }
-			set { htmlElement.style.backgroundColor = value; }
 		}
 
 		public object Object

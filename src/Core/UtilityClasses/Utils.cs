@@ -387,5 +387,31 @@ namespace WatiN.Core.UtilityClasses
             catch { }
 
         }
+
+        /// <summary>
+        /// Turns the style attribute into property syntax.
+        /// </summary>
+        /// <example>
+        /// "font-size" will turn into "fontSize"
+        /// </example>
+        /// <param name="attributeName">Name of the attribute.</param>
+        /// <returns></returns>
+        public static string TurnStyleAttributeIntoProperty(string attributeName)
+        {
+            if (attributeName.Contains("-"))
+            {
+                var parts = attributeName.Split(char.Parse("-"));
+
+                attributeName = parts[0].ToLowerInvariant();
+
+                for (var i = 1; i < parts.Length; i++)
+                {
+                    var part = parts[i];
+                    attributeName += part.Substring(0, 1).ToUpperInvariant();
+                    attributeName += part.Substring(1).ToLowerInvariant();
+                }
+            }
+            return attributeName;
+        }
     }
 }

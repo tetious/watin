@@ -750,42 +750,49 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HighlightShouldGoBackToTheOriginalBackGroundColor()
 		{
-			Settings.HighLightElement = true;
-			Settings.HighLightColor = "red";
 
-			var textField = Ie.TextField("name");
-			var _originalcolor = textField.Style.BackgroundColor;
+		    ExecuteTest(browser =>
+		                    {
+                                Settings.HighLightElement = true;
+                                Settings.HighLightColor = "red";
+                                
+                                var textField = browser.TextField("name");
+		                        var _originalcolor = textField.Style.BackgroundColor;
 
-			textField.Highlight(true);
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
+		                        textField.Highlight(true);
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
 
-			// Invoke highlighting done by WatiN when typing text
-			Settings.HighLightColor = "yellow";
-			textField.TypeText("abc");
+		                        // Invoke highlighting done by WatiN when typing text
+		                        Settings.HighLightColor = "yellow";
+		                        textField.TypeText("abc");
 
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after TypeText");
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after TypeText");
 		
-			textField.Highlight(false);
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		                        textField.Highlight(false);
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		                    });
 		}
 
 		[Test]
 		public void HighlightShouldNotThrowExceptionWhenCalledToManyTimesWithParamFalse()
 		{
-			Settings.HighLightElement = true;
-			Settings.HighLightColor = "red";
+		    ExecuteTest(browser =>
+		                    {
+		                        Settings.HighLightElement = true;
+		                        Settings.HighLightColor = "red";
 
-			var textField = Ie.TextField("name");
-			var _originalcolor = textField.Style.BackgroundColor;
+		                        var textField = browser.TextField("name");
+		                        var _originalcolor = textField.Style.BackgroundColor;
 
-			textField.Highlight(true);
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
+		                        textField.Highlight(true);
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
 		
-			textField.Highlight(false);
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		                        textField.Highlight(false);
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
 
-			textField.Highlight(false);
-			Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		                        textField.Highlight(false);
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
+		                    });
 		}
 
 		[Test]
@@ -906,7 +913,7 @@ namespace WatiN.Core.UnitTests
         {
             Ie.GoTo(TablesUri);
             var tableRow = Ie.TableRow(Find.ById("2"));
-            Element ancestor = tableRow.Ancestor<Table>(delegate(Table table) { return table.Id == "Table1"; });
+            Element ancestor = tableRow.Ancestor<Table>(table => table.Id == "Table1");
           
             Assert.IsInstanceOfType (typeof (Table), ancestor);
             Assert.That(ancestor.Id, Is.EqualTo("Table1"));

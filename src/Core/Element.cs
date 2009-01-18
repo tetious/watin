@@ -314,7 +314,7 @@ namespace WatiN.Core
         public string GetAttributeValue(string attributeName)
 		{
 		    return GetAttributeValue(attributeName, NativeElement);
-		}
+        }
 
         public static string GetAttributeValue(string attributeName, INativeElement nativeElement)
 		{
@@ -624,7 +624,7 @@ namespace WatiN.Core
 
 		    if (doHighlight)
 		    {
-		        _originalcolor.Push(NativeElement.BackgroundColor);
+		        _originalcolor.Push(NativeElement.GetStyleAttributeValue("backgroundColor"));
 		        SetBackgroundColor(Settings.HighLightColor);
 		    }
 		    else
@@ -638,11 +638,7 @@ namespace WatiN.Core
 
 		private void SetBackgroundColor(string color) 
 		{
-			try
-			{
-				NativeElement.BackgroundColor = color ?? "";
-			}
-			catch{}
+            UtilityClass.TryActionIgnoreException(() => NativeElement.SetStyleAttributeValue("backgroundColor", color ?? ""));
 		}
 
         /// <summary>

@@ -167,7 +167,7 @@ namespace WatiN.Core.Mozilla
             // Handle properties different from attributes
             if (knownAttributeOverrides.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
             {
-                SetProperty(attributeName, value);
+                SetPropertyValue(attributeName, value);
                 return;
             }
 
@@ -176,22 +176,16 @@ namespace WatiN.Core.Mozilla
 
         public string GetStyleAttributeValue(string attributeName)
         {
-            if (attributeName.Contains("-"))
-            {
-                var parts = attributeName.Split(char.Parse("-"));
-
-                attributeName = parts[0];
-
-                for (var i = 1; i < parts.Length; i++)
-                {
-                    var part = parts[i];
-                    if (part.Equals("-")) continue;
-                    attributeName += part.Substring(0, 1).ToUpperInvariant() + part.Substring(1);
-                }
-            }
+            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
             var attributeValue = GetPropertyValue("style." + attributeName);
             return string.IsNullOrEmpty(attributeValue) ? null : attributeValue;
+        }
+
+        public void SetStyleAttributeValue(string attributeName, string value)
+        {
+            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
+            SetPropertyValue("style." + attributeName, "'" + value + "'");
         }
 
         public void ClickOnElement()
@@ -208,13 +202,6 @@ namespace WatiN.Core.Mozilla
         {
             // TODO: can FireFox handle eventProperties?
             ExecuteEvent(eventName, eventProperties);
-        }
-
-        // TODO: implement backgroundcolor
-        public string BackgroundColor
-        {
-            get { return string.Empty; }
-            set {  }
         }
 
         public IAttributeBag GetAttributeBag(DomContainer domContainer)
@@ -389,7 +376,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
-        protected void SetProperty(string propertyName, string value)
+        protected void SetPropertyValue(string propertyName, string value)
         {
             if (propertyName == "value") value = "'" + value + "'";
             

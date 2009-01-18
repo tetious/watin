@@ -408,7 +408,7 @@ namespace WatiN.Core
 
         private void CreateFireFoxInstance(string url)
         {
-            Logger.LogAction("Creating new FireFox instance");
+            Logger.LogAction("Creating FireFox instance");
             
             ClientPort = new FireFoxClientPort();
             ClientPort.Connect(url);
