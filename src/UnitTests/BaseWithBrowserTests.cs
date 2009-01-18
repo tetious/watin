@@ -40,13 +40,21 @@ namespace WatiN.Core.UnitTests
         // TODO: remove this property in time
         public IE Ie
         {
-            get { return (IE)ieManager.GetBrowser(TestEventsURI); }
+            get
+            {
+                if (InsideExecuteTest) throw new WatiNException("Specific test for IE detected inside call to ExecuteTest");
+                return (IE)ieManager.GetBrowser(TestEventsURI);
+            }
         }
 
         // TODO: remove this property in time
         public FireFox Firefox
         {
-            get { return (FireFox)ffManager.GetBrowser(TestEventsURI); }
+            get
+            {
+                if (InsideExecuteTest) throw new WatiNException("Specific test for Firefox detected inside call to ExecuteTest");
+                return (FireFox)ffManager.GetBrowser(TestEventsURI);
+            }
         }
 
 		[TestFixtureSetUp]
@@ -95,6 +103,7 @@ namespace WatiN.Core.UnitTests
 
         private static void ExecuteTest(BrowserTest testMethod, Browser browser)
         {
+            InsideExecuteTest = true;
             try
             {
                 testMethod.Invoke(browser);
@@ -108,6 +117,12 @@ namespace WatiN.Core.UnitTests
             {
                 throw new WatiNException(browser.GetType() + " exception", e);
             }
+            finally
+            {
+                InsideExecuteTest = false;
+            }
         }
+
+	    private static bool InsideExecuteTest { get; set; }
 	}
 }

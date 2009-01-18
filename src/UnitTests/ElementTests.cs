@@ -232,8 +232,13 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (ArgumentException))]
 		public void AncestorTypeShouldOnlyExceptTypesInheritingElement()
 		{
-			element = Ie.Form("Form");
-			element.Ancestor(typeof (String));
+            // GIVEN
+		    var element1 = new Element(new Mock<DomContainer>().Object, new  Mock<INativeElement>().Object);
+
+            // WHEN
+			element1.Ancestor(typeof (String));
+
+            // THEN exception
 		}
 
 		[Test]
