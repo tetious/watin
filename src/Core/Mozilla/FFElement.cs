@@ -176,7 +176,22 @@ namespace WatiN.Core.Mozilla
 
         public string GetStyleAttributeValue(string attributeName)
         {
-            throw new System.NotImplementedException();
+            if (attributeName.Contains("-"))
+            {
+                var parts = attributeName.Split(char.Parse("-"));
+
+                attributeName = parts[0];
+
+                for (var i = 1; i < parts.Length; i++)
+                {
+                    var part = parts[i];
+                    if (part.Equals("-")) continue;
+                    attributeName += part.Substring(0, 1).ToUpperInvariant() + part.Substring(1);
+                }
+            }
+
+            var attributeValue = GetPropertyValue("style." + attributeName);
+            return string.IsNullOrEmpty(attributeValue) ? null : attributeValue;
         }
 
         public void ClickOnElement()
@@ -265,6 +280,7 @@ namespace WatiN.Core.Mozilla
         /// Executes the event.
         /// </summary>
         /// <param name="eventName">Name of the event to fire.</param>
+        /// <param name="eventProperties"></param>
         private void ExecuteEvent(string eventName, NameValueCollection eventProperties)
         {
             // See http://www.howtocreate.co.uk/tutorials/javascript/domevents

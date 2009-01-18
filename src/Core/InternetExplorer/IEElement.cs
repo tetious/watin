@@ -272,7 +272,14 @@ namespace WatiN.Core.InternetExplorer
                 return null;
             }
 
-            return attributeValue.ToString();
+	        var stringAttributeValue = attributeValue.ToString();
+
+	        if (attributeName == "cssText" && !stringAttributeValue.TrimEnd(Char.Parse(" ")).EndsWith(";"))
+	        {
+	            stringAttributeValue = stringAttributeValue.ToLowerInvariant() + ";";
+	        }
+
+            return stringAttributeValue;
         }
 
         internal static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)

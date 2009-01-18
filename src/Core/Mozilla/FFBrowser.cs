@@ -17,6 +17,7 @@ namespace WatiN.Core.Mozilla
         /// Initializes a new instance of the <see cref="FFBrowser"/> class.
         /// </summary>
         /// <param name="clientPort">The client port.</param>
+        /// <param name="domContainer"></param>
         public FFBrowser(FireFoxClientPort clientPort, DomContainer domContainer)
         {
             _domContainer = domContainer;

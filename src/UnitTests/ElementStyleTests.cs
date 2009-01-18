@@ -17,14 +17,16 @@
 #endregion Copyright
 
 using System;
+using Moq;
 using NUnit.Framework;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
 	public class ElementStyleTests : BaseWithBrowserTests
 	{
-		private const string style = "FONT-SIZE: 12px; COLOR: white; FONT-STYLE: italic; FONT-FAMILY: Arial; HEIGHT: 50px; BACKGROUND-COLOR: blue";
+		private const string expectedStyle = "font-size: 12px; color: white; font-style: italic; font-family: arial; height: 50px; background-color: blue;";
 		private TextField element;
 
 		public override Uri TestPageUri
@@ -32,101 +34,158 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
-		[SetUp]
-		public override void TestSetUp()
-		{
-			base.TestSetUp ();
-			element = Ie.TextField("Textarea1");
-		}
-
 		[Test]
 		public void GetAttributeValueStyleAsString()
 		{
-			Assert.AreEqual(style, element.GetAttributeValue("style"));
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual(expectedStyle, element.GetAttributeValue("style").ToLowerInvariant());
+		                    });
 		}
 
 		[Test]
 		public void ElementStyleToStringReturnsCssText()
 		{
-			Assert.AreEqual(style, element.Style.ToString());
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual(expectedStyle, element.Style.ToString().ToLowerInvariant());
+		                    });
 		}
 
 		[Test]
 		public void ElementStyleCssText()
 		{
-			Assert.AreEqual(style, element.Style.CssText);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual(expectedStyle, element.Style.CssText.ToLowerInvariant());
+		                    });
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfNullThrowsArgumenNullException()
 		{
-			element.Style.GetAttributeValue(null);
+		    // GIVEN
+		    var style = new Style(new Mock<INativeElement>().Object);
+
+            // WHEN
+		    style.GetAttributeValue(null);
+
+            // THEN exception
 		}
 
-		[Test, ExpectedException(typeof (ArgumentNullException))]
+	    [Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfEmptyStringThrowsArgumenNullException()
 		{
-			element.Style.GetAttributeValue(String.Empty);
-		}
+            // GIVEN
+            var style = new Style(new Mock<INativeElement>().Object);
+
+            // WHEN
+            style.GetAttributeValue(string.Empty);
+
+            // THEN exception
+        }
 
 		[Test]
 		public void GetAttributeValueBackgroundColor()
 		{
-			Assert.AreEqual("blue", element.Style.GetAttributeValue("BackgroundColor"));
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("blue", element.Style.GetAttributeValue("backgroundColor"));
+		                    });
 		}
 
 		[Test]
-		public void GetAttributeValueBackgroundColorByOriginalHTMLattribname()
+		public void GetAttributeValueBackgroundColorByOriginalHTMLattributename()
 		{
-			Assert.AreEqual("blue", element.Style.GetAttributeValue("background-color"));
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("blue", element.Style.GetAttributeValue("background-color"));
+		                    });
 		}
 
 		[Test]
-		public void GetAttributeValueOfUndefiniedButValidAttribute()
+		public void GetAttributeValueOfUndefinedButValidAttribute()
 		{
-			Assert.IsNull(element.Style.GetAttributeValue("cursor"));
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.IsNull(element.Style.GetAttributeValue("cursor"));
+		                    });
 		}
 
 		[Test]
-		public void GetAttributeValueOfUndefiniedAndInvalidAttribute()
+		public void GetAttributeValueOfUndefinedAndInvalidAttribute()
 		{
-			Assert.IsNull(element.Style.GetAttributeValue("nonexistingattrib"));
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.IsNull(element.Style.GetAttributeValue("nonexistingattrib"));
+		                    });
 		}
 
 		[Test]
 		public void BackgroundColor()
 		{
-			Assert.AreEqual("blue", element.Style.BackgroundColor);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("blue", element.Style.BackgroundColor);
+		                    });
 		}
 
 		[Test]
 		public void Color()
 		{
-			Assert.AreEqual("white", element.Style.Color);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("white", element.Style.Color);
+		                    });
 		}
 
 		[Test]
 		public void FontFamily()
 		{
-			Assert.AreEqual("Arial", element.Style.FontFamily);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("Arial", element.Style.FontFamily);
+		                    });
 		}
 
 		[Test]
 		public void FontSize()
 		{
-			Assert.AreEqual("12px", element.Style.FontSize);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("12px", element.Style.FontSize);
+		                    });
 		}
 
 		[Test]
 		public void FontStyle()
 		{
-			Assert.AreEqual("italic", element.Style.FontStyle);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("italic", element.Style.FontStyle);
+		                    });
 		}
 
 		[Test]
 		public void Height()
 		{
-			Assert.AreEqual("50px", element.Style.Height);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.TextField("Textarea1");
+		                        Assert.AreEqual("50px", element.Style.Height);
+		                    });
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace WatiN.Core
 		/// <value>The color of the background.</value>
 		public string BackgroundColor
 		{
-			get { return GetAttributeValue("backgroundcolor"); }
+			get { return GetAttributeValue("backgroundColor"); }
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace WatiN.Core
 		/// <value>The font family.</value>
 		public string FontFamily
 		{
-			get { return GetAttributeValue("fontfamily"); }
+			get { return GetAttributeValue("fontFamily"); }
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace WatiN.Core
 		/// <value>The size of the font.</value>
 		public string FontSize
 		{
-			get { return GetAttributeValue("fontsize"); }
+			get { return GetAttributeValue("fontSize"); }
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace WatiN.Core
 		/// <value>The fount style.</value>
 		public string FontStyle
 		{
-			get { return GetAttributeValue("fontstyle"); }
+			get { return GetAttributeValue("fontStyle"); }
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace WatiN.Core
 		/// <value>The CSS text.</value>
 		public string CssText
 		{
-			get { return GetAttributeValue("csstext"); }
+			get { return GetAttributeValue("cssText"); }
 		}
 
 		/// <summary>

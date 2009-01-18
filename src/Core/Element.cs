@@ -327,7 +327,7 @@ namespace WatiN.Core
             
             if (toLowerInvariant == "style")
 			{
-                return nativeElement.GetStyleAttributeValue("csstext");
+                return nativeElement.GetStyleAttributeValue("cssText");
 			}
 
             if (toLowerInvariant.StartsWith("style."))
