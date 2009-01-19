@@ -15,25 +15,21 @@ namespace WatiN.Core.Mozilla
 
         public object Object
         {
-            get { return GetBodyReference(); }
+            get { return FireFoxClientPort.DocumentVariableName; }
         }
 
         public object Objects
         {
-            get { return GetBodyReference(); }
+            get { return FireFoxClientPort.DocumentVariableName; }
         }
 
         public INativeElement Body
         {
             get
             {
-                return new FFElement(GetBodyReference(), ClientPort);
+                var bodyReference = string.Format("{0}.body", FireFoxClientPort.DocumentVariableName);
+                return new FFElement(bodyReference, ClientPort);
             }
-        }
-
-        private static string GetBodyReference()
-        {
-            return string.Format("{0}.body", FireFoxClientPort.DocumentVariableName);
         }
 
         public string Url

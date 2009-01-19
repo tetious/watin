@@ -86,7 +86,7 @@ function removeElement()
     window.setTimeout(function() 
     {
       div = document.getElementById("textFieldToRemoveDiv"); 
-      div.removeNode(true);
+      div.parentNode.removeChild(div);
     }, 3000);
 }
 

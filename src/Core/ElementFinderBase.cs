@@ -173,13 +173,18 @@ namespace WatiN.Core
 
             if (validElementType && constraint.Compare(attributeBag))
             {
-                children.Add(nativeElement);
+                FoundMatchingElement(nativeElement, children);
                 if (returnAfterFirstMatch)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        protected virtual void FoundMatchingElement(INativeElement nativeElement, ICollection<INativeElement> children)
+        {
+            children.Add(nativeElement);
         }
 
         protected abstract void WaitUntilElementReadyStateIsComplete(INativeElement element);

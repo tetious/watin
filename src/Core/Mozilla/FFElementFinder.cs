@@ -46,10 +46,14 @@ namespace WatiN.Core.Mozilla
 
         private List<INativeElement> FindMatchingElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection parentElement)
         {
-            var elementArrayName = FireFoxClientPort.CreateVariableName();
-            var elementToSearchFrom = parentElement.Elements.ToString(); // FireFoxClientPort.DocumentVariableName;
-
             var elementReferences = new List<INativeElement>();
+            if (parentElement.Elements == null) return elementReferences;
+
+            // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
+            _clientPort.InitializeDocument();
+
+            var elementArrayName = "watinElemFinder";
+            var elementToSearchFrom = parentElement.Elements.ToString();
 
             var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom, elementTag.TagName);
 
@@ -66,6 +70,16 @@ namespace WatiN.Core.Mozilla
             }
 
             return elementReferences;
+        }
+
+        protected override void FoundMatchingElement(INativeElement nativeElement, ICollection<INativeElement> children)
+        {
+            var elementVariableName = FireFoxClientPort.CreateVariableName();
+            _clientPort.Write("{0}={1};", elementVariableName, nativeElement.Object);
+            
+            var ffElement = new FFElement(elementVariableName, _clientPort);
+
+            base.FoundMatchingElement(ffElement, children);
         }
 
         private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)

@@ -32,7 +32,7 @@ namespace WatiN.Core
 	{
 		internal const string altAttribute = "alt";
 		internal const string idAttribute = "id";
-		internal const string forAttribute = "htmlfor";
+		internal const string forAttribute = "htmlFor";
 		internal const string nameAttribute = "name";
 		internal const string srcAttribute = "src";
 		internal const string styleBaseAttribute = "style.";

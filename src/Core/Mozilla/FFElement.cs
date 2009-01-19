@@ -17,7 +17,8 @@ namespace WatiN.Core.Mozilla
         private static readonly List<string> knownAttributeOverrides = new List<string>(
             new[]
                 {
-                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value"
+                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
+                    "nodeType", 
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
@@ -201,7 +202,7 @@ namespace WatiN.Core.Mozilla
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
             // TODO: can FireFox handle eventProperties?
-            ExecuteEvent(eventName, eventProperties);
+            ExecuteEvent(eventName, eventProperties, true);
         }
 
         public IAttributeBag GetAttributeBag(DomContainer domContainer)
@@ -218,7 +219,7 @@ namespace WatiN.Core.Mozilla
         {
             if (UtilityClass.IsNullOrEmpty(ElementReference)) return false;
 
-            var command = string.Format("{0} != null; ", ElementReference);
+            var command = string.Format("{0} != null && {0}.offsetParent != null; ", ElementReference);
 
             return ClientPort.WriteAndReadAsBool(command);
         }
@@ -248,9 +249,7 @@ namespace WatiN.Core.Mozilla
 
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            // TODO: Make it not wait
-            // TODO: Can FireFox handle eventProperties?
-            ExecuteEvent(eventName, eventProperties);
+            ExecuteEvent(eventName, eventProperties, false);
         }
 
         public void Select()
@@ -268,7 +267,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="eventName">Name of the event to fire.</param>
         /// <param name="eventProperties"></param>
-        private void ExecuteEvent(string eventName, NameValueCollection eventProperties)
+        private void ExecuteEvent(string eventName, NameValueCollection eventProperties, bool WaitForEventToComplete)
         {
             // See http://www.howtocreate.co.uk/tutorials/javascript/domevents
             // for more info about manually firing events
@@ -290,8 +289,21 @@ namespace WatiN.Core.Mozilla
                 command = CreateHTMLEventCommand(eventname);
             }
 
-            ClientPort.WriteAndReadAsBool
-                (command + "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};");
+
+            command += "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
+
+            if (WaitForEventToComplete == false)
+            {
+                command = WrappCommandInTimer(command);
+            }
+            
+            ClientPort.WriteAndReadAsBool(command);
+
+        }
+
+        private static string WrappCommandInTimer(string command)
+        {
+            return "window.setTimeout(function() {" + command + ";" +"}, 200);";
 
         }
 

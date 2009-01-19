@@ -159,6 +159,7 @@ namespace WatiN.Core.Mozilla
         /// <returns></returns>
         public static string CreateVariableName()
         {
+            if (elementCounter == long.MaxValue) elementCounter = 0;
             elementCounter++;
             return string.Format("{0}.watin{1}", DocumentVariableName, elementCounter);
         }
@@ -172,15 +173,20 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public void InitializeDocument()
         {
+            // Check to see if setting the reference (and doing the loop for activeElement which is time consuming)
+            // is needed.
+            var needToUpdateDocumentReference = WriteAndReadAsBool("{0} != {1}.document", DocumentVariableName, WindowVariableName);
+            if (!needToUpdateDocumentReference) return;
+
             // Sets up the document variable
             Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
 
-            // Javascript to implement document.activeElement currently not support by Mozilla
-            Write("if (" + DocumentVariableName + ".activeElement == null){" + DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;\n" +
-                       "var allElements = " + DocumentVariableName + ".getElementsByTagName(\"*\");\n" +
-                       "for (i = 0; i < allElements.length; i++)\n{\n" +
-                       "allElements[i].addEventListener(\"focus\", function (event) {\n" +
-                       DocumentVariableName + ".activeElement = event.target;}, false);\n}}");
+            // Javascript to implement document.activeElement if not supported by browser (FireFox 2.x)
+            Write("if (" + DocumentVariableName + ".activeElement == null){" + DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;" +
+                  "var allElements = " + DocumentVariableName + ".getElementsByTagName(\"*\");" +
+                  "for (i = 0; i < allElements.length; i++){" +
+                  "allElements[i].addEventListener(\"focus\", function (event) {" +
+                  DocumentVariableName + ".activeElement = event.target;}, false);}}");
         }
 
         public void Connect(string arguments)

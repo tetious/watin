@@ -54,6 +54,7 @@ namespace WatiN.Core.UnitTests
 			Settings.Reset();
 		}
 
+        // TODO: This should be mocked cause there is no browser logic involved
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()
 		{
@@ -61,21 +62,24 @@ namespace WatiN.Core.UnitTests
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(typeof (Div)));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void AncestorTagNameShouldReturnTypedElement()
 		{
 			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor("Div"));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void AncestorAttributeConstraintShouldReturnTypedElement()
 		{
 			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
 			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(Find.ById("divid")));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
 		{
 		    var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
@@ -135,7 +139,8 @@ namespace WatiN.Core.UnitTests
 			nativeElementMock.VerifyAll();
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementParentReturningTypedParent()
 		{
 			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
@@ -143,7 +148,8 @@ namespace WatiN.Core.UnitTests
             Assert.IsInstanceOfType(typeof (TableRow), tableCell.Parent);
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementParentReturnsElementsContainerForUnknownElement()
 		{
 			var parent = Ie.Form("Form").Parent;
@@ -169,7 +175,8 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(Ie.RadioButton("Radio1").PreviousSibling.GetType().Equals(typeof (CheckBox)));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
 		{
 			var previous = Ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
@@ -190,7 +197,8 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementNextSiblingReturningTypedParent()
 		{
 			var next = Ie.Div("NextAndPreviousTests").Div("first").NextSibling;
@@ -198,7 +206,8 @@ namespace WatiN.Core.UnitTests
             Assert.IsTrue(next.GetType().Equals(typeof (Span)));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
 		{
 			var next = Ie.Div("NextAndPreviousTests").Span("second").NextSibling;
@@ -216,7 +225,7 @@ namespace WatiN.Core.UnitTests
             var domContainer = new Mock<DomContainer>( new object[] { });
 
 			finderMock.Expect(finder => finder.FindFirst()).Returns(nativeElementMock.Object).AtMost(2);
-			nativeElementMock.Expect(native => native.GetAttributeValue("tagName")).Returns("mockedtag");
+			nativeElementMock.Expect(native => native.TagName).Returns("mockedtag");
 
             element = new Element(domContainer.Object, finderMock.Object);
 
@@ -278,38 +287,51 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementByTagNameAndInputType()
 		{
-			element = Ie.Element("input", Find.By("id", "name"), "text");
-			Assert.IsTrue(element.Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.Element("input", Find.By("id", "name"), "text");
+		                        Assert.IsTrue(element.Exists);
+		                    });
 		}
 
 		[Test]
 		public void ElementByTagName()
 		{
-			element = Ie.Element("a", Find.By("id", "testlinkid"));
-			Assert.IsTrue(element.Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.Element("a", Find.By("id", "testlinkid"));
+		                        Assert.IsTrue(element.Exists);
+		                    });
 		}
 
 		[Test]
 		public void FindHeadElementByTagName()
 		{
-			element = Ie.Element("head", Find.ByIndex(0));
-			Assert.IsTrue(element.Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.Element("head", Find.ByIndex(0));
+		                        Assert.IsTrue(element.Exists);
+		                    });
 		}
 
 		[Test]
 		public void ElementFindByShouldNeverThrowInvalidAttributeException()
 		{
-			element = Ie.Element(Find.ByFor("Checkbox21"));
-			Assert.IsTrue(element.Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        element = browser.Element(Find.ByFor("Checkbox21"));
+		                        Assert.IsTrue(element.Exists);
+		                    });
 		}
 
 		[Test]
 		public void ElementCollectionExistsShouldNeverThrowInvalidAttributeException()
 		{
-			Assert.IsTrue(Ie.Elements.Exists(Find.ByFor("Checkbox21")));
+		    ExecuteTest(browser => Assert.IsTrue(browser.Elements.Exists(Find.ByFor("Checkbox21"))));
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void ElementCollectionShouldReturnTypedElements()
 		{
 			var elements = Ie.Div("NextAndPreviousTests").Elements;
@@ -325,54 +347,77 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementCollectionSecondFilterShouldNeverThrowInvalidAttributeException()
 		{
-			var elements = Ie.Elements.Filter(Find.ById("testlinkid"));
-			var elements2 = elements.Filter(Find.ByFor("Checkbox21"));
-			Assert.AreEqual(0, elements2.Length);
+		    ExecuteTest(browser =>
+		                    {
+		                        var elements = browser.Elements.Filter(Find.ById("testlinkid"));
+		                        var elements2 = elements.Filter(Find.ByFor("Checkbox21"));
+		                        Assert.AreEqual(0, elements2.Length);
+		                    });
 		}
 
 		[Test]
 		public void GetInvalidAttribute()
 		{
-			Element helloButton = Ie.Button("helloid");
-			Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
+		    ExecuteTest(browser =>
+		                    {
+		                        Element helloButton = browser.Button("helloid");
+		                        Assert.IsNull(helloButton.GetAttributeValue("NONSENCE"));
+		                    });
 		}
 
 		[Test]
-		public void GetValidButUndefiniedAttribute()
+		public void GetValidButUndefinedAttribute()
 		{
-			Element helloButton = Ie.Button("helloid");
-			Assert.IsNull(helloButton.GetAttributeValue("title"));
+		    ExecuteTest(browser =>
+		                    {
+		                        Element helloButton = browser.Button("helloid");
+		                        Assert.IsNull(helloButton.GetAttributeValue("title"));
+		                    });
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfNullThrowsArgumentNullException()
 		{
-			Element helloButton = Ie.Button("helloid");
-			Assert.IsNull(helloButton.GetAttributeValue(null));
+            // GIVEN
+			var helloButton = new Element(new Mock<DomContainer>().Object, new Mock<INativeElement>().Object);
+			
+            // WHEN
+            helloButton.GetAttributeValue(null);
+
+            // THEN exception
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfEmptyStringThrowsArgumentNullException()
 		{
-			Element helloButton = Ie.Button("helloid");
-			Assert.IsNull(helloButton.GetAttributeValue(String.Empty));
-		}
+            // GIVEN
+            var helloButton = new Element(new Mock<DomContainer>().Object, new Mock<INativeElement>().Object);
+
+            // WHEN
+            helloButton.GetAttributeValue(string.Empty);
+
+            // THEN exception
+        }
 
 		[Test]
 		public void Flash()
 		{
-			Ie.TextField("name").Flash();
+		    ExecuteTest(browser => browser.TextField("name").Flash());
 		}
 
 		[Test]
 		public void ElementExists()
 		{
-			Assert.IsTrue(Ie.Div("divid").Exists);
-			Assert.IsTrue(Ie.Div(new Regex("divid")).Exists);
-			Assert.IsFalse(Ie.Button("noneexistingelementid").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.Div("divid").Exists);
+		                        Assert.IsTrue(browser.Div(new Regex("divid")).Exists);
+		                        Assert.IsFalse(browser.Button("noneexistingelementid").Exists);
+		                    });
 		}
 
-		[Test]
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
 		public void WaitUntilElementExistsTestElementAlreadyExists()
 		{
 			var button = Ie.Button("disabledid");
@@ -385,29 +430,31 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilElementExistsElementInjectionAfter3Seconds()
 		{
-			Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+                                
+                                browser.GoTo(TestEventsURI);
+		                        
+                                var injectedTextField = browser.TextField("injectedTextField");
+		                        var injectedDivTextField = browser.Div("seconddiv").TextField("injectedTextField");
 
-			using (var ie1 = new IE(TestEventsURI))
-			{
-				var injectedTextField = ie1.TextField("injectedTextField");
-				var injectedDivTextField = ie1.Div("seconddiv").TextField("injectedTextField");
+		                        Assert.IsFalse(injectedTextField.Exists);
+		                        Assert.IsFalse(injectedDivTextField.Exists);
 
-				Assert.IsFalse(injectedTextField.Exists);
-				Assert.IsFalse(injectedDivTextField.Exists);
+		                        browser.Button("injectElement").ClickNoWait();
 
-				ie1.Button("injectElement").ClickNoWait();
+		                        Assert.IsFalse(injectedTextField.Exists);
+		                        Assert.IsFalse(injectedDivTextField.Exists);
 
-				Assert.IsFalse(injectedTextField.Exists);
-				Assert.IsFalse(injectedDivTextField.Exists);
+		                        // WatiN should wait until the element exists before
+		                        // getting the text.
+		                        var text = injectedTextField.Text;
 
-				// WatiN should wait until the element exists before
-				// getting the text.
-				var text = injectedTextField.Text;
-
-				Assert.IsTrue(injectedTextField.Exists);
-				Assert.AreEqual("Injection Succeeded", text);
-				Assert.IsTrue(injectedDivTextField.Exists);
-			}
+		                        Assert.IsTrue(injectedTextField.Exists);
+		                        Assert.AreEqual("Injection Succeeded", text);
+		                        Assert.IsTrue(injectedDivTextField.Exists);
+		                    });
 		}
 
 		[Test]
@@ -415,34 +462,48 @@ namespace WatiN.Core.UnitTests
 		{
 			const int indexTextFieldToRemove = 9;
 
-			Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3,
+		                                      "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
 
-			using (var ie1 = new IE(TestEventsURI))
-			{
-				var textfieldToRemove = ie1.TextField("textFieldToRemove");
-				var textfields = ie1.TextFields;
+		                        browser.GoTo(TestEventsURI);
 
-				Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
+		                        var textfieldToRemove = browser.TextField("textFieldToRemove");
+		                        var textfields = browser.TextFields;
 
-				Assert.IsTrue(textfieldToRemove.Exists);
-				Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
+		                        Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
 
-				ie1.Button("removeElement").ClickNoWait();
+		                        Assert.IsTrue(textfieldToRemove.Exists);
+		                        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
 
-				Assert.IsTrue(textfieldToRemove.Exists);
-				Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
+		                        browser.Button("removeElement").ClickNoWait();
 
-				textfieldToRemove.WaitUntilRemoved();
+		                        Assert.IsTrue(textfieldToRemove.Exists);
+		                        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
 
-				Assert.IsFalse(textfieldToRemove.Exists);
-				Assert.IsFalse(textfields[indexTextFieldToRemove].Exists);
-			}
+		                        textfieldToRemove.WaitUntilRemoved();
+
+		                        Assert.IsFalse(textfieldToRemove.Exists);
+
+                                Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
+                                Assert.IsFalse(textfields[indexTextFieldToRemove].Exists);
+		                    });
 		}
 
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element to show up.")]
 		public void WaitUntilElementExistsTimeOutException()
 		{
-			Ie.Button("nonexistingbutton").WaitUntilExists(1);
+            // GIVEN
+		    var elementFinderMock = new Mock<INativeElementFinder>();
+		    elementFinderMock.Expect(finder => finder.FindFirst(It.IsAny<BaseConstraint>())).Returns((INativeElement) null);
+
+            var element1 = new Element(new Mock<DomContainer>().Object, elementFinderMock.Object);
+		    
+            // WHEN
+            element1.WaitUntilExists(1);
+
+            // THEN exception
 		}
 
 		[Test]
@@ -458,10 +519,10 @@ namespace WatiN.Core.UnitTests
             attributeBagMock.Expect(bag => bag.GetValue("disabled")).Returns(true.ToString()).AtMostOnce();
 			attributeBagMock.Expect(bag => bag.GetValue("disabled")).Returns(false.ToString()).AtMostOnce();
 
-			var element = new Element(domContainerMock.Object, nativeElementMock.Object);
+			var element1 = new Element(domContainerMock.Object, nativeElementMock.Object);
 
 			// calls htmlelement.getAttribute twice (ones true and once false is returned)
-			element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
+			element1.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
 
 			nativeElementMock.VerifyAll();
 			attributeBagMock.VerifyAll();
@@ -480,9 +541,9 @@ namespace WatiN.Core.UnitTests
 			var elementMock = new Mock<Element>(domContainerMock.Object, nativeElementMock.Object);
 
 		    elementMock.Expect(elem => elem.Exists).Returns(true);
-		    var element = elementMock.Object;
+		    var element1 = elementMock.Object;
 
-			element.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
+			element1.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
 
             elementMock.VerifyAll();
 		}
@@ -519,13 +580,13 @@ namespace WatiN.Core.UnitTests
 			finderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException(""));
             finderMock.Expect(finder => finder.FindFirst()).Returns((INativeElement) null); //.AtMostOnce();
 
-			var element = new Element(domContainerMock.Object, finderMock.Object);
+			var element1 = new Element(domContainerMock.Object, finderMock.Object);
 
 			Exceptions.TimeoutException timeoutException = null;
 
 			try
 			{
-				element.WaitUntilExists(1);
+				element1.WaitUntilExists(1);
 			}
 			catch (Exceptions.TimeoutException e)
 			{
@@ -586,6 +647,7 @@ namespace WatiN.Core.UnitTests
             elementMock.VerifyAll();
 		}
 
+        // TODO: This should be mocked cause there is no browser logic involved
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'True'")]
 		public void WaitUntilTimesOut()
 		{
@@ -598,21 +660,25 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementShouldBeFoundAfterRedirect()
 		{
-			Ie.GoTo(new Uri(HtmlTestBaseURI, "intro.html"));
+		    ExecuteTest(browser =>
+		                    {
+		                        browser.GoTo(new Uri(HtmlTestBaseURI, "intro.html"));
 
-			Assert.IsFalse(Ie.TextField("TheTextBox").Exists);
+		                        Assert.IsFalse(browser.TextField("TheTextBox").Exists);
 
-			Ie.TextField("TheTextBox").WaitUntilExists(10);
+		                        browser.TextField("TheTextBox").WaitUntilExists(10);
 
-			Assert.IsTrue(Ie.TextField("TheTextBox").Exists);
+		                        Assert.IsTrue(browser.TextField("TheTextBox").Exists);
+		                    });
 		}
 
 		[Test]
 		public void GetAttributeValueOfTypeInt()
 		{
-			Assert.AreEqual("10", Ie.Form("Form").GetAttributeValue("sourceIndex"));
+		    ExecuteTest(browser => Assert.AreEqual("1", browser.Form("Form").GetAttributeValue("nodeType")));
 		}
 
+        // Ie specific test to see if the way the element is referenced to fire an event on works.
 		[Test]
 		public void FireKeyDownEventOnElementWithNoId()
 		{
@@ -632,6 +698,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsNull(button.Id, "Button id not null after click event");
 		}
 
+        // TODO: make this a multi browser test when HtmlDialogs are implemented for firefox
 		[Test]
 		public void FireEventAlwaysSetsLeftMouseOnEventObject()
 		{
@@ -714,7 +781,7 @@ namespace WatiN.Core.UnitTests
 			return pos + int.Parse(element.GetAttributeValue("offset" + attributename));
 		}
 
-		public void MouseMove(int X, int Y, bool Relative)
+	    private void MouseMove(int X, int Y, bool Relative)
 		{
 			var currentPt = System.Windows.Forms.Cursor.Position;
 			if (Relative)
@@ -731,6 +798,7 @@ namespace WatiN.Core.UnitTests
 			System.Windows.Forms.Cursor.Position = currentPt;
 		}
 
+        // Ie specific test
 		[Test]
 		public void FireEventAlwaysSetsSrcElementOnEventObject()
 		{
@@ -873,9 +941,12 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Bug_1932065_FireEventNoWait_hangs_when_ModalWindow_opened()
         {
-            Ie.GoTo(PopUpURI);
-            Ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
-            Ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(PopUpURI);
+                                browser.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+                                browser.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+                            });
         }
 
         [Test]
@@ -902,6 +973,7 @@ namespace WatiN.Core.UnitTests
             domContainerMock.VerifyAll();
         }
 
+        // TODO: This should be mocked cause there is no browser logic involved
         [Test]
         public void AncestorGenericTypeAndAttributeConstraintShouldReturnTypedElement()
         {
@@ -913,6 +985,7 @@ namespace WatiN.Core.UnitTests
             Assert.That(ancestor.Id, Is.EqualTo("Table1"));
         }
 
+        // TODO: This should be mocked cause there is no browser logic involved
         [Test]
         public void AncestorGenericTypeAndPredicateShouldReturnTypedElement()
         {
@@ -924,18 +997,23 @@ namespace WatiN.Core.UnitTests
             Assert.That(ancestor.Id, Is.EqualTo("Table1"));
         }
 
+        // TODO: This should be mocked cause there is no browser logic involved
         [Test]
         public void TableOfElementE()
         {
+            // Invoke with anonymous delegate
             Element table = Ie.Table("table1");
             table.WaitUntil((Table table1) => table1.Enabled);
 
+            // Invoke with lambda
             ElementsContainer<Table> table2 = Ie.Table("table1");
             table2.WaitUntil(t => t.Enabled);
 
+            // Invoke with delegate method
             var table3 = Ie.Table("table1");
             table3.WaitUntil(IsEnabled);
         }
+
         private static bool IsEnabled(Table table)
         {
             return table.Enabled;

@@ -85,28 +85,6 @@ namespace WatiN.Core
 //            get { return Core.BrowserType.FireFox; }
 //        }
 
-
-//        /// <summary>
-//        /// Evaluates the specified JavaScript code within the scope of this
-//        /// document. Returns the value computed by the last expression in the
-//        /// code block after implicit conversion to a string.
-//        /// </summary>
-//        /// <example>
-//        /// The following example shows an alert dialog then returns the string "4".
-//        /// <code>
-//        /// Eval("window.alert('Hello world!'); 2 + 2");
-//        /// </code>
-//        /// </example>
-//        /// <param name="javaScriptCode">The JavaScript code</param>
-//        /// <returns>The result converted to a string</returns>
-//        /// <exception cref="JavaScriptException">Thrown when the JavaScript code cannot be evaluated
-//        /// or throws an exception during evaluation</exception>
-//        public string Eval(string javaScriptCode)
-//        {
-//            this.ClientPort.Write(javaScriptCode);
-//            return this.ClientPort.LastResponse;
-//        }
-
         #endregion Public instance properties
 
         #region Public instance methods
