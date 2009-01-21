@@ -369,6 +369,7 @@
     <Content Include="html\main.html" />
     <Content Include="html\OnBeforeUnloadJavaDialog.html" />
     <Content Include="html\popup.html" />
+    <Content Include="html\ProximityTests.html" />
     <Content Include="html\Tables.html" />
     <Content Include="html\TestEvents.html" />
     <Content Include="html\theApp.html" />

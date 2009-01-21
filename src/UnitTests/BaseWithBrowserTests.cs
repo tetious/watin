@@ -43,7 +43,7 @@ namespace WatiN.Core.UnitTests
             get
             {
                 if (InsideExecuteTest) throw new WatiNException("Specific test for IE detected inside call to ExecuteTest");
-                return (IE)ieManager.GetBrowser(TestEventsURI);
+                return (IE)ieManager.GetBrowser(TestPageUri);
             }
         }
 
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
             get
             {
                 if (InsideExecuteTest) throw new WatiNException("Specific test for Firefox detected inside call to ExecuteTest");
-                return (FireFox)ffManager.GetBrowser(TestEventsURI);
+                return (FireFox)ffManager.GetBrowser(TestPageUri);
             }
         }
 

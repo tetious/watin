@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void FindByFor()
 		{
-			const string htmlfor = "htmlfor";
+			const string htmlfor = "htmlFor";
 
 			var value = Find.ByFor("foridvalue");
 

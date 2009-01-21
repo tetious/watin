@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
 			const string cssText = "COLOR: white; FONT-STYLE: italic";
 
             var mockNativeElement = new Mock<INativeElement>();
-            mockNativeElement.Expect(element => element.GetStyleAttributeValue("csstext")).Returns(cssText);
+            mockNativeElement.Expect(element => element.GetStyleAttributeValue("cssText")).Returns(cssText);
 
             var attributeBag = new ElementAttributeBag(mockDomContainer.Object, mockNativeElement.Object);
 
@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests
 		    var value = attributeBag.GetValue("style");
 
             // THEN
-		    Assert.That(cssText, Is.EqualTo(value));
+		    Assert.That(value, Is.EqualTo(cssText));
 		}
 
 		[Test]

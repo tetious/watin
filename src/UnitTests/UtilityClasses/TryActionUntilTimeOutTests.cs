@@ -25,7 +25,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             catch (Exception e)
             {
                 Assert.That(e is ArgumentNullException, Is.True, "Action should be required");
-                Assert.That(e.Message, Text.Contains("action"), "Expected for argument 'action'");
+                Assert.That(e.Message, Text.Contains("func"), "Expected for argument 'func'");
                 return;
             }
             Assert.Fail("Expected an ArgumentNullException");
