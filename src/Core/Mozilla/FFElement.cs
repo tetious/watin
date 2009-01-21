@@ -90,7 +90,7 @@ namespace WatiN.Core.Mozilla
 
             if (TagName.ToLowerInvariant() == "pre") return innerHtml;
 
-            // remove all \n (newline)
+            // remove all \n (newline) and any following spaces
             var newlineSpaces = new Regex("\n *");
             var returnValue = newlineSpaces.Replace(innerHtml, "");
 
@@ -176,8 +176,10 @@ namespace WatiN.Core.Mozilla
         public string GetAttributeValue(string attributeName)
         {
             // Special case
-            if (attributeName.ToLowerInvariant() == "tagname") return TagName;
-            
+            var attribName = attributeName.ToLowerInvariant();
+            if (attribName == "tagname") return TagName;
+            if (attribName == "outerhtml") return GetOuterHtml();
+
             // Translate to FireFox html syntax
             if (watiNAttributeMap.ContainsKey(attributeName))
             {
@@ -490,12 +492,24 @@ namespace WatiN.Core.Mozilla
 
         private string GetOuterHtml()
         {
-//            temp=document.getElementById(obj).cloneNode(true)
-// document.getElementById('tempDiv').appendChild(temp)
-// outer=document.getElementById('tempDiv').innerHTML
-// document.getElementById('tempDiv').innerHTML=""
-// return outer
-            return string.Empty;
+            var clone = FireFoxClientPort.CreateVariableName();
+            var div = FireFoxClientPort.CreateVariableName();
+            var outerHtml = FireFoxClientPort.CreateVariableName();
+
+            var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
+            command += string.Format("{0}={1}.createElement('div');", div, FireFoxClientPort.DocumentVariableName);
+            command += string.Format("{0}.appendChild({1});", div, clone);
+            command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
+            command += string.Format("{0}=null;{1}=null;", div, clone);
+            command += string.Format("{0};", outerHtml);
+
+            var result = ClientPort.WriteAndRead(command);
+
+            // remove all \n (newline) and any following spaces
+            var newlineSpaces = new Regex("\n *");
+            result = newlineSpaces.Replace(result, "");
+
+            return "\r\n" + result;
         }
 
     }

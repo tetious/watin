@@ -492,7 +492,52 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(Image.Id, Is.EqualTo("readonlytext"));
                             });
         }
-	}
+    
+        [Test, Ignore("but it doesn't")]
+        public void FFelementInnerHtmlToInnerTextShouldBeWorkingForThisAsWell()
+        {
+            // GIVEN
+            var ieText = Ie.Text;
+
+            // WHEN
+            var ffText = Firefox.Text;
+
+            // THEN
+            Assert.That(ffText, Is.EqualTo(ieText));
+        }
+
+        [Test]
+        public void TextShouldStartWith()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var newlineSpaces = new Regex("[\n\r ]*");
+
+                                // WHEN
+                                var text = browser.Text;
+                                // remove all newlines and spaces.... browser differences
+                                text = newlineSpaces.Replace(text, "");
+
+                                // THEN
+                                Assert.That(text, NUnit.Framework.SyntaxHelpers.Text.StartsWith("col1col2a1a2b1b2"));
+                            });
+        }
+
+        [Test]
+        public void HtmlShouldStartWithBodyTag()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                // WHEN
+                                var outerHtml = browser.Html.ToLowerInvariant();
+
+                                // THEN
+                                Assert.That(outerHtml, NUnit.Framework.SyntaxHelpers.Text.StartsWith("\r\n<body>"));
+                            });
+        }
+    }
 
     public class TestDocument : Document
     {
