@@ -44,7 +44,7 @@ namespace WatiN.Core
 		/// <param name="htmlDocument">The HTML document.</param>
 		/// <param name="frameSetParent">The frame set parent.</param>
 		/// <param name="frameElementUniqueId">The frame element unique id.</param>
-		public Frame(DomContainer domContainer, IHTMLDocument2 htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(domContainer, new IEDocument(htmlDocument))
+		public Frame(DomContainer domContainer, INativeDocument htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(domContainer, htmlDocument)
 		{
 			_frameSetParent = frameSetParent;
 			_frameElementUniqueId = frameElementUniqueId;
@@ -137,7 +137,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			switch (attributename.ToLower(CultureInfo.InvariantCulture))
+			switch (attributename.ToLowerInvariant())
 			{
 				case "url":
 					return Url;

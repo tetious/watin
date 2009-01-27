@@ -388,6 +388,19 @@ namespace WatiN.Core.UtilityClasses
 
         }
 
+        public static T TryFuncIgnoreException<T>(TryFunc<T> action)
+        {
+            try
+            {
+                return action.Invoke();
+            }
+            catch
+            {
+                return default(T);
+            }
+
+        }
+
         /// <summary>
         /// Turns the style attribute into property syntax.
         /// </summary>

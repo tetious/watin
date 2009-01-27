@@ -316,6 +316,7 @@
     <Compile Include="MockAttributeBag.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NoFramesTest.cs" />
     <Compile Include="ParaTests.cs">
       <SubType>Code</SubType>
     </Compile>

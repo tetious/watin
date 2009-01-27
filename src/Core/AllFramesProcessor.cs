@@ -20,6 +20,7 @@ using System.Collections;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -60,7 +61,7 @@ namespace WatiN.Core
 			var frameElement = (IHTMLElement) frameElements.item(index, null);
 			var frameElementUniqueId = ((DispHTMLBaseElement) frameElement).uniqueID;
 
-			var frame = new Frame(_domContainer, (IHTMLDocument2)webBrowser2.Document, (IHTMLDocument3) htmlDocument, frameElementUniqueId);
+			var frame = new Frame(_domContainer, new IEDocument(webBrowser2.Document), (IHTMLDocument3) htmlDocument, frameElementUniqueId);
 			
 			elements.Add(frame);
 

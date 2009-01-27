@@ -21,7 +21,6 @@ using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Logging;
 using WatiN.Core.Constraints;
 using WatiN.Core.UtilityClasses;
 
@@ -66,7 +65,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ContentsFrame()
 		{
-			Frame contentsFrame = Ie.Frame(Find.ByName("contents"));
+			var contentsFrame = Ie.Frame(Find.ByName("contents"));
 			Assert.IsNotNull(contentsFrame, "Frame expected");
 			Assert.AreEqual("contents", contentsFrame.Name);
 			Assert.AreEqual(null, contentsFrame.Id);
@@ -77,7 +76,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MainFrame()
 		{
-			Frame mainFrame = Ie.Frame(Find.ById("mainid"));
+			var mainFrame = Ie.Frame(Find.ById("mainid"));
 			Assert.IsNotNull(mainFrame, "Frame expected");
 			Assert.AreEqual("main", mainFrame.Name);
 			Assert.AreEqual("mainid", mainFrame.Id);
@@ -88,16 +87,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FrameHTMLShouldNotReturnParentHTML()
 		{
-			Frame contentsFrame = Ie.Frame(Find.ByName("contents"));
+			var contentsFrame = Ie.Frame(Find.ByName("contents"));
 			Assert.AreNotEqual(Ie.Html, contentsFrame.Html, "Html should be from the frame page.");
 		}
 
 		[Test]
 		public void DoesFrameCodeWorkIfToBrowsersWithFramesAreOpen()
 		{
-			using (IE ie2 = new IE(FramesetURI))
+			using (var ie2 = new IE(FramesetURI))
 			{
-				Frame contentsFrame = ie2.Frame(Find.ByName("contents"));
+				var contentsFrame = ie2.Frame(Find.ByName("contents"));
 				Assert.IsFalse(contentsFrame.Html.StartsWith("<FRAMESET"), "inner html of frame is expected");
 			}
 		}
@@ -106,7 +105,7 @@ namespace WatiN.Core.UnitTests
 		public void Frames()
 		{
 			const int expectedFramesCount = 2;
-			FrameCollection frames = Ie.Frames;
+			var frames = Ie.Frames;
 
 			Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
@@ -115,14 +114,14 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual(frameNameMain, frames[1].Name);
 
 			IEnumerable frameEnumerable = frames;
-			IEnumerator frameEnumerator = frameEnumerable.GetEnumerator();
+			var frameEnumerator = frameEnumerable.GetEnumerator();
 
 			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
+			var count = 0;
 			foreach (Frame frame in frames)
 			{
 				frameEnumerator.MoveNext();
-				object enumFrame = frameEnumerator.Current;
+				var enumFrame = frameEnumerator.Current;
 
 				Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
 				Assert.AreEqual(frame.Html, ((Frame) enumFrame).Html, "foreach and IEnumator don't act the same.");
@@ -136,14 +135,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ShouldBeAbleToAccessCustomAttributeInFrameSetElement()
 		{
-			string value = Ie.Frame("mainid").GetAttributeValue("mycustomattribute");
+			var value = Ie.Frame("mainid").GetAttributeValue("mycustomattribute");
 			Assert.That(value, Is.EqualTo("WatiN"));
 		}
 
 		[Test]
 		public void ShouldBeAbleToFindFrameUsingCustomAttributeInFrameSetElement()
 		{
-			Frame frame = Ie.Frame(Find.By("mycustomattribute","WatiN"));
+			var frame = Ie.Frame(Find.By("mycustomattribute","WatiN"));
 			Assert.That(frame.Id, Is.EqualTo("mainid"));
 		}
 
@@ -159,31 +158,16 @@ namespace WatiN.Core.UnitTests
 			UtilityClass.DumpFrames(Ie);
 		}
 
-		private static void AssertFindFrame(IE ie, AttributeConstraint findBy, string expectedFrameName)
+		private static void AssertFindFrame(Document document, AttributeConstraint findBy, string expectedFrameName)
 		{
 			Frame frame = null;
-			string attributeName = findBy.AttributeName.ToLower();
+			var attributeName = findBy.AttributeName.ToLower();
 			if (attributeName == "href" || attributeName == "name")
 			{
-				frame = ie.Frame(findBy);
+				frame = document.Frame(findBy);
 			}
 			Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
-			Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy.ToString() + ", " + findBy.Value);
-		}
-	}
-
-    [TestFixture]
-	public class NoFramesTest : BaseWithBrowserTests
-	{
-		[Test]
-		public void HasNoFrames()
-		{
-			Assert.AreEqual(0, Ie.Frames.Length);
-		}
-
-		public override Uri TestPageUri
-		{
-			get { return MainURI; }
+			Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy + ", " + findBy.Value);
 		}
 	}
 }

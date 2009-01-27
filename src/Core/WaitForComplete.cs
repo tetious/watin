@@ -21,6 +21,7 @@ using System.Threading;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -210,23 +211,19 @@ namespace WatiN.Core
 
 		protected virtual bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
 		{
-			if (document != null)
-			{
-				// Sometimes an OutOfMemoryException or ComException occurs while accessing
-				// the readystate property of IHTMLDocument2. Giving MSHTML some time
-				// to do further processing seems to solve this problem.
-				try
-				{
-					var readyState = document.readyState;
-					return true;
-				}
-				catch {}
-			}
+		    if (document == null) return false;
 
-			return false;
+		    // Sometimes an OutOfMemoryException or ComException occurs while accessing
+		    // the readystate property of IHTMLDocument2. Giving MSHTML some time
+		    // to do further processing seems to solve this problem.
+		    return UtilityClass.TryFuncIgnoreException(() =>
+                                                          {
+                                                              var readyState = document.readyState;
+                                                              return true;
+                                                          });
 		}
 
-		protected virtual void waitWhileIEStateNotComplete(IWebBrowser2 ie)
+	    protected virtual void waitWhileIEStateNotComplete(IWebBrowser2 ie)
 		{
 			while (IsIEReadyStateComplete(ie))
 			{
