@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using mshtml;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UtilityClasses;
@@ -247,7 +248,16 @@ namespace WatiN.Core.InternetExplorer
 
 	    }
 
-        private IHTMLFormElement HtmlFormElement
+	    public void SetFileUploadFile(Element element, string fileName)
+	    {
+			var uploadDialogHandler = new FileUploadDialogHandler(fileName);
+            using (new UseDialogOnce(element.DomContainer.DialogWatcher, uploadDialogHandler))
+            {
+                element.Click();
+            }
+	    }
+
+	    private IHTMLFormElement HtmlFormElement
         {
             get { return (IHTMLFormElement)_element; }
         }

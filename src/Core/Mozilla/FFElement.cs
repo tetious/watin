@@ -329,6 +329,12 @@ namespace WatiN.Core.Mozilla
             FireEvent("submit", null);
         }
 
+        public void SetFileUploadFile(Element element, string fileName)
+        {
+            fileName = fileName.Replace(@"\", @"\\");
+            SetAttributeValue("value", fileName);
+        }
+
         /// <summary>
         /// Executes the event.
         /// </summary>

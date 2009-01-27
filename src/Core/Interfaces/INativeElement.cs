@@ -99,5 +99,6 @@ namespace WatiN.Core.Interfaces
         void FireEventNoWait(string eventName, NameValueCollection eventProperties);
 	    void Select();
 	    void SubmitForm();
+	    void SetFileUploadFile(Element element, string fileName);
 	}
 }

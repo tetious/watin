@@ -31,39 +31,49 @@ namespace WatiN.Core.UnitTests
 		public void FileUploadElementTags()
 		{
 			Assert.AreEqual(1, FileUpload.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("input", ((ElementTag) FileUpload.ElementTags[0]).TagName);
-			Assert.AreEqual("file", ((ElementTag) FileUpload.ElementTags[0]).InputTypes);
+			Assert.AreEqual("input", FileUpload.ElementTags[0].TagName);
+			Assert.AreEqual("file", FileUpload.ElementTags[0].InputTypes);
 		}
 
 		[Test]
 		public void CreateFileUploadFromElement()
 		{
-			var element = Ie.Element("upload");
-			var fileUpload = new FileUpload(element);
-			Assert.AreEqual("upload", fileUpload.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var element = browser.Element("upload");
+		                        var fileUpload = new FileUpload(element);
+		                        Assert.AreEqual("upload", fileUpload.Id);
+		                    });
 		}
 
 		[Test]
 		public void FileUploadExists()
 		{
-			Assert.IsTrue(Ie.FileUpload("upload").Exists);
-			Assert.IsTrue(Ie.FileUpload(new Regex("upload")).Exists);
-			Assert.IsFalse(Ie.FileUpload("noneexistingupload").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.FileUpload("upload").Exists);
+		                        Assert.IsTrue(browser.FileUpload(new Regex("upload")).Exists);
+		                        Assert.IsFalse(browser.FileUpload("noneexistingupload").Exists);
+		                    });
 		}
 
 		[Test]
 		public void FileUploadTest()
 		{
-			var fileUpload = Ie.FileUpload("upload");
+		    ExecuteTest(browser =>
+		                    {
+		                        var fileUpload = browser.FileUpload("upload");
 
-			Assert.That(fileUpload.Exists);
-			Assert.IsNull(fileUpload.FileName);
+		                        Assert.That(fileUpload.Exists);
+		                        Assert.IsNull(fileUpload.FileName);
 
-			fileUpload.Set(MainURI.LocalPath);
+		                        fileUpload.Set(MainURI.LocalPath);
 
-			Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);
+		                        Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);
+		                    });
 		}
 
+        // TODO: Should be mocked cause this WatiN behaviour not browser related
 		[Test, ExpectedException(typeof (System.IO.FileNotFoundException))]
 		public void FileUploadFileNotFoundException()
 		{
@@ -74,52 +84,58 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FileUploads()
 		{
-			const int expectedFileUploadsCount = 1;
-			Assert.AreEqual(expectedFileUploadsCount, Ie.FileUploads.Length, "Unexpected number of FileUploads");
+		    ExecuteTest(browser =>
+		                    {
+		                        const int expectedFileUploadsCount = 1;
+		                        Assert.AreEqual(expectedFileUploadsCount, browser.FileUploads.Length, "Unexpected number of FileUploads");
 
-			// Collection.Length
-			var formFileUploads = Ie.FileUploads;
+		                        // Collection.Length
+		                        var formFileUploads = browser.FileUploads;
 
-			// Collection items by index
-			Assert.AreEqual("upload", Ie.FileUploads[0].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("upload", browser.FileUploads[0].Id);
 
-			IEnumerable FileUploadEnumerable = formFileUploads;
-			var FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
+		                        IEnumerable FileUploadEnumerable = formFileUploads;
+		                        var FileUploadEnumerator = FileUploadEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			var count = 0;
-			foreach (FileUpload inputFileUpload in formFileUploads)
-			{
-				FileUploadEnumerator.MoveNext();
-				var enumFileUpload = FileUploadEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (FileUpload inputFileUpload in formFileUploads)
+		                        {
+		                            FileUploadEnumerator.MoveNext();
+		                            var enumFileUpload = FileUploadEnumerator.Current;
 
-				Assert.IsInstanceOfType(inputFileUpload.GetType(), enumFileUpload, "Types are not the same");
-				Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload) enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(inputFileUpload.GetType(), enumFileUpload, "Types are not the same");
+		                            Assert.AreEqual(inputFileUpload.OuterHtml, ((FileUpload) enumFileUpload).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedFileUploadsCount, count);
+		                        Assert.IsFalse(FileUploadEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedFileUploadsCount, count);
+		                    });
 		}
 
 		[Test]
 		public void FileUploadOfFileWithSpecialCharactersInFilenameShouldBeHandledOK()
 		{
-            // GIVEN
-			Ie.Refresh();
+		    ExecuteTest(browser =>
+		                    {
+		                        // GIVEN
+                                browser.GoTo(TestPageUri);
 
-			var fileUpload = Ie.FileUpload("upload");
+                                var fileUpload = browser.FileUpload("upload");
 
-			Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
-			Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");
+		                        Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
+		                        Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");
 
-			var file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
+		                        var file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
 
-            // WHEN
-            fileUpload.Set(file);
+		                        // WHEN
+		                        fileUpload.Set(file);
 
-            // THEN
-			Assert.That(fileUpload.FileName, Is.EqualTo(file), "Unexpected filename");
+		                        // THEN
+		                        Assert.That(fileUpload.FileName, Is.EqualTo(file), "Unexpected filename");
+		                    });
 		}
 
 		public override Uri TestPageUri

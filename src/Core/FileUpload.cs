@@ -56,7 +56,11 @@ namespace WatiN.Core
 
 		public string FileName
 		{
-			get { return GetAttributeValue("value"); }
+			get
+			{
+			    var value = GetAttributeValue("value");
+			    return value == string.Empty? null: value;
+			}
 		}
 
 		public void Set(string fileName)
@@ -67,11 +71,7 @@ namespace WatiN.Core
 				throw new FileNotFoundException("File does not exist", fileName);
 			}
 
-			var uploadDialogHandler = new FileUploadDialogHandler(fileName);
-			using(new UseDialogOnce(DomContainer.DialogWatcher, uploadDialogHandler))
-            {
-				Click();
-            }
+            NativeElement.SetFileUploadFile(this, fileName);
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)
