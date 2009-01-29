@@ -167,6 +167,22 @@ namespace WatiN.Core.UnitTests
             );
 		}
 
+	    [Test, Ignore]
+	    public void ShouldCloseBrowser()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var command = "window.close();";
+
+	                            // WHEN
+	                            browser.Eval(command);
+
+	                            // THEN
+	                            Assert.That(browser.Url, Is.Null, "Expected no url");
+	                        });
+	    }
+
 		[Test]
 		public void RunScriptAndEval()
 		{

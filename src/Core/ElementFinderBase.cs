@@ -141,7 +141,7 @@ namespace WatiN.Core
 
             if (FindByExactMatchOnIdPossible(constraint))
             {
-                return FindElementById(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
+                return FindElementById(constraint, elementTag, attributeBag, true, _elementCollection);
             }
             return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
         }

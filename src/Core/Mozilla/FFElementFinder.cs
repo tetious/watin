@@ -35,7 +35,18 @@ namespace WatiN.Core.Mozilla
 
         protected override List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
         {
-            return FindMatchingElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, elementCollection);
+            return FindMatchingElementById(constraint, elementTag, attributeBag, returnAfterFirstMatch, elementCollection);
+        }
+
+        private List<INativeElement> FindMatchingElementById(BaseConstraint constraint, ElementTag elementTag, IAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection parentElement)
+        {
+            var elementReferences = new List<INativeElement>();
+            if (parentElement.Elements == null) return elementReferences;
+
+            _clientPort.InitializeDocument();
+
+
+            return elementReferences;
         }
 
         protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)

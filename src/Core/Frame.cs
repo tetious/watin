@@ -16,11 +16,9 @@
 
 #endregion Copyright
 
-using System.Globalization;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Constraints;
-using WatiN.Core.InternetExplorer;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
