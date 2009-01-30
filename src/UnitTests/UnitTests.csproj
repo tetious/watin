@@ -134,6 +134,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="WatiN.Core.UnitTests.dll.config" />
+    <Compile Include="AreaTests.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
