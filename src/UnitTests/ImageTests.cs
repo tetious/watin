@@ -43,12 +43,14 @@ namespace WatiN.Core.UnitTests
 			Assert.AreEqual("image", Image.ElementTags[1].InputTypes);
 		}
 
+        // TODO: can be mocked
 		[Test]
 		public void ImageFromElementInput()
 		{
 			AssertImageFromElement("Image4");
 		}
 
+        // TODO: can be mocked
 		[Test]
 		public void ImageFromElementImage()
 		{
@@ -65,84 +67,98 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageExists()
 		{
-			Assert.IsTrue(Ie.Image("Image2").Exists);
-			Assert.IsTrue(Ie.Image(new Regex("Image2")).Exists);
-			Assert.IsFalse(Ie.Image("nonexistingImage").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.Image("Image2").Exists);
+                                Assert.IsTrue(browser.Image(new Regex("Image2")).Exists);
+                                Assert.IsFalse(browser.Image("nonexistingImage").Exists);
+		                    });
 		}
 
 		[Test]
 		public void ImageTag()
 		{
-			var image = Ie.Image("Image2");
+		    ExecuteTest(browser =>
+		                    {
+		                        var image = browser.Image("Image2");
 
-			Assert.AreEqual("img", image.TagName.ToLower(), "Should be image element");
-			Assert.AreEqual("Image2", image.Id, "Unexpected id");
-			Assert.AreEqual("ImageName2", image.Name, "Unexpected name");
-			Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
-			Assert.AreEqual(watinwebsiteImage, image.Uri, "Unexpected Src");
-			Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
+		                        Assert.AreEqual("img", image.TagName.ToLower(), "Should be image element");
+		                        Assert.AreEqual("Image2", image.Id, "Unexpected id");
+		                        Assert.AreEqual("ImageName2", image.Name, "Unexpected name");
+		                        Assert.AreEqual(watinwebsiteImage, new Uri(image.Src), "Unexpected Src");
+		                        Assert.AreEqual(watinwebsiteImage, image.Uri, "Unexpected Src");
+		                        Assert.AreEqual("WatiN website", image.Alt, "Unexpected Alt");
+		                    });
 		}
 
 		[Test]
 		public void ImageInputTag()
 		{
-			var image = Ie.Image("Image4");
+		    ExecuteTest(browser =>
+		                    {
+		                        var image = browser.Image("Image4");
 
-			Assert.AreEqual("input", image.TagName.ToLower(), "Should be input element");
-			Assert.AreEqual("Image4", image.Id, "Unexpected id");
-			Assert.AreEqual("ImageName4", image.Name, "Unexpected name");
-			Assert.AreEqual(watinwebsiteLogoImage, new Uri(image.Src), "Unexpected Src");
-			Assert.AreEqual("WatiN logo in input element of type image", image.Alt, "Unexpected Alt");
+		                        Assert.AreEqual("input", image.TagName.ToLower(), "Should be input element");
+		                        Assert.AreEqual("Image4", image.Id, "Unexpected id");
+		                        Assert.AreEqual("ImageName4", image.Name, "Unexpected name");
+		                        Assert.AreEqual(watinwebsiteLogoImage, new Uri(image.Src), "Unexpected Src");
+		                        Assert.AreEqual("WatiN logo in input element of type image", image.Alt, "Unexpected Alt");
+		                    });
 		}
 
 		[Test]
 		public void ImageReadyStateUninitializedButShouldReturn()
 		{
-			Assert.IsFalse(Ie.Image("Image3").Complete);
+		    ExecuteTest(browser => Assert.IsFalse(browser.Image("Image3").Complete));
 		}
 
 		[Test]
 		public void Images()
 		{
-			const int expectedImagesCount = 4;
-			Assert.AreEqual(expectedImagesCount, Ie.Images.Length, "Unexpected number of Images");
+		    ExecuteTest(browser =>
+		                    {
+		                        const int expectedImagesCount = 4;
+		                        Assert.AreEqual(expectedImagesCount, browser.Images.Length, "Unexpected number of Images");
 
-			// Collection.Length
-			var formImages = Ie.Images;
+		                        // Collection.Length
+		                        var formImages = browser.Images;
 
-			// Collection items by index
-			Assert.AreEqual("Image1", Ie.Images[0].Id);
-			Assert.AreEqual("Image2", Ie.Images[1].Id);
-			Assert.AreEqual("Image3", Ie.Images[2].Id);
-			Assert.AreEqual("Image4", Ie.Images[3].Id);
+		                        // Collection items by index
+                                Assert.AreEqual("Image1", browser.Images[0].Id);
+                                Assert.AreEqual("Image2", browser.Images[1].Id);
+                                Assert.AreEqual("Image3", browser.Images[2].Id);
+                                Assert.AreEqual("Image4", browser.Images[3].Id);
 
-			IEnumerable ImageEnumerable = formImages;
-			var ImageEnumerator = ImageEnumerable.GetEnumerator();
+		                        IEnumerable ImageEnumerable = formImages;
+		                        var ImageEnumerator = ImageEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			var count = 0;
-			foreach (Image inputImage in formImages)
-			{
-				ImageEnumerator.MoveNext();
-				var enumImage = ImageEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (Image inputImage in formImages)
+		                        {
+		                            ImageEnumerator.MoveNext();
+		                            var enumImage = ImageEnumerator.Current;
 
-				Assert.IsInstanceOfType(inputImage.GetType(), enumImage, "Types are not the same");
-				Assert.AreEqual(inputImage.OuterHtml, ((Image) enumImage).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(inputImage.GetType(), enumImage, "Types are not the same");
+		                            Assert.AreEqual(inputImage.OuterHtml, ((Image) enumImage).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedImagesCount, count);
+		                        Assert.IsFalse(ImageEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedImagesCount, count);
+		                    });
 		}
 
 		[Test]
 		public void ButtonFromInputImage()
 		{
-			var button = Ie.Button(Find.BySrc(new Regex("images/watin.jpg")));
+		    ExecuteTest(browser =>
+		                    {
+		                        var button = browser.Button(Find.BySrc(new Regex("images/watin.jpg")));
 
-			Assert.IsTrue(button.Exists, "Button should exist");
-			Assert.AreEqual("Image4", button.Id, "Unexpected id");
+		                        Assert.IsTrue(button.Exists, "Button should exist");
+		                        Assert.AreEqual("Image4", button.Id, "Unexpected id");
+		                    });
 		}
-
     }
 }

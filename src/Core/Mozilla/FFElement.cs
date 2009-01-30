@@ -19,7 +19,7 @@ namespace WatiN.Core.Mozilla
             new[]
                 {
                     "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
-                    "nodeType", "innerHTML"
+                    "nodeType", "innerHTML", "baseURI", "src"
                 });
 
         private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
