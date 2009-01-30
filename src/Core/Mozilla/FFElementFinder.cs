@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core.Mozilla
 {
@@ -35,16 +36,24 @@ namespace WatiN.Core.Mozilla
 
         protected override List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
         {
-            return FindMatchingElementById(constraint, elementTag, attributeBag, returnAfterFirstMatch, elementCollection);
-        }
-
-        private List<INativeElement> FindMatchingElementById(BaseConstraint constraint, ElementTag elementTag, IAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection parentElement)
-        {
             var elementReferences = new List<INativeElement>();
-            if (parentElement.Elements == null) return elementReferences;
 
+            // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
 
+            var elementName = FireFoxClientPort.CreateVariableName();
+
+            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, FireFoxClientPort.DocumentVariableName, ((AttributeConstraint)constraint).Value);
+            command = command + string.Format("{0} != null;", elementName);
+
+            if  (_clientPort.WriteAndReadAsBool(command))
+            {
+                var element = new FFElement(elementName, _clientPort);
+                if (elementTag.Compare(element))
+                {
+                    elementReferences.Add(element);
+                }
+            }
 
             return elementReferences;
         }
