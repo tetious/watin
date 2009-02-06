@@ -18,10 +18,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -34,11 +32,7 @@ namespace WatiN.Core
 
 		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
 		{
-			var processor = new AllFramesProcessor(domContainer, (HTMLDocument) htmlDocument.Object);
-
-			NativeMethods.EnumIWebBrowser2Interfaces(processor);
-
-			frames = processor.elements;
+			frames = htmlDocument.Frames(domContainer);
 		}
 
 		public int Length

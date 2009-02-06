@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System.Collections.Generic;
+
 namespace WatiN.Core.Interfaces
 {
     public interface INativeDocument
@@ -28,6 +30,7 @@ namespace WatiN.Core.Interfaces
         INativeElement ActiveElement { get; }
         void RunScript(string scriptCode, string language);
         string JavaScriptVariableName {get;}
+        List<Frame> Frames(DomContainer domContainer);
 
         string GetPropertyValue(string propertyName);
     }

@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
@@ -80,6 +81,15 @@ namespace WatiN.Core.InternetExplorer
         public string JavaScriptVariableName
         {
             get { return "document"; }
+        }
+
+        public List<Frame> Frames(DomContainer domContainer)
+        {
+            var processor = new AllFramesProcessor(domContainer, (HTMLDocument)_nativeDocument);
+
+            NativeMethods.EnumIWebBrowser2Interfaces(processor);
+
+            return processor.elements;
         }
 
         public string GetPropertyValue(string propertyName)
