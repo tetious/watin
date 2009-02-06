@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
@@ -26,7 +26,7 @@ namespace WatiN.Core.InternetExplorer
 {
     internal class AllFramesProcessor : IWebBrowser2Processor
     {
-        public ArrayList elements;
+        public List<Frame> elements;
 
         private readonly HTMLDocument htmlDocument;
         private readonly IHTMLElementCollection frameElements;
@@ -35,7 +35,7 @@ namespace WatiN.Core.InternetExplorer
 
         public AllFramesProcessor(DomContainer domContainer, HTMLDocument htmlDocument)
         {
-            elements = new ArrayList();
+            elements = new List<Frame>();
 
             frameElements = (IHTMLElementCollection) htmlDocument.all.tags(ElementsSupport.FrameTagName);
 
@@ -63,7 +63,7 @@ namespace WatiN.Core.InternetExplorer
             var frameElement = RetrieveSameFrameFromHtmlDocument(uniqueId);
             var nativeFrameElement = _domContainer.NativeBrowser.CreateElement(frameElement);
             var watinElement = new Element(_domContainer, nativeFrameElement);
-		    
+
             var frame = new Frame(_domContainer, new IEDocument(webBrowser2.Document), watinElement);
 
             elements.Add(frame);

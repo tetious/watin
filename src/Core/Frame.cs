@@ -41,26 +41,6 @@ namespace WatiN.Core
 		    _frameElement = frameElement;
 		}
 
-		/// <summary>
-		/// This constructor will mainly be used by Document.Frame to find
-		/// a Frame. A FrameNotFoundException will be thrown if the Frame isn't found.
-		/// </summary>
-		/// <param name="frames">Collection of frames to find the frame in</param>
-		/// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
-		public static Frame Find(FrameCollection frames, BaseConstraint findBy)
-		{
-			foreach (Frame frame in frames)
-			{
-				if (findBy.Compare(frame))
-				{
-					// Return
-					return frame;
-				}
-			}
-
-			throw new FrameNotFoundException(findBy.ConstraintToString());
-		}
-
 		public string Name
 		{
 			get { return GetAttributeValue("name"); }

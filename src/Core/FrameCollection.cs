@@ -17,8 +17,10 @@
 #endregion Copyright
 
 using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 
@@ -29,7 +31,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class FrameCollection : IEnumerable
 	{
-		private readonly ArrayList elements;
+		private readonly List<Frame> frames = new List<Frame>();
 
 		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
 		{
@@ -37,37 +39,46 @@ namespace WatiN.Core
 
 			NativeMethods.EnumIWebBrowser2Interfaces(processor);
 
-			elements = processor.elements;
+			frames = processor.elements;
 		}
 
 		public int Length
 		{
-			get { return elements.Count; }
+			get { return frames.Count; }
 		}
 
 		public Frame this[int index]
 		{
-			get { return (Frame) elements[index]; }
+			get { return frames[index]; }
 		}
 
 		public bool Exists(BaseConstraint findBy)
 		{
-			foreach (Frame frame in elements)
-			{
-				if (findBy.Compare(frame))
-				{
-					// Return
-					return true;
-				}
-			}
-
-			return false;
+		    return (Find(findBy) != null);
 		}
+
+        /// <summary>
+        /// Find a frame within this collection. If no match is found it will return null.
+        /// </summary>
+        /// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find.</param>
+        public Frame Find(BaseConstraint findBy)
+        {
+            foreach (var frame in frames)
+            {
+                if (findBy.Compare(frame))
+                {
+                    // Return
+                    return frame;
+                }
+            }
+
+            return null;
+        }
 
 		/// <exclude />
         public IEnumerator GetEnumerator()
 		{
-			foreach(var element in elements)
+			foreach(var element in frames)
 			{
 			    yield return element;
 			}
