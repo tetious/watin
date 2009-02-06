@@ -16,10 +16,7 @@
 
 #endregion Copyright
 
-using mshtml;
-using SHDocVw;
 using WatiN.Core.Constraints;
-using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
@@ -30,9 +27,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class Frame : Document, IAttributeBag
 	{
-		private readonly IHTMLDocument3 _frameSetParent;
-		private readonly string _frameElementUniqueId;
-		private Element frameElement;
+		private readonly Element _frameElement;
 
 		/// <summary>
 		/// This constructor will mainly be used by the constructor of FrameCollection
@@ -40,12 +35,10 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="htmlDocument">The HTML document.</param>
-		/// <param name="frameSetParent">The frame set parent.</param>
-		/// <param name="frameElementUniqueId">The frame element unique id.</param>
-		public Frame(DomContainer domContainer, INativeDocument htmlDocument, IHTMLDocument3 frameSetParent, string frameElementUniqueId) : base(domContainer, htmlDocument)
+		/// <param name="frameElement"></param>
+		public Frame(DomContainer domContainer, INativeDocument htmlDocument, Element frameElement) : base(domContainer, htmlDocument)
 		{
-			_frameSetParent = frameSetParent;
-			_frameElementUniqueId = frameElementUniqueId;
+		    _frameElement = frameElement;
 		}
 
 		/// <summary>
@@ -55,11 +48,6 @@ namespace WatiN.Core
 		/// <param name="frames">Collection of frames to find the frame in</param>
 		/// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find (Find.ByUrl, Find.ByName and Find.ById are supported)</param>
 		public static Frame Find(FrameCollection frames, BaseConstraint findBy)
-		{
-			return findFrame(frames, findBy);
-		}
-
-		private static Frame findFrame(FrameCollection frames, BaseConstraint findBy)
 		{
 			foreach (Frame frame in frames)
 			{
@@ -85,69 +73,22 @@ namespace WatiN.Core
 
 		public string GetAttributeValue(string attributename)
 		{
-			if(frameElement == null)
-			{
-                var element = GetFrameElement(ElementsSupport.FrameTagName) ?? GetFrameElement(ElementsSupport.IFrameTagName);
+            switch (attributename.ToLowerInvariant())
+            {
+                case "url":
+                    return Url;
 
-			    if (element == null)
-				{
-					throw new WatiNException("Frame shouldn't be null");
-				}
+                case "href":
+                    return Url;
 
-				frameElement = new Element(DomContainer, DomContainer.NativeBrowser.CreateElement(element));
-			}	
-			return frameElement.GetAttributeValue(attributename);
+                default:
+                    return _frameElement.GetAttributeValue(attributename);
+            }
 		}
 
-		private IHTMLElement2 GetFrameElement(string tagname) 
+	    public string GetValue(string attributename)
 		{
-			var elements = _frameSetParent.getElementsByTagName(tagname);
-
-			foreach (DispHTMLBaseElement element in elements)
-			{
-				if (StringComparer.AreEqual(element.uniqueID, _frameElementUniqueId, true))
-				{
-					return (IHTMLElement2)element;
-				}
-			}
-			return null;
+			return GetAttributeValue(attributename);
 		}
-
-		internal static int GetFrameCountFromHTMLDocument(HTMLDocument htmlDocument)
-		{
-			var processor = new FrameCountProcessor(htmlDocument);
-
-			NativeMethods.EnumIWebBrowser2Interfaces(processor);
-
-			return processor.FramesCount;
-		}
-
-		internal static IWebBrowser2 GetFrameFromHTMLDocument(int frameIndex, HTMLDocument htmlDocument)
-		{
-			var processor = new FrameByIndexProcessor(frameIndex, htmlDocument);
-
-			NativeMethods.EnumIWebBrowser2Interfaces(processor);
-
-			return processor.IWebBrowser2();
-		}
-
-		#region IAttributeBag Members
-
-		public string GetValue(string attributename)
-		{
-			switch (attributename.ToLowerInvariant())
-			{
-				case "url":
-					return Url;
-				
-				case "href":
-					return Url;
-
-				default:
-					return GetAttributeValue(attributename);
-			}
-		}
-
-		#endregion
 	}
 }

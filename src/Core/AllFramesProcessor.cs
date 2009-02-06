@@ -19,6 +19,8 @@
 using System.Collections;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Comparers;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 
@@ -58,15 +60,37 @@ namespace WatiN.Core
 		public void Process(IWebBrowser2 webBrowser2)
 		{
 			// Get the frame element from the parent document
-			var frameElement = (IHTMLElement) frameElements.item(index, null);
-			var frameElementUniqueId = ((DispHTMLBaseElement) frameElement).uniqueID;
+			var uniqueId = RetrieveUniqueIdOfFrameElement();
 
-			var frame = new Frame(_domContainer, new IEDocument(webBrowser2.Document), (IHTMLDocument3) htmlDocument, frameElementUniqueId);
-			
+            var frameElement = RetrieveSameFrameFromHtmlDocument(uniqueId);
+		    var nativeFrameElement = _domContainer.NativeBrowser.CreateElement(frameElement);
+		    var watinElement = new Element(_domContainer, nativeFrameElement);
+		    
+            var frame = new Frame(_domContainer, new IEDocument(webBrowser2.Document), watinElement);
+
 			elements.Add(frame);
 
 			index++;
 		}
+
+	    private string RetrieveUniqueIdOfFrameElement()
+	    {
+	        var element = (IHTMLElement) frameElements.item(index, null);
+            return ((DispHTMLBaseElement)element).uniqueID;
+	    }
+
+	    // This is lookup in htmldocument is needed to bridge between 
+        // two different "memory" representations of document and its frame elements.
+        private IHTMLElement2 RetrieveSameFrameFromHtmlDocument(string frameElementUniqueId)
+        {
+            var frame = htmlDocument.getElementById(frameElementUniqueId) as IHTMLElement2;
+            if (frame == null)
+            {
+                throw new WatiNException("Couldn't find Frame or IFrame.");
+            }
+
+            return frame;
+        }
 
 		public bool Continue()
 		{

@@ -92,7 +92,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void DoesFrameCodeWorkIfToBrowsersWithFramesAreOpen()
+		public void DoesFrameCodeWorkIfTwoBrowsersWithFramesAreOpen()
 		{
 			using (var ie2 = new IE(FramesetURI))
 			{

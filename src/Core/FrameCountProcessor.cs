@@ -47,5 +47,15 @@ namespace WatiN.Core
 		{
 			return true;
 		}
+
+        internal static int GetFrameCountFromHTMLDocument(HTMLDocument htmlDocument)
+        {
+            var processor = new FrameCountProcessor(htmlDocument);
+
+            NativeMethods.EnumIWebBrowser2Interfaces(processor);
+
+            return processor.FramesCount;
+        }
+
 	}
 }

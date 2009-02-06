@@ -90,11 +90,11 @@ namespace WatiN.Core
 		{
 			var mainHtmlDocument = (HTMLDocument) maindocument;
 
-			var framesCount = Frame.GetFrameCountFromHTMLDocument(mainHtmlDocument);
+			var framesCount = FrameCountProcessor.GetFrameCountFromHTMLDocument(mainHtmlDocument);
 
 			for (var i = 0; i != framesCount; ++i)
 			{
-				var frame = Frame.GetFrameFromHTMLDocument(i, mainHtmlDocument);
+				var frame = FrameByIndexProcessor.GetFrameFromHTMLDocument(i, mainHtmlDocument);
 
 			    if (frame == null) continue;
 			    

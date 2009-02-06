@@ -58,5 +58,15 @@ namespace WatiN.Core
 		{
 			return iWebBrowser2;
 		}
+
+        internal static IWebBrowser2 GetFrameFromHTMLDocument(int frameIndex, HTMLDocument htmlDocument)
+        {
+            var processor = new FrameByIndexProcessor(frameIndex, htmlDocument);
+
+            NativeMethods.EnumIWebBrowser2Interfaces(processor);
+
+            return processor.IWebBrowser2();
+        }
+
 	}
 }
