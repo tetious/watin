@@ -364,7 +364,7 @@ namespace WatiN.Core
 		/// <exception cref="FrameNotFoundException">Thrown if the given name isn't found.</exception>
 		public Frame Frame(BaseConstraint findBy)
 		{
-		    var frame = Frames.Find(findBy);
+		    var frame = Frames.First(findBy);
             if (frame == null)
             {
                 throw new FrameNotFoundException(findBy.ConstraintToString());

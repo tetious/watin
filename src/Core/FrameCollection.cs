@@ -20,7 +20,6 @@ using System.Collections;
 using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 
@@ -54,14 +53,23 @@ namespace WatiN.Core
 
 		public bool Exists(BaseConstraint findBy)
 		{
-		    return (Find(findBy) != null);
+		    return (First(findBy) != null);
 		}
+
+        /// <summary>
+        /// Returns the first frame of this collection. If colection contains
+        /// no frames, null will be returned.
+        /// </summary>
+        public Frame First()
+        {
+            return First(Find.First());
+        }
 
         /// <summary>
         /// Find a frame within this collection. If no match is found it will return null.
         /// </summary>
         /// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find.</param>
-        public Frame Find(BaseConstraint findBy)
+        public Frame First(BaseConstraint findBy)
         {
             foreach (var frame in frames)
             {
