@@ -130,7 +130,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllFramesProcessor.cs">
+    <Compile Include="InternetExplorer\AllFramesProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Area.cs">
@@ -366,6 +366,8 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InternetExplorer\FrameByIndexProcessor.cs" />
+    <Compile Include="InternetExplorer\FrameCountProcessor.cs" />
     <Compile Include="Mozilla\FFDocument.cs" />
     <Compile Include="Mozilla\FFElement.cs" />
     <Compile Include="Mozilla\FFElementFinder.cs" />
@@ -383,13 +385,7 @@
     <Compile Include="Frame.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FrameByIndexProcessor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FrameCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FrameCountProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HTMLDialog.cs">

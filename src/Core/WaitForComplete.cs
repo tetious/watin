@@ -21,6 +21,7 @@ using System.Threading;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core

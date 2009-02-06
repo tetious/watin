@@ -20,6 +20,7 @@ using System.Collections;
 using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {

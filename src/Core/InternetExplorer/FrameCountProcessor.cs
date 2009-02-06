@@ -20,33 +20,33 @@ using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.InternetExplorer
 {
-	internal class FrameCountProcessor : IWebBrowser2Processor
-	{
-		private readonly HTMLDocument htmlDocument;
+    internal class FrameCountProcessor : IWebBrowser2Processor
+    {
+        private readonly HTMLDocument htmlDocument;
 
-	    public FrameCountProcessor(HTMLDocument htmlDocument)
-		{
-			this.htmlDocument = htmlDocument;
-		}
+        public FrameCountProcessor(HTMLDocument htmlDocument)
+        {
+            this.htmlDocument = htmlDocument;
+        }
 
-	    public int FramesCount { get; private set; }
+        public int FramesCount { get; private set; }
 
-	    public HTMLDocument HTMLDocument()
-		{
-			return htmlDocument;
-		}
+        public HTMLDocument HTMLDocument()
+        {
+            return htmlDocument;
+        }
 
-		public void Process(IWebBrowser2 webBrowser2)
-		{
-			FramesCount++;
-		}
+        public void Process(IWebBrowser2 webBrowser2)
+        {
+            FramesCount++;
+        }
 
-		public bool Continue()
-		{
-			return true;
-		}
+        public bool Continue()
+        {
+            return true;
+        }
 
         internal static int GetFrameCountFromHTMLDocument(HTMLDocument htmlDocument)
         {
@@ -57,5 +57,5 @@ namespace WatiN.Core
             return processor.FramesCount;
         }
 
-	}
+    }
 }

@@ -20,44 +20,44 @@ using mshtml;
 using SHDocVw;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.InternetExplorer
 {
-	internal class FrameByIndexProcessor : IWebBrowser2Processor
-	{
-		private readonly HTMLDocument htmlDocument;
-		private readonly int index;
-		private int counter;
-		private IWebBrowser2 iWebBrowser2;
+    internal class FrameByIndexProcessor : IWebBrowser2Processor
+    {
+        private readonly HTMLDocument htmlDocument;
+        private readonly int index;
+        private int counter;
+        private IWebBrowser2 iWebBrowser2;
 
-		public FrameByIndexProcessor(int index, HTMLDocument htmlDocument)
-		{
-			this.index = index;
-			this.htmlDocument = htmlDocument;
-		}
+        public FrameByIndexProcessor(int index, HTMLDocument htmlDocument)
+        {
+            this.index = index;
+            this.htmlDocument = htmlDocument;
+        }
 
-		public HTMLDocument HTMLDocument()
-		{
-			return htmlDocument;
-		}
+        public HTMLDocument HTMLDocument()
+        {
+            return htmlDocument;
+        }
 
-		public void Process(IWebBrowser2 webBrowser2)
-		{
-			if (counter == index)
-			{
-				iWebBrowser2 = webBrowser2;
-			}
-			counter++;
-		}
+        public void Process(IWebBrowser2 webBrowser2)
+        {
+            if (counter == index)
+            {
+                iWebBrowser2 = webBrowser2;
+            }
+            counter++;
+        }
 
-		public bool Continue()
-		{
-			return (iWebBrowser2 == null);
-		}
+        public bool Continue()
+        {
+            return (iWebBrowser2 == null);
+        }
 
-		public IWebBrowser2 IWebBrowser2()
-		{
-			return iWebBrowser2;
-		}
+        public IWebBrowser2 IWebBrowser2()
+        {
+            return iWebBrowser2;
+        }
 
         internal static IWebBrowser2 GetFrameFromHTMLDocument(int frameIndex, HTMLDocument htmlDocument)
         {
@@ -68,5 +68,5 @@ namespace WatiN.Core
             return processor.IWebBrowser2();
         }
 
-	}
+    }
 }
