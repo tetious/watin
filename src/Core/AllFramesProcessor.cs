@@ -43,7 +43,7 @@ namespace WatiN.Core
 			// might contain IFRAME elements.
 			if (frameElements.length == 0)
 			{
-				frameElements = (IHTMLElementCollection) htmlDocument.all.tags("IFRAME");
+                frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.IFrameTagName);
 			}
 
 			_domContainer = domContainer;

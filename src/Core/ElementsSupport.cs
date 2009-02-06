@@ -29,6 +29,7 @@ namespace WatiN.Core
 	public static class ElementsSupport
 	{
 		public const string FrameTagName = "FRAME";
+		public const string IFrameTagName = "IFRAME";
 		public const string InputTagName = "INPUT";
 		public const string TableCellTagName = "TD";
 		public const string LabelTagName = "LABEL";

@@ -87,11 +87,11 @@ namespace WatiN.Core
 		{
 			if(frameElement == null)
 			{
-				var element = GetFrameElement("FRAME") ?? GetFrameElement("IFRAME");
+                var element = GetFrameElement(ElementsSupport.FrameTagName) ?? GetFrameElement(ElementsSupport.IFrameTagName);
 
 			    if (element == null)
 				{
-					throw new WatiNException("element shouldn't be null");
+					throw new WatiNException("Frame shouldn't be null");
 				}
 
 				frameElement = new Element(DomContainer, DomContainer.NativeBrowser.CreateElement(element));
