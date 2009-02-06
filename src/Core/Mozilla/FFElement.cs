@@ -1,6 +1,6 @@
 ﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
-//Copyright 2006-2008 Jeroen van Menen
+//Copyright 2006-2009 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
