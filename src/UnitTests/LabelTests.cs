@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,90 +31,106 @@ namespace WatiN.Core.UnitTests
 		public void LabelElementTags()
 		{
 			Assert.AreEqual(1, Label.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("label", ((ElementTag) Label.ElementTags[0]).TagName);
+			Assert.AreEqual("label", Label.ElementTags[0].TagName);
 		}
 
+        // TODO: This could be mocked
 		[Test]
 		public void LabelFromElement()
 		{
-			Element element = Ie.Element("label", Find.ByFor("Checkbox21"));
-			Label label = new Label(element);
+			var element = Ie.Element("label", Find.ByFor("Checkbox21"));
+			var label = new Label(element);
 			Assert.AreEqual("Checkbox21", label.For);
 		}
 
 		[Test]
 		public void LabelExists()
 		{
-			Assert.IsTrue(Ie.Label(Find.ByFor("Checkbox21")).Exists);
-			Assert.IsTrue(Ie.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
-			Assert.IsFalse(Ie.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.Label(Find.ByFor("Checkbox21")).Exists);
+                                Assert.IsTrue(browser.Label(Find.ByFor(new Regex("Checkbox21"))).Exists);
+                                Assert.IsFalse(browser.Label(Find.ByFor("nonexistingCheckbox21")).Exists);
+		                    });
 		}
 
 		[Test]
 		public void LabelByFor()
 		{
-			Label label = Ie.Label(Find.ByFor("Checkbox21"));
+		    ExecuteTest(browser =>
+		                    {
+                                var label = browser.Label(Find.ByFor("Checkbox21"));
 
-			Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
-			Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
-			Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+		                        Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
+		                        Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+		                        Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+		                    });
 		}
 
 		[Test]
 		public void LabelByForWithElement()
 		{
-			CheckBox checkBox = Ie.CheckBox("Checkbox21");
+		    ExecuteTest(browser =>
+		                    {
+                                var checkBox = browser.CheckBox("Checkbox21");
 
-			Label label = Ie.Label(Find.ByFor(checkBox));
+                                var label = browser.Label(Find.ByFor(checkBox));
 
-			Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
-			Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
-			Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+		                        Assert.AreEqual("Checkbox21", label.For, "Unexpected label.For id");
+		                        Assert.AreEqual("label for Checkbox21", label.Text, "Unexpected label.Text");
+		                        Assert.AreEqual("C", label.AccessKey, "Unexpected label.AccessKey");
+		                    });
 		}
 
 		[Test]
 		public void LabelWrapped()
 		{
-			LabelCollection labelCollection = Ie.Labels;
-			Assert.AreEqual(2, Ie.Labels.Length, "Unexpected number of labels");
+		    ExecuteTest(browser =>
+		                    {
+                                var labelCollection = browser.Labels;
+                                Assert.AreEqual(2, browser.Labels.Length, "Unexpected number of labels");
 
-			Label label = labelCollection[1];
+		                        var label = labelCollection[1];
 
-			Assert.AreEqual(null, label.For, "Unexpected label.For id");
-			Assert.AreEqual("Test label before:  Test label after", label.Text, "Unexpected label.Text");
-
-			// Element.TextBefore and Element.TextAfter are tested in test method Element
+		                        Assert.AreEqual(null, label.For, "Unexpected label.For id");
+		                        var regex = new Regex("Test label before: +Test label after");
+                                Assert.That(regex.IsMatch(label.Text), Is.True, "Unexpected label.Text");
+		                    });
 		}
 
 		[Test]
 		public void Labels()
 		{
-			const int expectedLabelCount = 2;
+		    ExecuteTest(browser =>
+		                    {
+		                        const int expectedLabelCount = 2;
 
-			Assert.AreEqual(expectedLabelCount, Ie.Labels.Length, "Unexpected number of labels");
+                                Assert.AreEqual(expectedLabelCount, browser.Labels.Length, "Unexpected number of labels");
 
-			LabelCollection labelCollection = Ie.Labels;
+                                var labelCollection = browser.Labels;
 
-			// Collection items by index
-			Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");
+		                        // Collection items by index
+		                        Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");
 
-			// Collection iteration and comparing the result with Enumerator
-			IEnumerable labelEnumerable = labelCollection;
-			IEnumerator labelEnumerator = labelEnumerable.GetEnumerator();
+		                        // Collection iteration and comparing the result with Enumerator
+		                        IEnumerable labelEnumerable = labelCollection;
+		                        var labelEnumerator = labelEnumerable.GetEnumerator();
 
-			int count = 0;
-			foreach (Label label in labelCollection)
-			{
-				labelEnumerator.MoveNext();
-				object enumCheckbox = labelEnumerator.Current;
+		                        var count = 0;
+		                        foreach (Label label in labelCollection)
+		                        {
+		                            labelEnumerator.MoveNext();
+		                            var enumCheckbox = labelEnumerator.Current;
 
-				Assert.IsInstanceOfType(label.GetType(), enumCheckbox, "Types are not the same");
-				Assert.AreEqual(label.OuterHtml, ((Label) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(label.GetType(), enumCheckbox, "Types are not the same");
+		                            Assert.AreEqual(label.OuterHtml, ((Label) enumCheckbox).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(labelEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedLabelCount, count);
+		                        Assert.IsFalse(labelEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedLabelCount, count);
+
+		                    });
 		}
 
 		public override Uri TestPageUri
