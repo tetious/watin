@@ -9,8 +9,11 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void FramesLength()
         {
-            Assert.AreEqual(2, Ie.Frames.Length);
-            Assert.AreEqual(2, Ie.Frames[1].Frames.Length);
+            ExecuteTest(browser =>
+                            {
+                                Assert.AreEqual(2, browser.Frames.Length);
+                                Assert.AreEqual(2, browser.Frames[1].Frames.Length);
+                            });
         }
 
         public override Uri TestPageUri

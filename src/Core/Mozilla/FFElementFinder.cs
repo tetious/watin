@@ -86,13 +86,24 @@ namespace WatiN.Core.Mozilla
             var referencedElement = elementCollection.Elements.ToString();
             
             // Create reference to document object
-            var documentReference = referencedElement.Contains(".") ? referencedElement + ".ownerDocument" : referencedElement;
+            var documentReference = GetDocumentReference(referencedElement);
 
             var elementName = FireFoxClientPort.CreateVariableName();
             var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, Id);
             command = command + string.Format("{0} != null;", elementName);
 
             return _clientPort.WriteAndReadAsBool(command) ? new FFElement(elementName, _clientPort) : null;
+        }
+
+        private static string GetDocumentReference(string referencedElement)
+        {
+            if (referencedElement.Contains(".") && 
+                !(referencedElement.EndsWith("contentDocument") || referencedElement.EndsWith("ownerDocument")))
+            {
+                return referencedElement + ".ownerDocument";
+            }
+            
+            return referencedElement;
         }
 
         protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)

@@ -32,75 +32,106 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void GetGoogleFrameUsingFramesCollection()
 		{
-			try
-			{
-				Ie.Frames[1].TextField(Find.ByName("q"));
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Assert.Fail("UnauthorizedAccessException");
-			}
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+                                    Assert.That(browser.Frames[1].TextField(Find.ByName("q")).Exists, "Should find google input field");
+		                        }
+		                        catch (UnauthorizedAccessException)
+		                        {
+		                            Assert.Fail("UnauthorizedAccessException");
+		                        }
+                                catch(Exception e)
+                                {
+                                    Assert.Fail("Unexpected exception: " + e.GetType());
+                                }
 
-			Assert.AreEqual("mainid", Ie.Frames[1].Id, "Unexpected id");
-			Assert.AreEqual("main", Ie.Frames[1].Name, "Unexpected name");
+                                Assert.AreEqual("mainid", browser.Frames[1].Id, "Unexpected id");
+                                Assert.AreEqual("main", browser.Frames[1].Name, "Unexpected name");
+		                    });
 		}
 
 		[Test]
 		public void GetGoogleFrameUsingFindById()
 		{
-			try
-			{
-				Ie.Frame("mainid").TextField(Find.ByName("q"));
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Assert.Fail("UnauthorizedAccessException");
-			}
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+		                            browser.Frame("mainid").TextField(Find.ByName("q")).TypeText("WatiN");
+		                        }
+		                        catch (UnauthorizedAccessException)
+		                        {
+		                            Assert.Fail("UnauthorizedAccessException");
+		                        }
+                                catch (Exception e)
+                                {
+                                    Assert.Fail("Unexpected exception: " + e.GetType());
+                                }
 
-			Assert.AreEqual("mainid", Ie.Frame("mainid").Id, "Unexpected Id");
-			Assert.AreEqual("main", Ie.Frame("mainid").Name, "Unexpected name");
+		                        Assert.AreEqual("mainid", browser.Frame("mainid").Id, "Unexpected Id");
+		                        Assert.AreEqual("main", browser.Frame("mainid").Name, "Unexpected name");
+
+		                    });
+
 		}
 
 		[Test]
 		public void GetContentsFrameUsingFindById()
 		{
-			try
-			{
-				Ie.Frame("contentsid").Link("googlelink");
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Assert.Fail("UnauthorizedAccessException");
-			}
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+		                            Assert.That(browser.Frame("contentsid").Link("googlelink").Exists, "Should find link");
+		                        }
+		                        catch (UnauthorizedAccessException)
+		                        {
+		                            Assert.Fail("UnauthorizedAccessException");
+		                        }
+                                catch (Exception e)
+                                {
+                                    Assert.Fail("Unexpected exception: " + e.GetType());
+                                }
 
-			Assert.AreEqual("contentsid", Ie.Frame("contentsid").Id, "Unexpected Id");
-			Assert.AreEqual("contents", Ie.Frame("contentsid").Name, "Unexpected name");
+                                Assert.AreEqual("contentsid", browser.Frame("contentsid").Id, "Unexpected Id");
+                                Assert.AreEqual("contents", browser.Frame("contentsid").Name, "Unexpected name");
+
+		                    });
+
 		}
 
 		[Test]
 		public void GetGoogleFrameUsingFindByName()
 		{
-			try
-			{
-				Ie.Frame(Find.ByName("main"));
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Assert.Fail("UnauthorizedAccessException");
-			}
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+                                    browser.Frame(Find.ByName("main"));
+		                        }
+		                        catch (UnauthorizedAccessException)
+		                        {
+		                            Assert.Fail("UnauthorizedAccessException");
+		                        }
+		                    });
 		}
 
 		[Test]
 		public void GetContentsFrameUsingFindByName()
 		{
-			try
-			{
-				Ie.Frame(Find.ByName("contents"));
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Assert.Fail("UnauthorizedAccessException");
-			}
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+                                    browser.Frame(Find.ByName("contents"));
+		                        }
+		                        catch (UnauthorizedAccessException)
+		                        {
+		                            Assert.Fail("UnauthorizedAccessException");
+		                        }
+		                    });
 		}
 	}
 }
