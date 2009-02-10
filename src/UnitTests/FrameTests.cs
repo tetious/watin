@@ -22,7 +22,6 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Constraints;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
 {
@@ -49,10 +48,22 @@ namespace WatiN.Core.UnitTests
 			Assert.IsInstanceOfType(typeof (Document), Ie.Frame("mainid"));
 		}
 
-		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingFrameID'")]
+		[Test]
 		public void ExpectFrameNotFoundException()
 		{
-		    ExecuteTest(browser => browser.Frame(Find.ById("NonExistingFrameID")));
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+		                            browser.Frame(Find.ById("NonExistingFrameID"));
+                                    Assert.Fail("Expected " + typeof(FrameNotFoundException));
+		                        }
+		                        catch (Exception e)
+		                        {
+		                            Assert.That(e, Is.InstanceOfType(typeof(FrameNotFoundException)), "Unexpected exception");
+                                    Assert.That(e.Message, Is.EqualTo("Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingFrameID'"), "Unexpected message");
+		                        }
+		                    });
 		}
 
 		[Test]
