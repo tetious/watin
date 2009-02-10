@@ -517,7 +517,7 @@ namespace WatiN.Core.Mozilla
 
             while (!stream.CanRead)
             {
-                // Hack: need to work out a better way for this
+                // TODO: need to work out a better way for this
                 System.Threading.Thread.Sleep(10);
             }
 
@@ -532,6 +532,9 @@ namespace WatiN.Core.Mozilla
                 lastResponse += CleanTelnetResponse(readData);
             } while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(lastResponse)));
 
+            // Convert \n to newline
+            lastResponse = lastResponse.Replace("\n", Environment.NewLine);
+            
             response.Append(lastResponse);
 
             if (checkForErrors)
