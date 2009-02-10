@@ -52,25 +52,31 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (FrameNotFoundException), ExpectedMessage = "Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingFrameID'")]
 		public void ExpectFrameNotFoundException()
 		{
-			Ie.Frame(Find.ById("NonExistingFrameID"));
+		    ExecuteTest(browser => browser.Frame(Find.ById("NonExistingFrameID")));
 		}
 
 		[Test]
 		public void FramesCollectionExists()
 		{
-			Assert.IsTrue(Ie.Frames.Exists(Find.ByName("contents")));
-			Assert.IsFalse(Ie.Frames.Exists(Find.ByName("nonexisting")));
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.Frames.Exists(Find.ByName("contents")));
+                                Assert.IsFalse(browser.Frames.Exists(Find.ByName("nonexisting")));
+		                    });
 		}
 
 		[Test]
 		public void ContentsFrame()
 		{
-			var contentsFrame = Ie.Frame(Find.ByName("contents"));
-			Assert.IsNotNull(contentsFrame, "Frame expected");
-			Assert.AreEqual("contents", contentsFrame.Name);
-			Assert.AreEqual(null, contentsFrame.Id);
+		    ExecuteTest(browser =>
+		                    {
+                                var contentsFrame = browser.Frame(Find.ByName("contents"));
+		                        Assert.IsNotNull(contentsFrame, "Frame expected");
+		                        Assert.AreEqual("contents", contentsFrame.Name);
+		                        Assert.AreEqual(null, contentsFrame.Id);
 
-			AssertFindFrame(Ie, Find.ByUrl(IndexURI), frameNameContents);
+                                AssertFindFrame(browser, Find.ByUrl(IndexURI), frameNameContents);
+		                    });
 		}
 
 		[Test]

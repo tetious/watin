@@ -63,17 +63,26 @@ namespace WatiN.Core.InternetExplorer
 	        return children;
 	    }
 
-	    protected override List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
+	    protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
 	    {
-            var children = new List<INativeElement>();
+	        var elements = (IHTMLElementCollection)elementCollection.Elements;
+	        
+            if (elements == null) return null;
 
-            var element = GetElementById((IHTMLElementCollection)elementCollection.Elements, ((AttributeConstraint)constraint).Value, elementTag);
+	        var elementCollection3 = elements as IHTMLElementCollection3;
 
-	        if (element != null)
+	        if (elementCollection3 == null) return null;
+
+	        var item = elementCollection3.namedItem(Id);
+            
+	        var element = item as IHTMLElement;
+
+	        if (element == null && (item as IHTMLElementCollection) != null)
 	        {
-	            FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, children);
+	            element = (IHTMLElement) ((IHTMLElementCollection) item).item(null, 0);
 	        }
-	        return children;
+
+	        return element == null ? null : new IEElement(element);
 	    }
 
         protected bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> children)
@@ -122,28 +131,5 @@ namespace WatiN.Core.InternetExplorer
 
             return (IHTMLElementCollection)elements.tags(tagName);
         }
-
-        private static IHTMLElement GetElementById(IHTMLElementCollection elements, string id, ElementTag elementTag)
-        {
-            if (elements == null) return null;
-
-            var elementCollection3 = elements as IHTMLElementCollection3;
-
-            if (elementCollection3 == null) return null;
-
-            var item = elementCollection3.namedItem(id);
-            
-            var element = item as IHTMLElement;
-
-            if (element == null && (item as IHTMLElementCollection) != null)
-            {
-                element = (IHTMLElement) ((IHTMLElementCollection) item).item(null, 0);
-            }
-
-            if (element != null && elementTag.Compare(new IEElement(element))) return element;
-
-            return null;
-        }
-
 	}
 }

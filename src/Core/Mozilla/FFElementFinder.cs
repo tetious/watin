@@ -48,49 +48,16 @@ namespace WatiN.Core.Mozilla
 
         protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
         {
-            return FindMatchingElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, elementCollection);
-        }
-
-        protected override List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
-        {
             var elementReferences = new List<INativeElement>();
+            if (elementCollection.Elements == null) return new List<INativeElement>();
 
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
 
-            var elementName = FireFoxClientPort.CreateVariableName();
-
-            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, FireFoxClientPort.DocumentVariableName, ((AttributeConstraint)constraint).Value);
-            command = command + string.Format("{0} != null;", elementName);
-
-            if  (_clientPort.WriteAndReadAsBool(command))
-            {
-                var element = new FFElement(elementName, _clientPort);
-                if (elementTag.Compare(element))
-                {
-                    elementReferences.Add(element);
-                }
-            }
-
-            return elementReferences;
-        }
-
-        protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
-        {
-            // TODO: Is this needed for FireFox?
-            return;
-        }
-
-        private List<INativeElement> FindMatchingElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection parentElement)
-        {
-            var elementReferences = new List<INativeElement>();
-            if (parentElement.Elements == null) return elementReferences;
-
-            // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            _clientPort.InitializeDocument();
+            if (elementCollection.Elements == null) return new List<INativeElement>();
 
             var elementArrayName = "watinElemFinder";
-            var elementToSearchFrom = parentElement.Elements.ToString();
+            var elementToSearchFrom = elementCollection.Elements.ToString();
 
             var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom, elementTag.TagName);
 
@@ -107,6 +74,31 @@ namespace WatiN.Core.Mozilla
             }
 
             return elementReferences;
+        }
+
+        protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
+        {
+            // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
+            _clientPort.InitializeDocument();
+
+            if (elementCollection.Elements == null) return null;
+
+            var referencedElement = elementCollection.Elements.ToString();
+            
+            // Create reference to document object
+            var documentReference = referencedElement.Contains(".") ? referencedElement + ".ownerDocument" : referencedElement;
+
+            var elementName = FireFoxClientPort.CreateVariableName();
+            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, Id);
+            command = command + string.Format("{0} != null;", elementName);
+
+            return _clientPort.WriteAndReadAsBool(command) ? new FFElement(elementName, _clientPort) : null;
+        }
+
+        protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
+        {
+            // TODO: Is this needed for FireFox?
+            return;
         }
 
         protected override void FoundMatchingElement(INativeElement nativeElement, ICollection<INativeElement> children)

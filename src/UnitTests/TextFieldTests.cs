@@ -78,7 +78,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                var textfieldName = Ie.TextField("Textarea1");
+                                var textfieldName = browser.TextField("Textarea1");
 		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
 		                        textfieldName.TypeText(textWithNewLine);
@@ -132,8 +132,8 @@ namespace WatiN.Core.UnitTests
 		                        Assert.AreEqual(value, textfieldName.Text, "Text not OK");
 
 		                        Assert.AreEqual("Textfield title", textfieldName.ToString(), "Expected Title");
-		                        Assert.AreEqual("readonlytext", Ie.TextField("readonlytext").ToString(), "Expected Id");
-		                        Assert.AreEqual("disabledtext", Ie.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
+                                Assert.AreEqual("readonlytext", browser.TextField("readonlytext").ToString(), "Expected Id");
+                                Assert.AreEqual("disabledtext", browser.TextField(Find.ByName("disabledtext")).ToString(), "Expected Name");
 		                    });
 		}
 
@@ -184,7 +184,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        browser.GoTo(Ie.Uri);
+                                browser.GoTo(browser.Uri);
 
 		                        const string value = "Hello world!";
 		                        const string appendValue = " This is WatiN!";

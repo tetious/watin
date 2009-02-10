@@ -410,22 +410,22 @@ namespace WatiN.Core.Mozilla
             return eventname;
         }
 
-        private static string CreateHTMLEventCommand(string eventname)
+        private string CreateHTMLEventCommand(string eventname)
         {
-            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"HTMLEvents\");" +
+            return "var event = " +  ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
                    "event.initEvent(\"" + eventname + "\",true,true);";
         }
 
-        private static string CreateMouseEventCommand(string eventname)
+        private string CreateMouseEventCommand(string eventname)
         {
             // Params for the initMouseEvent:
             // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
 
-            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"MouseEvents\");" +
+            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
                    "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
         }
 
-        private static string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
+        private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
         {
             // Params for the initKeyEvent:
             // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
@@ -437,7 +437,7 @@ namespace WatiN.Core.Mozilla
             // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
             if (eventname == "keypress") keyCode = "0";
             
-            return "var event = " + FireFoxClientPort.DocumentVariableName + ".createEvent(\"KeyboardEvent\");" +
+            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
                    "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
         }
 
@@ -521,7 +521,7 @@ namespace WatiN.Core.Mozilla
             var outerHtml = FireFoxClientPort.CreateVariableName();
 
             var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
-            command += string.Format("{0}={1}.createElement('div');", div, FireFoxClientPort.DocumentVariableName);
+            command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
             command += string.Format("{0}.appendChild({1});", div, clone);
             command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
             command += string.Format("{0}=null;{1}=null;", div, clone);

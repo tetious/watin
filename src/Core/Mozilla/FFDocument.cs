@@ -22,7 +22,7 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Mozilla
 {
-    public class FFDocument : INativeDocument
+    public class FFDocument : INativeDocument, IElementCollection
     {
         public FireFoxClientPort ClientPort { get; set; }
 
@@ -99,7 +99,18 @@ namespace WatiN.Core.Mozilla
 
         public List<Frame> Frames(DomContainer domContainer)
         {
-            return new List<Frame>();
+            var frames = new List<Frame>();
+
+            var elementFinder = new FFElementFinder(Frame.ElementTags, this, domContainer, ClientPort);
+            var all = elementFinder.FindAll();
+
+            foreach (var element in all)
+            {
+                var frameElement = new Element(domContainer, element);
+                frames.Add(new Frame(domContainer, this, frameElement));
+            }
+
+            return frames;
         }
 
         public string GetPropertyValue(string propertyName)
@@ -112,6 +123,11 @@ namespace WatiN.Core.Mozilla
             }
 
             return ClientPort.WriteAndRead(command);
+        }
+
+        public object Elements
+        {
+            get { return Objects; }
         }
     }
 }

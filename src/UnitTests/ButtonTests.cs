@@ -351,6 +351,13 @@ namespace WatiN.Core.UnitTests
 
         }
 
+	    [Test]
+	    public void ShouldFindButtonInsideForm()
+	    {
+            ExecuteTest(browser => Assert.That(browser.Form("Form").Button("helloid").Exists, Is.True, "Expected button to be found"));
+	    }
+
+
 		public override Uri TestPageUri
 		{
 			get { return MainURI; }

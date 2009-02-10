@@ -16,8 +16,7 @@
 
 #endregion Copyright
 
-using WatiN.Core.Constraints;
-using WatiN.Core.Exceptions;
+using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -27,6 +26,25 @@ namespace WatiN.Core
 	/// </summary>
 	public class Frame : Document, IAttributeBag
 	{
+        private static List<ElementTag> elementTags;
+
+        public static List<ElementTag> ElementTags
+        {
+            get
+            {
+                if (elementTags == null)
+                {
+                    elementTags = new List<ElementTag>
+					                  {
+					                      new ElementTag(ElementsSupport.FrameTagName), 
+                                          new ElementTag(ElementsSupport.IFrameTagName)
+					                  };
+                }
+
+                return elementTags;
+            }
+        }
+
 		private readonly Element _frameElement;
 
 		/// <summary>

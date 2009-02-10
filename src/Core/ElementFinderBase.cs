@@ -137,26 +137,40 @@ namespace WatiN.Core
         {
             // Get elements with the tagname from the page
             constraint.Reset();
-            var attributeBag = new ElementAttributeBag(_domContainer);
 
-            if (FindByExactMatchOnIdPossible(constraint))
+            if (IsGetElementByIdPossible(constraint))
             {
-                return FindElementById(constraint, elementTag, attributeBag, true, _elementCollection);
+                return GetElementById(constraint, elementTag);
             }
+
+            var attributeBag = new ElementAttributeBag(_domContainer);
             return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
         }
 
         protected abstract List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection);
-        protected abstract List<INativeElement> FindElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection);
+        protected abstract INativeElement FindElementById(string Id, IElementCollection elementCollection);
 
-        private static bool FindByExactMatchOnIdPossible(BaseConstraint constraint)
+        private static bool IsGetElementByIdPossible(BaseConstraint constraint)
         {
             var attributeConstraint = constraint as AttributeConstraint;
-			
-            return attributeConstraint != null && 
-                   StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) && 
-                   !(constraint.HasAnd || constraint.HasOr) && 
+
+            return attributeConstraint != null &&
+                   StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) &&
+                   !(constraint.HasAnd || constraint.HasOr) &&
                    attributeConstraint.Comparer.GetType() == typeof(StringComparer);
+        }
+
+        private List<INativeElement> GetElementById(BaseConstraint constraint, ElementTag elementTag)
+        {
+            var Id = ((AttributeConstraint) constraint).Value;
+            var element = FindElementById(Id, _elementCollection);
+            
+            if (element != null && elementTag.Compare(element))
+            {
+                return new List<INativeElement> {element};
+            }
+
+            return new List<INativeElement>();
         }
 
         protected bool FinishedAddingChildrenThatMetTheConstraints(INativeElement nativeElement, ElementAttributeBag attributeBag, ElementTag elementTag, BaseConstraint constraint, ICollection<INativeElement> children, bool returnAfterFirstMatch)
