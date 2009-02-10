@@ -45,6 +45,14 @@ namespace WatiN.Core.UnitTests
 			UtilityClass.DumpElementsWithHtmlSource(Ie);
 		}
 
+        [Test]
+        public void ShowFrames()
+        {
+            Ie.GoTo(FramesetURI);
+
+            UtilityClass.DumpFrames(Ie);
+        }
+
 		[Test]
 		public void IsNullOrEmpty()
 		{

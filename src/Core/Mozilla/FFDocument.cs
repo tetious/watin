@@ -24,28 +24,35 @@ namespace WatiN.Core.Mozilla
 {
     public class FFDocument : INativeDocument, IElementCollection
     {
+        private readonly string _elementReference;
         public FireFoxClientPort ClientPort { get; set; }
 
-        public FFDocument(FireFoxClientPort clientPort)
+        public FFDocument(FireFoxClientPort clientPort) : this (FireFoxClientPort.DocumentVariableName, clientPort)
         {
+            ClientPort = clientPort;
+        }
+
+        public FFDocument(string elementReference, FireFoxClientPort clientPort)
+        {
+            _elementReference = elementReference;
             ClientPort = clientPort;
         }
 
         public object Object
         {
-            get { return FireFoxClientPort.DocumentVariableName; }
+            get { return _elementReference; }
         }
 
         public object Objects
         {
-            get { return FireFoxClientPort.DocumentVariableName; }
+            get { return _elementReference; }
         }
 
         public INativeElement Body
         {
             get
             {
-                var bodyReference = string.Format("{0}.body", FireFoxClientPort.DocumentVariableName);
+                var bodyReference = string.Format("{0}.body", _elementReference);
                 return new FFElement(bodyReference, ClientPort);
             }
         }
@@ -54,7 +61,7 @@ namespace WatiN.Core.Mozilla
         {
             get
             {
-                var url = ClientPort.WriteAndRead("{0}.location.href", FireFoxClientPort.WindowVariableName);
+                var url = ClientPort.WriteAndRead("{0}.location.href", _elementReference);
                 url = string.IsNullOrEmpty(url) ? "about:blank" : url;
                 return url;
             }
@@ -62,7 +69,7 @@ namespace WatiN.Core.Mozilla
 
         public string Title
         {
-            get { return ClientPort.WriteAndRead("{0}.title", FireFoxClientPort.DocumentVariableName); }
+            get { return ClientPort.WriteAndRead("{0}.title", _elementReference); }
         }
 
         public INativeElement ActiveElement
@@ -73,7 +80,7 @@ namespace WatiN.Core.Mozilla
                 var propertyName = "activeElement";
 
                 var elementvar = FireFoxClientPort.CreateVariableName();
-                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, FireFoxClientPort.DocumentVariableName, propertyName);
+                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, _elementReference, propertyName);
                 var result = ClientPort.WriteAndReadAsBool(command);
 
                 return !result ? new FFElement(elementvar, ClientPort) : null;
@@ -94,7 +101,7 @@ namespace WatiN.Core.Mozilla
 
         public string JavaScriptVariableName
         {
-            get { return FireFoxClientPort.DocumentVariableName; }
+            get { return _elementReference; }
         }
 
         public List<Frame> Frames(DomContainer domContainer)
@@ -107,7 +114,8 @@ namespace WatiN.Core.Mozilla
             foreach (var element in all)
             {
                 var frameElement = new Element(domContainer, element);
-                frames.Add(new Frame(domContainer, this, frameElement));
+                var frameDocument = element.Object + ".contentDocument";
+                frames.Add(new Frame(domContainer, new FFDocument(frameDocument, ClientPort), frameElement));
             }
 
             return frames;
@@ -115,7 +123,7 @@ namespace WatiN.Core.Mozilla
 
         public string GetPropertyValue(string propertyName)
         {
-            var command = string.Format("{0}.{1};", FireFoxClientPort.DocumentVariableName, propertyName);
+            var command = string.Format("{0}.{1};", _elementReference, propertyName);
             
             if (propertyName == Document.ERROR_PROPERTY_NAME)
             {

@@ -82,21 +82,28 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void MainFrame()
 		{
-			var mainFrame = Ie.Frame(Find.ById("mainid"));
-			Assert.IsNotNull(mainFrame, "Frame expected");
-			Assert.AreEqual("main", mainFrame.Name);
-			Assert.AreEqual("mainid", mainFrame.Id);
+		    ExecuteTest(browser =>
+		                    {
+		                        var mainFrame = browser.Frame(Find.ById("mainid"));
+		                        Assert.IsNotNull(mainFrame, "Frame expected");
+		                        Assert.AreEqual("main", mainFrame.Name);
+		                        Assert.AreEqual("mainid", mainFrame.Id);
 
-			AssertFindFrame(Ie, Find.ByName(frameNameMain), frameNameMain);
+		                        AssertFindFrame(browser, Find.ByName(frameNameMain), frameNameMain);
+		                    });
 		}
 
 		[Test]
 		public void FrameHTMLShouldNotReturnParentHTML()
 		{
-			var contentsFrame = Ie.Frame(Find.ByName("contents"));
-			Assert.AreNotEqual(Ie.Html, contentsFrame.Html, "Html should be from the frame page.");
+		    ExecuteTest(browser =>
+		                    {
+                                var contentsFrame = browser.Frame(Find.ByName("contents"));
+                                Assert.AreNotEqual(browser.Html, contentsFrame.Html, "Html should be from the frame page.");
+		                    });
 		}
 
+        // TODO: Make multi browser test as soon as WatiN can handle multiple instances of FireFox
 		[Test]
 		public void DoesFrameCodeWorkIfTwoBrowsersWithFramesAreOpen()
 		{
@@ -110,58 +117,72 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Frames()
 		{
-			const int expectedFramesCount = 2;
-			var frames = Ie.Frames;
+		    ExecuteTest(browser =>
+		                    {
+		                        const int expectedFramesCount = 2;
+                                var frames = browser.Frames;
 
-			Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
+		                        Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
 
-			// Collection items by index
-			Assert.AreEqual(frameNameContents, frames[0].Name);
-			Assert.AreEqual(frameNameMain, frames[1].Name);
+		                        // Collection items by index
+		                        Assert.AreEqual(frameNameContents, frames[0].Name);
+		                        Assert.AreEqual(frameNameMain, frames[1].Name);
 
-			IEnumerable frameEnumerable = frames;
-			var frameEnumerator = frameEnumerable.GetEnumerator();
+		                        IEnumerable frameEnumerable = frames;
+		                        var frameEnumerator = frameEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			var count = 0;
-			foreach (Frame frame in frames)
-			{
-				frameEnumerator.MoveNext();
-				var enumFrame = frameEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (Frame frame in frames)
+		                        {
+		                            frameEnumerator.MoveNext();
+		                            var enumFrame = frameEnumerator.Current;
 
-				Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
-				Assert.AreEqual(frame.Html, ((Frame) enumFrame).Html, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(frame.GetType(), enumFrame, "Types are not the same");
+		                            Assert.AreEqual(frame.Html, ((Frame) enumFrame).Html, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedFramesCount, count);
+		                        Assert.IsFalse(frameEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedFramesCount, count);
+		                    });
 		}
 
 		[Test]
 		public void ShouldBeAbleToAccessCustomAttributeInFrameSetElement()
 		{
-			var value = Ie.Frame("mainid").GetAttributeValue("mycustomattribute");
-			Assert.That(value, Is.EqualTo("WatiN"));
+		    ExecuteTest(browser =>
+		                    {
+		                        var value = browser.Frame("mainid").GetAttributeValue("mycustomattribute");
+		                        Assert.That(value, Is.EqualTo("WatiN"));
+		                    });
 		}
 
 		[Test]
 		public void ShouldBeAbleToFindFrameUsingCustomAttributeInFrameSetElement()
 		{
-			var frame = Ie.Frame(Find.By("mycustomattribute","WatiN"));
-			Assert.That(frame.Id, Is.EqualTo("mainid"));
-		}
-
-		[Test, ExpectedException(typeof(FrameNotFoundException))]
-		public void ShouldThrowFrameNotFoundExceptionWhenFindingFrameWithNonExistingAttribute()
-		{
-			Ie.Frame(Find.By("nonexisting","something"));
+		    ExecuteTest(browser =>
+		                    {
+		                        var frame = browser.Frame(Find.By("mycustomattribute","WatiN"));
+		                        Assert.That(frame.Id, Is.EqualTo("mainid"));
+		                    });
 		}
 
 		[Test]
-		public void ShowFrames()
+		public void ShouldThrowFrameNotFoundExceptionWhenFindingFrameWithNonExistingAttribute()
 		{
-			UtilityClass.DumpFrames(Ie);
+		    ExecuteTest(browser =>
+		                    {
+		                        try
+		                        {
+		                            browser.Frame(Find.By("nonexisting","something"));
+                                    Assert.Fail("Expected " + typeof(FrameNotFoundException));
+		                        }
+		                        catch (Exception e)
+		                        {
+		                            Assert.That(e, Is.TypeOf(typeof(FrameNotFoundException)), "Unexpected exception");
+		                        }
+		                    });
 		}
 
 		private static void AssertFindFrame(Document document, AttributeConstraint findBy, string expectedFrameName)

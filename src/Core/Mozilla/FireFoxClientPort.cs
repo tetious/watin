@@ -412,9 +412,9 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         private void DefineDefaultJSVariables()
         {
-            Write("var w0 = getWindows()[0];", WindowVariableName);
+            Write("var w0 = getWindows()[0];");
             Write("var {0} = w0.content;", WindowVariableName);
-            Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
+            Write("var {0} = w0.document;", DocumentVariableName);
             Write("var {0} = w0.getBrowser();", BrowserVariableName);
         }
 
