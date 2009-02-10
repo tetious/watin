@@ -138,12 +138,12 @@ namespace WatiN.Core
             // Get elements with the tagname from the page
             constraint.Reset();
 
+            var attributeBag = new ElementAttributeBag(_domContainer);
             if (IsGetElementByIdPossible(constraint))
             {
-                return GetElementById(constraint, elementTag);
+                return GetElementById(constraint, elementTag, attributeBag);
             }
 
-            var attributeBag = new ElementAttributeBag(_domContainer);
             return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
         }
 
@@ -160,20 +160,30 @@ namespace WatiN.Core
                    attributeConstraint.Comparer.GetType() == typeof(StringComparer);
         }
 
-        private List<INativeElement> GetElementById(BaseConstraint constraint, ElementTag elementTag)
+        private List<INativeElement> GetElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag elementAttributeBag)
         {
             var Id = ((AttributeConstraint) constraint).Value;
             var element = FindElementById(Id, _elementCollection);
             
-            if (element != null && elementTag.Compare(element))
+            var elements = new List<INativeElement>();
+
+            if (element != null && elementTag.Compare(element) && IsMatchingElement(element, elementAttributeBag, elementTag, constraint))
             {
                 return new List<INativeElement> {element};
             }
 
-            return new List<INativeElement>();
+            return elements;
         }
 
-        protected bool FinishedAddingChildrenThatMetTheConstraints(INativeElement nativeElement, ElementAttributeBag attributeBag, ElementTag elementTag, BaseConstraint constraint, ICollection<INativeElement> children, bool returnAfterFirstMatch)
+        protected bool FinishedAddingChildrenThatMetTheConstraints(INativeElement nativeElement, ElementAttributeBag attributeBag, ElementTag elementTag, BaseConstraint constraint, ICollection<INativeElement> matchingElements, bool returnAfterFirstMatch)
+        {
+            if (!IsMatchingElement(nativeElement, attributeBag, elementTag, constraint)) return false;
+
+            AddToMatchingElements(nativeElement, matchingElements);
+            return returnAfterFirstMatch;
+        }
+
+        private bool IsMatchingElement(INativeElement nativeElement, ElementAttributeBag attributeBag, ElementTag elementTag, BaseConstraint constraint)
         {
             WaitUntilElementReadyStateIsComplete(nativeElement);
 
@@ -185,20 +195,12 @@ namespace WatiN.Core
                 validElementType = elementTag.CompareInputTypes(nativeElement);
             }
 
-            if (validElementType && constraint.Compare(attributeBag))
-            {
-                FoundMatchingElement(nativeElement, children);
-                if (returnAfterFirstMatch)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return (validElementType && constraint.Compare(attributeBag));
         }
 
-        protected virtual void FoundMatchingElement(INativeElement nativeElement, ICollection<INativeElement> children)
+        protected virtual void AddToMatchingElements(INativeElement nativeElement, ICollection<INativeElement> matchingElements)
         {
-            children.Add(nativeElement);
+            matchingElements.Add(nativeElement);
         }
 
         protected abstract void WaitUntilElementReadyStateIsComplete(INativeElement element);

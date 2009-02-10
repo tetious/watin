@@ -94,7 +94,7 @@ namespace WatiN.Core.UnitTests
 
 		                        Assert.AreEqual(null, label.For, "Unexpected label.For id");
 		                        var regex = new Regex("Test label before: +Test label after");
-                                Assert.That(regex.IsMatch(label.Text), Is.True, "Unexpected label.Text");
+                                Assert.That(regex.IsMatch(label.Text), Is.True, "Unexpected label.Text: '" + label.Text + "'");
 		                    });
 		}
 

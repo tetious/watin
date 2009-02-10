@@ -48,7 +48,7 @@ namespace WatiN.Core.Mozilla
 
         protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
         {
-            var elementReferences = new List<INativeElement>();
+            var matchingElements = new List<INativeElement>();
             if (elementCollection.Elements == null) return new List<INativeElement>();
 
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
@@ -67,13 +67,13 @@ namespace WatiN.Core.Mozilla
                 var ffElement = new FFElement(indexedElementVariableName, _clientPort);
 
                 if (FinishedAddingChildrenThatMetTheConstraints(ffElement, attributeBag, elementTag, constraint,
-                                                                elementReferences, returnAfterFirstMatch))
+                                                                matchingElements, returnAfterFirstMatch))
                 {
-                    return elementReferences;
+                    return matchingElements;
                 }
             }
 
-            return elementReferences;
+            return matchingElements;
         }
 
         protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
@@ -112,14 +112,14 @@ namespace WatiN.Core.Mozilla
             return;
         }
 
-        protected override void FoundMatchingElement(INativeElement nativeElement, ICollection<INativeElement> children)
+        protected override void AddToMatchingElements(INativeElement nativeElement, ICollection<INativeElement> matchingElements)
         {
             var elementVariableName = FireFoxClientPort.CreateVariableName();
             _clientPort.Write("{0}={1};", elementVariableName, nativeElement.Object);
             
             var ffElement = new FFElement(elementVariableName, _clientPort);
 
-            base.FoundMatchingElement(ffElement, children);
+            base.AddToMatchingElements(ffElement, matchingElements);
         }
 
         private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)

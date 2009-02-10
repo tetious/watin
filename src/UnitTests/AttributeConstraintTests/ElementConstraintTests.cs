@@ -46,7 +46,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             var domContainerMock = new Mock<DomContainer>();
             var elementAttributeBag = new ElementAttributeBag(domContainerMock.Object, INativeElementStub.Object);
 
-            INativeElementStub.Expect(native => native.GetAttributeValue("tagName")).Returns("testtagname");
+            INativeElementStub.Expect(native => native.TagName).Returns("testtagname");
 			
             var elementComparerMock = new ElementComparerMock(tagname);
             var elementConstraint = new ElementConstraint(elementComparerMock);

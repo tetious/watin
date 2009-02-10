@@ -109,8 +109,12 @@ namespace WatiN.Core.Mozilla
             if (TagName.ToLowerInvariant() == "pre") return innerHtml;
 
             // remove all \n (newline) and any following spaces
-            var newlineSpaces = new Regex("\n *");
+            var newlineSpaces = new Regex("\r\n *");
             var returnValue = newlineSpaces.Replace(innerHtml, "");
+            
+            // remove all \n (newline) and any following spaces
+            var simpleNewlineSpaces = new Regex("\n *");
+            returnValue = simpleNewlineSpaces.Replace(returnValue, "");
 
             // that's it for text nodes
             if (IsTextNodeType()) return returnValue;

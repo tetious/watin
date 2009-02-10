@@ -44,7 +44,7 @@ namespace WatiN.Core.InternetExplorer
         protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
 	    {
             var elements = GetElementCollection((IHTMLElementCollection)elementCollection.Elements, elementTag.TagName);
-            var children = new List<INativeElement>();
+            var matchingElements = new List<INativeElement>();
 
 	        if (elements != null)
 	        {
@@ -53,14 +53,14 @@ namespace WatiN.Core.InternetExplorer
 	            for (var index = 0; index < length; index++ )
                 {
                     var element = (IHTMLElement)elements.item(index, null);
-                    if (element != null && FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, children))
+                    if (element != null && FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, matchingElements))
                     {
-                        return children;
+                        return matchingElements;
                     }
                 }
 	        }
 
-	        return children;
+	        return matchingElements;
 	    }
 
 	    protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
@@ -85,11 +85,11 @@ namespace WatiN.Core.InternetExplorer
 	        return element == null ? null : new IEElement(element);
 	    }
 
-        protected bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> children)
+        protected bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> matchingElements)
         {
             var nativeElement = _domContainer.NativeBrowser.CreateElement(element);
 
-            return FinishedAddingChildrenThatMetTheConstraints(nativeElement, attributeBag, elementTag, constraint, children, returnAfterFirstMatch);
+            return FinishedAddingChildrenThatMetTheConstraints(nativeElement, attributeBag, elementTag, constraint, matchingElements, returnAfterFirstMatch);
         }
 
         protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
