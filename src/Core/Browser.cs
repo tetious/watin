@@ -106,6 +106,68 @@ namespace WatiN.Core
         protected abstract void navigateTo(Uri url);
 
         /// <summary>
+        /// Navigates the browser to the given <paramref name="url" /> 
+        /// without waiting for the page load to be finished.
+        /// </summary>
+        /// <param name="url">The URL to GoTo.</param>
+        /// <example>
+        /// The following example creates a new Internet Explorer instance and navigates to
+        /// the WatiN Project website on SourceForge.
+        /// <code>
+        /// using WatiN.Core;
+        /// 
+        /// namespace NewIEExample
+        /// {
+        ///    public class WatiNWebsite
+        ///    {
+        ///      public WatiNWebsite()
+        ///      {
+        ///        IE ie = new IE();
+        ///        ie.GoToNoWait("http://watin.sourceforge.net");
+        ///      }
+        ///    }
+        ///  }
+        /// </code>
+        /// </example>
+        public void GoToNoWait(string url)
+        {
+            GoToNoWait(UtilityClass.CreateUri(url));
+        }
+
+        /// <summary>
+        /// Navigates the browser to the given <paramref name="url" /> 
+        /// without waiting for the page load to be finished.
+        /// </summary>
+        /// <param name="url">The URL to GoTo.</param>
+        /// <example>
+        /// The following example creates a new Internet Explorer instance and navigates to
+        /// the WatiN Project website on SourceForge.
+        /// <code>
+        /// using WatiN.Core;
+        /// 
+        /// namespace NewIEExample
+        /// {
+        ///    public class WatiNWebsite
+        ///    {
+        ///      public WatiNWebsite()
+        ///      {
+        ///        Uri URL = new Uri("http://watin.sourceforge.net");
+        ///        IE ie = new IE();
+        ///        ie.GoToNoWait(URL);
+        ///      }
+        ///    }
+        ///  }
+        /// </code>
+        /// </example>
+        public void GoToNoWait(Uri url)
+        {
+            navigateToNoWait(url);
+        }
+
+
+        protected abstract void navigateToNoWait(Uri url);
+
+        /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" />.
         /// </summary>
         /// <param name="url">The URL to GoTo.</param>

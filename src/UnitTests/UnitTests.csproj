@@ -116,6 +116,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -125,6 +126,7 @@
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
+    <Reference Include="System.Xml" />
     <ProjectReference Include="..\Core\Core.csproj">
       <Name>Core</Name>
       <Project>{217E2D34-F6DF-431B-AC5A-B368F481A530}</Project>
@@ -168,12 +170,13 @@
     <Compile Include="BaseElementCollectionTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseWatiNTest.cs">
+    <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseWithBrowserTests.cs">
+    <Compile Include="TestUtils\BaseWithBrowserTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BrowserTests.cs" />
     <Compile Include="ButtonTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -265,7 +268,7 @@
     <Compile Include="ElementTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FFBrowserTestManager.cs" />
+    <Compile Include="FireFoxTests\FFBrowserTestManager.cs" />
     <Compile Include="FileUploadTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -289,10 +292,10 @@
     <Compile Include="HTMLDialogTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IBrowserTestManager.cs" />
-    <Compile Include="IEBrowserTestManager.cs" />
-    <Compile Include="IETests\HtmlInjector.cs" />
-    <Compile Include="IETests.cs">
+    <Compile Include="TestUtils\IBrowserTestManager.cs" />
+    <Compile Include="IETests\IEBrowserTestManager.cs" />
+    <Compile Include="TestUtils\HtmlInjector.cs" />
+    <Compile Include="IETests\IETests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IETests\IEDocumentTests.cs" />
@@ -333,7 +336,7 @@
     <Compile Include="SpanTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StealthSettings.cs" />
+    <Compile Include="TestUtils\StealthSettings.cs" />
     <Compile Include="TableBodyTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -351,7 +354,7 @@
     </Compile>
     <Compile Include="UtilityClasses\CaptureWebPageToFileTests.cs" />
     <Compile Include="UtilityClasses\TryActionUntilTimeOutTests.cs" />
-    <Compile Include="UtilityClasses\Utils.cs">
+    <Compile Include="UtilityClasses\UtilityClassTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Content Include="html\ButtonTests.html" />

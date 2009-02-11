@@ -18,7 +18,7 @@
 
 namespace WatiN.Core.UnitTests.IETests
 {
-    internal class HtmlInjector
+    public class HtmlInjector
     {
         private readonly string _html;
         private readonly int _numberOfSecondsToWaitBeforeInjection;

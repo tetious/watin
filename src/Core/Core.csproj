@@ -373,6 +373,7 @@
     <Compile Include="Mozilla\FFElementFinder.cs" />
     <Compile Include="FireFox.cs" />
     <Compile Include="Browser.cs" />
+    <Compile Include="Mozilla\FFUtils.cs" />
     <Compile Include="Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Mozilla\FireFoxException.cs" />
     <Compile Include="Mozilla\FFBrowser.cs" />

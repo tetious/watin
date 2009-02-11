@@ -598,7 +598,7 @@ namespace WatiN.Core
 		{
 			CheckThreadApartmentStateIsSTA();
 
-			MoveMousePoinerToTopLeft();
+			UtilityClass.MoveMousePoinerToTopLeft(Settings.AutoMoveMousePointerToTopLeft);
 
 			if (createInNewProcess)
 			{
@@ -726,14 +726,6 @@ namespace WatiN.Core
 			return null;
 		}
 
-		private static void MoveMousePoinerToTopLeft()
-		{
-			if (Settings.AutoMoveMousePointerToTopLeft)
-			{
-				Cursor.Position = new Point(0, 0);
-			}
-		}
-
 	    protected override void navigateTo(Uri url)
 		{
 			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
@@ -742,61 +734,8 @@ namespace WatiN.Core
 			ie.Navigate(url.AbsoluteUri, ref nil, ref nil, ref nil, ref nil);
 		}
 
-	    /// <summary>
-        /// Navigates Internet Explorer to the given <paramref name="url" /> 
-        /// without waiting for the page load to be finished.
-        /// </summary>
-        /// <param name="url">The URL to GoTo.</param>
-        /// <example>
-        /// The following example creates a new Internet Explorer instance and navigates to
-        /// the WatiN Project website on SourceForge.
-        /// <code>
-        /// using WatiN.Core;
-        /// 
-        /// namespace NewIEExample
-        /// {
-        ///    public class WatiNWebsite
-        ///    {
-        ///      public WatiNWebsite()
-        ///      {
-        ///        IE ie = new IE();
-        ///        ie.GoToNoWait("http://watin.sourceforge.net");
-        ///      }
-        ///    }
-        ///  }
-        /// </code>
-        /// </example>
-        public void GoToNoWait(string url)
-        {
-            GoToNoWait(UtilityClass.CreateUri(url));
-        }
 
-        /// <summary>
-        /// Navigates Internet Explorer to the given <paramref name="url" /> 
-        /// without waiting for the page load to be finished.
-        /// </summary>
-        /// <param name="url">The URL to GoTo.</param>
-        /// <example>
-        /// The following example creates a new Internet Explorer instance and navigates to
-        /// the WatiN Project website on SourceForge.
-        /// <code>
-        /// using WatiN.Core;
-        /// 
-        /// namespace NewIEExample
-        /// {
-        ///    public class WatiNWebsite
-        ///    {
-        ///      public WatiNWebsite()
-        ///      {
-        ///        Uri URL = new Uri("http://watin.sourceforge.net");
-        ///        IE ie = new IE();
-        ///        ie.GoToNoWait(URL);
-        ///      }
-        ///    }
-        ///  }
-        /// </code>
-        /// </example>
-        public void GoToNoWait(Uri url)
+        protected override void navigateToNoWait(Uri url)
         {
             var thread = new Thread(GoToNoWaitInternal);
             thread.SetApartmentState(ApartmentState.STA);

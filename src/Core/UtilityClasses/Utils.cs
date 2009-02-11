@@ -19,8 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -426,5 +428,14 @@ namespace WatiN.Core.UtilityClasses
             }
             return attributeName;
         }
+
+        public static void MoveMousePoinerToTopLeft(bool shouldMoveMousePointer)
+        {
+            if (shouldMoveMousePointer)
+            {
+                Cursor.Position = new Point(0, 0);
+            }
+        }
+
     }
 }

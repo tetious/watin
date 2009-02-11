@@ -24,7 +24,7 @@ using WatiN.Core.UtilityClasses;
 namespace WatiN.Core.UnitTests
 {
 	[TestFixture]
-	public class Utils : BaseWithBrowserTests
+	public class UtilityClassTests : BaseWithBrowserTests
 	{
 		public override Uri TestPageUri
 		{

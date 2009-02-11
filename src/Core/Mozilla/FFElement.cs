@@ -390,16 +390,10 @@ namespace WatiN.Core.Mozilla
 
             if (WaitForEventToComplete == false)
             {
-                command = WrappCommandInTimer(command);
+                command = FFUtils.WrappCommandInTimer(command);
             }
             
             ClientPort.WriteAndReadAsBool(command);
-
-        }
-
-        private static string WrappCommandInTimer(string command)
-        {
-            return "window.setTimeout(function() {" + command + ";" +"}, 200);";
 
         }
 

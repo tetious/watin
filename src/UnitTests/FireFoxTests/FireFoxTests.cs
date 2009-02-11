@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Web;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.Logging;
 
 namespace WatiN.Core.UnitTests.FireFoxTests
 {
@@ -8,30 +8,40 @@ namespace WatiN.Core.UnitTests.FireFoxTests
     public class FireFoxTests : BaseWatiNTest
     {
         [Test]
-        public void TestFF()
+        public void CheckFireFoxIsInheritingProperTypes()
         {
-            Logger.LogWriter = new ConsoleLogWriter();
-            var browser = new FireFox(MainURI);
-            var text = browser.Button("helloid").Text;
-            Assert.That(text, Is.EqualTo("Show allert"));
-            browser.Dispose();
+			using (var firefox = new FireFox())
+			{
+				Assert.IsInstanceOfType(typeof (FireFox), firefox, "Should be a FireFox instance");
+				Assert.IsInstanceOfType(typeof (Browser), firefox, "Should be a Browser instance");
+				Assert.IsInstanceOfType(typeof (DomContainer), firefox, "Should be a DomContainer instance");
+			}
         }
 
-//        [Test]
-//        public void TestFF2()
-//        {
-//            Logger.LogWriter = new ConsoleLogWriter();
-//            var browser = new FireFox(MainURI);
-//            browser.Button("helloid").Click();
-//            browser.Dispose();
-//        }
+        [Test, Category("InternetConnectionNeeded")]
+        public void GoogleSearchWithEncodedQueryStringInConstructor()
+        {
+            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+
+            using (var firefox = new FireFox(url))
+            {
+                Assert.That(firefox.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
+            }
+        }
+
+        [Test, Category("InternetConnectionNeeded")]
+        public void AddProtocolToUrlIfOmmitted()
+        {
+            using (var firefox = new FireFox("www.google.com"))
+            {
+                Assert.That(firefox.Url, Text.StartsWith("http://"));
+            }
+        }
 
         [Test]
-        public void TestIE()
+        public void NewFireFoxInstanceShouldTake_Settings_MakeNewBrowserInstanceVisible_IntoAccount()
         {
-            var browser = new IE(MainURI);
-            var text = browser.Button("helloid").Text;
-            Assert.That(text, Is.EqualTo("Show allert"));
+            // TODO: make this work for firefox if possible. Do rename the setting from ...IeInstance... to ...BrowserInstance...
         }
     }
 }

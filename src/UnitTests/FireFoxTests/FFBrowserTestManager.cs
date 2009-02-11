@@ -7,11 +7,16 @@ namespace WatiN.Core.UnitTests
     {
         private FireFox firefox;
 
+        public Browser CreateBrowser(Uri uri)
+        {
+            return new FireFox(uri);
+        }
+
         public Browser GetBrowser(Uri uri)
         {
             if (firefox == null)
             {
-                firefox = new FireFox(uri);
+                firefox = (FireFox) CreateBrowser(uri);
             }
 
             return firefox;

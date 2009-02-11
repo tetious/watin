@@ -71,7 +71,7 @@ namespace WatiN.Core.UnitTests
 	    [TestFixtureTearDown]
 		public override void FixtureTearDown()
 	    {
-            BrowsersToTestWith.ForEach(manager => manager.CloseBrowser());
+            BrowsersToTestWith.ForEach(browserTestManager => browserTestManager.CloseBrowser());
 	        base.FixtureTearDown();
 	    }
 
@@ -79,7 +79,7 @@ namespace WatiN.Core.UnitTests
 		public virtual void TestSetUp()
 	    {
 	        Settings.Reset();
-            BrowsersToTestWith.ForEach(browser => GoToTestPage(browser.GetBrowser(TestPageUri)));
+            BrowsersToTestWith.ForEach(browserTestManager => GoToTestPage(browserTestManager.GetBrowser(TestPageUri)));
 	    }
 
 	    private void GoToTestPage(Browser browser)
@@ -98,10 +98,10 @@ namespace WatiN.Core.UnitTests
         /// <param name="testMethod">The test method.</param>
         public void ExecuteTest(BrowserTest testMethod)
         {
-            BrowsersToTestWith.ForEach(browser => ExecuteTest(testMethod, browser.GetBrowser(TestPageUri)));
+            BrowsersToTestWith.ForEach(browserTestManager => ExecuteTest(testMethod, browserTestManager.GetBrowser(TestPageUri)));
         }
 
-        private static void ExecuteTest(BrowserTest testMethod, Browser browser)
+        public void ExecuteTest(BrowserTest testMethod, Browser browser)
         {
             InsideExecuteTest = true;
             try

@@ -135,6 +135,11 @@ namespace WatiN.Core
             _ffBrowser.LoadUri(url);
         }
 
+        protected override void navigateToNoWait(Uri url)
+        {
+            _ffBrowser.LoadUriNoWait(url);
+        }
+
         public override IntPtr hWnd
         {
             get { return _ffBrowser.Handle; }
@@ -387,7 +392,9 @@ namespace WatiN.Core
         private void CreateFireFoxInstance(string url)
         {
             Logger.LogAction("Creating FireFox instance");
-            
+
+            UtilityClass.MoveMousePoinerToTopLeft(Settings.AutoMoveMousePointerToTopLeft);
+
             ClientPort = new FireFoxClientPort();
             ClientPort.Connect(url);
 

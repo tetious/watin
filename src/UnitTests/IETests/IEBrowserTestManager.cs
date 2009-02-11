@@ -7,11 +7,16 @@ namespace WatiN.Core.UnitTests
     {
         private IE ie;
 
+        public Browser CreateBrowser(Uri uri)
+        {
+            return new IE(uri);
+        }
+
         public Browser GetBrowser(Uri uri)
         {
             if (ie == null)
             {
-                ie = new IE(uri);
+                ie = (IE) CreateBrowser(uri);
             }
 
             return ie;

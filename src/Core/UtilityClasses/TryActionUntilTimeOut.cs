@@ -60,6 +60,12 @@ namespace WatiN.Core.UtilityClasses
             SleepTime = Settings.SleepTime;
         }
 
+        public static T Try<T>(int timeout, TryFunc<T> func)
+        {
+            var tryAction = new TryActionUntilTimeOut(timeout);
+            return tryAction.Try(func);
+        }
+
         /// <summary>
         /// Tries the specified action until the result of the action is not equal to <c>default(T)</c>
         /// or the time out is reached.

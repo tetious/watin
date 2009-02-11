@@ -75,7 +75,23 @@ namespace WatiN.Core.Mozilla
         /// <param name="url">The URL to laod.</param>
         public void LoadUri(Uri url)
         {
-            ClientPort.Write("{0}.loadURI(\"{1}\");", FireFoxClientPort.BrowserVariableName, url.AbsoluteUri);
+            LoadUri(url, true);
+        }
+
+        private void LoadUri(Uri url, bool waitForComplete)
+        {
+            var command = string.Format("{0}.loadURI(\"{1}\");", FireFoxClientPort.BrowserVariableName, url.AbsoluteUri);
+            if (!waitForComplete)
+            {
+                command = FFUtils.WrappCommandInTimer(command);
+            }
+
+            ClientPort.Write(command);
+        }
+
+        public void LoadUriNoWait(Uri url)
+        {
+            LoadUri(url, false);
         }
 
         /// <summary>
