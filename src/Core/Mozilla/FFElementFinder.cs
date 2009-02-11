@@ -49,7 +49,6 @@ namespace WatiN.Core.Mozilla
         protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
         {
             var matchingElements = new List<INativeElement>();
-            if (elementCollection.Elements == null) return new List<INativeElement>();
 
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();

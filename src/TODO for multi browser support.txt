@@ -1,8 +1,8 @@
 TODO for multiple browser support:
 
 ** FRAMES
-- Abstract current AllFramesProcessor used in FramesCollection away
-- FramesCollection constructor should not depend on mshtml.HTMLDocument
+DONE JVM - Abstract current AllFramesProcessor used in FramesCollection away
+DONE JVM - FramesCollection constructor should not depend on mshtml.HTMLDocument
 
 ** IE specific Constraint classes (TableRowAttributeConstraint, ProximityTextConstraint)
 - Move to InternetExplorer.Constraints namespace
@@ -27,7 +27,7 @@ DONE JVM - Reimplement style support in GetValue(attributename)
 ** Document
 DONE JVM - Remove dependencies on IHTMLDocument2
 DONE JVM - Remove dependencies on IHTMLElement for attributes values from Body element
-- Move GetPropertyValue to nativeBrowser class? Is Com interop specific
+DONE JVM - Move GetPropertyValue to nativeBrowser class? Is Com interop specific
 
 ** Style
 DONE JVM - Remove depenency on IHTMLStyle 
@@ -51,12 +51,17 @@ DONE JVM - remove dependencies in wrappers around TextArea or input text
 
 ** Check for and replace 
 -  new IEElement by DomContainer.NativeBrowser.CreateElement
+-  new FFElement by DomContainer.NativeBrowser.CreateElement
 
-*** FIREFOX
-- Implement propper handling of firing events
+** Element (not multi browser related)
+- Create eventproperty classes for all event types (mouse, keyboard, click etc..)
+
+** FFElement
+DONE JVM - Implement propper handling of firing events
+
+*** FireFox specfic
 - Wrapp WaitForComplete implementation and override DomContainer methods
 DONE JVM - move RunScript to FFBrowser
-- move Eval to FFBrowser (and IEBrowser)
 - what to do with Settings.CloseExistingBrowserInstances
 
 ** Changes to test suite
@@ -64,17 +69,17 @@ DONE JVM - move RunScript to FFBrowser
   DONE: ButtonTests
   DONE: CheckBoxTests
   DONE: RadioButtonTests
-  Almost DONE: TextFieldTests (TextFieldTypeTextEventsInFrame can be done after Frames are implemented for FF)
+  DONE: TextFieldTests
   Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can be done after support for javascript confirm dialog for FF is implemented)
   
 - other option would be to create a in memory browser (mock) to run the general test against and 
   test the browser specific classes seperately (will speed up the test suite, but it
   is possible some integration issues will be missed....)
 
-- Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
+DONE JVM - Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
 
 ** Interfaces
-- Add interfaces to all elements and elementcollections (like in the current 2.0 CTP). Mainly to provide a way to mock out WatiN in testing tools using Watin (like stormwind)
+- Add interfaces to all elements and elementcollections (like in the current 2.0 CTP). Mainly to provide a way to mock out WatiN in testing tools using WatiN (like stormwind)
 
 
 

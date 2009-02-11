@@ -141,7 +141,7 @@ namespace WatiN.Core
             var attributeBag = new ElementAttributeBag(_domContainer);
             if (IsGetElementByIdPossible(constraint))
             {
-                return GetElementById(constraint, elementTag, attributeBag);
+                return GetElementById((AttributeConstraint) constraint, elementTag, attributeBag);
             }
 
             return FindElements(constraint, elementTag, attributeBag, returnAfterFirstMatch, _elementCollection);
@@ -154,15 +154,37 @@ namespace WatiN.Core
         {
             var attributeConstraint = constraint as AttributeConstraint;
 
-            return attributeConstraint != null &&
-                   StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) &&
-                   !(constraint.HasAnd || constraint.HasOr) &&
-                   attributeConstraint.Comparer.GetType() == typeof(StringComparer);
+            if (attributeConstraint == null) return false;
+
+            return ContainsAnIdConstraint(attributeConstraint) && OnlyAndConstraints(attributeConstraint);
         }
 
-        private List<INativeElement> GetElementById(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag elementAttributeBag)
+        private static bool OnlyAndConstraints(BaseConstraint attributeConstraint)
         {
-            var Id = ((AttributeConstraint) constraint).Value;
+            if (attributeConstraint == null) return false;
+            if (attributeConstraint.HasOr) return false;
+
+            return !attributeConstraint.HasAnd || OnlyAndConstraints(attributeConstraint.GetAnd);
+        }
+
+        private static bool ContainsAnIdConstraint(AttributeConstraint attributeConstraint)
+        {
+            return RetrieveIdConstraint(attributeConstraint) != null;
+        }
+
+        private static AttributeConstraint RetrieveIdConstraint(AttributeConstraint attributeConstraint)
+        {
+            if (attributeConstraint == null) return null;
+
+            var validIdConstraint = StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) &&
+                                    attributeConstraint.Comparer.GetType() == typeof (StringComparer);
+
+            return validIdConstraint ? attributeConstraint : RetrieveIdConstraint(attributeConstraint.GetAnd as AttributeConstraint);
+        }
+
+        private List<INativeElement> GetElementById(AttributeConstraint constraint, ElementTag elementTag, ElementAttributeBag elementAttributeBag)
+        {
+            var Id = (RetrieveIdConstraint(constraint)).Value;
             var element = FindElementById(Id, _elementCollection);
             
             var elements = new List<INativeElement>();

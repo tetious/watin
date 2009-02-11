@@ -52,9 +52,9 @@ namespace WatiN.Core
 		/// to create an instance of a Frame.
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
-		/// <param name="htmlDocument">The HTML document.</param>
+		/// <param name="document">The HTML document.</param>
 		/// <param name="frameElement"></param>
-		public Frame(DomContainer domContainer, INativeDocument htmlDocument, Element frameElement) : base(domContainer, htmlDocument)
+		public Frame(DomContainer domContainer, INativeDocument document, Element frameElement) : base(domContainer, document)
 		{
 		    _frameElement = frameElement;
 		}

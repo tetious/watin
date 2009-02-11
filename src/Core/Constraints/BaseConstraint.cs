@@ -52,6 +52,16 @@ namespace WatiN.Core.Constraints
             get { return _andBaseConstraint != null; }
 	    }
 
+	    public BaseConstraint GetOr
+	    {
+	        get { return _orBaseConstraint; }
+	    }
+
+	    public BaseConstraint GetAnd
+	    {
+            get { return _andBaseConstraint; }
+	    }
+
 	    /// <summary>
 		/// This methode implements an exact match comparison. If you want
 		/// different behaviour, inherit this class or one of its subclasses and 

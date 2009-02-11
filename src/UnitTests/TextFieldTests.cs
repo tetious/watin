@@ -159,24 +159,27 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-        // TODO: Make this work for FireFox
 		[Test]
 		public void TextFieldTypeTextEventsInFrame()
 		{
-            Ie.GoTo(FramesetURI);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(FramesetURI);
 
-            var frame = Ie.Frames[1];
-			frame.RunScript("window.document.location.href='TestEvents.html';");
+                                var frame = browser.Frames[1];
+		                        var command = frame.NativeDocument.JavaScriptVariableName + ".location.href='TestEvents.html';";
+                                frame.RunScript(command);
 
-			Assert.IsFalse(frame.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
-			Assert.IsFalse(frame.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
-			Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
+		                        Assert.IsFalse(frame.CheckBox("chkKeyDown").Checked, "KeyDown false expected");
+		                        Assert.IsFalse(frame.CheckBox("chkKeyPress").Checked, "KeyPress false expected");
+		                        Assert.IsFalse(frame.CheckBox("chkKeyUp").Checked, "KeyUp false expected");
 
-			frame.TextField("textfieldid").TypeText("test");
+		                        frame.TextField("textfieldid").TypeText("test");
 
-			Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
-			Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
-			Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
+		                        Assert.IsTrue(frame.CheckBox("chkKeyDown").Checked, "KeyDown event expected");
+		                        Assert.IsTrue(frame.CheckBox("chkKeyPress").Checked, "KeyPress event expected");
+		                        Assert.IsTrue(frame.CheckBox("chkKeyUp").Checked, "KeyUp event expected");
+		                    });
 		}
 
 		[Test]
