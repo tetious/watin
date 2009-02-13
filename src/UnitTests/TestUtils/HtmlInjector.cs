@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-namespace WatiN.Core.UnitTests.IETests
+namespace WatiN.Core.UnitTests.TestUtils
 {
     public class HtmlInjector
     {

@@ -1,7 +1,7 @@
 using System;
 using WatiN.Core.UnitTests.Interfaces;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.FireFoxTests
 {
     public class FFBrowserTestManager : IBrowserTestManager
     {

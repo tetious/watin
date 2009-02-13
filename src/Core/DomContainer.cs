@@ -19,6 +19,7 @@
 using System;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -142,21 +143,18 @@ namespace WatiN.Core
 		/// <summary>
 		/// Waits for the page to be completely loaded using the Settings.WaitForCompleteTimeOut setting
 		/// </summary>
-		public virtual void WaitForComplete()
+		public void WaitForComplete()
 		{
-			WaitForComplete(new WaitForComplete(this));
+			WaitForComplete(Settings.WaitForCompleteTimeOut);
 		}
 
 		/// <summary>
         /// Waits for the page to be completely loaded.
 		/// </summary>
 		/// <param name="waitForCompleteTimeOut">The number of seconds to wait before timing out</param>
-		public virtual void WaitForComplete(int waitForCompleteTimeOut)
-		{
-			WaitForComplete(new WaitForComplete(this, waitForCompleteTimeOut));
-		}
+		public abstract void WaitForComplete(int waitForCompleteTimeOut);
 
-		/// <summary>
+	    /// <summary>
 		/// Waits for the page to be completely loaded
 		/// </summary>
 		/// <param name="waitForComplete">The wait for complete.</param>

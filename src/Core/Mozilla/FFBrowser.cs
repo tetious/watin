@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
@@ -48,6 +47,11 @@ namespace WatiN.Core.Mozilla
         /// <value>The client port.</value>
         public FireFoxClientPort ClientPort { get; private set; }
 
+        public string BrowserVariableName
+        {
+            get { return FireFoxClientPort.BrowserVariableName;  }
+        }
+
         public IntPtr Handle
         {
             get { return ClientPort.Process.MainWindowHandle; }
@@ -58,7 +62,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public void Back()
         {
-            ClientPort.Write("{0}.goBack();", FireFoxClientPort.BrowserVariableName);
+            ClientPort.Write("{0}.goBack();", BrowserVariableName);
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public void Forward()
         {
-            ClientPort.Write("{0}.goForward();", FireFoxClientPort.BrowserVariableName);
+            ClientPort.Write("{0}.goForward();", BrowserVariableName);
         }
 
         /// <summary>
@@ -80,7 +84,7 @@ namespace WatiN.Core.Mozilla
 
         private void LoadUri(Uri url, bool waitForComplete)
         {
-            var command = string.Format("{0}.loadURI(\"{1}\");", FireFoxClientPort.BrowserVariableName, url.AbsoluteUri);
+            var command = string.Format("{0}.loadURI(\"{1}\");", BrowserVariableName, url.AbsoluteUri);
             if (!waitForComplete)
             {
                 command = FFUtils.WrappCommandInTimer(command);
@@ -99,33 +103,12 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public void Reload()
         {
-            ClientPort.Write("{0}.reload();", FireFoxClientPort.BrowserVariableName);
+            ClientPort.Write("{0}.reload();", BrowserVariableName);
         }
 
-        /// <summary>
-        /// Waits until the document is loaded
-        /// </summary>
-        public void WaitForComplete()
+        public bool IsLoading()
         {
-            WaitForComplete(ClientPort);
-        }
-
-        /// <summary>
-        /// Waits until the document, associated with the <param name="clientPort" /> is loaded.
-        /// </summary>
-        internal static void WaitForComplete(FireFoxClientPort clientPort)
-        {
-            var command = string.Format("{0}.webProgress.isLoadingDocument;", FireFoxClientPort.BrowserVariableName);
-
-            var loading = clientPort.WriteAndReadAsBool(command);
-
-            while (loading)
-            {
-                Thread.Sleep(200);
-                loading = clientPort.WriteAndReadAsBool(command);
-            }
-
-            clientPort.InitializeDocument();
+            return ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", BrowserVariableName);
         }
 
         public INativeElementFinder CreateElementFinder(List<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)

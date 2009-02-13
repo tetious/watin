@@ -368,12 +368,14 @@
     </Compile>
     <Compile Include="InternetExplorer\FrameByIndexProcessor.cs" />
     <Compile Include="InternetExplorer\FrameCountProcessor.cs" />
+    <Compile Include="WaitForCompleteBase.cs" />
     <Compile Include="Mozilla\FFDocument.cs" />
     <Compile Include="Mozilla\FFElement.cs" />
     <Compile Include="Mozilla\FFElementFinder.cs" />
     <Compile Include="FireFox.cs" />
     <Compile Include="Browser.cs" />
     <Compile Include="Mozilla\FFUtils.cs" />
+    <Compile Include="Mozilla\FFWaitForComplete.cs" />
     <Compile Include="Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Mozilla\FireFoxException.cs" />
     <Compile Include="Mozilla\FFBrowser.cs" />
@@ -404,7 +406,7 @@
     <Compile Include="IECollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IEWaitForComplete.cs">
+    <Compile Include="InternetExplorer\IEWaitForComplete.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Image.cs">
@@ -574,7 +576,7 @@
     <Compile Include="UtilityClasses\WinInet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WaitForComplete.cs">
+    <Compile Include="InternetExplorer\WaitForComplete.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

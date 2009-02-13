@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
+//using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
@@ -30,13 +30,6 @@ namespace WatiN.Core
 {
     public class FireFox : Browser 
     {
-        /// <summary>
-        /// Wrapper for the XUL:Browser object see: http://developer.mozilla.org/en/docs/XUL:browser
-        /// </summary>
-        private FFBrowser _ffBrowser;
-
-        public FireFoxClientPort ClientPort { get; set; }
-
         #region Public constructors / destructor
 
         /// <summary>
@@ -44,7 +37,7 @@ namespace WatiN.Core
         /// </summary>
         public FireFox()
         {
-            CreateFireFoxInstance("");
+            CreateFireFoxInstance(string.Empty);
         }
 
         /// <summary>
@@ -85,6 +78,9 @@ namespace WatiN.Core
 //            get { return Core.BrowserType.FireFox; }
 //        }
 
+
+        public FFBrowser FireFoxBrowser { get; private set; }
+
         #endregion Public instance properties
 
         #region Public instance methods
@@ -97,17 +93,16 @@ namespace WatiN.Core
         {
             try
             {
-                _ffBrowser.Back();
+                FireFoxBrowser.Back();
                 WaitForComplete();
                 Logger.LogAction("Navigated Back to '" + Url + "'");
                 return true;
             }
-            catch (COMException)
+            catch (Exception)
             {
                 Logger.LogAction("No history available, didn't navigate Back.");
                 return false;
             }
-
         }
 
         /// <summary>
@@ -118,12 +113,12 @@ namespace WatiN.Core
         {
             try
             {
-                _ffBrowser.Forward();
+                FireFoxBrowser.Forward();
                 WaitForComplete();
                 Logger.LogAction("Navigated Forward to '" + Url + "'");
                 return true;
             }
-            catch (COMException)
+            catch (Exception)
             {
                 Logger.LogAction("No forward history available, didn't navigate Forward.");
                 return false;
@@ -132,23 +127,22 @@ namespace WatiN.Core
 
         protected override void navigateTo(Uri url)
         {
-            _ffBrowser.LoadUri(url);
+            FireFoxBrowser.LoadUri(url);
         }
 
         protected override void navigateToNoWait(Uri url)
         {
-            _ffBrowser.LoadUriNoWait(url);
+            FireFoxBrowser.LoadUriNoWait(url);
         }
 
         public override IntPtr hWnd
         {
-            get { return _ffBrowser.Handle; }
+            get { return FireFoxBrowser.Handle; }
         }
-
 
         public override INativeDocument OnGetNativeDocument()
         {
-            return new FFDocument(ClientPort);
+            return new FFDocument(FireFoxBrowser.ClientPort);
         }
 
         /// <summary>
@@ -315,7 +309,7 @@ namespace WatiN.Core
         /// </summary>
         public void Refresh()
         {
-            _ffBrowser.Reload();
+            FireFoxBrowser.Reload();
             WaitForComplete();
         }
 
@@ -327,31 +321,21 @@ namespace WatiN.Core
         /// </remarks>
         public void Reopen()
         {
-            ClientPort.Dispose();
-            ClientPort.Connect(string.Empty);
+            FireFoxBrowser.ClientPort.Dispose();
+            FireFoxBrowser.ClientPort.Connect(string.Empty);
         }
-
-//        /// <summary>
-//        /// Runs the javascript code in the current browser.
-//        /// </summary>
-//        /// <param name="javaScriptCode">The javascript code.</param>
-//        public void RunScript(string javaScriptCode)
-//        {
-//            ClientPort.Write(javaScriptCode);
-//        }
-
 
         /// <summary>
         /// Waits until the page is completely loaded
         /// </summary>
-        public override void WaitForComplete()
+        public override void WaitForComplete(int waitForCompleteTimeOut)
         {
-            _ffBrowser.WaitForComplete();
+            WaitForComplete(new FFWaitForComplete(FireFoxBrowser, waitForCompleteTimeOut));
         }
 
         public override INativeBrowser NativeBrowser
         {
-            get { return _ffBrowser; }
+            get { return FireFoxBrowser; }
         }
         
         #endregion Public instance methods
@@ -371,7 +355,7 @@ namespace WatiN.Core
             if (disposing)
             {
                 // Dispose managed resources.
-                ClientPort.Dispose();
+                FireFoxBrowser.ClientPort.Dispose();
             }
 
             // Call the appropriate methods to clean up 
@@ -395,10 +379,10 @@ namespace WatiN.Core
 
             UtilityClass.MoveMousePoinerToTopLeft(Settings.AutoMoveMousePointerToTopLeft);
 
-            ClientPort = new FireFoxClientPort();
-            ClientPort.Connect(url);
+            var clientPort = new FireFoxClientPort();
+            clientPort.Connect(url);
 
-            _ffBrowser = new FFBrowser(ClientPort, this);
+            FireFoxBrowser = new FFBrowser(clientPort, this);
         }
 
         #endregion

@@ -20,6 +20,7 @@ using System;
 using Moq;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
+using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core.UnitTests
 {
@@ -121,6 +122,11 @@ namespace WatiN.Core.UnitTests
             public override INativeBrowser NativeBrowser
             {
                 get { throw new NotImplementedException(); }
+            }
+
+            public override void WaitForComplete(int waitForCompleteTimeOut)
+            {
+                //                waitForCompleteTimeOut()
             }
         }
 	}

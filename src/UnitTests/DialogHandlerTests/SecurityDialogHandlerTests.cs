@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			public IENoWaitForComplete(string url) : base(url) {}
 
-			public override void WaitForComplete()
+			public override void WaitForComplete(int timeOutPeriod)
 			{
 				// Skip Wait logic
 			}

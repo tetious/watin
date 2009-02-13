@@ -18,32 +18,30 @@
 
 using SHDocVw;
 
-namespace WatiN.Core
+namespace WatiN.Core.InternetExplorer
 {
-	public class IEWaitForComplete : WaitForComplete
-	{
-		protected IE _ie;
+    public class IEWaitForComplete : WaitForComplete
+    {
+        protected IE _ie;
 
-		public IEWaitForComplete(IE ie) : base(ie)
-		{
-			_ie = ie;
-		}
-
-	    public IEWaitForComplete(IE ie, int waitForCompleteTimeOut) : base(ie, waitForCompleteTimeOut)
-	    {
+        public IEWaitForComplete(IE ie) : base(ie)
+        {
             _ie = ie;
         }
 
-	    public override void DoWait()
-		{
-//			Sleep("DoWait IEWaitForComplete");
+        public IEWaitForComplete(IE ie, int waitForCompleteTimeOut) : base(ie, waitForCompleteTimeOut)
+        {
+            _ie = ie;
+        }
 
-			InitTimeout();
+        public override void DoWait()
+        {
+            InitTimeout();
 
-			WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
-			waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
+            WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
+            waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
 
-			WaitForCompleteOrTimeout();
-		}
-	}
+            WaitForCompleteOrTimeout();
+        }
+    }
 }

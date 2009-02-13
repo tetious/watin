@@ -87,7 +87,7 @@ namespace WatiN.Core.UnitTests
 	{
 		public MyIE(string url) : base(url) {}
 
-		public override void WaitForComplete()
+		public override void WaitForComplete(int timeOutPeriod)
 		{
 			Link("showModalPopupClientButton").WaitUntilExists();
 		}

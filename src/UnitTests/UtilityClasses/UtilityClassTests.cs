@@ -21,29 +21,29 @@ using System.Threading;
 using NUnit.Framework;
 using WatiN.Core.UtilityClasses;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.UtilityClasses
 {
-	[TestFixture]
-	public class UtilityClassTests : BaseWithBrowserTests
-	{
-		public override Uri TestPageUri
-		{
-			get { return MainURI; }
-		}
+    [TestFixture]
+    public class UtilityClassTests : BaseWithBrowserTests
+    {
+        public override Uri TestPageUri
+        {
+            get { return MainURI; }
+        }
 
-		[Test]
-		public void DumpElements()
-		{
-			UtilityClass.DumpElements(Ie);
-		}
+        [Test]
+        public void DumpElements()
+        {
+            UtilityClass.DumpElements(Ie);
+        }
 
-		[Test]
-		public void DumpElementsElab()
-		{
-			Ie.GoTo(FramesetURI);
+        [Test]
+        public void DumpElementsElab()
+        {
+            Ie.GoTo(FramesetURI);
 
-			UtilityClass.DumpElementsWithHtmlSource(Ie);
-		}
+            UtilityClass.DumpElementsWithHtmlSource(Ie);
+        }
 
         [Test]
         public void ShowFrames()
@@ -53,84 +53,84 @@ namespace WatiN.Core.UnitTests
             UtilityClass.DumpFrames(Ie);
         }
 
-		[Test]
-		public void IsNullOrEmpty()
-		{
-			Assert.IsTrue(UtilityClass.IsNullOrEmpty(null), "null should return true");
-			Assert.IsTrue(UtilityClass.IsNullOrEmpty(String.Empty), "Empty should return true");
-			Assert.IsTrue(UtilityClass.IsNullOrEmpty(""), "zero length string should return true");
-			Assert.IsFalse(UtilityClass.IsNullOrEmpty("test"), "string 'test' should return false");
-		}
+        [Test]
+        public void IsNullOrEmpty()
+        {
+            Assert.IsTrue(UtilityClass.IsNullOrEmpty(null), "null should return true");
+            Assert.IsTrue(UtilityClass.IsNullOrEmpty(String.Empty), "Empty should return true");
+            Assert.IsTrue(UtilityClass.IsNullOrEmpty(""), "zero length string should return true");
+            Assert.IsFalse(UtilityClass.IsNullOrEmpty("test"), "string 'test' should return false");
+        }
 
-		[Test]
-		public void IsNotNullOrEmpty()
-		{
-			Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(null), "null should return false");
-			Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(String.Empty), "Empty should return false");
-			Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(""), "zero length string should return false");
-			Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
-		}
+        [Test]
+        public void IsNotNullOrEmpty()
+        {
+            Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(null), "null should return false");
+            Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(String.Empty), "Empty should return false");
+            Assert.IsFalse(UtilityClass.IsNotNullOrEmpty(""), "zero length string should return false");
+            Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
+        }
 
-		[Test]
-		public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
-		{
-			Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "classname"));
-		}
+        [Test]
+        public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
+        {
+            Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "classname"));
+        }
 
-		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
-		public void SimpleTimerWithNegativeTimeoutNotAllowed()
-		{
-			new SimpleTimer(-1);
-		}
+        [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
+        public void SimpleTimerWithNegativeTimeoutNotAllowed()
+        {
+            new SimpleTimer(-1);
+        }
 
-		[Test]
-		public void SimpleTimerWithZeroTimoutIsAllowed()
-		{
-			var timer = new SimpleTimer(0);
-			Assert.IsTrue(timer.Elapsed);
-		}
+        [Test]
+        public void SimpleTimerWithZeroTimoutIsAllowed()
+        {
+            var timer = new SimpleTimer(0);
+            Assert.IsTrue(timer.Elapsed);
+        }
 
-		[Test]
-		public void SimpleTimerOneSecond()
-		{
-			var timer = new SimpleTimer(1);
-			Thread.Sleep(1200);
-			Assert.IsTrue(timer.Elapsed);
-		}
+        [Test]
+        public void SimpleTimerOneSecond()
+        {
+            var timer = new SimpleTimer(1);
+            Thread.Sleep(1200);
+            Assert.IsTrue(timer.Elapsed);
+        }
 
-		[Test]
-		public void SimpleTimerThreeSeconds()
-		{
-			var timer = new SimpleTimer(3);
-			Thread.Sleep(2500);
-			Assert.IsFalse(timer.Elapsed);
-			Thread.Sleep(1000);
-			Assert.IsTrue(timer.Elapsed);
-		}
+        [Test]
+        public void SimpleTimerThreeSeconds()
+        {
+            var timer = new SimpleTimer(3);
+            Thread.Sleep(2500);
+            Assert.IsFalse(timer.Elapsed);
+            Thread.Sleep(1000);
+            Assert.IsTrue(timer.Elapsed);
+        }
 
-		[Test]
-		public void ToStringTests()
-		{
-			Assert.IsEmpty(UtilityClass.ToString(null), "Null should return empty string");
-			Assert.IsEmpty(UtilityClass.ToString(string.Empty), "Empty should return empty string");
-			Assert.AreEqual("test", UtilityClass.ToString("test"), "test should return test");
-		}
+        [Test]
+        public void ToStringTests()
+        {
+            Assert.IsEmpty(UtilityClass.ToString(null), "Null should return empty string");
+            Assert.IsEmpty(UtilityClass.ToString(string.Empty), "Empty should return empty string");
+            Assert.AreEqual("test", UtilityClass.ToString("test"), "test should return test");
+        }
 
-		[Test]
-		public void ShouldEscapeSendKeysCharacters()
-		{
-			var original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
-			var expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
+        [Test]
+        public void ShouldEscapeSendKeysCharacters()
+        {
+            var original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
+            var expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
 
-			Assert.AreEqual(expected, UtilityClass.EscapeSendKeysCharacters(original));
-		}
+            Assert.AreEqual(expected, UtilityClass.EscapeSendKeysCharacters(original));
+        }
 
-		[Test]
-		public void ShouldNotEscapeCharacters()
-		{
-			var original = "just a test";
+        [Test]
+        public void ShouldNotEscapeCharacters()
+        {
+            var original = "just a test";
 
-			Assert.AreEqual(original, UtilityClass.EscapeSendKeysCharacters(original));
-		}
-	}
+            Assert.AreEqual(original, UtilityClass.EscapeSendKeysCharacters(original));
+        }
+    }
 }

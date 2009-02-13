@@ -57,7 +57,12 @@ namespace WatiN.Core
 			Close();
 		}
 
-		public void Close()
+	    public override void WaitForComplete(int waitForCompleteTimeOut)
+	    {
+	        WaitForComplete(new WaitForComplete(this, waitForCompleteTimeOut));
+	    }
+
+	    public void Close()
 		{
 			var dialog = new Window(hwnd);
 			if (dialog.Visible)

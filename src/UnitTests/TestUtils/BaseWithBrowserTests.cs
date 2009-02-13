@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using WatiN.Core.UnitTests.FireFoxTests;
+using WatiN.Core.UnitTests.IETests;
 using WatiN.Core.UnitTests.Interfaces;
 
 namespace WatiN.Core.UnitTests
