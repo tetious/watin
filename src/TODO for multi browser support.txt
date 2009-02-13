@@ -60,7 +60,7 @@ DONE JVM - remove dependencies in wrappers around TextArea or input text
 DONE JVM - Implement propper handling of firing events
 
 *** FireFox specfic
-- Wrapp WaitForComplete implementation and override DomContainer methods
+DONE JVM - Wrapp WaitForComplete implementation and override DomContainer methods
 DONE JVM - move RunScript to FFBrowser
 - what to do with Settings.CloseExistingBrowserInstances
 
