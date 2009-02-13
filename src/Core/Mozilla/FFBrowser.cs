@@ -60,17 +60,25 @@ namespace WatiN.Core.Mozilla
         /// <summary>
         /// Navigates to the previous page in the browser history.
         /// </summary>
-        public void Back()
+        public bool Back()
         {
-            ClientPort.Write("{0}.goBack();", BrowserVariableName);
+            return Navigate("goBack");
         }
 
         /// <summary>
         /// Navigates to the next back in the browser history.
         /// </summary>
-        public void Forward()
+        public bool Forward()
         {
-            ClientPort.Write("{0}.goForward();", BrowserVariableName);
+            return Navigate("goForward");
+        }
+
+        private bool Navigate(string action)
+        {
+            var ticks = DateTime.Now.Ticks;
+            ClientPort.Write("window.document.WatiNGoBackCheck={0};", ticks);
+            ClientPort.Write("{0}.{1}();", BrowserVariableName, action);
+            return ClientPort.WriteAndReadAsBool("window.document.WatiNGoBackCheck!={0};", ticks);
         }
 
         /// <summary>

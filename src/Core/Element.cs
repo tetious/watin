@@ -156,7 +156,12 @@ namespace WatiN.Core
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return !bool.Parse(GetAttributeValue("disabled")); }
+			get
+			{
+			    var value = GetAttributeValue("disabled");
+                if (string.IsNullOrEmpty(value)) return true;
+			    return !bool.Parse(value);
+			}
 		}
 
 		/// <summary>

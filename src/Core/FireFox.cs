@@ -19,12 +19,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-//using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Mozilla;
 using WatiN.Core.UtilityClasses;
+
+// https://developer.mozilla.org/en/Gecko_DOM_Reference
 
 namespace WatiN.Core
 {
@@ -85,44 +86,14 @@ namespace WatiN.Core
 
         #region Public instance methods
 
-        /// <summary>
-        /// Navigates the browser back to the previously displayed Url (like the back
-        /// button in Internet Explorer).
-        /// </summary>
-        public bool Back()
+        protected override bool GoBack()
         {
-            try
-            {
-                FireFoxBrowser.Back();
-                WaitForComplete();
-                Logger.LogAction("Navigated Back to '" + Url + "'");
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.LogAction("No history available, didn't navigate Back.");
-                return false;
-            }
+            return FireFoxBrowser.Back();
         }
 
-        /// <summary>
-        /// Navigates the browser forward to the next displayed Url (like the forward
-        /// button in Internet Explorer).
-        /// </summary>
-        public bool Forward()
+        protected override bool GoForward()
         {
-            try
-            {
-                FireFoxBrowser.Forward();
-                WaitForComplete();
-                Logger.LogAction("Navigated Forward to '" + Url + "'");
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.LogAction("No forward history available, didn't navigate Forward.");
-                return false;
-            }
+            return FireFoxBrowser.Forward();
         }
 
         protected override void navigateTo(Uri url)

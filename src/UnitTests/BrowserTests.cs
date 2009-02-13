@@ -117,6 +117,57 @@ namespace WatiN.Core.UnitTests
                             });
         }
 
+        [Test]
+        public void BackAndForward()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+
+                                browser.Link(Find.ByUrl(IndexURI)).Click();
+                                Assert.AreEqual(IndexURI, new Uri(browser.Url));
+
+                                var wentBack = browser.Back();
+                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+                                Assert.That(wentBack, "Expected went back");
+
+                                var wentFoward = browser.Forward();
+                                Assert.AreEqual(IndexURI, new Uri(browser.Url));
+                                Assert.That(wentFoward, "Expected went forward");
+
+                            });
+        }
+
+
+        [Test]
+        public void BackShouldNotBePossibleOnBrowserWithNoHistory()
+        {
+            BrowsersToTestWith.ForEach(manager =>
+                            {
+                                manager.CloseBrowser();
+
+                                var browser = manager.CreateBrowser(AboutBlank);
+
+                                var wentBack = browser.Back();
+                                Assert.That(wentBack, Is.False, "Expected no navigation back");
+                            });
+        }
+
+        [Test]
+        public void ForwardShouldNotBePossibleOnBrowserWithNoHistory()
+        {
+            BrowsersToTestWith.ForEach(manager =>
+                            {
+                                manager.CloseBrowser();
+
+                                var browser = manager.CreateBrowser(AboutBlank);
+
+                                var wentForward = browser.Forward();
+                                Assert.That(wentForward, Is.False, "Expected no navigation back");
+                            });
+        }
+
         public override Uri TestPageUri
         {
             get { return AboutBlank; }

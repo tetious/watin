@@ -1018,5 +1018,23 @@ namespace WatiN.Core.UnitTests
         {
             return table.Enabled;
         }
+
+	    [Test]
+	    public void ShouldBeEnabled()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            browser.GoTo(MainURI);
+	                            Assert.AreEqual(MainURI, new Uri(browser.Url));
+
+	                            // WHEN
+	                            var enabled = browser.Link(Find.ByUrl(IndexURI)).Enabled;
+
+	                            // THEN
+	                            Assert.That(enabled, Is.True);
+	                        });
+	    }
+
 	}
 }

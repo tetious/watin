@@ -194,5 +194,55 @@ namespace WatiN.Core
         {
             GoTo(UtilityClass.CreateUri(url));
         }
+
+
+        /// <summary>
+        /// Navigates the browser back to the previously displayed Url (like the back
+        /// button in Internet Explorer).
+        /// </summary>
+        /// <returns><c>true</c> if navigating back to a previous url was possible, otherwise <c>false</c></returns>
+        public bool Back()
+        {
+            var succeeded = GoBack();
+            
+            if (succeeded)
+            {
+                WaitForComplete();
+                Logger.LogAction("Navigated Back to '" + Url + "'");
+            }
+            else
+            {
+                Logger.LogAction("No history available, didn't navigate Back.");
+            }
+
+            return succeeded;
+        }
+
+        protected abstract bool GoBack();
+
+        /// <summary>
+        /// Navigates the browser forward to the next displayed Url (like the forward
+        /// button in Internet Explorer). 
+        /// </summary>
+        /// <returns><c>true</c> if navigating forward to a previous url was possible, otherwise <c>false</c></returns>
+        public bool Forward()
+        {
+            var succeeded = GoForward();
+
+            if (succeeded)
+            {
+                WaitForComplete();
+                Logger.LogAction("Navigated Forward to '" + Url + "'");
+            }
+            else
+            {
+                Logger.LogAction("No forward history available, didn't navigate Forward.");
+            }
+
+            return succeeded;
+        }
+
+        protected abstract bool GoForward();
+
     }
 }
