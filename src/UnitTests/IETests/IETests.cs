@@ -171,15 +171,6 @@ namespace WatiN.Core.UnitTests.IETests
             Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
         }
 
-        [Test]
-        public void GoToUri()
-        {
-            using (var ie = new IE())
-            {
-                ie.GoTo(MainURI);
-                Assert.AreEqual(MainURI, new Uri(ie.Url));
-            }
-        }
 
         [Test]
         public void NewIEInSameProcess()
@@ -266,24 +257,8 @@ namespace WatiN.Core.UnitTests.IETests
             Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
         }
 
-        [Test]
-        public void Reopen()
-        {
-            FailIfIEWindowExists("main", "Reopen");
-
-            var url = MainURI.AbsoluteUri;
-            using (var ie = new IE(url))
-            {
-                Assert.AreEqual(MainURI, new Uri(ie.Url));
-                var oldIEObj = ie.InternetExplorer;
-
-                ie.Reopen();
-                Assert.AreNotSame(oldIEObj, ie.InternetExplorer, "Reopen should create a new browser.");
-
-                Assert.AreEqual("about:blank", ie.Url);
-            }
-        }
-
+        // TODO: Should this also become a multi browser test? 
+        //       Logon dialog not currently supported by FireFox implementation
         [Test]
         public void ReopenWithUrlAndLogonDialogHandlerInNewProcess()
         {
@@ -314,18 +289,6 @@ namespace WatiN.Core.UnitTests.IETests
             Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
         }
 
-        [Test]
-        public void RefreshWithNeverExpiredPage()
-        {
-            using (var ie = new IE(MainURI))
-            {
-                ie.TextField("name").TypeText("refresh test");
-
-                ie.Refresh();
-
-                Assert.AreEqual("refresh test", ie.TextField("name").Text);
-            }
-        }
 
         [Test]
         public void Cookies()
@@ -390,74 +353,6 @@ namespace WatiN.Core.UnitTests.IETests
         {
             var document = (IHTMLDocument2) ie.NativeDocument.Object;
             return document.body.parentElement.outerHTML;
-        }
-
-        [Test, Category("InternetConnectionNeeded")]
-        public void RefreshWithImmediatelyExpiredPage()
-        {
-            using (var ie = new IE(GoogleUrl))
-            {
-                ie.TextField(Find.ByName("q")).TypeText("refresh test");
-
-                ie.Refresh();
-
-                Assert.AreEqual(null, ie.TextField(Find.ByName("q")).Text);
-            }
-        }
-
-        [Test]
-        public void BackAndForward()
-        {
-            using (var ie = new IE())
-            {
-                ie.GoTo(MainURI);
-                Assert.AreEqual(MainURI, new Uri(ie.Url));
-
-                ie.Link(Find.ByUrl(IndexURI)).Click();
-                Assert.AreEqual(IndexURI, new Uri(ie.Url));
-
-                var wentBack = ie.Back();
-                Assert.AreEqual(MainURI, new Uri(ie.Url));
-                Assert.That(wentBack, "Expected went back");
-
-                var wentFoward = ie.Forward();
-                Assert.AreEqual(IndexURI, new Uri(ie.Url));
-                Assert.That(wentFoward, "Expected went forward");
-            }
-        }
-
-        [Test]
-        public void BackShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
-        {
-            using (var ie = new IE())
-            {
-                try
-                {
-                    var wentBack = ie.Back();
-                    Assert.That(wentBack, Is.False, "Expected no navigation back");
-                }
-                catch (Exception e)
-                {
-                    Assert.Fail("Shouldn't throw exception: " + e);
-                }
-            }
-        }
-
-        [Test]
-        public void ForwardShouldIgnoreExceptionsWhenNoHistoryIsAvailable()
-        {
-            using (var ie = new IE())
-            {
-                try
-                {
-                    var wentForward = ie.Forward();
-                    Assert.That(wentForward, Is.False, "Expected no navigation forward");
-                }
-                catch (Exception e)
-                {
-                    Assert.Fail("Shouldn't throw exception: " + e);
-                }
-            }
         }
 
         [Test]
@@ -685,6 +580,8 @@ namespace WatiN.Core.UnitTests.IETests
         }
     }
 
+
+    // TODO: NewAttachToIeImplementation is work in progress
     [TestFixture]
     public class NewAttachToIeImplementation
     {

@@ -52,7 +52,7 @@ namespace WatiN.Core.Mozilla
             get { return FireFoxClientPort.BrowserVariableName;  }
         }
 
-        public IntPtr Handle
+        public IntPtr hWnd
         {
             get { return ClientPort.Process.MainWindowHandle; }
         }
@@ -111,7 +111,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         public void Reload()
         {
-            ClientPort.Write("{0}.reload();", BrowserVariableName);
+            ClientPort.Write("{0}.location.reload(true);", FireFoxClientPort.WindowVariableName);
         }
 
         public bool IsLoading()

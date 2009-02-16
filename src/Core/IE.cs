@@ -790,13 +790,10 @@ namespace WatiN.Core
 		/// Reloads the currently displayed webpage (like the Refresh button in 
 		/// Internet Explorer).
 		/// </summary>
-		public void Refresh()
+		protected override void DoRefresh()
 		{
-			Logger.LogAction("Refreshing browser from '" + Url + "'");
-
 			object REFRESH_COMPLETELY = 3;
 			ie.Refresh2(ref REFRESH_COMPLETELY);
-			WaitForComplete();
 		}
 
 	    /// <summary>
@@ -863,7 +860,7 @@ namespace WatiN.Core
 		///  }
 		/// </code>
 		/// </example>
-		public void Reopen()
+		protected override void DoReopen()
 		{
 			Reopen(new Uri("about:blank"), null, false);
 		}

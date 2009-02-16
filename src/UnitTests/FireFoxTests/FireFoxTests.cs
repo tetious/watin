@@ -46,16 +46,6 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         }
 
         [Test]
-        public void GoToUri()
-        {
-            using (var fireFox = new FireFox())
-            {
-                fireFox.GoTo(MainURI);
-                Assert.AreEqual(MainURI, new Uri(fireFox.Url));
-            }
-        }
-
-        [Test]
         public void NewFireFoxWithoutUrlShouldStartAtAboutBlank()
         {
             using (var fireFox = new FireFox())

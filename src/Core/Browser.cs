@@ -244,5 +244,49 @@ namespace WatiN.Core
 
         protected abstract bool GoForward();
 
+        /// <summary>
+        /// Closes and then reopens the browser with a blank page.
+        /// </summary>
+        /// <example>
+        /// The following example creates a new Internet Explorer instances and navigates to
+        /// the WatiN Project website on SourceForge and then reopens the browser.
+        /// <code>
+        /// using WatiN.Core;
+        /// 
+        /// namespace NewIEExample
+        /// {
+        ///    public class WatiNWebsite
+        ///    {
+        ///      public WatiNWebsite()
+        ///      {
+        ///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
+        ///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
+        ///        ie.Reopen();
+        ///      }
+        ///    }
+        ///  }
+        /// </code>
+        /// </example>
+        public void Reopen()
+        {
+            Logger.LogAction("Reopening browser (closing current and creating new instance)");
+            DoReopen();
+        }
+
+        protected abstract void DoReopen();
+
+        /// <summary>
+        /// Reloads the currently displayed webpage (like the Refresh/reload button in 
+        /// a browser).
+        /// </summary>
+        public void Refresh()
+        {
+            Logger.LogAction("Refreshing browser from '" + Url + "'");
+            DoRefresh();
+            WaitForComplete();
+        }
+
+        protected abstract void DoRefresh();
+
     }
 }

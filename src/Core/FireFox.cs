@@ -108,7 +108,7 @@ namespace WatiN.Core
 
         public override IntPtr hWnd
         {
-            get { return FireFoxBrowser.Handle; }
+            get { return FireFoxBrowser.hWnd; }
         }
 
         public override INativeDocument OnGetNativeDocument()
@@ -278,10 +278,9 @@ namespace WatiN.Core
         /// <summary>
         /// Reloads the currently displayed webpage.
         /// </summary>
-        public void Refresh()
+        protected override void DoRefresh()
         {
             FireFoxBrowser.Reload();
-            WaitForComplete();
         }
 
         /// <summary>
@@ -290,10 +289,11 @@ namespace WatiN.Core
         /// <remarks>
         /// Useful when clearing the cookie cache and continuing execution to a test.
         /// </remarks>
-        public void Reopen()
+        protected override void DoReopen()
         {
             FireFoxBrowser.ClientPort.Dispose();
             FireFoxBrowser.ClientPort.Connect(string.Empty);
+            WaitForComplete();
         }
 
         /// <summary>

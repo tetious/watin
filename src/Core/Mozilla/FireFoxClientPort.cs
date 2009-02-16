@@ -189,15 +189,19 @@ namespace WatiN.Core.Mozilla
                   DocumentVariableName + ".activeElement = event.target;}, false);}}");
         }
 
-        public void Connect(string arguments)
+        public void Connect(string url)
         {
+            if (string.IsNullOrEmpty(url)) url = "about:blank";
+
             ValidateCanConnect();
             disposed = false;
+            
             Logger.LogDebug("Attempting to connect to jssh server on localhost port 9997.");
+            
             lastResponse = string.Empty;
             response = new StringBuilder();
 
-            Process = FireFox.CreateProcess(arguments + " -jssh", true);
+            Process = FireFox.CreateProcess(url + " -jssh", true);
 
             if (!IsMainWindowVisible)
             {

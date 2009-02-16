@@ -19,14 +19,12 @@
 using System;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
 
 namespace WatiN.Core
 {
 	/// <summary>
 	/// This class hosts functionality for classes which are an entry point
-	/// to a document and its elements and/or frames. Currently implemented
-	/// by IE and HTMLDialog.
+	/// to a document and its elements and/or frames.
 	/// </summary>
 	public abstract class DomContainer : Document
 	{

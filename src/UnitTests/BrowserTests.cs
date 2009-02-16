@@ -118,6 +118,17 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
+        public void GoToUri()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+                                Assert.AreEqual(MainURI, browser.Uri);
+                            });
+
+        }
+
+        [Test]
         public void BackAndForward()
         {
             ExecuteTest(browser =>
@@ -167,6 +178,61 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(wentForward, Is.False, "Expected no navigation back");
                             });
         }
+
+        [Test]
+        public void Reopen()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var oldBrowserHwnd = browser.hWnd;
+
+                                browser.GoTo(MainURI);
+                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+
+                                // WHEN
+                                browser.Reopen();
+
+                                // THEN
+                                Assert.AreNotSame(oldBrowserHwnd, browser.hWnd, "Reopen should create a new browser.");
+                                Assert.AreEqual("about:blank", browser.Url, "Unexpected url after reopen");
+                            });
+
+        }
+
+        [Test]
+        public void RefreshWithNeverExpiredPage()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+                                browser.TextField("name").TypeText("refresh test");
+
+                                browser.Refresh();
+
+                                Assert.AreEqual("refresh test", browser.TextField("name").Text);
+                            });
+
+        }
+
+        [Test, Category("InternetConnectionNeeded")]
+        public void RefreshWithImmediatelyExpiredPage()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(GoogleUrl);
+                                browser.TextField(Find.ByName("q")).TypeText("refresh test");
+
+                                // WHEN
+                                browser.Refresh();
+
+                                // THEN
+                                Assert.AreEqual(null, browser.TextField(Find.ByName("q")).Text);
+                            });
+
+        }
+
 
         public override Uri TestPageUri
         {

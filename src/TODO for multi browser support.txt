@@ -63,6 +63,11 @@ DONE JVM - Implement propper handling of firing events
 DONE JVM - Wrapp WaitForComplete implementation and override DomContainer methods
 DONE JVM - move RunScript to FFBrowser
 - what to do with Settings.CloseExistingBrowserInstances
+- Creating a new FireFox instance in a new process (constructor param)? Is this applicable to FireFox?
+- Is ClearCookies possible? If yes, move to Browser
+- Is ClearCache possible? If yes, move to Browser
+- Implement FireFox.AttachTo
+- Implement FireFox.Exists
 
 ** Changes to test suite
 - Make sure none browser specific tests are executed for IE and FireFox
@@ -81,5 +86,11 @@ DONE JVM - Cleanup tests who make use of IEHtmlInjector (use javascript with tim
 ** Interfaces
 - Add interfaces to all elements and elementcollections (like in the current 2.0 CTP). Mainly to provide a way to mock out WatiN in testing tools using WatiN (like stormwind)
 
+
+** Misc.
+- Move IE.AutoClose functionality used in Dispose to Browser? Are make it a Setting instead? Not implemented in FireFox yet.
+- DomContainer.DialogWatcher applicable for Browser/FireFox or IE only?
+- DomContainer.CaptureWebPageToFile applicable for Browser/FireFox or IE only?
+- Move IE.Reopen(url, logonDialogHandler, inNewProcess) to Browser (no logonDialogHandler support for FireFox yet)?
 
 
