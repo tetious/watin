@@ -1036,5 +1036,21 @@ namespace WatiN.Core.UnitTests
 	                        });
 	    }
 
+	    [Test]
+	    public void ShouldReturnTextofEventValue()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            browser.GoTo(MainURI);
+
+	                            // WHEN
+                                var onClickText = browser.Button("modalid").GetAttributeValue("onclick");
+
+	                            // THEN
+                                Assert.That(onClickText, Is.EqualTo("fnOpen()"), "Unexpected text for onclick event");
+	                        });
+	    }
+
 	}
 }
