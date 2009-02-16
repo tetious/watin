@@ -158,7 +158,7 @@ namespace WatiN.Core
 		/// <value>The parent <see cref="SelectList"/>.</value>
 		public SelectList ParentSelectList
 		{
-			get { return (SelectList) Ancestor(typeof (SelectList)); }
+			get { return Ancestor<SelectList>(); }
 		}
 
 		private void setSelected(bool value, bool WaitForComplete)
@@ -175,11 +175,6 @@ namespace WatiN.Core
 		        ParentSelectList.FireEventNoWait("onchange");
 		    }
 		}
-
-//		private IHTMLOptionElement optionElement
-//		{
-//            get { return (IHTMLOptionElement)NativeElement.Object; }
-//		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)
 		{

@@ -207,7 +207,7 @@ namespace WatiN.Core.UnitTests.IETests
         }
 
         [Test]
-        public void NewIE()
+        public void NewIEWithoutUrlShouldStartAtAboutBlank()
         {
             using (var ie = new IE())
             {

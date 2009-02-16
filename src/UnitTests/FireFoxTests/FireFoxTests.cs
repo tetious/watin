@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -43,5 +44,25 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         {
             // TODO: make this work for firefox if possible. Do rename the setting from ...IeInstance... to ...BrowserInstance...
         }
+
+        [Test]
+        public void GoToUri()
+        {
+            using (var fireFox = new FireFox())
+            {
+                fireFox.GoTo(MainURI);
+                Assert.AreEqual(MainURI, new Uri(fireFox.Url));
+            }
+        }
+
+        [Test]
+        public void NewFireFoxWithoutUrlShouldStartAtAboutBlank()
+        {
+            using (var fireFox = new FireFox())
+            {
+                Assert.AreEqual("about:blank", fireFox.Url);
+            }
+        }
+
     }
 }

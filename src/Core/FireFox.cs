@@ -38,7 +38,7 @@ namespace WatiN.Core
         /// </summary>
         public FireFox()
         {
-            CreateFireFoxInstance(string.Empty);
+            CreateFireFoxInstance("about:blank");
         }
 
         /// <summary>
@@ -354,6 +354,7 @@ namespace WatiN.Core
             clientPort.Connect(url);
 
             FireFoxBrowser = new FFBrowser(clientPort, this);
+            WaitForComplete();
         }
 
         #endregion
