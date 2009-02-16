@@ -120,7 +120,7 @@ namespace WatiN.Core
         /// Gets the number of running FireFox processes.
         /// </summary>
         /// <value>The number of running FireFox processes.</value>
-        internal static int CurrentProcessCount
+        public static int CurrentProcessCount
         {
             get
             {

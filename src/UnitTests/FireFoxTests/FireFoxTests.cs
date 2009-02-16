@@ -64,5 +64,24 @@ namespace WatiN.Core.UnitTests.FireFoxTests
             }
         }
 
+        [Test]
+        public void NewFireFoxWithUri()
+        {
+            using (var fireFox = new FireFox(MainURI))
+            {
+                Assert.AreEqual(MainURI, fireFox.Uri);
+            }
+        }
+
+        [Test]
+        public void NewFireFoxWithUriShouldAutoClose()
+        {
+            Assert.That(FireFox.CurrentProcessCount, Is.EqualTo(0), "pre-condition: Expected no running firefox instances");
+            using (new FireFox(MainURI)) { }
+
+            Assert.That(FireFox.CurrentProcessCount, Is.EqualTo(0), "Expected no running firefox instances");
+        }
+
+
     }
 }
