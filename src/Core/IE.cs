@@ -834,32 +834,6 @@ namespace WatiN.Core
 	        DisposeAndCloseIE(true);
 		}
 
-		/// <summary>
-		/// Closes then reopens Internet Explorer with a blank page.
-		/// </summary>
-		/// <remarks>
-		/// You could also use one of the overloaded methods.
-		/// </remarks>
-		/// <example>
-		/// The following example creates a new Internet Explorer instances and navigates to
-		/// the WatiN Project website on SourceForge leaving the created Internet Explorer open.
-		/// <code>
-		/// using WatiN.Core;
-		/// 
-		/// namespace NewIEExample
-		/// {
-		///    public class WatiNWebsite
-		///    {
-		///      public WatiNWebsite()
-		///      {
-		///        LogonDialogHandler logon = new LogonDialogHandler("username", "password");
-		///        IE ie = new IE(new Uri("http://watin.sourceforge.net"), logon);
-		///        ie.Reopen();
-		///      }
-		///    }
-		///  }
-		/// </code>
-		/// </example>
 		protected override void DoReopen()
 		{
 			Reopen(new Uri("about:blank"), null, false);
