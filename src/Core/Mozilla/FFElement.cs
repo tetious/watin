@@ -27,6 +27,7 @@ namespace WatiN.Core.Mozilla
 {
     public class FFElement : INativeElement
     {
+        private const int NodeType_Text = 3;
 
         /// <summary>
         /// List of html attributes that have to be retrieved as properties in order to get the correct value.
@@ -40,6 +41,16 @@ namespace WatiN.Core.Mozilla
                 };
 
         /// <summary>
+        /// List of html attributes that should not be changed when SetAttributeValue is called
+        /// I.e. the Checked property is set be the click event on RadioButton.Checked and CheckBox.Checked
+        /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
+        /// </summary>
+        public static readonly List<string> IgnoreSettingOfValue = new List<string>
+                {
+                    "checked"
+                };
+
+        /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
         public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
@@ -47,13 +58,16 @@ namespace WatiN.Core.Mozilla
                     {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
                 };
 
-        private const int NodeType_Text = 3;
-        
+        /// <summary>
+        /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
+        /// </summary>
+        public static readonly Dictionary<string, TryFuncValue<string>> SetPropertyTransformations = new Dictionary<string, TryFuncValue<string>>
+                {
+                    {"value", value => "'" + value + "'"}
+                };
+
         private ElementAttributeBag _attributeBag;
         private Dictionary<string, object> _attributeCache;
-
-        public string ElementReference { get; private set; }
-        public FireFoxClientPort ClientPort { get; private set; }
 
         public FFElement(object elementReference, FireFoxClientPort clientPort)
         {
@@ -64,6 +78,75 @@ namespace WatiN.Core.Mozilla
             ClientPort = clientPort;
         }
 
+        public string ElementReference { get; private set; }
+        public FireFoxClientPort ClientPort { get; private set; }
+
+        public string TextContent
+        {
+            get
+            {
+                var propertyName = "textContent";
+                if (!IsTextNodeType) propertyName = "innerHTML";
+
+                var propertyValue = GetProperty(propertyName);
+
+                if (propertyName == "textContent") propertyValue = InnerHtmlToInnerText(propertyValue);
+
+                return propertyValue;
+            }
+        }
+
+        public string InputType
+        {
+            get
+            {
+                return GetFromAttributeCache("Type", () =>
+                                                         {
+                                                             var value = GetAttribute("type");
+                                                             return value ?? "text";
+                                                         });
+            }
+        }
+
+        public string OuterHtml
+        {
+            get
+            {
+                var clone = FireFoxClientPort.CreateVariableName();
+                var div = FireFoxClientPort.CreateVariableName();
+                var outerHtml = FireFoxClientPort.CreateVariableName();
+
+                var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
+                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
+                command += string.Format("{0}.appendChild({1});", div, clone);
+                command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
+                command += string.Format("{0}=null;{1}=null;", div, clone);
+                command += string.Format("{0};", outerHtml);
+
+                var result = ClientPort.WriteAndRead(command);
+
+                // remove all \n (newline) and any following spaces
+                var newlineSpaces = new Regex("\n *");
+                result = newlineSpaces.Replace(result, "");
+
+                return "\r\n" + result;
+            }
+        }
+
+        public bool IsTextNodeType
+        {
+            get
+            {
+                return GetFromAttributeCache("IsTextNodeType", () =>
+                                                                   {
+                                                                       var nodeTypeValue = GetProperty("nodeType");
+                                                                       return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
+                                                                   });
+            }
+        }
+
+        #region INativeElement Members
+
         /// <summary>
         /// This not supported in FireFox
         /// </summary>
@@ -73,7 +156,7 @@ namespace WatiN.Core.Mozilla
             {
                 var element = GetElementByProperty("nextSibling");
 
-                if (element == null || !element.IsTextNodeType()) return string.Empty;
+                if (element == null || !element.IsTextNodeType) return string.Empty;
 
                 return element.GetAttributeValue("textContent");
             }
@@ -88,69 +171,10 @@ namespace WatiN.Core.Mozilla
             {
                 var element = GetElementByProperty("previousSibling");
 
-                if (element == null || !element.IsTextNodeType()) return string.Empty;
+                if (element == null || !element.IsTextNodeType) return string.Empty;
 
                 return element.GetAttributeValue("textContent");
             }
-        }
-
-        /// <summary>
-        /// Makes innerHtml inner text (IE) look a like. It comes close but it seems not to cover all
-        /// conversions cause comparing browser.body.innertext between a IE and FireFox instances will 
-        /// certainly fail on newlines and maybe some spaces.
-        /// </summary>
-        /// <param name="innerHtml">The value.</param>
-        /// <returns></returns>
-        private string InnerHtmlToInnerText(string innerHtml)
-        {
-            if (string.IsNullOrEmpty(innerHtml)) return string.Empty;
-
-            if (TagName.ToLowerInvariant() == "pre") return innerHtml;
-
-            // remove all \n (newline) and any following spaces
-            var newlineSpaces = new Regex("\r\n *");
-            var returnValue = newlineSpaces.Replace(innerHtml, "");
-            
-            // remove all \n (newline) and any following spaces
-            var simpleNewlineSpaces = new Regex("\n *");
-            returnValue = simpleNewlineSpaces.Replace(returnValue, "");
-
-            // that's it for text nodes
-            if (IsTextNodeType()) return returnValue;
-
-            // remove all but the last param tag by \r\n
-            var param = new Regex("</p>");
-            var matches = param.Matches(returnValue);
-            if (matches.Count > 1)
-            {
-                returnValue = param.Replace(returnValue, "\r\n", matches.Count - 1);
-            }
-
-            // remove all br tags and following space with \r\n
-            var br = new Regex("<br> *");
-            returnValue = br.Replace(returnValue, "\r\n");
-
-            // remove all hr tags and following space with \r\n
-            var hr = new Regex("<hr> *");
-            returnValue = hr.Replace(returnValue, "\r\n");
-
-            // remove tags (beginning and end tags)
-            var tag = new Regex(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
-            returnValue = tag.Replace(returnValue, "");
-
-//            tag = new Regex(@"</\w> *");
-//            returnValue = tag.Replace(returnValue, "");
-
-            // remove comment
-            tag = new Regex("<!--.*-->");
-            returnValue = tag.Replace(returnValue, "");
-
-            // replace multiple spaces by one space
-            var moreThanOneSpace = new Regex(" +");
-            returnValue = moreThanOneSpace.Replace(returnValue, " ");
-
-            // remove spaces at the beginning of the text
-            return returnValue.TrimStart();
         }
 
         public INativeElement NextSibling
@@ -161,7 +185,7 @@ namespace WatiN.Core.Mozilla
 
                 while (true)
                 {
-                    if (element == null || !element.IsTextNodeType())
+                    if (element == null || !element.IsTextNodeType)
                     {
                         return element;
                     }
@@ -179,7 +203,7 @@ namespace WatiN.Core.Mozilla
 
                 while (true)
                 {
-                    if (element == null || !element.IsTextNodeType())
+                    if (element == null || !element.IsTextNodeType)
                     {
                         return element;
                     }
@@ -213,65 +237,25 @@ namespace WatiN.Core.Mozilla
             return ReadPropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
         }
 
-        private string TextContent
-        {
-            get
-            {
-                var propertyName = "textContent";
-                if (!IsTextNodeType()) propertyName = "innerHTML";
-
-                var propertyValue = GetProperty(propertyName);
-
-                if (propertyName == "textContent") propertyValue = InnerHtmlToInnerText(propertyValue);
-
-                return propertyValue;
-            }
-        }
-
-        private string InputType
-        {
-            get
-            {
-                return GetFromAttributeCache("Type", () =>
-                                                         {
-                                                             var value = GetAttribute("type");
-                                                             return value ?? "text";
-                                                         });
-            }
-        }
-
-        public string GetAttribute(string attributeName)
-        {
-            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", ElementReference, attributeName);
-
-            return ClientPort.WriteAndRead(getAttributeWrite);
-        }
-
         public void SetAttributeValue(string attributeName, string value)
         {
-            // Ignores
-            // Checked is set be the click event on RadioButton.Checked and CheckBox.Checked
-            if (attributeName == "checked") return;
-
             // Translate to FireFox html syntax
             if (WatiNAttributeMap.ContainsKey(attributeName))
             {
                 attributeName = WatiNAttributeMap[attributeName];
             }
 
+            // Ignores
+            if (IgnoreSettingOfValue.Contains(attributeName)) return;
+
             // Handle properties different from attributes
-            if (ReadPropertyInsteadOfAttribute.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
+            if (ReadPropertyInsteadOfAttribute.Contains(attributeName))
             {
                 SetProperty(attributeName, value);
                 return;
             }
 
             SetAttribute(attributeName, value);
-        }
-
-        public void SetAttribute(string attributeName, string value)
-        {
-            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
         }
 
         public string GetStyleAttributeValue(string attributeName)
@@ -301,6 +285,11 @@ namespace WatiN.Core.Mozilla
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
             ExecuteEvent(eventName, eventProperties, true);
+        }
+
+        public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
+        {
+            ExecuteEvent(eventName, eventProperties, false);
         }
 
         public IAttributeBag GetAttributeBag(DomContainer domContainer)
@@ -337,11 +326,6 @@ namespace WatiN.Core.Mozilla
             get { return ElementReference; }
         }
 
-        public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
-        {
-            ExecuteEvent(eventName, eventProperties, false);
-        }
-
         public void Select()
         {
             FireEvent("select", null);
@@ -356,6 +340,141 @@ namespace WatiN.Core.Mozilla
         {
             fileName = fileName.Replace(@"\", @"\\");
             SetAttributeValue("value", fileName);
+        }
+
+        #endregion
+
+        public string GetAttribute(string attributeName)
+        {
+            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", ElementReference, attributeName);
+            return ClientPort.WriteAndRead(getAttributeWrite);
+        }
+
+        public void SetAttribute(string attributeName, string value)
+        {
+            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
+        }
+
+        /// <summary>
+        /// Gets the property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns></returns>
+        public string GetProperty(string propertyName)
+        {
+            var command = string.Format("{0}.{1};", ElementReference, propertyName);
+            return ClientPort.WriteAndRead(command);
+        }
+
+        /// <summary>
+        /// Sets the property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        public void SetProperty(string propertyName, string value)
+        {
+            if (SetPropertyTransformations.ContainsKey(propertyName)) value = SetPropertyTransformations[propertyName].Invoke(value);
+            
+            var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
+            ClientPort.Write(command);
+        }
+
+        /// <summary>
+        /// Executes a method with no parameters.
+        /// </summary>
+        /// <param name="methodName">Name of the method to execute.</param>
+        public void ExecuteMethod(string methodName)
+        {
+            ClientPort.Write("{0}.{1}();", ElementReference, methodName);
+        }
+
+        /// <summary>
+        /// Gets the element by property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>Returns the element that is returned by the specified property</returns>
+        public FFElement GetElementByProperty(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+            {
+                throw new ArgumentNullException("propertyName");
+            }
+
+            var elementvar = FireFoxClientPort.CreateVariableName();
+            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
+            var exists = ClientPort.WriteAndReadAsBool(command);
+
+            return exists ? new FFElement(elementvar, ClientPort) : null;
+        }
+
+        /// <summary>
+        /// Makes innerHtml inner text (IE) look a like. It comes close but it seems not to cover all
+        /// conversions cause comparing browser.body.innertext between a IE and FireFox instances will 
+        /// certainly fail on newlines and maybe some spaces.
+        /// </summary>
+        /// <param name="innerHtml">The value.</param>
+        /// <returns></returns>
+        private string InnerHtmlToInnerText(string innerHtml)
+        {
+            if (string.IsNullOrEmpty(innerHtml)) return string.Empty;
+
+            if (TagName.ToLowerInvariant() == "pre") return innerHtml;
+
+            // remove all \n (newline) and any following spaces
+            var newlineSpaces = new Regex("\r\n *");
+            var returnValue = newlineSpaces.Replace(innerHtml, "");
+            
+            // remove all \n (newline) and any following spaces
+            var simpleNewlineSpaces = new Regex("\n *");
+            returnValue = simpleNewlineSpaces.Replace(returnValue, "");
+
+            // that's it for text nodes
+            if (IsTextNodeType) return returnValue;
+
+            // remove all but the last param tag by \r\n
+            var param = new Regex("</p>");
+            var matches = param.Matches(returnValue);
+            if (matches.Count > 1)
+            {
+                returnValue = param.Replace(returnValue, "\r\n", matches.Count - 1);
+            }
+
+            // remove all br tags and following space with \r\n
+            var br = new Regex("<br> *");
+            returnValue = br.Replace(returnValue, "\r\n");
+
+            // remove all hr tags and following space with \r\n
+            var hr = new Regex("<hr> *");
+            returnValue = hr.Replace(returnValue, "\r\n");
+
+            // remove tags (beginning and end tags)
+            var tag = new Regex(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
+            returnValue = tag.Replace(returnValue, "");
+
+//            tag = new Regex(@"</\w> *");
+//            returnValue = tag.Replace(returnValue, "");
+
+            // remove comment
+            tag = new Regex("<!--.*-->");
+            returnValue = tag.Replace(returnValue, "");
+
+            // replace multiple spaces by one space
+            var moreThanOneSpace = new Regex(" +");
+            returnValue = moreThanOneSpace.Replace(returnValue, " ");
+
+            // remove spaces at the beginning of the text
+            return returnValue.TrimStart();
+        }
+
+        private T GetFromAttributeCache<T>(string key, TryFunc<T> function)
+        {
+            if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
+
+            if (!_attributeCache.ContainsKey(key))
+            {
+                _attributeCache.Add(key, function.Invoke());
+            }
+            return (T) _attributeCache[key];
         }
 
         /// <summary>
@@ -452,103 +571,6 @@ namespace WatiN.Core.Mozilla
             }
 
             return defaultValue;
-        }
-
-        /// <summary>
-        /// Executes a method with no parameters.
-        /// </summary>
-        /// <param name="methodName">Name of the method to execute.</param>
-        private void ExecuteMethod(string methodName)
-        {
-            ClientPort.Write("{0}.{1}();", ElementReference, methodName);
-        }
-
-        /// <summary>
-        /// Gets the property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns></returns>
-        public string GetProperty(string propertyName)
-        {
-            var command = string.Format("{0}.{1};", ElementReference, propertyName);
-            return ClientPort.WriteAndRead(command);
-        }
-
-        /// <summary>
-        /// Sets the property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        public void SetProperty(string propertyName, string value)
-        {
-            if (propertyName == "value") value = "'" + value + "'";
-            
-            var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
-            ClientPort.Write(command);
-        }
-
-        /// <summary>
-        /// Gets the element by property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>Returns the element that is returned by the specified property</returns>
-        public FFElement GetElementByProperty(string propertyName)
-        {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException("propertyName");
-            }
-
-            var elementvar = FireFoxClientPort.CreateVariableName();
-            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
-            var exists = ClientPort.WriteAndReadAsBool(command);
-
-            return exists ? new FFElement(elementvar, ClientPort) : null;
-        }
-
-        public bool IsTextNodeType()
-        {
-            return GetFromAttributeCache("IsTextNodeType", () =>
-                                                     {
-                                                         var nodeTypeValue = GetProperty("nodeType");
-                                                         return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
-                                                     });
-        }
-
-        private T GetFromAttributeCache<T>(string key, TryFunc<T> function)
-        {
-            if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
-
-            if (!_attributeCache.ContainsKey(key))
-            {
-                _attributeCache.Add(key, function.Invoke());
-            }
-            return (T) _attributeCache[key];
-        }
-
-        private string OuterHtml
-        {
-            get
-            {
-                var clone = FireFoxClientPort.CreateVariableName();
-                var div = FireFoxClientPort.CreateVariableName();
-                var outerHtml = FireFoxClientPort.CreateVariableName();
-
-                var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
-                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
-                command += string.Format("{0}.appendChild({1});", div, clone);
-                command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
-                command += string.Format("{0}=null;{1}=null;", div, clone);
-                command += string.Format("{0};", outerHtml);
-
-                var result = ClientPort.WriteAndRead(command);
-
-                // remove all \n (newline) and any following spaces
-                var newlineSpaces = new Regex("\n *");
-                result = newlineSpaces.Replace(result, "");
-
-                return "\r\n" + result;
-            }
         }
     }
 }

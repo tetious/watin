@@ -4,6 +4,7 @@ using System.Threading;
 namespace WatiN.Core.UtilityClasses
 {
     public delegate T TryFunc<T>();
+    public delegate T TryFuncValue<T>(string value);
     public delegate void TryAction();
     public delegate string BuildTimeOutExceptionMessage();
 
