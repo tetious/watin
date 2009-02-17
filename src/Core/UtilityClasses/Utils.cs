@@ -174,10 +174,14 @@ namespace WatiN.Core.UtilityClasses
         /// <returns></returns>
         public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
         {
-            if (hWnd == IntPtr.Zero) return false;
+            if (hWnd == IntPtr.Zero)
+            {
+//                Console.WriteLine("   skip: Hwnd = zero");
+                return false;
+            }
 
             var className = NativeMethods.GetClassName(hWnd);
-
+//            Console.WriteLine("   ClassName: " + className);
             return className.Equals(expectedClassName);
         }
 

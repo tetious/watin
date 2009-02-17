@@ -18,10 +18,8 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
@@ -60,7 +58,7 @@ namespace WatiN.Core
 	/// </example>
 	public class IE : Browser
 	{
-		private SHDocVw.InternetExplorer ie;
+		private IWebBrowser2 ie;
 
 		private bool autoClose = true;
 		private bool isDisposed;
@@ -579,16 +577,16 @@ namespace WatiN.Core
 		/// object because otherwise all projects using WatiN should also
 		/// reference the Interop.SHDocVw assembly.
 		/// </summary>
-		/// <param name="shDocVwInternetExplorer">The Interop.SHDocVw.InternetExplorer object to use</param>
-		public IE(object shDocVwInternetExplorer)
+		/// <param name="iwebBrowser2">An object implementing IWebBrowser2 (like Interop.SHDocVw.InternetExplorer object)</param>
+		public IE(object iwebBrowser2)
 		{
 			CheckThreadApartmentStateIsSTA();
 
-			var internetExplorer = shDocVwInternetExplorer as SHDocVw.InternetExplorer;
+			var internetExplorer = iwebBrowser2 as IWebBrowser2;
 
-			if (shDocVwInternetExplorer == null)
+            if (internetExplorer == null)
 			{
-				throw new ArgumentException("SHDocVwInternetExplorer needs to be of type Interop.SHDocVw.InternetExplorer");
+                throw new ArgumentException("iwebBrowser2 needs to implement shdocvw.IWebBrowser2");
 			}
 
 			InitIEAndStartDialogWatcher(internetExplorer);
@@ -655,12 +653,12 @@ namespace WatiN.Core
 			}
 		}
 
-		private void InitIEAndStartDialogWatcher(SHDocVw.InternetExplorer internetExplorer)
+		private void InitIEAndStartDialogWatcher(IWebBrowser2 internetExplorer)
 		{
 			InitIEAndStartDialogWatcher(internetExplorer, null);
 		}
 
-		private void InitIEAndStartDialogWatcher(SHDocVw.InternetExplorer internetExplorer, Uri uri)
+		private void InitIEAndStartDialogWatcher(IWebBrowser2 internetExplorer, Uri uri)
 		{
 			ie = internetExplorer;
 
@@ -731,7 +729,8 @@ namespace WatiN.Core
 			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
 
 			object nil = null;
-			ie.Navigate(url.AbsoluteUri, ref nil, ref nil, ref nil, ref nil);
+	        object absoluteUri = url.AbsoluteUri;
+	        ie.Navigate2(ref absoluteUri, ref nil, ref nil, ref nil, ref nil);
 		}
 
 

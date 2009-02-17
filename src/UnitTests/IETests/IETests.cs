@@ -27,6 +27,7 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.InternetExplorer;
 using WatiN.Core.Logging;
 using WatiN.Core.UtilityClasses;
 
@@ -601,11 +602,10 @@ namespace WatiN.Core.UnitTests.IETests
 
             foreach (var process in processes)
             {
-
+                Console.WriteLine("process: " + process.ProcessName + "(" +process.Threads.Count +")");
                 foreach (ProcessThread t in process.Threads)
                 {
                     var threadId = t.Id;
-
                     NativeMethods.EnumThreadProc callbackProc = EnumChildForTridentDialogFrame;
                     NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
                 }
@@ -618,67 +618,15 @@ namespace WatiN.Core.UnitTests.IETests
             {
                 Console.WriteLine("Is IE Window: " + ((long)hWnd).ToString("X"));
 
-                Console.WriteLine(IEDOMFromhWnd(hWnd).title);
+                Console.WriteLine(Utils.IEDOMFromhWnd(hWnd).title);
             }
 
             return false;
         }
 
-        internal static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)
-        {
-            var IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
-
-            var lRes = 0;
-
-            //if (IsIETridentDlgFrame(hWnd))
-            //{
-
-            while (!IsIEServerWindow(hWnd))
-            {
-                // Get 1st child IE server window
-                hWnd = NativeMethods.GetChildWindowHwnd(hWnd, "Internet Explorer_Server");
-            }
-
-            if (IsIEServerWindow(hWnd))
-            {
-                // Register the message
-                var lMsg = NativeMethods.RegisterWindowMessage("WM_HTML_GETOBJECT");
-
-                // Get the object
-                NativeMethods.SendMessageTimeout(hWnd, lMsg, 0, 0, NativeMethods.SMTO_ABORTIFHUNG, 1000, ref lRes);
-
-                if (lRes != 0)
-                {
-                    // Get the object from lRes
-                    IHTMLDocument2 ieDOMFromhWnd = null;
-
-                    var hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
-
-                    if (hr != 0)
-                    {
-                        throw new COMException("ObjectFromLresult has thrown an exception", hr);
-                    }
-
-                    return ieDOMFromhWnd;
-                }
-            }
-
-            return null;
-        }
-
-        internal static bool IsIETridentDlgFrame(IntPtr hWnd)
-        {
-            return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
-        }
-
         internal static bool IsIEFrame(IntPtr hWnd)
         {
             return UtilityClass.CompareClassNames(hWnd, "IEFrame");
-        }
-
-        private static bool IsIEServerWindow(IntPtr hWnd)
-        {
-            return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
         }
 
     }

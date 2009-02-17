@@ -68,6 +68,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -170,6 +171,7 @@
     <Compile Include="BaseElementCollectionTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IETests\WindowEnumeratorTest.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
