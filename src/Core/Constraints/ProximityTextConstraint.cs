@@ -80,7 +80,7 @@ namespace WatiN.Core.Constraints
 		/// Initializes a new instance of the <see cref="ProximityTextConstraint" /> class;
 		/// </summary>
 		/// <param name="labelText">The text that represents the label for the form element.</param>
-		public ProximityTextConstraint( string labelText ) : base( Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
+		public ProximityTextConstraint( string labelText ) : base( Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
 		{
 			this.labelText = labelText;
 		}

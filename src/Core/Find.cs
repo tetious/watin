@@ -36,11 +36,11 @@ namespace WatiN.Core
 		internal const string nameAttribute = "name";
 		internal const string srcAttribute = "src";
 		internal const string styleBaseAttribute = "style.";
-		internal const string textAttribute = "innertext";
+		internal const string innerTextAttribute = "innertext";
 		internal const string titleAttribute = "title";
 		internal const string valueAttribute = "value";
 		internal const string hrefAttribute = "href";
-		internal const string classNameAttribute = "classname";
+		internal const string classNameAttribute = "className";
 
 		/// <summary>
 		/// Finds an element by its alt text.
@@ -318,7 +318,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(string text)
 		{
-            return new AttributeConstraint(textAttribute, new Regex("^ *" + text + " *$"));
+            return new AttributeConstraint(innerTextAttribute, new Regex("^ *" + text + " *$"));
 		}
 
 		/// <param name="regex">Regular expression to find a matching Text.</param>
@@ -328,7 +328,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(Regex regex)
 		{
-			return new AttributeConstraint(textAttribute, regex);
+			return new AttributeConstraint(innerTextAttribute, regex);
 		}
 
 		/// <param name="comparer">The comparer.</param>
@@ -338,7 +338,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(ICompare comparer)
 		{
-			return new AttributeConstraint(textAttribute, comparer);
+			return new AttributeConstraint(innerTextAttribute, comparer);
         }
 
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
@@ -350,7 +350,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByText(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(textAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(innerTextAttribute, new PredicateStringComparer(predicate));
 		}
 
 		/// <summary>

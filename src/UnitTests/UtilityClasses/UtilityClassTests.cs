@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         [Test]
         public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
         {
-            Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "classname"));
+            Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "className"));
         }
 
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]

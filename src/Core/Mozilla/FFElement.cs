@@ -29,29 +29,28 @@ namespace WatiN.Core.Mozilla
     {
 
         /// <summary>
-        /// List of html attributes that have to retrieved as properties in order to get the correct value.
+        /// List of html attributes that have to be retrieved as properties in order to get the correct value.
         /// I.e. for options myOption.getAttribute("selected"); returns nothing if it's selected. 
         /// However  myOption.selected returns true.
         /// </summary>
-        private static readonly List<string> knownAttributeOverrides = new List<string>(
-            new[]
+        public static readonly List<string> ReadPropertyInsteadOfAttribute = new List<string>
                 {
                     "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
                     "nodeType", "innerHTML", "baseURI", "src", "href"
-                });
+                };
 
-        private static readonly Dictionary<string, string> watiNAttributeMap = new Dictionary<string, string>();
+        /// <summary>
+        /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
+        /// </summary>
+        public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
+                {
+                    {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
+                };
 
-        static FFElement()
-        {
-            watiNAttributeMap.Add("innertext", "textContent");
-            watiNAttributeMap.Add("classname", "className");
-            watiNAttributeMap.Add("htmlFor", "for");
-        }
-
-        private ElementAttributeBag _attributeBag;
-        private string _tagName;
         private const int NodeType_Text = 3;
+        
+        private ElementAttributeBag _attributeBag;
+        private Dictionary<string, object> _attributeCache;
 
         public string ElementReference { get; private set; }
         public FireFoxClientPort ClientPort { get; private set; }
@@ -197,36 +196,48 @@ namespace WatiN.Core.Mozilla
 
         public string GetAttributeValue(string attributeName)
         {
-            // Special case
-            var attribName = attributeName.ToLowerInvariant();
-            if (attribName == "tagname") return TagName;
-            if (attribName == "outerhtml") return GetOuterHtml();
-
-            // Translate to FireFox html syntax
-            if (watiNAttributeMap.ContainsKey(attributeName))
+            // Translate to FireFox dom syntax
+            if (WatiNAttributeMap.ContainsKey(attributeName))
             {
-                attributeName = watiNAttributeMap[attributeName];
+                attributeName = WatiNAttributeMap[attributeName];
             }
 
-            // Handle properties different from attributes
-            if (knownAttributeOverrides.Contains(attributeName))
+            // Special cases
+            var attribName = attributeName.ToLowerInvariant();
+            if (attribName == "tagname") return TagName;
+            if (attribName == "type") return InputType;
+            if (attribName == "outerhtml") return OuterHtml;
+            if (attributeName == "textContent") return TextContent;
+
+            // Return value
+            return ReadPropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
+        }
+
+        private string TextContent
+        {
+            get
             {
-                var propertyName = attributeName;
-                if (propertyName == "textContent" && !IsTextNodeType()) propertyName = "innerHTML";
+                var propertyName = "textContent";
+                if (!IsTextNodeType()) propertyName = "innerHTML";
 
                 var propertyValue = GetProperty(propertyName);
 
-                if (attributeName == "textContent") propertyValue = InnerHtmlToInnerText(propertyValue);
+                if (propertyName == "textContent") propertyValue = InnerHtmlToInnerText(propertyValue);
+
                 return propertyValue;
             }
+        }
 
-            var value = GetAttribute(attributeName);
-
-            // Post processing
-            if (attributeName.ToLowerInvariant() == "type") { value = value ?? "text"; }
-
-            // return result
-            return value;
+        private string InputType
+        {
+            get
+            {
+                return GetFromAttributeCache("Type", () =>
+                                                         {
+                                                             var value = GetAttribute("type");
+                                                             return value ?? "text";
+                                                         });
+            }
         }
 
         public string GetAttribute(string attributeName)
@@ -240,17 +251,16 @@ namespace WatiN.Core.Mozilla
         {
             // Ignores
             // Checked is set be the click event on RadioButton.Checked and CheckBox.Checked
-            // for CheckBox.Checked it in resulted in setting and re-setting
             if (attributeName == "checked") return;
 
             // Translate to FireFox html syntax
-            if (watiNAttributeMap.ContainsKey(attributeName))
+            if (WatiNAttributeMap.ContainsKey(attributeName))
             {
-                attributeName = watiNAttributeMap[attributeName];
+                attributeName = WatiNAttributeMap[attributeName];
             }
 
             // Handle properties different from attributes
-            if (knownAttributeOverrides.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
+            if (ReadPropertyInsteadOfAttribute.Contains(attributeName) || attributeName.StartsWith("style", StringComparison.OrdinalIgnoreCase))
             {
                 SetProperty(attributeName, value);
                 return;
@@ -290,7 +300,6 @@ namespace WatiN.Core.Mozilla
 
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
-            // TODO: can FireFox handle eventProperties?
             ExecuteEvent(eventName, eventProperties, true);
         }
 
@@ -315,15 +324,7 @@ namespace WatiN.Core.Mozilla
 
         public string TagName
         {
-            get
-            {
-                if (_tagName == null)
-                {
-                    _tagName = GetProperty("tagName");
-                }
-
-                return _tagName;
-            }
+            get { return GetFromAttributeCache("TagName", () => GetProperty("tagName")); }
         }
 
         public object Object
@@ -491,7 +492,7 @@ namespace WatiN.Core.Mozilla
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>Returns the element that is returned by the specified property</returns>
-        internal FFElement GetElementByProperty(string propertyName)
+        public FFElement GetElementByProperty(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -505,34 +506,49 @@ namespace WatiN.Core.Mozilla
             return exists ? new FFElement(elementvar, ClientPort) : null;
         }
 
-        // TODO: Can/should be cached
-        private bool IsTextNodeType()
+        public bool IsTextNodeType()
         {
-            var nodeTypeValue = GetProperty("nodeType");
-            return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
+            return GetFromAttributeCache("IsTextNodeType", () =>
+                                                     {
+                                                         var nodeTypeValue = GetProperty("nodeType");
+                                                         return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
+                                                     });
         }
 
-        private string GetOuterHtml()
+        private T GetFromAttributeCache<T>(string key, TryFunc<T> function)
         {
-            var clone = FireFoxClientPort.CreateVariableName();
-            var div = FireFoxClientPort.CreateVariableName();
-            var outerHtml = FireFoxClientPort.CreateVariableName();
+            if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
 
-            var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
-            command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
-            command += string.Format("{0}.appendChild({1});", div, clone);
-            command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
-            command += string.Format("{0}=null;{1}=null;", div, clone);
-            command += string.Format("{0};", outerHtml);
-
-            var result = ClientPort.WriteAndRead(command);
-
-            // remove all \n (newline) and any following spaces
-            var newlineSpaces = new Regex("\n *");
-            result = newlineSpaces.Replace(result, "");
-
-            return "\r\n" + result;
+            if (!_attributeCache.ContainsKey(key))
+            {
+                _attributeCache.Add(key, function.Invoke());
+            }
+            return (T) _attributeCache[key];
         }
 
+        private string OuterHtml
+        {
+            get
+            {
+                var clone = FireFoxClientPort.CreateVariableName();
+                var div = FireFoxClientPort.CreateVariableName();
+                var outerHtml = FireFoxClientPort.CreateVariableName();
+
+                var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
+                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
+                command += string.Format("{0}.appendChild({1});", div, clone);
+                command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
+                command += string.Format("{0}=null;{1}=null;", div, clone);
+                command += string.Format("{0};", outerHtml);
+
+                var result = ClientPort.WriteAndRead(command);
+
+                // remove all \n (newline) and any following spaces
+                var newlineSpaces = new Regex("\n *");
+                result = newlineSpaces.Replace(result, "");
+
+                return "\r\n" + result;
+            }
+        }
     }
 }

@@ -58,7 +58,7 @@ namespace WatiN.Core
 
 		public string For
 		{
-			get { return GetAttributeValue("htmlFor"); }
+			get { return GetAttributeValue(Find.forAttribute); }
 		}
 
 		internal new static Element New(DomContainer domContainer, INativeElement element)

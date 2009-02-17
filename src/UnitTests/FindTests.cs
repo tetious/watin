@@ -562,7 +562,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsInstanceOfType(typeof (BaseConstraint), value, "Find.ByClass should return an AttributeConstraint");
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
-			const string classname = "classname";
+			const string classname = "className";
 			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
 			Assert.AreEqual("highlighted", value.Value, "Wrong value");
 

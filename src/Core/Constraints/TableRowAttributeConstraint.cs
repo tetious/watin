@@ -38,7 +38,7 @@ namespace WatiN.Core.Constraints
 		/// </summary>
 		/// <param name="findText">The text to find (exact match but case insensitive).</param>
 		/// <param name="inColumn">The column index in which to look for the value.</param>
-		public TableRowAttributeConstraint(string findText, int inColumn) : base(Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(findText))
+		public TableRowAttributeConstraint(string findText, int inColumn) : base(Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(findText))
 		{
 			columnIndex = inColumn;
 			containsText = new StringContainsAndCaseInsensitiveComparer(findText);
@@ -49,7 +49,7 @@ namespace WatiN.Core.Constraints
 		/// </summary>
 		/// <param name="findTextRegex">The regular expression to match with.</param>
 		/// <param name="inColumn">The column index in which to look for the value.</param>
-		public TableRowAttributeConstraint(Regex findTextRegex, int inColumn) : base(Find.textAttribute, findTextRegex)
+		public TableRowAttributeConstraint(Regex findTextRegex, int inColumn) : base(Find.innerTextAttribute, findTextRegex)
 		{
 			columnIndex = inColumn;
 			containsText = new AlwaysTrueComparer();
@@ -60,7 +60,7 @@ namespace WatiN.Core.Constraints
 		/// </summary>
 		/// <param name="comparer">The comparer.</param>
 		/// <param name="inColumn">The column index in which to look for the value.</param>
-		public TableRowAttributeConstraint(ICompare comparer, int inColumn) : base(Find.textAttribute, comparer)
+		public TableRowAttributeConstraint(ICompare comparer, int inColumn) : base(Find.innerTextAttribute, comparer)
 		{
 			columnIndex = inColumn;
 			containsText = new AlwaysTrueComparer();

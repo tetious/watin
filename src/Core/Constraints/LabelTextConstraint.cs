@@ -43,7 +43,7 @@ namespace WatiN.Core.Constraints
 		/// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
 		/// </summary>
 		/// <param name="labelText">The text that represents the label for the form element.</param>
-		public LabelTextConstraint( string labelText ) : base( Find.textAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
+		public LabelTextConstraint( string labelText ) : base( Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
 		{
 			this.labelText = labelText.Trim();
 		}
