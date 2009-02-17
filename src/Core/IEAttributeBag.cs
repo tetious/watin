@@ -18,6 +18,7 @@
 
 using System.Globalization;
 using mshtml;
+using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -30,7 +31,7 @@ namespace WatiN.Core
 	/// </summary>
 	public class IEAttributeBag : IAttributeBag
 	{
-	    public SHDocVw.InternetExplorer InternetExplorer { get; set; }
+	    public IWebBrowser2 InternetExplorer { get; set; }
 
 	    public string GetValue(string attributename)
 		{

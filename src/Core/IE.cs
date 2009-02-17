@@ -622,7 +622,7 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		private static SHDocVw.InternetExplorer CreateIEInNewProcess()
+		private static IWebBrowser2 CreateIEInNewProcess()
 		{
 			var m_Proc = Process.Start("IExplore.exe", "about:blank");
 
@@ -690,7 +690,7 @@ namespace WatiN.Core
 			throw new IENotFoundException(findBy.ConstraintToString(), timeout);
 		}
 
-		private static SHDocVw.InternetExplorer findInternetExplorer(BaseConstraint findBy, int timeout)
+		private static IWebBrowser2 findInternetExplorer(BaseConstraint findBy, int timeout)
 		{
 			Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ConstraintToString());
 
@@ -700,7 +700,7 @@ namespace WatiN.Core
 		    return internetExplorer;
 		}
 
-		private static SHDocVw.InternetExplorer findInternetExplorer(BaseConstraint findBy)
+		private static IWebBrowser2 findInternetExplorer(BaseConstraint findBy)
 		{
 			var allBrowsers = new ShellWindows();
 
@@ -711,7 +711,7 @@ namespace WatiN.Core
 
 			while (browserCounter < browserCount)
 			{
-				attributeBag.InternetExplorer = (SHDocVw.InternetExplorer) allBrowsers.Item(browserCounter);
+				attributeBag.InternetExplorer = (IWebBrowser2) allBrowsers.Item(browserCounter);
 
 				if (findBy.Compare(attributeBag))
 				{
