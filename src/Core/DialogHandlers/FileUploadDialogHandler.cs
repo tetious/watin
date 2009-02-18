@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using WatiN.Core.UtilityClasses;
+
 namespace WatiN.Core.DialogHandlers
 {
 	public class FileUploadDialogHandler : BaseDialogHandler

@@ -244,9 +244,6 @@
     <Compile Include="DialogHandlers\FileUploadDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DialogHandlers\Hwnd.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DialogHandlers\JavaDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -274,10 +271,10 @@
     <Compile Include="DialogHandlers\VbScriptMsgBoxDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DialogHandlers\WinButton.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DialogHandlers\Window.cs">
+    <Compile Include="InternetExplorer\ShellWindows2.cs" />
+    <Compile Include="UtilityClasses\Hwnd.cs" />
+    <Compile Include="UtilityClasses\WinButton.cs" />
+    <Compile Include="UtilityClasses\Window.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Div.cs">

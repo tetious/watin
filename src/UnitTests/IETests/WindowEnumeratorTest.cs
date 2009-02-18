@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SHDocVw;
 using WatiN.Core;
 using WatiN.Core.InternetExplorer;
-
-public class ApiWindow
-{
-    public string MainWindowTitle = "";
-    public string ClassName = "";
-    public Int32 hWnd;
-}
+using WatiN.Core.UtilityClasses;
 
 [TestFixture]
 public class EnumTester
@@ -28,9 +23,9 @@ public class EnumTester
         var topLevelWindows = enumerator.GetTopLevelWindows("IEFrame");
         foreach (var window in topLevelWindows)
         {
-            foreach (var childWindow in enumerator.GetChildWindows(window.hWnd, "TabWindowClass"))
+            foreach (var childWindow in enumerator.GetChildWindows((int) window.Hwnd, "TabWindowClass"))
             {
-                var document2 = Utils.IEDOMFromhWnd((IntPtr)childWindow.hWnd);
+                var document2 = Utils.IEDOMFromhWnd(childWindow.Hwnd);
                 Assert.That(document2, Is.Not.Null, "Oeps");
 
                 var window1 = document2.parentWindow;
@@ -50,7 +45,7 @@ public class EnumTester
         // THEN
     }
 
-    public IWebBrowser2 YetAnotherSolution(object site)
+    public IWebBrowser2 YetAnotherSolution(IHTMLWindow2 site)
     {
         var SID_STopLevelBrowser = new Guid(0x4C96BE40, 0x915C, 0x11CF, 0x99, 0xD3, 0x00, 0xAA, 0x00, 0x4A, 0xE8, 0x37);
         var SID_SWebBrowserApp = new Guid(0x0002DF05, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
@@ -134,8 +129,8 @@ public class WindowsEnumerator
 
     // Get window text signature. 
 
-    private List<ApiWindow> _listChildren = new List<ApiWindow>();
-    private readonly List<ApiWindow> _listTopLevel = new List<ApiWindow>();
+    private List<Window> _listChildren = new List<Window>();
+    private readonly List<Window> _listTopLevel = new List<Window>();
 
     private string _topLevelClass = "";
     private string _childClass = "";
@@ -144,7 +139,7 @@ public class WindowsEnumerator
     /// Get all top-level window information 
     /// </summary> 
     /// <returns>List of window information objects</returns> 
-    public List<ApiWindow> GetTopLevelWindows()
+    public List<Window> GetTopLevelWindows()
     {
 
         EnumWindows(EnumWindowProc, 0x0);
@@ -153,7 +148,7 @@ public class WindowsEnumerator
 
     }
 
-    public List<ApiWindow> GetTopLevelWindows(string className)
+    public List<Window> GetTopLevelWindows(string className)
     {
 
         _topLevelClass = className;
@@ -166,11 +161,11 @@ public class WindowsEnumerator
     /// Get all child windows for the specific windows handle (hwnd). 
     /// </summary> 
     /// <returns>List of child windows for parent window</returns> 
-    public List<ApiWindow> GetChildWindows(Int32 hwnd)
+    public List<Window> GetChildWindows(Int32 hwnd)
     {
 
         // Clear the window list. 
-        _listChildren = new List<ApiWindow>();
+        _listChildren = new List<Window>();
 
         // Start the enumeration process. 
         EnumChildWindows(hwnd, EnumChildWindowProc, 0x0);
@@ -180,7 +175,7 @@ public class WindowsEnumerator
 
     }
 
-    public List<ApiWindow> GetChildWindows(Int32 hwnd, string childClass)
+    public List<Window> GetChildWindows(Int32 hwnd, string childClass)
     {
 
         // Set the search 
@@ -204,7 +199,7 @@ public class WindowsEnumerator
         {
 
             // Get the window title / class name. 
-            var window = GetWindowIdentification(hwnd);
+            var window = new Window((IntPtr) hwnd);
 
             // Match the class name if searching for a specific window class. 
             if (_topLevelClass.Length == 0 || window.ClassName.ToLower() == _topLevelClass.ToLower())
@@ -232,7 +227,7 @@ public class WindowsEnumerator
     private Int32 EnumChildWindowProc(Int32 hwnd, Int32 lParam)
     {
 
-        var window = GetWindowIdentification(hwnd);
+        var window = new Window((IntPtr) hwnd);
 
         // Attempt to match the child class, if one was specified, otherwise 
         // enumerate all the child windows. 
@@ -245,40 +240,40 @@ public class WindowsEnumerator
 
     }
 
-    /// <summary> 
-    /// Build the ApiWindow object to hold information about the Window object. 
-    /// </summary> 
-    private static ApiWindow GetWindowIdentification(int hwnd)
-    {
-
-        const Int32 WM_GETTEXT = 0xd;
-        const Int32 WM_GETTEXTLENGTH = 0xe;
-
-        var window = new ApiWindow();
-
-        var title = new StringBuilder();
-
-        // Get the size of the string required to hold the window title. 
-        var size = SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0);
-
-        // If the return is 0, there is no title. 
-        if (size > 0)
-        {
-            title = new StringBuilder(size + 1);
-
-            SendMessage(hwnd, WM_GETTEXT, title.Capacity, title);
-        }
-
-        // Get the class name for the window. 
-        var classBuilder = new StringBuilder(64);
-        GetClassName(hwnd, classBuilder, 64);
-
-        // Set the properties for the ApiWindow object. 
-        window.ClassName = classBuilder.ToString();
-        window.MainWindowTitle = title.ToString();
-        window.hWnd = hwnd;
-
-        return window;
-
-    }
+//    /// <summary> 
+//    /// Build the ApiWindow object to hold information about the Window object. 
+//    /// </summary> 
+//    private static Window GetWindowIdentification(int hwnd)
+//    {
+//
+//        const Int32 WM_GETTEXT = 0xd;
+//        const Int32 WM_GETTEXTLENGTH = 0xe;
+//
+//        var window = new Window();
+//
+//        var title = new StringBuilder();
+//
+//        // Get the size of the string required to hold the window title. 
+//        var size = SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0);
+//
+//        // If the return is 0, there is no title. 
+//        if (size > 0)
+//        {
+//            title = new StringBuilder(size + 1);
+//
+//            SendMessage(hwnd, WM_GETTEXT, title.Capacity, title);
+//        }
+//
+//        // Get the class name for the window. 
+//        var classBuilder = new StringBuilder(64);
+//        GetClassName(hwnd, classBuilder, 64);
+//
+//        // Set the properties for the ApiWindow object. 
+//        window.ClassName = classBuilder.ToString();
+//        window.MainWindowTitle = title.ToString();
+//        window.hWnd = hwnd;
+//
+//        return window;
+//
+//    }
 }

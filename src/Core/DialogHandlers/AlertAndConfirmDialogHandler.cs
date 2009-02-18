@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using WatiN.Core.Exceptions;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {

@@ -1,8 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using WatiN.Core.DialogHandlers;
 
-namespace WatiN.Core.DialogHandlers
+namespace WatiN.Core.UtilityClasses
 {
     public class Hwnd : IHwnd
     {
