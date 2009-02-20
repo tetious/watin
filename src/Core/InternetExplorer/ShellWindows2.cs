@@ -10,7 +10,7 @@ namespace WatiN.Core.InternetExplorer
 {
     public class ShellWindows2 //: IEnumerable<IWebBrowser2>
     {
-        private int _count;
+        private int _count = 0;
 
         public int Count
         {

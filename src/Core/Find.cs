@@ -279,7 +279,7 @@ namespace WatiN.Core
         /// <example>
         /// <code>
         /// // Returns the 3rd link with class "link".
-        /// Link link = ie.Link(Find.ByClass("link") & Find.ByIndex(2));
+        /// Link link = ie.Link(Find.ByClass("link") &amp; Find.ByIndex(2));
         /// </code>
         /// </example>
         public static IndexConstraint ByIndex(int index)
