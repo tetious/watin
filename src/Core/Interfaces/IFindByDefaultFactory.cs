@@ -21,9 +21,26 @@ using WatiN.Core.Constraints;
 
 namespace WatiN.Core.Interfaces
 {
+    /// <summary>
+    /// Used to find elements by a default characteristic such as by id or by
+    /// some other application-specific rule.
+    /// </summary>
     public interface IFindByDefaultFactory
     {
+        /// <summary>
+        /// Gets a constraint to find an element by matching its default characteristics
+        /// against the specified string.
+        /// </summary>
+        /// <param name="value">The string to match against</param>
+        /// <returns>A constraint</returns>
         BaseConstraint ByDefault(string value);
+
+        /// <summary>
+        /// Gets a constraint to find an element by matching its default characteristics
+        /// against the specified regular expression.
+        /// </summary>
+        /// <param name="value">The regular expression to match against</param>
+        /// <returns>A constraint</returns>
         BaseConstraint ByDefault(Regex value);
     }
 }

@@ -147,7 +147,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find a Label element by the id of the element it's linked with.
+		/// Finds a Label element by the id of the element it's linked with.
 		/// </summary>
 		/// <param name="forId">Id of the element the label is linked with.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -159,7 +159,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(forAttribute, forId);
 		}
 
-		/// <param name="regex">Regular expression to find the matching Id of the element
+        /// <summary>
+        /// Finds a Label element by the id of the element it's linked with.
+        /// </summary>
+        /// <param name="regex">Regular expression to find the matching Id of the element
 		///  the label is linked with.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
@@ -170,7 +173,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(forAttribute, regex);
 		}
 
-		/// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
+        /// <summary>
+        /// Finds a Label element by the id of the element it's linked with.
+        /// </summary>
+        /// <param name="element">The element to which the Label element is attached. This element must an Id value.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>
@@ -182,7 +188,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(forAttribute, element.Id);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds a Label element by the id of the element it's linked with.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>
@@ -193,6 +202,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(forAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds a Label element by the id of the element it's linked with.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -206,7 +218,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element by its id.
+		/// Finds an element by its id.
 		/// </summary>
 		/// <param name="id">Element id to find.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -218,7 +230,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(idAttribute, id);
 		}
 
-		/// <param name="regex">Regular expression to find a matching Id.</param>
+        /// <summary>
+        /// Finds an element by its id.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Id.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Link(Find.ById(new Regex("pattern goes here"))).Url</code>
@@ -228,7 +243,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(idAttribute, regex);
 		}
 
-		/// <param name="compare">The compare.</param>
+        /// <summary>
+        /// Finds an element by its id.
+        /// </summary>
+        /// <param name="compare">The compare.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.ById(new StringContainsAndCaseInsensitiveComparer("linkId1")));</code>
@@ -238,6 +256,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(idAttribute, compare);
         }
 
+        /// <summary>
+        /// Finds an element by its id.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -251,17 +272,23 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element by its index.
+		/// Finds an element by its index.
 		/// </summary>
-		/// <param name="index">The index.</param>
+		/// <param name="index">The zero-based index.</param>
 		/// <returns></returns>
-		public static IndexConstraint ByIndex(int index)
+        /// <example>
+        /// <code>
+        /// // Returns the 3rd link with class "link".
+        /// Link link = ie.Link(Find.ByClass("link") & Find.ByIndex(2));
+        /// </code>
+        /// </example>
+        public static IndexConstraint ByIndex(int index)
 		{
 			return new IndexConstraint(index);
 		}
 
 		/// <summary>
-		/// Find an element by its name.
+		/// Finds an element by its name.
 		/// </summary>
 		/// <param name="name">Name to find.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -273,7 +300,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(nameAttribute, name);
 		}
 
-		/// <param regex="regex">Regular expression to find a matching Name.</param>
+        /// <summary>
+        /// Finds an element by its name.
+        /// </summary>
+        /// <param regex="regex">Regular expression to find a matching Name.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Link(Find.ByName(new Regex("pattern goes here")))).Url</code>
@@ -283,10 +313,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(nameAttribute, regex);
 		}
 
-		/// <summary>
-		/// Bies the name.
-		/// </summary>
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an element by its name.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>ie.Link(Find.ByName(new StringContainsAndCaseInsensitiveComparer("linkname")))).Url</code>
@@ -296,6 +326,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(nameAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an element by its name.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -309,7 +342,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element by its (inner) text
+		/// Finds an element by its (inner) text.
 		/// </summary>
 		/// <param name="text">Element text</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -321,7 +354,10 @@ namespace WatiN.Core
             return new AttributeConstraint(innerTextAttribute, new Regex("^ *" + text + " *$"));
 		}
 
-		/// <param name="regex">Regular expression to find a matching Text.</param>
+        /// <summary>
+        /// Finds an element by its (inner) text.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Text.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Link(Find.ByText(new Regex("pattern goes here"))).Url</code>
@@ -331,7 +367,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(innerTextAttribute, regex);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an element by its (inner) text.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.ByText(new StringContainsAndCaseInsensitiveComparer("my li"))).Url</code>
@@ -341,6 +380,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(innerTextAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an element by its (inner) text.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -354,7 +396,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element, frame, IE instance or HTMLDialog by its Url.
+		/// Finds an element, frame, IE instance or HTMLDialog by its Url.
 		/// </summary>
 		/// <param name="url">The well-formed url to find.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -366,7 +408,10 @@ namespace WatiN.Core
 			return ByUrl(new Uri(url));
 		}
 
-		/// <param name="url">The well-formed url to find.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
+        /// <param name="url">The well-formed url to find.</param>
 		/// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
@@ -377,7 +422,10 @@ namespace WatiN.Core
 			return ByUrl(new Uri(url), ignoreQuery);
 		}
 
-		/// <param name="uri">The uri to find.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
+        /// <param name="uri">The uri to find.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Link(Find.ByUrl(new Uri("watin.sourceforge.net"))).Url</code>
@@ -387,7 +435,10 @@ namespace WatiN.Core
 			return ByUrl(uri, false);
 		}
 
-		/// <param name="uri">The uri to find.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
+        /// <param name="uri">The uri to find.</param>
 		/// <param name="ignoreQuery">Set to true to ignore querystring when matching.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
@@ -398,7 +449,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(hrefAttribute, new UriComparer(uri, ignoreQuery));
 		}
 
-		/// <param name="regex">Regular expression to find a matching Url.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Url.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Link(Find.ByUrl(new Regex("pattern goes here"))).Url</code>
@@ -408,7 +462,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(hrefAttribute, regex);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>ie.Link(Find.ByUrl(new UriComparer(uri, ignoreQuery))).Url</code>
@@ -418,6 +475,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(hrefAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Url.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -431,7 +491,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element, frame, IE instance or HTMLDialog by its Title.
+		/// Finds an element, frame, IE instance or HTMLDialog by its Title.
 		/// </summary>
 		/// <param name="title">The title to match partially.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
@@ -443,7 +503,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(titleAttribute, new StringContainsAndCaseInsensitiveComparer(title));
 		}
 
-		/// <param name="regex">Regular expression to find a matching Title.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Title.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Title.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// <code>IE ie = IE.AttachToIE(Find.ByTitle(new Regex("pattern goes here")))</code>
@@ -453,7 +516,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(titleAttribute, regex);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Title.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>IE ie = IE.AttachToIE(Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("part of the title")));</code>
@@ -463,6 +529,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(titleAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an element, frame, IE instance or HTMLDialog by its Title.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -476,7 +545,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element by its value attribute.
+		/// Finds an element by its value attribute.
 		/// </summary>
 		/// <param name="value">The value to find.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
@@ -490,7 +559,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(valueAttribute, value);
 		}
 
-		/// <param name="regex">Regular expression to find a matching Value.</param>
+        /// <summary>
+        /// Finds an element by its value attribute.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Value.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// <code>
@@ -502,7 +574,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(valueAttribute, regex);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an element by its value attribute.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// <code>
@@ -514,6 +589,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(valueAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an element by its value attribute.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -527,7 +605,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an <see cref="Image"/> by its source (src) attribute.
+		/// Finds an <see cref="Image"/> by its source (src) attribute.
 		/// </summary>
 		/// <param name="src">Src to find.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
@@ -539,7 +617,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(srcAttribute, src);
 		}
 
-		/// <param regex="regex">Regular expression to find a matching Src.</param>
+        /// <summary>
+        /// Finds an <see cref="Image"/> by its source (src) attribute.
+        /// </summary>
+        /// <param regex="regex">Regular expression to find a matching Src.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
 		/// <code>ie.Image(Find.BySrc(new Regex("pattern goes here"))))</code>
@@ -549,7 +630,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(srcAttribute, regex);
 		}
 
-		/// <param name="comparer">The comparer.</param>
+        /// <summary>
+        /// Finds an <see cref="Image"/> by its source (src) attribute.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
 		/// 	<code>Image image = ie.Image(Find.BySrc(new StringContainsAndCaseInsensitiveComparer("watin/sourceforge")));</code>
@@ -559,6 +643,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(srcAttribute, comparer);
         }
 
+        /// <summary>
+        /// Finds an <see cref="Image"/> by its source (src) attribute.
+        /// </summary>
         /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
 	    /// <example>
@@ -572,7 +659,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an element by an attribute.
+		/// Finds an element by an attribute.
 		/// </summary>
 		/// <param name="attributeName">The attribute name to compare the value with.</param>
 		/// <param name="value">The exact matching value of the attribute.</param>
@@ -585,7 +672,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(attributeName, value);
 		}
 
-		/// <param name="attributeName">The attribute name to compare the value with.</param>
+        /// <summary>
+        /// Finds an element by an attribute.
+        /// </summary>
+        /// <param name="attributeName">The attribute name to compare the value with.</param>
 		/// <param name="regex">Regular expression to find a matching value of the given attribute.</param>
 		/// <returns><see cref="AttributeConstraint" /></returns>
 		/// <example>
@@ -596,7 +686,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(attributeName, regex);
 		}
 
-		/// <param name="attributeName">The attribute to compare the value with.</param>
+        /// <summary>
+        /// Finds an element by an attribute.
+        /// </summary>
+        /// <param name="attributeName">The attribute to compare the value with.</param>
 		/// <param name="comparer">The comparer to be used.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
@@ -607,6 +700,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(attributeName, comparer);
         }
 
+        /// <summary>
+        /// Finds an element by an attribute.
+        /// </summary>
         /// <param name="attributeName">The attribute to compare the value with.</param>
 	    /// <param name="predicate">The predicate method to call to make the comparison.</param>
 	    /// <returns>The AttributeConstraint</returns>
@@ -621,7 +717,7 @@ namespace WatiN.Core
 	    }
 
 		/// <summary>
-		/// Find an element by a style attribute.
+		/// Finds an element by a style attribute.
 		/// </summary>
 		/// <param name="styleAttributeName">Name of the style attribute.</param>
 		/// <param name="value">The exact matching value of the attribute.</param>
@@ -634,7 +730,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, value);
 		}
 
-		/// <param name="styleAttributeName">Name of the style attribute.</param>
+        /// <summary>
+        /// Finds an element by a style attribute.
+        /// </summary>
+        /// <param name="styleAttributeName">Name of the style attribute.</param>
 		/// <param name="value">Regular expression to find a matching value of the given style attribute.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
@@ -645,7 +744,10 @@ namespace WatiN.Core
 			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, value);
 		}
 
-		/// <param name="styleAttributeName">Name of the style attribute.</param>
+        /// <summary>
+        /// Finds an element by a style attribute.
+        /// </summary>
+        /// <param name="styleAttributeName">Name of the style attribute.</param>
 		/// <param name="comparer">The comparer.</param>
 		/// <returns><see cref="AttributeConstraint"/></returns>
 		/// <example>
@@ -656,6 +758,9 @@ namespace WatiN.Core
 			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, comparer);
         }
 
+        /// <summary>
+        /// Finds an element by a style attribute.
+        /// </summary>
         /// <param name="styleAttributeName">Name of the style attribute.</param>
 		/// <param name="predicate">The predicate method to call to make the comparison.</param>
 		/// <returns>The AttributeConstraint</returns>
@@ -670,7 +775,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an Element by using a specialized Element comparer
+		/// Finds an Element by using a specialized Element comparer.
 		/// </summary>
 		/// <param name="comparer">The comparer</param>
 		/// <returns>An ElementConstraint instance</returns>
@@ -680,7 +785,7 @@ namespace WatiN.Core
         }
 
         /// <summary>
-		/// Find an Element by calling the predicate for each element that
+		/// Finds an Element by calling the predicate for each element that
 		/// needs to be evaluated.
 		/// </summary>
 		/// <param name="predicate">The predicate</param>
@@ -691,7 +796,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Find an Element by calling the predicate for each element that
+		/// Finds an Element by calling the predicate for each element that
 		/// needs to be evaluated.
 		/// </summary>
 		/// <param name="predicate">The predicate</param>
@@ -701,13 +806,17 @@ namespace WatiN.Core
 			return new ElementConstraint(new PredicateElementComparer<T>(predicate));
 		}
     
+        /// <summary>
+        /// Finds the first element of the expected type.
+        /// </summary>
+        /// <returns></returns>
         public static IndexConstraint First()
         {
             return ByIndex(0);
         }
 
 		/// <summary>
-		/// Find a form element by looking for specific text on the page near the field.
+		/// Finds a form element by looking for specific text on the page near the field.
 		/// </summary>
 		/// <param name="labelText">The text near the field</param>
 		/// <returns><see cref="ProximityTextConstraint"/></returns>
@@ -731,12 +840,22 @@ namespace WatiN.Core
 		{
 			return new LabelTextConstraint( labelText );
 		}
-		
+
+		/// <summary>
+		/// Finds an element by its default characteristics as defined by <see cref="Settings.FindByDefaultFactory" />.
+		/// </summary>
+		/// <param name="value">The string to match against</param>
+		/// <returns>A constraint</returns>
         public static BaseConstraint ByDefault(string value)
         {
             return Settings.FindByDefaultFactory.ByDefault(value);
         }
 
+        /// <summary>
+        /// Finds an element by its default characteristics as defined by <see cref="Settings.FindByDefaultFactory" />.
+        /// </summary>
+        /// <param name="value">The regular expression to match against</param>
+        /// <returns>A constraint</returns>
         public static BaseConstraint ByDefault(Regex value)
         {
             return Settings.FindByDefaultFactory.ByDefault(value);

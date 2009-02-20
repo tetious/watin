@@ -22,13 +22,18 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
+    /// <summary>
+    /// A find by default factory that finds elements by id.
+    /// </summary>
     public class FindByDefaultFactory : IFindByDefaultFactory
     {
+        /// <inheritdoc />
         public BaseConstraint ByDefault(string value)
         {
             return Find.ById(value);
         }
 
+        /// <inheritdoc />
         public BaseConstraint ByDefault(Regex value)
         {
             return Find.ById(value);

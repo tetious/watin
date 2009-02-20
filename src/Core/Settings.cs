@@ -236,6 +236,13 @@ namespace WatiN.Core
 			set { Instance.MakeNewIeInstanceVisible = value; }
 		}
 
+        /// <summary>
+        /// Gets or sets a factory to find element by their default characteristics.
+        /// </summary>
+        /// <remarks>
+        /// The default value is a <see cref="FindByDefaultFactory"/> which finds elements
+        /// by id.
+        /// </remarks>
         public static IFindByDefaultFactory FindByDefaultFactory
 	    {
             get { return Instance.FindByDefaultFactory; }
