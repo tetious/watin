@@ -26,8 +26,9 @@ using System.Windows.Forms;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UtilityClasses
 {

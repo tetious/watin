@@ -17,16 +17,19 @@
 #endregion Copyright
 
 using System;
+using System.Runtime.Serialization;
 
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Base class for Exceptions thrown by WatiN.
 	/// </summary>
+    [Serializable]
 	public class WatiNException : Exception
 	{
 		public WatiNException() : base() {}
 		public WatiNException(string message) : base(message) {}
 		public WatiNException(string message, Exception innerexception) : base(message, innerexception) {}
+        public WatiNException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

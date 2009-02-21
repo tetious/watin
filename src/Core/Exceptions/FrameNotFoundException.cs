@@ -16,14 +16,20 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if the searched for frame can't be found.
 	/// </summary>
+    [Serializable]
 	public class FrameNotFoundException : WatiNException
 	{
 		public FrameNotFoundException(string constraint) :
 			base("Could not find a Frame or IFrame matching constraint: " + constraint) {}
+
+        public FrameNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core

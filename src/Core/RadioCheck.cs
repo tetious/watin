@@ -17,8 +17,8 @@
 #endregion Copyright
 
 using System.Collections.Generic;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

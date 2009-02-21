@@ -20,7 +20,8 @@ using System;
 using Moq;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests
 {
@@ -119,9 +120,9 @@ namespace WatiN.Core.UnitTests
                 return ReturnNativeDocument;
             }
 
-            public override INativeBrowser NativeBrowser
+            protected override INativeBrowser GetNativeBrowser()
             {
-                get { throw new NotImplementedException(); }
+                throw new NotImplementedException();
             }
 
             public override void WaitForComplete(int waitForCompleteTimeOut)
@@ -131,7 +132,7 @@ namespace WatiN.Core.UnitTests
         }
 	}
 
-    public class WaitForCompleteMock : WaitForComplete
+    internal class WaitForCompleteMock : WaitForComplete
     {
         public WaitForCompleteMock(DomContainer domContainer) : base(domContainer) {}
 

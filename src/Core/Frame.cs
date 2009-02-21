@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

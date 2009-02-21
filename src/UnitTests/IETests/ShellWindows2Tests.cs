@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
 
 namespace WatiN.Core.UnitTests.IETests
 {

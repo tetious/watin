@@ -19,7 +19,8 @@
 using System;
 using System.Runtime.InteropServices;
 using mshtml;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
@@ -40,9 +41,9 @@ namespace WatiN.Core
 			get { return hwnd; }
 		}
 
-		public override INativeBrowser NativeBrowser
+		protected override INativeBrowser GetNativeBrowser()
 		{
-			get { return new IEBrowser(this); }
+			return new IEBrowser(this);
 		}
 
 		public HtmlDialog(IntPtr windowHandle)
@@ -73,7 +74,7 @@ namespace WatiN.Core
 
 		public override INativeDocument OnGetNativeDocument()
 		{
-			return NativeBrowser.CreateDocument(Utils.IEDOMFromhWnd(hwnd));
+			return NativeBrowser.CreateDocument(IEUtils.IEDOMFromhWnd(hwnd));
 		}
 
 		public string GetValue(string attributename)
@@ -90,7 +91,7 @@ namespace WatiN.Core
 			}
 			else
 			{
-				throw new InvalidAttributException(attributename, "HTMLDialog");
+				throw new InvalidAttributeException(attributename, "HTMLDialog");
 			}
 
 			return value;

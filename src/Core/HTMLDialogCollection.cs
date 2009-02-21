@@ -21,7 +21,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WatiN.Core.Constraints;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {
@@ -51,7 +52,7 @@ namespace WatiN.Core
 
 		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
 		{
-			if (Utils.IsIETridentDlgFrame(hWnd))
+			if (IEUtils.IsIETridentDlgFrame(hWnd))
 			{
 				var htmlDialog = new HtmlDialog(hWnd);
 				htmlDialogs.Add(htmlDialog);

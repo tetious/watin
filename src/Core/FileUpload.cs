@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using System.IO;
 using WatiN.Core.DialogHandlers;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

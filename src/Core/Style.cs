@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core

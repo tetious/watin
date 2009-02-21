@@ -17,14 +17,17 @@
 #endregion Copyright
 
 using System;
+using System.Runtime.Serialization;
 
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if a (java) script failed to run. The innerexception returns the actual exception.
 	/// </summary>
+    [Serializable]
 	public class RunScriptException : WatiNException
 	{
 		public RunScriptException(Exception innerException) : base("RunScript failed", innerException) {}
+        public RunScriptException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

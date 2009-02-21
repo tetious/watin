@@ -52,7 +52,7 @@ namespace WatiN.Core
 			}
 			else
 			{
-				throw new InvalidAttributException(attributename, "IE");
+				throw new InvalidAttributeException(attributename, "IE");
 			}
 
 			return value;

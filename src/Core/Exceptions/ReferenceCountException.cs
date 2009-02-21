@@ -16,7 +16,18 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
-	public class ReferenceCountException : WatiNException {}
+    [Serializable]
+    public class ReferenceCountException : WatiNException
+    {
+        public ReferenceCountException()
+        {
+        }
+
+        public ReferenceCountException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+    }
 }

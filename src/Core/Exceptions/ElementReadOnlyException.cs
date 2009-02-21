@@ -16,15 +16,21 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if an element is readonly and the current action (like TextField.TypeText) a
 	/// is not allowed.
 	/// </summary>
+    [Serializable]
 	public class ElementReadOnlyException : WatiNException
 	{
 		public ElementReadOnlyException(string elementId) :
 			base("Element with Id:" + elementId + " is readonly") {}
+
+        public ElementReadOnlyException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Threading;
 using Moq;
 using NUnit.Framework;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests
 {

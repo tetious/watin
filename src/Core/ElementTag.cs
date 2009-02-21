@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

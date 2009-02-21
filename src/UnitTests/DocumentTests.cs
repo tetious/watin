@@ -23,6 +23,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 using WatiN.Core.UnitTests.TestUtils;
 using TimeoutException=WatiN.Core.Exceptions.TimeoutException;
 

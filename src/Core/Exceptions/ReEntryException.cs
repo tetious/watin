@@ -16,13 +16,17 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core.Exceptions
 {
+    [Serializable]
 	public class ReEntryException : WatiNException
 	{
 		public ReEntryException(BaseConstraint constraint) : base(createMessage(constraint)) {}
+        public ReEntryException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 
 		private static string createMessage(BaseConstraint constraint)
 		{

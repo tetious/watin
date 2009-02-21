@@ -17,15 +17,18 @@
 #endregion Copyright
 
 using System;
+using System.Runtime.Serialization;
 
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if waiting for a webpage or element times out.
 	/// </summary>
+    [Serializable]
 	public class TimeoutException : WatiNException
 	{
 		public TimeoutException(string value) : base("Timeout while " + value ) {}
 		public TimeoutException(string value, Exception innerException) : base("Timeout while " + value, innerException) {}
+        public TimeoutException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

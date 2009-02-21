@@ -16,10 +16,21 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if no more alerts are available when calling PopUpWatcher.PopAlert.
 	/// </summary>
-	public class MissingAlertException : WatiNException {}
+    [Serializable]
+    public class MissingAlertException : WatiNException
+    {
+        public MissingAlertException()
+        {
+        }
+
+	    public MissingAlertException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+    }
 }

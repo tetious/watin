@@ -27,8 +27,9 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.IETests
@@ -618,7 +619,7 @@ namespace WatiN.Core.UnitTests.IETests
             {
                 Console.WriteLine("Is IE Window: " + ((long)hWnd).ToString("X"));
 
-                Console.WriteLine(Utils.IEDOMFromhWnd(hWnd).title);
+                Console.WriteLine(IEUtils.IEDOMFromhWnd(hWnd).title);
             }
 
             return false;

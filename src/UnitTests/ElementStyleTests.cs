@@ -19,7 +19,7 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests
 {

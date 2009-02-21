@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Runtime.Serialization;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Exceptions
@@ -24,6 +25,7 @@ namespace WatiN.Core.Exceptions
 	/// <summary>
 	/// Thrown if the searched for element can't be found.
 	/// </summary>
+    [Serializable]
 	public class ElementNotFoundException : WatiNException
 	{
 		public ElementNotFoundException(string tagName, string criteria, string url) :
@@ -31,6 +33,8 @@ namespace WatiN.Core.Exceptions
 
 		public ElementNotFoundException(string tagName, string criteria, string url, Exception innerexception) :
 			base(CreateMessage(tagName, criteria, url, innerexception.Message), innerexception) {}
+
+        public ElementNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 
 		private static string CreateMessage(string tagName, string criteria, string url, string innerException)
 		{

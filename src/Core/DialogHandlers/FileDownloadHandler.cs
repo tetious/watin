@@ -20,6 +20,7 @@ using System;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers

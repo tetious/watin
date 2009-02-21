@@ -16,10 +16,16 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
+    [Serializable]
 	public class JavaScriptException : WatiNException
 	{
 		public JavaScriptException(string error) : base(error) {}
+
+        public JavaScriptException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

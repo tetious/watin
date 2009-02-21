@@ -24,9 +24,9 @@ using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -1163,9 +1163,14 @@ namespace WatiN.Core
 			get { return new IntPtr(ie.HWND); }
 		}
 
-		public override INativeBrowser NativeBrowser
+        public new IEBrowser NativeBrowser
+        {
+            get { return new IEBrowser(this); }
+        }
+
+		protected override INativeBrowser GetNativeBrowser()
 		{
-			get { return new IEBrowser(this); }
+            return NativeBrowser;
 		}
 
 		/// <summary>

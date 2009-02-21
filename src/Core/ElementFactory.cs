@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

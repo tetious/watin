@@ -16,14 +16,20 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if the searched for HtmlDialog can't be found.
 	/// </summary>
+    [Serializable]
 	public class HtmlDialogNotFoundException : WatiNException
 	{
 		public HtmlDialogNotFoundException(string criteria, int waitTimeInSeconds) :
 			base("Could not find a HTMLDialog matching criteria: " + criteria + ". (Search expired after '" + waitTimeInSeconds.ToString() + "' seconds). Is there a popup blocker active?") {}
+
+        public HtmlDialogNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

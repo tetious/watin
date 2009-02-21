@@ -18,6 +18,7 @@
 
 using System;
 using System.Threading;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers

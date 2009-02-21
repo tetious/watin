@@ -4,6 +4,7 @@ using System.Web;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests

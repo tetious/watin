@@ -16,14 +16,20 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if the searched for internet explorer (IE) can't be found.
 	/// </summary>
+    [Serializable]
 	public class IENotFoundException : WatiNException
 	{
 		public IENotFoundException(string constraint, int waitTimeInSeconds) :
 			base("Could not find an IE window matching constraint: " + constraint + ". Search expired after '" + waitTimeInSeconds.ToString() + "' seconds.") {}
+
+        public IENotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

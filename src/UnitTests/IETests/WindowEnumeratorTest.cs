@@ -7,8 +7,8 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SHDocVw;
 using WatiN.Core;
-using WatiN.Core.InternetExplorer;
-using WatiN.Core.UtilityClasses;
+using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native;
 
 [TestFixture]
 public class EnumTester
@@ -25,7 +25,7 @@ public class EnumTester
         {
             foreach (var childWindow in enumerator.GetChildWindows((int) window.Hwnd, "TabWindowClass"))
             {
-                var document2 = Utils.IEDOMFromhWnd(childWindow.Hwnd);
+                var document2 = IEUtils.IEDOMFromhWnd(childWindow.Hwnd);
                 Assert.That(document2, Is.Not.Null, "Oeps");
 
                 var window1 = document2.parentWindow;

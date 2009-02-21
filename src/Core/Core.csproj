@@ -135,9 +135,6 @@
   <ItemGroup>
     <Compile Include="IElementCollection.cs" />
     <Compile Include="ElementFinder.cs" />
-    <Compile Include="InternetExplorer\AllFramesProcessor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Area.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -145,6 +142,35 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnumerableElementFinder.cs" />
+    <Compile Include="Native\Hwnd.cs" />
+    <Compile Include="Native\IHwnd.cs" />
+    <Compile Include="Native\INativeBrowser.cs" />
+    <Compile Include="Native\INativeDocument.cs" />
+    <Compile Include="Native\INativeElement.cs" />
+    <Compile Include="Native\InternetExplorer\AllFramesProcessor.cs" />
+    <Compile Include="Native\InternetExplorer\FrameByIndexProcessor.cs" />
+    <Compile Include="Native\InternetExplorer\FrameCountProcessor.cs" />
+    <Compile Include="Native\InternetExplorer\IEBrowser.cs" />
+    <Compile Include="Native\InternetExplorer\IEDocument.cs" />
+    <Compile Include="Native\InternetExplorer\IEElement.cs" />
+    <Compile Include="Native\InternetExplorer\IEElementFinder.cs" />
+    <Compile Include="Native\InternetExplorer\IEWaitForComplete.cs" />
+    <Compile Include="Native\InternetExplorer\IWebBrowser2Processor.cs" />
+    <Compile Include="Native\InternetExplorer\ShellWindows2.cs" />
+    <Compile Include="Native\InternetExplorer\IEUtils.cs" />
+    <Compile Include="Native\InternetExplorer\WaitForComplete.cs" />
+    <Compile Include="Native\Mozilla\FFBrowser.cs" />
+    <Compile Include="Native\Mozilla\FFDocument.cs" />
+    <Compile Include="Native\Mozilla\FFElement.cs" />
+    <Compile Include="Native\Mozilla\FFElementFinder.cs" />
+    <Compile Include="Native\Mozilla\FFUtils.cs" />
+    <Compile Include="Native\Mozilla\FFWaitForComplete.cs" />
+    <Compile Include="Native\Mozilla\FireFoxClientPort.cs" />
+    <Compile Include="Native\Mozilla\FireFoxException.cs" />
+    <Compile Include="Native\Win32.cs" />
+    <Compile Include="Native\WinButton.cs" />
+    <Compile Include="Native\Window.cs" />
+    <Compile Include="Native\WinInet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -276,18 +302,12 @@
     <Compile Include="DialogHandlers\VbScriptMsgBoxDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InternetExplorer\ShellWindows2.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ElementTagAttribute.cs" />
-    <Compile Include="UtilityClasses\Hwnd.cs" />
-    <Compile Include="UtilityClasses\WinButton.cs" />
-    <Compile Include="UtilityClasses\Window.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Div.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -333,7 +353,7 @@
     <Compile Include="Exceptions\IENotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\InvalidAttributException.cs">
+    <Compile Include="Exceptions\InvalidAttributeException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\JavaScriptException.cs">
@@ -372,20 +392,9 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InternetExplorer\FrameByIndexProcessor.cs" />
-    <Compile Include="InternetExplorer\FrameCountProcessor.cs" />
-    <Compile Include="InternetExplorer\Utils.cs" />
     <Compile Include="WaitForCompleteBase.cs" />
-    <Compile Include="Mozilla\FFDocument.cs" />
-    <Compile Include="Mozilla\FFElement.cs" />
-    <Compile Include="Mozilla\FFElementFinder.cs" />
     <Compile Include="FireFox.cs" />
     <Compile Include="Browser.cs" />
-    <Compile Include="Mozilla\FFUtils.cs" />
-    <Compile Include="Mozilla\FFWaitForComplete.cs" />
-    <Compile Include="Mozilla\FireFoxClientPort.cs" />
-    <Compile Include="Mozilla\FireFoxException.cs" />
-    <Compile Include="Mozilla\FFBrowser.cs" />
     <Compile Include="Form.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -411,9 +420,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IECollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InternetExplorer\IEWaitForComplete.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Image.cs">
@@ -443,17 +449,7 @@
     <Compile Include="Interfaces\IFindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\IHwnd.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\ILogWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Interfaces\INativeBrowser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Interfaces\INativeDocument.cs" />
-    <Compile Include="Interfaces\INativeElement.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\ISettings.cs">
@@ -463,10 +459,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native\NativeElementFinder.cs" />
-    <Compile Include="InternetExplorer\IEBrowser.cs" />
-    <Compile Include="InternetExplorer\IEDocument.cs" />
-    <Compile Include="InternetExplorer\IEElement.cs" />
-    <Compile Include="InternetExplorer\IEElementFinder.cs" />
     <Compile Include="Label.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -566,21 +558,11 @@
     <Compile Include="UtilityClasses\CaptureWebPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\IWebBrowser2Processor.cs" />
     <Compile Include="UtilityClasses\SimpleTimer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UtilityClasses\TryActionUntilTimeOut.cs" />
     <Compile Include="UtilityClasses\Utils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UtilityClasses\Win32.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UtilityClasses\WinInet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InternetExplorer\WaitForComplete.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

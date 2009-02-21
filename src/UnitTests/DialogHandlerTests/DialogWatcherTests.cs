@@ -23,7 +23,7 @@ using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
-using WatiN.Core.UtilityClasses;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests
 {

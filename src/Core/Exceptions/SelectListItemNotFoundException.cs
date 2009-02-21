@@ -16,14 +16,20 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.Serialization;
+
 namespace WatiN.Core.Exceptions
 {
 	/// <summary>
 	/// Thrown if the searched for selectlist item (option) can't be found.
 	/// </summary>
+    [Serializable]
 	public class SelectListItemNotFoundException : WatiNException
 	{
 		public SelectListItemNotFoundException(string constraint) :
 			base("No item was found in the selectlist matching constraint: " + constraint) {}
+
+        public SelectListItemNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

@@ -24,7 +24,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
-using WatiN.Core.InternetExplorer;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UnitTests.AttributeConstraintTests;
 
 namespace WatiN.Core.UnitTests.IETests

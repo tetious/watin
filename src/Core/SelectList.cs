@@ -26,6 +26,7 @@ using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {

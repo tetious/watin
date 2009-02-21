@@ -22,6 +22,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {

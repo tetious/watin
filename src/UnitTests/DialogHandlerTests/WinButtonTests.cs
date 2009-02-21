@@ -18,9 +18,8 @@
 
 using Moq;
 using NUnit.Framework;
-using WatiN.Core.DialogHandlers;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.UtilityClasses;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
