@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,20 +32,10 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void CheckBoxElementTags()
         {
-            Assert.AreEqual(1, CheckBox.ElementTags.Count, "1 elementtags expected");
-            Assert.AreEqual("input", CheckBox.ElementTags[0].TagName);
-            Assert.AreEqual("checkbox", CheckBox.ElementTags[0].InputTypes);
-        }
-
-        [Test]
-        public void CheckBoxFromElement()
-        {
-            ExecuteTest(browser =>
-                            {
-                                var element = browser.Element("Checkbox1");
-                                var checkBox = new CheckBox(element);
-                                Assert.AreEqual("Checkbox1", checkBox.Id);
-                            });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<CheckBox>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+            Assert.AreEqual("input", elementTags[0].TagName);
+            Assert.AreEqual("checkbox", elementTags[0].InputType);
         }
 
         [Test]
@@ -82,12 +73,12 @@ namespace WatiN.Core.UnitTests
         {
             ExecuteTest(browser =>
                             {
-                                Assert.AreEqual(5, browser.CheckBoxes.Length, "Unexpected number of checkboxes");
+                                Assert.AreEqual(5, browser.CheckBoxes.Count, "Unexpected number of checkboxes");
 
                                 var formCheckBoxs = browser.Form("FormCheckboxes").CheckBoxes;
 
                                 // Collection items by index
-                                Assert.AreEqual(3, formCheckBoxs.Length, "Wrong number off checkboxes");
+                                Assert.AreEqual(3, formCheckBoxs.Count, "Wrong number off checkboxes");
                                 Assert.AreEqual("Checkbox1", formCheckBoxs[0].Id);
                                 Assert.AreEqual("Checkbox2", formCheckBoxs[1].Id);
                                 Assert.AreEqual("Checkbox4", formCheckBoxs[2].Id);

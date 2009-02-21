@@ -24,36 +24,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML span element.
 	/// </summary>
-    public class Span : ElementsContainer<Span>
+    [ElementTag("span")]
+    public sealed class Span : ElementsContainer<Span>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("span") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public Span(DomContainer domContainer, INativeElement htmlSpanElement) : base(domContainer, htmlSpanElement) {}
 
-		public Span(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Span"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Span(Element element) : base(element, ElementTags) {}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Span(domContainer, element);
-		}
+        public Span(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 }

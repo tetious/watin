@@ -24,27 +24,10 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a Frame or IFrame.
 	/// </summary>
-	public class Frame : Document, IAttributeBag
+    [ElementTag("frame")]
+    [ElementTag("iframe")]
+    public sealed class Frame : Document, IAttributeBag
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-        {
-            get
-            {
-                if (elementTags == null)
-                {
-                    elementTags = new List<ElementTag>
-					                  {
-					                      new ElementTag(ElementsSupport.FrameTagName), 
-                                          new ElementTag(ElementsSupport.IFrameTagName)
-					                  };
-                }
-
-                return elementTags;
-            }
-        }
-
 		private readonly Element _frameElement;
 
 		/// <summary>

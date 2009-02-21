@@ -32,7 +32,6 @@ namespace WatiN.Core.InternetExplorer
 	public class IEElement : INativeElement
 	{
 		private readonly object _element;
-		private ElementAttributeBag _attributeBag;
 
 		public IEElement(object element)
 		{
@@ -353,16 +352,6 @@ namespace WatiN.Core.InternetExplorer
 			get { return _element; }
 		}
 
-	    public IAttributeBag GetAttributeBag(DomContainer domContainer)
-	    {
-	        if (_attributeBag == null)
-	        {
-	            _attributeBag = new ElementAttributeBag(domContainer);
-	        }
-	        _attributeBag.INativeElement = this;
-	        return _attributeBag;
-	    }
-
 	    public bool IsElementReferenceStillValid()
 		{
 			try
@@ -384,7 +373,38 @@ namespace WatiN.Core.InternetExplorer
 		{
 			get { return htmlElement.tagName; }
 		}
-	}
+
+        public void WaitUntilReady()
+        {
+            //TODO: See if this method could be dropped, it seems to give
+            //      more trouble (uninitialized state of elements)
+            //      then benefits (I just introduced this method to be on 
+            //      the save side)
+
+            if (ElementTag.IsMatch(ElementFactory.GetElementTags<Image>(), this))
+            {
+                return;
+            }
+
+            // Wait if the readystate of an element is BETWEEN
+            // Uninitialized and Complete. If it's uninitialized,
+            // it's quite probable that it will never reach Complete.
+            // Like for elements that could not load an image or ico
+            // or some other bits not part of the HTML page.     
+            var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
+            var ihtmlElement2 = ((IHTMLElement2)Object);
+            var success = tryActionUntilTimeOut.Try(() =>
+            {
+                var readyState = ihtmlElement2.readyStateValue;
+                return (readyState == 0 || readyState == 4);
+            });
+
+            if (success) return;
+
+            var ihtmlElement = ((IHTMLElement)Object);
+            throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
+        }
+    }
 
     public class AsyncScriptRunner
     {

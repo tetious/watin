@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,20 +31,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FileUploadElementTags()
 		{
-			Assert.AreEqual(1, FileUpload.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("input", FileUpload.ElementTags[0].TagName);
-			Assert.AreEqual("file", FileUpload.ElementTags[0].InputTypes);
-		}
-
-		[Test]
-		public void CreateFileUploadFromElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("upload");
-		                        var fileUpload = new FileUpload(element);
-		                        Assert.AreEqual("upload", fileUpload.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<FileUpload>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("input", elementTags[0].TagName);
+			Assert.AreEqual("file", elementTags[0].InputType);
 		}
 
 		[Test]
@@ -87,7 +78,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        const int expectedFileUploadsCount = 1;
-		                        Assert.AreEqual(expectedFileUploadsCount, browser.FileUploads.Length, "Unexpected number of FileUploads");
+		                        Assert.AreEqual(expectedFileUploadsCount, browser.FileUploads.Count, "Unexpected number of FileUploads");
 
 		                        // Collection.Length
 		                        var formFileUploads = browser.FileUploads;

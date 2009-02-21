@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TextField" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class TextFieldCollection : BaseElementCollection<TextField>
+    public sealed class TextFieldCollection : BaseElementCollection<TextField, TextFieldCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TextFieldCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TextField.New) {}
+        public TextFieldCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TextFieldCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public TextFieldCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TextField.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="TextField"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public TextField this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public TextFieldCollection Filter(BaseConstraint findBy)
-		{
-			return new TextFieldCollection(domContainer, DoFilter(findBy));
-		}
-
-        public TextFieldCollection Filter(Predicate<TextField> predicate)
+        /// <inheritdoc />
+        protected override TextFieldCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new TextFieldCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new TextFieldCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

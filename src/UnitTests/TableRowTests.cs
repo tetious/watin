@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,16 +32,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowElementTags()
 		{
-			Assert.AreEqual(1, TableRow.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("tr", ((ElementTag) TableRow.ElementTags[0]).TagName);
-		}
-
-		[Test]
-		public void TableRowFromElement()
-		{
-			Element element = Ie.Element("row0");
-			TableRow tableRow = new TableRow(element);
-			Assert.AreEqual("row0", tableRow.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<TableRow>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("tr", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -57,7 +51,7 @@ namespace WatiN.Core.UnitTests
 			// Collection.Length
 			TableRowCollection rows = Ie.Table("table1").TableRows;
 
-			Assert.AreEqual(3, rows.Length);
+			Assert.AreEqual(3, rows.Count);
 
 			// Collection items by index
 			Assert.AreEqual("row0", rows[1].Id);
@@ -101,7 +95,7 @@ namespace WatiN.Core.UnitTests
 
 	        TableRow tableRow = Ie.TableRow("1");
 
-            Assert.That(tableRow.TableCellsDirectChildren.Length, Is.EqualTo(2));
+            Assert.That(tableRow.TableCellsDirectChildren.Count, Is.EqualTo(2));
             Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));
             Assert.That(tableRow.TableCellsDirectChildren[1].Id, Is.EqualTo("td12"));
 	    }

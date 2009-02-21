@@ -17,8 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
-using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
@@ -26,7 +24,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class ElementCollection : BaseElementCollection <Element>
+    public sealed class ElementCollection : BaseElementCollection<Element, ElementCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
@@ -34,33 +32,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ElementCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Element.New) {}
+        public ElementCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ElementCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-		public ElementCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Element.New) {}
-
-		/// <summary>
-		/// Gets the <see cref="Element"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Element this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public ElementCollection Filter(BaseConstraint findBy)
-		{
-			return new ElementCollection(domContainer, DoFilter(findBy));
-		}
-
-        public ElementCollection Filter(Predicate<Element> predicate)
+        /// <inheritdoc />
+        protected override ElementCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new ElementCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new ElementCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

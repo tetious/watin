@@ -22,34 +22,15 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// This class provides specialized functionality for a HTML td element.
+	/// This class provides specialized functionality for a HTML td or th element.
 	/// </summary>
-    public class TableCell : ElementsContainer<TableCell>
+    [ElementTag("td")]
+    [ElementTag("th")]
+    public sealed class TableCell : ElementsContainer<TableCell>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("td") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
 
-		public TableCell(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="TableCell"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public TableCell(Element element) : base(element, ElementTags) {}
+        public TableCell(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		/// <summary>
 		/// Gets the parent <see cref="TableRow"/> of this <see cref="TableCell"/>.
@@ -67,11 +48,6 @@ namespace WatiN.Core
 		public int Index
 		{
 			get { return int.Parse(GetAttributeValue("cellindex")); }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new TableCell(domContainer, element);
 		}
 	}
 }

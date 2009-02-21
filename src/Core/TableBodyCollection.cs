@@ -26,25 +26,14 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
 	/// </summary>
-    public class TableBodyCollection : BaseElementCollection<TableBody>
+    public sealed class TableBodyCollection : BaseElementCollection<TableBody, TableBodyCollection>
     {
-        public TableBodyCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TableBody.New) { }
+        public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public TableBodyCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TableBody.New) {}
-
-		public TableBody this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-        public TableBodyCollection Filter(BaseConstraint findBy)
+        /// <inheritdoc />
+        protected override TableBodyCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new TableBodyCollection(domContainer, DoFilter(findBy));
+            return new TableBodyCollection(DomContainer, elementFinder);
         }
-
-        public TableBodyCollection Filter(Predicate<TableBody> predicate)
-        {
-            return new TableBodyCollection(domContainer, DoFilter(Find.ByElement(predicate)));
-        }
-	}
+    }
 }

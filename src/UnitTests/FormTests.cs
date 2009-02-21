@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -36,19 +37,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void FormElementTags()
 		{
-			Assert.AreEqual(1, Form.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("form", Form.ElementTags[0].TagName);
-		}
-
-		[Test]
-		public void ImageFromElementImage()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("Form1");
-		                        var form = new Form(element);
-		                        Assert.AreEqual("Form1", form.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Form>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("form", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -106,7 +97,7 @@ namespace WatiN.Core.UnitTests
 		                    {
 		                        browser.GoTo(MainURI);
 
-		                        Assert.AreEqual(6, browser.Forms.Length, "Unexpected number of forms");
+		                        Assert.AreEqual(6, browser.Forms.Count, "Unexpected number of forms");
 
 		                        var forms = browser.Forms;
 

@@ -24,41 +24,16 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML link element.
 	/// </summary>
-    public class Link : Element<Link>
+    [ElementTag("a")]
+    public sealed class Link : Element<Link>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("a") };
-				}
-
-				return elementTags;
-			}
-		}
-
         public Link(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
-		public Link(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Link"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Link(Element element) : base(element, ElementTags) {}
+        public Link(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public string Url
 		{
 			get { return GetAttributeValue("href"); }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Link(domContainer, element);
 		}
 	}
 }

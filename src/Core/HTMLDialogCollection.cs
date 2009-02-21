@@ -28,7 +28,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of open <see cref="HtmlDialog" />.
 	/// </summary>
-	public class HtmlDialogCollection : IEnumerable
+	public sealed class HtmlDialogCollection : IEnumerable
 	{
 		private readonly bool _waitForComplete;
 		private readonly List<HtmlDialog> htmlDialogs;

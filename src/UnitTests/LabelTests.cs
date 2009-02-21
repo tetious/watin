@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,17 +31,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LabelElementTags()
 		{
-			Assert.AreEqual(1, Label.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("label", Label.ElementTags[0].TagName);
-		}
-
-        // TODO: This could be mocked
-		[Test]
-		public void LabelFromElement()
-		{
-			var element = Ie.Element("label", Find.ByFor("Checkbox21"));
-			var label = new Label(element);
-			Assert.AreEqual("Checkbox21", label.For);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Label>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("label", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -88,7 +81,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
                                 var labelCollection = browser.Labels;
-                                Assert.AreEqual(2, browser.Labels.Length, "Unexpected number of labels");
+                                Assert.AreEqual(2, browser.Labels.Count, "Unexpected number of labels");
 
 		                        var label = labelCollection[1];
 
@@ -105,12 +98,12 @@ namespace WatiN.Core.UnitTests
 		                    {
 		                        const int expectedLabelCount = 2;
 
-                                Assert.AreEqual(expectedLabelCount, browser.Labels.Length, "Unexpected number of labels");
+                                Assert.AreEqual(expectedLabelCount, browser.Labels.Count, "Unexpected number of labels");
 
                                 var labelCollection = browser.Labels;
 
 		                        // Collection items by index
-		                        Assert.AreEqual(expectedLabelCount, labelCollection.Length, "Wrong number of labels");
+                                Assert.AreEqual(expectedLabelCount, labelCollection.Count, "Wrong number of labels");
 
 		                        // Collection iteration and comparing the result with Enumerator
 		                        IEnumerable labelEnumerable = labelCollection;

@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,19 +32,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SupportedElementTags()
 		{
-			Assert.AreEqual(1, SelectList.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("select", SelectList.ElementTags[0].TagName);
-		}
-
-		[Test]
-		public void SelectListFromElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("Select2");
-		                        var selectList = new SelectList(element);
-		                        Assert.AreEqual("Select2", selectList.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<SelectList>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("select", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -121,12 +112,12 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        Assert.AreEqual(2, browser.SelectLists.Length);
+                                Assert.AreEqual(2, browser.SelectLists.Count);
 
 		                        // Collections
 		                        var selectLists = browser.SelectLists;
 
-		                        Assert.AreEqual(2, selectLists.Length);
+                                Assert.AreEqual(2, selectLists.Count);
 
 		                        // Collection items by index
 		                        Assert.AreEqual("Select1", selectLists[0].Id);

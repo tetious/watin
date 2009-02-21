@@ -94,9 +94,7 @@ namespace WatiN.Core.UnitTests
 		{
 	        var nativeElementMock = new Mock<INativeElement>();
 			var firstParentDivMock = new Mock<INativeElement>();
-			var firstAttributeBagMock = new Mock<IAttributeBag>();
 			var secondParentDivMock = new Mock<INativeElement>();
-			var secondAttributeBagMock = new Mock<IAttributeBag>();
             var domContainerMock = new Mock<DomContainer> (new object[] { });
 
 			element = new Element(domContainerMock.Object, nativeElementMock.Object);
@@ -104,19 +102,13 @@ namespace WatiN.Core.UnitTests
             nativeElementMock.Expect(native => native.Parent).Returns(firstParentDivMock.Object);
 			
             firstParentDivMock.Expect(first => first.TagName).Returns("div");
-            firstParentDivMock.Expect(first => first.GetAttributeBag(domContainerMock.Object)).Returns(firstAttributeBagMock.Object);
-			
-            firstAttributeBagMock.Expect(bag => bag.GetValue("tagname")).Returns("div");
-			firstAttributeBagMock.Expect(bag => bag.GetValue("innertext")).Returns("first ancestor");
+            firstParentDivMock.Expect(first => first.GetAttributeValue("tagname")).Returns("div");
+            firstParentDivMock.Expect(first => first.GetAttributeValue("innertext")).Returns("first ancestor");
 
 			firstParentDivMock.Expect(first => first.Parent).Returns(secondParentDivMock.Object);
 			
             secondParentDivMock.Expect(second => second.TagName).Returns("div");
-            secondParentDivMock.Expect(second => second.GetAttributeBag(domContainerMock.Object)).Returns(secondAttributeBagMock.Object);
-			
-            secondAttributeBagMock.Expect(bag => bag.GetValue("tagname")).Returns("div");
-			secondAttributeBagMock.Expect(bag => bag.GetValue("innertext")).Returns("second ancestor");
-			
+            secondParentDivMock.Expect(second => second.GetAttributeValue("tagname")).Returns("div");
             secondParentDivMock.Expect(second => second.GetAttributeValue("innertext")).Returns("second ancestor");
 
 			var ancestor = element.Ancestor("Div", Find.ByText("second ancestor"));
@@ -220,11 +212,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ElementRefresh()
 		{
-			var finderMock = new Mock<INativeElementFinder>();
+			var finderMock = new Mock<ElementFinder>();
 			var nativeElementMock = new Mock<INativeElement>();
             var domContainer = new Mock<DomContainer>( new object[] { });
 
-			finderMock.Expect(finder => finder.FindFirst()).Returns(nativeElementMock.Object).AtMost(2);
+			finderMock.Expect(finder => finder.FindFirst()).Returns(new Element(domContainer.Object, nativeElementMock.Object)).AtMost(2);
 			nativeElementMock.Expect(native => native.TagName).Returns("mockedtag");
 
             element = new Element(domContainer.Object, finderMock.Object);
@@ -351,7 +343,7 @@ namespace WatiN.Core.UnitTests
 		                    {
 		                        var elements = browser.Elements.Filter(Find.ById("testlinkid"));
 		                        var elements2 = elements.Filter(Find.ByFor("Checkbox21"));
-		                        Assert.AreEqual(0, elements2.Length);
+                                Assert.AreEqual(0, elements2.Count);
 		                    });
 		}
 
@@ -495,8 +487,8 @@ namespace WatiN.Core.UnitTests
 		public void WaitUntilElementExistsTimeOutException()
 		{
             // GIVEN
-		    var elementFinderMock = new Mock<INativeElementFinder>();
-		    elementFinderMock.Expect(finder => finder.FindFirst(It.IsAny<BaseConstraint>())).Returns((INativeElement) null);
+		    var elementFinderMock = new Mock<ElementFinder>();
+            elementFinderMock.Expect(finder => finder.FindFirst()).Returns((Element)null);
 
             var element1 = new Element(new Mock<DomContainer>().Object, elementFinderMock.Object);
 		    
@@ -510,14 +502,11 @@ namespace WatiN.Core.UnitTests
 		public void WaitUntil()
 		{
 			var nativeElementMock = new Mock<INativeElement>();
-			var attributeBagMock = new Mock<IAttributeBag>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
 
-			nativeElementMock.Expect(native => native.GetAttributeBag(domContainerMock.Object)).Returns(attributeBagMock.Object).AtMost(2);
             nativeElementMock.Expect(native => native.IsElementReferenceStillValid()).Returns(true).AtMost(2);
-			
-            attributeBagMock.Expect(bag => bag.GetValue("disabled")).Returns(true.ToString()).AtMostOnce();
-			attributeBagMock.Expect(bag => bag.GetValue("disabled")).Returns(false.ToString()).AtMostOnce();
+            nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(true.ToString()).AtMostOnce();
+            nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(false.ToString()).AtMostOnce();
 
 			var element1 = new Element(domContainerMock.Object, nativeElementMock.Object);
 
@@ -525,18 +514,15 @@ namespace WatiN.Core.UnitTests
 			element1.WaitUntil(new AttributeConstraint("disabled", new BoolComparer(false)), 1);
 
 			nativeElementMock.VerifyAll();
-			attributeBagMock.VerifyAll();
 		}
 
 		[Test]
 		public void WaitUntilShouldCallExistsToForceRefreshOfHtmlElement()
 		{
 			var nativeElementMock = new Mock<INativeElement>();
-			var attributeBagMock = new Mock<IAttributeBag>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
 
-			nativeElementMock.Expect(native => native.GetAttributeBag(domContainerMock.Object)).Returns(attributeBagMock.Object);//.AtMostOnce();
-			attributeBagMock.Expect(bag => bag.GetValue("disabled")).Returns(false.ToString()); //.AtMostOnce();
+			nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(false.ToString()); //.AtMostOnce();
 
 			var elementMock = new Mock<Element>(domContainerMock.Object, nativeElementMock.Object);
 
@@ -552,14 +538,14 @@ namespace WatiN.Core.UnitTests
 		public void WaitUntilExistsShouldIgnoreExceptionsDuringWait()
 		{
 			var nativeElementMock = new Mock<INativeElement>();
-			var elementFinderMock = new Mock<INativeElementFinder>();
+			var elementFinderMock = new Mock<ElementFinder>();
             var domContainerMock = new Mock<DomContainer>( new object[] { });
 
 			element = new Element(domContainerMock.Object, elementFinderMock.Object);
 
-			elementFinderMock.Expect(finder => finder.FindFirst()).Returns((INativeElement) null).AtMost(5);
+			elementFinderMock.Expect(finder => finder.FindFirst()).Returns((Element) null).AtMost(5);
             elementFinderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException("")).AtMost(4);
-            elementFinderMock.Expect(finder => finder.FindFirst()).Returns(nativeElementMock.Object);
+            elementFinderMock.Expect(finder => finder.FindFirst()).Returns(new Element(domContainerMock.Object, nativeElementMock.Object));
 
 			nativeElementMock.Expect(native => native.GetAttributeValue("innertext")).Returns("succeeded").AtMostOnce();
 
@@ -578,7 +564,7 @@ namespace WatiN.Core.UnitTests
 			var finderMock = new Mock<IEElementFinder> ( null, elementCollectionMock.Object, domContainerMock.Object);
 
 			finderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException(""));
-            finderMock.Expect(finder => finder.FindFirst()).Returns((INativeElement) null); //.AtMostOnce();
+            finderMock.Expect(finder => finder.FindFirst()).Returns((Element) null); //.AtMostOnce();
 
 			var element1 = new Element(domContainerMock.Object, finderMock.Object);
 
@@ -873,11 +859,11 @@ namespace WatiN.Core.UnitTests
 		{
 			Settings.WaitUntilExistsTimeOut = 1;
 			
-			var elementFinderMock = new Mock<INativeElementFinder>();
+			var elementFinderMock = new Mock<ElementFinder>();
 			elementFinderMock.Expect(finder => finder.FindFirst()).Throws(new Exception("My innerexception"));
 			
-			elementFinderMock.Expect(finder => finder.ElementTagsToString).Returns("button");
-            elementFinderMock.Expect(finder => finder.ConstraintToString).Returns("id=something");
+			elementFinderMock.Expect(finder => finder.ElementTagsToString()).Returns("button");
+            elementFinderMock.Expect(finder => finder.ConstraintToString()).Returns("id=something");
 
             
             var domContainerMock = new Mock<DomContainer>(new object[] { });
@@ -908,11 +894,11 @@ namespace WatiN.Core.UnitTests
 		{
 			Settings.WaitUntilExistsTimeOut = 1;
 			
-			var elementFinderMock = new Mock<INativeElementFinder>();
-			elementFinderMock.Expect(finder => finder.FindFirst()).Returns((INativeElement) null);
+			var elementFinderMock = new Mock<ElementFinder>();
+			elementFinderMock.Expect(finder => finder.FindFirst()).Returns((Element)null);
 
-            elementFinderMock.Expect(finder => finder.ElementTagsToString).Returns("button");
-            elementFinderMock.Expect(finder => finder.ConstraintToString).Returns("id=something");
+            elementFinderMock.Expect(finder => finder.ElementTagsToString()).Returns("button");
+            elementFinderMock.Expect(finder => finder.ConstraintToString()).Returns("id=something");
 
             var domContainerMock = new Mock<DomContainer>( new object[] { });
 			element = new Element(domContainerMock.Object, elementFinderMock.Object);
@@ -1052,5 +1038,42 @@ namespace WatiN.Core.UnitTests
 	                        });
 	    }
 
+        [Test]
+        public void StyleAttributeShouldReturnAsString()
+        {
+            // GIVEN
+            const string cssText = "COLOR: white; FONT-STYLE: italic";
+
+            var mockNativeElement = new Mock<INativeElement>();
+            var mockDomContainer = new Mock<DomContainer>();
+            mockNativeElement.Expect(x => x.GetStyleAttributeValue("cssText")).Returns(cssText);
+
+            var element = new Element(mockDomContainer.Object, mockNativeElement.Object);
+
+            // WHEN
+            var value = element.GetValue("style");
+
+            // THEN
+            Assert.That(value, Is.EqualTo(cssText));
+        }
+
+        [Test]
+        public void StyleDotStyleAttributeNameShouldReturnStyleAttribute()
+        {
+            // GIVEN
+            const string styleAttributeValue = "white";
+
+            var mockNativeElement = new Mock<INativeElement>();
+            var mockDomContainer = new Mock<DomContainer>();
+            mockNativeElement.Expect(x => x.GetStyleAttributeValue("color")).Returns(styleAttributeValue);
+
+            var element = new Element(mockDomContainer.Object, mockNativeElement.Object);
+
+            // WHEN
+            var value = element.GetValue("style.color");
+
+            // THEN
+            Assert.AreEqual(styleAttributeValue, value);
+        }
 	}
 }

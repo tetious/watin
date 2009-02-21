@@ -30,48 +30,24 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// text password textarea hidden and for a HTML textarea element.
 	/// </summary>
-    public class TextField : Element<TextField>
+    [ElementTag("input", InputType = "text")]
+    [ElementTag("input", InputType = "password")]
+    [ElementTag("input", InputType = "textarea")]
+    [ElementTag("input", InputType = "hidden")]
+    [ElementTag("textarea")]
+    public sealed class TextField : Element<TextField>
 	{
-		private static List<ElementTag> elementTags;
-
-		public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-					elementTags = new List<ElementTag>
-					                  {
-					                      new ElementTag("input", "text password textarea hidden"),
-					                      CreateElementTagForTextArea()
-					                  };
-				}
-
-				return elementTags;
-			}
-		}
-
-	    private static ElementTag CreateElementTagForTextArea()
-	    {
-	        return new ElementTag("textarea");
-	    }
-
 		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
-		public TextField(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="TextField"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public TextField(Element element) : base(element, ElementTags) {}
+        public TextField(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public int MaxLength
 		{
 			get
 			{
-                var tagForTextArea = CreateElementTagForTextArea();
-                if (tagForTextArea.Compare(NativeElement)) return 0;
+                var tagForTextArea = new ElementTag("textarea");
+                if (tagForTextArea.IsMatch(NativeElement))
+                    return 0;
 
                 var value = GetAttributeValue("maxLength");
                 return string.IsNullOrEmpty(value) ? 0 : int.Parse(value);
@@ -247,11 +223,6 @@ namespace WatiN.Core
 		private static bool ShouldEventBeFired(Object value)
 		{
 			return (value != DBNull.Value);
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new TextField(domContainer, element);
 		}
 	}
 }

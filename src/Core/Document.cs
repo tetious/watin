@@ -333,7 +333,7 @@ namespace WatiN.Core
 				var activeElement = NativeDocument.ActiveElement;
 			    if (activeElement == null) return null;
 			    
-                return TypedElementFactory.CreateTypedElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
+                return ElementFactory.CreateElement(domContainer, domContainer.NativeBrowser.CreateElement(activeElement));
 			}
 		}
 

@@ -24,32 +24,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML label element.
 	/// </summary>
-    public class Label : ElementsContainer<Label>
+    [ElementTag("label")]
+    public sealed class Label : ElementsContainer<Label>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("label") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public Label(DomContainer domContainer, INativeElement labelElement) : base(domContainer, labelElement) {}
 
-		public Label(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Label"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Label(Element element) : base(element, ElementTags) {}
+        public Label(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public string AccessKey
 		{
@@ -59,11 +39,6 @@ namespace WatiN.Core
 		public string For
 		{
 			get { return GetAttributeValue(Find.forAttribute); }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Label(domContainer, element);
 		}
 	}
 }

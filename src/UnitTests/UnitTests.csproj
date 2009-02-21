@@ -11,8 +11,8 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>WatiN.Core.UnitTests</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\WatiN.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -136,7 +136,7 @@
     <None Include="App.config" />
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AttributeConstraintTests\BaseConstraintTests.cs">
@@ -257,9 +257,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DotNet35Tests.cs" />
-    <Compile Include="ElementAttributeBagTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ElementStyleTests.cs">
       <SubType>Code</SubType>
     </Compile>

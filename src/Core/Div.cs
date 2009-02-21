@@ -24,23 +24,9 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML div element.
 	/// </summary>
-    public class Div : ElementsContainer<Div>
+    [ElementTag("div")]
+    public sealed class Div : ElementsContainer<Div>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("div") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.
 		/// Mainly used by WatiN internally.
@@ -55,17 +41,6 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The HTML div element.</param>
-		public Div(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Div"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Div(Element element) : base(element, ElementTags) {}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Div(domContainer, element);
-		}
+        public Div(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 }

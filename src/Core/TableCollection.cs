@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Table" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class TableCollection : BaseElementCollection<Table>
+    public sealed class TableCollection : BaseElementCollection<Table, TableCollection>
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TableCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Table.New) {}
+        public TableCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TableCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public TableCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Table.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Table"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Table this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public TableCollection Filter(BaseConstraint findBy)
-		{
-			return new TableCollection(domContainer, DoFilter(findBy));
-		}
-
-        public TableCollection Filter(Predicate<Table> predicate)
+        /// <inheritdoc />
+        protected override TableCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new TableCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new TableCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

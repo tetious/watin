@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="CheckBox" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class CheckBoxCollection : BaseElementCollection<CheckBox>
+    public sealed class CheckBoxCollection : BaseElementCollection<CheckBox, CheckBoxCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public CheckBoxCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, CheckBox.New) {}
+        public CheckBoxCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CheckBoxCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-		public CheckBoxCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, CheckBox.New) {}
-
-		/// <summary>
-		/// Gets the <see cref="CheckBox"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public CheckBox this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public CheckBoxCollection Filter(BaseConstraint findBy)
-		{
-			return new CheckBoxCollection(domContainer, DoFilter(findBy));
-		}
-
-        public CheckBoxCollection Filter(Predicate<CheckBox> predicate)
+        /// <inheritdoc />
+        protected override CheckBoxCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new CheckBoxCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new CheckBoxCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

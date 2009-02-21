@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
@@ -31,25 +32,11 @@ namespace WatiN.Core.Constraints
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-            Element element = null;
-
-            ElementAttributeBag elementAttributeBag = attributeBag as ElementAttributeBag;
-            if (elementAttributeBag != null)
-			{
-				element = elementAttributeBag.ElementTyped;
-			}
-
+            Element element = attributeBag as Element;
             if (element == null)
-			{
-                element = attributeBag as Element;
-			}
+                throw new WatiNException("This constraint class can only be used to compare against an element");
 
-            if (element != null)
-            {
-                return EvaluateAndOrAttributes(attributeBag, _comparer.Compare(element));
-            }
-
-            throw new Exceptions.WatiNException("This constraint class can only be used to compare against an element");
+            return EvaluateAndOrAttributes(attributeBag, _comparer.Compare(element));
 		}
 
 		public override string ConstraintToString()

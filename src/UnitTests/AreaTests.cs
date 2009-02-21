@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -29,18 +30,10 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AreaElementTags()
         {
-            Assert.AreEqual(1, Area.ElementTags.Count, "1 elementtags expected");
-            Assert.AreEqual("area", Area.ElementTags[0].TagName);
-            Assert.AreEqual(null, Area.ElementTags[0].InputTypes);
-        }
-
-        // TODO: this can be mocked
-        [Test]
-        public void AreaFromElement()
-        {
-            var element = Ie.Element("Area1");
-            var area = new Area(element);
-            Assert.AreEqual("Area1", area.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Area>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+            Assert.AreEqual("area", elementTags[0].TagName);
+            Assert.AreEqual(null, elementTags[0].InputType);
         }
 
         [Test]
@@ -77,7 +70,7 @@ namespace WatiN.Core.UnitTests
                             {
                                 // Collection items by index
                                 var areas = browser.Areas;
-                                Assert.AreEqual(2, areas.Length, "Unexpected number of areas");
+                                Assert.AreEqual(2, areas.Count, "Unexpected number of areas");
                                 Assert.AreEqual("Area1", areas[0].Id);
                                 Assert.AreEqual("Area2", areas[1].Id);
 

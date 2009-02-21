@@ -28,15 +28,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tbody element. 
 	/// </summary>
-    public class TableBody : ElementsContainer<TableBody>
+    [ElementTag("tbody")]
+    public sealed class TableBody : ElementsContainer<TableBody>
 	{
-        private static List<ElementTag> elementTags;
-
-		public TableBody(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
+        public TableBody(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public TableBody(DomContainer domContainer, INativeElement element) : base(domContainer, element) {}
-
-		public TableBody(Element element) : base(element, elementTags) {}
 
 		/// <summary>
 		/// Returns the table rows belonging to this table body (not including table rows 
@@ -57,8 +54,9 @@ namespace WatiN.Core
         {
             get
             {
-                var list = UtilityClass.IHtmlElementCollectionToList(HtmlBody.rows);
-                return new TableRowCollection(DomContainer, list);
+                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HtmlBody.rows);
+                return new TableRowCollection(DomContainer, new EnumerableElementFinder(list,
+                    ElementFactory.GetElementTags<TableRow>(), new AlwaysTrueConstraint()));
             }
         }
 
@@ -84,19 +82,6 @@ namespace WatiN.Core
 			return TableRow(Find.ByElement(predicate));
 		}
 
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("tbody") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		private IHTMLTableSection HtmlBody
 		{
             get { return (IHTMLTableSection)NativeElement.Object; }
@@ -115,11 +100,6 @@ namespace WatiN.Core
 			{
 				get { return tableBody.HtmlBody.rows; }
 			}
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new TableBody(domContainer, element);
 		}
 	}
 }

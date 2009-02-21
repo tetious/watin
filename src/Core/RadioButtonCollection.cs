@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="RadioButton" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class RadioButtonCollection : BaseElementCollection<RadioButton>
+    public sealed class RadioButtonCollection : BaseElementCollection<RadioButton, RadioButtonCollection>
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public RadioButtonCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, RadioButton.New) {}
+        public RadioButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RadioButtonCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public RadioButtonCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, RadioButton.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="RadioButton"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public RadioButton this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public RadioButtonCollection Filter(BaseConstraint findBy)
-		{
-			return new RadioButtonCollection(domContainer, DoFilter(findBy));
-		}
-
-        public RadioButtonCollection Filter(Predicate<RadioButton> predicate)
+        /// <inheritdoc />
+        protected override RadioButtonCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new RadioButtonCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new RadioButtonCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

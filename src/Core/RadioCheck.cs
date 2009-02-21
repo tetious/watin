@@ -30,14 +30,7 @@ namespace WatiN.Core
 	{
         public RadioCheck(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
-		public RadioCheck(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of this class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementTags">The element tags the element should match with.</param>
-        public RadioCheck(Element element, List<ElementTag> elementTags) : base(element, elementTags) { }
+        public RadioCheck(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public bool Checked
 		{

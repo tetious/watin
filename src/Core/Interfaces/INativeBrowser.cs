@@ -23,10 +23,17 @@ namespace WatiN.Core.Interfaces
 {
 	public interface INativeBrowser 
 	{
-        INativeElementFinder CreateElementFinder(List<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements);
-        INativeElementFinder CreateElementFinder(List<ElementTag> tags, IElementCollection elements);
-		INativeElementFinder CreateElementFinder(string tagname, string inputtypesString, BaseConstraint baseConstraint, IElementCollection elements);
+        /// <summary>
+        /// Creates an element finder.
+        /// </summary>
+        /// <param name="tags">The tags, or null if all tags are admissible</param>
+        /// <param name="baseConstraint">The constraint, or null if no additional constraint required</param>
+        /// <param name="elements">The element collection to search</param>
+        /// <returns>The finder</returns>
+        ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements);
+
 		INativeElement CreateElement(object element);
+
 	    INativeDocument CreateDocument(object document);
 	}
 }

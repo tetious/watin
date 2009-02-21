@@ -119,19 +119,9 @@ namespace WatiN.Core.Mozilla
             return ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", BrowserVariableName);
         }
 
-        public INativeElementFinder CreateElementFinder(List<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
+        public ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
         {
             return new FFElementFinder(tags, baseConstraint, elements, _domContainer, ClientPort);
-        }
-
-        public INativeElementFinder CreateElementFinder(List<ElementTag> tags, IElementCollection elements)
-        {
-            return new FFElementFinder(tags, elements, _domContainer, ClientPort);
-        }
-
-        public INativeElementFinder CreateElementFinder(string tagname, string inputtypesString, BaseConstraint baseConstraint, IElementCollection elements)
-        {
-            return new FFElementFinder(tagname, inputtypesString, baseConstraint, elements, _domContainer, ClientPort);
         }
 
         public INativeElement CreateElement(object element)

@@ -31,9 +31,7 @@ namespace WatiN.Core
 	{		
 		public ElementsContainer(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement) {}
 
-		public ElementsContainer(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-        public ElementsContainer(Element element, List<ElementTag> elementTags) : base(element, elementTags) { }
+        public ElementsContainer(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		#region IElementsContainer
 

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,16 +31,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ParaElementTags()
 		{
-			Assert.AreEqual(1, Para.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("p", ((ElementTag) Para.ElementTags[0]).TagName);
-		}
-
-		[Test]
-		public void CreateParaFromElement()
-		{
-			Element element = Ie.Element("links");
-			Para para = new Para(element);
-			Assert.AreEqual("links", para.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Para>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("p", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -66,7 +60,7 @@ namespace WatiN.Core.UnitTests
 		public void Paras()
 		{
 			const int expectedParasCount = 4;
-			Assert.AreEqual(expectedParasCount, Ie.Paras.Length, "Unexpected number of Paras");
+			Assert.AreEqual(expectedParasCount, Ie.Paras.Count, "Unexpected number of Paras");
 
 			// Collection.Length
 			ParaCollection formParas = Ie.Paras;

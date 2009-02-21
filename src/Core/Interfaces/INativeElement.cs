@@ -91,7 +91,6 @@ namespace WatiN.Core.Interfaces
         void ClickOnElement();
 		void SetFocus();
 		void FireEvent(string eventName, NameValueCollection eventProperties);
-	    IAttributeBag GetAttributeBag(DomContainer domContainer);
 	    bool IsElementReferenceStillValid();
 		string TagName { get; }
         object Object { get; }
@@ -100,5 +99,7 @@ namespace WatiN.Core.Interfaces
 	    void Select();
 	    void SubmitForm();
 	    void SetFileUploadFile(Element element, string fileName);
+
+        void WaitUntilReady();
 	}
 }

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,16 +31,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LinkElementTags()
 		{
-			Assert.AreEqual(1, Link.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("a", ((ElementTag) Link.ElementTags[0]).TagName);
-		}
-
-		[Test]
-		public void LinkFromElement()
-		{
-			Element element = Ie.Element("testlinkid");
-			Link link = new Link(element);
-			Assert.AreEqual("testlinkid", link.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Link>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("a", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -65,12 +59,12 @@ namespace WatiN.Core.UnitTests
 		{
 			const int expectedLinkCount = 3;
 
-			Assert.AreEqual(expectedLinkCount, Ie.Links.Length, "Unexpected number of links");
+			Assert.AreEqual(expectedLinkCount, Ie.Links.Count, "Unexpected number of links");
 
 			LinkCollection links = Ie.Links;
 
 			// Collection items by index
-			Assert.AreEqual(expectedLinkCount, links.Length, "Wrong number off links");
+			Assert.AreEqual(expectedLinkCount, links.Count, "Wrong number off links");
 			Assert.AreEqual("testlinkid", links[0].Id);
 			Assert.AreEqual("testlinkid1", links[1].Id);
 

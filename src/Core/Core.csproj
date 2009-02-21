@@ -133,6 +133,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IElementCollection.cs" />
+    <Compile Include="ElementFinder.cs" />
     <Compile Include="InternetExplorer\AllFramesProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,7 +144,8 @@
     <Compile Include="AreaCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="EnumerableElementFinder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseElementCollection.cs">
@@ -274,6 +277,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InternetExplorer\ShellWindows2.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ElementTagAttribute.cs" />
     <Compile Include="UtilityClasses\Hwnd.cs" />
     <Compile Include="UtilityClasses\WinButton.cs" />
     <Compile Include="UtilityClasses\Window.cs">
@@ -292,9 +301,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Element.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ElementAttributeBag.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ElementCollection.cs">
@@ -450,16 +456,13 @@
     <Compile Include="Interfaces\INativeElement.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\INativeElementFinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\ISettings.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ElementFinderBase.cs" />
+    <Compile Include="Native\NativeElementFinder.cs" />
     <Compile Include="InternetExplorer\IEBrowser.cs" />
     <Compile Include="InternetExplorer\IEDocument.cs" />
     <Compile Include="InternetExplorer\IEElement.cs" />
@@ -557,7 +560,7 @@
     <Compile Include="TextFieldCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TypedElementFactory.cs">
+    <Compile Include="ElementFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UtilityClasses\CaptureWebPage.cs">
@@ -607,6 +610,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

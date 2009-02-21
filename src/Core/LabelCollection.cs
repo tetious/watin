@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Label" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class LabelCollection : BaseElementCollection<Label>
+    public sealed class LabelCollection : BaseElementCollection<Label, LabelCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public LabelCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Label.New) {}
+        public LabelCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LabelCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public LabelCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Label.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Label"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Label this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public LabelCollection Filter(BaseConstraint findBy)
-		{
-			return new LabelCollection(domContainer, DoFilter(findBy));
-		}
-
-        public LabelCollection Filter(Predicate<Label> predicate)
+        /// <inheritdoc />
+        protected override LabelCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new LabelCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new LabelCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

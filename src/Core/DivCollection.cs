@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Div" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class DivCollection : BaseElementCollection<Div>
+    public sealed class DivCollection : BaseElementCollection<Div, DivCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DivCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public DivCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Div.New) {}
+        public DivCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DivCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public DivCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Div.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Div"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Div this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public DivCollection Filter(BaseConstraint findBy)
-		{
-			return new DivCollection(domContainer, DoFilter(findBy));
-		}
-
-        public DivCollection Filter(Predicate<Div> predicate)
+        /// <inheritdoc />
+        protected override DivCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new DivCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new DivCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

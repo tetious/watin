@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using WatiN.Core.Interfaces;
-using WatiN.Core.UtilityClasses;
-using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core
 {
@@ -29,112 +27,195 @@ namespace WatiN.Core
 	/// This class is mainly used by WatiN internally and defines 
 	/// the supported html tags for inheritors of <see cref="Element"/>.
 	/// </summary>
-	public class ElementTag
+	public struct ElementTag : IEquatable<ElementTag>
 	{
-		public readonly string TagName;
-		public readonly string InputTypes;
-		public readonly bool IsInputElement;
+        private readonly string tagName;
+        private readonly string inputType;
 
-		public ElementTag(string tagName) : this(tagName, null) {}
+        /// <summary>
+        /// Creates an element tag.
+        /// </summary>
+        /// <param name="tagName">The tag name, or null to represent any element</param>
+        public ElementTag(string tagName)
+            : this(tagName, null)
+        {
+        }
 
-        public ElementTag(INativeElement nativeElement) : this(nativeElement.TagName, getInputType(nativeElement)) {}
-
-		public ElementTag(string tagName, string inputTypes)
+        /// <summary>
+        /// Creates an element tag with an input tag type qualifier.
+        /// </summary>
+        /// <param name="tagName">The tag name, or null to represent any element</param>
+        /// <param name="inputType">The input tag type qualifier, or null if none</param>
+	    public ElementTag(string tagName, string inputType)
 		{
-			if (tagName != null)
-			{
-				TagName = tagName.ToLower(CultureInfo.InvariantCulture);
-			}
+            this.tagName = tagName != null ? tagName.ToLowerInvariant() : null;
+            this.inputType = inputType != null ? inputType.ToLowerInvariant() : null;
 
-			IsInputElement = IsAnInputElement(tagName);
-
-			// Check arguments
-		    if (!IsInputElement) return;
-		    
-            if (UtilityClass.IsNullOrEmpty(inputTypes))
-		    {
-		        throw new ArgumentNullException("inputTypes", String.Format("inputTypes must be set when tagName is '{0}'", tagName));
-		    }
-
-		    InputTypes = inputTypes.ToLower(CultureInfo.InvariantCulture);
+            if (IsAnInputElement(tagName))
+            {
+                if (inputType == null)
+                    throw new ArgumentNullException("inputType", String.Format("inputType must be set when tagName is '{0}'", tagName));
+            }
+            else
+            {
+                if (inputType != null)
+                    throw new ArgumentNullException("inputType", String.Format("inputType must be null when tagName is '{0}'", tagName));
+            }
 		}
 
-		private static string getInputType(INativeElement ieNativeElement)
-		{
-		    return IsAnInputElement(ieNativeElement.TagName) ? ieNativeElement.GetAttributeValue("type") : null;
-		}
+        /// <summary>
+        /// Gets the tag name, or null to represent any element.
+        /// </summary>
+        public string TagName
+        {
+            get { return tagName; }
+        }
 
-		public bool Compare(INativeElement nativeElement)
-		{
-			if (nativeElement == null) return false;
+        /// <summary>
+        /// Gets the input tag type qualifier, or null if none.
+        /// </summary>
+        public string InputType
+        {
+            get { return inputType; }
+        }
 
-			if (CompareTagName(nativeElement))
-			{
-			    return !IsInputElement || CompareInputTypes(nativeElement);
-			}
+        /// <summary>
+        /// Returns true if the tag represents an input element.
+        /// </summary>
+        public bool IsInputElement
+        {
+            get { return IsAnInputElement(tagName); }
+        }
+        
+        /// <summary>
+        /// Returns true if the tag matches any element.
+        /// </summary>
+        public bool IsAny
+        {
+            get { return tagName == null; }
+        }
 
-		    return false;
-		}
+        /// <summary>
+        /// Returns a special tag object that can match any element.
+        /// </summary>
+        public static ElementTag Any
+        {
+            get { return new ElementTag(null, null); }
+        }
 
-		public override string ToString()
-		{
-			if (TagName != null)
-			{
-				var tagName = TagName.ToUpper(CultureInfo.InvariantCulture);
-				return IsInputElement ? String.Format("{0} ({1})", tagName, InputTypes) : tagName;
-			}
+        /// <summary>
+        /// Creates an element tag object from a native element.
+        /// </summary>
+        /// <param name="nativeElement">The native element</param>
+        /// <returns>The element tag object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nativeElement"/> is null</exception>
+        public static ElementTag FromNativeElement(INativeElement nativeElement)
+        {
+            if (nativeElement == null)
+                throw new ArgumentNullException("nativeElement");
 
-			return string.Empty;
-		}
+            return new ElementTag(nativeElement.TagName, GetInputType(nativeElement));
+        }
 
-		private bool CompareTagName(INativeElement nativeElement)
-		{
-		    return TagName == null || StringComparer.AreEqual(TagName, nativeElement.TagName, true);
-		}
+        /// <summary>
+        /// Returns true if this tag object matches the specified element.
+        /// </summary>
+        /// <param name="nativeElement">The element to consider</param>
+        /// <returns>True if the tag matches the specified element</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nativeElement"/> is null</exception>
+        public bool IsMatch(INativeElement nativeElement)
+        {
+            if (nativeElement == null)
+                throw new ArgumentNullException("nativeElement");
 
-	    public bool CompareInputTypes(INativeElement element)
-		{
-			var inputElementType = element.GetAttributeValue("type").ToLower(CultureInfo.InvariantCulture);
+            return IsMatch(FromNativeElement(nativeElement));
+        }
 
-			return (InputTypes.IndexOf(inputElementType) >= 0);
-		}
+        /// <summary>
+        /// Returns true if this tag object matches the specified tag.
+        /// </summary>
+        /// <param name="elementTag">The element tag to consider</param>
+        /// <returns>True if the tag matches the specified element tag</returns>
+        public bool IsMatch(ElementTag elementTag)
+        {
+            return IsAny
+                || tagName == elementTag.tagName && inputType == elementTag.inputType;
+        }
 
+        /// <inheritdoc />
 		public override int GetHashCode()
 		{
-			return (TagName != null ? TagName.GetHashCode() : 0) + 29*(InputTypes != null ? InputTypes.GetHashCode() : 0);
+			return (tagName != null ? tagName.GetHashCode() : 0)
+                + 29 * (inputType != null ? inputType.GetHashCode() : 0);
 		}
 
-		public override bool Equals(object obj)
+        /// <inheritdoc />
+        public override bool Equals(object obj)
 		{
-			if (this == obj) return true;
-			
-            var elementTag = obj as ElementTag;
-			if (elementTag == null) return false;
-			
-            return Equals(TagName, elementTag.TagName) && Equals(InputTypes, elementTag.InputTypes);
+            return obj is ElementTag && Equals((ElementTag)obj);
 		}
 
-		public static bool IsValidElement(INativeElement nativeElement, List<ElementTag> elementTags)
-		{
-			if (nativeElement == null) return false;
+        /// <inheritdoc />
+        public bool Equals(ElementTag other)
+        {
+            return tagName == other.tagName && inputType == other.inputType;
+        }
 
-			foreach (var elementTag in elementTags)
-			{
-				if (elementTag.Compare(nativeElement))
-				{
-					return true;
-				}
-			}
+        /// <summary>
+        /// Returns a human-readable string representation of the tag.
+        /// </summary>
+        /// <returns>The tag as a string</returns>
+        public override string ToString()
+        {
+            if (TagName != null)
+            {
+                var tagName = TagName.ToUpper(CultureInfo.InvariantCulture);
+                return IsInputElement ? String.Format("{0} ({1})", tagName, InputType) : tagName;
+            }
 
-			return false;
-		}
+            return string.Empty;
+        }
 
-	    public static bool IsAnInputElement(string tagName)
-		{
-			return StringComparer.AreEqual(tagName, ElementsSupport.InputTagName, true);
-		}
+        /// <summary>
+        /// Returns true if any tag object in the list matches the specified element.
+        /// </summary>
+        /// <param name="tags">The tags against which to match</param>
+        /// <param name="nativeElement">The element to consider</param>
+        /// <returns>True if the tag matches the specified element</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="tags"/> or <paramref name="nativeElement"/> is null</exception>
+        public static bool IsMatch(IEnumerable<ElementTag> tags, INativeElement nativeElement)
+        {
+            if (nativeElement == null)
+                throw new ArgumentNullException("nativeElement");
 
-        public static string ElementTagsToString(List<ElementTag> elementTags)
+            return IsMatch(tags, FromNativeElement(nativeElement));
+        }
+
+        /// <summary>
+        /// Returns true if any tag object in the list matches the specified tag.
+        /// </summary>
+        /// <param name="tags">The tags against which to match</param>
+        /// <param name="elementTag">The element tag to consider</param>
+        /// <returns>True if the tag matches the specified element tag</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="tags"/> is null</exception>
+        public static bool IsMatch(IEnumerable<ElementTag> tags, ElementTag elementTag)
+        {
+            if (tags == null)
+                throw new ArgumentNullException("tags");
+
+            foreach (ElementTag tag in tags)
+                if (tag.IsMatch(elementTag))
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Converts a list of tags to a human-readable string.
+        /// </summary>
+        /// <param name="elementTags">The list of element tags</param>
+        /// <returns>The element tags as a string</returns>
+        public static string ElementTagsToString(IList<ElementTag> elementTags)
 		{
 			var elementTagsString = String.Empty;
 
@@ -149,5 +230,15 @@ namespace WatiN.Core
 
 			return elementTagsString;
 		}
-	}
+
+        private static string GetInputType(INativeElement nativeElement)
+        {
+            return IsAnInputElement(nativeElement.TagName) ? nativeElement.GetAttributeValue("type") : null;
+        }
+
+        private static bool IsAnInputElement(string tagName)
+        {
+            return string.Compare(tagName, ElementsSupport.InputTagName, StringComparison.InvariantCultureIgnoreCase) == 0;
+        }
+    }
 }

@@ -19,6 +19,7 @@
 using System.Text.RegularExpressions;
 using mshtml;
 using WatiN.Core.Comparers;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.InternetExplorer;
 
@@ -68,26 +69,28 @@ namespace WatiN.Core.Constraints
 
 		public override bool Compare(IAttributeBag attributeBag)
 		{
-		    var elementAttributeBag = (ElementAttributeBag) attributeBag;
-		    var element = elementAttributeBag.Element;
-            var nativeElement = (IHTMLElement)element.NativeElement.Object;
+            Element element = attributeBag as Element;
+            if (element == null)
+                throw new WatiNException("This constraint class can only be used to compare against an element");
+
+            var htmlElement = (IHTMLElement)element.NativeElement.Object;
 			
 			if (IsTextContainedIn(element.Text))
 			{
 				// Get all elements and filter this for TableCells
-                var tableRowElement = (IHTMLTableRow)nativeElement;
+                var tableRowElement = (IHTMLTableRow)htmlElement;
 				var tableCellElements = tableRowElement.cells;
 
 				if (tableCellElements.length - 1 >= columnIndex)
 				{
-                    var tableCell = (IHTMLTableCell)tableCellElements.item(columnIndex, null);
+                    var htmlTableCell = (IHTMLTableCell)tableCellElements.item(columnIndex, null);
 				    var elementComparer = comparer as ICompareElement;
                     
+                    var tableCell = new TableCell(element.DomContainer, new IEElement(htmlElement));
                     if (elementComparer != null)
-                    {
-                        return elementComparer.Compare(new TableCell(elementAttributeBag.DomContainer, new IEElement(tableCell)));
-                    }
-				    return base.Compare(new ElementAttributeBag(elementAttributeBag.DomContainer, new IEElement(tableCell)));
+                        return elementComparer.Compare(tableCell);
+
+				    return base.Compare(tableCell);
 				}
 			}
 

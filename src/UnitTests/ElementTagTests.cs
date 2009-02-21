@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -29,16 +30,11 @@ namespace WatiN.Core.UnitTests
 	public class ElementTagTests
 	{
 		[Test]
-		public void CompareNullShouldReturnFalse()
+        [ExpectedException(typeof(ArgumentNullException))]
+		public void IsMatchNullShouldThrow()
 		{
-			var elementTag = new ElementTag("tagname", "");
-			Assert.IsFalse(elementTag.Compare(null));
-		}
-
-		[Test]
-		public void IsValidElementWithNullElementShouldReturnFalse()
-		{
-            Assert.IsFalse(ElementTag.IsValidElement(null, new List<ElementTag>()));
+			var elementTag = new ElementTag("tagname");
+			elementTag.IsMatch(null);
 		}
 
 		[Test]
@@ -83,7 +79,7 @@ namespace WatiN.Core.UnitTests
 
 			// UpperCase
 			var elementTag = new ElementTag("INPUT", "IMAGE");
-			Assert.IsTrue(elementTag.Compare(elementMock.Object), "Compare should compare using CultureInvariant");
+			Assert.IsTrue(elementTag.IsMatch(elementMock.Object), "Compare should compare using CultureInvariant");
 
             elementMock.VerifyAll();
 		}
@@ -96,7 +92,7 @@ namespace WatiN.Core.UnitTests
 
 			// UpperCase
 			var elementTag = new ElementTag("INPUT", "IMAGE");
-			Assert.IsTrue(elementTag.Compare(elementMock.Object), "Compare should compare using CultureInvariant");
+			Assert.IsTrue(elementTag.IsMatch(elementMock.Object), "Compare should compare using CultureInvariant");
 
             elementMock.VerifyAll();
 		}
@@ -109,7 +105,7 @@ namespace WatiN.Core.UnitTests
 			
 			// LowerCase
 			var elementTag = new ElementTag("input", "image");
-			Assert.IsTrue(elementTag.Compare(elementMock.Object), "Compare should compare using CultureInvariant");
+			Assert.IsTrue(elementTag.IsMatch(elementMock.Object), "Compare should compare using CultureInvariant");
 			Assert.AreEqual("INPUT (image)", elementTag.ToString(), "ToString problem");
 
             elementMock.VerifyAll();

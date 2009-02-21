@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -29,19 +30,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void DivElementTags()
 		{
-			Assert.AreEqual(1, Div.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("div", Div.ElementTags[0].TagName);
-		}
-
-		[Test]
-		public void CreateDivFromElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("divid");
-		                        var div = new Div(element);
-		                        Assert.AreEqual("divid", div.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Div>();
+			Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("div", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -70,7 +61,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        Assert.AreEqual(4, browser.Divs.Length, "Unexpected number of Divs");
+		                        Assert.AreEqual(4, browser.Divs.Count, "Unexpected number of Divs");
 
 		                        var divs = browser.Divs;
 

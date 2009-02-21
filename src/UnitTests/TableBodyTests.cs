@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests
 		public void TableTableBodiesExcludesBodiesFromNestedTables()
 		{
 			TableBodyCollection tableBodies = Ie.Table("Table1").TableBodies;
-			Assert.AreEqual(2, tableBodies.Length, "Unexpected number of tbodies");
+			Assert.AreEqual(2, tableBodies.Count, "Unexpected number of tbodies");
 			Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
 			Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
 		}
@@ -46,8 +46,8 @@ namespace WatiN.Core.UnitTests
 		{
 			TableBody tableBody = Ie.Table("Table1").TableBodies[0];
 
-			Assert.AreEqual(1, tableBody.Tables.Length, "Expected nested table");
-			Assert.AreEqual(2, tableBody.TableRows.Length, "Expected 2 rows");
+			Assert.AreEqual(1, tableBody.Tables.Count, "Expected nested table");
+			Assert.AreEqual(2, tableBody.TableRows.Count, "Expected 2 rows");
 			Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
 			Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
 		}

@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Span" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class SpanCollection : BaseElementCollection<Span>
+    public sealed class SpanCollection : BaseElementCollection<Span, SpanCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SpanCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public SpanCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Span.New) {}
+        public SpanCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SpanCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public SpanCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Span.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Span"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Span this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public SpanCollection Filter(BaseConstraint findBy)
-		{
-			return new SpanCollection(domContainer, DoFilter(findBy));
-		}
-
-        public SpanCollection Filter(Predicate<Span> predicate)
+        /// <inheritdoc />
+        protected override SpanCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new SpanCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new SpanCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

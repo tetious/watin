@@ -21,6 +21,8 @@
 using System.Collections;
 using mshtml;
 using WatiN.Core.Comparers;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {
@@ -49,18 +51,20 @@ namespace WatiN.Core.Constraints
 		}
 
         /// <summary>
-        /// This method expects an <see cref="ElementAttributeBag"/> which it will use
-        /// to determine if the element wrapped by the <see cref="ElementAttributeBag"/> is 
+        /// This method expects an <see cref="Element"/> which it will use
+        /// to determine if the element is 
         /// the element for which a label is specified with the searched for innertext.
         /// </summary>
         /// <param name="attributeBag">Value to compare with</param>
         /// <returns>
         /// 	<c>true</c> if the searched for value equals the given value
         /// </returns>
-        protected override bool DoCompare(Interfaces.IAttributeBag attributeBag)
+        protected override bool DoCompare(IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-            var element = ((ElementAttributeBag) attributeBag).Element;
+            Element element = attributeBag as Element;
+            if (element == null)
+                throw new WatiNException("This constraint class can only be used to compare against an element");
 			
 			// Get all elements and filter this for Labels
             if (labelIdsWithMatchingText == null)

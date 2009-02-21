@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -38,16 +39,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SpanElementTags()
 		{
-			Assert.AreEqual(1, Span.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("span", ((ElementTag) Span.ElementTags[0]).TagName);
-		}
-
-		[Test]
-		public void CreateSpanFromElement()
-		{
-			Element element = Ie.Element("spanid1");
-			Span span = new Span(element);
-			Assert.AreEqual("spanid1", span.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Span>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("span", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -66,7 +60,7 @@ namespace WatiN.Core.UnitTests
 		public void Spans()
 		{
 			const int expectedSpansCount = 3;
-			Assert.AreEqual(expectedSpansCount, Ie.Spans.Length, "Unexpected number of Spans");
+			Assert.AreEqual(expectedSpansCount, Ie.Spans.Count, "Unexpected number of Spans");
 
 			// Collection.Length
 			SpanCollection formSpans = Ie.Spans;

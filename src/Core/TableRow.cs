@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using mshtml;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UtilityClasses;
 
@@ -26,32 +27,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML tr element.
 	/// </summary>
-    public class TableRow : ElementsContainer<TableRow>
+    [ElementTag("tr")]
+    public sealed class TableRow : ElementsContainer<TableRow>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> {new ElementTag("tr")};
-				}
-
-				return elementTags;
-			}
-		}
-
 		public TableRow(DomContainer domContainer, INativeElement htmlTableRow) : base(domContainer, htmlTableRow) {}
 
-		public TableRow(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="TableRow"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public TableRow(Element element) : base(element, ElementTags) {}
+        public TableRow(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public Table ParentTable
 		{
@@ -78,14 +59,10 @@ namespace WatiN.Core
             { 
                 var row = (IHTMLTableRow)NativeElement.Object;
 
-                var list = UtilityClass.IHtmlElementCollectionToList(row.cells);
-                return new TableCellCollection(DomContainer, list);
+                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, row.cells);
+                return new TableCellCollection(DomContainer, new EnumerableElementFinder(list,
+                    ElementFactory.GetElementTags<TableCell>(), new AlwaysTrueConstraint()));
             }
         }
-
-        internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new TableRow(domContainer, element);
-		}
 	}
 }

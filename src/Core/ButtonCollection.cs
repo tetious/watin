@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Button" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class ButtonCollection : BaseElementCollection<Button>
+    public sealed class ButtonCollection : BaseElementCollection<Button, ButtonCollection>
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public ButtonCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Button.New) {}
+        public ButtonCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-		public ButtonCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Button.New) {}
-
-		/// <summary>
-		/// Gets the <see cref="Button"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Button this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public ButtonCollection Filter(BaseConstraint findBy)
-		{
-			return new ButtonCollection(domContainer, DoFilter(findBy));
-		}
-
-        public ButtonCollection Filter(Predicate<Button> predicate)
+        /// <inheritdoc />
+        protected override ButtonCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new ButtonCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new ButtonCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,20 +31,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RadioButtonElementTags()
 		{
-			Assert.AreEqual(1, RadioButton.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("input", RadioButton.ElementTags[0].TagName);
-			Assert.AreEqual("radio", RadioButton.ElementTags[0].InputTypes);
-		}
-
-		[Test]
-		public void CreateRadioButtonFromElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("Radio1");
-		                        var radioButton = new RadioButton(element);
-		                        Assert.AreEqual("Radio1", radioButton.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<RadioButton>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("input", elementTags[0].TagName);
+			Assert.AreEqual("radio", elementTags[0].InputType);
 		}
 
 		[Test]
@@ -105,11 +96,11 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        Assert.AreEqual(3, browser.RadioButtons.Length, "Unexpected number of RadioButtons");
+		                        Assert.AreEqual(3, browser.RadioButtons.Count, "Unexpected number of RadioButtons");
 
 		                        var formRadioButtons = browser.Form("FormRadioButtons").RadioButtons;
 
-		                        Assert.AreEqual(2, formRadioButtons.Length, "Wrong number off RadioButtons");
+                                Assert.AreEqual(2, formRadioButtons.Count, "Wrong number off RadioButtons");
 		                        Assert.AreEqual("Radio2", formRadioButtons[0].Id);
 		                        Assert.AreEqual("Radio3", formRadioButtons[1].Id);
 

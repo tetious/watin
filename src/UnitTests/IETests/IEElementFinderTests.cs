@@ -54,7 +54,8 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection.Object, domContainerMock.Object);
+			ElementFinder finder = new IEElementFinder(new[] { new ElementTag("input", "text") }, null,
+                stubElementCollection.Object, domContainerMock.Object);
 
 			Assert.IsNull(finder.FindFirst());
 		}
@@ -64,9 +65,10 @@ namespace WatiN.Core.UnitTests.IETests
 		{
 			SetUp();
 			
-			INativeElementFinder finder = new IEElementFinder("input", "text", stubElementCollection.Object, domContainerMock.Object);
+			ElementFinder finder = new IEElementFinder(new[] { new ElementTag("input", "text") }, null,
+                stubElementCollection.Object, domContainerMock.Object);
 
-		    var all = new List<INativeElement>(finder.FindAll());
+		    var all = new List<Element>(finder.FindAll());
 		    Assert.AreEqual(0, all.Count);
 		}
 
@@ -76,7 +78,8 @@ namespace WatiN.Core.UnitTests.IETests
 			SetUp();
 			
 			var constraint = new MyTestConstraint();
-			INativeElementFinder finder = new IEElementFinder("input", "text", constraint, stubElementCollection.Object, domContainerMock.Object);
+			ElementFinder finder = new IEElementFinder(new[] { new ElementTag("input", "text") },
+                constraint, stubElementCollection.Object, domContainerMock.Object);
 			
 			finder.FindFirst();
 

@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="FileUpload" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class FileUploadCollection : BaseElementCollection<FileUpload>
+    public sealed class FileUploadCollection : BaseElementCollection<FileUpload, FileUploadCollection>
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FileUploadCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, FileUpload.New) {}
+        public FileUploadCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FileUploadCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public FileUploadCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, FileUpload.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="FileUpload"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public FileUpload this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public FileUploadCollection Filter(BaseConstraint findBy)
-		{
-			return new FileUploadCollection(domContainer, DoFilter(findBy));
-		}
-
-        public FileUploadCollection Filter(Predicate<FileUpload> predicate)
+        /// <inheritdoc />
+        protected override FileUploadCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new FileUploadCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new FileUploadCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

@@ -26,32 +26,12 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML Form element.
 	/// </summary>
-	public class Form : ElementsContainer<Form>
+    [ElementTag("form")]
+	public sealed class Form : ElementsContainer<Form>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("form") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public Form(DomContainer domContainer, INativeElement htmlFormElement) : base(domContainer, htmlFormElement) {}
 
-		public Form(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Form"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Form(Element element) : base(element, ElementTags) {}
+        public Form(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public void Submit()
 		{
@@ -78,11 +58,6 @@ namespace WatiN.Core
 		public string Name
 		{
 			get { return GetAttributeValue("name"); }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Form(domContainer, element);
 		}
 	}
 }

@@ -19,79 +19,77 @@
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.Mozilla
 {
-    public class FFElementFinder : ElementFinderBase
+    internal sealed class FFElementFinder : NativeElementFinder
     {
         private readonly FireFoxClientPort _clientPort;
 
-        public FFElementFinder(List<ElementTag> elementTags, IElementCollection elementCollection, DomContainer domContainer, FireFoxClientPort clientPort) : base(elementTags, elementCollection, domContainer)
+        public FFElementFinder(IList<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer, FireFoxClientPort clientPort)
+            : base(elementTags, constraint, elementCollection, domContainer)
         {
             _clientPort = clientPort;
         }
 
-        public FFElementFinder(List<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer, FireFoxClientPort clientPort) : base(elementTags, constraint, elementCollection, domContainer)
+        /// <inheritdoc />
+        protected override ElementFinder FilterImpl(BaseConstraint findBy)
         {
-            _clientPort = clientPort;
+            return new FFElementFinder(ElementTags, Constraint & findBy, ElementCollection, DomContainer, _clientPort);
         }
 
-		public FFElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer, FireFoxClientPort clientPort) : base(tagName, inputType, elementCollection, domContainer)
-		{
-		    _clientPort = clientPort;
-		}
-
-        public FFElementFinder(string tagName, string inputType, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer, FireFoxClientPort clientPort) : base(tagName, inputType, constraint, elementCollection, domContainer)
+        /// <inheritdoc />
+        protected override IEnumerable<Element> FindElementsByTag(ElementTag elementTag)
         {
-            _clientPort = clientPort;
-        }
-
-        protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
-        {
-            var matchingElements = new List<INativeElement>();
-
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
 
-            if (elementCollection.Elements == null) return new List<INativeElement>();
-
-            var elementArrayName = "watinElemFinder";
-            var elementToSearchFrom = elementCollection.Elements.ToString();
-
-            var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom, elementTag.TagName);
-
-            for (var index = 0; index < numberOfElements; index++)
+            if (ElementCollection.Elements != null)
             {
-                var indexedElementVariableName = string.Format("{0}[{1}]", elementArrayName, index);
-                var ffElement = new FFElement(indexedElementVariableName, _clientPort);
+                var elementArrayName = "watinElemFinder";
+                var elementToSearchFrom = ElementCollection.Elements.ToString();
 
-                if (FinishedAddingChildrenThatMetTheConstraints(ffElement, attributeBag, elementTag, constraint,
-                                                                matchingElements, returnAfterFirstMatch))
+                var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom,
+                    elementTag.TagName);
+
+                for (var index = 0; index < numberOfElements; index++)
                 {
-                    return matchingElements;
+                    var indexedElementVariableName = string.Format("{0}[{1}]", elementArrayName, index);
+                    var ffElement = new FFElement(indexedElementVariableName, _clientPort);
+
+                    var element = WrapElementIfMatch(ffElement);
+                    if (element != null)
+                        yield return WrapElementWithPersistentReference(ffElement);
                 }
             }
-
-            return matchingElements;
         }
 
-        protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
+        /// <inheritdoc />
+        protected override IEnumerable<Element> FindElementsById(string id)
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
 
-            if (elementCollection.Elements == null) return null;
+            if (ElementCollection.Elements != null)
+            {
+                var referencedElement = ElementCollection.Elements.ToString();
 
-            var referencedElement = elementCollection.Elements.ToString();
-            
-            // Create reference to document object
-            var documentReference = GetDocumentReference(referencedElement);
+                // Create reference to document object
+                var documentReference = GetDocumentReference(referencedElement);
 
-            var elementName = FireFoxClientPort.CreateVariableName();
-            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, Id);
-            command = command + string.Format("{0} != null;", elementName);
+                var elementName = FireFoxClientPort.CreateVariableName();
+                var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, id);
+                command = command + string.Format("{0} != null;", elementName);
 
-            return _clientPort.WriteAndReadAsBool(command) ? new FFElement(elementName, _clientPort) : null;
+                if (_clientPort.WriteAndReadAsBool(command))
+                {
+                    var ffElement = new FFElement(elementName, _clientPort);
+                    var element = WrapElementIfMatch(ffElement);
+                    if (element != null)
+                        yield return WrapElementWithPersistentReference(ffElement);
+                }
+            }
         }
 
         private static string GetDocumentReference(string referencedElement)
@@ -105,20 +103,13 @@ namespace WatiN.Core.Mozilla
             return referencedElement;
         }
 
-        protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
-        {
-            // TODO: Is this needed for FireFox?
-            return;
-        }
-
-        protected override void AddToMatchingElements(INativeElement nativeElement, ICollection<INativeElement> matchingElements)
+        private Element WrapElementWithPersistentReference(INativeElement nativeElement)
         {
             var elementVariableName = FireFoxClientPort.CreateVariableName();
             _clientPort.Write("{0}={1};", elementVariableName, nativeElement.Object);
             
             var ffElement = new FFElement(elementVariableName, _clientPort);
-
-            base.AddToMatchingElements(ffElement, matchingElements);
+            return WrapElement(ffElement);
         }
 
         private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)

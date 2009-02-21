@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -40,16 +41,9 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableElementTags()
 		{
-			Assert.AreEqual(1, Table.ElementTags.Count, "1 elementtags expected");
-			Assert.AreEqual("table", Table.ElementTags[0].TagName);
-		}
-
-		[Test]
-		public void TableFromElement()
-		{
-			var element = Ie.Element(tableId);
-			var table = new Table(element);
-			Assert.AreEqual(tableId, table.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Table>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+			Assert.AreEqual("table", elementTags[0].TagName);
 		}
 
 		[Test]
@@ -76,7 +70,7 @@ namespace WatiN.Core.UnitTests
 			var table = Ie.Table(tableId);
 			Assert.AreEqual(tableId, table.Id);
 			Assert.AreEqual(tableId, table.ToString());
-			Assert.AreEqual(3, table.TableRows.Length, "Unexpected number of rows");
+			Assert.AreEqual(3, table.TableRows.Count, "Unexpected number of rows");
 
 			var row = table.FindRow("a1", 0);
 			Assert.IsNotNull(row, "Row with a1 expected");
@@ -170,7 +164,7 @@ namespace WatiN.Core.UnitTests
 			// Collection.length
 			var tables = Ie.Tables;
 
-			Assert.AreEqual(2, tables.Length);
+            Assert.AreEqual(2, tables.Count);
 
 			// Collection items by index
 			Assert.AreEqual("table1", tables[0].Id);
@@ -201,7 +195,7 @@ namespace WatiN.Core.UnitTests
             Ie.GoTo(TablesUri);
 
             var table = Ie.Table("Table1");
-            Assert.That(table.TableRowsDirectChildren.Length, Is.EqualTo(3), "Unexpected number of TableRows");
+            Assert.That(table.TableRowsDirectChildren.Count, Is.EqualTo(3), "Unexpected number of TableRows");
             Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
             Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
             Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");

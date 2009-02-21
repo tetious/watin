@@ -22,6 +22,8 @@ using System;
 using System.Collections;
 using mshtml;
 using WatiN.Core.Comparers;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {
@@ -85,29 +87,33 @@ namespace WatiN.Core.Constraints
 			this.labelText = labelText;
 		}
 
-        public override bool Compare(Interfaces.IAttributeBag attributeBag)
+        public override bool Compare(IAttributeBag attributeBag)
 		{
 			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-			IHTMLElement element = (IHTMLElement) ((ElementAttributeBag) attributeBag).INativeElement.Object;
-			IHTMLDocument2 document = (IHTMLDocument2)element.document;
+            Element element = attributeBag as Element;
+            if (element == null)
+                throw new WatiNException("This constraint class can only be used to compare against an element");
+
+			IHTMLElement htmlElement = (IHTMLElement) element.NativeElement.Object;
+			IHTMLDocument2 htmlDocument = (IHTMLDocument2)htmlElement.document;
 			
 			// Only supports input and textarea elements
-			if( element.tagName != ElementsSupport.InputTagName && element.tagName != "textarea") return false;
+			if( htmlElement.tagName != ElementsSupport.InputTagName && htmlElement.tagName != "textarea") return false;
 			
 			// Get all text and filter this for the phrase, building a bounding box for each instance
-			verifyLabelElements(document);
+			verifyLabelElements(htmlDocument);
 			
 			// If no matching text then this there is no field
 			if( labelElements == null || labelElements.Count == 0 ) return false;
 			
 			// Get all the form field elements
-			verifyFieldElements(document);
+			verifyFieldElements(htmlDocument);
 			
 			// If no form field elements where found then there is not match
 			if( fieldElements == null || fieldElements.Count == 0 ) return false;
 			
 			// Measure the 'proximity' of each valid text node to the input elements and find the closest form element
-			if( nearestFormElement == null ) findNearestFormElement(document);
+			if( nearestFormElement == null ) findNearestFormElement(htmlDocument);
 			
 			// If no form field elements where found to be 'near' the tex then there's no match
 			// NB: This can't really happen at this point unless there's something really screwy going on
@@ -115,7 +121,7 @@ namespace WatiN.Core.Constraints
 
 			// Is this the form element we're looking for?
 			bool elementFound = false;
-			if( element.id  == nearestFormElement.id ) {
+			if( htmlElement.id  == nearestFormElement.id ) {
 				 elementFound = true;
 			}
 			

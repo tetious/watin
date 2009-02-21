@@ -21,192 +21,267 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
-    /// <summary>
-    /// This delegate is mainly used by BaseElementCollectionT to 
-    /// delegate the creation of a specialized element type. 
-	/// </summary>
-    public delegate Element CreateElementInstance(DomContainer domContainer, INativeElement element);
-
 	/// <summary>
 	/// This class is mainly used by Watin internally as the base class for all 
 	/// of the element collections.
 	/// </summary>
-    public abstract class BaseElementCollection<T> : IEnumerable<T> where T:Element
+    /// <typeparam name="TElement">The element type</typeparam>
+    /// <typeparam name="TCollection">The derived collection type</typeparam>
+    public abstract class BaseElementCollection<TElement, TCollection>
+        : IElementCollection<TElement>
+        where TElement : Element
+        where TCollection : BaseElementCollection<TElement, TCollection>
 	{
-		protected DomContainer domContainer;
-
-		private List<INativeElement> elements;
-		private readonly CreateElementInstance createElementInstance;
-		protected INativeElementFinder finder;
+		private readonly DomContainer domContainer;
+		private readonly ElementFinder elementFinder;
+        private List<TElement> cachedElements;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
 		/// Mainly used by WatiN internally.
 		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="finder">The finder.</param>
-		/// <param name="createElementInstance">The create element instance.</param>
-		protected BaseElementCollection(DomContainer domContainer, INativeElementFinder finder, CreateElementInstance createElementInstance) :
-			this(domContainer, (IEnumerable<INativeElement>) null, createElementInstance)
+		/// <param name="domContainer">The DOM container</param>
+		/// <param name="elementFinder">The element finder</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="domContainer"/>
+        /// or <paramref name="elementFinder"/> is null</exception>
+        protected BaseElementCollection(DomContainer domContainer, ElementFinder elementFinder)
 		{
-			this.finder = finder;
-		}
+            if (domContainer == null)
+                throw new ArgumentNullException("domContainer");
+            if (elementFinder == null)
+                throw new ArgumentNullException("elementFinder");
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-		/// <param name="createElementInstance">The create element instance.</param>
-		protected BaseElementCollection(DomContainer domContainer, IEnumerable<INativeElement> elements, CreateElementInstance createElementInstance)
-		{
-            if (domContainer == null) throw new ArgumentNullException("domContainer");
-
-		    if (elements != null) this.elements = new List<INativeElement>(elements);
 		    this.domContainer = domContainer;
-			this.createElementInstance = createElementInstance;
-		}
-
-		/// <summary>
-		/// Gets the length.
-		/// </summary>
-		/// <value>The length.</value>
-		public int Length
-		{
-			get { return Elements.Count; }
-		}
-
-        protected T ElementsTyped(int index)
-		{
-            return (T)CreateElementInstance(Elements[index]); 
-		}
-
-        private Element CreateElementInstance(INativeElement element)
-        {
-            return createElementInstance(domContainer, element);
+            this.elementFinder = elementFinder;
         }
 
+	    /// <inheritdoc />
+        public int Count
+        {
+            get { return CachedElements.Count; }
+        }
 
-        protected List<INativeElement> Elements
+        /// <inheritdoc />
+        public void CopyTo(TElement[] array, int arrayIndex)
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
+
+            foreach (TElement element in CachedElements)
+                array[arrayIndex++] = element;
+        }
+
+        /// <summary>
+        /// Gets the element at the specified index in the collection.
+        /// </summary>
+        /// <param name="index">The zero-based index</param>
+        /// <returns>The element</returns>
+        public TElement this[int index]
+        {
+            get { return CachedElements[index]; }
+        }
+
+	    bool ICollection<TElement>.IsReadOnly
+	    {
+	        get { return true; }
+	    }
+
+	    /// <summary>
+		/// Gets the number of elements in the collection.
+		/// </summary>
+		/// <value>The number of elements in the collection</value>
+        [Obsolete("Use Count property instead.")]
+		public int Length
 		{
-			get
-			{
-				if (elements == null)
-				{
-					elements = finder != null ? new List<INativeElement>(finder.FindAll()) : new List<INativeElement>();
-				}
-
-				return elements;
-			}
+			get { return Count; }
 		}
 
+        /// <inheritdoc />
 		public bool Exists(string elementId)
 		{
 			return Exists(Find.ByDefault(elementId));
 		}
 
-		public bool Exists(Regex elementId)
+        /// <inheritdoc />
+        public bool Exists(Regex elementId)
 		{
             return Exists(Find.ByDefault(elementId));
 		}
 
-		public bool Exists(BaseConstraint findBy)
+        /// <inheritdoc />
+        public bool Exists(BaseConstraint findBy)
 		{
-			var attributeBag = new ElementAttributeBag(domContainer);
-
-			foreach (var element in Elements)
-			{
-				attributeBag.INativeElement = element;
-				if (findBy.Compare(attributeBag))
-				{
-					return true;
-				}
-			}
-
-			return false;
+            return elementFinder.Filter(findBy).Exists();
 		}
 
-        public bool Exists(Predicate<T> predicate)
+        /// <inheritdoc />
+        public bool Exists(Predicate<TElement> predicate)
         {
             return Exists(Find.ByElement(predicate));
         }
 
-        public T First()
+        /// <inheritdoc />
+        public TElement First()
         {
-            return (T)FindFirst(Find.First());
+            if (cachedElements != null)
+                return cachedElements.Count != 0 ? cachedElements[0] : null;
+
+            return (TElement) elementFinder.FindFirst();
         }
 
-        public T First(BaseConstraint findBy)
+        /// <inheritdoc />
+        public TElement First(BaseConstraint findBy)
         {
-            return (T)FindFirst(findBy);
+            return (TElement)elementFinder.Filter(findBy).FindFirst();
         }
 
-        public T First(Predicate<T> predicate)
+        /// <inheritdoc />
+        public TElement First(Predicate<TElement> predicate)
         {
-            return (T)FindFirst(Find.ByElement(predicate));
+            return First(Find.ByElement(predicate));
         }
 
-        private Element FindFirst(BaseConstraint findBy)
+        /// <summary>
+        /// Returned a filtered view of the collection consisting only of the elements that
+        /// match the given constraint.
+        /// </summary>
+        /// <param name="findBy">The constraint to match</param>
+        /// <returns>The filtered element collection</returns>
+        public TCollection Filter(BaseConstraint findBy)
         {
-            if (elements == null)
-                return finder != null ? CreateElementInstance(finder.FindFirst(findBy)) : null;
-
-            return ElementsTyped(0);
+            return CreateFilteredCollection(elementFinder.Filter(findBy));
         }
 
-		protected IEnumerable<INativeElement> DoFilter(BaseConstraint findBy)
+	    /// <summary>
+        /// Returned a filtered view of the collection consisting only of the elements that
+        /// match the given predicate.
+        /// </summary>
+        /// <param name="predicate">The predicate to match</param>
+        /// <returns>The filtered element collection</returns>
+        public TCollection Filter(Predicate<TElement> predicate)
+        {
+            return Filter(Find.ByElement(predicate));
+        }
+
+        /// <inheritdoc />
+	    public IEnumerator<TElement> GetEnumerator()
 		{
-			if (elements == null)
-			{
-			    return finder != null ? finder.FindAll(findBy) : new List<INativeElement>();
-			}
-
-		    return FilterElements(findBy);
-		}
-
-	    private IEnumerable<INativeElement> FilterElements(BaseConstraint findBy)
-	    {
-	        var returnElements = new List<INativeElement>();
-	        var attributeBag = new ElementAttributeBag(domContainer);
-
-	        foreach (var element in Elements)
-	        {
-	            attributeBag.INativeElement = element;
-
-	            if (findBy.Compare(attributeBag))
-	            {
-	                returnElements.Add(element);
-	            }
-	        }
-
-	        return returnElements;
-	    }
-
-	    /// <exclude />
-		public IEnumerator GetEnumerator()
-		{
-	        foreach (var element in Elements)
-	        {
-	            yield return createElementInstance(domContainer, element);
-	        }
-		}
-
-	    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-            foreach (var element in Elements)
-            {
-                yield return (T)createElementInstance(domContainer, element);
-            }
+            foreach (var element in elementFinder.FindAll())
+                yield return (TElement) element;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
-	}
+
+        /// <summary>
+        /// Gets the DOM container to which the collection belongs.
+        /// </summary>
+        protected DomContainer DomContainer
+        {
+            get { return domContainer; }
+        }
+
+        /// <summary>
+        /// Gets the underlying element finder.
+        /// </summary>
+        protected ElementFinder ElementFinder
+        {
+            get { return elementFinder; }
+        }
+
+	    /// <summary>
+        /// Creates a filtered instance of the collection with the given finder.
+        /// </summary>
+        /// <param name="elementFinder">The element finder</param>
+        /// <returns>The element collection</returns>
+        protected abstract TCollection CreateFilteredCollection(ElementFinder elementFinder);
+
+        IElementCollection<TElement> IElementCollection<TElement>.Filter(BaseConstraint findBy)
+        {
+            return Filter(findBy);
+        }
+
+        IElementCollection<TElement> IElementCollection<TElement>.Filter(Predicate<TElement> predicate)
+        {
+            return Filter(predicate);
+        }
+
+        private IList<TElement> CachedElements
+        {
+            get
+            {
+                if (cachedElements == null)
+                {
+                    cachedElements = new List<TElement>();
+                    foreach (TElement element in elementFinder.FindAll())
+                        cachedElements.Add(element);
+                }
+
+                return cachedElements;
+            }
+        }
+
+        #region Unsupported List Methods
+
+        int IList<TElement>.IndexOf(TElement item)
+	    {
+            ThrowCollectionDoesNotSupportSearchingByElement();
+            return 0;
+	    }
+
+        bool ICollection<TElement>.Contains(TElement item)
+        {
+            ThrowCollectionDoesNotSupportSearchingByElement();
+            return false;
+        }
+
+	    void IList<TElement>.Insert(int index, TElement item)
+	    {
+            ThrowCollectionIsReadOnly();
+        }
+
+	    void IList<TElement>.RemoveAt(int index)
+	    {
+            ThrowCollectionIsReadOnly();
+	    }
+
+	    TElement IList<TElement>.this[int index]
+	    {
+	        get { return this[index]; }
+	        set { ThrowCollectionIsReadOnly(); }
+	    }
+
+        void ICollection<TElement>.Add(TElement item)
+        {
+            ThrowCollectionIsReadOnly();
+        }
+
+        void ICollection<TElement>.Clear()
+        {
+            ThrowCollectionIsReadOnly();
+        }
+
+        bool ICollection<TElement>.Remove(TElement item)
+        {
+            ThrowCollectionIsReadOnly();
+            return false;
+        }
+
+        private static void ThrowCollectionDoesNotSupportSearchingByElement()
+        {
+            throw new NotSupportedException("Collection does not support searching by element.");
+        }
+
+	    private static void ThrowCollectionIsReadOnly()
+        {
+            throw new NotSupportedException("Collection is read-only");
+        }
+
+        #endregion
+    }
 }

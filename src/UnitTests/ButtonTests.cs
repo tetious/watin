@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -35,7 +36,7 @@ namespace WatiN.Core.UnitTests
                             {
                                 var buttons = browser.Buttons.Filter(Find.ById("testlinkid"));
                                 var buttons2 = buttons.Filter(Find.ByFor("Checkbox21"));
-                                Assert.AreEqual(0, buttons2.Length);
+                                Assert.AreEqual(0, buttons2.Count);
                                 
                             });
 		}
@@ -121,60 +122,12 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void CreateButtonFromInputHTMLElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("input", Find.ById("disabledid"), "button");
-		                        var button = new Button(element);
-		                        Assert.AreEqual("disabledid", button.Id);
-		                    });
-
-		}
-
-		[Test]
-		public void CreateButtonFromButtonHTMLElement()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("button", Find.ById("buttonelementid"));
-		                        var button = new Button(element);
-		                        Assert.AreEqual("buttonelementid", button.Id);
-		                    });
-
-		}
-
-		[Test]
-		public void ButtonFromElementArgumentException()
-		{
-		    ExecuteTest(browser =>
-		                    {
-                                // GIVEN
-		                        var element = browser.Element("Checkbox1");
-
-
-		                        try
-		                        {
-                                    // WHEN
-		                            new Button(element);
-
-                                    // THEN
-		                            Assert.Fail("Expected an exception");
-		                        }
-                                catch (ArgumentException)
-		                        {
-		                            // OK;
-		                        }
-		                    });
-		}
-
-		[Test]
 		public void Buttons()
 		{
 		    ExecuteTest(browser =>
 		                    {
 		                        const int expectedButtonsCount = 6;
-		                        Assert.AreEqual(expectedButtonsCount, browser.Buttons.Length, "Unexpected number of buttons");
+                                Assert.AreEqual(expectedButtonsCount, browser.Buttons.Count, "Unexpected number of buttons");
 
 		                        const int expectedFormButtonsCount = 5;
 		                        var form = browser.Form("Form");
@@ -182,7 +135,7 @@ namespace WatiN.Core.UnitTests
 		                        // Collection.Length
 		                        var formButtons = form.Buttons;
 
-		                        Assert.AreEqual(expectedFormButtonsCount, formButtons.Length);
+                                Assert.AreEqual(expectedFormButtonsCount, formButtons.Count);
 
 		                        // Collection items by index
 		                        Assert.AreEqual("popupid", form.Buttons[0].Id);
@@ -221,7 +174,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        var buttons = browser.Buttons.Filter(Find.ById(new Regex("le")));
-		                        Assert.AreEqual(2, buttons.Length);
+                                Assert.AreEqual(2, buttons.Count);
 		                        Assert.AreEqual("disabledid", buttons[0].Id);
 		                        Assert.AreEqual("buttonelementid", buttons[1].Id);
 		                    });
@@ -234,10 +187,10 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        var buttons = browser.Buttons;
-		                        Assert.AreEqual(6, buttons.Length);
+                                Assert.AreEqual(6, buttons.Count);
 
 		                        buttons = browser.Buttons.Filter(Find.ById(new Regex("le")));
-		                        Assert.AreEqual(2, buttons.Length);
+                                Assert.AreEqual(2, buttons.Count);
 		                        Assert.AreEqual("disabledid", buttons[0].Id);
 		                        Assert.AreEqual("buttonelementid", buttons[1].Id);
 		                    });
@@ -247,14 +200,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ButtonElementTags()
 		{
-		    ExecuteTest(browser =>
-		                    {
-		                        Assert.AreEqual(2, Button.ElementTags.Count, "2 elementtags expected");
-		                        Assert.AreEqual("input", Button.ElementTags[0].TagName);
-		                        Assert.AreEqual("button submit image reset", Button.ElementTags[0].InputTypes);
-		                        Assert.AreEqual("button", Button.ElementTags[1].TagName);
-		                    });
-
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Button>();
+            Assert.AreEqual(4, elementTags.Count, "4 elementtags expected");
+            Assert.AreEqual("input", elementTags[0].TagName);
+            Assert.AreEqual("button", elementTags[0].InputType);
+            Assert.AreEqual("input", elementTags[1].TagName);
+            Assert.AreEqual("submit", elementTags[1].InputType);
+            Assert.AreEqual("input", elementTags[2].TagName);
+            Assert.AreEqual("reset", elementTags[2].InputType);
+            Assert.AreEqual("button", elementTags[3].TagName);
 		}
 
 		[Test]

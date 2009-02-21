@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Form" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class FormCollection : BaseElementCollection<Form>
+    public class FormCollection : BaseElementCollection<Form, FormCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public FormCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Form.New) {}
+        public FormCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FormCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public FormCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Form.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Form"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Form this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public FormCollection Filter(BaseConstraint findBy)
-		{
-			return new FormCollection(domContainer, DoFilter(findBy));
-		}
-
-        public FormCollection Filter(Predicate<Form> predicate)
+        /// <inheritdoc />
+        protected override FormCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new FormCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new FormCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

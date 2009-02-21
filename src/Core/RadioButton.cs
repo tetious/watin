@@ -25,36 +25,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// radio.
 	/// </summary>
-    public class RadioButton : RadioCheck<RadioButton>
+    [ElementTag("input", InputType = "radio")]
+    public sealed class RadioButton : RadioCheck<RadioButton>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("input", "radio") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public RadioButton(DomContainer domContainer, INativeElement inputElement) : base(domContainer, inputElement) {}
 
-		public RadioButton(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="RadioButton"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public RadioButton(Element element) : base(element, ElementTags) {}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new RadioButton(domContainer, element);
-		}
+        public RadioButton(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 }

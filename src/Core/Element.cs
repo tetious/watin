@@ -40,10 +40,8 @@ namespace WatiN.Core
 	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
 	    {}
 
-	    public Element(Element element, List<ElementTag> elementTags) : base(element, elementTags)
-	    {}
-
-	    public Element(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder)
+        public Element(DomContainer domContainer, ElementFinder elementFinder)
+            : base(domContainer, elementFinder)
 	    {}
 
 	    /// <summary>
@@ -74,7 +72,7 @@ namespace WatiN.Core
 	public class Element : IAttributeBag
 	{
         private INativeElement _nativeElement;
-		private INativeElementFinder _nativeElementFinder;
+        private ElementFinder _elementFinder;
 
 		private Stack _originalcolor;
 
@@ -85,7 +83,7 @@ namespace WatiN.Core
 		/// <param name="nativeElement">The element</param>
 		public Element(DomContainer domContainer, INativeElement nativeElement)
 		{
-			initElement(domContainer,nativeElement, null);
+			InitElement(domContainer,nativeElement, null);
 		}
 
 		/// <summary>
@@ -93,35 +91,18 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer"><see cref="DomContainer"/> this element is located in</param>
 		/// <param name="elementFinder">The element finder.</param>
-		public Element(DomContainer domContainer, INativeElementFinder elementFinder)
+        public Element(DomContainer domContainer, ElementFinder elementFinder)
 		{
-			initElement(domContainer, null, elementFinder);
+			InitElement(domContainer, null, elementFinder);
 		}
 
-		/// <summary>
-		/// This constructor is mainly used from within WatiN.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		/// <param name="elementTags">The element tags the element should match with.</param>
-		public Element(Element element, List<ElementTag> elementTags)
-		{
-			if (ElementTag.IsValidElement(element.NativeElement, elementTags))
-			{
-				initElement(element.DomContainer, element._nativeElement, element._nativeElementFinder);
-			}
-			else
-			{
-				throw new ArgumentException(String.Format("Expected element {0}", ElementTag.ElementTagsToString(elementTags)), "element");
-			}
-		}
-
-		private void initElement(DomContainer domContainer, INativeElement nativeElement, INativeElementFinder elementFinder) 
+        private void InitElement(DomContainer domContainer, INativeElement nativeElement, ElementFinder elementFinder) 
 		{
             if (domContainer == null) throw new ArgumentNullException("domContainer");
 
 			DomContainer = domContainer;
 			_nativeElement = nativeElement;
-			_nativeElementFinder = elementFinder;
+			_elementFinder = elementFinder;
 		}
 
 		/// <summary>
@@ -254,7 +235,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.NextSibling);
+                return ElementFactory.CreateElement(DomContainer, NativeElement.NextSibling);
 			}
         }
 
@@ -266,7 +247,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.PreviousSibling);
+                return ElementFactory.CreateElement(DomContainer, NativeElement.PreviousSibling);
 			}
 		}
 
@@ -300,7 +281,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-                return TypedElementFactory.CreateTypedElement(DomContainer, NativeElement.Parent);
+                return ElementFactory.CreateElement(DomContainer, NativeElement.Parent);
             }
         }
 
@@ -668,9 +649,9 @@ namespace WatiN.Core
 					{
 					    if(e.InnerException == null)
 						{
-							throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, DomContainer.Url);
+							throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url);
 						}
-                        throw new ElementNotFoundException(_nativeElementFinder.ElementTagsToString, _nativeElementFinder.ConstraintToString, DomContainer.Url, e.InnerException);
+                        throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url, e.InnerException);
 					}
 				}
 
@@ -810,7 +791,7 @@ namespace WatiN.Core
                 ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ConstraintToString())
             };
 
-            tryActionUntilTimeOut.Try(() => Exists && constraint.Compare(NativeElement.GetAttributeBag(DomContainer)));
+            tryActionUntilTimeOut.Try(() => Exists && constraint.Compare(this));
 		}
 
 	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
@@ -823,7 +804,7 @@ namespace WatiN.Core
 					return;
 				}
 
-			    if (_nativeElementFinder == null)
+			    if (_elementFinder == null)
 			    {
 			        throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
 			    }
@@ -892,7 +873,7 @@ namespace WatiN.Core
 		/// </example>
 		public void Refresh()
 		{
-			if (_nativeElementFinder != null)
+			if (_elementFinder != null)
 			{
 				_nativeElement = null;
 			}
@@ -904,9 +885,13 @@ namespace WatiN.Core
 		/// <returns></returns>
 		protected INativeElement RefreshNativeElement()
 		{
-			if (_nativeElementFinder != null)
+			if (_elementFinder != null)
 			{
-				_nativeElement = _nativeElementFinder.FindFirst();
+                _nativeElement = null;
+
+                Element foundElement = _elementFinder.FindFirst();
+                if (foundElement != null)
+                    _nativeElement = foundElement._nativeElement;
 			}
 			else
 			{
@@ -1130,12 +1115,7 @@ namespace WatiN.Core
 
 		public string GetValue(string attributename)
 		{
-			return NativeElement.GetAttributeBag(DomContainer).GetValue(attributename);
-		}
-
-		internal static Element New(DomContainer domContainer, INativeElement element)
-		{
-            return TypedElementFactory.CreateTypedElement(domContainer, element);
+            return GetAttributeValue(attributename);
 		}
 
         public void SetAttributeValue(string attributeName, string value)

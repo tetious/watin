@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="TableRow" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public class TableRowCollection : BaseElementCollection<TableRow>
+    public sealed class TableRowCollection : BaseElementCollection<TableRow, TableRowCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableRowCollection"/> class.
@@ -34,33 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public TableRowCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, TableRow.New) {}
+        public TableRowCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TableRowCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public TableRowCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, TableRow.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="TableRow"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public TableRow this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		public TableRowCollection Filter(BaseConstraint findBy)
-		{
-			return new TableRowCollection(domContainer, DoFilter(findBy));
-		}
-
-        public TableRowCollection Filter(Predicate<TableRow> predicate)
+        /// <inheritdoc />
+        protected override TableRowCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new TableRowCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new TableRowCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

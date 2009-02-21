@@ -59,11 +59,11 @@ namespace WatiN.Core.UnitTests
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-            ElementAttributeBag bag = attributeBag as ElementAttributeBag;
+            Element element = attributeBag as Element;
 
-            if (bag == null) return false;
+            if (element == null) return false;
 
-			return comparer.Compare(IsVisible(bag.Element).ToString());
+			return comparer.Compare(IsVisible(element).ToString());
 		}
 
 		public bool IsVisible(Element element)

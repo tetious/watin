@@ -44,14 +44,14 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         {
             var INativeElementStub = new Mock<INativeElement>();
             var domContainerMock = new Mock<DomContainer>();
-            var elementAttributeBag = new ElementAttributeBag(domContainerMock.Object, INativeElementStub.Object);
+            var element = new Element(domContainerMock.Object, INativeElementStub.Object);
 
             INativeElementStub.Expect(native => native.TagName).Returns("testtagname");
 			
             var elementComparerMock = new ElementComparerMock(tagname);
             var elementConstraint = new ElementConstraint(elementComparerMock);
 			
-            Assert.That(elementConstraint.Compare(elementAttributeBag) == expectedResult);
+            Assert.That(elementConstraint.Compare(element) == expectedResult);
         }
 
         [Test]

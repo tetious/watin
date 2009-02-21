@@ -32,27 +32,9 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML select element.
 	/// </summary>
-    public class SelectList : Element<SelectList>
+    [ElementTag("select")]
+    public sealed class SelectList : Element<SelectList>
 	{
-        private static List<ElementTag> elementTags;
-
-		/// <summary>
-		/// Gets the element tags supported by this element
-		/// </summary>
-		/// <value>Arraylist with ElementTag instances.</value>
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("select") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Returns an initialized instance of a SelectList object.
 		/// Mainly used by the collectionclass SelectLists.
@@ -67,13 +49,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer"/> the element is in.</param>
 		/// <param name="finder">The element finder to use.</param>
-		public SelectList(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="SelectList"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public SelectList(Element element) : base(element, ElementTags) {}
+        public SelectList(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		/// <summary>
 		/// This method clears the selected items in the select box and waits for the 
@@ -90,7 +66,7 @@ namespace WatiN.Core
 				option.ClearNoWait();
 			}
 
-			if (options.Length > 0)
+			if (options.Count > 0)
 			{
 				WaitForComplete();
 			}
@@ -315,7 +291,7 @@ namespace WatiN.Core
 				option.Select();
 			}
 
-			if (options.Length == 0)
+			if (options.Count == 0)
 			{
 				throw new SelectListItemNotFoundException(findBy.ConstraintToString());
 			}
@@ -343,11 +319,6 @@ namespace WatiN.Core
 				    return selectlist.NativeElement.Objects;
 				}
 			}
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new SelectList(domContainer, element);
 		}
 	}
 }

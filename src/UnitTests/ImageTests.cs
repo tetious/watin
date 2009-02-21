@@ -20,6 +20,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -37,31 +38,11 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageElementTags()
 		{
-			Assert.AreEqual(2, Image.ElementTags.Count, "2 elementtags expected");
-			Assert.AreEqual("img", Image.ElementTags[0].TagName);
-			Assert.AreEqual("input", Image.ElementTags[1].TagName);
-			Assert.AreEqual("image", Image.ElementTags[1].InputTypes);
-		}
-
-        // TODO: can be mocked
-		[Test]
-		public void ImageFromElementInput()
-		{
-			AssertImageFromElement("Image4");
-		}
-
-        // TODO: can be mocked
-		[Test]
-		public void ImageFromElementImage()
-		{
-			AssertImageFromElement("Image2");
-		}
-
-		private void AssertImageFromElement(string id)
-		{
-			var element = Ie.Element(id);
-			var image = new Image(element);
-			Assert.AreEqual(id, image.Id);
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Image>();
+            Assert.AreEqual(2, elementTags.Count, "2 elementtags expected");
+			Assert.AreEqual("img", elementTags[0].TagName);
+			Assert.AreEqual("input", elementTags[1].TagName);
+			Assert.AreEqual("image", elementTags[1].InputType);
 		}
 
 		[Test]
@@ -118,7 +99,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        const int expectedImagesCount = 4;
-		                        Assert.AreEqual(expectedImagesCount, browser.Images.Length, "Unexpected number of Images");
+                                Assert.AreEqual(expectedImagesCount, browser.Images.Count, "Unexpected number of Images");
 
 		                        // Collection.Length
 		                        var formImages = browser.Images;

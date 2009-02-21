@@ -66,7 +66,6 @@ namespace WatiN.Core.Mozilla
                     {"value", value => "'" + value + "'"}
                 };
 
-        private ElementAttributeBag _attributeBag;
         private Dictionary<string, object> _attributeCache;
 
         public FFElement(object elementReference, FireFoxClientPort clientPort)
@@ -292,16 +291,6 @@ namespace WatiN.Core.Mozilla
             ExecuteEvent(eventName, eventProperties, false);
         }
 
-        public IAttributeBag GetAttributeBag(DomContainer domContainer)
-        {
-            if (_attributeBag == null)
-            {
-                _attributeBag = new ElementAttributeBag(domContainer);
-            }
-            _attributeBag.INativeElement = this;
-            return _attributeBag;
-        }
-
         public bool IsElementReferenceStillValid()
         {
             if (UtilityClass.IsNullOrEmpty(ElementReference)) return false;
@@ -405,6 +394,11 @@ namespace WatiN.Core.Mozilla
             var exists = ClientPort.WriteAndReadAsBool(command);
 
             return exists ? new FFElement(elementvar, ClientPort) : null;
+        }
+
+        public void WaitUntilReady()
+        {
+            // TODO: Is this needed for FireFox?
         }
 
         /// <summary>

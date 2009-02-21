@@ -25,23 +25,9 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// checkbox.
     /// </summary>
-    public class CheckBox : RadioCheck<CheckBox>
+    [ElementTag("input", InputType = "checkbox")]
+    public sealed class CheckBox : RadioCheck<CheckBox>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("input", "checkbox") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBox"/> class.
 		/// Mainly used by WatiN internally.
@@ -56,17 +42,6 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="finder">The finder.</param>
-		public CheckBox(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="CheckBox"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public CheckBox(Element element) : base(element, ElementTags) {}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new CheckBox(domContainer, element);
-		}
+        public CheckBox(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 }

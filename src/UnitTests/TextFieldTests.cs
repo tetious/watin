@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
+using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,35 +32,17 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldElementTags()
 		{
-		    ExecuteTest(browser =>
-		                    {
-		                        Assert.AreEqual(2, TextField.ElementTags.Count, "2 elementtags expected");
-		                        Assert.AreEqual("input", TextField.ElementTags[0].TagName);
-		                        Assert.AreEqual("text password textarea hidden", TextField.ElementTags[0].InputTypes);
-		                        Assert.AreEqual("textarea", TextField.ElementTags[1].TagName);
-		                    });
-		}
-
-		[Test]
-		public void CreateTextFieldFromElementInput()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("name");
-		                        var textField = new TextField(element);
-		                        Assert.AreEqual("name", textField.Id);
-		                    });
-		}
-
-		[Test]
-		public void CreateTextFieldFromElementTextArea()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var element = browser.Element("Textarea1");
-		                        var textField = new TextField(element);
-		                        Assert.AreEqual("Textarea1", textField.Id);
-		                    });
+            IList<ElementTag> elementTags = ElementFactory.GetElementTags<TextField>();
+            Assert.AreEqual(5, elementTags.Count, "5 elementtags expected");
+            Assert.AreEqual("input", elementTags[0].TagName);
+            Assert.AreEqual("text", elementTags[0].InputType);
+            Assert.AreEqual("input", elementTags[1].TagName);
+            Assert.AreEqual("password", elementTags[1].InputType);
+            Assert.AreEqual("input", elementTags[2].TagName);
+            Assert.AreEqual("textarea", elementTags[2].InputType);
+            Assert.AreEqual("input", elementTags[3].TagName);
+            Assert.AreEqual("hidden", elementTags[3].InputType);
+            Assert.AreEqual("textarea", elementTags[5].TagName);
 		}
 
 		[Test]
@@ -285,11 +268,11 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                Assert.AreEqual(6, browser.TextFields.Length, "Unexpected number of TextFields");
+                                Assert.AreEqual(6, browser.TextFields.Count, "Unexpected number of TextFields");
 
 		                        // Collection items by index
                                 var mainForm = browser.Form("FormHiddens");
-		                        Assert.AreEqual(2, mainForm.TextFields.Length, "Wrong number of textfields in collectionTestForm");
+                                Assert.AreEqual(2, mainForm.TextFields.Count, "Wrong number of textfields in collectionTestForm");
 		                        Assert.AreEqual("first", mainForm.TextFields[0].Value);
 		                        Assert.AreEqual("second", mainForm.TextFields[1].Value);
 
@@ -297,7 +280,7 @@ namespace WatiN.Core.UnitTests
 
 		                        // Collection.length
 		                        var textfields = form.TextFields;
-		                        Assert.AreEqual(1, textfields.Length);
+                                Assert.AreEqual(1, textfields.Count);
 
 		                        // Collection iteration and comparing the result with Enumerator
 		                        IEnumerable textfieldEnumerable = textfields;

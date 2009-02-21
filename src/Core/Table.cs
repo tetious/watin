@@ -31,33 +31,13 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
-	public class Table : ElementsContainer<Table>
+    [ElementTag("table")]
+	public sealed class Table : ElementsContainer<Table>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("table") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public Table(DomContainer domContainer, INativeElement htmlTable) : 
             base(domContainer, htmlTable) {}
 
-		public Table(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Table"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Table(Element element) : base(element, ElementTags) {}
+        public Table(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		/// <summary>
 		/// Returns all rows in the first TBODY section of a table. If no
@@ -82,8 +62,9 @@ namespace WatiN.Core
         {
             get
             {
-                var list = UtilityClass.IHtmlElementCollectionToList(GetTableRows());
-                return new TableRowCollection(DomContainer, list);
+                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, GetTableRows());
+                return new TableRowCollection(DomContainer, new EnumerableElementFinder(list,
+                    ElementFactory.GetElementTags<TableRow>(), new AlwaysTrueConstraint()));
             }
         }
 
@@ -100,7 +81,11 @@ namespace WatiN.Core
 		/// <value>The table bodies.</value>
 		public override TableBodyCollection TableBodies
 		{
-            get { return new TableBodyCollection(DomContainer, UtilityClass.IHtmlElementCollectionToList(HTMLTable.tBodies)); }
+            get
+            {
+                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HTMLTable.tBodies);
+                return new TableBodyCollection(DomContainer,
+                    new EnumerableElementFinder(list, ElementFactory.GetElementTags<TableBody>(), new AlwaysTrueConstraint())); }
 		}
 
 		/// <summary>
@@ -316,11 +301,8 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRowInDirectChildren(TableRowAttributeConstraint findBy)
 		{
-            var elements = DomContainer.NativeBrowser.CreateElementFinder(Core.TableRow.ElementTags, new Rows(this));
-
-            var element = elements.FindFirst(findBy);
-            
-            return element != null ? new TableRow(DomContainer, element) : null;
+            var elements = DomContainer.NativeBrowser.CreateElementFinder(ElementFactory.GetElementTags<TableRow>(), null, new Rows(this));
+            return (TableRow) elements.Filter(findBy).FindFirst();
 		}
 
 		public abstract class TableElementCollectionsBase : IElementCollection
@@ -366,11 +348,6 @@ namespace WatiN.Core
                     return ((IHTMLTable)table.NativeElement.Object).rows;
 				}
 			}
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Table(domContainer, element);
 		}
 	}
 }

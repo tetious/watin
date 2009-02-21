@@ -27,32 +27,12 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element 
 	/// of type file. 
 	/// </summary>
-	public class FileUpload : Element<FileUpload>
+    [ElementTag("input", InputType = "file")]
+	public sealed class FileUpload : Element<FileUpload>
 	{
-        private static List<ElementTag> elementTags;
-
-		public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("input", "file") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public FileUpload(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
-		public FileUpload(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="FileUpload"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public FileUpload(Element element) : base(element, ElementTags) {}
+        public FileUpload(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public string FileName
 		{
@@ -72,11 +52,6 @@ namespace WatiN.Core
 			}
 
             NativeElement.SetFileUploadFile(this, fileName);
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new FileUpload(domContainer, element);
 		}
 	}
 }

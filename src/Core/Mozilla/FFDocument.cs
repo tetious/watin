@@ -108,13 +108,12 @@ namespace WatiN.Core.Mozilla
         {
             var frames = new List<Frame>();
 
-            var elementFinder = new FFElementFinder(Frame.ElementTags, this, domContainer, ClientPort);
+            var elementFinder = new FFElementFinder(ElementFactory.GetElementTags<Frame>(), null, this, domContainer, ClientPort);
             var all = elementFinder.FindAll();
 
-            foreach (var element in all)
+            foreach (var frameElement in all)
             {
-                var frameElement = new Element(domContainer, element);
-                var frameDocument = element.Object + ".contentDocument";
+                var frameDocument = frameElement.NativeElement.Object + ".contentDocument";
                 frames.Add(new Frame(domContainer, new FFDocument(frameDocument, ClientPort), frameElement));
             }
 

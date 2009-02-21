@@ -24,23 +24,9 @@ namespace WatiN.Core
 	/// <summary>
 	/// Represents an area of an image map.
 	/// </summary>
-    public class Area : Element<Area>
+    [ElementTag("area")]
+    public sealed class Area : Element<Area>
     {
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("area") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area" /> class.
 		/// Mainly used by WatiN internally.
@@ -55,13 +41,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="elementFinder">The element finder.</param>
-		public Area(DomContainer domContainer, INativeElementFinder elementFinder) : base(domContainer, elementFinder) {}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Area"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Area(Element element) : base(element, ElementTags) {}
+		public Area(DomContainer domContainer, ElementFinder elementFinder) : base(domContainer, elementFinder) {}
 
 		/// <summary>
 		/// Gets the alt-text of the area element.
@@ -93,11 +73,6 @@ namespace WatiN.Core
 		public string Shape
 		{
 			get { return GetAttributeValue("shape"); }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Area(domContainer, element);
 		}
 	}
 }

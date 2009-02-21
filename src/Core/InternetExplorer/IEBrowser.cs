@@ -31,19 +31,9 @@ namespace WatiN.Core.InternetExplorer
             _domContainer = domContainer;
         }
 
-        public INativeElementFinder CreateElementFinder(List<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
+        public ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
 		{
 			return new IEElementFinder(tags, baseConstraint, elements, _domContainer);
-		}
-
-        public INativeElementFinder CreateElementFinder(List<ElementTag> tags, IElementCollection elements)
-		{
-			return new IEElementFinder(tags, elements, _domContainer);
-		}
-
-		public INativeElementFinder CreateElementFinder(string tagname, string inputtypesString, BaseConstraint baseConstraint, IElementCollection elements)
-		{
-			return new IEElementFinder(tagname, inputtypesString, baseConstraint, elements, _domContainer);
 		}
 
 		public INativeElement CreateElement(object element)

@@ -24,36 +24,11 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML para element.
 	/// </summary>
-    public class Para : ElementsContainer<Para>
+    [ElementTag("p")]
+    public sealed class Para : ElementsContainer<Para>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("p") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		public Para(DomContainer domContainer, INativeElement htmlParaElement) : base(domContainer, htmlParaElement) {}
 
-		public Para(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Para"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Para(Element element) : base(element, ElementTags) {}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Para(domContainer, element);
-		}
+        public Para(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 }

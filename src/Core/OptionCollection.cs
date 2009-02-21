@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Option" /> elements within a <see cref="SelectList"/>.
 	/// </summary>
-    public class OptionCollection : BaseElementCollection<Option>
+    public sealed class OptionCollection : BaseElementCollection<Option, OptionCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionCollection"/> class.
@@ -34,38 +34,12 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
 		/// <param name="finder">The finder.</param>
-		public OptionCollection(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder, Option.New) {}
+        public OptionCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OptionCollection"/> class.
-		/// Mainly used by WatiN internally.
-		/// </summary>
-		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="elements">The elements.</param>
-        public OptionCollection(DomContainer domContainer, IEnumerable<INativeElement> elements) : base(domContainer, elements, Option.New) { }
-
-		/// <summary>
-		/// Gets the <see cref="Span"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		public Option this[int index]
-		{
-			get { return ElementsTyped(index); }
-		}
-
-		/// <summary>
-		/// Filters this collection with the specified find by.
-		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> to filter this collection.</param>
-		/// <returns>A filtered <see cref="OptionCollection"/></returns>
-		public OptionCollection Filter(BaseConstraint findBy)
-		{
-			return new OptionCollection(domContainer, DoFilter(findBy));
-		}
-
-        public OptionCollection Filter(Predicate<Option> predicate)
+        /// <inheritdoc />
+        protected override OptionCollection CreateFilteredCollection(ElementFinder elementFinder)
         {
-            return new OptionCollection(domContainer, DoFilter(Find.ByElement(predicate)));
+            return new OptionCollection(DomContainer, elementFinder);
         }
-	}
+    }
 }

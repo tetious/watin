@@ -24,27 +24,9 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML option element.
 	/// </summary>
-    public class Option : Element<Option>
+    [ElementTag("option")]
+    public sealed class Option : Element<Option>
 	{
-        private static List<ElementTag> elementTags;
-
-		/// <summary>
-		/// Gets the element tags supported by this element
-		/// </summary>
-		/// <value>The element tags.</value>
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("option") };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.
 		/// </summary>
@@ -57,13 +39,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The domContainer.</param>
 		/// <param name="finder">The finder.</param>
-		public Option(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Option"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Option(Element element) : base(element, ElementTags) {}
+        public Option(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		/// <summary>
 		/// Returns the value.
@@ -174,11 +150,6 @@ namespace WatiN.Core
 		    {
 		        ParentSelectList.FireEventNoWait("onchange");
 		    }
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Option(domContainer, element);
 		}
 	}
 }

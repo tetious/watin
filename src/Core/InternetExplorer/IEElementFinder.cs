@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -31,20 +32,23 @@ namespace WatiN.Core.InternetExplorer
 	/// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
 	/// the given <see cref="BaseConstraint"/>.
 	/// </summary>
-	public class IEElementFinder : ElementFinderBase
+	internal sealed class IEElementFinder : NativeElementFinder
 	{
-        public IEElementFinder(List<ElementTag> elementTags, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, elementCollection, domContainer) { }
+        public IEElementFinder(IList<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
+            : base(elementTags, constraint, elementCollection, domContainer)
+        {
+        }
 
-        public IEElementFinder(List<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(elementTags, constraint, elementCollection, domContainer) { }
+        /// <inheritdoc />
+        protected override ElementFinder FilterImpl(BaseConstraint findBy)
+        {
+            return new IEElementFinder(ElementTags, Constraint & findBy, ElementCollection, DomContainer);
+        }
 
-		public IEElementFinder(string tagName, string inputType, IElementCollection elementCollection, DomContainer domContainer) : base(tagName, inputType, elementCollection, domContainer) {}
-		
-        public IEElementFinder(string tagName, string inputType, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer) : base(tagName, inputType, constraint, elementCollection, domContainer) {}
-
-        protected override List<INativeElement> FindElements(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IElementCollection elementCollection)
-	    {
-            var elements = GetElementCollection((IHTMLElementCollection)elementCollection.Elements, elementTag.TagName);
-            var matchingElements = new List<INativeElement>();
+        /// <inheritdoc />
+        protected override IEnumerable<Element> FindElementsByTag(ElementTag elementTag)
+        {
+            var elements = GetElementCollection((IHTMLElementCollection)ElementCollection.Elements, elementTag.TagName);
 
 	        if (elements != null)
 	        {
@@ -52,76 +56,34 @@ namespace WatiN.Core.InternetExplorer
 	            var length = elements.length;
 	            for (var index = 0; index < length; index++ )
                 {
-                    var element = (IHTMLElement)elements.item(index, null);
-                    if (element != null && FinishedAddingChildrenThatMetTheConstraints(constraint, elementTag, attributeBag, returnAfterFirstMatch, element, matchingElements))
-                    {
-                        return matchingElements;
-                    }
+                    var htmlElement = (IHTMLElement)elements.item(index, null);
+                    var element = WrapElementIfMatch(new IEElement(htmlElement));
+                    if (element != null)
+                        yield return element;
                 }
 	        }
-
-	        return matchingElements;
 	    }
 
-	    protected override INativeElement FindElementById(string Id, IElementCollection elementCollection)
+        /// <inheritdoc />
+        protected override IEnumerable<Element> FindElementsById(string id)
 	    {
-	        var elements = (IHTMLElementCollection)elementCollection.Elements;
-	        
-            if (elements == null) return null;
-
-	        var elementCollection3 = elements as IHTMLElementCollection3;
-
-	        if (elementCollection3 == null) return null;
-
-	        var item = elementCollection3.namedItem(Id);
-            
-	        var element = item as IHTMLElement;
-
-	        if (element == null && (item as IHTMLElementCollection) != null)
-	        {
-	            element = (IHTMLElement) ((IHTMLElementCollection) item).item(null, 0);
-	        }
-
-	        return element == null ? null : new IEElement(element);
-	    }
-
-        protected bool FinishedAddingChildrenThatMetTheConstraints(BaseConstraint constraint, ElementTag elementTag, ElementAttributeBag attributeBag, bool returnAfterFirstMatch, IHTMLElement element, ICollection<INativeElement> matchingElements)
-        {
-            var nativeElement = _domContainer.NativeBrowser.CreateElement(element);
-
-            return FinishedAddingChildrenThatMetTheConstraints(nativeElement, attributeBag, elementTag, constraint, matchingElements, returnAfterFirstMatch);
-        }
-
-        protected override void WaitUntilElementReadyStateIsComplete(INativeElement element)
-		{
-			//TODO: See if this method could be dropped, it seems to give
-			//      more trouble (uninitialized state of elements)
-			//      then benefits (I just introduced this method to be on 
-			//      the save side)
-
-			if (ElementTag.IsValidElement(element, Image.ElementTags))
-			{
-				return;
-			}
-
-			// Wait if the readystate of an element is BETWEEN
-			// Uninitialized and Complete. If it's uninitialized,
-			// it's quite probable that it will never reach Complete.
-			// Like for elements that could not load an image or ico
-			// or some other bits not part of the HTML page.     
-	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
-            var ihtmlElement2 = ((IHTMLElement2)element.Object);
-            var success = tryActionUntilTimeOut.Try(() =>
+	        var htmlElements = ElementCollection.Elements as IHTMLElementCollection3;
+            if (htmlElements != null)
             {
-                var readyState = ihtmlElement2.readyStateValue;
-                return (readyState == 0 || readyState == 4);
-            });
+                var htmlItem = htmlElements.namedItem(id);
+                var htmlElement = htmlItem as IHTMLElement;
 
-	        if (success) return;
+                if (htmlElement == null && (htmlItem as IHTMLElementCollection) != null)
+                    htmlElement = (IHTMLElement) ((IHTMLElementCollection) htmlItem).item(null, 0);
 
-            var ihtmlElement = ((IHTMLElement) element.Object);
-            throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
-		}
+                if (htmlElement != null)
+                {
+                    var element = WrapElementIfMatch(new IEElement(htmlElement));
+                    if (element != null)
+                        yield return element;
+                }
+            }
+	    }
 
         private static IHTMLElementCollection GetElementCollection(IHTMLElementCollection elements, string tagName)
         {

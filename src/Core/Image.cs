@@ -25,32 +25,13 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML img element.
 	/// </summary>
-    public class Image : Element<Image>
+    [ElementTag("img")]
+    [ElementTag("input", InputType = "image")]
+    public sealed class Image : Element<Image>
 	{
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag> { new ElementTag("img"), new ElementTag("input", "image") };
-				}
-
-				return elementTags;
-			}
-		}
-
         public Image(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
-		public Image(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Image"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Image(Element element) : base(element, ElementTags) {}
+        public Image(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		public string Src
 		{
@@ -82,11 +63,6 @@ namespace WatiN.Core
 			{
 				return GetAttributeValue("name");
 			}
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Image(domContainer, element);
 		}
 	}
 }

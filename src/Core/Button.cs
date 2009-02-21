@@ -25,27 +25,13 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// button, submit, image and reset.
 	/// </summary>
-    public class Button : Element<Button>
+    [ElementTag("input", InputType = "button")]
+    [ElementTag("input", InputType = "submit")]
+    //[ElementTag("input", InputType = "image")]
+    [ElementTag("input", InputType = "reset")]
+    [ElementTag("button")]
+    public sealed class Button : Element<Button>
     {
-        private static List<ElementTag> elementTags;
-
-        public static List<ElementTag> ElementTags
-		{
-			get
-			{
-				if (elementTags == null)
-				{
-                    elementTags = new List<ElementTag>
-					                  {
-					                      new ElementTag("input", "button submit image reset"), 
-                                          new ElementTag("button")
-					                  };
-				}
-
-				return elementTags;
-			}
-		}
-
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Button"/> class.
 		/// Mainly used by WatiN internally.
@@ -60,13 +46,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="domContainer">The <see cref="DomContainer" /> the element is in.</param>
 		/// <param name="finder">The input button or button element.</param>
-		public Button(DomContainer domContainer, INativeElementFinder finder) : base(domContainer, finder) {}
-
-		/// <summary>
-		/// Initialises a new instance of the <see cref="Button"/> class based on <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">The element.</param>
-		public Button(Element element) : base(element, ElementTags) {}
+        public Button(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
 		/// <summary>
 		/// The text displayed at the button.
@@ -95,11 +75,6 @@ namespace WatiN.Core
 		public override string ToString()
 		{
 			return Value;
-		}
-
-		internal new static Element New(DomContainer domContainer, INativeElement element)
-		{
-			return new Button(domContainer, element);
 		}
 	}
 }
