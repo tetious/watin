@@ -138,22 +138,12 @@ namespace WatiN.Core.Native
 
         private static string GetElementIdToMatchIfPossible(BaseConstraint constraint)
         {
-            if (!OnlyAndConstraints(constraint))
+            if (constraint.HasAnd)
                 return null;
 
             var idConstraint = RetrieveIdConstraint(constraint);
             
             return idConstraint == null ? null : idConstraint.Value;
-        }
-
-        private static bool OnlyAndConstraints(BaseConstraint constraint)
-        {
-            if (constraint == null)
-                return false;
-            if (constraint.HasOr)
-                return false;
-
-            return !constraint.HasAnd || OnlyAndConstraints(constraint.GetAnd);
         }
 
         private static AttributeConstraint RetrieveIdConstraint(BaseConstraint constraint)
@@ -164,14 +154,12 @@ namespace WatiN.Core.Native
             var attributeConstraint = constraint as AttributeConstraint;
 
             if (attributeConstraint == null)
-            {
-                return RetrieveIdConstraint(constraint.GetAnd as AttributeConstraint);
-            }
+                return null;
 
             var validIdConstraint = StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) &&
                 attributeConstraint.Comparer.GetType() == typeof (StringComparer);
 
-            return validIdConstraint ? attributeConstraint : RetrieveIdConstraint(attributeConstraint.GetAnd);
+            return validIdConstraint ? attributeConstraint : null;
         }
     }
 }

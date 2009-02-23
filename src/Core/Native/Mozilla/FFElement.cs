@@ -89,7 +89,7 @@ namespace WatiN.Core.Native.Mozilla
 
                 var propertyValue = GetProperty(propertyName);
 
-                if (propertyName == "textContent") propertyValue = InnerHtmlToInnerText(propertyValue);
+                if (propertyName == "innerHTML") propertyValue = InnerHtmlToInnerText(propertyValue);
 
                 return propertyValue;
             }

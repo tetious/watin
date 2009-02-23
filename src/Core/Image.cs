@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,8 +24,8 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML img element.
 	/// </summary>
-    [ElementTag("img")]
     [ElementTag("input", InputType = "image")]
+    [ElementTag("img")]
     public sealed class Image : Element<Image>
 	{
         public Image(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }

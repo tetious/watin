@@ -21,6 +21,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -38,11 +39,10 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ImageElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Image>();
+            var elementTags = ElementFactory.GetElementTags<Image>();
             Assert.AreEqual(2, elementTags.Count, "2 elementtags expected");
-			Assert.AreEqual("img", elementTags[0].TagName);
-			Assert.AreEqual("input", elementTags[1].TagName);
-			Assert.AreEqual("image", elementTags[1].InputType);
+		    Assert.That(elementTags, List.Contains(new ElementTag("img")));
+            Assert.That(elementTags, List.Contains(new ElementTag("input", "image")));
 		}
 
 		[Test]

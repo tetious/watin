@@ -25,7 +25,9 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML td or th element.
 	/// </summary>
     [ElementTag("td")]
-    [ElementTag("th")]
+    // TODO: Adding th support in this way would break many test out in the field
+    //       maybe add a TableHeaderCell element instead.
+    //[ElementTag("th")] S
     public sealed class TableCell : ElementsContainer<TableCell>
 	{
 		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
