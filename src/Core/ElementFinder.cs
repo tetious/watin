@@ -82,16 +82,7 @@ namespace WatiN.Core
         /// <value>The element tag names.</value>
         public IEnumerable<string> ElementTagNames
         {
-            get
-            {
-                var tagNames = new List<string>();
-                foreach (var elementTag in elementTags)
-                {
-                    if (tagNames.Contains(elementTag.TagName)) continue;
-                    tagNames.Add(elementTag.TagName);
-                }
-                return tagNames;
-            }
+            get { return ElementTag.ElementTagNames(ElementTags); }
         }
 
         /// <summary>

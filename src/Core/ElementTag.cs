@@ -252,5 +252,16 @@ namespace WatiN.Core
         {
             return string.Compare(tagName, ElementsSupport.InputTagName, StringComparison.InvariantCultureIgnoreCase) == 0;
         }
-    }
+
+	    public static IEnumerable<string> ElementTagNames(IEnumerable<ElementTag> elementTags)
+	    {
+            var tagNames = new List<string>();
+            foreach (var elementTag in elementTags)
+            {
+                if (tagNames.Contains(elementTag.TagName)) continue;
+                tagNames.Add(elementTag.TagName);
+            }
+            return tagNames;
+	    }
+	}
 }
