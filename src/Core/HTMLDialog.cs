@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using mshtml;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;

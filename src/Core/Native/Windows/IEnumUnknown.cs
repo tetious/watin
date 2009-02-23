@@ -16,30 +16,25 @@
 
 #endregion Copyright
 
-using WatiN.Core.Native.Windows;
+using System.Runtime.InteropServices;
 
-namespace WatiN.Core.DialogHandlers
+namespace WatiN.Core.Native.Windows
 {
-	public class ConfirmDialogHandler : JavaDialogHandler
-	{
-		public WinButton CancelButton
-		{
-			get
-			{
-				ThrowExceptionIfDialogDoesNotExist();
+    [ComImport, Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IEnumUnknown
+    {
+        [PreserveSig]
+        int Next(
+            [In, MarshalAs(UnmanagedType.U4)] int celt,
+            [Out, MarshalAs(UnmanagedType.IUnknown)] out object rgelt,
+            [Out, MarshalAs(UnmanagedType.U4)] out int pceltFetched
+            );
 
-				return new WinButton(2, window.Hwnd);
-			}
-		}
+        [PreserveSig]
+        int Skip([In, MarshalAs(UnmanagedType.U4)] int celt);
 
-		public override bool CanHandleDialog(Window window)
-		{
-			return (window.StyleInHex == "94C801C5" && ButtonWithId1Exists(window.Hwnd));
-		}
+        void Reset();
 
-		protected override int getOKButtonID()
-		{
-			return 1;
-		}
-	}
+        void Clone(out IEnumUnknown ppenum);
+    }
 }

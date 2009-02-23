@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -30,6 +30,7 @@
 using System;
 using System.Runtime.InteropServices;
 using mshtml;
+using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer

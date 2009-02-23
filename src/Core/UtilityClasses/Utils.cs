@@ -28,7 +28,7 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
-using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UtilityClasses
 {

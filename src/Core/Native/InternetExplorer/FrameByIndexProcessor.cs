@@ -19,6 +19,7 @@
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.Native.InternetExplorer
 {

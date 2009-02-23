@@ -18,7 +18,7 @@
 
 using System;
 
-namespace WatiN.Core.Native
+namespace WatiN.Core.Native.Windows
 {
     public class Window
     {

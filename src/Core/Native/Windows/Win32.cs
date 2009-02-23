@@ -24,7 +24,7 @@ using SHDocVw;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UtilityClasses;
 
-namespace WatiN.Core.Native
+namespace WatiN.Core.Native.Windows
 {
     /// <summary>
     /// Class that contains native win32 API support.
@@ -57,52 +57,6 @@ namespace WatiN.Core.Native
         public const int GW_HWNDNEXT = 2;
 
         #endregion Constants
-
-        #region Structs
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct WINDOWPLACEMENT
-        {
-            public int length;
-            public int flags;
-            public int showCmd;
-            public POINT ptMinPosition;
-            public POINT ptMaxPosition;
-            public RECT rcNormalPosition;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct POINT
-        {
-            public int X;
-            public int Y;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct WINDOWINFO
-        {
-            public uint cbSize;
-            public RECT rcWindow;
-            public RECT rcClient;
-            public uint dwStyle;
-            public uint dwExStyle;
-            public uint dwWindowStatus;
-            public uint cxWindowBorders;
-            public uint cyWindowBorders;
-            public ushort atomWindowType;
-            public ushort wCreatorVersion;
-        }
-
-        #endregion Structs
 
         #region Enum delegates
 
@@ -331,49 +285,6 @@ namespace WatiN.Core.Native
 
         [DllImport("gdi32.dll")]
         internal static extern bool DeleteObject(IntPtr hObject);
-
-        #region ComImport Interfaces
-
-        [ComImport, Guid("00000100-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IEnumUnknown
-        {
-            [PreserveSig]
-            int Next(
-                [In, MarshalAs(UnmanagedType.U4)] int celt,
-                [Out, MarshalAs(UnmanagedType.IUnknown)] out object rgelt,
-                [Out, MarshalAs(UnmanagedType.U4)] out int pceltFetched
-                );
-
-            [PreserveSig]
-            int Skip([In, MarshalAs(UnmanagedType.U4)] int celt);
-
-            void Reset();
-
-            void Clone(out IEnumUnknown ppenum);
-        }
-
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("0000011B-0000-0000-C000-000000000046")]
-        internal interface IOleContainer
-        {
-            [PreserveSig]
-            int ParseDisplayName(
-                [In, MarshalAs(UnmanagedType.Interface)] object pbc,
-                [In, MarshalAs(UnmanagedType.BStr)] string pszDisplayName,
-                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pchEaten,
-                [Out, MarshalAs(UnmanagedType.LPArray)] object[] ppmkOut
-                );
-
-            [PreserveSig]
-            int EnumObjects(
-                [In, MarshalAs(UnmanagedType.U4)] tagOLECONTF grfFlags,
-                out IEnumUnknown ppenum
-                );
-
-            [PreserveSig]
-            int LockContainer(bool fLock);
-        }
-
-        #endregion ComImport Interfaces
 
         #region Methods
 

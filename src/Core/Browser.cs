@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using WatiN.Core.Logging;
-using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -30,7 +30,7 @@ namespace WatiN.Core
         /// <returns>The style currently applied to the ie window.</returns>
         public NativeMethods.WindowShowStyle GetWindowStyle()
         {
-            var placement = new NativeMethods.WINDOWPLACEMENT();
+            var placement = new WINDOWPLACEMENT();
             placement.length = Marshal.SizeOf(placement);
 
             NativeMethods.GetWindowPlacement(hWnd, ref placement);

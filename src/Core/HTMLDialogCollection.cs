@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using WatiN.Core.Constraints;
 using WatiN.Core.Native.InternetExplorer;
-using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core
 {

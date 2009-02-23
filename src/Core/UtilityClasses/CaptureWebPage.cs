@@ -34,7 +34,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using mshtml;
-using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UtilityClasses
 {

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Native.Windows;
+using IServiceProvider = WatiN.Core.Native.Windows.IServiceProvider;
 
 namespace WatiN.Core.Native.InternetExplorer
 {

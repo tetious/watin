@@ -19,7 +19,7 @@
 using System;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
-using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {

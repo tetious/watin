@@ -142,7 +142,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnumerableElementFinder.cs" />
-    <Compile Include="Native\Hwnd.cs" />
+    <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />
     <Compile Include="Native\INativeDocument.cs" />
@@ -159,7 +159,6 @@
     <Compile Include="Native\InternetExplorer\ShellWindows2.cs" />
     <Compile Include="Native\InternetExplorer\IEUtils.cs" />
     <Compile Include="Native\InternetExplorer\WaitForComplete.cs" />
-    <Compile Include="Native\IServiceProvider.cs" />
     <Compile Include="Native\Mozilla\FFBrowser.cs" />
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\Mozilla\FFElement.cs" />
@@ -168,10 +167,17 @@
     <Compile Include="Native\Mozilla\FFWaitForComplete.cs" />
     <Compile Include="Native\Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Native\Mozilla\FireFoxException.cs" />
-    <Compile Include="Native\Win32.cs" />
-    <Compile Include="Native\WinButton.cs" />
-    <Compile Include="Native\Window.cs" />
-    <Compile Include="Native\WinInet.cs" />
+    <Compile Include="Native\Windows\IEnumUnknown.cs" />
+    <Compile Include="Native\Windows\IOleContainer.cs" />
+    <Compile Include="Native\Windows\IServiceProvider.cs" />
+    <Compile Include="Native\Windows\Point.cs" />
+    <Compile Include="Native\Windows\Rect.cs" />
+    <Compile Include="Native\Windows\Win32.cs" />
+    <Compile Include="Native\Windows\WinButton.cs" />
+    <Compile Include="Native\Windows\Window.cs" />
+    <Compile Include="Native\InternetExplorer\WinInet.cs" />
+    <Compile Include="Native\Windows\WindowInfo.cs" />
+    <Compile Include="Native\Windows\WindowPlacement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

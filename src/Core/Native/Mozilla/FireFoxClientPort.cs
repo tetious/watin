@@ -25,6 +25,7 @@ using System.Text;
 using System.Windows.Forms;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
+using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.Mozilla

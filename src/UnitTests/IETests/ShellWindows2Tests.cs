@@ -9,7 +9,7 @@ using WatiN.Core.Native.InternetExplorer;
 namespace WatiN.Core.UnitTests.IETests
 {
     [TestFixture]
-    public class ShellWindows2Tests
+    public class ShellWindows2Tests 
     {
         [Test]
         public void ShouldCount1IEInstance()
@@ -50,14 +50,19 @@ namespace WatiN.Core.UnitTests.IETests
                 // GIVEN
                 process1 = StartIE("about:blank");
                 Assert.That(process1, Is.Not.Null, "pre-condition 1: Expected an IE process");
-                
-                process2 = StartIE("about:blank");
+
+                process2 = StartIE(BaseWatiNTest.FramesetURI.AbsolutePath);
                 Assert.That(process2, Is.Not.Null, "pre-condition 2: Expected an IE process");
 
-                var documents2 = new ShellWindows2();
+                var browsers = new ShellWindows2();
 
                 // WHEN
-                var count = documents2.Count;
+                var count = browsers.Count;
+
+                foreach (IWebBrowser2 browser in browsers)
+                {
+                    Console.WriteLine(browser.LocationURL);
+                }
 
                 // THEN
                 Assert.That(count, Is.EqualTo(2), "unexpected count");
