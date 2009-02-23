@@ -170,7 +170,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IETests\ShellWindows2Tests.cs" />
-    <Compile Include="IETests\WindowEnumeratorTest.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>

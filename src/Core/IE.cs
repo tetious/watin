@@ -632,9 +632,9 @@ namespace WatiN.Core
 			do
 			{
 				m_Proc.Refresh();
-				var mainWindowHandle = (int) m_Proc.MainWindowHandle;
+				var mainWindowHandle = m_Proc.MainWindowHandle;
 
-				if (mainWindowHandle != 0)
+				if (mainWindowHandle != IntPtr.Zero)
 				{
 					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Settings.AttachToIETimeOut);
 				}
@@ -702,24 +702,18 @@ namespace WatiN.Core
 
 		private static IWebBrowser2 findInternetExplorer(BaseConstraint findBy)
 		{
-			var allBrowsers = new ShellWindows();
-
-			var browserCount = allBrowsers.Count;
-			var browserCounter = 0;
-
+			var allBrowsers = new ShellWindows2();
 			var attributeBag = new IEAttributeBag();
 
-			while (browserCounter < browserCount)
-			{
-				attributeBag.InternetExplorer = (IWebBrowser2) allBrowsers.Item(browserCounter);
+		    foreach (IWebBrowser2 browser in allBrowsers)
+		    {
+                attributeBag.InternetExplorer = browser;
 
-				if (findBy.Compare(attributeBag))
-				{
-					return attributeBag.InternetExplorer;
-				}
-
-				browserCounter++;
-			}
+                if (findBy.Compare(attributeBag))
+                {
+                    return attributeBag.InternetExplorer;
+                }
+		    }
 
 			return null;
 		}

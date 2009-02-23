@@ -144,7 +144,7 @@ namespace WatiN.Core.Native
             if (!OnlyAndConstraints(constraint))
                 return null;
 
-            AttributeConstraint idConstraint = RetrieveIdConstraint(constraint as AttributeConstraint);
+            AttributeConstraint idConstraint = RetrieveIdConstraint(constraint);
             if (idConstraint == null)
                 return null;
 
@@ -161,15 +161,22 @@ namespace WatiN.Core.Native
             return !constraint.HasAnd || OnlyAndConstraints(constraint.GetAnd);
         }
 
-        private static AttributeConstraint RetrieveIdConstraint(AttributeConstraint attributeConstraint)
+        private static AttributeConstraint RetrieveIdConstraint(BaseConstraint constraint)
         {
-            if (attributeConstraint == null)
+            if (constraint == null)
                 return null;
+
+            var attributeConstraint = constraint as AttributeConstraint;
+
+            if (attributeConstraint == null)
+            {
+                return RetrieveIdConstraint(constraint.GetAnd as AttributeConstraint);
+            }
 
             var validIdConstraint = StringComparer.AreEqual(attributeConstraint.AttributeName, "id", true) &&
                 attributeConstraint.Comparer.GetType() == typeof (StringComparer);
 
-            return validIdConstraint ? attributeConstraint : RetrieveIdConstraint(attributeConstraint.GetAnd as AttributeConstraint);
+            return validIdConstraint ? attributeConstraint : RetrieveIdConstraint(attributeConstraint.GetAnd);
         }
     }
 }

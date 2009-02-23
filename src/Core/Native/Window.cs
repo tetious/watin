@@ -17,13 +17,12 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Native;
 
 namespace WatiN.Core.Native
 {
     public class Window
     {
-        private IntPtr hwnd;
+        private readonly IntPtr hwnd;
 
         public Window(IntPtr hwnd)
         {
@@ -38,6 +37,11 @@ namespace WatiN.Core.Native
         public virtual IntPtr ParentHwnd
         {
             get { return NativeMethods.GetParent(Hwnd); }
+        }
+
+        public bool HasParentWindow
+        {
+            get { return ParentHwnd != IntPtr.Zero; }
         }
 
         public virtual string Title

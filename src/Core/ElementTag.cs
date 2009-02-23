@@ -24,7 +24,7 @@ using WatiN.Core.Native;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// This class is mainly used by WatiN internally and defines 
+	/// This struct is mainly used by WatiN internally and defines 
 	/// the supported html tags for inheritors of <see cref="Element"/>.
 	/// </summary>
 	public struct ElementTag : IEquatable<ElementTag>

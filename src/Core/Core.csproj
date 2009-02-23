@@ -159,6 +159,7 @@
     <Compile Include="Native\InternetExplorer\ShellWindows2.cs" />
     <Compile Include="Native\InternetExplorer\IEUtils.cs" />
     <Compile Include="Native\InternetExplorer\WaitForComplete.cs" />
+    <Compile Include="Native\IServiceProvider.cs" />
     <Compile Include="Native\Mozilla\FFBrowser.cs" />
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\Mozilla\FFElement.cs" />

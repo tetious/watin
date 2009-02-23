@@ -20,9 +20,6 @@ using System.Collections;
 using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
-using WatiN.Core.Native;
-using WatiN.Core.UtilityClasses;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native.InternetExplorer

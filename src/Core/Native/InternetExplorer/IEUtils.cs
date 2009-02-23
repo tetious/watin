@@ -1,7 +1,35 @@
-﻿using System;
+﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+
+//Copyright 2006-2009 Jeroen van Menen
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+// ---------------------------------------------------------------------------
+//
+// Copyright (c) Doug Weems.
+// http://www.codeproject.com/cs/media/IECapture.asp
+// 
+// You may use this code for fun and knowledge.
+// You can compile and use the application as is or copy out what you need.  
+// This code makes for a really useful tool.
+// 
+// ---------------------------------------------------------------------------
+
+#endregion Copyright
+
+using System;
 using System.Runtime.InteropServices;
 using mshtml;
-using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -13,8 +41,6 @@ namespace WatiN.Core.Native.InternetExplorer
             var IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
 
             var lRes = 0;
-
-//            if (!IsIETridentDlgFrame(hWnd)) return null;
 
             if (!IsIEServerWindow(hWnd))
             {
@@ -52,7 +78,5 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
         }
-
-
     }
 }

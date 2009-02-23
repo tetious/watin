@@ -33,6 +33,10 @@ namespace WatiN.Core.Native
     {
         private static string enumChildWindowClassName;
 
+        public delegate bool EnumCallBackDelegate(IntPtr hwnd, ref IntPtr lParam);
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        public static extern bool EnumWindows(EnumCallBackDelegate lpEnumFunc, IntPtr lParam);
+
         #region Constants
 
         internal const int WM_SYSCOMMAND = 0x0112;
@@ -100,9 +104,13 @@ namespace WatiN.Core.Native
 
         #endregion Structs
 
-        public delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
+        #region Enum delegates
 
-        internal delegate bool EnumChildProc(IntPtr hWnd, ref IntPtr lParam);
+        public delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
+        public delegate bool EnumWindowProc(IntPtr hwnd, ref IntPtr lParam);
+        public delegate bool EnumChildWindowProc(IntPtr hWnd, ref IntPtr lParam);
+
+        #endregion
 
         #region Enums
 
@@ -184,11 +192,11 @@ namespace WatiN.Core.Native
         /// <summary>
         /// Prevent creating an instance of this class (contains only static members)
         /// </summary>
-        private NativeMethods() {}
+        private NativeMethods() { }
 
         #region DllImport User32
 
-        [DllImport("user32.dll", CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool EnumThreadWindows(int threadId, EnumThreadProc pfnEnum, IntPtr lParam);
 
         [DllImport("user32", EntryPoint = "GetClassNameA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -200,31 +208,31 @@ namespace WatiN.Core.Native
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, IntPtr windowTitle);
 
-        [DllImport("user32.dll", SetLastError=true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
-        [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern IntPtr GetDlgItem(IntPtr handleToWindow, int ControlId);
 
         /// <summary>
         /// The GetForegroundWindow function returns a handle to the foreground window.
         /// </summary>
-        [DllImport("user32.dll", SetLastError=true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
 
         [DllImport("user32.dll")]
         internal static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
 
-        [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern int GetWindowText(IntPtr handleToWindow, StringBuilder windowText, int maxTextLength);
 
-        [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern int GetWindowTextLength(IntPtr hWnd);
 
-        [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
         [DllImport("user32.dll")]
@@ -236,21 +244,24 @@ namespace WatiN.Core.Native
         [DllImport("user32.dll")]
         internal static extern bool IsWindowVisible(IntPtr hWnd);
 
-        [DllImport("user32.dll", CharSet=CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern IntPtr SendMessage(HandleRef hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport("user32.dll", SetLastError=true)]
-        [return : MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr SetFocus(IntPtr hWnd);
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildProc lpEnumFunc, ref IntPtr lParam);
+        public static extern Int32 EnumWindows(EnumWindowProc lpEnumFunc, ref IntPtr lParam);
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildWindowProc lpEnumFunc, ref IntPtr lParam);
 
         [DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern Int32 RegisterWindowMessage(string lpString);
@@ -371,13 +382,13 @@ namespace WatiN.Core.Native
             var oc = processor.HTMLDocument() as IOleContainer;
 
             if (oc == null) return;
-	        
+
             IEnumUnknown eu;
             var hr = oc.EnumObjects(tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
             Marshal.ThrowExceptionForHR(hr);
 
             if (eu == null) return;
-	        
+
             try
             {
                 object pUnk;
@@ -467,14 +478,14 @@ namespace WatiN.Core.Native
 
             var className = new StringBuilder(maxCapacity);
             var lRes = GetClassName(hwnd, className, maxCapacity);
-			
+
             return lRes == 0 ? String.Empty : className.ToString();
         }
 
         internal static Int64 GetWindowStyle(IntPtr hwnd)
         {
             var info = new WINDOWINFO();
-            info.cbSize = (uint) Marshal.SizeOf(info);
+            info.cbSize = (uint)Marshal.SizeOf(info);
             GetWindowInfo(hwnd, ref info);
 
             return Convert.ToInt64(info.dwStyle);
@@ -492,8 +503,8 @@ namespace WatiN.Core.Native
             enumChildWindowClassName = className;
 
             // Go throught the child windows of the dialog window
-            EnumChildProc childProc = EnumChildWindows;
-            EnumChildWindows(parentHwnd, childProc, ref hWnd);
+            EnumChildWindowProc childWindowProc = EnumChildWindows;
+            EnumChildWindows(parentHwnd, childWindowProc, ref hWnd);
 
             return hWnd;
         }
