@@ -24,11 +24,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// button, submit, image and reset.
 	/// </summary>
-    [ElementTag("input", InputType = "button")]
-    [ElementTag("input", InputType = "submit")]
+    [ElementTag("input", InputType = "button", Index = 0)]
+    [ElementTag("input", InputType = "submit", Index = 1)]
     //[ElementTag("input", InputType = "image")]
-    [ElementTag("input", InputType = "reset")]
-    [ElementTag("button")]
+    [ElementTag("input", InputType = "reset", Index = 2)]
+    [ElementTag("button", Index = 3)]
     public sealed class Button : Element<Button>
     {
 		/// <summary>

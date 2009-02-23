@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
             Assert.AreEqual("textarea", elementTags[2].InputType);
             Assert.AreEqual("input", elementTags[3].TagName);
             Assert.AreEqual("hidden", elementTags[3].InputType);
-            Assert.AreEqual("textarea", elementTags[5].TagName);
+            Assert.AreEqual("textarea", elementTags[4].TagName);
 		}
 
 		[Test]
@@ -257,7 +257,7 @@ namespace WatiN.Core.UnitTests
 		                        }
 		                        catch (ElementNotFoundException e)
 		                        {
-		                            Assert.That(e.Message, Text.StartsWith("Could not find INPUT (text password textarea hidden) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid' at file://"));
+                                    Assert.That(e.Message, Text.StartsWith("Could not find INPUT (hidden) or INPUT (password) or INPUT (text) or INPUT (textarea) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid' at file://"));
 		                            Assert.That(e.Message, Text.EndsWith("main.html"));
 		                        }
 		                    });

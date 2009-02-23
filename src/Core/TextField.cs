@@ -30,11 +30,11 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML input element of type 
 	/// text password textarea hidden and for a HTML textarea element.
 	/// </summary>
-    [ElementTag("input", InputType = "text")]
-    [ElementTag("input", InputType = "password")]
-    [ElementTag("input", InputType = "textarea")]
-    [ElementTag("input", InputType = "hidden")]
-    [ElementTag("textarea")]
+    [ElementTag("input", InputType = "text", Index = 0)]
+    [ElementTag("input", InputType = "password", Index = 1)]
+    [ElementTag("input", InputType = "textarea", Index = 2)]
+    [ElementTag("input", InputType = "hidden", Index = 3)]
+    [ElementTag("textarea", Index = 4)]
     public sealed class TextField : Element<TextField>
 	{
 		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }

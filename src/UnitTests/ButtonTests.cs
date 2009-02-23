@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -203,10 +202,10 @@ namespace WatiN.Core.UnitTests
             var elementTags = ElementFactory.GetElementTags<Button>();
             Assert.AreEqual(4, elementTags.Count, "4 elementtags expected");
 
-            Assert.That(elementTags, List.Contains(new ElementTag("input", "button")));
-            Assert.That(elementTags, List.Contains(new ElementTag("input", "submit")));
-            Assert.That(elementTags, List.Contains(new ElementTag("input", "reset")));
-            Assert.That(elementTags, List.Contains(new ElementTag("button")));
+            Assert.That(elementTags[0], Is.EqualTo(new ElementTag("input", "button")));
+            Assert.That(elementTags[1], Is.EqualTo(new ElementTag("input", "submit")));
+            Assert.That(elementTags[2], Is.EqualTo(new ElementTag("input", "reset")));
+            Assert.That(elementTags[3], Is.EqualTo(new ElementTag("button")));
 		}
 
 		[Test]

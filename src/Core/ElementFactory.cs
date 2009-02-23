@@ -45,7 +45,7 @@ namespace WatiN.Core
 				if (!type.IsSubclassOf(typeof(Element)))
                     continue;
 
-                var tagAttributes = (ElementTagAttribute[]) type.GetCustomAttributes(typeof(ElementTagAttribute), false);
+			    var tagAttributes = (ElementTagAttribute[]) type.GetCustomAttributes(typeof(ElementTagAttribute), false);
                 if (tagAttributes.Length == 0)
                     continue;
 
@@ -56,7 +56,9 @@ namespace WatiN.Core
                 ElementFactoryDelegate factory = (container, nativeElement) =>
                     (Element) constructor.Invoke(new object[] { container, nativeElement });
 
-                ElementTag[] tags = Array.ConvertAll(tagAttributes, x => x.ToElementTag());
+			    var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
+                elementTagAttributes.Sort();
+                var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
                 elementTagsByType.Add(type, tags);
 
                 foreach (ElementTag tag in tags)

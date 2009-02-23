@@ -6,7 +6,7 @@ namespace WatiN.Core
     /// Specifies the HTML tags associated with a given <see cref="Element" /> class.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=false)]
-    public class ElementTagAttribute : Attribute
+    public class ElementTagAttribute : Attribute, IComparable<ElementTagAttribute>
     {
         /// <summary>
         /// Associates a tag with an <see cref="Element" /> class.
@@ -32,12 +32,22 @@ namespace WatiN.Core
         public string InputType { get; set; }
 
         /// <summary>
+        /// Gets or sets the "index" attribute value to force a specific order of the ElementTag in a list of ElementTags.
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
         /// Creates an <see cref="ElementTag" /> object from the contents of the attribute.
         /// </summary>
         /// <returns>The element tag</returns>
         public ElementTag ToElementTag()
         {
             return new ElementTag(TagName, InputType);
+        }
+
+        public int CompareTo(ElementTagAttribute other)
+        {
+            return Index.CompareTo(other.Index);
         }
     }
 }
