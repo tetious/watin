@@ -85,12 +85,10 @@ namespace WatiN.Core.Constraints
 				{
                     var htmlTableCell = (IHTMLTableCell)tableCellElements.item(columnIndex, null);
 				    var elementComparer = comparer as ICompareElement;
-                    
-                    var tableCell = new TableCell(element.DomContainer, new IEElement(htmlElement));
-                    if (elementComparer != null)
-                        return elementComparer.Compare(tableCell);
 
-				    return base.Compare(tableCell);
+                    var tableCell = new TableCell(element.DomContainer, new IEElement(htmlTableCell));
+                    
+                    return elementComparer != null ? elementComparer.Compare(tableCell) : base.Compare(tableCell);
 				}
 			}
 
