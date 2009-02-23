@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using WatiN.Core.Comparers;
 using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
@@ -33,7 +34,7 @@ namespace WatiN.Core.Constraints
         /// <returns>Will always return <c>true</c></returns>
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-			return true;
+            return EvaluateAndOrAttributes(attributeBag, true);
 		}
 
         /// <summary>
