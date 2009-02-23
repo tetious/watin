@@ -43,9 +43,9 @@ namespace WatiN.Core.Native.InternetExplorer
         }
 
         /// <inheritdoc />
-        protected override IEnumerable<Element> FindElementsByTag(ElementTag elementTag)
+        protected override IEnumerable<Element> FindElementsByTag(string tagName)
         {
-            var elements = GetElementCollection((IHTMLElementCollection)ElementCollection.Elements, elementTag.TagName);
+            var elements = GetElementCollection((IHTMLElementCollection)ElementCollection.Elements, tagName);
 
 	        if (elements != null)
 	        {

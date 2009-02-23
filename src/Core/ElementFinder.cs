@@ -20,7 +20,7 @@ namespace WatiN.Core
         /// <param name="findBy">The constraint used by the finder to filter elements, or null if no additional constraint</param>
         protected ElementFinder(IList<ElementTag> elementTags, BaseConstraint findBy)
         {
-            this.elementTags = elementTags ?? new[] { ElementTag.Any };
+            this.elementTags = new ReadOnlyCollection<ElementTag>(elementTags ?? new[] { ElementTag.Any });
             this.findBy = findBy ?? new AlwaysTrueConstraint();
         }
 
@@ -73,7 +73,25 @@ namespace WatiN.Core
         /// </summary>
         public IList<ElementTag> ElementTags
         {
-            get { return new ReadOnlyCollection<ElementTag>(elementTags); }
+            get { return elementTags; }
+        }
+
+        /// <summary>
+        /// Gets a list of unique tag names from <see cref="ElementTags"/>.
+        /// </summary>
+        /// <value>The element tag names.</value>
+        public IEnumerable<string> ElementTagNames
+        {
+            get
+            {
+                var tagNames = new List<string>();
+                foreach (var elementTag in elementTags)
+                {
+                    if (tagNames.Contains(elementTag.TagName)) continue;
+                    tagNames.Add(elementTag.TagName);
+                }
+                return tagNames;
+            }
         }
 
         /// <summary>
@@ -89,7 +107,7 @@ namespace WatiN.Core
         /// </summary>
         public string ElementTagsToString()
         {
-            return ElementTag.ElementTagsToString(elementTags);
+            return ElementTag.ElementTagsToString(ElementTags);
         }
 
         /// <summary>

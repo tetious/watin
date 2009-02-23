@@ -40,7 +40,7 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <inheritdoc />
-        protected override IEnumerable<Element> FindElementsByTag(ElementTag elementTag)
+        protected override IEnumerable<Element> FindElementsByTag(string tagName)
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
@@ -51,7 +51,7 @@ namespace WatiN.Core.Native.Mozilla
                 var elementToSearchFrom = ElementCollection.Elements.ToString();
 
                 var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom,
-                    elementTag.TagName);
+                    tagName);
 
                 for (var index = 0; index < numberOfElements; index++)
                 {

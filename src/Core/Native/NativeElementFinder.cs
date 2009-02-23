@@ -31,7 +31,6 @@ namespace WatiN.Core.Native
     {
         private readonly IElementCollection elementCollection;
         private readonly DomContainer domContainer;
-        private ElementTag _currentTag;
 
         /// <summary>
         /// Creates an element finder.
@@ -71,17 +70,14 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
-            _currentTag = ElementTag.Any;
-
             var id = GetElementIdToMatchIfPossible(Constraint);
             return id != null ? FindElementsById(id) : FindElementByTags();
         }
 
         private IEnumerable<Element> FindElementByTags()
         {
-            foreach (var elementTag in ElementTags)
+            foreach (var elementTag in ElementTagNames)
             {
-                _currentTag = elementTag;
                 foreach (var element in FindElementsByTag(elementTag))
                     yield return element;
             }
@@ -90,9 +86,9 @@ namespace WatiN.Core.Native
         /// <summary>
         /// Finds a matching element by its tag.
         /// </summary>
-        /// <param name="elementTag">The tag to filter on</param>
+        /// <param name="tagName">The tag to filter on</param>
         /// <returns>The matching elements</returns>
-        protected abstract IEnumerable<Element> FindElementsByTag(ElementTag elementTag);
+        protected abstract IEnumerable<Element> FindElementsByTag(string tagName);
 
         /// <summary>
         /// Finds a matching element by its id.
@@ -132,9 +128,7 @@ namespace WatiN.Core.Native
 
         private bool IsMatchByTag(INativeElement nativeElement)
         {
-            var elementTags = _currentTag.IsAny ? ElementTags : new List<ElementTag> {_currentTag};
-
-            return ElementTag.IsMatch(elementTags, nativeElement);
+            return ElementTag.IsMatch(ElementTags, nativeElement);
         }
 
         private bool IsMatchByConstraint(IAttributeBag element)

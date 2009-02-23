@@ -200,7 +200,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ButtonElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Button>();
+            var elementTags = ElementFactory.GetElementTags<Button>();
             Assert.AreEqual(4, elementTags.Count, "4 elementtags expected");
             Assert.AreEqual("input", elementTags[0].TagName);
             Assert.AreEqual("button", elementTags[0].InputType);
