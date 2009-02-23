@@ -202,13 +202,11 @@ namespace WatiN.Core.UnitTests
 		{
             var elementTags = ElementFactory.GetElementTags<Button>();
             Assert.AreEqual(4, elementTags.Count, "4 elementtags expected");
-            Assert.AreEqual("input", elementTags[0].TagName);
-            Assert.AreEqual("button", elementTags[0].InputType);
-            Assert.AreEqual("input", elementTags[1].TagName);
-            Assert.AreEqual("submit", elementTags[1].InputType);
-            Assert.AreEqual("input", elementTags[2].TagName);
-            Assert.AreEqual("reset", elementTags[2].InputType);
-            Assert.AreEqual("button", elementTags[3].TagName);
+
+            Assert.That(elementTags.Contains(new ElementTag("input", "button")), "Expected input type=button");
+            Assert.That(elementTags.Contains(new ElementTag("input", "submit")), "Expected input type=submit");
+            Assert.That(elementTags.Contains(new ElementTag("input", "reset")), "Expected input type=reset");
+            Assert.That(elementTags.Contains(new ElementTag("button")), "Expected button");
 		}
 
 		[Test]
