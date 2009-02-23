@@ -50,10 +50,8 @@ namespace WatiN.Core.Native.InternetExplorer
 	        if (elements != null)
 	        {
 	            // Loop through each element and evaluate
-	            var length = elements.length;
-	            for (var index = 0; index < length; index++ )
-                {
-                    var htmlElement = (IHTMLElement)elements.item(index, null);
+                foreach (IHTMLElement htmlElement in elements)
+	            {
                     var element = WrapElementIfMatch(new IEElement(htmlElement));
                     if (element != null)
                         yield return element;

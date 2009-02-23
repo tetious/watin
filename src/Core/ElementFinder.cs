@@ -39,7 +39,7 @@ namespace WatiN.Core
         /// <returns>The first matching element, or null if none</returns>
         public Element FindFirst()
         {
-            foreach (Element element in FindAll())
+            foreach (var element in FindAll())
                 return element;
             return null;
         }
@@ -57,15 +57,15 @@ namespace WatiN.Core
         /// <summary>
         /// Creates a new finder filtered by an additional constraint.
         /// </summary>
-        /// <param name="findBy">The additional constraint</param>
+        /// <param name="constraint">The additional constraint</param>
         /// <returns>The filtered element finder</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="findBy"/> is null</exception>
-        public ElementFinder Filter(BaseConstraint findBy)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="constraint"/> is null</exception>
+        public ElementFinder Filter(BaseConstraint constraint)
         {
-            if (findBy == null)
-                throw new ArgumentNullException("findBy");
+            if (constraint == null)
+                throw new ArgumentNullException("constraint");
 
-            return FilterImpl(findBy);
+            return FilterImpl(constraint);
         }
 
         /// <summary>

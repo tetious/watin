@@ -31,6 +31,7 @@ namespace WatiN.Core.Native
     {
         private readonly IElementCollection elementCollection;
         private readonly DomContainer domContainer;
+        private ElementTag _currentTag;
 
         /// <summary>
         /// Creates an element finder.
@@ -70,18 +71,18 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
-            string id = GetElementIdToMatchIfPossible(Constraint);
-            if (id != null)
-                return FindElementsById(id);
+            _currentTag = ElementTag.Any;
 
-            return FindElementByTags();
+            var id = GetElementIdToMatchIfPossible(Constraint);
+            return id != null ? FindElementsById(id) : FindElementByTags();
         }
 
         private IEnumerable<Element> FindElementByTags()
         {
             foreach (var elementTag in ElementTags)
             {
-                foreach (Element element in FindElementsByTag(elementTag))
+                _currentTag = elementTag;
+                foreach (var element in FindElementsByTag(elementTag))
                     yield return element;
             }
         }
@@ -111,7 +112,7 @@ namespace WatiN.Core.Native
 
             if (IsMatchByTag(nativeElement))
             {
-                Element element = WrapElement(nativeElement);
+                var element = WrapElement(nativeElement);
                 if (IsMatchByConstraint(element))
                     return element;
             }
@@ -131,10 +132,12 @@ namespace WatiN.Core.Native
 
         private bool IsMatchByTag(INativeElement nativeElement)
         {
-            return ElementTag.IsMatch(ElementTags, nativeElement);
+            var elementTags = _currentTag.IsAny ? ElementTags : new List<ElementTag> {_currentTag};
+
+            return ElementTag.IsMatch(elementTags, nativeElement);
         }
 
-        private bool IsMatchByConstraint(Element element)
+        private bool IsMatchByConstraint(IAttributeBag element)
         {
             return Constraint.Compare(element);
         }
@@ -144,11 +147,9 @@ namespace WatiN.Core.Native
             if (!OnlyAndConstraints(constraint))
                 return null;
 
-            AttributeConstraint idConstraint = RetrieveIdConstraint(constraint);
-            if (idConstraint == null)
-                return null;
-
-            return idConstraint.Value;
+            var idConstraint = RetrieveIdConstraint(constraint);
+            
+            return idConstraint == null ? null : idConstraint.Value;
         }
 
         private static bool OnlyAndConstraints(BaseConstraint constraint)
