@@ -94,6 +94,7 @@ namespace WatiN.Core.UnitTests.IETests
             }
         }
 
+
         [Test, Category("InternetConnectionNeeded")]
         public void AddProtocolToUrlIfOmmitted()
         {

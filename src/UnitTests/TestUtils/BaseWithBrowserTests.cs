@@ -65,7 +65,7 @@ namespace WatiN.Core.UnitTests
             base.FixtureSetup();
 
             BrowsersToTestWith.Add(ieManager);
-//            BrowsersToTestWith.Add(ffManager);
+            BrowsersToTestWith.Add(ffManager);
 
             Logger.LogWriter = new ConsoleLogWriter();
 		}

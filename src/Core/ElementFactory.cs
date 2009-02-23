@@ -49,7 +49,7 @@ namespace WatiN.Core
                 if (tagAttributes.Length == 0)
                     continue;
 
-                ConstructorInfo constructor = type.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
+                var constructor = type.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
                 if (constructor == null)
                     throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, INativeElement).", type));
 
@@ -58,10 +58,11 @@ namespace WatiN.Core
 
 			    var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
                 elementTagAttributes.Sort();
+
                 var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
                 elementTagsByType.Add(type, tags);
 
-                foreach (ElementTag tag in tags)
+                foreach (var tag in tags)
                     elementFactoriesByTag.Add(tag, factory);
 			}
         }
@@ -84,7 +85,7 @@ namespace WatiN.Core
                 return null;
 
 			var elementTag = ElementTag.FromNativeElement(nativeElement);
-            ElementFactoryDelegate factory = GetElementFactory(elementTag);
+            var factory = GetElementFactory(elementTag);
             return factory(domContainer, nativeElement);
 		}
 

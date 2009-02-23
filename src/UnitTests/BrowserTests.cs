@@ -234,6 +234,23 @@ namespace WatiN.Core.UnitTests
 
         }
 
+        [Test]
+        public void ActiveElementShouldBeCorrectWhenFocusIsSetOnElement()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+
+                                var element = browser.ActiveElement;
+                                Assert.That(element.Id, Is.Not.EqualTo("popupid"), "pre-condition: expected popupid hasn't the focus");
+
+                                browser.Button("popupid").Focus();
+
+                                element = browser.ActiveElement;
+                                Assert.That(element.Id,Is.EqualTo("popupid"), "Unexpected ActiveElement");
+                            });
+        }
+
 
         public override Uri TestPageUri
         {
