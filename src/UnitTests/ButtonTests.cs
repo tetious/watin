@@ -95,7 +95,7 @@ namespace WatiN.Core.UnitTests
 		                        }
 		                        catch (ElementNotFoundException e)
 		                        {
-		                            Assert.That(e.Message, Text.StartsWith("Could not find INPUT (button submit image reset) or BUTTON element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid' at file://"));
+                                    Assert.That(e.Message, Text.StartsWith("Could not find BUTTON or INPUT (button) or INPUT (reset) or INPUT (submit) element tag matching criteria: Attribute 'id' with value 'noneexistingbuttonid' at file://"));
 		                            Assert.That(e.Message, Text.EndsWith("main.html"));
 		                        }
 

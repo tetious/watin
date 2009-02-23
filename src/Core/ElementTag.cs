@@ -27,7 +27,7 @@ namespace WatiN.Core
 	/// This struct is mainly used by WatiN internally and defines 
 	/// the supported html tags for inheritors of <see cref="Element"/>.
 	/// </summary>
-	public struct ElementTag : IEquatable<ElementTag>
+	public struct ElementTag : IEquatable<ElementTag>, IComparable<ElementTag>
 	{
         private readonly string tagName;
         private readonly string inputType;
@@ -161,7 +161,17 @@ namespace WatiN.Core
             return tagName == other.tagName && inputType == other.inputType;
         }
 
-        /// <summary>
+	    public int CompareTo(ElementTag other)
+	    {
+	        var compare = TagName.CompareTo(other.TagName);
+            if (compare == 0 && InputType != null)
+            {
+                compare = InputType.CompareTo(other.InputType);
+            }
+	        return compare;
+	    }
+
+	    /// <summary>
         /// Returns a human-readable string representation of the tag.
         /// </summary>
         /// <returns>The tag as a string</returns>
@@ -218,8 +228,10 @@ namespace WatiN.Core
         public static string ElementTagsToString(IList<ElementTag> elementTags)
 		{
 			var elementTagsString = String.Empty;
+            var sortedElementTags = new List<ElementTag>(elementTags);
+            sortedElementTags.Sort();
 
-			foreach (var elementTag in elementTags)
+			foreach (var elementTag in sortedElementTags)
 			{
 				if (elementTagsString.Length > 0)
 				{
