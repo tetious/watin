@@ -42,29 +42,39 @@ namespace WatiN.Core
 			var assembly = Assembly.GetExecutingAssembly();
 			foreach (var type in assembly.GetExportedTypes())
 			{
-				if (!type.IsSubclassOf(typeof(Element)))
-                    continue;
+				if (!type.IsSubclassOf(typeof(Element))) continue;
 
-			    var tagAttributes = (ElementTagAttribute[]) type.GetCustomAttributes(typeof(ElementTagAttribute), false);
-                if (tagAttributes.Length == 0)
-                    continue;
+                var tags = CreateElementTags(type);
+                if (tags == null) continue;
 
-                var constructor = type.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
+			    var constructor = type.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
                 if (constructor == null)
+                {
                     throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, INativeElement).", type));
+                }
 
                 ElementFactoryDelegate factory = (container, nativeElement) =>
                     (Element) constructor.Invoke(new object[] { container, nativeElement });
 
-			    var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
-                elementTagAttributes.Sort();
-
-                var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
-                elementTagsByType.Add(type, tags);
-
                 foreach (var tag in tags)
+                {
                     elementFactoriesByTag.Add(tag, factory);
+                }
 			}
+        }
+
+        private static List<ElementTag> CreateElementTags(Type type)
+        {
+            var tagAttributes = (ElementTagAttribute[]) type.GetCustomAttributes(typeof(ElementTagAttribute), false);
+            if (tagAttributes.Length == 0) return null;
+
+            var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
+            elementTagAttributes.Sort();
+
+            var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
+            elementTagsByType.Add(type, tags);
+
+            return tags;
         }
 
         /// <summary>
@@ -122,10 +132,7 @@ namespace WatiN.Core
         /// <returns>The untyped element, or null if none</returns>
         public static ElementsContainer<Element> CreateUntypedElement(DomContainer domContainer, INativeElement nativeElement)
         {
-            if (nativeElement == null)
-                return null;
-
-            return new ElementsContainer<Element>(domContainer, nativeElement);
+            return nativeElement == null ? null : new ElementsContainer<Element>(domContainer, nativeElement);
         }
 
         /// <summary>
@@ -139,8 +146,14 @@ namespace WatiN.Core
         {
             if (elementType == null)
                 throw new ArgumentNullException("elementType");
+            
             if (!elementTagsByType.ContainsKey(elementType))
-                throw new ArgumentException("Not a valid element type.", "elementType");
+            {
+                var tags = CreateElementTags(elementType);
+                if (tags == null) throw new ArgumentException("Not a valid element type.", "elementType");
+
+                return new ReadOnlyCollection<ElementTag>(tags);
+            }
 
             return new ReadOnlyCollection<ElementTag>(elementTagsByType[elementType]);
         }
@@ -158,10 +171,8 @@ namespace WatiN.Core
         private static ElementFactoryDelegate GetElementFactory(ElementTag tag)
         {
             ElementFactoryDelegate factory;
-            if (elementFactoriesByTag.TryGetValue(tag, out factory))
-                return factory;
-
-            return CreateUntypedElement;
+            
+            return elementFactoriesByTag.TryGetValue(tag, out factory) ? factory : CreateUntypedElement;
         }
 	}
 }

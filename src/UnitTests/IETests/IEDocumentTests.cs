@@ -61,7 +61,7 @@ namespace WatiN.Core.UnitTests.IETests
         public void UrlShouldReturnUrlOfCurrentDocument()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var url = ieDocument.Url;
@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests.IETests
         public void TitleShouldReturnTitleofThePage()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var title = ieDocument.Title;
@@ -87,7 +87,7 @@ namespace WatiN.Core.UnitTests.IETests
         {
             // GIVEN
             Ie.CheckBox("Checkbox1").Focus();
-            var ieDocument = new IEDocument(((SHDocVw.InternetExplorer)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var activeElement = ieDocument.ActiveElement;

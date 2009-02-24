@@ -9,7 +9,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void HasNoFrames()
         {
-            ExecuteTest(browser => Assert.AreEqual(0, browser.Frames.Length));
+            ExecuteTest(browser => Assert.AreEqual(0, browser.Frames.Count));
         }
 
         public override Uri TestPageUri

@@ -109,7 +109,7 @@ namespace WatiN.Core.UtilityClasses
         {
             var frames = document.Frames;
 
-            logWriter.LogAction("There are " + frames.Length + " Frames");
+            logWriter.LogAction("There are " + frames.Count + " Frames");
 
             var index = 0;
             foreach (Frame frame in frames)

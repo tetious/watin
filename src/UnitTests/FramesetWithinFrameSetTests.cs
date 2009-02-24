@@ -11,8 +11,8 @@ namespace WatiN.Core.UnitTests
         {
             ExecuteTest(browser =>
                             {
-                                Assert.AreEqual(2, browser.Frames.Length);
-                                Assert.AreEqual(2, browser.Frames[1].Frames.Length);
+                                Assert.AreEqual(2, browser.Frames.Count);
+                                Assert.AreEqual(2, browser.Frames[1].Frames.Count);
                             });
         }
 

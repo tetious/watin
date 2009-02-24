@@ -104,7 +104,7 @@ namespace WatiN.Core.UnitTests
 		                        const int expectedFramesCount = 3;
                                 var frames = browser.Frames;
 
-		                        Assert.AreEqual(expectedFramesCount, frames.Length, "Unexpected number of frames");
+                                Assert.AreEqual(expectedFramesCount, frames.Count, "Unexpected number of frames");
 
 		                        // Collection items by index
 		                        Assert.AreEqual("left", frames[0].Name);

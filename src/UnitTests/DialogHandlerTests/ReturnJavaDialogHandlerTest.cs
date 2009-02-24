@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using System.Threading;
 using NUnit.Framework;
 using SHDocVw;
@@ -31,15 +30,15 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnOkShouldCloseIE()
 		{
-			using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))
+			using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
 			{
-				ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();
+				var returnDialogHandler = new ReturnDialogHandler();
 				ie.AddDialogHandler(returnDialogHandler);
 
-				IntPtr hWnd = ie.hWnd;
+				var hWnd = ie.hWnd;
 				// can't use ie.Close() here cause this will cleanup the registered
 				// returnDialogHandler which leads to a timeout on the WaitUntilExists
-				SHDocVw.InternetExplorer internetExplorer = (SHDocVw.InternetExplorer) ie.InternetExplorer;
+                var internetExplorer = (IWebBrowser2)ie.InternetExplorer;
 				internetExplorer.Quit();
 
 				returnDialogHandler.WaitUntilExists();
@@ -53,16 +52,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnCancelShouldKeepIEOpen()
 		{
-			using (IE ie = new IE(OnBeforeUnloadJavaDialogURI))
+			using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
 			{
-				ReturnDialogHandler returnDialogHandler = new ReturnDialogHandler();
+				var returnDialogHandler = new ReturnDialogHandler();
 				ie.AddDialogHandler(returnDialogHandler);
 
-				IntPtr hWnd = ie.hWnd;
+				var hWnd = ie.hWnd;
 
 				// can't use ie.Close() here cause this will cleanup the registered
 				// returnDialogHandler which leads to a timeout on the WaitUntilExists
-				SHDocVw.InternetExplorer internetExplorer = (SHDocVw.InternetExplorer) ie.InternetExplorer;
+                var internetExplorer = (IWebBrowser2)ie.InternetExplorer;
 				internetExplorer.Quit();
 
 				returnDialogHandler.WaitUntilExists();

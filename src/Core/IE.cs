@@ -744,9 +744,9 @@ namespace WatiN.Core
         }
 
 		/// <summary>
-		/// Use this method to gain access to the full Internet Explorer object.
+        /// Use this method to gain access to the IWebBrowser2 interface of Internet Explorer.
 		/// Do this by referencing the Interop.SHDocVw assembly (supplied in the WatiN distribution)
-		/// and cast the return value of this method to type SHDocVw.InternetExplorer.
+        /// and cast the return value of this method to type SHDocVw.IWebBrowser2.
 		/// </summary>
 		public object InternetExplorer
 		{

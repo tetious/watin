@@ -112,7 +112,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (var ie = new IE())
             {
-                Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, "IE Should be visible");
+                Assert.That(((SHDocVw.IWebBrowser2)ie.InternetExplorer).Visible, "IE Should be visible");
             }
 
             Settings.MakeNewIeInstanceVisible = false;
@@ -120,7 +120,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (var ie = new IE())
             {
-                Assert.That(((SHDocVw.InternetExplorer) ie.InternetExplorer).Visible, Is.EqualTo(false), "IE Should be visible");
+                Assert.That(((SHDocVw.IWebBrowser2)ie.InternetExplorer).Visible, Is.EqualTo(false), "IE Should be visible");
             }
         }
 
@@ -538,7 +538,7 @@ namespace WatiN.Core.UnitTests.IETests
                 // Previously this would pick up a reference to the Windows Explorer
                 // window which would timeout while waiting for the main document to
                 // become available.
-                Assert.GreaterOrEqual(IE.InternetExplorers().Length, 1);
+                Assert.GreaterOrEqual(IE.InternetExplorers().Count, 1);
 
                 foreach (var ie in IE.InternetExplorers())
                     ie.Close();

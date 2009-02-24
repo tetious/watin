@@ -16,9 +16,11 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Native.InternetExplorer;
 
 namespace WatiN.Core
 {
@@ -38,9 +40,9 @@ namespace WatiN.Core
 
 			internetExplorers = new ArrayList();
 
-			var allBrowsers = new ShellWindows();
+			var allBrowsers = new ShellWindows2();
 
-			foreach (SHDocVw.InternetExplorer internetExplorer in allBrowsers)
+			foreach (IWebBrowser2 internetExplorer in allBrowsers)
 			{
 				try
 				{
@@ -54,7 +56,13 @@ namespace WatiN.Core
 			}
 		}
 
+        [Obsolete("Use Count instead")]
 		public int Length
+		{
+			get { return Count; }
+		}
+
+        public int Count
 		{
 			get { return internetExplorers.Count; }
 		}

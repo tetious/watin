@@ -27,7 +27,7 @@ using WatiN.Core.UtilityClasses;
 namespace WatiN.Core
 {
 	/// <summary>
-	/// Wrapper around the <see cref="SHDocVw.InternetExplorer"/> object. Used by <see cref="BaseConstraint.Compare"/>.
+    /// Wrapper around the <see cref="SHDocVw.IWebBrowser2"/> object. Used by <see cref="BaseConstraint.Compare"/>.
 	/// </summary>
 	public class IEAttributeBag : IAttributeBag
 	{

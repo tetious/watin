@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
@@ -35,7 +36,13 @@ namespace WatiN.Core
 			frames = htmlDocument.Frames(domContainer);
 		}
 
+        [Obsolete("Use Count property instead.")]
 		public int Length
+		{
+			get { return Count; }
+		}
+
+        public int Count
 		{
 			get { return frames.Count; }
 		}
