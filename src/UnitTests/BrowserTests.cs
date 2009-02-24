@@ -162,6 +162,7 @@ namespace WatiN.Core.UnitTests
                                 var browser = manager.CreateBrowser(AboutBlank);
 
                                 var wentBack = browser.Back();
+//                                browser.Dispose();
                                 Assert.That(wentBack, Is.False, "Expected no navigation back");
                             });
         }
@@ -176,6 +177,7 @@ namespace WatiN.Core.UnitTests
                                 var browser = manager.CreateBrowser(AboutBlank);
 
                                 var wentForward = browser.Forward();
+//                                browser.Dispose();
                                 Assert.That(wentForward, Is.False, "Expected no navigation back");
                             });
         }

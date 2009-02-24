@@ -287,7 +287,7 @@ namespace WatiN.Core.UnitTests
 		                        var textfieldEnumerator = textfieldEnumerable.GetEnumerator();
 
 		                        var count = 0;
-		                        foreach (TextField textField in textfields)
+		                        foreach (var textField in textfields)
 		                        {
 		                            textfieldEnumerator.MoveNext();
 		                            var enumTextfield = textfieldEnumerator.Current;

@@ -566,5 +566,17 @@ namespace WatiN.Core.Native.Mozilla
 
             return defaultValue;
         }
+
+        /// <summary>
+        /// This ONLY changes the java script variable name <see cref="ElementReference"/> which is used to 
+        /// execute commands on FireFox. When using this method, MAKE SURE THE ACTUAL REFERENCED ELEMENT
+        /// IS STILL THE SAME cause FFElement is statefull (it does cache some property values which we
+        /// want to keep when re-assigning).
+        /// </summary>
+        /// <param name="elementVariableName"></param>
+        internal void ReAssignElementReference(string elementVariableName)
+        {
+            ElementReference = elementVariableName;
+        }
     }
 }

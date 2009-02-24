@@ -16,10 +16,10 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
-using WatiN.Core.Native;
 
 namespace WatiN.Core.Native.Mozilla
 {
@@ -47,22 +47,32 @@ namespace WatiN.Core.Native.Mozilla
 
             if (ElementCollection.Elements != null)
             {
-                var elementArrayName = "watinElemFinder";
                 var elementToSearchFrom = ElementCollection.Elements.ToString();
+                var ElementArrayName = FireFoxClientPort.CreateVariableName();
 
-                var numberOfElements = GetNumberOfElementsWithMatchingTagName(elementArrayName, elementToSearchFrom,
+                var numberOfElements = GetNumberOfElementsWithMatchingTagName(ElementArrayName, elementToSearchFrom,
                     tagName);
 
                 for (var index = 0; index < numberOfElements; index++)
                 {
-                    var indexedElementVariableName = string.Format("{0}[{1}]", elementArrayName, index);
+                    var indexedElementVariableName = string.Format("{0}[{1}]", ElementArrayName, index);
                     var ffElement = new FFElement(indexedElementVariableName, _clientPort);
 
                     var element = WrapElementIfMatch(ffElement);
-                    if (element != null)
-                        yield return WrapElementWithPersistentReference(ffElement);
+                    if (element == null) continue;
+                    
+                    AssignPersistentElementReference(ffElement);
+                    yield return element;
                 }
+                DeReferenceElementArrayName(ElementArrayName);
             }
+        }
+
+        private void DeReferenceElementArrayName(string elementName)
+        {
+            var command = string.Format("{0} = null; ", elementName);
+
+            _clientPort.Write(command);
         }
 
         /// <inheritdoc />
@@ -71,25 +81,23 @@ namespace WatiN.Core.Native.Mozilla
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
             _clientPort.InitializeDocument();
 
-            if (ElementCollection.Elements != null)
-            {
-                var referencedElement = ElementCollection.Elements.ToString();
+            if (ElementCollection.Elements == null) yield break;
 
-                // Create reference to document object
-                var documentReference = GetDocumentReference(referencedElement);
+            var referencedElement = ElementCollection.Elements.ToString();
 
-                var elementName = FireFoxClientPort.CreateVariableName();
-                var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, id);
-                command = command + string.Format("{0} != null;", elementName);
+            // Create reference to document object
+            var documentReference = GetDocumentReference(referencedElement);
 
-                if (_clientPort.WriteAndReadAsBool(command))
-                {
-                    var ffElement = new FFElement(elementName, _clientPort);
-                    var element = WrapElementIfMatch(ffElement);
-                    if (element != null)
-                        yield return WrapElementWithPersistentReference(ffElement);
-                }
-            }
+            var elementName = FireFoxClientPort.CreateVariableName();
+            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); ", elementName, documentReference, id);
+            command = command + String.Format("{0} != null;", elementName);
+
+            if (!_clientPort.WriteAndReadAsBool(command)) yield break;
+
+            var ffElement = new FFElement(elementName, _clientPort);
+            var element = WrapElementIfMatch(ffElement);
+            
+            if (element != null) yield return element;
         }
 
         private static string GetDocumentReference(string referencedElement)
@@ -103,13 +111,12 @@ namespace WatiN.Core.Native.Mozilla
             return referencedElement;
         }
 
-        private Element WrapElementWithPersistentReference(INativeElement nativeElement)
+        private void AssignPersistentElementReference(FFElement nativeElement)
         {
             var elementVariableName = FireFoxClientPort.CreateVariableName();
             _clientPort.Write("{0}={1};", elementVariableName, nativeElement.Object);
-            
-            var ffElement = new FFElement(elementVariableName, _clientPort);
-            return WrapElement(ffElement);
+
+            nativeElement.ReAssignElementReference(elementVariableName);
         }
 
         private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)
