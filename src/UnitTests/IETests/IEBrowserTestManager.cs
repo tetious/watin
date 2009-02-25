@@ -27,6 +27,15 @@ namespace WatiN.Core.UnitTests.IETests
             if (ie == null) return;
             ie.Close();
             ie = null;
+            if (IE.InternetExplorers().Count > 0)
+            {
+                foreach (var explorer in IE.InternetExplorers())
+                {
+                    Console.WriteLine(explorer.Url);
+//                    explorer.Close();
+                }
+                throw new Exception("Expected no open IE instances.");
+            }
         }
     }
 }
