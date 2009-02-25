@@ -19,7 +19,6 @@
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
-using WatiN.Core.Native;
 
 namespace WatiN.Core.Native.InternetExplorer
 {

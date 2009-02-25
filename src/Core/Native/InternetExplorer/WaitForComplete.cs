@@ -23,7 +23,7 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    internal class WaitForComplete : WaitForCompleteBase
+    public class WaitForComplete : WaitForCompleteBase
     {
         protected DomContainer _domContainer;
 

@@ -18,7 +18,7 @@
 
 namespace WatiN.Core.Native.Mozilla
 {
-    internal class FFWaitForComplete : WaitForCompleteBase
+    public class FFWaitForComplete : WaitForCompleteBase
     {
         private readonly FFBrowser nativeBrowser;
 

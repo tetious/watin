@@ -20,7 +20,7 @@ using SHDocVw;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    internal class IEWaitForComplete : WaitForComplete
+    public class IEWaitForComplete : WaitForComplete
     {
         protected IE _ie;
 
