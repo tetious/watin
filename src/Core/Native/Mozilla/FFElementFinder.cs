@@ -123,44 +123,9 @@ namespace WatiN.Core.Native.Mozilla
         {
             var tagToFind = string.IsNullOrEmpty(tagName) ? "*" : tagName;
             var command = string.Format("{0} = {1}.getElementsByTagName(\"{2}\"); ", elementArrayName, elementToSearchFrom, tagToFind);
-
-            // TODO: Can't get this to work, otherwise the TypeIsOk check could be removed.
-            //            if (this.type != null)
-            //            {
-            //            	command = command + FilterInputTypes(elementArrayName);
-            //            }
-
             command = command + string.Format("{0}.length;", elementArrayName);
 
             return _clientPort.WriteAndReadAsInt(command);
         }
-
-        // TODO: Can't get this to work, but if it does then the TypeIsOk check 
-        // Can be removed.
-        //private string FilterInputTypes(string elementArrayName)
-        //{
-        //    string typeArrayName = FireFoxClientPort.CreateVariableName();
-        //    string types = FireFoxClientPort.CreateVariableName();
-        //    string elementtype = FireFoxClientPort.CreateVariableName();
-
-        //    StringBuilder command = new StringBuilder(string.Format("{0} = {1}.getElementsByTagName(\"{2}\"); ", elementArrayName, FireFoxClientPort.DocumentVariableName, this.tagName));
-
-        //    command.Append(string.Format("{0} = new Array();", typeArrayName));
-        //    command.Append(string.Format("for(i=0;i<{0}.length;i++)", elementArrayName));
-        //    command.Append("{");
-        //    command.Append(string.Format("{0}={1}[i].type;", elementtype, elementArrayName));
-        //    command.Append(string.Format("if ({0}== null)", elementtype));
-        //    command.Append("{");
-        //    command.Append(string.Format("{0}=\"text\";", elementtype));
-        //    command.Append("}");
-        //    command.Append(string.Format("if(\"{0}\".indexOf({1}.toLowerCase()) > 0)", this.type.ToLower(), elementtype));
-        //    command.Append("{");
-        //    command.Append(string.Format("{0}.push({1}[i]);", typeArrayName, elementArrayName));
-        //    command.Append("}}");
-        //    command.Append(string.Format("{0} = {1};", elementArrayName, typeArrayName));
-        //    command.Append(string.Format("{0} = null;", typeArrayName));
-
-        //    return command.ToString();
-        //}
     }
 }

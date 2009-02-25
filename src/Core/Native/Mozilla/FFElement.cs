@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
-using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.Mozilla

@@ -21,7 +21,6 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,7 +30,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LinkElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Link>();
+            var elementTags = ElementFactory.GetElementTags<Link>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("a", elementTags[0].TagName);
 		}
@@ -39,19 +38,25 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void LinkExists()
 		{
-			Assert.IsTrue(Ie.Link("testlinkid").Exists);
-			Assert.IsTrue(Ie.Link(new Regex("testlinkid")).Exists);
-			Assert.IsFalse(Ie.Link("nonexistingtestlinkid").Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.Link("testlinkid").Exists);
+                                Assert.IsTrue(browser.Link(new Regex("testlinkid")).Exists);
+                                Assert.IsFalse(browser.Link("nonexistingtestlinkid").Exists);
+		                    });
 		}
 
 		[Test]
 		public void LinkTest()
 		{
-			Assert.AreEqual(WatiNURI, Ie.Link(Find.ById("testlinkid")).Url);
-			Assert.AreEqual(WatiNURI, Ie.Link("testlinkid").Url);
-			Assert.AreEqual(WatiNURI, Ie.Link(Find.ByName("testlinkname")).Url);
-			Assert.AreEqual(WatiNURI, Ie.Link(Find.ByUrl(WatiNURI)).Url);
-			Assert.AreEqual("Microsoft", Ie.Link(Find.ByText("Microsoft")).Text);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(WatiNURI, browser.Link(Find.ById("testlinkid")).Url);
+                                Assert.AreEqual(WatiNURI, browser.Link("testlinkid").Url);
+                                Assert.AreEqual(WatiNURI, browser.Link(Find.ByName("testlinkname")).Url);
+                                Assert.AreEqual(WatiNURI, browser.Link(Find.ByUrl(WatiNURI)).Url);
+                                Assert.AreEqual("Microsoft", browser.Link(Find.ByText("Microsoft")).Text);
+		                    });
 		}
 
 		[Test]
@@ -59,32 +64,35 @@ namespace WatiN.Core.UnitTests
 		{
 			const int expectedLinkCount = 3;
 
-			Assert.AreEqual(expectedLinkCount, Ie.Links.Count, "Unexpected number of links");
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(expectedLinkCount, browser.Links.Count, "Unexpected number of links");
 
-			LinkCollection links = Ie.Links;
+                                var links = browser.Links;
 
-			// Collection items by index
-			Assert.AreEqual(expectedLinkCount, links.Count, "Wrong number off links");
-			Assert.AreEqual("testlinkid", links[0].Id);
-			Assert.AreEqual("testlinkid1", links[1].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual(expectedLinkCount, links.Count, "Wrong number off links");
+		                        Assert.AreEqual("testlinkid", links[0].Id);
+		                        Assert.AreEqual("testlinkid1", links[1].Id);
 
-			// Collection iteration and comparing the result with Enumerator
-			IEnumerable linksEnumerable = links;
-			IEnumerator linksEnumerator = linksEnumerable.GetEnumerator();
+		                        // Collection iteration and comparing the result with Enumerator
+		                        IEnumerable linksEnumerable = links;
+		                        var linksEnumerator = linksEnumerable.GetEnumerator();
 
-			int count = 0;
-			foreach (Link link in links)
-			{
-				linksEnumerator.MoveNext();
-				object enumLink = linksEnumerator.Current;
+		                        var count = 0;
+		                        foreach (var link in links)
+		                        {
+		                            linksEnumerator.MoveNext();
+		                            var enumLink = linksEnumerator.Current;
 
-				Assert.IsInstanceOfType(link.GetType(), enumLink, "Types are not the same");
-				Assert.AreEqual(link.OuterHtml, ((Link) enumLink).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(link.GetType(), enumLink, "Types are not the same");
+		                            Assert.AreEqual(link.OuterHtml, ((Link) enumLink).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(linksEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedLinkCount, count);
+		                        Assert.IsFalse(linksEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedLinkCount, count);
+		                    });
 		}
 
 	    [Test]
@@ -92,12 +100,19 @@ namespace WatiN.Core.UnitTests
 	    {
 	        Settings.MakeNewIeInstanceVisible = true;
 
-	        using (IE ie = new IE(TestEventsURI))
-	        {
-	            Link link = ie.Link("hreftest");
-	            link.Click();
-                Assert.That(ie.TextField("hrefclickresult").Value, Is.EqualTo("success"));
-	        }
+	        ExecuteTest(browser =>
+	                        {
+                                // GIVEN
+	                            browser.GoTo(TestEventsURI);
+
+                                var link = browser.Link("hreftest");
+                                
+                                // WHEN
+                                link.Click();
+                                
+                                // THEN
+                                Assert.That(browser.TextField("hrefclickresult").Value, Is.EqualTo("success"));
+	                        });
 	    }
 
 		public override Uri TestPageUri
