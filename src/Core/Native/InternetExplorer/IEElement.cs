@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Specialized;
 using mshtml;
-using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.UtilityClasses;
@@ -424,6 +423,13 @@ namespace WatiN.Core.Native.InternetExplorer
             var row = Object as IHTMLTableRow;
             if (row == null) return null;
             return new IEElementCollectionFinder(() => row.cells, domContainer, Find.ByElement(element => element.TagName.ToLowerInvariant() == "td"));
+        }
+
+	    public ElementFinder TableBodyRows(DomContainer domContainer)
+	    {
+            var row = Object as IHTMLTableSection;
+            if (row == null) return null;
+            return new IEElementCollectionFinder(() => row.rows, domContainer, null);
         }
 	}
 

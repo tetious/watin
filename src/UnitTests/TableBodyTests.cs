@@ -32,33 +32,51 @@ namespace WatiN.Core.UnitTests
 			get { return TablesUri; }
 		}
 
+        [Test]
+        public void TableElementTags()
+        {
+            var elementTags = ElementFactory.GetElementTags<TableBody>();
+            Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
+            Assert.AreEqual("tbody", elementTags[0].TagName);
+        }
+
 		[Test]
 		public void TableTableBodiesExcludesBodiesFromNestedTables()
 		{
-			TableBodyCollection tableBodies = Ie.Table("Table1").TableBodies;
-			Assert.AreEqual(2, tableBodies.Count, "Unexpected number of tbodies");
-			Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
-			Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
+		    ExecuteTest(browser =>
+		                    {
+                                var tableBodies = browser.Table("Table1").TableBodies;
+		                        Assert.AreEqual(2, tableBodies.Count, "Unexpected number of tbodies");
+		                        Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
+		                        Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
+		                    });
 		}
 
 		[Test]
 		public void TableBodyExcludesRowsFromNestedTables()
 		{
-			TableBody tableBody = Ie.Table("Table1").TableBodies[0];
+		    ExecuteTest(browser =>
+		                    {
+                                var tableBody = browser.Table("Table1").TableBodies[0];
 
-			Assert.AreEqual(1, tableBody.Tables.Count, "Expected nested table");
-			Assert.AreEqual(2, tableBody.TableRows.Count, "Expected 2 rows");
-			Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
-			Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
+		                        Assert.AreEqual(1, tableBody.Tables.Count, "Expected nested table");
+		                        Assert.AreEqual(2, tableBody.TableRows.Count, "Expected 2 rows");
+		                        Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
+		                        Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
+
+		                    });
 		}
 
         [Test]
         public void FindTableRowUsingPredicateT()
         {
-            TableRow tableRow = Ie.Table("Table2").TableBody("tbody2").TableRow(
-                delegate(TableRow r) { return r.Id == "2"; });
+            ExecuteTest(browser =>
+                            {
+                                var tableRow = browser.Table("Table2").TableBody("tbody2").TableRow(r => r.Id == "2");
 
-            Assert.That(tableRow.Exists);
+                                Assert.That(tableRow.Exists);
+
+                            });
         }
 	}
 }

@@ -120,5 +120,11 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <returns></returns>
         ElementFinder TableCells(DomContainer domContainer);
+
+        /// <summary>
+        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a tbody element
+        /// </summary>
+        /// <returns></returns>
+        ElementFinder TableBodyRows(DomContainer domContainer);
     }
 }

@@ -17,11 +17,8 @@
 #endregion Copyright
 
 using System;
-using mshtml;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -54,9 +51,8 @@ namespace WatiN.Core
         {
             get
             {
-                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HtmlBody.rows);
-                return new TableRowCollection(DomContainer, new EnumerableElementFinder(list,
-                    ElementFactory.GetElementTags<TableRow>(), new AlwaysTrueConstraint()));
+//                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HtmlBody.rows);
+                return new TableRowCollection(DomContainer, NativeElement.TableBodyRows(DomContainer));
             }
         }
 
@@ -68,7 +64,7 @@ namespace WatiN.Core
 		/// <returns></returns>
 		public override TableRow TableRow(BaseConstraint findBy)
 		{
-			return ElementsSupport.TableRow(DomContainer, findBy, new Rows(this));
+			return ElementsSupport.TableRow(DomContainer, NativeElement.TableBodyRows(DomContainer).Filter(findBy));
 		}
 
         /// <summary>
@@ -80,26 +76,6 @@ namespace WatiN.Core
 		public override TableRow TableRow(Predicate<TableRow> predicate)
 		{
 			return TableRow(Find.ByElement(predicate));
-		}
-
-		private IHTMLTableSection HtmlBody
-		{
-            get { return (IHTMLTableSection)NativeElement.Object; }
-		}
-
-	    private class Rows : IElementCollection
-		{
-			private readonly TableBody tableBody;
-
-			public Rows(TableBody tableBody)
-			{
-				this.tableBody = tableBody;
-			}
-
-			public object Elements
-			{
-				get { return tableBody.HtmlBody.rows; }
-			}
 		}
 	}
 }

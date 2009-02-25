@@ -424,6 +424,14 @@ namespace WatiN.Core.Native.Mozilla
             return null;
         }
 
+        public ElementFinder TableBodyRows(DomContainer domContainer)
+        {
+            if (ElementFactory.GetElementTags(typeof(TableBody)).Contains(ElementTag.FromNativeElement(this)))
+                return new FFElementCollectionFinder(ElementReference + ".rows", domContainer, null, ClientPort);
+
+            return null;
+        }
+
         /// <summary>
         /// Makes innerHtml inner text (IE) look a like. It comes close but it seems not to cover all
         /// conversions cause comparing browser.body.innertext between a IE and FireFox instances will 
