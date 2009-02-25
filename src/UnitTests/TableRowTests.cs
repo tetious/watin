@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -32,7 +31,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<TableRow>();
+            var elementTags = ElementFactory.GetElementTags<TableRow>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("tr", elementTags[0].TagName);
 		}
@@ -40,47 +39,56 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableRowExists()
 		{
-			Assert.IsTrue(Ie.TableRow("row0").Exists);
-			Assert.IsTrue(Ie.TableRow(new Regex("row0")).Exists);
-			Assert.IsFalse(Ie.TableRow("nonexistingtr").Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.TableRow("row0").Exists);
+                                Assert.IsTrue(browser.TableRow(new Regex("row0")).Exists);
+                                Assert.IsFalse(browser.TableRow("nonexistingtr").Exists);
+		                    });
 		}
 
 		[Test]
 		public void TableRows()
 		{
-			// Collection.Length
-			TableRowCollection rows = Ie.Table("table1").TableRows;
+		    ExecuteTest(browser =>
+		                    {
+		                        // Collection.Length
+                                var rows = browser.Table("table1").TableRows;
 
-			Assert.AreEqual(3, rows.Count);
+		                        Assert.AreEqual(3, rows.Count);
 
-			// Collection items by index
-			Assert.AreEqual("row0", rows[1].Id);
-			Assert.AreEqual("row1", rows[2].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("row0", rows[1].Id);
+		                        Assert.AreEqual("row1", rows[2].Id);
 
-			IEnumerable rowEnumerable = rows;
-			IEnumerator rowEnumerator = rowEnumerable.GetEnumerator();
+		                        IEnumerable rowEnumerable = rows;
+		                        var rowEnumerator = rowEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
-			foreach (TableRow row in rows)
-			{
-				rowEnumerator.MoveNext();
-				object enumTable = rowEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (var row in rows)
+		                        {
+		                            rowEnumerator.MoveNext();
+		                            var enumTable = rowEnumerator.Current;
 
-				Assert.IsInstanceOfType(row.GetType(), enumTable, "Types are not the same");
-				Assert.AreEqual(row.OuterHtml, ((TableRow) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(row.GetType(), enumTable, "Types are not the same");
+		                            Assert.AreEqual(row.OuterHtml, ((TableRow) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(3, count);
+		                        Assert.IsFalse(rowEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(3, count);
+		                    });
 		}
 
 		[Test]
 		public void TableRowRowIndex()
 		{
-			Assert.AreEqual(1, Ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("a1"))).Index);
-			Assert.AreEqual(2, Ie.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("b2"))).Index);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(1, browser.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("a1"))).Index);
+                                Assert.AreEqual(2, browser.TableRow(Find.ByText(new StringContainsAndCaseInsensitiveComparer("b2"))).Index);
+		                    });
 		}
 
 		public override Uri TestPageUri
@@ -91,13 +99,16 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void TableRowDirectChildren()
 	    {
-	        Ie.GoTo(TablesUri);
+	        ExecuteTest(browser =>
+	                        {
+                                browser.GoTo(TablesUri);
 
-	        TableRow tableRow = Ie.TableRow("1");
+                                var tableRow = browser.TableRow("1");
 
-            Assert.That(tableRow.TableCellsDirectChildren.Count, Is.EqualTo(2));
-            Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));
-            Assert.That(tableRow.TableCellsDirectChildren[1].Id, Is.EqualTo("td12"));
+	                            Assert.That(tableRow.TableCellsDirectChildren.Count, Is.EqualTo(2));
+	                            Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));
+	                            Assert.That(tableRow.TableCellsDirectChildren[1].Id, Is.EqualTo("td12"));
+	                        });
 	    }
 
 	}

@@ -51,7 +51,6 @@ namespace WatiN.Core
         {
             get
             {
-//                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HtmlBody.rows);
                 return new TableRowCollection(DomContainer, NativeElement.TableBodyRows(DomContainer));
             }
         }

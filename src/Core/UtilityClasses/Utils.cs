@@ -187,26 +187,6 @@ namespace WatiN.Core.UtilityClasses
         }
 
         /// <summary>
-        /// Converts the HTML element collection to a list of elements.
-        /// </summary>
-        /// <param name="domContainer">The DOM container</param>
-        /// <param name="elementCollection">The element collection.</param>
-        /// <returns>an array list with all the elements found in the element collection</returns>
-        internal static IList<Element> IHtmlElementCollectionToElementList(DomContainer domContainer, IHTMLElementCollection elementCollection)
-        {
-            var elements = new List<Element>();
-            var length = elementCollection.length;
-
-            for (var index = 0; index < length; index++)
-            {
-                var nativeElement = new IEElement(elementCollection.item(index, null));
-                elements.Add(ElementFactory.CreateElement(domContainer, nativeElement));
-            }
-
-            return elements;
-        }
-
-        /// <summary>
         /// Runs the javascript code in IE.
         /// </summary>
         /// <param name="scriptCode">The javascript code.</param>
