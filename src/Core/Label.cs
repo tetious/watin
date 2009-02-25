@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML label element.
 	/// </summary>
     [ElementTag("label")]
-    public sealed class Label : ElementsContainer<Label>
+    public class Label : ElementsContainer<Label>
 	{
 		public Label(DomContainer domContainer, INativeElement labelElement) : base(domContainer, labelElement) {}
 

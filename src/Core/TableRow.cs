@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML tr element.
 	/// </summary>
     [ElementTag("tr")]
-    public sealed class TableRow : ElementsContainer<TableRow>
+    public class TableRow : ElementsContainer<TableRow>
 	{
 		public TableRow(DomContainer domContainer, INativeElement htmlTableRow) : base(domContainer, htmlTableRow) {}
 

@@ -16,9 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using System.IO;
-using WatiN.Core.DialogHandlers;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -28,7 +26,7 @@ namespace WatiN.Core
 	/// of type file. 
 	/// </summary>
     [ElementTag("input", InputType = "file")]
-	public sealed class FileUpload : Element<FileUpload>
+	public class FileUpload : Element<FileUpload>
 	{
 		public FileUpload(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 

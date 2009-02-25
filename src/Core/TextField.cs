@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
@@ -35,7 +34,7 @@ namespace WatiN.Core
     [ElementTag("input", InputType = "textarea", Index = 2)]
     [ElementTag("input", InputType = "hidden", Index = 3)]
     [ElementTag("textarea", Index = 4)]
-    public sealed class TextField : Element<TextField>
+    public class TextField : Element<TextField>
 	{
 		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 

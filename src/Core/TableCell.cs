@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML td element.
 	/// </summary>
     [ElementTag("td")]
-    public sealed class TableCell : ElementsContainer<TableCell>
+    public class TableCell : ElementsContainer<TableCell>
 	{
 		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
 

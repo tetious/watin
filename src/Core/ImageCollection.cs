@@ -16,17 +16,12 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections.Generic;
-using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core
 {
 	/// <summary>
 	/// A typed collection of <see cref="Image" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public sealed class ImageCollection : BaseElementCollection<Image, ImageCollection>
+    public class ImageCollection : BaseElementCollection<Image, ImageCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImageCollection"/> class.

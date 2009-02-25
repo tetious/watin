@@ -29,7 +29,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	/// an <see cref="IHTMLElementCollection"/> or <see cref="ArrayList"/> matching
 	/// the given <see cref="BaseConstraint"/>.
 	/// </summary>
-	internal sealed class IEElementFinder : NativeElementFinder
+    public class IEElementFinder : NativeElementFinder
 	{
         public IEElementFinder(IList<ElementTag> elementTags, BaseConstraint constraint, IElementCollection elementCollection, DomContainer domContainer)
             : base(elementTags, constraint, elementCollection, domContainer)

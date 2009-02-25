@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML link element.
 	/// </summary>
     [ElementTag("a")]
-    public sealed class Link : Element<Link>
+    public class Link : Element<Link>
 	{
         public Link(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 

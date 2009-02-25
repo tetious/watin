@@ -16,17 +16,12 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections.Generic;
-using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core
 {
 	/// <summary>
 	/// A typed collection of <see cref="Link" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public sealed class LinkCollection : BaseElementCollection<Link, LinkCollection>
+    public class LinkCollection : BaseElementCollection<Link, LinkCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LinkCollection"/> class.

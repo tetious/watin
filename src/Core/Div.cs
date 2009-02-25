@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML div element.
 	/// </summary>
     [ElementTag("div")]
-    public sealed class Div : ElementsContainer<Div>
+    public class Div : ElementsContainer<Div>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.

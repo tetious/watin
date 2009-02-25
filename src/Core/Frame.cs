@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
 
@@ -27,7 +26,7 @@ namespace WatiN.Core
 	/// </summary>
     [ElementTag("frame", Index = 0)]
     [ElementTag("iframe", Index = 1)]
-    public sealed class Frame : Document, IAttributeBag
+    public class Frame : Document, IAttributeBag
 	{
 		private readonly Element _frameElement;
 

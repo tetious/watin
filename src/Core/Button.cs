@@ -29,7 +29,7 @@ namespace WatiN.Core
     //[ElementTag("input", InputType = "image")]
     [ElementTag("input", InputType = "reset", Index = 2)]
     [ElementTag("button", Index = 3)]
-    public sealed class Button : Element<Button>
+    public class Button : Element<Button>
     {
 		/// <summary>
 		/// Initialises a new instance of the <see cref="Button"/> class.

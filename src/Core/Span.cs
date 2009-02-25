@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML span element.
 	/// </summary>
     [ElementTag("span")]
-    public sealed class Span : ElementsContainer<Span>
+    public class Span : ElementsContainer<Span>
 	{
 		public Span(DomContainer domContainer, INativeElement htmlSpanElement) : base(domContainer, htmlSpanElement) {}
 

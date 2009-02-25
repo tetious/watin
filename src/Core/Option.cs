@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML option element.
 	/// </summary>
     [ElementTag("option")]
-    public sealed class Option : Element<Option>
+    public class Option : Element<Option>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Option"/> class.

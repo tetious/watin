@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// Represents an area of an image map.
 	/// </summary>
     [ElementTag("area")]
-    public sealed class Area : Element<Area>
+    public class Area : Element<Area>
     {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Area" /> class.

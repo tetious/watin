@@ -23,7 +23,7 @@ using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native.Mozilla
 {
-    internal sealed class FFElementFinder : NativeElementFinder
+    public class FFElementFinder : NativeElementFinder
     {
         private readonly FireFoxClientPort _clientPort;
 

@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -26,7 +25,7 @@ namespace WatiN.Core
 	/// checkbox.
     /// </summary>
     [ElementTag("input", InputType = "checkbox")]
-    public sealed class CheckBox : RadioCheck<CheckBox>
+    public class CheckBox : RadioCheck<CheckBox>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CheckBox"/> class.

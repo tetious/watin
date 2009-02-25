@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -25,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML para element.
 	/// </summary>
     [ElementTag("p")]
-    public sealed class Para : ElementsContainer<Para>
+    public class Para : ElementsContainer<Para>
 	{
 		public Para(DomContainer domContainer, INativeElement htmlParaElement) : base(domContainer, htmlParaElement) {}
 

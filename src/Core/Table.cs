@@ -30,7 +30,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
     [ElementTag("table")]
-	public sealed class Table : ElementsContainer<Table>
+	public class Table : ElementsContainer<Table>
 	{
 		public Table(DomContainer domContainer, INativeElement htmlTable) : 
             base(domContainer, htmlTable) {}

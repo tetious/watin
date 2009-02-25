@@ -16,15 +16,12 @@
 
 #endregion Copyright
 
-using System;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core
 {
 	/// <summary>
 	/// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
 	/// </summary>
-    public sealed class ElementCollection : BaseElementCollection<Element, ElementCollection>
+    public class ElementCollection : BaseElementCollection<Element, ElementCollection>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ElementCollection"/> class.

@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML tbody element. 
 	/// </summary>
     [ElementTag("tbody")]
-    public sealed class TableBody : ElementsContainer<TableBody>
+    public class TableBody : ElementsContainer<TableBody>
 	{
         public TableBody(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 

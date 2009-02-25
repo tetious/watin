@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
@@ -27,7 +26,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML Form element.
 	/// </summary>
     [ElementTag("form")]
-	public sealed class Form : ElementsContainer<Form>
+	public class Form : ElementsContainer<Form>
 	{
 		public Form(DomContainer domContainer, INativeElement htmlFormElement) : base(domContainer, htmlFormElement) {}
 

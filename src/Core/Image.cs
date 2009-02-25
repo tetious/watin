@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// </summary>
     [ElementTag("img", Index = 0)]
     [ElementTag("input", InputType = "image", Index = 1)]
-    public sealed class Image : Element<Image>
+    public class Image : Element<Image>
 	{
         public Image(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 

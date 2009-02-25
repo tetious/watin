@@ -16,17 +16,12 @@
 
 #endregion Copyright
 
-using System;
-using System.Collections.Generic;
-using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
-
 namespace WatiN.Core
 {
 	/// <summary>
 	/// A typed collection of <see cref="TableBody"/> instances within a Document or Element. 
 	/// </summary>
-    public sealed class TableBodyCollection : BaseElementCollection<TableBody, TableBodyCollection>
+    public class TableBodyCollection : BaseElementCollection<TableBody, TableBodyCollection>
     {
         public TableBodyCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 

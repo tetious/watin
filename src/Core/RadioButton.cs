@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -26,7 +25,7 @@ namespace WatiN.Core
 	/// radio.
 	/// </summary>
     [ElementTag("input", InputType = "radio")]
-    public sealed class RadioButton : RadioCheck<RadioButton>
+    public class RadioButton : RadioCheck<RadioButton>
 	{
 		public RadioButton(DomContainer domContainer, INativeElement inputElement) : base(domContainer, inputElement) {}
 
