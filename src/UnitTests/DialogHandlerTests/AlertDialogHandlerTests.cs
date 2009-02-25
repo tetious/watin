@@ -30,14 +30,14 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
-			AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+			var alertDialogHandler = new AlertDialogHandler();
 			using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler))
 			{
 				Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
 				alertDialogHandler.WaitUntilExists();
 
-				string message = alertDialogHandler.Message;
+				var message = alertDialogHandler.Message;
 				alertDialogHandler.OKButton.Click();
 
 				Ie.WaitForComplete();
@@ -56,13 +56,13 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 
 			Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
-			AlertDialogHandler alertDialogHandler = new AlertDialogHandler();
+			var alertDialogHandler = new AlertDialogHandler();
 
 			using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler))
 			{
 				alertDialogHandler.WaitUntilExists();
 
-				string message = alertDialogHandler.Message;
+				var message = alertDialogHandler.Message;
 				alertDialogHandler.OKButton.Click();
 
 				Ie.WaitForComplete();

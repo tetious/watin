@@ -4,9 +4,9 @@ TODO for multiple browser support:
 DONE JVM - Abstract current AllFramesProcessor used in FramesCollection away
 DONE JVM - FramesCollection constructor should not depend on mshtml.HTMLDocument
 
-** IE specific Constraint classes (TableRowAttributeConstraint, ProximityTextConstraint)
-- Move to InternetExplorer.Constraints namespace
-- remove from Find class and expose them using extension methods on Find
+** IE specific Constraint classes (, ProximityTextConstraint)
+- ProximityTextConstraint: Move to InternetExplorer.Constraints namespace
+DONE JVM - Make TableRowAttributeConstraint support multiple browsers
 DONE JVM - LabelTextConstraint is browser independent
 
 ** IElementCollection
@@ -44,7 +44,7 @@ DONE JVM - Handle selected with NativeElement
 DONE JVM - Move checked to NativeElement
 
 ** Table, TableBody, TableRow
-- Multiple issues
+DONE JVM - Multiple issues
 
 ** TextField
 DONE JVM - remove dependencies in wrappers around TextArea or input text 
@@ -70,17 +70,12 @@ DONE JVM - move RunScript to FFBrowser
 - Implement FireFox.Exists
 
 ** Changes to test suite
-- Make sure none browser specific tests are executed for IE and FireFox
-  DONE: ButtonTests
-  DONE: CheckBoxTests
-  DONE: RadioButtonTests
-  DONE: TextFieldTests
-  Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can be done after support for javascript confirm dialog for FF is implemented)
-  
-- other option would be to create a in memory browser (mock) to run the general test against and 
-  test the browser specific classes seperately (will speed up the test suite, but it
-  is possible some integration issues will be missed....)
+DONE JVM- Make sure none browser specific tests are executed for IE and FireFox
+Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can be done after support for javascript confirm dialog for FF is implemented)
 
+** HTMLDialog
+- Add support for FireFox
+  
 DONE JVM - Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
 
 ** Interfaces

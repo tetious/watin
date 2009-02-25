@@ -251,7 +251,6 @@ namespace WatiN.Core.UnitTests
                             });
         }
 
-
         public override Uri TestPageUri
         {
             get { return AboutBlank; }

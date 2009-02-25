@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
@@ -36,11 +36,11 @@ namespace WatiN.Core.DialogHandlers
 	{
 		private readonly int ieProcessId;
 		private bool keepRunning = true;
-		private readonly ArrayList handlers = new ArrayList();
+		private readonly IList<IDialogHandler> handlers;
 		private readonly Thread watcherThread;
 		private bool closeUnhandledDialogs = Settings.AutoCloseDialogs;
 
-	    private static ArrayList dialogWatchers = new ArrayList();
+	    private static IList<DialogWatcher> dialogWatchers = new List<DialogWatcher>();
 		private Exception lastException;
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			CleanupDialogWatcherCache();
 
-			DialogWatcher dialogWatcher = GetDialogWatcherFromCache(ieProcessId);
+			var dialogWatcher = GetDialogWatcherFromCache(ieProcessId);
 
 			// If no dialogwatcher exists for the ieprocessid then 
 			// create a new one, store it and return it.
@@ -72,7 +72,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			// Loop through already created dialogwatchers and
 			// return a dialogWatcher if one exists for the given processid
-			foreach (DialogWatcher dialogWatcher in dialogWatchers)
+			foreach (var dialogWatcher in dialogWatchers)
 			{
 				if (dialogWatcher.ProcessId == ieProcessId)
 				{
@@ -85,9 +85,9 @@ namespace WatiN.Core.DialogHandlers
 
 		public static void CleanupDialogWatcherCache()
 		{
-			var cleanedupDialogWatcherCache = new ArrayList();
+			var cleanedupDialogWatcherCache = new List<DialogWatcher>();
 
-			foreach (DialogWatcher dialogWatcher in dialogWatchers)
+			foreach (var dialogWatcher in dialogWatchers)
 			{
 				if (!dialogWatcher.IsRunning)
 				{
@@ -112,7 +112,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			this.ieProcessId = ieProcessId;
 
-			handlers = new ArrayList();
+			handlers = new List<IDialogHandler>();
 
 			// Create thread to watch windows
 			watcherThread = new Thread(Start);
@@ -223,7 +223,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <returns>
 		/// 	<c>true</c> if [contains] [the specified handler]; otherwise, <c>false</c>.
 		/// </returns>
-		public bool Contains(object handler)
+        public bool Contains(IDialogHandler handler)
 		{
 			lock (this)
 			{

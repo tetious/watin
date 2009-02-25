@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -32,7 +31,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TextFieldElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<TextField>();
+            var elementTags = ElementFactory.GetElementTags<TextField>();
             Assert.AreEqual(5, elementTags.Count, "5 elementtags expected");
             Assert.AreEqual("input", elementTags[0].TagName);
             Assert.AreEqual("text", elementTags[0].InputType);
