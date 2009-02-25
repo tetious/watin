@@ -21,7 +21,6 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,7 +30,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ParaElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Para>();
+            var elementTags = ElementFactory.GetElementTags<Para>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("p", elementTags[0].TagName);
 		}
@@ -39,55 +38,64 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ParaExists()
 		{
-			Assert.IsTrue(Ie.Para("links").Exists);
-			Assert.IsTrue(Ie.Para(new Regex("links")).Exists);
-			Assert.IsFalse(Ie.Para("nonexistinglinks").Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.Para("links").Exists);
+                                Assert.IsTrue(browser.Para(new Regex("links")).Exists);
+                                Assert.IsFalse(browser.Para("nonexistinglinks").Exists);
+		                    });
 		}
 
 		[Test]
 		public void ParaTest()
 		{
-			Para para = Ie.Para("links");
+		    ExecuteTest(browser =>
+		                    {
+                                var para = browser.Para("links");
 
-			Assert.IsInstanceOfType(typeof (IElementsContainer), para);
-            Assert.IsInstanceOfType(typeof (ElementsContainer<Para>), para);
+		                        Assert.IsInstanceOfType(typeof (IElementsContainer), para);
+		                        Assert.IsInstanceOfType(typeof (ElementsContainer<Para>), para);
 
-			Assert.IsNotNull(para);
-			Assert.AreEqual("links", para.Id);
+		                        Assert.IsNotNull(para);
+		                        Assert.AreEqual("links", para.Id);
+		                    });
 		}
 
 		[Test]
 		public void Paras()
 		{
 			const int expectedParasCount = 4;
-			Assert.AreEqual(expectedParasCount, Ie.Paras.Count, "Unexpected number of Paras");
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(expectedParasCount, browser.Paras.Count, "Unexpected number of Paras");
 
-			// Collection.Length
-			ParaCollection formParas = Ie.Paras;
+		                        // Collection.Length
+                                var formParas = browser.Paras;
 
-			// Collection items by index
-			Assert.IsNull(Ie.Paras[0].Id);
-			Assert.AreEqual("links", Ie.Paras[1].Id);
-			Assert.IsNull(Ie.Paras[2].Id);
-			Assert.IsNull(Ie.Paras[3].Id);
+		                        // Collection items by index
+                                Assert.IsNull(browser.Paras[0].Id);
+                                Assert.AreEqual("links", browser.Paras[1].Id);
+                                Assert.IsNull(browser.Paras[2].Id);
+                                Assert.IsNull(browser.Paras[3].Id);
 
-			IEnumerable ParaEnumerable = formParas;
-			IEnumerator ParaEnumerator = ParaEnumerable.GetEnumerator();
+		                        IEnumerable ParaEnumerable = formParas;
+		                        var ParaEnumerator = ParaEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
-			foreach (Para inputPara in formParas)
-			{
-				ParaEnumerator.MoveNext();
-				object enumPara = ParaEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (var inputPara in formParas)
+		                        {
+		                            ParaEnumerator.MoveNext();
+		                            var enumPara = ParaEnumerator.Current;
 
-				Assert.IsInstanceOfType(inputPara.GetType(), enumPara, "Types are not the same");
-				Assert.AreEqual(inputPara.OuterHtml, ((Para) enumPara).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(inputPara.GetType(), enumPara, "Types are not the same");
+		                            Assert.AreEqual(inputPara.OuterHtml, ((Para) enumPara).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(ParaEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedParasCount, count);
+		                        Assert.IsFalse(ParaEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedParasCount, count);
+		                    });
 		}
 
 		public override Uri TestPageUri

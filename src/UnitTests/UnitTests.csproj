@@ -314,7 +314,7 @@
     <Compile Include="LoggerTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MockAttributeBag.cs">
+    <Compile Include="TestUtils\MockAttributeBag.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NoFramesTest.cs" />
