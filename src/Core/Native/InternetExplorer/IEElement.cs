@@ -19,9 +19,9 @@
 using System;
 using System.Collections.Specialized;
 using mshtml;
+using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -404,7 +404,28 @@ namespace WatiN.Core.Native.InternetExplorer
             var ihtmlElement = ((IHTMLElement)Object);
             throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
         }
-    }
+
+	    public ElementFinder TableBodies(DomContainer domContainer)
+	    {
+            var ihtmlTable = Object as IHTMLTable;
+            if (ihtmlTable == null) return null;
+            return new IEElementCollectionFinder(()=>ihtmlTable.tBodies, domContainer, null);
+	    }
+
+	    public ElementFinder TableRows(DomContainer domContainer)
+	    {
+            var ihtmlTable = Object as IHTMLTable;
+            if (ihtmlTable == null) return null;
+            return new IEElementCollectionFinder(() => ihtmlTable.rows, domContainer, null);
+        }
+
+	    public ElementFinder TableCells(DomContainer domContainer)
+	    {
+            var row = Object as IHTMLTableRow;
+            if (row == null) return null;
+            return new IEElementCollectionFinder(() => row.cells, domContainer, Find.ByElement(element => element.TagName.ToLowerInvariant() == "td"));
+        }
+	}
 
     public class AsyncScriptRunner
     {

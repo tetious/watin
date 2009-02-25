@@ -47,32 +47,18 @@ namespace WatiN.Core.Native.Mozilla
 
             if (ElementCollection.Elements != null)
             {
-                var elementToSearchFrom = ElementCollection.Elements.ToString();
-                var ElementArrayName = FireFoxClientPort.CreateVariableName();
+                var command = CreateGetElementsByTagName(ElementCollection.Elements.ToString(), tagName);
+                var elements = FFUtils.ElementArrayEnumerator(command, _clientPort);
 
-                var numberOfElements = GetNumberOfElementsWithMatchingTagName(ElementArrayName, elementToSearchFrom,
-                    tagName);
-
-                for (var index = 0; index < numberOfElements; index++)
+                foreach (var ffElement in elements)
                 {
-                    var indexedElementVariableName = string.Format("{0}[{1}]", ElementArrayName, index);
-                    var ffElement = new FFElement(indexedElementVariableName, _clientPort);
-
                     var element = WrapElementIfMatch(ffElement);
                     if (element == null) continue;
-                    
-                    AssignPersistentElementReference(ffElement);
+
+                    ffElement.ReAssignElementReference();
                     yield return element;
                 }
-                DeReferenceElementArrayName(ElementArrayName);
             }
-        }
-
-        private void DeReferenceElementArrayName(string elementName)
-        {
-            var command = string.Format("{0} = null; ", elementName);
-
-            _clientPort.Write(command);
         }
 
         /// <inheritdoc />
@@ -111,21 +97,13 @@ namespace WatiN.Core.Native.Mozilla
             return referencedElement;
         }
 
-        private void AssignPersistentElementReference(FFElement nativeElement)
-        {
-            var elementVariableName = FireFoxClientPort.CreateVariableName();
-            _clientPort.Write("{0}={1};", elementVariableName, nativeElement.Object);
 
-            nativeElement.ReAssignElementReference(elementVariableName);
-        }
-
-        private int GetNumberOfElementsWithMatchingTagName(string elementArrayName, string elementToSearchFrom, string tagName)
+        private static string CreateGetElementsByTagName(string elementToSearchFrom, string tagName)
         {
             var tagToFind = string.IsNullOrEmpty(tagName) ? "*" : tagName;
-            var command = string.Format("{0} = {1}.getElementsByTagName(\"{2}\"); ", elementArrayName, elementToSearchFrom, tagToFind);
-            command = command + string.Format("{0}.length;", elementArrayName);
+            var command = string.Format("{0}.getElementsByTagName(\"{1}\"); ", elementToSearchFrom, tagToFind);
 
-            return _clientPort.WriteAndReadAsInt(command);
+            return command;
         }
     }
 }

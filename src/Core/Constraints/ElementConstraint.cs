@@ -32,7 +32,7 @@ namespace WatiN.Core.Constraints
 
 		protected override bool DoCompare(IAttributeBag attributeBag)
 		{
-            Element element = attributeBag as Element;
+            var element = attributeBag as Element;
             if (element == null)
                 throw new WatiNException("This constraint class can only be used to compare against an element");
 

@@ -21,7 +21,6 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -41,7 +40,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Table>();
+            var elementTags = ElementFactory.GetElementTags<Table>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("table", elementTags[0].TagName);
 		}
@@ -49,187 +48,237 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableExists()
 		{
-			Assert.IsTrue(Ie.Table(tableId).Exists);
-			Assert.IsFalse(Ie.Table("nonexistingtableid").Exists);
+		    ExecuteTest(browser =>
+		                    {
+		                        Assert.IsTrue(browser.Table(tableId).Exists);
+                                Assert.IsFalse(browser.Table("nonexistingtableid").Exists);
+		                    });
 		}
 
 		[Test]
 		public void TableRowGetParentTable()
 		{
-			var tableRow = Ie.TableRow("row0");
-			Assert.IsInstanceOfType(typeof (TableBody), tableRow.Parent, "Parent should be a TableBody Type");
-			Assert.IsInstanceOfType(typeof (Table), tableRow.ParentTable, "Should be a Table Type");
-			Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
+		    ExecuteTest(browser =>
+		                    {
+                                var tableRow = browser.TableRow("row0");
+		                        Assert.IsInstanceOfType(typeof (TableBody), tableRow.Parent, "Parent should be a TableBody Type");
+		                        Assert.IsInstanceOfType(typeof (Table), tableRow.ParentTable, "Should be a Table Type");
+		                        Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
+		                    });
 		}
 
 		[Test]
 		public void TableTest()
 		{
-			Assert.AreEqual(tableId, Ie.Table(Find.ById(tableId)).Id);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(tableId, browser.Table(Find.ById(tableId)).Id);
 
-			var table = Ie.Table(tableId);
-			Assert.AreEqual(tableId, table.Id);
-			Assert.AreEqual(tableId, table.ToString());
-			Assert.AreEqual(3, table.TableRows.Count, "Unexpected number of rows");
+                                var table = browser.Table(tableId);
+		                        Assert.AreEqual(tableId, table.Id);
+		                        Assert.AreEqual(tableId, table.ToString());
+		                        Assert.AreEqual(3, table.TableRows.Count, "Unexpected number of rows");
 
-			var row = table.FindRow("a1", 0);
-			Assert.IsNotNull(row, "Row with a1 expected");
-			Assert.AreEqual("a1", row.TableCells[0].Text, "Unexpected text in cell");
+		                        var row = table.FindRow("a1", 0);
+		                        Assert.IsNotNull(row, "Row with a1 expected");
+		                        Assert.AreEqual("a1", row.TableCells[0].Text, "Unexpected text in cell");
 
+		                        row = table.FindRow("b2", 1);
+		                        Assert.IsNotNull(row, "Row with b2 expected");
+		                        Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
 
-			row = table.FindRow("b2", 1);
-			Assert.IsNotNull(row, "Row with b2 expected");
-			Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
-
-			row = table.FindRow("c1", 0);
-			Assert.IsNull(row, "No row with c1 expected");
+		                        row = table.FindRow("c1", 0);
+		                        Assert.IsNull(row, "No row with c1 expected");
+		                    });
 		}
 
 		[Test]
 		public void TableFindRowShouldIgnoreTHtagsInTBody()
 		{
-			var table = Ie.Table(tableId);
-			Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
+		    ExecuteTest(browser =>
+		                    {
+                                var table = browser.Table(tableId);
+		                        Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
 
-			var row = table.FindRow(new Regex("a"), 0);
-			Assert.IsNotNull(row, "row expected");
-			Assert.AreEqual("a1", row.TableCells[0].Text);
+		                        var row = table.FindRow(new Regex("a"), 0);
+		                        Assert.IsNotNull(row, "row expected");
+		                        Assert.AreEqual("a1", row.TableCells[0].Text);
+		                    });
 		}
 
 		[Test]
 		public void TableFindRowWithTextIgnoreCase()
 		{
-			var table = Ie.Table(tableId);
+		    ExecuteTest(browser =>
+		                    {
+                                var table = browser.Table(tableId);
 
-			// test: ignore case of the text to find
-			var row = table.FindRow("A2", 1);
-			Assert.IsNotNull(row, "Row with a1 expected");
-			Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
+		                        // test: ignore case of the text to find
+		                        var row = table.FindRow("A2", 1);
+		                        Assert.IsNotNull(row, "Row with a1 expected");
+		                        Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
+		                    });
 		}
 
 		[Test]
 		public void TableFindRowWithTextNoPartialMatch()
 		{
-			var table = Ie.Table(tableId);
+		    ExecuteTest(browser =>
+		                    {
+                                var table = browser.Table(tableId);
 
-			// test: ignore case of the text to find
-			var row = table.FindRow("a", 1);
-			Assert.IsNull(row, "No row expected");
+		                        // test: ignore case of the text to find
+		                        var row = table.FindRow("a", 1);
+		                        Assert.IsNull(row, "No row expected");
+
+		                    });
 		}
 
 		[Test]
 		public void TableFindRowWithRegex()
 		{
-			var table = Ie.Table(tableId);
+		    ExecuteTest(browser =>
+		                    {
+                                var table = browser.Table(tableId);
 
-			var row = table.FindRow(new Regex("b"), 1);
+		                        var row = table.FindRow(new Regex("b"), 1);
 
-			Assert.IsNotNull(row, "Row with b1 expected");
-			Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
+		                        Assert.IsNotNull(row, "Row with b1 expected");
+		                        Assert.AreEqual("b2", row.TableCells[1].Text, "Unexpected text in cell");
+
+		                    });
 		}
 
 		[Test]
         public void TableRowAttributeConstraintCompareShouldNotCrashIfColumnIndexIsGreaterThenNumberOfColumnsInARow()
 		{
-			Ie.GoTo(TablesUri);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TablesUri);
 
-			var table = Ie.Table("Table1");
+                                var table = browser.Table("Table1");
 
-			Assert.That(table.FindRow("12", 999), Is.Null);
+		                        Assert.That(table.FindRow("12", 999), Is.Null);
+
+		                    });
 		}
 
 		[Test]
 		public void TableFindRowShouldFindTableCellsInsideOfNestedTables()
 		{
-			Ie.GoTo(TablesUri);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TablesUri);
 
-			var table = Ie.Table("Table1");
+                                var table = browser.Table("Table1");
 
-			Assert.That(table.FindRow("2", 0), Is.Not.Null);
+		                        Assert.That(table.FindRow("2", 0), Is.Not.Null);
+
+		                    });
 		}
 
 		[Test]
         public void TableFindRowInDirectChildrenShouldIgnoreTableCellsInsideOfNestedTables()
 		{
-			Ie.GoTo(TablesUri);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TablesUri);
 
-			var table = Ie.Table("Table1");
+                                var table = browser.Table("Table1");
 
-			Assert.That(table.FindRowInDirectChildren("2", 0), Is.Null);
+		                        Assert.That(table.FindRowInDirectChildren("2", 0), Is.Null);
+
+		                    });
 		}
 
 		[Test]
 		public void Tables()
 		{
-			// Collection.length
-			var tables = Ie.Tables;
+		    ExecuteTest(browser =>
+		                    {
+		                        // Collection.length
+                                var tables = browser.Tables;
 
-            Assert.AreEqual(2, tables.Count);
+		                        Assert.AreEqual(2, tables.Count);
 
-			// Collection items by index
-			Assert.AreEqual("table1", tables[0].Id);
-			Assert.AreEqual("table2", tables[1].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("table1", tables[0].Id);
+		                        Assert.AreEqual("table2", tables[1].Id);
 
-			IEnumerable tableEnumerable = tables;
-			var tableEnumerator = tableEnumerable.GetEnumerator();
+		                        IEnumerable tableEnumerable = tables;
+		                        var tableEnumerator = tableEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			var count = 0;
-			foreach (Table table in tables)
-			{
-				tableEnumerator.MoveNext();
-				var enumTable = tableEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (var table in tables)
+		                        {
+		                            tableEnumerator.MoveNext();
+		                            var enumTable = tableEnumerator.Current;
 
-				Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
-				Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumerator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(table.GetType(), enumTable, "Types are not the same");
+		                            Assert.AreEqual(table.OuterHtml, ((Table) enumTable).OuterHtml, "foreach and IEnumerator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(tableEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(2, count);
+		                        Assert.IsFalse(tableEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(2, count);
+
+		                    });
 		}
 
         [Test]
         public void TableRowsDirectChildren()
         {
-            Ie.GoTo(TablesUri);
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(TablesUri);
 
-            var table = Ie.Table("Table1");
-            Assert.That(table.TableRowsDirectChildren.Count, Is.EqualTo(3), "Unexpected number of TableRows");
-            Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
-            Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
-            Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");
+                                var table = browser.Table("Table1");
+                                Assert.That(table.TableRowsDirectChildren.Count, Is.EqualTo(3), "Unexpected number of TableRows");
+                                Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
+                                Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
+                                Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");
+                            });
         }
 
         [Test]
         public void FindTableBodyUsingPredicateT()
         {
-            Ie.GoTo(TablesUri);
-            var tableBody = Ie.Table("Table1").TableBody(t => t.Id == "tbody3");
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(TablesUri);
+                                var tableBody = browser.Table("Table1").TableBody(t => t.Id == "tbody3");
 
-            Assert.That(tableBody.Exists);
+                                Assert.That(tableBody.Exists);
+                            });
         }
 
         [Test]
         public void FindRowWithNoResultUsingPredicateT()
         {
-            var table = Ie.Table(tableId);
-            Assert.That(table.Exists);
+            ExecuteTest(browser =>
+                            {
+                                var table = browser.Table(tableId);
+                                Assert.That(table.Exists);
 
-            var tableRow = table.FindRow(c => c.Text == "b", 1);
+                                var tableRow = table.FindRow(c => c.Text == "b", 1);
 
-            Assert.That(tableRow, Is.Null);
+                                Assert.That(tableRow, Is.Null);
+                            });
         }
 
         [Test]
         public void FindRowUsingPredicateT()
         {
-            var table = Ie.Table(tableId);
-            Assert.That(table.Exists);
+            ExecuteTest(browser =>
+                            {
+                                var table = browser.Table(tableId);
+                                Assert.That(table.Exists);
 
-            var tableRow = table.FindRow(c => c.Text == "b2", 1);
+                                var tableRow = table.FindRow(c => c.Text == "b2", 1);
 
-            Assert.That(tableRow, Is.Not.Null);
+                                Assert.That(tableRow, Is.Not.Null);
+                            });
         }
 	}
 }

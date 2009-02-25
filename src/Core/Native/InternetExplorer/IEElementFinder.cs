@@ -69,7 +69,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 var htmlElement = htmlItem as IHTMLElement;
 
                 if (htmlElement == null && (htmlItem as IHTMLElementCollection) != null)
-                    htmlElement = (IHTMLElement) ((IHTMLElementCollection) htmlItem).item(null, 0);
+                    htmlElement = ((IHTMLElementCollection)htmlItem).item(null, 0) as IHTMLElement;
 
                 if (htmlElement != null)
                 {

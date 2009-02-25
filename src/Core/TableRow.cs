@@ -16,11 +16,7 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
-using mshtml;
-using WatiN.Core.Constraints;
 using WatiN.Core.Native;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -55,14 +51,7 @@ namespace WatiN.Core
         /// <value>The table cells collection.</value>
         public TableCellCollection TableCellsDirectChildren
         {
-            get 
-            { 
-                var row = (IHTMLTableRow)NativeElement.Object;
-
-                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, row.cells);
-                return new TableCellCollection(DomContainer, new EnumerableElementFinder(list,
-                    ElementFactory.GetElementTags<TableCell>(), new AlwaysTrueConstraint()));
-            }
+            get { return new TableCellCollection(DomContainer, NativeElement.TableCells(DomContainer)); }
         }
 	}
 }

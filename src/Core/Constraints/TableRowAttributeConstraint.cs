@@ -17,11 +17,9 @@
 #endregion Copyright
 
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
-using WatiN.Core.Native.InternetExplorer;
 
 namespace WatiN.Core.Constraints
 {
@@ -69,25 +67,20 @@ namespace WatiN.Core.Constraints
 
 		public override bool Compare(IAttributeBag attributeBag)
 		{
-            Element element = attributeBag as Element;
+            var element = attributeBag as TableRow;
             if (element == null)
-                throw new WatiNException("This constraint class can only be used to compare against an element");
-
-            var htmlElement = (IHTMLElement)element.NativeElement.Object;
+                throw new WatiNException("This constraint class can only be used to compare against a TableRow");
 			
 			if (IsTextContainedIn(element.Text))
 			{
 				// Get all elements and filter this for TableCells
-                var tableRowElement = (IHTMLTableRow)htmlElement;
-				var tableCellElements = tableRowElement.cells;
+				var tableCellElements = element.TableCellsDirectChildren;
 
-				if (tableCellElements.length - 1 >= columnIndex)
+				if (tableCellElements.Count - 1 >= columnIndex)
 				{
-                    var htmlTableCell = (IHTMLTableCell)tableCellElements.item(columnIndex, null);
+                    var tableCell = tableCellElements[columnIndex];
 				    var elementComparer = comparer as ICompareElement;
 
-                    var tableCell = new TableCell(element.DomContainer, new IEElement(htmlTableCell));
-                    
                     return elementComparer != null ? elementComparer.Compare(tableCell) : base.Compare(tableCell);
 				}
 			}

@@ -142,6 +142,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnumerableElementFinder.cs" />
+    <Compile Include="Native\InternetExplorer\IEElementCollectionFinder.cs" />
+    <Compile Include="Native\Mozilla\FFElementCollectionFinder.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />

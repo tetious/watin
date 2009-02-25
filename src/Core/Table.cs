@@ -17,15 +17,12 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using mshtml;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -61,19 +58,8 @@ namespace WatiN.Core
         /// <value>The table rows collection.</value>
         public TableRowCollection TableRowsDirectChildren
         {
-            get
-            {
-                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, GetTableRows());
-                return new TableRowCollection(DomContainer, new EnumerableElementFinder(list,
-                    ElementFactory.GetElementTags<TableRow>(), new AlwaysTrueConstraint()));
-            }
+            get { return new TableRowCollection(DomContainer, NativeElement.TableRows(DomContainer)); }
         }
-
-	    private IHTMLElementCollection GetTableRows()
-	    {
-            var table = (IHTMLTable)NativeElement.Object;
-	        return table.rows;
-	    }
 
 	    /// <summary>
 		/// Returns the table body sections belonging to this table (not including table body sections 
@@ -82,11 +68,7 @@ namespace WatiN.Core
 		/// <value>The table bodies.</value>
 		public override TableBodyCollection TableBodies
 		{
-            get
-            {
-                var list = UtilityClass.IHtmlElementCollectionToElementList(DomContainer, HTMLTable.tBodies);
-                return new TableBodyCollection(DomContainer,
-                    new EnumerableElementFinder(list, ElementFactory.GetElementTags<TableBody>(), new AlwaysTrueConstraint())); }
+            get { return new TableBodyCollection(DomContainer, NativeElement.TableBodies(DomContainer)); }
 		}
 
 		/// <summary>
@@ -97,7 +79,7 @@ namespace WatiN.Core
 		/// <returns></returns>
 		public override TableBody TableBody(BaseConstraint findBy)
 		{
-			return ElementsSupport.TableBody(DomContainer, findBy, new TBodies(this));
+			return ElementsSupport.TableBody(DomContainer, NativeElement.TableBodies(DomContainer).Filter(findBy));
 		}
 
         /// <summary>
@@ -109,11 +91,6 @@ namespace WatiN.Core
 		public override TableBody TableBody(Predicate<TableBody> predicate)
 		{
 			return TableBody(Find.ByElement(predicate));
-		}
-
-		private IHTMLTable HTMLTable
-		{
-            get { return (IHTMLTable)NativeElement.Object; }
 		}
 
 		/// <summary>
@@ -290,7 +267,7 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRow(TableRowAttributeConstraint findBy)
 		{
-			var row = ElementsSupport.TableRow(DomContainer, findBy, new ElementsInFirstTBody(this));
+			var row = ElementsSupport.TableRow(DomContainer, findBy, this);
 			return row.Exists ? row : null;
 		}
 
@@ -302,53 +279,8 @@ namespace WatiN.Core
 		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
 		public TableRow FindRowInDirectChildren(TableRowAttributeConstraint findBy)
 		{
-            var elements = DomContainer.NativeBrowser.CreateElementFinder(ElementFactory.GetElementTags<TableRow>(), null, new Rows(this));
-            return (TableRow) elements.Filter(findBy).FindFirst();
-		}
-
-		public abstract class TableElementCollectionsBase : IElementCollection
-		{
-			protected Table table;
-
-		    protected TableElementCollectionsBase(Table table)
-			{
-				this.table = table;
-			}
-
-			public abstract object Elements { get; }
-		}
-
-		public class TBodies : TableElementCollectionsBase
-		{
-			public TBodies(Table table) : base(table) {}
-
-			public override object Elements
-			{
-				get { return table.HTMLTable.tBodies; }
-			}
-		}
-
-		public class ElementsInFirstTBody : TableElementCollectionsBase
-		{
-			public ElementsInFirstTBody(Table table) : base(table) {}
-
-			public override object Elements
-			{
-				get { return table.TableBody(Find.First()).NativeElement.Objects; }
-			}
-		}
-
-		private class Rows : TableElementCollectionsBase
-		{
-			public Rows(Table table) : base(table) {}
-
-			public override object Elements
-			{
-				get
-                {
-                    return ((IHTMLTable)table.NativeElement.Object).rows;
-				}
-			}
+            var rowsFinder = NativeElement.TableRows(DomContainer);
+            return (TableRow) rowsFinder.Filter(findBy).FindFirst();
 		}
 	}
 }

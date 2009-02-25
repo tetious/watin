@@ -101,5 +101,24 @@ namespace WatiN.Core.Native
         void SetFileUploadFile(Element element, string fileName);
 
         void WaitUntilReady();
+
+
+        /// <summary>
+        /// Should return an <see cref="ElementFinder"/> which enumerates the tBodies of a table
+        /// </summary>
+        /// <returns></returns>
+        ElementFinder TableBodies(DomContainer domContainer);
+        
+        /// <summary>
+        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a table
+        /// </summary>
+        /// <returns></returns>
+        ElementFinder TableRows(DomContainer domContainer);
+
+        /// <summary>
+        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a table
+        /// </summary>
+        /// <returns></returns>
+        ElementFinder TableCells(DomContainer domContainer);
     }
 }

@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using mshtml;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;

@@ -201,8 +201,13 @@ namespace WatiN.Core
 
 		public static TableRow TableRow(DomContainer domContainer, BaseConstraint findBy, IElementCollection elements)
 		{
-			return new TableRow(domContainer, CreateElementFinder<TableRow>(domContainer, findBy, elements));
+			return TableRow(domContainer, CreateElementFinder<TableRow>(domContainer, findBy, elements));
 		}
+
+        public static TableRow TableRow(DomContainer domContainer, ElementFinder elementFinder)
+        {
+            return new TableRow(domContainer, elementFinder);
+        }
 
 		public static TableRowCollection TableRows(DomContainer domContainer, IElementCollection elements)
 		{
@@ -211,8 +216,13 @@ namespace WatiN.Core
 
 		public static TableBody TableBody(DomContainer domContainer, BaseConstraint findBy, IElementCollection elements)
 		{
-			return new TableBody(domContainer, CreateElementFinder<TableBody>(domContainer, findBy, elements));
+			return TableBody(domContainer, CreateElementFinder<TableBody>(domContainer, findBy, elements));
 		}
+
+        public static TableBody TableBody(DomContainer domContainer, ElementFinder elementFinder)
+        {
+            return new TableBody(domContainer, elementFinder);
+        }
 
 		public static TableBodyCollection TableBodies(DomContainer domContainer, IElementCollection elements)
 		{

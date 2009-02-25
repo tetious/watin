@@ -400,6 +400,30 @@ namespace WatiN.Core.Native.Mozilla
             // TODO: Is this needed for FireFox?
         }
 
+        public ElementFinder TableBodies(DomContainer domContainer)
+        {
+            if (ElementFactory.GetElementTags(typeof(Table)).Contains(ElementTag.FromNativeElement(this)))
+                return new FFElementCollectionFinder(ElementReference + ".tBodies", domContainer, null, ClientPort);
+
+            return null;
+        }
+
+        public ElementFinder TableRows(DomContainer domContainer)
+        {
+            if (ElementFactory.GetElementTags(typeof(Table)).Contains(ElementTag.FromNativeElement(this)))
+                return new FFElementCollectionFinder(ElementReference + ".rows", domContainer, null, ClientPort);
+
+            return null;
+        }
+
+        public ElementFinder TableCells(DomContainer domContainer)
+        {
+            if (ElementFactory.GetElementTags(typeof(TableRow)).Contains(ElementTag.FromNativeElement(this)))
+                return new FFElementCollectionFinder(ElementReference + ".cells", domContainer, Find.ByElement(element => element.TagName.ToLowerInvariant() == "td"), ClientPort);
+
+            return null;
+        }
+
         /// <summary>
         /// Makes innerHtml inner text (IE) look a like. It comes close but it seems not to cover all
         /// conversions cause comparing browser.body.innertext between a IE and FireFox instances will 
@@ -567,15 +591,16 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <summary>
-        /// This ONLY changes the java script variable name <see cref="ElementReference"/> which is used to 
-        /// execute commands on FireFox. When using this method, MAKE SURE THE ACTUAL REFERENCED ELEMENT
-        /// IS STILL THE SAME cause FFElement is statefull (it does cache some property values which we
-        /// want to keep when re-assigning).
+        /// This changes the java script variable name <see cref="ElementReference"/> which is used to 
+        /// execute commands on FireFox. 
         /// </summary>
-        /// <param name="elementVariableName"></param>
-        internal void ReAssignElementReference(string elementVariableName)
+        internal void ReAssignElementReference()
         {
+            var elementVariableName = FireFoxClientPort.CreateVariableName();
+            ClientPort.Write("{0}={1};", elementVariableName, ElementReference);
+
             ElementReference = elementVariableName;
         }
+
     }
 }
