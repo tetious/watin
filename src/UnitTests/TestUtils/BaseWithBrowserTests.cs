@@ -73,9 +73,25 @@ namespace WatiN.Core.UnitTests
 	    [TestFixtureTearDown]
 		public override void FixtureTearDown()
 	    {
-            BrowsersToTestWith.ForEach(browserTestManager => browserTestManager.CloseBrowser());
+            var exceptions= new List<Exception>();
+            BrowsersToTestWith.ForEach(browserTestManager =>
+                                           {
+                                               try
+                                               {
+                                                   browserTestManager.CloseBrowser();
+                                               }
+                                               catch (Exception e)
+                                               {
+                                                   exceptions.Add(e);
+                                               }
+                                           });
 	        base.FixtureTearDown();
-	    }
+	        foreach (var exception in exceptions)
+	            Logger.LogAction( exception.Message + Environment.NewLine + exception.StackTrace);
+
+            foreach (var exception in exceptions)
+                throw exception;
+        }
 
 	    [SetUp]
 		public virtual void TestSetUp()
@@ -100,12 +116,19 @@ namespace WatiN.Core.UnitTests
         /// <param name="testMethod">The test method.</param>
         public void ExecuteTest(BrowserTest testMethod)
         {
-            BrowsersToTestWith.ForEach(browserTestManager => ExecuteTest(testMethod, browserTestManager.GetBrowser(TestPageUri)));
+            InsideExecuteTest = true;
+            try
+            {
+                BrowsersToTestWith.ForEach(browserTestManager => ExecuteTest(testMethod, browserTestManager.GetBrowser(TestPageUri)));
+            }
+            finally
+            {
+                InsideExecuteTest = false;
+            }
         }
 
         public void ExecuteTest(BrowserTest testMethod, Browser browser)
         {
-            InsideExecuteTest = true;
             try
             {
                 testMethod.Invoke(browser);
@@ -118,10 +141,6 @@ namespace WatiN.Core.UnitTests
             catch(Exception e)
             {
                 throw new WatiNException(browser.GetType() + " exception", e);
-            }
-            finally
-            {
-                InsideExecuteTest = false;
             }
         }
 

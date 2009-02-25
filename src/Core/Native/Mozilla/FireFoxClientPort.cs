@@ -254,7 +254,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var result = NativeMethods.GetWindowText(Process.MainWindowHandle).Contains("Firefox - Restore Previous Session");
+                var result = NativeMethods.GetWindowText(Process.MainWindowHandle).Contains("Firefox - ");
                 return result;
             }
         }

@@ -30,8 +30,10 @@
 using System;
 using System.Runtime.InteropServices;
 using mshtml;
+using SHDocVw;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
+using IEnumUnknown=WatiN.Core.Native.Windows.IEnumUnknown;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -78,6 +80,78 @@ namespace WatiN.Core.Native.InternetExplorer
         public static bool IsIEServerWindow(IntPtr hWnd)
         {
             return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
+        }
+
+        internal static void EnumIWebBrowser2Interfaces(IWebBrowser2Processor processor)
+        {
+            var oc = processor.HTMLDocument() as IOleContainer;
+
+            if (oc == null) return;
+
+            IEnumUnknown eu;
+            var hr = oc.EnumObjects(NativeMethods.tagOLECONTF.OLECONTF_EMBEDDINGS, out eu);
+            Marshal.ThrowExceptionForHR(hr);
+
+            if (eu == null) return;
+
+            try
+            {
+                object pUnk;
+                int fetched;
+                const int MAX_FETCH_COUNT = 1;
+
+                // get the first embedded object
+                // pUnk alloc
+                hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+                Marshal.ThrowExceptionForHR(hr);
+
+                while (hr == 0)
+                {
+                    // Query Interface pUnk for the IWebBrowser2 interface
+                    var brow = pUnk as IWebBrowser2;
+
+                    try
+                    {
+                        if (brow != null)
+                        {
+                            processor.Process(brow);
+                            if (!processor.Continue())
+                            {
+                                break;
+                            }
+                            // free brow
+                            ReleaseComObjectButIgnoreNull(brow);
+                        }
+                    }
+                    catch
+                    {
+                        // free brow
+                        ReleaseComObjectButIgnoreNull(brow);
+                        ReleaseComObjectButIgnoreNull(pUnk);
+                    }
+
+                    // pUnk free
+                    ReleaseComObjectButIgnoreNull(pUnk);
+
+                    // get the next embedded object
+                    // pUnk alloc
+                    hr = eu.Next(MAX_FETCH_COUNT, out pUnk, out fetched);
+                    Marshal.ThrowExceptionForHR(hr);
+                }
+            }
+            finally
+            {
+                // eu free
+                ReleaseComObjectButIgnoreNull(eu);
+            }
+        }
+
+        private static void ReleaseComObjectButIgnoreNull(object comObject)
+        {
+            if (comObject != null)
+            {
+                Marshal.ReleaseComObject(comObject);
+            }
         }
     }
 }

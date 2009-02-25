@@ -63,7 +63,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             var processor = new FrameByIndexProcessor(frameIndex, htmlDocument);
 
-            NativeMethods.EnumIWebBrowser2Interfaces(processor);
+            IEUtils.EnumIWebBrowser2Interfaces(processor);
 
             return processor.IWebBrowser2();
         }
