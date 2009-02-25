@@ -21,7 +21,6 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,15 +30,18 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SpanExists()
 		{
-			Assert.IsTrue(Ie.Span("spanid1").Exists);
-			Assert.IsTrue(Ie.Span(new Regex("spanid1")).Exists);
-			Assert.IsFalse(Ie.Span("nonexistingspanid1").Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.Span("spanid1").Exists);
+                                Assert.IsTrue(browser.Span(new Regex("spanid1")).Exists);
+                                Assert.IsFalse(browser.Span("nonexistingspanid1").Exists);
+		                    });
 		}
 
 		[Test]
 		public void SpanElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Span>();
+            var elementTags = ElementFactory.GetElementTags<Span>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("span", elementTags[0].TagName);
 		}
@@ -47,45 +49,52 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SpanTest()
 		{
-			Span Span = Ie.Span("spanid1");
+		    ExecuteTest(browser =>
+		                    {
+                                var Span = browser.Span("spanid1");
 
-			Assert.IsInstanceOfType(typeof (IElementsContainer), Span);
-            Assert.IsInstanceOfType(typeof (ElementsContainer<Span>), Span);
+		                        Assert.IsInstanceOfType(typeof (IElementsContainer), Span);
+		                        Assert.IsInstanceOfType(typeof (ElementsContainer<Span>), Span);
 
-			Assert.IsNotNull(Span, "Span should bot be null");
-			Assert.AreEqual("spanid1", Span.Id, "Unexpected id");
+		                        Assert.IsNotNull(Span, "Span should bot be null");
+		                        Assert.AreEqual("spanid1", Span.Id, "Unexpected id");
+		                    });
 		}
 
 		[Test]
 		public void Spans()
 		{
 			const int expectedSpansCount = 3;
-			Assert.AreEqual(expectedSpansCount, Ie.Spans.Count, "Unexpected number of Spans");
 
-			// Collection.Length
-			SpanCollection formSpans = Ie.Spans;
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(expectedSpansCount, browser.Spans.Count, "Unexpected number of Spans");
 
-			// Collection items by index
-			Assert.AreEqual("spanid1", Ie.Spans[0].Id);
-			Assert.AreEqual("Span1", Ie.Spans[1].Id);
+		                        // Collection.Length
+                                var formSpans = browser.Spans;
 
-			IEnumerable SpanEnumerable = formSpans;
-			IEnumerator SpanEnumerator = SpanEnumerable.GetEnumerator();
+		                        // Collection items by index
+                                Assert.AreEqual("spanid1", browser.Spans[0].Id);
+                                Assert.AreEqual("Span1", browser.Spans[1].Id);
 
-			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
-			foreach (Span inputSpan in formSpans)
-			{
-				SpanEnumerator.MoveNext();
-				object enumSpan = SpanEnumerator.Current;
+		                        IEnumerable SpanEnumerable = formSpans;
+		                        var SpanEnumerator = SpanEnumerable.GetEnumerator();
 
-				Assert.IsInstanceOfType(inputSpan.GetType(), enumSpan, "Types are not the same");
-				Assert.AreEqual(inputSpan.OuterHtml, ((Span) enumSpan).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (var inputSpan in formSpans)
+		                        {
+		                            SpanEnumerator.MoveNext();
+		                            var enumSpan = SpanEnumerator.Current;
 
-			Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(expectedSpansCount, count);
+		                            Assert.IsInstanceOfType(inputSpan.GetType(), enumSpan, "Types are not the same");
+		                            Assert.AreEqual(inputSpan.OuterHtml, ((Span) enumSpan).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
+
+		                        Assert.IsFalse(SpanEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(expectedSpansCount, count);
+		                    });
 		}
 
 		public override Uri TestPageUri

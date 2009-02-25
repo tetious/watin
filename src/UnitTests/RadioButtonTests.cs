@@ -21,7 +21,6 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -31,7 +30,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void RadioButtonElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<RadioButton>();
+            var elementTags = ElementFactory.GetElementTags<RadioButton>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("input", elementTags[0].TagName);
 			Assert.AreEqual("radio", elementTags[0].InputType);

@@ -103,12 +103,16 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SetIESettings()
 		{
-			ISettings settings = new DefaultSettings();
-			Assert.AreNotEqual(111, Settings.AttachToIETimeOut);
-			settings.AttachToIETimeOut = 111;
+            // GIVEN
+			Assert.AreNotEqual(111, Settings.AttachToIETimeOut, "Pre condition failed");
 
-			Settings.Instance = settings;
-			Assert.AreEqual(111, Settings.AttachToIETimeOut);
+            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+
+            // WHEN
+		    Settings.Instance = settings;
+			
+            // THEN
+            Assert.AreEqual(111, Settings.AttachToIETimeOut);
 		}
 	}
 }

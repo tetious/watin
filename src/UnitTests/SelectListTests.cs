@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void SupportedElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<SelectList>();
+            var elementTags = ElementFactory.GetElementTags<SelectList>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("select", elementTags[0].TagName);
 		}
