@@ -16,18 +16,14 @@
 
 #endregion Copyright
 
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
 {
 	/// <summary>
-	/// This class provides specialized functionality for a HTML td or th element.
+	/// This class provides specialized functionality for a HTML td element.
 	/// </summary>
     [ElementTag("td")]
-    // TODO: Adding th support in this way would break many test out in the field
-    //       maybe add a TableHeaderCell element instead.
-    //[ElementTag("th")] S
     public sealed class TableCell : ElementsContainer<TableCell>
 	{
 		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
@@ -49,7 +45,7 @@ namespace WatiN.Core
 		/// <value>The index of the cell.</value>
 		public int Index
 		{
-			get { return int.Parse(GetAttributeValue("cellindex")); }
+			get { return int.Parse(GetAttributeValue("cellIndex")); }
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableCellElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<TableCell>();
+            var elementTags = ElementFactory.GetElementTags<TableCell>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("td", elementTags[0].TagName);
 		}
@@ -39,71 +39,89 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void TableCellExists()
 		{
-			Assert.IsTrue(Ie.TableCell("td1").Exists);
-			Assert.IsTrue(Ie.TableCell(new Regex("td1")).Exists);
-			Assert.IsFalse(Ie.Table("nonexistingtd1").Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.TableCell("td1").Exists);
+                                Assert.IsTrue(browser.TableCell(new Regex("td1")).Exists);
+                                Assert.IsFalse(browser.Table("nonexistingtd1").Exists);
+		                    });
 		}
 
 		[Test]
 		public void TableCellByIndexExists()
 		{
-			Assert.IsTrue(Ie.TableCell("td1", 0).Exists);
-			Assert.IsTrue(Ie.TableCell(new Regex("td1"), 0).Exists);
-			Assert.IsFalse(Ie.TableCell("td1", 100).Exists);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(browser.TableCell("td1", 0).Exists);
+                                Assert.IsTrue(browser.TableCell(new Regex("td1"), 0).Exists);
+                                Assert.IsFalse(browser.TableCell("td1", 100).Exists);
+		                    });
 		}
 
 		[Test]
 		public void TableCellByIndex()
 		{
-			// accessing several occurences with equal id
-			Assert.AreEqual("a1", Ie.TableCell("td1", 0).Text);
-			Assert.AreEqual("b1", Ie.TableCell("td1", 1).Text);
+		    ExecuteTest(browser =>
+		                    {
+		                        // accessing several occurences with equal id
+                                Assert.AreEqual("a1", browser.TableCell("td1", 0).Text);
+                                Assert.AreEqual("b1", browser.TableCell("td1", 1).Text);
+		                    });
 		}
 
 		[Test]
 		public void TableCellGetParentTableRow()
 		{
-			TableCell tableCell = Ie.TableCell(Find.ByText("b1"));
-			Assert.IsInstanceOfType(typeof (TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
-			Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
+		    ExecuteTest(browser =>
+		                    {
+                                var tableCell = browser.TableCell(Find.ByText("b1"));
+		                        Assert.IsInstanceOfType(typeof (TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
+		                        Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
+		                    });
 		}
 
 		[Test]
 		public void TableCellCellIndex()
 		{
-			Assert.AreEqual(0, Ie.TableCell(Find.ByText("b1")).Index);
-			Assert.AreEqual(1, Ie.TableCell(Find.ByText("b2")).Index);
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.AreEqual(0, browser.TableCell(Find.ByText("b1")).Index);
+                                Assert.AreEqual(1, browser.TableCell(Find.ByText("b2")).Index);
+		                    });
 		}
 
 		[Test]
 		public void TableCells()
 		{
-			// Collection.Length
-			TableCellCollection cells = Ie.Table("table1").TableRows[1].TableCells;
+		    ExecuteTest(browser =>
+		                    {
+		                        // Collection.Length
+                                var cells = browser.Table("table1").TableRows[1].TableCells;
 
-			Assert.AreEqual(2, cells.Count);
+		                        Assert.AreEqual(2, cells.Count);
 
-			// Collection items by index
-			Assert.AreEqual("td1", cells[0].Id);
-			Assert.AreEqual("td2", cells[1].Id);
+		                        // Collection items by index
+		                        Assert.AreEqual("td1", cells[0].Id);
+		                        Assert.AreEqual("td2", cells[1].Id);
 
-			IEnumerable cellEnumerable = cells;
-			IEnumerator cellEnumerator = cellEnumerable.GetEnumerator();
+		                        IEnumerable cellEnumerable = cells;
+		                        var cellEnumerator = cellEnumerable.GetEnumerator();
 
-			// Collection iteration and comparing the result with Enumerator
-			int count = 0;
-			foreach (TableCell cell in cells)
-			{
-				cellEnumerator.MoveNext();
-				object enumTable = cellEnumerator.Current;
+		                        // Collection iteration and comparing the result with Enumerator
+		                        var count = 0;
+		                        foreach (var cell in cells)
+		                        {
+		                            cellEnumerator.MoveNext();
+		                            var enumTable = cellEnumerator.Current;
 
-				Assert.IsInstanceOfType(cell.GetType(), enumTable, "Types are not the same");
-				Assert.AreEqual(cell.OuterHtml, ((TableCell) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
-				++count;
-			}
+		                            Assert.IsInstanceOfType(cell.GetType(), enumTable, "Types are not the same");
+		                            Assert.AreEqual(cell.OuterHtml, ((TableCell) enumTable).OuterHtml, "foreach and IEnumator don't act the same.");
+		                            ++count;
+		                        }
 
-			Assert.IsFalse(cellEnumerator.MoveNext(), "Expected last item");
-			Assert.AreEqual(2, count);
+		                        Assert.IsFalse(cellEnumerator.MoveNext(), "Expected last item");
+		                        Assert.AreEqual(2, count);
+		                    });
 		}
 
 		public override Uri TestPageUri
@@ -111,25 +129,27 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
-        [Test]
+        [Test, Ignore("will be replaced with a new element TableHeader")]
         public void TableCellShouldAlsoRecognizeTHElements()
         {
-            using (IE browser = new IE(TablesUri))
-            {
-                Table table = browser.Table("tdandth");
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(TablesUri);
 
-                // Check row with TH elements
-                TableRow rowWithTHs = table.TableRows[0];
-                Assert.That(rowWithTHs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
-                Assert.That(rowWithTHs.TableCells[0].TagName, Is.EqualTo("TH"), "index 0");
-                Assert.That(rowWithTHs.TableCells[1].TagName, Is.EqualTo("TH"), "index 1");
+                                var table = browser.Table("tdandth");
 
-                // Check row with TD elements
-                TableRow rowWithTDs = table.TableRows[1];
-                Assert.That(rowWithTDs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
-                Assert.That(rowWithTDs.TableCells[0].TagName, Is.EqualTo("TD"), "index 0");
-                Assert.That(rowWithTDs.TableCells[1].TagName, Is.EqualTo("TD"), "index 1");
-            }
+                                // Check row with TH elements
+                                var rowWithTHs = table.TableRows[0];
+                                Assert.That(rowWithTHs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
+                                Assert.That(rowWithTHs.TableCells[0].TagName, Is.EqualTo("TH"), "index 0");
+                                Assert.That(rowWithTHs.TableCells[1].TagName, Is.EqualTo("TH"), "index 1");
+
+                                // Check row with TD elements
+                                var rowWithTDs = table.TableRows[1];
+                                Assert.That(rowWithTDs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
+                                Assert.That(rowWithTDs.TableCells[0].TagName, Is.EqualTo("TD"), "index 0");
+                                Assert.That(rowWithTDs.TableCells[1].TagName, Is.EqualTo("TD"), "index 1");
+                            });
         }
 	}
 }

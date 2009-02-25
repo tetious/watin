@@ -36,7 +36,7 @@ namespace WatiN.Core.Native.Mozilla
         public static readonly List<string> ReadPropertyInsteadOfAttribute = new List<string>
                 {
                     "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
-                    "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex"
+                    "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
                 };
 
         /// <summary>
