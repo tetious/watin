@@ -56,8 +56,9 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Frame> GetElements()
         {
+            var context = new ConstraintContext();
             foreach (Frame frame in frames)
-                if (frame.Matches(findBy))
+                if (frame.Matches(findBy, context))
                     yield return frame;
         }
     }

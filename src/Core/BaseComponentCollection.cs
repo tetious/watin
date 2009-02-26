@@ -90,8 +90,9 @@ namespace WatiN.Core
             if (findBy == null)
                 throw new ArgumentNullException("findBy");
 
+            var context = new ConstraintContext();
             foreach (TComponent component in this)
-                if (component.Matches(findBy))
+                if (component.Matches(findBy, context))
                     return true;
 
             return false;
@@ -124,8 +125,9 @@ namespace WatiN.Core
             if (findBy == null)
                 throw new ArgumentNullException("findBy");
 
+            var context = new ConstraintContext();
             foreach (TComponent component in this)
-                if (component.Matches(findBy))
+                if (component.Matches(findBy, context))
                     return component;
 
             return null;

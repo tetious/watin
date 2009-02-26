@@ -84,22 +84,23 @@ namespace WatiN.Core
 
         private IEnumerable<Element> WrapMatchingElements(IEnumerable<INativeElement> nativeElements)
         {
+            var context = new ConstraintContext();
             foreach (INativeElement nativeElement in nativeElements)
             {
-                var element = WrapElementIfMatch(nativeElement);
+                var element = WrapElementIfMatch(nativeElement, context);
                 if (element != null)
                     yield return element;
             }
         }
 
-        private Element WrapElementIfMatch(INativeElement nativeElement)
+        private Element WrapElementIfMatch(INativeElement nativeElement, ConstraintContext context)
         {
             nativeElement.WaitUntilReady();
 
             if (IsMatchByTag(nativeElement))
             {
                 var element = WrapElement(nativeElement);
-                if (IsMatchByConstraint(element))
+                if (IsMatchByConstraint(element, context))
                     return element;
             }
 
@@ -116,9 +117,9 @@ namespace WatiN.Core
             return ElementTag.IsMatch(ElementTags, nativeElement);
         }
 
-        private bool IsMatchByConstraint(Element element)
+        private bool IsMatchByConstraint(Element element, ConstraintContext context)
         {
-            return element.Matches(Constraint);
+            return element.Matches(Constraint, context);
         }
     }
 }

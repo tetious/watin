@@ -37,8 +37,9 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
+            var context = new ConstraintContext();
             foreach (Element element in elements)
-                if (element.Matches(Constraint))
+                if (element.Matches(Constraint, context))
                     yield return element;
         }
     }

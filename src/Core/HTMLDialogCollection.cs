@@ -29,14 +29,18 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of open <see cref="HtmlDialog" />.
 	/// </summary>
-	public class HtmlDialogCollection : IEnumerable
+	public class HtmlDialogCollection : BaseComponentCollection<HtmlDialog, HtmlDialogCollection>
 	{
-		private readonly bool _waitForComplete;
+        // TODO: earlier implementation had an optimization to only wait for complete of returned instances
 		private readonly List<HtmlDialog> htmlDialogs;
+        private readonly Constraint findBy;
+        private readonly bool waitForComplete;
 
-		public HtmlDialogCollection(Process ieProcess, bool waitForComplete)
+	    public HtmlDialogCollection(Process ieProcess, bool waitForComplete)
 		{
-			_waitForComplete = waitForComplete;
+            findBy = Find.Any;
+            this.waitForComplete = waitForComplete;
+
 			htmlDialogs = new List<HtmlDialog>();
 
 			var hWnd = IntPtr.Zero;
@@ -48,7 +52,51 @@ namespace WatiN.Core
 				NativeMethods.EnumThreadProc callbackProc = EnumChildForTridentDialogFrame;
 				NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
 			}
-		}
+        }
+
+        private HtmlDialogCollection(Constraint findBy, List<HtmlDialog> htmlDialogs, bool waitForComplete)
+        {
+            this.findBy = findBy;
+            this.htmlDialogs = htmlDialogs;
+            this.waitForComplete = waitForComplete;
+        }
+
+        public void CloseAll()
+        {
+            //TODO: Since HTMLDialog collection contains all HTMLDialogs
+            //      within the processId of this IE instance, there might be
+            //      other HTMLDialogs not created by this IE instance. Closing
+            //      also those HTMLDialogs seems not right.
+            //      So how will we handle this? For now we keep the "old"
+            //      implementation.
+
+            // Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
+            foreach (var htmlDialog in htmlDialogs)
+            {
+                htmlDialog.Close();
+            }
+        }
+
+	    /// <inheritdoc />
+        protected override HtmlDialogCollection CreateFilteredCollection(Constraint findBy)
+        {
+            return new HtmlDialogCollection(this.findBy & findBy, htmlDialogs, waitForComplete);
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<HtmlDialog> GetElements()
+        {
+            var context = new ConstraintContext();
+            foreach (HtmlDialog htmlDialog in htmlDialogs)
+            {
+                if (htmlDialog.Matches(findBy, context))
+                {
+                    if (waitForComplete)
+                        htmlDialog.WaitForComplete();
+                    yield return htmlDialog;
+                }
+            }
+        }
 
 		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
 		{
@@ -59,115 +107,6 @@ namespace WatiN.Core
 			}
 
 			return true;
-		}
-
-		public int Length
-		{
-			get { return htmlDialogs.Count; }
-		}
-
-		public HtmlDialog this[int index]
-		{
-			get { return GetHTMLDialogByIndex(htmlDialogs, index, _waitForComplete); }
-		}
-
-		public void CloseAll()
-		{
-			//TODO: Since HTMLDialog collection contains all HTMLDialogs
-			//      within the processId of this IE instance, there might be
-			//      other HTMLDialogs not created by this IE instance. Closing
-			//      also those HTMLDialogs seems not right.
-			//      So how will we handle this? For now we keep the "old"
-			//      implementation.
-
-			// Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
-			foreach (var htmlDialog in htmlDialogs)
-			{
-				htmlDialog.Close();
-			}
-		}
-
-		public bool Exists(Constraint findBy)
-		{
-			foreach (var htmlDialog in htmlDialogs)
-			{
-				if (htmlDialog.Matches(findBy))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-        public HtmlDialog Filter(Constraint constraint)
-        {
-            foreach (var htmlDialog in htmlDialogs)
-			{
-				if (htmlDialog.Matches(constraint))
-				{
-					return htmlDialog;
-				}
-			}
-            return null;
-        }
-
-		private static HtmlDialog GetHTMLDialogByIndex(IList htmlDialogs, int index, bool waitForComplete)
-		{
-			var htmlDialog = (HtmlDialog) htmlDialogs[index];
-			if (waitForComplete)
-			{
-				htmlDialog.WaitForComplete();
-			}
-
-			return htmlDialog;
-		}
-
-		/// <exclude />
-		public Enumerator GetEnumerator()
-		{
-			return new Enumerator(htmlDialogs, _waitForComplete);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		/// <exclude />
-		public class Enumerator : IEnumerator
-		{
-			private readonly List<HtmlDialog> _htmlDialogs;
-			private readonly bool _waitForComplete;
-			private int index;
-
-			public Enumerator(List<HtmlDialog> htmlDialogs, bool waitForComplete)
-			{
-				_htmlDialogs = htmlDialogs;
-				_waitForComplete = waitForComplete;
-				Reset();
-			}
-
-			public void Reset()
-			{
-				index = -1;
-			}
-
-			public bool MoveNext()
-			{
-				++index;
-				return index < _htmlDialogs.Count;
-			}
-
-			public HtmlDialog Current
-			{
-				get { return GetHTMLDialogByIndex(_htmlDialogs, index, _waitForComplete); }
-			}
-
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
 		}
 	}
 }

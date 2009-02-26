@@ -79,9 +79,10 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<IE> GetElements()
         {
+            var context = new ConstraintContext();
             foreach (IE ie in internetExplorers)
             {
-                if (ie.Matches(findBy))
+                if (ie.Matches(findBy, context))
                 {
                     if (waitForComplete)
                         ie.WaitForComplete();

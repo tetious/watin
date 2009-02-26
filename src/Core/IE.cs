@@ -702,10 +702,11 @@ namespace WatiN.Core
 		{
 			var allBrowsers = new ShellWindows2();
 
-		    foreach (IWebBrowser2 browser in allBrowsers)
+            var context = new ConstraintContext();
+            foreach (IWebBrowser2 browser in allBrowsers)
 		    {
                 var ie = new IE(browser, false);
-                if (ie.Matches(findBy))
+                if (ie.Matches(findBy, context))
                     return ie;
 		    }
 
@@ -1187,7 +1188,7 @@ namespace WatiN.Core
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ToString());
 
 		    var action = new TryActionUntilTimeOut(timeout){SleepTime = 500};
-            var result = action.Try(() => HtmlDialogs.Filter(findBy));
+            var result = action.Try(() => HtmlDialogs.First(findBy));
             
             if (result == null)
             {
