@@ -447,16 +447,16 @@ namespace WatiN.Core
         /// <summary>
         /// Gets a page object of the desired type that wraps this document.
         /// </summary>
-        /// <typeparam name="T">The <see cref="Page" /> subclass</typeparam>
+        /// <typeparam name="TPage">The <see cref="Page" /> subclass</typeparam>
         /// <returns>The page object</returns>
         /// <example>
         /// <code>
         /// browser.Page&lt;SignInPage&gt;>().SignIn("somebody", "letmein");
         /// </code>
         /// </example>
-        public T Page<T>() where T : Page, new()
+        public TPage Page<TPage>() where TPage : Page, new()
         {
-            return Core.Page.CreatePage<T>(this);
+            return Core.Page.CreatePage<TPage>(this);
         }
 
         private NativeElementCollectionAdapter All
