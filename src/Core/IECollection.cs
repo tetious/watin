@@ -18,8 +18,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Constraints;
 using WatiN.Core.Native.InternetExplorer;
 
 namespace WatiN.Core
@@ -27,107 +29,65 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of open <see cref="IE" /> instances.
 	/// </summary>
-	public class IECollection : IEnumerable
+	public class IECollection : BaseComponentCollection<IE, IECollection>
 	{
-		private readonly ArrayList internetExplorers;
-		private readonly bool _waitForComplete;
+        // TODO: earlier implementation had an optimization to only wait for complete of returned instances
+		private readonly List<IE> internetExplorers;
+        private readonly Constraint findBy;
+        private readonly bool waitForComplete;
 
-		public IECollection() : this(true) {}
+        public IECollection()
+            : this(true)
+        {
+        }
 
-		public IECollection(bool waitForComplete)
+	    public IECollection(bool waitForComplete)
 		{
-			_waitForComplete = waitForComplete;
+            findBy = Find.Any;
+            this.waitForComplete = waitForComplete;
 
-			internetExplorers = new ArrayList();
+            internetExplorers = new List<IE>();
+            var allBrowsers = new ShellWindows2();
 
-			var allBrowsers = new ShellWindows2();
+            foreach (IWebBrowser2 internetExplorer in allBrowsers)
+            {
+                try
+                {
+                    if (internetExplorer.Document is IHTMLDocument2)
+                    {
+                        var ie = new IE(internetExplorer);
+                        internetExplorers.Add(ie);
+                    }
+                }
+                catch { }
+            }
+        }
 
-			foreach (IWebBrowser2 internetExplorer in allBrowsers)
-			{
-				try
-				{
-					if (internetExplorer.Document is IHTMLDocument2)
-					{
-						var ie = new IE(internetExplorer);
-						internetExplorers.Add(ie);
-					}
-				}
-				catch {}
-			}
-		}
+        private IECollection(Constraint findBy, List<IE> internetExplorers, bool waitForComplete)
+        {
+            this.findBy = findBy;
+            this.internetExplorers = internetExplorers;
+            this.waitForComplete = waitForComplete;
+        }
 
-        [Obsolete("Use Count instead")]
-		public int Length
-		{
-			get { return Count; }
-		}
+	    /// <inheritdoc />
+        protected override IECollection CreateFilteredCollection(Constraint findBy)
+        {
+            return new IECollection(this.findBy & findBy, internetExplorers, waitForComplete);
+        }
 
-        public int Count
-		{
-			get { return internetExplorers.Count; }
-		}
-
-		public IE this[int index]
-		{
-			get { return GetIEByIndex(internetExplorers, index, _waitForComplete); }
-		}
-
-		private static IE GetIEByIndex(IList internetExplorers, int index, bool waitForComplete)
-		{
-			var ie = (IE) internetExplorers[index];
-			if (waitForComplete)
-			{
-				ie.WaitForComplete();
-			}
-
-			return ie;
-		}
-
-		/// <exclude />
-		public Enumerator GetEnumerator()
-		{
-			return new Enumerator(internetExplorers, _waitForComplete);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		/// <exclude />
-		public class Enumerator : IEnumerator
-		{
-			private readonly ArrayList children;
-			private readonly bool _waitForComplete;
-			private int index;
-
-			public Enumerator(ArrayList children, bool waitForComplete)
-			{
-				this.children = children;
-				_waitForComplete = waitForComplete;
-				Reset();
-			}
-
-			public void Reset()
-			{
-				index = -1;
-			}
-
-			public bool MoveNext()
-			{
-				++index;
-				return index < children.Count;
-			}
-
-			public IE Current
-			{
-				get { return GetIEByIndex(children, index, _waitForComplete); }
-			}
-
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
-		}
+        /// <inheritdoc />
+        protected override IEnumerable<IE> GetElements()
+        {
+            foreach (IE ie in internetExplorers)
+            {
+                if (ie.Matches(findBy))
+                {
+                    if (waitForComplete)
+                        ie.WaitForComplete();
+                    yield return ie;
+                }
+            }
+        }
 	}
 }

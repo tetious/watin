@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
 using WatiN.Core.Native;
@@ -27,78 +26,39 @@ namespace WatiN.Core
 	/// <summary>
 	/// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
 	/// </summary>
-	public class FrameCollection : IEnumerable
+	public class FrameCollection : BaseComponentCollection<Frame, FrameCollection>
 	{
+        private readonly Constraint findBy;
         private readonly List<Frame> frames;
 
 		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
 		{
+            findBy = Find.Any;
+
             frames = new List<Frame>();
 
             foreach (INativeDocument frameDocument in htmlDocument.Frames)
                 frames.Add(new Frame(domContainer, frameDocument));
 		}
 
-        [Obsolete("Use Count property instead.")]
-		public int Length
-		{
-			get { return Count; }
-		}
-
-        public int Count
-		{
-			get { return frames.Count; }
-		}
-
-		public Frame this[int index]
-		{
-			get { return frames[index]; }
-		}
-
-		public bool Exists(Constraint findBy)
-		{
-		    return (First(findBy) != null);
-		}
-
-        /// <summary>
-        /// Returns the first frame of this collection. If colection contains
-        /// no frames, null will be returned.
-        /// </summary>
-        public Frame First()
+        private FrameCollection(Constraint findBy, List<Frame> frames)
         {
-            return First(Find.First());
+            this.findBy = findBy;
+            this.frames = frames;
         }
 
-        /// <summary>
-        /// Find a frame within this collection. If no match is found it will return null.
-        /// </summary>
-        /// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find.</param>
-        public Frame First(Constraint findBy)
+        /// <inheritdoc />
+        protected override FrameCollection CreateFilteredCollection(Constraint findBy)
         {
-            foreach (var frame in frames)
-            {
+            return new FrameCollection(this.findBy & findBy, frames);
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<Frame> GetElements()
+        {
+            foreach (Frame frame in frames)
                 if (frame.Matches(findBy))
-                {
-                    // Return
-                    return frame;
-                }
-            }
-
-            return null;
+                    yield return frame;
         }
-
-		/// <exclude />
-        public IEnumerator GetEnumerator()
-		{
-			foreach(var element in frames)
-			{
-			    yield return element;
-			}
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
+    }
 }
