@@ -69,7 +69,7 @@ namespace WatiN.Core
     /// <example>
     /// <para>
     /// Consider a calendar user control that is represented as an HTML table with
-    /// clickable cells.  The same calendar user control may appear in make web pages
+    /// clickable cells.  The same calendar user control may appear in many web pages
     /// and need to be accessed by many tests.  Moreover, selecting dates in such a
     /// control could be somewhat tedious as it involved clicking on links to set the
     /// month and day.
@@ -145,7 +145,7 @@ namespace WatiN.Core
         /// The default implementation verifies that <paramref name="element"/> satisfies <see cref="ElementConstraint" />.
         /// </para>
         /// <para>
-        /// Subclasses can override this method to customize how document verification takes place.
+        /// Subclasses can override this method to customize how verification takes place.
         /// </para>
         /// </remarks>
         /// <param name="element">The element to verify, not null</param>
@@ -158,23 +158,23 @@ namespace WatiN.Core
 
         internal sealed override void Initialize(Element untypedElement)
         {
-            if (this.element != null)
+            if (element != null)
                 throw new InvalidOperationException(Resources.Control_HasAlreadyBeenInitialized);
 
-            TElement element = untypedElement as TElement;
-            if (element == null && untypedElement != null)
+            var typedElement = untypedElement as TElement;
+            if (typedElement == null && untypedElement != null)
                 throw new WatiNException(String.Format(
                     "The element was of type '{0}' but expected an element of type {1}.", untypedElement.GetType(), typeof(TElement)));
 
-            this.element = element;
+            element = typedElement;
         }
 
         internal sealed override void Initialize(IElementContainer elementContainer, Constraint findBy)
         {
-            if (this.element != null)
+            if (element != null)
                 throw new InvalidOperationException(Resources.Control_HasAlreadyBeenInitialized);
 
-            this.element = elementContainer.ElementOfType<TElement>(ElementConstraint & findBy);
+            element = elementContainer.ElementOfType<TElement>(ElementConstraint & findBy);
         }
 
         internal sealed override Element GetUntypedElement()
@@ -300,7 +300,6 @@ namespace WatiN.Core
             StringBuilder description = new StringBuilder();
             description.Append(GetType().Name);
 
-            // Note: Uses unvalidated document to avoid throwing an exception if the document is incorrect.
             Element element = GetUntypedElement();
             if (element != null)
             {
