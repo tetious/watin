@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using WatiN.Core.Properties;
 
 namespace WatiN.Core.Constraints
 {

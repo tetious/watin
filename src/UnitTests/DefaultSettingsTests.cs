@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests
 {
@@ -50,19 +49,18 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Clone()
         {
-            ISettings settings = new DefaultSettings();
+            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
 
-            settings.AttachToIETimeOut = 111;
-            bool autoCloseDialogs = !settings.AutoCloseDialogs;
+            var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
             settings.HighLightColor = "strange color";
-            bool highLightElement = !settings.HighLightElement;
+            var highLightElement = !settings.HighLightElement;
             settings.HighLightElement = highLightElement;
             settings.WaitForCompleteTimeOut = 222;
             settings.WaitUntilExistsTimeOut = 333;
             settings.SleepTime = 444;
 
-            ISettings settingsClone = settings.Clone();
+            var settingsClone = settings.Clone();
             Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
             Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
@@ -83,19 +81,18 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Reset()
         {
-            ISettings settings = new DefaultSettings();
+            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
 
-            settings.AttachToIETimeOut = 111;
-            bool autoCloseDialogs = !settings.AutoCloseDialogs;
+            var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
             settings.HighLightColor = "strange color";
-            bool highLightElement = !settings.HighLightElement;
+            var highLightElement = !settings.HighLightElement;
             settings.HighLightElement = highLightElement;
             settings.WaitForCompleteTimeOut = 222;
             settings.WaitUntilExistsTimeOut = 333;
             settings.SleepTime = 444;
 
-            ISettings settingsClone = settings.Clone();
+            var settingsClone = settings.Clone();
             Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
             Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
@@ -111,11 +108,9 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void ChangeSettingInCloneShouldNotChangeOriginalSetting()
         {
-            ISettings settings = new DefaultSettings();
+            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
 
-            settings.AttachToIETimeOut = 111;
-
-            ISettings settingsClone = settings.Clone();
+            var settingsClone = settings.Clone();
             Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected clone 1");
 
             settingsClone.AttachToIETimeOut = 222;

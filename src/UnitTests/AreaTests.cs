@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,7 +29,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AreaElementTags()
         {
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Area>();
+            var elementTags = ElementFactory.GetElementTags<Area>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
             Assert.AreEqual("area", elementTags[0].TagName);
             Assert.AreEqual(null, elementTags[0].InputType);

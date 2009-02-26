@@ -595,7 +595,7 @@ namespace WatiN.Core
                 throw new ArgumentException("iwebBrowser2 needs to implement shdocvw.IWebBrowser2");
             }
 
-            this.ie = internetExplorer;
+            ie = internetExplorer;
 
             if (finishInitialization)
                 FinishInitialization(null);
@@ -681,7 +681,7 @@ namespace WatiN.Core
 
 	    private static IE FindIE(Constraint findBy, int timeout, bool waitForComplete)
 		{
-            Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ToString());
+            Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy);
 
             var action = new TryActionUntilTimeOut(timeout) { SleepTime = 500 };
             var ie = action.Try(() => FindIEPartiallyInitialized(findBy));

@@ -166,19 +166,6 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets the table rows that are direct children of this <see cref="Table"/>, leaving
-        /// out table rows of any nested tables within this <see cref="Table"/>. If the <see cref="Table"/>
-        /// has multiple <see cref="Core.TableBody"/> elements, the <see cref="TableRowCollection"/> contains 
-        /// all the rows of these <see cref="Core.TableBody"/> elements.
-        /// </summary>
-        /// <value>The table rows collection.</value>
-        [Obsolete("Use OwnTableRows instead.")]
-        public TableRowCollection TableRowsDirectChildren
-        {
-            get { return OwnTableRows; }
-        }
-
-        /// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in the
         /// first <see cref="Core.TableBody"/> including rows in nested tables.
@@ -186,7 +173,6 @@ namespace WatiN.Core
         /// <param name="findText">The text to find.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use TableRow(Find.ByTextInColumn(findText, inColumn)) instead.")]
         public TableRow FindRow(string findText, int inColumn)
         {
             Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
@@ -201,8 +187,7 @@ namespace WatiN.Core
         /// <param name="findText">The text to find.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(findText, inColumn)) instead.")]
-        public TableRow FindRowInDirectChildren(string findText, int inColumn)
+        public TableRow FindRowInOwnTableRows(string findText, int inColumn)
         {
             Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
             return OwnTableRow(Find.ByTextInColumn(findText, inColumn));
@@ -216,7 +201,6 @@ namespace WatiN.Core
         /// <param name="findTextRegex">The regular expression the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use TableRow(Find.ByTextInColumn(findTextRegex, inColumn)) instead.")]
         public TableRow FindRow(Regex findTextRegex, int inColumn)
         {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
@@ -231,8 +215,7 @@ namespace WatiN.Core
         /// <param name="findTextRegex">The regular expression the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(findTextRegex, inColumn)) instead.")]
-        public TableRow FindRowInDirectChildren(Regex findTextRegex, int inColumn)
+        public TableRow FindRowInOwnTableRows(Regex findTextRegex, int inColumn)
         {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
             return OwnTableRow(Find.ByTextInColumn(findTextRegex, inColumn));
@@ -246,7 +229,6 @@ namespace WatiN.Core
         /// <param name="comparer">The comparer that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use TableRow(Find.ByTextInColumn(comparer, inColumn)) instead.")]
         public TableRow FindRow(Comparer<string> comparer, int inColumn)
         {
             Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
@@ -261,8 +243,7 @@ namespace WatiN.Core
         /// <param name="comparer">The comparer that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(comparer, inColumn)) instead.")]
-        public TableRow FindRowInDirectChildren(Comparer<string> comparer, int inColumn)
+        public TableRow FindRowInOwnTableRows(Comparer<string> comparer, int inColumn)
         {
             Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
             return OwnTableRow(Find.ByTextInColumn(comparer, inColumn));
@@ -276,7 +257,6 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use TableRow(Find.ByTextInColumn(predicate, inColumn)) instead.")]
         public TableRow FindRow(Predicate<string> predicate, int inColumn)
         {
             return TableRow(Find.ByTextInColumn(predicate, inColumn));
@@ -290,8 +270,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(predicate, inColumn)) instead.")]
-        public TableRow FindRowInDirectChildren(Predicate<string> predicate, int inColumn)
+        public TableRow FindRowInOwnTableRows(Predicate<string> predicate, int inColumn)
         {
             return OwnTableRow(Find.ByTextInColumn(predicate, inColumn));
         }
@@ -304,7 +283,6 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use TableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate)))) instead.")]
         public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
         {
             return TableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
@@ -318,8 +296,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        [Obsolete("Use OwnTableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate)))) instead.")]
-        public TableRow FindRowInDirectChildren(Predicate<TableCell> predicate, int inColumn)
+        public TableRow FindRowInOwnTableRows(Predicate<TableCell> predicate, int inColumn)
         {
             return OwnTableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }

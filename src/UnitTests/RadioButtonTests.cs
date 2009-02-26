@@ -108,7 +108,7 @@ namespace WatiN.Core.UnitTests
 		                        var radiobuttonEnumerator = radiobuttonEnumerable.GetEnumerator();
 
 		                        var count = 0;
-		                        foreach (RadioButton radioButton in formRadioButtons)
+		                        foreach (var radioButton in formRadioButtons)
 		                        {
 		                            radiobuttonEnumerator.MoveNext();
 		                            var enumRadioButton = radiobuttonEnumerator.Current;

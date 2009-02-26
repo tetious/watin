@@ -82,10 +82,10 @@ namespace WatiN.Core.UnitTests
         [Test, ExpectedException(typeof(WatiNException), ExpectedMessage = "Exception during execution of predicate for <INPUT type=button value=\"Button with no Id\">")]
         public void IfExceptionDuringExecutionOfPredicateItShouldBeClearThatThisAProblemInThePredicate()
         {
-            Button button = Ie.Button(delegate(Button b) { return b.Id.Contains("somethingoiojdoijsdf"); });
+            var button = Ie.Button(b => b.Id.Contains("somethingoiojdoijsdf"));
             
             //trigger search of the button
-            bool exists = button.Exists;
+            var exists = button.Exists;
         }
     }
 }

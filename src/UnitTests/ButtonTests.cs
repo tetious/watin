@@ -151,7 +151,7 @@ namespace WatiN.Core.UnitTests
 
 		                        // Collection iteration and comparing the result with Enumerator
 		                        var count = 0;
-		                        foreach (Button inputButton in formButtons)
+		                        foreach (var inputButton in formButtons)
 		                        {
 		                            buttonEnumerator.MoveNext();
 		                            var enumButton = buttonEnumerator.Current;

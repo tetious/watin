@@ -19,7 +19,6 @@
 using System;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core

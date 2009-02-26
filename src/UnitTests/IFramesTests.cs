@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests
                 catch (Exception e)
                 {
                     Assert.That(e, Is.InstanceOfType(typeof(FrameNotFoundException)), "Unexpected exception");
-                    Assert.That(e.Message, Is.EqualTo("Could not find a Frame or IFrame matching constraint: Attribute 'id' with value 'NonExistingIFrameID'"), "Unexpected message");
+                    Assert.That(e.Message, Is.EqualTo("Could not find a Frame or IFrame matching constraint: Attribute 'id' = 'NonExistingIFrameID'"), "Unexpected message");
                 }
             });
         }

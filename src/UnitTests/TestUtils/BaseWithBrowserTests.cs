@@ -73,7 +73,7 @@ namespace WatiN.Core.UnitTests
 	    [TestFixtureTearDown]
 		public override void FixtureTearDown()
 	    {
-            var exceptions= new List<Exception>();
+            var exceptions = new List<Exception>();
             BrowsersToTestWith.ForEach(browserTestManager =>
                                            {
                                                try
@@ -86,6 +86,7 @@ namespace WatiN.Core.UnitTests
                                                }
                                            });
 	        base.FixtureTearDown();
+
 	        foreach (var exception in exceptions)
 	            Logger.LogAction( exception.Message + Environment.NewLine + exception.StackTrace);
 

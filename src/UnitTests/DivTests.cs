@@ -20,7 +20,6 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,7 +29,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void DivElementTags()
 		{
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<Div>();
+            var elementTags = ElementFactory.GetElementTags<Div>();
 			Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
 			Assert.AreEqual("div", elementTags[0].TagName);
 		}
@@ -73,7 +72,7 @@ namespace WatiN.Core.UnitTests
 		                        var divEnumerator = divEnumerable.GetEnumerator();
 
 		                        var count = 0;
-		                        foreach (Div div in divs)
+		                        foreach (var div in divs)
 		                        {
 		                            divEnumerator.MoveNext();
 		                            var enumDiv = divEnumerator.Current;

@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void CheckBoxElementTags()
         {
-            IList<ElementTag> elementTags = ElementFactory.GetElementTags<CheckBox>();
+            var elementTags = ElementFactory.GetElementTags<CheckBox>();
             Assert.AreEqual(1, elementTags.Count, "1 elementtags expected");
             Assert.AreEqual("input", elementTags[0].TagName);
             Assert.AreEqual("checkbox", elementTags[0].InputType);

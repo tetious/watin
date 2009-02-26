@@ -161,7 +161,7 @@ namespace WatiN.Core.Native.Mozilla
 
         public INativeElementCollection AllDescendants
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".all"); }
+            get { return new FFElementCollection(ClientPort, ElementReference); }
         }
 
         public INativeElementCollection TableRows

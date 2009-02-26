@@ -186,7 +186,7 @@ namespace WatiN.Core.UnitTests
 
                                 var table = browser.Table("Table1");
 
-		                        Assert.That(table.FindRowInDirectChildren("2", 0), Is.Null);
+		                        Assert.That(table.FindRowInOwnTableRows("2", 0), Is.Null);
 
 		                    });
 		}
@@ -227,17 +227,17 @@ namespace WatiN.Core.UnitTests
 		}
 
         [Test]
-        public void TableRowsDirectChildren()
+        public void OwnTableRowsShouldNotReturnRowsOfNestedTables()
         {
             ExecuteTest(browser =>
                             {
                                 browser.GoTo(TablesUri);
 
                                 var table = browser.Table("Table1");
-                                Assert.That(table.TableRowsDirectChildren.Count, Is.EqualTo(3), "Unexpected number of TableRows");
-                                Assert.That(table.TableRowsDirectChildren[0].Id, Is.EqualTo("1"), "Unexpected Id");
-                                Assert.That(table.TableRowsDirectChildren[1].Id, Is.EqualTo("3"), "Unexpected Id");
-                                Assert.That(table.TableRowsDirectChildren[2].Id, Is.EqualTo("4"), "Unexpected Id");
+                                Assert.That(table.OwnTableRows.Count, Is.EqualTo(3), "Unexpected number of TableRows");
+                                Assert.That(table.OwnTableRows[0].Id, Is.EqualTo("1"), "Unexpected Id");
+                                Assert.That(table.OwnTableRows[1].Id, Is.EqualTo("3"), "Unexpected Id");
+                                Assert.That(table.OwnTableRows[2].Id, Is.EqualTo("4"), "Unexpected Id");
                             });
         }
 
