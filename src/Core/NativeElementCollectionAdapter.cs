@@ -521,6 +521,61 @@ namespace WatiN.Core
             get { return new ImageCollection(domContainer, CreateElementFinder<Image>(null)); }
         }
 
+        public TElement ElementOfType<TElement>(string elementId) where TElement : Element
+        {
+            return ElementOfType<TElement>(Find.ByDefault(elementId));
+        }
+
+        public TElement ElementOfType<TElement>(Regex elementId) where TElement : Element
+        {
+            return ElementOfType<TElement>(Find.ByDefault(elementId));
+        }
+
+        public TElement ElementOfType<TElement>(Constraint findBy) where TElement : Element
+        {
+            return ElementFactory.CreateElement<TElement>(domContainer, CreateElementFinder<TElement>(findBy));
+        }
+
+        public TElement ElementOfType<TElement>(Predicate<TElement> predicate) where TElement : Element
+        {
+            return ElementOfType<TElement>(Find.ByElement(predicate));
+        }
+
+        public ElementCollection<TElement> ElementsOfType<TElement>() where TElement : Element
+        {
+            return new ElementCollection<TElement>(domContainer, CreateElementFinder<TElement>(null));
+        }
+
+        public TControl Control<TControl>() where TControl : Control, new()
+        {
+            return Control<TControl>(Find.Any);
+        }
+
+        public TControl Control<TControl>(string elementId) where TControl : Control, new()
+        {
+            return Control<TControl>(Find.ByDefault(elementId));
+        }
+
+        public TControl Control<TControl>(Regex elementId) where TControl : Control, new()
+        {
+            return Control<TControl>(Find.ByDefault(elementId));
+        }
+
+        public TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
+        {
+            return Core.Control.FindControl<TControl>(this, findBy);
+        }
+
+        public TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
+        {
+            return Control<TControl>(new PredicateConstraint<TControl>(predicate));
+        }
+
+        public ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
+        {
+            return Core.Control.FindControls<TControl>(this);
+        }
+
         #endregion
 
         private NativeElementFinder CreateElementFinder<TElement>(Constraint findBy)

@@ -444,6 +444,21 @@ namespace WatiN.Core
             return NativeDocument.GetPropertyValue(RESULT_PROPERTY_NAME);
 		}
 
+        /// <summary>
+        /// Gets a page object of the desired type that wraps this document.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Page" /> subclass</typeparam>
+        /// <returns>The page object</returns>
+        /// <example>
+        /// <code>
+        /// browser.Page&lt;SignInPage&gt;>().SignIn("somebody", "letmein");
+        /// </code>
+        /// </example>
+        public T Page<T>() where T : Page, new()
+        {
+            return Core.Page.CreatePage<T>(this);
+        }
+
         private NativeElementCollectionAdapter All
         {
             get { return new NativeElementCollectionAdapter(DomContainer, NativeDocument.AllElements); }
@@ -559,6 +574,31 @@ namespace WatiN.Core
         public ElementCollection ElementsWithTag(string tagName, params string[] inputTypes)
         {
             return All.ElementsWithTag(tagName, inputTypes);
+        }
+
+        public TElement ElementOfType<TElement>(string elementId) where TElement : Element
+        {
+            return All.ElementOfType<TElement>(elementId);
+        }
+
+        public TElement ElementOfType<TElement>(Regex elementId) where TElement : Element
+        {
+            return All.ElementOfType<TElement>(elementId);
+        }
+
+        public TElement ElementOfType<TElement>(Constraint findBy) where TElement : Element
+        {
+            return All.ElementOfType<TElement>(findBy);
+        }
+
+        public TElement ElementOfType<TElement>(Predicate<TElement> predicate) where TElement : Element
+        {
+            return All.ElementOfType<TElement>(predicate);
+        }
+
+        public ElementCollection<TElement> ElementsOfType<TElement>() where TElement : Element
+        {
+            return All.ElementsOfType<TElement>();
         }
 
         public FileUpload FileUpload(string elementId)
@@ -948,6 +988,36 @@ namespace WatiN.Core
             get { return All.Images; }
         }
 
-        #endregion
+	    public TControl Control<TControl>() where TControl : Control, new()
+	    {
+            return All.Control<TControl>();
+	    }
+
+	    public TControl Control<TControl>(string elementId) where TControl : Control, new()
+	    {
+            return All.Control<TControl>(elementId);
+	    }
+
+	    public TControl Control<TControl>(Regex elementId) where TControl : Control, new()
+	    {
+            return All.Control<TControl>(elementId);
+        }
+
+	    public TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
+	    {
+            return All.Control<TControl>(findBy);
+	    }
+
+	    public TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
+	    {
+            return All.Control<TControl>(predicate);
+	    }
+
+	    public ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
+	    {
+            return All.Controls<TControl>();
+	    }
+
+	    #endregion
     }
 }

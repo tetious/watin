@@ -37,4 +37,26 @@ namespace WatiN.Core
             return new ElementCollection(DomContainer, elementFinder);
         }
     }
+
+    /// <summary>
+    /// A typed collection of <see cref="Element" /> instances within a <see cref="Document"/> or <see cref="Element"/>.
+    /// </summary>
+    /// <typeparam name="TElement">The element type</typeparam>
+    public class ElementCollection<TElement> : BaseElementCollection<TElement, ElementCollection<TElement>>
+        where TElement : Element
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElementCollection{TElement}"/> class.
+        /// Mainly used by WatiN internally.
+        /// </summary>
+        /// <param name="domContainer">The DOM container.</param>
+        /// <param name="finder">The finder.</param>
+        public ElementCollection(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
+
+        /// <inheritdoc />
+        protected override ElementCollection<TElement> CreateFilteredCollection(ElementFinder elementFinder)
+        {
+            return new ElementCollection<TElement>(DomContainer, elementFinder);
+        }
+    }
 }

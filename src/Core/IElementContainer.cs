@@ -254,5 +254,185 @@ namespace WatiN.Core
         Image Image(Constraint findBy);
         Image Image(Predicate<Image> predicate);
         ImageCollection Images { get; }
+
+        /// <summary>
+        /// ElementOfTypes an element of the desired type with the specified id.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(string)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="elementId">The element id to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ElementOfType&lt;Div&gt;("id");
+        /// </code>
+        /// </example>
+        TElement ElementOfType<TElement>(string elementId)
+            where TElement : Element;
+
+        /// <summary>
+        /// ElementOfTypes an element of the desired type with an id that matches the specified regular expression.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Regex)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="elementId">The element id regular expression to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ElementOfType&lt;Div&gt;(new Regex("id"));
+        /// </code>
+        /// </example>
+        TElement ElementOfType<TElement>(Regex elementId)
+            where TElement : Element;
+
+        /// <summary>
+        /// ElementOfTypes an element of the desired type that matches the specified <see cref="Constraint" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Constraint)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="findBy">The constraint to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ElementOfType&lt;Div&gt;(Find.ById("id"));
+        /// </code>
+        /// </example>
+        TElement ElementOfType<TElement>(Constraint findBy)
+            where TElement : Element;
+
+        /// <summary>
+        /// ElementOfTypes an element of the desired type that matches the specified <see cref="Predicate{T}" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Predicate{Div})"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="predicate">The predicate to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ElementOfType&lt;Div&gt;(div => div.Id == "id");
+        /// </code>
+        /// </example>
+        TElement ElementOfType<TElement>(Predicate<TElement> predicate)
+            where TElement : Element;
+
+        /// <summary>
+        /// Gets a collection of all elements of the specified type.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Divs"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <returns>The element collection</returns>
+        /// <example>
+        /// <code>
+        /// ie.ElementsOfType&lt;Div&gt;();
+        /// </code>
+        /// </example>
+        ElementCollection<TElement> ElementsOfType<TElement>()
+            where TElement : Element;
+
+        /// <summary>
+        /// Gets a control object of the desired type that appears first within this element container.
+        /// </summary>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control object</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;Header&gt;().MyAccountTab.Click();
+        /// </code>
+        /// </example>
+        TControl Control<TControl>() where TControl : Control, new();
+
+        /// <summary>
+        /// Gets a control object of the desired type with the specified id.
+        /// </summary>
+        /// <param name="elementId">The element id to match</param>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control object</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;CalendarControl&gt;("fromDateCalendar").SetDate(DateTime.Date);
+        /// </code>
+        /// </example>
+        TControl Control<TControl>(string elementId) where TControl : Control, new();
+
+        /// <summary>
+        /// Gets a control object of the desired type with an id that matches the specified regular expression.
+        /// </summary>
+        /// <param name="elementId">The element id regular expression to match</param>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control object</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;CalendarControl&gt;("fromDateCalendar").SetDate(DateTime.Date);
+        /// </code>
+        /// </example>
+        TControl Control<TControl>(Regex elementId) where TControl : Control, new();
+
+        /// <summary>
+        /// Gets a control object of the desired type that matches the specified <see cref="Constraint" />.
+        /// </summary>
+        /// <param name="findBy">The constraint to match</param>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control object</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;CalendarControl&gt;(Find.ById("fromDateCalendar")).SetDate(DateTime.Date);
+        /// </code>
+        /// </example>
+        TControl Control<TControl>(Constraint findBy) where TControl : Control, new();
+
+        /// <summary>
+        /// Gets a control object of the desired type that matches the specified <see cref="Predicate{T}" />.
+        /// </summary>
+        /// <param name="predicate">The predicate to match</param>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;CalendarControl&gt;(control => control.Name == "SomeName").SetDate(DateTime.Date);
+        /// </code>
+        /// </example>
+        TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new();
+
+        /// <summary>
+        /// Gets a collection of all controls of the desired type.
+        /// </summary>
+        /// <typeparam name="TControl">The <see cref="Core.Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control collection</returns>
+        /// <example>
+        /// <code>
+        /// ie.Control&lt;CalendarControl&gt;(control => control.Name == "SomeName").SetDate(DateTime.Date);
+        /// </code>
+        /// </example>
+        ControlCollection<TControl> Controls<TControl>() where TControl : Control, new();
     }
 }

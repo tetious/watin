@@ -77,5 +77,23 @@ namespace WatiN.Core.Properties {
                 return ResourceManager.GetString("BaseComponentCollection_DoesNotSupportSearchingByEquality", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The control has already been initialized..
+        /// </summary>
+        internal static string Control_HasAlreadyBeenInitialized {
+            get {
+                return ResourceManager.GetString("Control_HasAlreadyBeenInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The page type is expected to be a subclass of Page..
+        /// </summary>
+        internal static string PageMetadata_PageTypeIsExpectedToBeASubclassOfPage {
+            get {
+                return ResourceManager.GetString("PageMetadata_PageTypeIsExpectedToBeASubclassOfPage", resourceCulture);
+            }
+        }
     }
 }

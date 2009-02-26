@@ -140,9 +140,14 @@
     <Compile Include="Component.cs" />
     <Compile Include="Constraints\AndConstraint.cs" />
     <Compile Include="Constraints\ComponentConstraint.cs" />
+    <Compile Include="Constraints\PredicateConstraint.cs" />
     <Compile Include="Constraints\NoneConstraint.cs" />
     <Compile Include="Constraints\OrConstraint.cs" />
     <Compile Include="BaseComponentCollection.cs" />
+    <Compile Include="Control.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ControlCollection.cs" />
     <Compile Include="IAttributeBag.cs" />
     <Compile Include="IComponentCollection.cs" />
     <Compile Include="ElementSelector.cs" />
@@ -193,6 +198,9 @@
     <Compile Include="Native\InternetExplorer\WinInet.cs" />
     <Compile Include="Native\Windows\WindowInfo.cs" />
     <Compile Include="Native\Windows\WindowPlacement.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="PageMetadata.cs" />
+    <Compile Include="PageAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

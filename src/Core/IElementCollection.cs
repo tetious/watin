@@ -13,6 +13,14 @@ namespace WatiN.Core
         where TElement : Element
     {
         /// <summary>
+        /// Wraps all elements in the collection as controls of a particular type.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Control{TElement}" /> subclass</typeparam>
+        /// <returns>The collection of controls</returns>
+        ControlCollection<T> As<T>()
+            where T : Control, new();
+
+        /// <summary>
         /// Returns true if there exists an element within the collection
         /// that matches the given element id.
         /// </summary>

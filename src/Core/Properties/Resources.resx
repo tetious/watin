@@ -123,4 +123,10 @@
   <data name="BaseComponentCollection_CollectionIsReadonly" xml:space="preserve">
     <value>Collection is read-only</value>
   </data>
+  <data name="PageMetadata_PageTypeIsExpectedToBeASubclassOfPage" xml:space="preserve">
+    <value>The page type is expected to be a subclass of Page.</value>
+  </data>
+  <data name="Control_HasAlreadyBeenInitialized" xml:space="preserve">
+    <value>The control has already been initialized.</value>
+  </data>
 </root>

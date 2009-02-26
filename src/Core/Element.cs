@@ -291,6 +291,17 @@ namespace WatiN.Core
             get { return new Style(NativeElement); }
 		}
 
+        /// <summary>
+        /// Wraps an element as a control of a particular type.
+        /// </summary>
+        /// <typeparam name="TControl">The <see cref="Control{TElement}" /> subclass</typeparam>
+        /// <returns>The control</returns>
+        public TControl As<TControl>()
+            where TControl : Control, new()
+        {
+            return Control.CreateControl<TControl>(this);
+        }
+
         /// <inheritdoc />
         protected override string GetAttributeValueImpl(string attributeName)
         {

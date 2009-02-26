@@ -538,6 +538,61 @@ namespace WatiN.Core
             get { return All.Images; }
         }
 
+        public TChildElement ElementOfType<TChildElement>(string elementId) where TChildElement : Element
+        {
+            return All.ElementOfType<TChildElement>(elementId);
+        }
+
+        public TChildElement ElementOfType<TChildElement>(Regex elementId) where TChildElement : Element
+        {
+            return All.ElementOfType<TChildElement>(elementId);
+        }
+
+        public TChildElement ElementOfType<TChildElement>(Constraint findBy) where TChildElement : Element
+        {
+            return All.ElementOfType<TChildElement>(findBy);
+        }
+
+        public TChildElement ElementOfType<TChildElement>(Predicate<TChildElement> predicate) where TChildElement : Element
+        {
+            return All.ElementOfType<TChildElement>(predicate);
+        }
+
+        public ElementCollection<TChildElement> ElementsOfType<TChildElement>() where TChildElement : Element
+        {
+            return All.ElementsOfType<TChildElement>();
+        }
+
+        public TControl Control<TControl>() where TControl : Control, new()
+        {
+            return All.Control<TControl>();
+        }
+
+        public TControl Control<TControl>(string elementId) where TControl : Control, new()
+        {
+            return All.Control<TControl>(elementId);
+        }
+
+        public TControl Control<TControl>(Regex elementId) where TControl : Control, new()
+        {
+            return All.Control<TControl>(elementId);
+        }
+
+        public TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
+        {
+            return All.Control<TControl>(findBy);
+        }
+
+        public TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
+        {
+            return All.Control<TControl>(predicate);
+        }
+
+        public ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
+        {
+            return All.Controls<TControl>();
+        }
+
         #endregion
 	}
 }

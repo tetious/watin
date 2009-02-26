@@ -29,52 +29,160 @@ namespace WatiN.Core
     /// </summary>
 	public static class ElementFactory
 	{
-        private delegate Element ElementFactoryDelegate(DomContainer domContainer, INativeElement nativeElement);
+        private delegate Element NativeElementBasedFactory(DomContainer domContainer, INativeElement nativeElement);
+        private delegate Element ElementFinderBasedFactory(DomContainer domContainer, ElementFinder elementFinder);
 
         private static readonly Dictionary<Type, IList<ElementTag>> elementTagsByType;
-        private static readonly Dictionary<ElementTag, ElementFactoryDelegate> elementFactoriesByTag;
+        private static readonly Dictionary<ElementTag, Type> elementTypeByTag;
+        private static readonly Dictionary<Type, NativeElementBasedFactory> nativeElementBasedFactoriesByType;
+        private static readonly Dictionary<Type, ElementFinderBasedFactory> elementFinderBasedFactoriesByType;
 
         static ElementFactory()
         {
             elementTagsByType = new Dictionary<Type, IList<ElementTag>>();
-            elementFactoriesByTag = new Dictionary<ElementTag, ElementFactoryDelegate>();
+            elementTypeByTag = new Dictionary<ElementTag, Type>();
+            nativeElementBasedFactoriesByType = new Dictionary<Type, NativeElementBasedFactory>();
+            elementFinderBasedFactoriesByType = new Dictionary<Type, ElementFinderBasedFactory>();
 
 			var assembly = Assembly.GetExecutingAssembly();
-			foreach (var type in assembly.GetExportedTypes())
-			{
-				if (!type.IsSubclassOf(typeof(Element))) continue;
-
-                var tags = CreateElementTags(type);
-                if (tags == null) continue;
-
-			    var constructor = type.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
-                if (constructor == null)
-                {
-                    throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, INativeElement).", type));
-                }
-
-                ElementFactoryDelegate factory = (container, nativeElement) =>
-                    (Element) constructor.Invoke(new object[] { container, nativeElement });
-
-                foreach (var tag in tags)
-                {
-                    elementFactoriesByTag.Add(tag, factory);
-                }
-			}
+            RegisterElementTypes(assembly);
         }
 
-        private static List<ElementTag> CreateElementTags(Type type)
+        /// <summary>
+        /// Registers all element types within an assembly with WatiN.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method registers new element types with WatiN for elements that are not
+        /// supported out of the box (eg. H1, etc...).  It ensures that the correct element type
+        /// can be returned from find operations that do not specify the type natively.
+        /// </para>
+        /// <para>
+        /// This method does nothing if a given type has already been registered.
+        /// </para>
+        /// </remarks>
+        /// <param name="assembly">The assembly containing the <see cref="Element"/> subclasses to register</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="assembly"/> is null</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the any element type within the assembly
+        /// is not correctly defined because it is missing a constructor or has no element tag attributes specified</exception>
+        public static void RegisterElementTypes(Assembly assembly)
         {
-            var tagAttributes = (ElementTagAttribute[]) type.GetCustomAttributes(typeof(ElementTagAttribute), false);
-            if (tagAttributes.Length == 0) return null;
+            foreach (var type in assembly.GetExportedTypes())
+            {
+                RegisterElementType(type, true);
+            }
+        }
+
+        /// <summary>
+        /// Registers an element type with WatiN.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method registers new element types with WatiN for elements that are not
+        /// supported out of the box (eg. H1, etc...).  It ensures that the correct element type
+        /// can be returned from find operations that do not specify the type natively.
+        /// </para>
+        /// <para>
+        /// This method does nothing if the type has already been registered.
+        /// </para>
+        /// </remarks>
+        /// <param name="elementType">The <see cref="Element" /> subclass to register</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementType"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="elementType"/> is not a subclass
+        /// of <see cref="Element" /> or if it is abstract</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <paramref name="elementType"/>
+        /// is not correctly defined because it is missing a constructor or has no element tag attributes specified</exception>
+        public static void RegisterElementType(Type elementType)
+        {
+            RegisterElementType(elementType, false);
+        }
+
+        private static bool RegisterElementType(Type elementType, bool ignoreInvalidTypes)
+        {
+            if (elementType == null)
+                throw new ArgumentNullException("elementType");
+
+            // Skip if already registered.
+            if (nativeElementBasedFactoriesByType.ContainsKey(elementType))
+                return true;
+
+            if (!IsValidElementSubClass(elementType))
+            {
+                if (ignoreInvalidTypes)
+                    return false;
+
+                throw new ArgumentException("The type must be a subclass of Element and it must not be abstract.",
+                    "elementType");
+            }
+
+            if (!RegisterElementTags(elementType))
+            {
+                if (ignoreInvalidTypes)
+                    return false;
+
+                throw new ArgumentException("The type must have at least one [ElementTag] attribute.",
+                    "elementType");
+            }
+
+            RegisterNativeElementBasedFactories(elementType);
+            RegisterElementFinderBasedFactories(elementType);
+            return true;
+        }
+
+        private static bool IsValidElementSubClass(Type type)
+        {
+            return type.IsSubclassOf(typeof(Element)) && ! type.IsAbstract;
+        }
+
+        private static bool RegisterElementTags(Type elementType)
+        {
+            var tagAttributes = (ElementTagAttribute[])elementType.GetCustomAttributes(typeof(ElementTagAttribute), false);
+            if (tagAttributes.Length == 0)
+                return false;
 
             var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
             elementTagAttributes.Sort();
 
             var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
-            elementTagsByType.Add(type, tags);
+            elementTagsByType.Add(elementType, tags);
 
-            return tags;
+            foreach (var tag in tags)
+            {
+                if (elementTypeByTag.ContainsKey(tag))
+                {
+                    throw new InvalidOperationException(
+                        string.Format("Types {0} and {1} have both registered element tag '{2}'.",
+                            elementTypeByTag[tag], elementType, tag));
+                }
+
+                elementTypeByTag.Add(tag, elementType);
+            }
+
+            return true;
+        }
+
+        private static void RegisterNativeElementBasedFactories(Type elementType)
+        {
+            var nativeElementBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
+            if (nativeElementBasedConstructor == null)
+                throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, INativeElement).", elementType));
+
+            NativeElementBasedFactory nativeElementBasedFactory = (container, nativeElement) =>
+                (Element)nativeElementBasedConstructor.Invoke(new object[] { container, nativeElement });
+
+            nativeElementBasedFactoriesByType.Add(elementType, nativeElementBasedFactory);
+        }
+
+        private static void RegisterElementFinderBasedFactories(Type elementType)
+        {
+            var elementFinderBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(ElementFinder) });
+            if (elementFinderBasedConstructor == null)
+                throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, ElementFinder).", elementType));
+
+            ElementFinderBasedFactory elementFinderBasedFactory = (container, elementFinder) =>
+                (Element)elementFinderBasedConstructor.Invoke(new object[] { container, elementFinder });
+
+            elementFinderBasedFactoriesByType.Add(elementType, elementFinderBasedFactory);
         }
 
         /// <summary>
@@ -95,7 +203,7 @@ namespace WatiN.Core
                 return null;
 
 			var elementTag = ElementTag.FromNativeElement(nativeElement);
-            var factory = GetElementFactory(elementTag);
+            var factory = GetNativeElementBasedFactory(elementTag);
             return factory(domContainer, nativeElement);
 		}
 
@@ -120,6 +228,30 @@ namespace WatiN.Core
         }
 
         /// <summary>
+        /// Creates a typed element wrapper for a given element finder and ensures it is of
+        /// a particular type.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The returned element will be a subclass of <see cref="Element" /> that is
+        /// appropriate for element's tag.
+        /// </para>
+        /// </remarks>
+        /// <param name="domContainer">The element's DOM container</param>
+        /// <param name="elementFinder">The element finder to wrap, or null if none</param>
+        /// <returns>The typed element, or null if none</returns>
+        /// <typeparam name="TElement">The element type</typeparam>
+        public static TElement CreateElement<TElement>(DomContainer domContainer, ElementFinder elementFinder)
+            where TElement : Element
+        {
+            if (elementFinder == null)
+                return null;
+
+            var factory = GetElementFinderBasedFactory(typeof(TElement));
+            return (TElement) factory(domContainer, elementFinder);
+        }
+
+        /// <summary>
         /// Creates an untyped element wrapper for a given native element.
         /// </summary>
         /// <remarks>
@@ -138,6 +270,24 @@ namespace WatiN.Core
         }
 
         /// <summary>
+        /// Creates an untyped element wrapper for a given element finder.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The returned element is just a generic element container.
+        /// </para>
+        /// </remarks>
+        /// <param name="domContainer">The element's DOM container</param>
+        /// <param name="elementFinder">The element finder to wrap, or null if none</param>
+        /// <returns>The untyped element, or null if none</returns>
+        public static ElementContainer<Element> CreateUntypedElement(DomContainer domContainer, ElementFinder elementFinder)
+        {
+            return elementFinder == null
+                ? null
+                : new ElementContainer<Element>(domContainer, elementFinder);
+        }
+
+        /// <summary>
         /// Gets the list of tags supported by the specified element type class.
         /// </summary>
         /// <param name="elementType">The element type</param>
@@ -148,14 +298,9 @@ namespace WatiN.Core
         {
             if (elementType == null)
                 throw new ArgumentNullException("elementType");
-            
-            if (!elementTagsByType.ContainsKey(elementType))
-            {
-                var tags = CreateElementTags(elementType);
-                if (tags == null) throw new ArgumentException("Not a valid element type.", "elementType");
 
-                return new ReadOnlyCollection<ElementTag>(tags);
-            }
+            if (! RegisterElementType(elementType, true))
+                throw new ArgumentException("Not a valid element type.", "elementType");
 
             return new ReadOnlyCollection<ElementTag>(elementTagsByType[elementType]);
         }
@@ -171,11 +316,21 @@ namespace WatiN.Core
             return GetElementTags(typeof(TElement));
         }
 
-        private static ElementFactoryDelegate GetElementFactory(ElementTag tag)
+        private static NativeElementBasedFactory GetNativeElementBasedFactory(ElementTag tag)
         {
-            ElementFactoryDelegate factory;
-            
-            return elementFactoriesByTag.TryGetValue(tag, out factory) ? factory : CreateUntypedElement;
+            Type elementType;
+            if (elementTypeByTag.TryGetValue(tag, out elementType))
+            {
+                return nativeElementBasedFactoriesByType[elementType];
+            }
+
+            return CreateUntypedElement;
         }
-	}
+
+        private static ElementFinderBasedFactory GetElementFinderBasedFactory(Type elementType)
+        {
+            ElementFinderBasedFactory factory;
+            return elementFinderBasedFactoriesByType.TryGetValue(elementType, out factory) ? factory : CreateUntypedElement;
+        }
+    }
 }
