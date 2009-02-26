@@ -17,36 +17,42 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Interfaces;
+using System.IO;
 
 namespace WatiN.Core.Constraints
 {
-	public class NotConstraint : BaseConstraint
+    /// <summary>
+    /// A constraint that produces the inverse result of another constraint.
+    /// </summary>
+	public sealed class NotConstraint : Constraint
 	{
-		private BaseConstraint _baseConstraint;
+        private readonly Constraint inner;
 
-		public NotConstraint(BaseConstraint baseConstraint) 
+        /// <summary>
+        /// Creates a new NOT constraint.
+        /// </summary>
+        /// <param name="inner">The inner constraint</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="inner"/> is null</exception>
+        public NotConstraint(Constraint inner) 
 		{
-			if (baseConstraint == null)
-			{
-				throw new ArgumentNullException("baseConstraint");
-			}
+            if (inner == null)
+                throw new ArgumentNullException("inner");
 
-			_baseConstraint = baseConstraint;
+            this.inner = inner;
 		}
 
-		/// <summary>
-		/// Does the compare without calling <see cref="BaseConstraint.LockCompare"/> and <see cref="BaseConstraint.UnLockCompare"/>.
-		/// </summary>
-		/// <param name="attributeBag">The attribute bag.</param>
-		protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-			return !(_baseConstraint.Compare(attributeBag));
-		}
+        /// <inheritdoc />
+        public override void WriteDescriptionTo(TextWriter writer)
+        {
+            writer.Write("Not '");
+            inner.WriteDescriptionTo(writer);
+            writer.Write("'");
+        }
 
-		public override string ConstraintToString()
-		{
-			return "Not '" + _baseConstraint.ConstraintToString() + "'";
-		}
-	}
+        /// <inheritdoc />
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            return ! inner.Matches(attributeBag, context);
+        }
+    }
 }

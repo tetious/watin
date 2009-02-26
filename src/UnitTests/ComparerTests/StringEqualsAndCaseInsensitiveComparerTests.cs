@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstructorWithValue()
 		{
-			ICompare comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
+			var comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
 
 			Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
 			Assert.IsTrue(comparer.Compare("a test Value"), "Match should be case insensitive");
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstuctorWithStringEmpty()
 		{
-			ICompare comparer = new StringEqualsAndCaseInsensitiveComparer(String.Empty);
+			var comparer = new StringEqualsAndCaseInsensitiveComparer(String.Empty);
 
 			Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
 

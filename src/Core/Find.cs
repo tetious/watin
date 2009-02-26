@@ -42,6 +42,22 @@ namespace WatiN.Core
 		internal const string hrefAttribute = "href";
 		internal const string classNameAttribute = "className";
 
+        /// <summary>
+        /// Finds anything.
+        /// </summary>
+        public static AnyConstraint Any
+        {
+            get { return AnyConstraint.Instance; }
+        }
+
+        /// <summary>
+        /// Finds nothing.
+        /// </summary>
+        public static NoneConstraint None
+        {
+            get { return NoneConstraint.Instance; }
+        }
+
 		/// <summary>
 		/// Finds an element by its alt text.
 		/// </summary>
@@ -76,7 +92,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Image img = ie.Image(Find.ByAlt(new StringContainsAndCaseInsensitiveComparer("alt text")));</code>
 		/// </example>
-		public static AttributeConstraint ByAlt(ICompare compare)
+		public static AttributeConstraint ByAlt(Comparer<string> compare)
 		{
 			return new AttributeConstraint(altAttribute, compare);
 		}
@@ -91,7 +107,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByAlt(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(altAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(altAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -128,7 +144,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Div div = ie.Div(Find.ByClass(new StringContainsAndCaseInsensitiveComparer("Highlighted")));</code>
 		/// </example>
-		public static AttributeConstraint ByClass(ICompare compare)
+		public static AttributeConstraint ByClass(Comparer<string> compare)
 		{
 			return new AttributeConstraint(classNameAttribute, compare);
         }
@@ -143,7 +159,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByClass(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(classNameAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(classNameAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -197,7 +213,7 @@ namespace WatiN.Core
 		/// 	<code>
 		/// Label label = ie.Label(Find.ByFor(new StringContainsAndCaseInsensitiveComparer("optionbuttonid")));</code>
 		/// </example>
-		public static AttributeConstraint ByFor(ICompare comparer)
+		public static AttributeConstraint ByFor(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(forAttribute, comparer);
         }
@@ -214,7 +230,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByFor(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(forAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(forAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -251,7 +267,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.ById(new StringContainsAndCaseInsensitiveComparer("linkId1")));</code>
 		/// </example>
-		public static AttributeConstraint ById(ICompare compare)
+		public static AttributeConstraint ById(Comparer<string> compare)
 		{
 			return new AttributeConstraint(idAttribute, compare);
         }
@@ -268,7 +284,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ById(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(idAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(idAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -321,7 +337,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>ie.Link(Find.ByName(new StringContainsAndCaseInsensitiveComparer("linkname")))).Url</code>
 		/// </example>
-		public static AttributeConstraint ByName(ICompare comparer)
+		public static AttributeConstraint ByName(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(nameAttribute, comparer);
         }
@@ -338,7 +354,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByName(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(nameAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(nameAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -375,7 +391,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.ByText(new StringContainsAndCaseInsensitiveComparer("my li"))).Url</code>
 		/// </example>
-		public static AttributeConstraint ByText(ICompare comparer)
+		public static AttributeConstraint ByText(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(innerTextAttribute, comparer);
         }
@@ -392,7 +408,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByText(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(innerTextAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(innerTextAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -457,7 +473,7 @@ namespace WatiN.Core
 		/// <example>
 		/// <code>ie.Link(Find.ByUrl(new Regex("pattern goes here"))).Url</code>
 		/// </example>
-		public static BaseConstraint ByUrl(Regex regex)
+		public static Constraint ByUrl(Regex regex)
 		{
 			return new AttributeConstraint(hrefAttribute, regex);
 		}
@@ -470,7 +486,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>ie.Link(Find.ByUrl(new UriComparer(uri, ignoreQuery))).Url</code>
 		/// </example>
-		public static AttributeConstraint ByUrl(ICompare comparer)
+		public static AttributeConstraint ByUrl(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(hrefAttribute, comparer);
         }
@@ -487,7 +503,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByUrl(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(hrefAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(hrefAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -524,7 +540,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>IE ie = IE.AttachToIE(Find.ByTitle(new StringContainsAndCaseInsensitiveComparer("part of the title")));</code>
 		/// </example>
-		public static AttributeConstraint ByTitle(ICompare comparer)
+		public static AttributeConstraint ByTitle(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(titleAttribute, comparer);
         }
@@ -541,7 +557,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByTitle(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(titleAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(titleAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -584,7 +600,7 @@ namespace WatiN.Core
 		/// Button button = ie.Button(Find.ByValue(new StringContainsAndCaseInsensitiveComparer("pattern goes here")));
 		/// </code>
 		/// </example>
-		public static AttributeConstraint ByValue(ICompare comparer)
+		public static AttributeConstraint ByValue(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(valueAttribute, comparer);
         }
@@ -601,7 +617,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint ByValue(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(valueAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(valueAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -638,7 +654,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Image image = ie.Image(Find.BySrc(new StringContainsAndCaseInsensitiveComparer("watin/sourceforge")));</code>
 		/// </example>
-		public static AttributeConstraint BySrc(ICompare comparer)
+		public static AttributeConstraint BySrc(Comparer<string> comparer)
 		{
 			return new AttributeConstraint(srcAttribute, comparer);
         }
@@ -655,7 +671,7 @@ namespace WatiN.Core
 	    /// </example>
 		public static AttributeConstraint BySrc(Predicate<string> predicate)
 		{
-			return new AttributeConstraint(srcAttribute, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(srcAttribute, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -695,7 +711,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.By("innertext", new StringContainsAndCaseInsensitiveComparer("pattern goes here")));</code>
 		/// </example>
-		public static AttributeConstraint By(string attributeName, ICompare comparer)
+		public static AttributeConstraint By(string attributeName, Comparer<string> comparer)
 		{
 			return new AttributeConstraint(attributeName, comparer);
         }
@@ -713,7 +729,7 @@ namespace WatiN.Core
 	    /// </example>
 	    public static AttributeConstraint By(string attributeName, Predicate<string> predicate)
 	    {
-		    return new AttributeConstraint(attributeName, new PredicateStringComparer(predicate));
+		    return new AttributeConstraint(attributeName, new PredicateComparer<string, string>(predicate));
 	    }
 
 		/// <summary>
@@ -753,7 +769,7 @@ namespace WatiN.Core
 		/// <example>
 		/// 	<code>Link link = ie.Link(Find.ByStyle("font-family", new StringContainsAndCaseInsensitiveComparer("aria")));</code>
 		/// </example>
-		public static AttributeConstraint ByStyle(string styleAttributeName, ICompare comparer)
+		public static AttributeConstraint ByStyle(string styleAttributeName, Comparer<string> comparer)
 		{
 			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, comparer);
         }
@@ -771,7 +787,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByStyle(string styleAttributeName, Predicate<string> predicate)
 		{
-			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateStringComparer(predicate));
+			return new AttributeConstraint(styleBaseAttribute + styleAttributeName, new PredicateComparer<string, string>(predicate));
 		}
 
 		/// <summary>
@@ -779,21 +795,21 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="comparer">The comparer</param>
 		/// <returns>An ElementConstraint instance</returns>
-		public static ElementConstraint ByElement(ICompareElement comparer)
+		public static ElementConstraint ByElement(Comparer<Element> comparer)
 		{
 			return new ElementConstraint(comparer);
         }
 
         /// <summary>
-		/// Finds an Element by calling the predicate for each element that
-		/// needs to be evaluated.
-		/// </summary>
-		/// <param name="predicate">The predicate</param>
-		/// <returns>An ElementConstraint instance</returns>
-		public static ElementConstraint ByElement(Predicate<Element> predicate)
-		{
+        /// Finds an Element by calling the predicate for each element that
+        /// needs to be evaluated.
+        /// </summary>
+        /// <param name="predicate">The predicate</param>
+        /// <returns>An ElementConstraint instance</returns>
+        public static ElementConstraint ByElement(Predicate<Element> predicate)
+        {
             return ByElement<Element>(predicate);
-		}
+        }
 
 		/// <summary>
 		/// Finds an Element by calling the predicate for each element that
@@ -801,12 +817,36 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="predicate">The predicate</param>
 		/// <returns>An ElementConstraint instance</returns>
-		public static ElementConstraint ByElement<T>(Predicate<T> predicate) where T:Element
+		public static ElementConstraint ByElement<TElement>(Predicate<TElement> predicate)
+            where TElement:Element
 		{
-			return new ElementConstraint(new PredicateElementComparer<T>(predicate));
+			return new ElementConstraint(new PredicateComparer<TElement, Element>(predicate));
 		}
-    
+
         /// <summary>
+        /// Finds an Element by determining whether there exists some other element
+        /// in a position relative to it, such as an ancestor or descendant.
+        /// </summary>
+        /// <param name="selector">The relative selector</param>
+        /// <returns>An ElementConstraint instance</returns>
+        /// <example>
+        /// <code>
+        /// // Finds a row by the fact that it contains a table cell with particular text content.
+        /// ie.TableRow(Find.ByExistenceOfRelatedElement&lt;TableRow&gt;(row => row.TableCell(Find.ByText("foo")))
+        /// </code>
+        /// </example>
+        public static ElementConstraint ByExistenceOfRelatedElement<T>(ElementSelector<T> selector)
+            where T : Element
+        {
+            return ByElement<T>(element => IsNotNullAndExists(selector(element)));
+        }
+
+        private static bool IsNotNullAndExists(Element element)
+        {
+            return element != null && element.Exists;
+        }
+
+	    /// <summary>
         /// Finds the first element of the expected type.
         /// </summary>
         /// <returns></returns>
@@ -823,7 +863,8 @@ namespace WatiN.Core
 		/// <example>
 		/// <code>TextField = ie.TextField(Find.Near("User Name"));</code>
 		/// </example>
-		public static ProximityTextConstraint Near( string labelText ) {
+		public static ProximityTextConstraint Near(string labelText)
+        {
 			return new ProximityTextConstraint(labelText);
 		}
 		
@@ -836,9 +877,9 @@ namespace WatiN.Core
 		/// This will look for a tet field that has a label element with the innerText "User Name:"
 		/// <code>TextField = ie.TextField(Find.ByLabelText("User Name:"));</code>
 		/// </example>
-		public static LabelTextConstraint ByLabelText( string labelText ) 
+		public static LabelTextConstraint ByLabelText(string labelText) 
 		{
-			return new LabelTextConstraint( labelText );
+			return new LabelTextConstraint(labelText);
 		}
 
 		/// <summary>
@@ -846,7 +887,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="value">The string to match against</param>
 		/// <returns>A constraint</returns>
-        public static BaseConstraint ByDefault(string value)
+        public static Constraint ByDefault(string value)
         {
             return Settings.FindByDefaultFactory.ByDefault(value);
         }
@@ -856,9 +897,65 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="value">The regular expression to match against</param>
         /// <returns>A constraint</returns>
-        public static BaseConstraint ByDefault(Regex value)
+        public static Constraint ByDefault(Regex value)
         {
             return Settings.FindByDefaultFactory.ByDefault(value);
         }
-	}
+
+        /// <summary>
+        /// Finds a <see cref="TableRow" /> element by the (inner) text of one of its cells.
+        /// </summary>
+        /// <param name="text">Element text</param>
+        /// <param name="columnIndex">The zero-based column index</param>
+        /// <returns><see cref="AttributeConstraint" /></returns>
+        /// <example>
+        /// <code>ie.TableRow(Find.ByTextInColumn("my link")).Url</code>
+        /// </example>
+        public static ElementConstraint ByTextInColumn(string text, int columnIndex)
+        {
+            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(text)));
+        }
+
+        /// <summary>
+        /// Finds a <see cref="TableRow" /> element by the (inner) text of one of its cells.
+        /// </summary>
+        /// <param name="regex">Regular expression to find a matching Text.</param>
+        /// <param name="columnIndex">The zero-based column index</param>
+        /// <returns><see cref="AttributeConstraint" /></returns>
+        /// <example>
+        /// <code>ie.TableRow(Find.ByTextInColumn(new Regex("my link"))).Url</code>
+        /// </example>
+        public static ElementConstraint ByTextInColumn(Regex regex, int columnIndex)
+        {
+            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(regex)));
+        }
+
+        /// <summary>
+        /// Finds a <see cref="TableRow" /> element by the (inner) text of one of its cells.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
+        /// <param name="columnIndex">The zero-based column index</param>
+        /// <returns><see cref="AttributeConstraint" /></returns>
+        /// <example>
+        /// <code>ie.TableRow(Find.ByTextInColumn(new StringContainsAndCaseInsensitiveComparer("my li"))).Url</code>
+        /// </example>
+        public static ElementConstraint ByTextInColumn(Comparer<string> comparer, int columnIndex)
+        {
+            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(comparer)));
+        }
+
+        /// <summary>
+        /// Finds a <see cref="TableRow" /> element by the (inner) text of one of its cells.
+        /// </summary>
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
+        /// <param name="columnIndex">The zero-based column index</param>
+        /// <returns><see cref="AttributeConstraint" /></returns>
+        /// <example>
+        /// <code>ie.TableRow(Find.ByTextInColumn(MyOwnCompareMethod)).Url</code>
+        /// </example>
+        public static ElementConstraint ByTextInColumn(Predicate<string> predicate, int columnIndex)
+        {
+            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(predicate)));
+        }
+    }
 }

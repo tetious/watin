@@ -28,208 +28,240 @@ namespace WatiN.Core.Native.InternetExplorer
 	/// <summary>
 	/// Summary description for IEElement.
 	/// </summary>
-	public class IEElement : INativeElement
-	{
-		private readonly object _element;
+    public class IEElement : INativeElement
+    {
+        private readonly object _element;
 
-		public IEElement(object element)
-		{
+        public IEElement(object element)
+        {
             if (element == null) throw new ArgumentNullException("element");
             if (element is INativeElement) throw new Exception("INativeElement not allowed");
-			_element = element;
-		}
+            _element = element;
+        }
 
-		/// <summary>
-		/// Returns the text displayed after this element when it's wrapped
-		/// in a Label element; otherwise it returns <c>null</c>.
-		/// </summary>
-		public string TextAfter
-		{
-			get { return htmlElement2.getAdjacentText("afterEnd"); }
-		}
+        /// <summary>
+        /// Gets the underlying <see cref="IHTMLElement" /> object.
+        /// </summary>
+        public IHTMLElement HtmlElement
+        {
+            get { return (IHTMLElement)_element; }
+        }
 
-		/// <summary>
-		/// Returns the text displayed before this element when it's wrapped
-		/// in a Label element; otherwise it returns <c>null</c>.
-		/// </summary>
-		public string TextBefore
-		{
-			get { return htmlElement2.getAdjacentText("beforeBegin"); }
-		}
+        /// <inheritdoc />
+        public INativeElementCollection Children
+        {
+            get { return new IEElementCollection((IHTMLElementCollection)HtmlElement.children); }
+        }
 
-		/// <summary>
-		/// Gets the next sibling of this element in the Dom of the HTML page.
-		/// </summary>
-		/// <value>The next sibling.</value>
-		public INativeElement NextSibling
-		{
-			get
-			{
-				var node = domNode.nextSibling;
-				while (node != null)
-				{
-					var nextSibling = node as IHTMLElement;
-					if (nextSibling != null)
-					{
-						return new IEElement(nextSibling);
-					}
-				    
+        /// <inheritdoc />
+        public INativeElementCollection AllDescendants
+        {
+            get { return new IEElementCollection((IHTMLElementCollection)HtmlElement.all); }
+        }
+
+        /// <inheritdoc />
+        public INativeElementCollection TableRows
+        {
+            get
+            {
+                IHTMLTable htmlTable = HtmlElement as IHTMLTable;
+                if (htmlTable != null)
+                    return new IEElementCollection(htmlTable.rows);
+
+                IHTMLTableSection htmlTableSection = HtmlElement as IHTMLTableSection;
+                if (htmlTableSection != null)
+                    return new IEElementCollection(htmlTableSection.rows);
+
+                throw new InvalidOperationException("The element must be a TABLE or TBODY.");
+            }
+        }
+
+        /// <inheritdoc />
+        public INativeElementCollection TableBodies
+        {
+            get
+            {
+                IHTMLTable htmlTable = HtmlElement as IHTMLTable;
+                if (htmlTable != null)
+                    return new IEElementCollection(htmlTable.tBodies);
+
+                throw new InvalidOperationException("The element must be a TABLE.");
+            }
+        }
+
+        /// <inheritdoc />
+        public INativeElementCollection TableCells
+        {
+            get
+            {
+                IHTMLTableRow htmlTableRow = HtmlElement as IHTMLTableRow;
+                if (htmlTableRow != null)
+                    return new IEElementCollection(htmlTableRow.cells);
+
+                throw new InvalidOperationException("The element must be a TR.");
+            }
+        }
+
+        /// <inheritdoc />
+        public INativeElementCollection Options
+        {
+            get
+            {
+                IHTMLSelectElement htmlSelectElement = HtmlElement as IHTMLSelectElement;
+                if (htmlSelectElement != null)
+                    return new IEElementCollection((IHTMLElementCollection)htmlSelectElement.options);
+
+                throw new InvalidOperationException("The element must be a SELECT.");
+            }
+        }
+
+        /// <inheritdoc />
+        public string TextAfter
+        {
+            get { return HtmlElement2.getAdjacentText("afterEnd"); }
+        }
+
+        /// <inheritdoc />
+        public string TextBefore
+        {
+            get { return HtmlElement2.getAdjacentText("beforeBegin"); }
+        }
+
+        /// <inheritdoc />
+        public INativeElement NextSibling
+        {
+            get
+            {
+                var node = domNode.nextSibling;
+                while (node != null)
+                {
+                    var nextSibling = node as IHTMLElement;
+                    if (nextSibling != null)
+                    {
+                        return new IEElement(nextSibling);
+                    }
+
                     node = node.nextSibling;
-				}
-				return null;
-			}
-		}
+                }
+                return null;
+            }
+        }
 
-		/// <summary>
-		/// Gets the previous sibling of this element in the Dom of the HTML page.
-		/// </summary>
-		/// <value>The previous sibling.</value>
-		public INativeElement PreviousSibling
-		{
-			get
-			{
-				var node = domNode.previousSibling;
-				while (node != null)
-				{
-					var previousSibling = node as IHTMLElement;
-					if (previousSibling != null)
-					{
-						return new IEElement(previousSibling);
-					}
-				    
+        /// <inheritdoc />
+        public INativeElement PreviousSibling
+        {
+            get
+            {
+                var node = domNode.previousSibling;
+                while (node != null)
+                {
+                    var previousSibling = node as IHTMLElement;
+                    if (previousSibling != null)
+                    {
+                        return new IEElement(previousSibling);
+                    }
+
                     node = node.previousSibling;
-				}
-				return null;
-			}
-		}
+                }
+                return null;
+            }
+        }
 
-		/// <summary>
-		/// Gets the parent element of this element.
-		/// If the parent type is known you can cast it to that type.
-		/// </summary>
-		/// <value>The parent.</value>
-		/// <example>
-		/// The following example shows you how to use the parent property.
-		/// Assume your web page contains a bit of html that looks something
-		/// like this:
-		/// 
-		/// div
-		///   a id="watinlink" href="http://watin.sourceforge.net" /
-		///   a href="http://sourceforge.net/projects/watin" /
-		/// /div
-		/// div
-		///   a id="watinfixturelink" href="http://watinfixture.sourceforge.net" /
-		///   a href="http://sourceforge.net/projects/watinfixture" /
-		/// /div
-		/// Now you want to click on the second link of the watin project. Using the 
-		/// parent property the code to do this would be:
-		/// 
-		/// <code>
-		/// Div watinDiv = (Div) ie.Link("watinlink").Parent;
-		/// watinDiv.Links[1].Click();
-		/// </code>
-		/// </example>
-		public INativeElement Parent
-		{
-			get
-			{
-				var parentNode = domNode.parentNode as IHTMLElement;
-				return parentNode != null ? new IEElement(parentNode) : null;
-			}
-		}
+        /// <inheritdoc />
+        public INativeElement Parent
+        {
+            get
+            {
+                var parentNode = domNode.parentNode as IHTMLElement;
+                return parentNode != null ? new IEElement(parentNode) : null;
+            }
+        }
 
-		/// <summary>
-		/// This methode can be used if the attribute isn't available as a property of
-		/// Element or a subclass of Element.
-		/// </summary>
-		/// <param name="attributeName">The attribute name. This could be different then named in
-		/// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
-		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
-		public string GetAttributeValue(string attributeName)
-		{
+        /// <inheritdoc />
+        public string GetAttributeValue(string attributeName)
+        {
             if (attributeName.ToLowerInvariant() == "tagname") return TagName;
 
-			var attributeValue = htmlElement.getAttribute(attributeName, 0);
+            var attributeValue = HtmlElement.getAttribute(attributeName, 0);
 
             if (DidReturnObjectReference(attributeValue))
             {
                 attributeValue = RetrieveNodeValue(attributeName);
             }
 
-			if (attributeValue == DBNull.Value || attributeValue == null)
-			{
-				return null;
-			}
+            if (attributeValue == DBNull.Value || attributeValue == null)
+            {
+                return null;
+            }
 
-			return attributeValue.ToString();
-		}
-
-	    private object RetrieveNodeValue(string attributeName)
-	    {
-	        var ihtmlElement4 = htmlElement as IHTMLElement4;
-            return ihtmlElement4 == null ? null : ihtmlElement4.getAttributeNode(attributeName).nodeValue;
-	    }
-
-	    private static bool DidReturnObjectReference(object attributeValue)
-	    {
-	        if (attributeValue == null) return false;
-            return attributeValue.GetType().ToString() == "System.__ComObject";
-	    }
-
-	    public void SetAttributeValue(string attributeName, string value)
-        {
-            value = HandleAttributesWhichHaveNoValuePart(attributeName, value);
-            
-            htmlElement.setAttribute(attributeName, value, 0);
+            return attributeValue.ToString();
         }
 
-	    private static string HandleAttributesWhichHaveNoValuePart(string attributeName, string value)
-	    {
+        private object RetrieveNodeValue(string attributeName)
+        {
+            var ihtmlElement4 = HtmlElement as IHTMLElement4;
+            return ihtmlElement4 == null ? null : ihtmlElement4.getAttributeNode(attributeName).nodeValue;
+        }
+
+        private static bool DidReturnObjectReference(object attributeValue)
+        {
+            if (attributeValue == null) return false;
+            return attributeValue.GetType().ToString() == "System.__ComObject";
+        }
+
+        /// <inheritdoc />
+        public void SetAttributeValue(string attributeName, string value)
+        {
+            value = HandleAttributesWhichHaveNoValuePart(attributeName, value);
+
+            HtmlElement.setAttribute(attributeName, value, 0);
+        }
+
+        private static string HandleAttributesWhichHaveNoValuePart(string attributeName, string value)
+        {
             // selected is attribute of Option
             // checked is attribute of RadioButton and CheckBox
-	        if (attributeName == "selected" || attributeName == "checked")
-	        {
-	            value = bool.Parse(value) ? "true" : "";
-	        }
-	        return value;
-	    }
+            if (attributeName == "selected" || attributeName == "checked")
+            {
+                value = bool.Parse(value) ? "true" : "";
+            }
+            return value;
+        }
 
+        /// <inheritdoc />
+        public void ClickOnElement()
+        {
+            DispHtmlBaseElement.click();
+        }
 
-	    public void ClickOnElement()
-		{
-			DispHtmlBaseElement.click();
-		}
+        /// <inheritdoc />
+        public void SetFocus()
+        {
+            DispHtmlBaseElement.focus();
+        }
 
-		public void SetFocus() 
-		{
-			DispHtmlBaseElement.focus();
-		}
+        /// <inheritdoc />
+        public void FireEvent(string eventName, NameValueCollection eventProperties)
+        {
+            if (eventProperties == null)
+            {
+                UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
+            }
+            else
+            {
+                if (eventName == "onKeyPress")
+                {
+                    var addChar = eventProperties.GetValues("keyCode")[0];
+                    var newValue = GetAttributeValue("value") + ((char)int.Parse(addChar));
+                    SetAttributeValue("value", newValue);
+                }
 
-		public void FireEvent(string eventName, NameValueCollection eventProperties)
-		{
-		    if (eventProperties == null)
-			{
-				UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
-			}
-			else
-			{
-				if (eventName == "onKeyPress")
-				{
-				    var addChar = eventProperties.GetValues("keyCode")[0];
-				    var newValue = GetAttributeValue("value") + ((char) int.Parse(addChar));
-				    SetAttributeValue("value", newValue);
-				}
+                UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
+            }
+        }
 
-			    UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
-			}
-		}
-
-	    public object Objects
-	    {
-            get { return htmlElement.all; }
-	    }
-
-	    public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
+        /// <inheritdoc />
+        public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
             var scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
             var window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
@@ -239,15 +271,16 @@ namespace WatiN.Core.Native.InternetExplorer
             UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
         }
 
-	    public void Select()
-	    {
-	        var input = _element as IHTMLInputElement;
+        /// <inheritdoc />
+        public void Select()
+        {
+            var input = _element as IHTMLInputElement;
             if (input != null)
             {
                 input.select();
                 return;
             }
-	        var textarea = _element as IHTMLTextAreaElement;
+            var textarea = _element as IHTMLTextAreaElement;
             if (textarea != null)
             {
                 textarea.select();
@@ -257,27 +290,29 @@ namespace WatiN.Core.Native.InternetExplorer
             throw new WatiNException("Select not supported on " + _element.GetType());
         }
 
-	    public void SubmitForm()
-	    {
+        /// <inheritdoc />
+        public void SubmitForm()
+        {
             HtmlFormElement.submit();
 
-	    }
+        }
 
-	    public void SetFileUploadFile(Element element, string fileName)
-	    {
-			var uploadDialogHandler = new FileUploadDialogHandler(fileName);
+        /// <inheritdoc />
+        public void SetFileUploadFile(Element element, string fileName)
+        {
+            var uploadDialogHandler = new FileUploadDialogHandler(fileName);
             using (new UseDialogOnce(element.DomContainer.DialogWatcher, uploadDialogHandler))
             {
                 element.Click();
             }
-	    }
+        }
 
-	    private IHTMLFormElement HtmlFormElement
+        private IHTMLFormElement HtmlFormElement
         {
             get { return (IHTMLFormElement)_element; }
         }
 
-	    /// <summary>
+        /// <summary>
         /// This methode can be used if the attribute isn't available as a property of
         /// of this <see cref="Style"/> class.
         /// </summary>
@@ -291,19 +326,19 @@ namespace WatiN.Core.Native.InternetExplorer
                 throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
             }
 
-            var attributeValue = GetStyleAttributeValue(attributeName, htmlElement.style);
+            var attributeValue = GetStyleAttributeValue(attributeName, HtmlElement.style);
 
             if (attributeValue == DBNull.Value || attributeValue == null)
             {
                 return null;
             }
 
-	        var stringAttributeValue = attributeValue.ToString();
+            var stringAttributeValue = attributeValue.ToString();
 
-	        if (attributeName == "cssText" && !stringAttributeValue.TrimEnd(Char.Parse(" ")).EndsWith(";"))
-	        {
-	            stringAttributeValue = stringAttributeValue.ToLowerInvariant() + ";";
-	        }
+            if (attributeName == "cssText" && !stringAttributeValue.TrimEnd(Char.Parse(" ")).EndsWith(";"))
+            {
+                stringAttributeValue = stringAttributeValue.ToLowerInvariant() + ";";
+            }
 
             return stringAttributeValue;
         }
@@ -315,64 +350,58 @@ namespace WatiN.Core.Native.InternetExplorer
             return style.getAttribute(attributeName, 0);
         }
 
+        /// <inheritdoc />
         public void SetStyleAttributeValue(string attributeName, string value)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
-            htmlElement.style.setAttribute(attributeName, value, 0);
+            HtmlElement.style.setAttribute(attributeName, value, 0);
         }
 
-		protected IHTMLElement htmlElement
-		{
-			get { return (IHTMLElement) _element; }
-		}
+        private IHTMLElement2 HtmlElement2
+        {
+            get { return (IHTMLElement2)_element; }
+        }
 
-		private IHTMLElement2 htmlElement2
-		{
-			get { return (IHTMLElement2) _element; }
-		}
+        private IHTMLDOMNode domNode
+        {
+            get { return (IHTMLDOMNode)_element; }
+        }
 
-		private IHTMLDOMNode domNode
-		{
-			get { return (IHTMLDOMNode) _element; }
-		}
+        /// <summary>
+        /// Gets the DispHtmlBaseElement />.
+        /// </summary>
+        /// <value>The DispHtmlBaseElement.</value>
+        private DispHTMLBaseElement DispHtmlBaseElement
+        {
+            get { return (DispHTMLBaseElement)_element; }
+        }
 
-		/// <summary>
-		/// Gets the DispHtmlBaseElement />.
-		/// </summary>
-		/// <value>The DispHtmlBaseElement.</value>
-		private DispHTMLBaseElement DispHtmlBaseElement
-		{
-			get { return (DispHTMLBaseElement) _element; }
-		}
+        /// <inheritdoc />
+        public bool IsElementReferenceStillValid()
+        {
+            try
+            {
+                if (HtmlElement.sourceIndex < 0)
+                {
+                    return false;
+                }
 
-		public object Object
-		{
-			get { return _element; }
-		}
+                return HtmlElement.offsetParent != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-	    public bool IsElementReferenceStillValid()
-		{
-			try
-			{
-				if (htmlElement.sourceIndex < 0)
-				{
-					return false;
-				}
-			    
-                return htmlElement.offsetParent != null;
-			}
-			catch
-			{
-				return false;
-			}
-		}
+        /// <inheritdoc />
+        public string TagName
+        {
+            get { return HtmlElement.tagName; }
+        }
 
-		public string TagName
-		{
-			get { return htmlElement.tagName; }
-		}
-
+        /// <inheritdoc />
         public void WaitUntilReady()
         {
             //TODO: See if this method could be dropped, it seems to give
@@ -391,7 +420,7 @@ namespace WatiN.Core.Native.InternetExplorer
             // Like for elements that could not load an image or ico
             // or some other bits not part of the HTML page.     
             var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
-            var ihtmlElement2 = ((IHTMLElement2)Object);
+            var ihtmlElement2 = ((IHTMLElement2)_element);
             var success = tryActionUntilTimeOut.Try(() =>
             {
                 var readyState = ihtmlElement2.readyStateValue;
@@ -400,40 +429,12 @@ namespace WatiN.Core.Native.InternetExplorer
 
             if (success) return;
 
-            var ihtmlElement = ((IHTMLElement)Object);
+            var ihtmlElement = ((IHTMLElement)_element);
             throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
         }
+    }
 
-	    public ElementFinder TableBodies(DomContainer domContainer)
-	    {
-            var ihtmlTable = Object as IHTMLTable;
-            if (ihtmlTable == null) return null;
-            return new IEElementCollectionFinder(()=>ihtmlTable.tBodies, domContainer, null);
-	    }
-
-	    public ElementFinder TableRows(DomContainer domContainer)
-	    {
-            var ihtmlTable = Object as IHTMLTable;
-            if (ihtmlTable == null) return null;
-            return new IEElementCollectionFinder(() => ihtmlTable.rows, domContainer, null);
-        }
-
-	    public ElementFinder TableCells(DomContainer domContainer)
-	    {
-            var row = Object as IHTMLTableRow;
-            if (row == null) return null;
-            return new IEElementCollectionFinder(() => row.cells, domContainer, Find.ByElement(element => element.TagName.ToLowerInvariant() == "td"));
-        }
-
-	    public ElementFinder TableBodyRows(DomContainer domContainer)
-	    {
-            var row = Object as IHTMLTableSection;
-            if (row == null) return null;
-            return new IEElementCollectionFinder(() => row.rows, domContainer, null);
-        }
-	}
-
-    public class AsyncScriptRunner
+    internal class AsyncScriptRunner
     {
         private readonly string _scriptCode;
         private readonly IHTMLWindow2 _window;

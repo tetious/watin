@@ -353,7 +353,7 @@ namespace WatiN.Core.UnitTests.IETests
 
         private static string GetHtmlSource(Document ie)
         {
-            var document = (IHTMLDocument2) ie.NativeDocument.Object;
+            var document = ((IEDocument)ie.NativeDocument).HtmlDocument;
             return document.body.parentElement.outerHTML;
         }
 
@@ -384,7 +384,7 @@ namespace WatiN.Core.UnitTests.IETests
             IEExistsAsserts(Find.ByTitle("Ai"));
         }
 
-        private static void IEExistsAsserts(BaseConstraint findByUrl)
+        private static void IEExistsAsserts(Constraint findByUrl)
         {
             Assert.IsFalse(IE.Exists(findByUrl));
 
@@ -574,7 +574,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using(var ie = new IE())
             {
-                var document = (IHTMLDocument2) ie.NativeDocument.Object;
+                var document = ((IEDocument)ie.NativeDocument).HtmlDocument;
                 document.writeln(html);
 
                 Assert.That(ie.Button(Find.ByName("btnSomething")).Exists);

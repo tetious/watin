@@ -24,14 +24,28 @@ namespace WatiN.Core.Comparers
     /// This comparer will always return <c>true</c> no matter what value it is given to
     /// compare with.
     /// </summary>
-	public class AlwaysTrueComparer : ICompare
+	public sealed class AlwaysTrueComparer<T> : Comparer<T>
 	{
+        private static readonly AlwaysTrueComparer<T> instance = new AlwaysTrueComparer<T>();
+
+        private AlwaysTrueComparer()
+        {
+        }
+
+        /// <summary>
+        /// Gets the singleton instance of the comparer.
+        /// </summary>
+        public static AlwaysTrueComparer<T> Instance
+        {
+            get { return instance; }
+        }
+
         /// <summary>
         /// Accepts a value bit it will be ignored
         /// </summary>
         /// <param name="ignoredValue">The ignored value.</param>
         /// <returns>Will always return <c>true</c></returns>
-		public bool Compare(string ignoredValue)
+		public override bool Compare(T ignoredValue)
 		{
 			return true;
 		}

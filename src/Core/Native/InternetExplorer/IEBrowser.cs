@@ -18,32 +18,10 @@
 
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
 	public class IEBrowser : INativeBrowser 
 	{
-	    private readonly DomContainer _domContainer;
-
-	    public IEBrowser(DomContainer domContainer)
-        {
-            _domContainer = domContainer;
-        }
-
-        public ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
-		{
-			return new IEElementFinder(tags, baseConstraint, elements, _domContainer);
-		}
-
-		public INativeElement CreateElement(object element)
-		{
-			return new IEElement(element);
-		}
-
-	    public INativeDocument CreateDocument(object document)
-	    {
-	        return new IEDocument(document);
-	    }
 	}
 }

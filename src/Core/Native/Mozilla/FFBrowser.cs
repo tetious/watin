@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native.Mozilla
 {
@@ -28,16 +27,12 @@ namespace WatiN.Core.Native.Mozilla
     /// </summary>
     public class FFBrowser : INativeBrowser
     {
-        private readonly DomContainer _domContainer;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FFBrowser"/> class.
         /// </summary>
         /// <param name="clientPort">The client port.</param>
-        /// <param name="domContainer"></param>
-        public FFBrowser(FireFoxClientPort clientPort, DomContainer domContainer)
+        public FFBrowser(FireFoxClientPort clientPort)
         {
-            _domContainer = domContainer;
             ClientPort = clientPort;
         }
 
@@ -117,21 +112,6 @@ namespace WatiN.Core.Native.Mozilla
         public bool IsLoading()
         {
             return ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", BrowserVariableName);
-        }
-
-        public ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements)
-        {
-            return new FFElementFinder(tags, baseConstraint, elements, _domContainer, ClientPort);
-        }
-
-        public INativeElement CreateElement(object element)
-        {
-            return new FFElement(element, ClientPort);
-        }
-
-        public INativeDocument CreateDocument(object document)
-        {
-            return new FFDocument(ClientPort);
         }
     }
 }

@@ -21,6 +21,7 @@ using mshtml;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -179,16 +180,15 @@ namespace WatiN.Core
 
 	    private void doKeyPress(string value)
 		{
-            // TODO "Move" ShouldEventBeFired to INativeElement + implementations 
-            var element = NativeElement.Object as IHTMLElement;
-
             var doKeyDown = true;
             var doKeyUp = true;
-            
-            if (element != null)
+
+            // TODO "Move" ShouldEventBeFired to INativeElement + implementations 
+            IEElement ieElement = NativeElement as IEElement;
+            if (ieElement != null)
 	        {
-	            doKeyDown = ShouldEventBeFired(element.onkeydown);
-	            doKeyUp = ShouldEventBeFired(element.onkeyup);
+                doKeyDown = ShouldEventBeFired(ieElement.HtmlElement.onkeydown);
+                doKeyUp = ShouldEventBeFired(ieElement.HtmlElement.onkeyup);
 	        }
 
 			var length = value.Length;

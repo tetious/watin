@@ -87,7 +87,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void HTMLDialogsExists()
 		{
-			BaseConstraint findBy = Find.ByUrl(PopUpURI);
+			Constraint findBy = Find.ByUrl(PopUpURI);
 			Assert.IsFalse(Ie.HtmlDialogs.Exists(findBy));
 
 			Ie.Button("modalid").ClickNoWait();

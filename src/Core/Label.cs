@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML label element.
 	/// </summary>
     [ElementTag("label")]
-    public class Label : ElementsContainer<Label>
+    public class Label : ElementContainer<Label>
 	{
 		public Label(DomContainer domContainer, INativeElement labelElement) : base(domContainer, labelElement) {}
 

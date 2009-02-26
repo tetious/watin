@@ -106,12 +106,12 @@ namespace WatiN.Core
             return NativeBrowser.Forward();
         }
 
-        protected override void navigateTo(Uri url)
+        protected override void NavigateTo(Uri url)
         {
             NativeBrowser.LoadUri(url);
         }
 
-        protected override void navigateToNoWait(Uri url)
+        protected override void NavigateToNoWait(Uri url)
         {
             NativeBrowser.LoadUriNoWait(url);
         }
@@ -358,10 +358,15 @@ namespace WatiN.Core
             var clientPort = new FireFoxClientPort();
             clientPort.Connect(url);
 
-            NativeBrowser = new FFBrowser(clientPort, this);
+            NativeBrowser = new FFBrowser(clientPort);
             WaitForComplete();
         }
 
         #endregion
+
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            return null;
+        }
     }
 }

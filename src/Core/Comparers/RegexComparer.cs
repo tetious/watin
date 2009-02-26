@@ -24,22 +24,30 @@ namespace WatiN.Core.Comparers
 	/// <summary>
 	/// This class supports matching a regular expression with a string value.
 	/// </summary>
-	public class RegexComparer : BaseComparer
+	public class RegexComparer : Comparer<string>
 	{
-		private readonly Regex regexToUse;
+		private readonly Regex regex;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegexComparer"/> class.
         /// </summary>
         /// <param name="regex">The regex to be used by the <see cref="Compare(string)"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="regex"/> is null</exception>
 		public RegexComparer(Regex regex)
 		{
 			if (regex == null)
-			{
 				throw new ArgumentNullException("regex");
-			}
-			regexToUse = regex;
+
+			this.regex = regex;
 		}
+
+        /// <summary>
+        /// Gets the regular expression to compare against.
+        /// </summary>
+        protected Regex Regex
+        {
+            get { return regex; }
+        }
 
         /// <summary>
         /// Matches the given value with the regex. You can override this method
@@ -52,9 +60,10 @@ namespace WatiN.Core.Comparers
         /// </returns>
 		public override bool Compare(string value)
 		{
-			if (value == null) return false;
+			if (value == null)
+                return false;
 
-			return regexToUse.IsMatch(value);
+			return regex.IsMatch(value);
 		}
 
         /// <summary>
@@ -65,7 +74,7 @@ namespace WatiN.Core.Comparers
         /// </returns>
 		public override string ToString()
 		{
-			return GetType().ToString() + " matching against: " + regexToUse.ToString();
+			return GetType().ToString() + " matching against: " + regex.ToString();
 		}
 	}
 }

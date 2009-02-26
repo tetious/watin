@@ -48,7 +48,7 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnTrue()
         {
             _returnValue = true;
-            PredicateStringComparer comparer = new PredicateStringComparer(CallThisMethod);
+            PredicateComparer<string, string> comparer = new PredicateComparer<string, string>(CallThisMethod);
 
             Assert.That(comparer.Compare("test value"), Is.True);
             Assert.That(_called, Is.True);
@@ -59,7 +59,7 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnFalse()
         {
             _returnValue = false;
-            PredicateStringComparer comparer = new PredicateStringComparer(CallThisMethod);
+            PredicateComparer<string, string> comparer = new PredicateComparer<string, string>(CallThisMethod);
 
             Assert.That(comparer.Compare("some input"), Is.False);
             Assert.That(_called, Is.True);

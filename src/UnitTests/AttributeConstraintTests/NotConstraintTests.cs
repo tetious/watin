@@ -31,15 +31,15 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void NotTest()
         {
             // Given
-            var baseConstraintMock = new Mock<BaseConstraint>();
-            baseConstraintMock.Expect(constraint => constraint.Compare(null)).Returns(false);
+            var mockAttributeBag = new Mock<IAttributeBag>().Object;
+            var constraintMock = new Mock<Constraint>();
+            ConstraintContext context = new ConstraintContext();
+            constraintMock.Expect(constraint => constraint.Matches(mockAttributeBag, context)).Returns(false);
 
-            var attributeBag = new Mock<IAttributeBag>().Object;
-
-            var notConstraint = new NotConstraint(baseConstraintMock.Object);
+            var notConstraint = new NotConstraint(constraintMock.Object);
 
             // WHEN
-            var result = notConstraint.Compare(attributeBag);
+            var result = notConstraint.Matches(mockAttributeBag, context);
             
             // THEN
             Assert.That(result, Is.True);
@@ -49,17 +49,17 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void AttributeOperatorNotOverload()
         {
             // Given
-            var baseConstraintMock = new Mock<BaseConstraint>();
-            baseConstraintMock.Expect(constraint => constraint.Compare(null)).Returns(false);
-
-            var attributeBag = new Mock<IAttributeBag>().Object;
+            var constraintMock = new Mock<Constraint>();
+            var mockAttributeBag = new Mock<IAttributeBag>().Object;
+            ConstraintContext context = new ConstraintContext();
+            constraintMock.Expect(constraint => constraint.Matches(mockAttributeBag, context)).Returns(false);
 
             // WHEN
-            var attributenot = !baseConstraintMock.Object;
+            var attributenot = !constraintMock.Object;
 
             // THEN
             Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
-            Assert.IsTrue(attributenot.Compare(attributeBag));
+            Assert.IsTrue(attributenot.Matches(mockAttributeBag, context));
         }
     }
 }

@@ -30,7 +30,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstructorWithValue()
 		{
-			ICompare comparer = new RegexComparer(new Regex("^A test value$"));
+			var comparer = new RegexComparer(new Regex("^A test value$"));
 
 			Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
 
@@ -51,7 +51,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstuctorWithStringEmpty()
 		{
-			ICompare comparer = new RegexComparer(new Regex(String.Empty));
+			var comparer = new RegexComparer(new Regex(String.Empty));
 
 			Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
 			Assert.IsTrue(comparer.Compare(" "), "Any string should not match");

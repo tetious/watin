@@ -33,51 +33,60 @@ namespace WatiN.Core.Native.Mozilla
         /// I.e. for options myOption.getAttribute("selected"); returns nothing if it's selected. 
         /// However  myOption.selected returns true.
         /// </summary>
-        public static readonly List<string> ReadPropertyInsteadOfAttribute = new List<string>
-                {
-                    "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
-                    "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
-                };
+        private static readonly IList<string> ReadPropertyInsteadOfAttribute = new[]
+        {
+            "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
+            "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
+        };
 
         /// <summary>
         /// List of html attributes that should not be changed when SetAttributeValue is called
         /// I.e. the Checked property is set be the click event on RadioButton.Checked and CheckBox.Checked
         /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
         /// </summary>
-        public static readonly List<string> IgnoreSettingOfValue = new List<string>
-                {
-                    "checked"
-                };
+        private static readonly IList<string> IgnoreSettingOfValue = new[]
+        {
+            "checked"
+        };
 
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
-        public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
-                {
-                    {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
-                };
+        private static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
+        {
+            {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
+        };
 
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
-        public static readonly Dictionary<string, TryFuncValue<string>> SetPropertyTransformations = new Dictionary<string, TryFuncValue<string>>
-                {
-                    {"value", value => "'" + value + "'"}
-                };
+        private static readonly Dictionary<string, TryFuncValue<string>> SetPropertyTransformations = new Dictionary<string, TryFuncValue<string>>
+        {
+            {"value", value => "'" + value + "'"}
+        };
 
         private Dictionary<string, object> _attributeCache;
 
-        public FFElement(object elementReference, FireFoxClientPort clientPort)
+        public FFElement(FireFoxClientPort clientPort, string elementReference)
         {
-            ElementReference = elementReference as string;
-            if (string.IsNullOrEmpty(ElementReference)) throw new ArgumentException("should be of type string and not null or empty","elementReference");
+            if (clientPort == null)
+                throw new ArgumentNullException("clientPort");
+            if (elementReference == null)
+                throw new ArgumentNullException("elementReference");
 
-            if (clientPort == null) throw new ArgumentNullException("clientPort");
             ClientPort = clientPort;
+            ElementReference = elementReference;
         }
 
-        public string ElementReference { get; private set; }
+        /// <summary>
+        /// Gets the FireFox client port.
+        /// </summary>
         public FireFoxClientPort ClientPort { get; private set; }
+
+        /// <summary>
+        /// Gets the name of a variable that stores a reference to the element within FireFox.
+        /// </summary>
+        public string ElementReference { get; private set; }
 
         public string TextContent
         {
@@ -144,6 +153,36 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         #region INativeElement Members
+
+        public INativeElementCollection Children
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".childNodes"); }
+        }
+
+        public INativeElementCollection AllDescendants
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".all"); }
+        }
+
+        public INativeElementCollection TableRows
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".rows"); }
+        }
+
+        public INativeElementCollection TableBodies
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".tBodies"); }
+        }
+
+        public INativeElementCollection TableCells
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".cells"); }
+        }
+
+        public INativeElementCollection Options
+        {
+            get { return new FFElementCollection(ClientPort, ElementReference + ".options"); }
+        }
 
         /// <summary>
         /// This not supported in FireFox
@@ -304,16 +343,6 @@ namespace WatiN.Core.Native.Mozilla
             get { return GetFromAttributeCache("TagName", () => GetProperty("tagName")); }
         }
 
-        public object Object
-        {
-            get { return ElementReference; }
-        }
-
-        public object Objects
-        {
-            get { return ElementReference; }
-        }
-
         public void Select()
         {
             FireEvent("select", null);
@@ -392,44 +421,12 @@ namespace WatiN.Core.Native.Mozilla
             var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
             var exists = ClientPort.WriteAndReadAsBool(command);
 
-            return exists ? new FFElement(elementvar, ClientPort) : null;
+            return exists ? new FFElement(ClientPort, elementvar) : null;
         }
 
         public void WaitUntilReady()
         {
             // TODO: Is this needed for FireFox?
-        }
-
-        public ElementFinder TableBodies(DomContainer domContainer)
-        {
-            if (ElementFactory.GetElementTags(typeof(Table)).Contains(ElementTag.FromNativeElement(this)))
-                return new FFElementCollectionFinder(ElementReference + ".tBodies", domContainer, null, ClientPort);
-
-            return null;
-        }
-
-        public ElementFinder TableRows(DomContainer domContainer)
-        {
-            if (ElementFactory.GetElementTags(typeof(Table)).Contains(ElementTag.FromNativeElement(this)))
-                return new FFElementCollectionFinder(ElementReference + ".rows", domContainer, null, ClientPort);
-
-            return null;
-        }
-
-        public ElementFinder TableCells(DomContainer domContainer)
-        {
-            if (ElementFactory.GetElementTags(typeof(TableRow)).Contains(ElementTag.FromNativeElement(this)))
-                return new FFElementCollectionFinder(ElementReference + ".cells", domContainer, Find.ByElement(element => element.TagName.ToLowerInvariant() == "td"), ClientPort);
-
-            return null;
-        }
-
-        public ElementFinder TableBodyRows(DomContainer domContainer)
-        {
-            if (ElementFactory.GetElementTags(typeof(TableBody)).Contains(ElementTag.FromNativeElement(this)))
-                return new FFElementCollectionFinder(ElementReference + ".rows", domContainer, null, ClientPort);
-
-            return null;
         }
 
         /// <summary>
@@ -609,6 +606,5 @@ namespace WatiN.Core.Native.Mozilla
 
             ElementReference = elementVariableName;
         }
-
     }
 }

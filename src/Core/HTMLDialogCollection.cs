@@ -87,11 +87,11 @@ namespace WatiN.Core
 			}
 		}
 
-		public bool Exists(BaseConstraint findBy)
+		public bool Exists(Constraint findBy)
 		{
 			foreach (var htmlDialog in htmlDialogs)
 			{
-				if (findBy.Compare(htmlDialog))
+				if (htmlDialog.Matches(findBy))
 				{
 					return true;
 				}
@@ -100,11 +100,11 @@ namespace WatiN.Core
 			return false;
 		}
 
-        public HtmlDialog Filter(BaseConstraint constraint)
+        public HtmlDialog Filter(Constraint constraint)
         {
             foreach (var htmlDialog in htmlDialogs)
 			{
-				if (constraint.Compare(htmlDialog))
+				if (htmlDialog.Matches(constraint))
 				{
 					return htmlDialog;
 				}

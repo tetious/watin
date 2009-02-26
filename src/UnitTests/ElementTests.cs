@@ -26,7 +26,6 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
@@ -147,10 +146,10 @@ namespace WatiN.Core.UnitTests
 		public void ElementParentReturnsElementsContainerForUnknownElement()
 		{
 			var parent = Ie.Form("Form").Parent;
-		    var container = parent as IElementsContainer;
+		    var container = parent as IElementContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-            Assert.IsTrue(parent.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+            Assert.IsTrue(parent.GetType().Equals(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
         }
 
 		[Test]
@@ -174,10 +173,10 @@ namespace WatiN.Core.UnitTests
 		public void ElementPreviousSiblingReturnsElementsContainerForUnknowElement()
 		{
 			var previous = Ie.Div("NextAndPreviousTests").Div("last").PreviousSibling;
-		    var container = previous as IElementsContainer;
+		    var container = previous as IElementContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-            Assert.IsTrue(previous.GetType().Equals(typeof(ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+            Assert.IsTrue(previous.GetType().Equals(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
         }
 
 		[Test]
@@ -205,10 +204,10 @@ namespace WatiN.Core.UnitTests
 		public void ElementNextSiblingReturnsElementsContainerForUnknowElement()
 		{
 			var next = Ie.Div("NextAndPreviousTests").Span("second").NextSibling;
-		    var container = next as IElementsContainer;
+		    var container = next as IElementContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-            Assert.IsTrue(next.GetType().Equals(typeof (ElementsContainer<Element>)), "Should be ElementsContainer<Element>");
+            Assert.IsTrue(next.GetType().Equals(typeof (ElementContainer<Element>)), "Should be ElementsContainer<Element>");
         }
 
 		[Test]
@@ -251,9 +250,9 @@ namespace WatiN.Core.UnitTests
 		                    {
                                 element = browser.Element(Find.ById("table1"));
 
-		                        var container = element as IElementsContainer;
+		                        var container = element as IElementContainer;
 		                        Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-		                        Assert.IsAssignableFrom(typeof(ElementsContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
+		                        Assert.IsAssignableFrom(typeof(ElementContainer<Element>), element, "The returned object form ie.Element should be castable to ElementsContainer<Element>");
 
 		                        Assert.IsNotNull(element, "Element not found");
 
@@ -283,7 +282,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        element = browser.Element("input", Find.By("id", "name"), "text");
+		                        element = browser.ElementWithTag("input", Find.By("id", "name"), "text");
 		                        Assert.IsTrue(element.Exists);
 		                    });
 		}
@@ -293,7 +292,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        element = browser.Element("a", Find.By("id", "testlinkid"));
+		                        element = browser.ElementWithTag("a", Find.By("id", "testlinkid"));
 		                        Assert.IsTrue(element.Exists);
 		                    });
 		}
@@ -303,7 +302,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        element = browser.Element("head", Find.ByIndex(0));
+                                element = browser.ElementWithTag("head", Find.ByIndex(0));
 		                        Assert.IsTrue(element.Exists);
 		                    });
 		}
@@ -332,9 +331,9 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(elements[0].GetType().Equals(typeof (Div)), "Element 0 should be a div");
 			Assert.IsTrue(elements[1].GetType().Equals(typeof (Span)), "Element 1 should be a span");
 
-		    var container = elements[2] as IElementsContainer;
+		    var container = elements[2] as IElementContainer;
             Assert.That(container, Is.Not.Null, "Element 2 should be an IElementsContainer");
-            Assert.IsTrue(elements[2].GetType().Equals(typeof(ElementsContainer<Element>)), "Element 2 should be an ElementsContainer<Element>");
+            Assert.IsTrue(elements[2].GetType().Equals(typeof(ElementContainer<Element>)), "Element 2 should be an ElementsContainer<Element>");
             Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
 		}
 
@@ -561,9 +560,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilExistsTimeOutExceptionInnerExceptionNotSetToLastExceptionThrown()
 		{
-			var elementCollectionMock = new Mock<IElementCollection>();
             var domContainerMock = new Mock<DomContainer>( new object[] { });
-			var finderMock = new Mock<IEElementFinder> ( null, elementCollectionMock.Object, domContainerMock.Object);
+			var finderMock = new Mock<ElementFinder> (null, null);
 
 			finderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException(""));
             finderMock.Expect(finder => finder.FindFirst()).Returns((Element) null); //.AtMostOnce();
@@ -584,7 +582,6 @@ namespace WatiN.Core.UnitTests
 			Assert.IsNotNull(timeoutException, "TimeoutException not thrown");
 			Assert.IsNull(timeoutException.InnerException, "Unexpected innerexception");
 
-            elementCollectionMock.VerifyAll();
 			domContainerMock.VerifyAll();
             finderMock.VerifyAll();
 		}
@@ -592,9 +589,8 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void WaitUntilExistsTimeOutExceptionInnerExceptionSetToLastExceptionThrown()
 		{
-			var elementCollectionMock = new Mock<IElementCollection>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
-            var finderMock = new Mock<IEElementFinder>(null, elementCollectionMock.Object, domContainerMock.Object);
+            var finderMock = new Mock<ElementFinder>(null, null);
 
 			finderMock.Expect(finder => finder.FindFirst()).Throws(new Exception(""));
             finderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException("mockUnauthorizedAccessException")).AtMostOnce();
@@ -616,7 +612,6 @@ namespace WatiN.Core.UnitTests
 			Assert.IsInstanceOfType(typeof (UnauthorizedAccessException), timeoutException.InnerException, "Unexpected innerexception");
 			Assert.AreEqual("mockUnauthorizedAccessException", timeoutException.InnerException.Message);
 
-			elementCollectionMock.VerifyAll();
             domContainerMock.VerifyAll();
             finderMock.VerifyAll();
 		}
@@ -743,7 +738,7 @@ namespace WatiN.Core.UnitTests
 			var top = position(button, "Top");
 			var height = int.Parse(button.GetAttributeValue("clientHeight"));
 			
-			var window = (IHTMLWindow3) ((IHTMLDocument2)ie.NativeDocument.Object).parentWindow;
+			var window = (IHTMLWindow3) ((IEDocument)ie.NativeDocument).HtmlDocument.parentWindow;
 			
 			left = left + window.screenLeft;
 			top = top + window.screenTop;
@@ -754,12 +749,14 @@ namespace WatiN.Core.UnitTests
 
 		private static int position(Element element, string attributename)
 		{
+            IEElement ieElement = (IEElement)element.NativeElement;
+
 			var pos = 0;
-            var offsetParent = ((IHTMLElement)element.NativeElement.Object).offsetParent;
+            var offsetParent = ieElement.HtmlElement.offsetParent;
 			if (offsetParent != null)
 			{
 			    var domContainer = element.DomContainer;
-			    pos = position(new Element(domContainer, domContainer.NativeBrowser.CreateElement(offsetParent)), attributename);
+			    pos = position(new Element(domContainer, new IEElement(offsetParent)), attributename);
 			}
 
 		    if (StringComparer.AreEqual(element.TagName, "table", true))
@@ -994,7 +991,7 @@ namespace WatiN.Core.UnitTests
             table.WaitUntil((Table table1) => table1.Enabled);
 
             // Invoke with lambda
-            ElementsContainer<Table> table2 = Ie.Table("table1");
+            ElementContainer<Table> table2 = Ie.Table("table1");
             table2.WaitUntil(t => t.Enabled);
 
             // Invoke with delegate method
@@ -1053,7 +1050,7 @@ namespace WatiN.Core.UnitTests
             var element = new Element(mockDomContainer.Object, mockNativeElement.Object);
 
             // WHEN
-            var value = element.GetValue("style");
+            var value = element.GetAttributeValue("style");
 
             // THEN
             Assert.That(value, Is.EqualTo(cssText));
@@ -1072,7 +1069,7 @@ namespace WatiN.Core.UnitTests
             var element = new Element(mockDomContainer.Object, mockNativeElement.Object);
 
             // WHEN
-            var value = element.GetValue("style.color");
+            var value = element.GetAttributeValue("style.color");
 
             // THEN
             Assert.AreEqual(styleAttributeValue, value);

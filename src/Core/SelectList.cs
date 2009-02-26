@@ -23,7 +23,6 @@ using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 
@@ -173,9 +172,9 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The find by to use.</param>
 		/// <returns></returns>
-		public Option Option(BaseConstraint findBy)
+		public Option Option(Constraint findBy)
 		{
-			return ElementsSupport.Option(DomContainer, findBy, new OptionCollection(this));
+            return new Option(DomContainer, CreateElementFinder<Option>(NativeElement.Options, findBy));
 		}
 
         /// <summary>
@@ -191,9 +190,9 @@ namespace WatiN.Core
 		/// <summary>
 		/// Returns all the <see cref="Core.Option"/> elements in the <see cref="SelectList"/>.
 		/// </summary>
-		public Core.OptionCollection Options
+		public OptionCollection Options
 		{
-			get { return ElementsSupport.Options(DomContainer, new OptionCollection(this)); }
+            get { return new OptionCollection(DomContainer, CreateElementFinder<Option>(NativeElement.Options, null)); }
 		}
 
 		/// <summary>
@@ -282,7 +281,7 @@ namespace WatiN.Core
 			return new AttributeConstraint("selected", new Comparers.StringComparer(true.ToString(), true));
 		}
 
-		private void SelectByTextOrValue(BaseConstraint findBy)
+		private void SelectByTextOrValue(Constraint findBy)
 		{
 			var options = Options.Filter(findBy);
 
@@ -293,32 +292,13 @@ namespace WatiN.Core
 
 			if (options.Count == 0)
 			{
-				throw new SelectListItemNotFoundException(findBy.ConstraintToString());
+				throw new SelectListItemNotFoundException(findBy.ToString());
 			}
 		}
 
 		private static AttributeConstraint GetTextAttribute(string text)
 		{
 			return Find.ByText(new StringEqualsAndCaseInsensitiveComparer(text));
-		}
-
-
-		public class OptionCollection : IElementCollection
-		{
-			private readonly SelectList selectlist;
-
-			public OptionCollection(SelectList selectList)
-			{
-				selectlist = selectList;
-			}
-
-			public object Elements
-			{
-				get
-				{
-				    return selectlist.NativeElement.Objects;
-				}
-			}
 		}
 	}
 }

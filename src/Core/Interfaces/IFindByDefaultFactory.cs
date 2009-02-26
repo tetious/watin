@@ -33,7 +33,7 @@ namespace WatiN.Core.Interfaces
         /// </summary>
         /// <param name="value">The string to match against</param>
         /// <returns>A constraint</returns>
-        BaseConstraint ByDefault(string value);
+        Constraint ByDefault(string value);
 
         /// <summary>
         /// Gets a constraint to find an element by matching its default characteristics
@@ -41,6 +41,6 @@ namespace WatiN.Core.Interfaces
         /// </summary>
         /// <param name="value">The regular expression to match against</param>
         /// <returns>A constraint</returns>
-        BaseConstraint ByDefault(Regex value);
+        Constraint ByDefault(Regex value);
     }
 }

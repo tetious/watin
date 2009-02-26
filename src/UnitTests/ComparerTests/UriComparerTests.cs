@@ -33,7 +33,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstructorWithValueAndStringCompare()
 		{
-			ICompare comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
+			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
 
 			// String Compare
 			Assert.IsTrue(comparer.Compare("http://watin.sourceforge.net"), "Exact match should pass.");
@@ -175,7 +175,7 @@ namespace WatiN.Core.UnitTests
         {
             var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
 
-            ICompare comparer = new UriComparer(new Uri(url));
+            var comparer = new UriComparer(new Uri(url));
             Assert.That(comparer.Compare(url), Is.True);
         }
 

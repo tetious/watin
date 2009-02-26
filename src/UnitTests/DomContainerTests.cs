@@ -106,7 +106,7 @@ namespace WatiN.Core.UnitTests
 			Settings.Reset();
 		}
 
-        private class MyTestDomContainer : DomContainer
+        internal class MyTestDomContainer : DomContainer
         {
             public INativeDocument ReturnNativeDocument { get; set; }
 
@@ -121,6 +121,11 @@ namespace WatiN.Core.UnitTests
             }
 
             protected override INativeBrowser GetNativeBrowser()
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override string GetAttributeValueImpl(string attributeName)
             {
                 throw new NotImplementedException();
             }

@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML para element.
 	/// </summary>
     [ElementTag("p")]
-    public class Para : ElementsContainer<Para>
+    public class Para : ElementContainer<Para>
 	{
 		public Para(DomContainer domContainer, INativeElement htmlParaElement) : base(domContainer, htmlParaElement) {}
 

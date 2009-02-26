@@ -1,14 +1,13 @@
 using System;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
 {
     /// <summary>
     /// Class that supports comparing the given Type with the type of a subclass of <see cref="Element"/>
     /// </summary>
-    public class TypeComparer : ICompareElement
+    public class TypeComparer : Comparer<Element>
     {
-        private readonly Type _type;
+        private readonly Type type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeComparer"/> class.
@@ -16,7 +15,15 @@ namespace WatiN.Core.Comparers
         /// <param name="type">The type to compare against.</param>
         public TypeComparer(Type type)
         {
-            _type = type;
+            this.type = type;
+        }
+
+        /// <summary>
+        /// Gets the type to compare against.
+        /// </summary>
+        protected Type Type
+        {
+            get { return type; }
         }
 
         /// <summary>
@@ -24,9 +31,9 @@ namespace WatiN.Core.Comparers
         /// </summary>
         /// <param name="element">The element to compare with.</param>
         /// <returns>Returns <c>true</c> if the <paramref name="element"/> is the exact type, otherwise it will return <c>false</c>.</returns>
-        public bool Compare(Element element)
+        public override bool Compare(Element element)
         {
-            return element.GetType() == _type;
+            return element.GetType() == type;
         }
     }
 }

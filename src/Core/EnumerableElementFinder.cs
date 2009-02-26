@@ -19,7 +19,7 @@ namespace WatiN.Core
         /// <param name="findBy">The constraint used by the finder to filter elements</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementTags"/>
         /// or <paramref name="findBy"/> is null</exception>
-        public EnumerableElementFinder(IEnumerable<Element> elements, IList<ElementTag> elementTags, BaseConstraint findBy)
+        public EnumerableElementFinder(IEnumerable<Element> elements, IList<ElementTag> elementTags, Constraint findBy)
             : base(elementTags, findBy)
         {
             if (elements == null)
@@ -29,7 +29,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        protected override ElementFinder FilterImpl(BaseConstraint findBy)
+        protected override ElementFinder FilterImpl(Constraint findBy)
         {
             return new EnumerableElementFinder(elements, ElementTags, Constraint & findBy);
         }
@@ -38,7 +38,7 @@ namespace WatiN.Core
         protected override IEnumerable<Element> FindAllImpl()
         {
             foreach (Element element in elements)
-                if (Constraint.Compare(element))
+                if (element.Matches(Constraint))
                     yield return element;
         }
     }

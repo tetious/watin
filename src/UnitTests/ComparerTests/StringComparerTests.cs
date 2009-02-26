@@ -32,7 +32,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstructorWithValue()
 		{
-			ICompare comparer = new StringComparer("A test value");
+			var comparer = new StringComparer("A test value");
 
 			Assert.IsTrue(comparer.Compare("A test value"), "Exact match should pass.");
 
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void ConstuctorWithStringEmpty()
 		{
-			ICompare comparer = new StringComparer(String.Empty);
+			var comparer = new StringComparer(String.Empty);
 
 			Assert.IsTrue(comparer.Compare(String.Empty), "String.Empty should match");
 

@@ -250,7 +250,7 @@ namespace WatiN.Core
 
         private static bool IsAnInputElement(string tagName)
         {
-            return string.Compare(tagName, ElementsSupport.InputTagName, StringComparison.InvariantCultureIgnoreCase) == 0;
+            return string.Compare(tagName, "input", StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
 	    public static IEnumerable<string> ElementTagNames(IEnumerable<ElementTag> elementTags)

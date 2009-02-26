@@ -28,10 +28,10 @@ namespace WatiN.Core.Comparers
         /// <summary>
         /// Initializes a new instance of the <see cref="StringContainsAndCaseInsensitiveComparer"/> class.
         /// </summary>
-        /// <param name="value">The value used to compare against.</param>
-		public StringContainsAndCaseInsensitiveComparer(string value) : base(value)
+        /// <param name="comparisonValue">The value used to compare against.</param>
+		public StringContainsAndCaseInsensitiveComparer(string comparisonValue)
+            : base(comparisonValue)
 		{
-			valueToCompareWith = value.ToLower();
 		}
 
         /// <summary>
@@ -43,16 +43,12 @@ namespace WatiN.Core.Comparers
 		public override bool Compare(string value)
 		{
 			if (value == null)
-			{
 				return false;
-			}
 
-			if (valueToCompareWith == String.Empty & value != String.Empty)
-			{
-				return false;
-			}
+            if (ComparisonValue.Length == 0)
+                return value.Length == 0;
 
-			return (value.ToLower().IndexOf(valueToCompareWith) >= 0);
+            return value.IndexOf(ComparisonValue, StringComparison.InvariantCultureIgnoreCase) >= 0;
 		}
 	}
 }

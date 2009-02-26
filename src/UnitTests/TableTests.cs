@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
 		                    {
                                 var tableRow = browser.TableRow("row0");
 		                        Assert.IsInstanceOfType(typeof (TableBody), tableRow.Parent, "Parent should be a TableBody Type");
-		                        Assert.IsInstanceOfType(typeof (Table), tableRow.ParentTable, "Should be a Table Type");
+		                        Assert.IsInstanceOfType(typeof (Table), tableRow.ContainingTable, "Should be a Table Type");
 		                        Assert.AreEqual("table1", tableRow.ParentTable.Id, "Unexpected id");
 		                    });
 		}

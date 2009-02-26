@@ -29,11 +29,14 @@ namespace WatiN.Core
 	/// </summary>
 	public class FrameCollection : IEnumerable
 	{
-		private readonly List<Frame> frames = new List<Frame>();
+        private readonly List<Frame> frames;
 
 		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
 		{
-			frames = htmlDocument.Frames(domContainer);
+            frames = new List<Frame>();
+
+            foreach (INativeDocument frameDocument in htmlDocument.Frames)
+                frames.Add(new Frame(domContainer, frameDocument));
 		}
 
         [Obsolete("Use Count property instead.")]
@@ -52,7 +55,7 @@ namespace WatiN.Core
 			get { return frames[index]; }
 		}
 
-		public bool Exists(BaseConstraint findBy)
+		public bool Exists(Constraint findBy)
 		{
 		    return (First(findBy) != null);
 		}
@@ -70,11 +73,11 @@ namespace WatiN.Core
         /// Find a frame within this collection. If no match is found it will return null.
         /// </summary>
         /// <param name="findBy">The <see cref="AttributeConstraint"/> of the Frame to find.</param>
-        public Frame First(BaseConstraint findBy)
+        public Frame First(Constraint findBy)
         {
             foreach (var frame in frames)
             {
-                if (findBy.Compare(frame))
+                if (frame.Matches(findBy))
                 {
                     // Return
                     return frame;

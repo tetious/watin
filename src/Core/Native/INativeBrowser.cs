@@ -18,7 +18,6 @@
 
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native
 {
@@ -27,17 +26,5 @@ namespace WatiN.Core.Native
     /// </summary>
     public interface INativeBrowser 
     {
-        /// <summary>
-        /// Creates an element finder.
-        /// </summary>
-        /// <param name="tags">The tags, or null if all tags are admissible</param>
-        /// <param name="baseConstraint">The constraint, or null if no additional constraint required</param>
-        /// <param name="elements">The element collection to search</param>
-        /// <returns>The finder</returns>
-        ElementFinder CreateElementFinder(IList<ElementTag> tags, BaseConstraint baseConstraint, IElementCollection elements);
-
-        INativeElement CreateElement(object element);
-
-        INativeDocument CreateDocument(object document);
     }
 }

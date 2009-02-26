@@ -130,9 +130,11 @@ namespace WatiN.Core
         /// <param name="domContainer">The element's DOM container</param>
         /// <param name="nativeElement">The native element to wrap, or null if none</param>
         /// <returns>The untyped element, or null if none</returns>
-        public static ElementsContainer<Element> CreateUntypedElement(DomContainer domContainer, INativeElement nativeElement)
+        public static ElementContainer<Element> CreateUntypedElement(DomContainer domContainer, INativeElement nativeElement)
         {
-            return nativeElement == null ? null : new ElementsContainer<Element>(domContainer, nativeElement);
+            return nativeElement == null
+                ? null
+                : new ElementContainer<Element>(domContainer, nativeElement);
         }
 
         /// <summary>
@@ -164,6 +166,7 @@ namespace WatiN.Core
         /// <returns>The list of supported tags</returns>
         /// <typeparam name="TElement">The element type</typeparam>
         public static IList<ElementTag> GetElementTags<TElement>()
+            where TElement : Element
         {
             return GetElementTags(typeof(TElement));
         }

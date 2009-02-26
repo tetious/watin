@@ -20,7 +20,6 @@ using System;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 
@@ -29,25 +28,142 @@ namespace WatiN.Core
 	/// <summary>
 	/// This class provides specialized functionality for a HTML table element.
 	/// </summary>
+    /// <remarks>
+    /// <para>
+    /// To find rows that contain particular cell values use the <see cref="Find.ByTextInColumn(string, int)"/>
+    /// constraint as in the following example:
+    /// </para>
+    /// <code>
+    /// // Find a table row with "some text" in the 3rd (!) column.
+    /// Table table = document.Table("my_table");
+    /// table.OwnTableRow(Find.ByTextInColumn("some text", 2));
+    /// </code>
+    /// <para>
+    /// To find rows based on other properties of their contents use the <see cref="Find.ByExistenceOfRelatedElement{T}" />
+    /// constraint as in the following example:
+    /// </para>
+    /// <code>
+    /// // Find a table row with "some text" in any of its columns.
+    /// Table table = document.Table("my_table");
+    /// table.OwnTableRow(Find.ByExistenceOfRelatedElement(row => row.OwnTableCell("some text")));
+    /// </code>
+    /// </remarks>
     [ElementTag("table")]
-	public class Table : ElementsContainer<Table>
+	public class Table : ElementContainer<Table>
 	{
 		public Table(DomContainer domContainer, INativeElement htmlTable) : 
             base(domContainer, htmlTable) {}
 
-        public Table(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
+        public Table(DomContainer domContainer, ElementFinder finder)
+            : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Returns all rows in the first TBODY section of a table. If no
-		/// explicit sections are defined in the table (like THEAD, TBODY 
-		/// and/or TFOOT sections), it will return all the rows in the table.
-		/// This method also returns rows from nested tables.
-		/// </summary>
-		/// <value>The table rows.</value>
-		public override TableRowCollection TableRows
-		{
-			get { return ElementsSupport.TableRows(DomContainer, TableBodies[0]); }
-		}
+        /// <summary>
+        /// Finds a table row within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id</param>
+        /// <returns>The table row</returns>
+        public TableRow OwnTableRow(string elementId)
+        {
+            return OwnTableRow(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a table row within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id regular expression</param>
+        /// <returns>The table row</returns>
+        public TableRow OwnTableRow(Regex elementId)
+        {
+            return OwnTableRow(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a table row within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="findBy">The constraint</param>
+        /// <returns>The table row</returns>
+        public TableRow OwnTableRow(Constraint findBy)
+        {
+            return new TableRow(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, findBy));
+        }
+
+        /// <summary>
+        /// Finds a table row within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="predicate">The predicate</param>
+        /// <returns>The table row</returns>
+        public TableRow OwnTableRow(Predicate<TableRow> predicate)
+        {
+            return OwnTableRow(Find.ByElement(predicate));
+        }
+
+        /// <summary>
+        /// Gets a collection of all table rows within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <returns>The table row collection</returns>
+        public TableRowCollection OwnTableRows
+        {
+            get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, null)); }
+        }
+
+        /// <summary>
+        /// Finds a table body within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id</param>
+        /// <returns>The table body</returns>
+        public TableBody OwnTableBody(string elementId)
+        {
+            return OwnTableBody(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a table body within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id regular expression</param>
+        /// <returns>The table body</returns>
+        public TableBody OwnTableBody(Regex elementId)
+        {
+            return OwnTableBody(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a table body within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="findBy">The constraint</param>
+        /// <returns>The table body</returns>
+        public TableBody OwnTableBody(Constraint findBy)
+        {
+            return new TableBody(DomContainer, CreateElementFinder<TableBody>(NativeElement.TableBodies, findBy));
+        }
+
+        /// <summary>
+        /// Finds a table body within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="predicate">The predicate</param>
+        /// <returns>The table body</returns>
+        public TableBody OwnTableBody(Predicate<TableBody> predicate)
+        {
+            return OwnTableBody(Find.ByElement(predicate));
+        }
+
+        /// <summary>
+        /// Gets a collection of all table bodies within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <returns>The table body collection</returns>
+        public TableBodyCollection OwnTableBodies
+        {
+            get { return new TableBodyCollection(DomContainer, CreateElementFinder<TableBody>(NativeElement.TableBodies, null)); }
+        }
 
         /// <summary>
         /// Gets the table rows that are direct children of this <see cref="Table"/>, leaving
@@ -56,150 +172,100 @@ namespace WatiN.Core
         /// all the rows of these <see cref="Core.TableBody"/> elements.
         /// </summary>
         /// <value>The table rows collection.</value>
+        [Obsolete("Use OwnTableRows instead.")]
         public TableRowCollection TableRowsDirectChildren
         {
-            get { return new TableRowCollection(DomContainer, NativeElement.TableRows(DomContainer)); }
+            get { return OwnTableRows; }
         }
 
-	    /// <summary>
-		/// Returns the table body sections belonging to this table (not including table body sections 
-		/// from tables nested in this table).
-		/// </summary>
-		/// <value>The table bodies.</value>
-		public override TableBodyCollection TableBodies
-		{
-            get { return new TableBodyCollection(DomContainer, NativeElement.TableBodies(DomContainer)); }
-		}
-
-		/// <summary>
-		/// Returns the table body section belonging to this table (not including table body sections 
-		/// from tables nested in this table).
-		/// </summary>
-		/// <param name="findBy">The find by.</param>
-		/// <returns></returns>
-		public override TableBody TableBody(BaseConstraint findBy)
-		{
-			return ElementsSupport.TableBody(DomContainer, NativeElement.TableBodies(DomContainer).Filter(findBy));
-		}
-
         /// <summary>
-		/// Returns the table body section belonging to this table (not including table body sections 
-		/// from tables nested in this table).
-		/// </summary>
-		/// <param name="predicate">The expression to use.</param>
-		/// <returns></returns>
-		public override TableBody TableBody(Predicate<TableBody> predicate)
-		{
-			return TableBody(Find.ByElement(predicate));
-		}
-
-		/// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in the
         /// first <see cref="Core.TableBody"/> including rows in nested tables.
-		/// </summary>
-		/// <param name="findText">The text to find.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRow(string findText, int inColumn)
-		{
-			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+        /// </summary>
+        /// <param name="findText">The text to find.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use TableRow(Find.ByTextInColumn(findText, inColumn)) instead.")]
+        public TableRow FindRow(string findText, int inColumn)
+        {
+            Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            return TableRow(Find.ByTextInColumn(findText, inColumn));
+        }
 
-			var constraint = new TableRowAttributeConstraint(findText, inColumn);
-
-            return TextIsInBody(constraint) ? FindRow(constraint) : null;
-		}
-
-		/// <summary>
+        /// <summary>
         /// Finds te first row that has an exact match with <paramref name="findText"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, null is returned. This method will look for rows in all
         /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
-		/// </summary>
-		/// <param name="findText">The text to find.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        /// </summary>
+        /// <param name="findText">The text to find.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(findText, inColumn)) instead.")]
         public TableRow FindRowInDirectChildren(string findText, int inColumn)
-		{
-			Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
-
-			var constraint = new TableRowAttributeConstraint(findText, inColumn);
-
-            return TextIsInBody(constraint) ? FindRowInDirectChildren(constraint) : null;
-		}
-
-        private bool TextIsInBody(TableRowAttributeConstraint attributeConstraint)
         {
-            var innertext = TableBody(Find.First()).Text;
-
-            return (innertext != null && attributeConstraint.IsTextContainedIn(innertext));
+            Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            return OwnTableRow(Find.ByTextInColumn(findText, inColumn));
         }
-        
+
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
         /// first <see cref="Core.TableBody"/> including rows in nested tables.
-		/// </summary>
-		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRow(Regex findTextRegex, int inColumn)
-		{
+        /// </summary>
+        /// <param name="findTextRegex">The regular expression the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use TableRow(Find.ByTextInColumn(findTextRegex, inColumn)) instead.")]
+        public TableRow FindRow(Regex findTextRegex, int inColumn)
+        {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
-
-			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
-
-			return FindRow(constraint);
-		}
+            return TableRow(Find.ByTextInColumn(findTextRegex, inColumn));
+        }
 
         /// <summary>
         /// Finds te first row that matches <paramref name="findTextRegex"/> in <paramref name="inColumn"/>
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
         /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
-		/// </summary>
-		/// <param name="findTextRegex">The regular expression the cell text must match.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRowInDirectChildren(Regex findTextRegex, int inColumn)
-		{
+        /// </summary>
+        /// <param name="findTextRegex">The regular expression the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(findTextRegex, inColumn)) instead.")]
+        public TableRow FindRowInDirectChildren(Regex findTextRegex, int inColumn)
+        {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
+            return OwnTableRow(Find.ByTextInColumn(findTextRegex, inColumn));
+        }
 
-			var constraint = new TableRowAttributeConstraint(findTextRegex, inColumn);
-
-			return FindRowInDirectChildren(constraint);
-		}
-
-		/// <summary>
+        /// <summary>
         /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
         /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in the
         /// first <see cref="Core.TableBody"/> including rows in nested tables.
-		/// </summary>
-		/// <param name="comparer">The comparer that the cell text must match.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRow(ICompare comparer, int inColumn)
-		{
-			Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
-
-			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
-
-			return FindRow(constraint);
-        }
-
-		/// <summary>
-        /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
-        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
-        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
-		/// </summary>
-		/// <param name="comparer">The comparer that the cell text must match.</param>
-		/// <param name="inColumn">Index of the column to find the text in.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInDirectChildren(ICompare comparer, int inColumn)
-		{
+        /// </summary>
+        /// <param name="comparer">The comparer that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use TableRow(Find.ByTextInColumn(comparer, inColumn)) instead.")]
+        public TableRow FindRow(Comparer<string> comparer, int inColumn)
+        {
             Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
+            return TableRow(Find.ByTextInColumn(comparer, inColumn));
+        }
 
-			var constraint = new TableRowAttributeConstraint(comparer, inColumn);
-
-            return FindRowInDirectChildren(constraint);
+        /// <summary>
+        /// Finds te first row that matches <paramref name="comparer"/> in <paramref name="inColumn"/> 
+        /// defined as a TD html element. If no match is found, <c>null</c> is returned. This method will look for rows in all
+        /// <see cref="Core.TableBody"/> elements but will ignore rows in nested tables.
+        /// </summary>
+        /// <param name="comparer">The comparer that the cell text must match.</param>
+        /// <param name="inColumn">Index of the column to find the text in.</param>
+        /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(comparer, inColumn)) instead.")]
+        public TableRow FindRowInDirectChildren(Comparer<string> comparer, int inColumn)
+        {
+            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
+            return OwnTableRow(Find.ByTextInColumn(comparer, inColumn));
         }
 
         /// <summary>
@@ -210,9 +276,10 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use TableRow(Find.ByTextInColumn(predicate, inColumn)) instead.")]
         public TableRow FindRow(Predicate<string> predicate, int inColumn)
         {
-            return FindRow(new PredicateStringComparer(predicate), inColumn);
+            return TableRow(Find.ByTextInColumn(predicate, inColumn));
         }
 
         /// <summary>
@@ -223,9 +290,10 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use OwnTableRow(Find.ByTextInColumn(predicate, inColumn)) instead.")]
         public TableRow FindRowInDirectChildren(Predicate<string> predicate, int inColumn)
         {
-            return FindRowInDirectChildren(new PredicateStringComparer(predicate), inColumn);
+            return OwnTableRow(Find.ByTextInColumn(predicate, inColumn));
         }
 
         /// <summary>
@@ -236,9 +304,10 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use TableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate)))) instead.")]
         public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
         {
-            return FindRow(new PredicateElementComparer<TableCell>(predicate), inColumn);
+            return TableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }
 
         /// <summary>
@@ -249,38 +318,10 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
+        [Obsolete("Use OwnTableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate)))) instead.")]
         public TableRow FindRowInDirectChildren(Predicate<TableCell> predicate, int inColumn)
         {
-            return FindRowInDirectChildren(new PredicateElementComparer<TableCell>(predicate), inColumn);
+            return OwnTableRow(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }
-
-		public override string ToString()
-		{
-			return Id;
-		}
-
-        /// <summary>
-		/// Finds the first row that meets the <see cref="TableRowAttributeConstraint"/>.
-		/// If no match is found, <c>null</c> is returned.
-		/// </summary>
-		/// <param name="findBy">The constraint used to identify the table cell.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRow(TableRowAttributeConstraint findBy)
-		{
-			var row = ElementsSupport.TableRow(DomContainer, findBy, this);
-			return row.Exists ? row : null;
-		}
-
-        /// <summary>
-		/// Finds the first row that meets the <see cref="TableRowAttributeConstraint"/>.
-		/// If no match is found, <c>null</c> is returned.
-		/// </summary>
-		/// <param name="findBy">The constraint used to identify the table cell.</param>
-		/// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-		public TableRow FindRowInDirectChildren(TableRowAttributeConstraint findBy)
-		{
-            var rowsFinder = NativeElement.TableRows(DomContainer);
-            return (TableRow) rowsFinder.Filter(findBy).FindFirst();
-		}
-	}
+    }
 }

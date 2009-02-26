@@ -17,23 +17,20 @@
 #endregion Copyright
 
 using System;
-using System.Runtime.InteropServices;
-using mshtml;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core
 {
 	/// <summary>
-	/// This is the main class to access a webpage within a modal or modeles
+	/// This is the main class to access a webpage within a modal or modeless
 	/// HTML dialog.
 	/// </summary>
-	public class HtmlDialog : DomContainer, IAttributeBag
+	public class HtmlDialog : DomContainer
 	{
 		private readonly IntPtr hwnd = IntPtr.Zero;
 
@@ -44,7 +41,7 @@ namespace WatiN.Core
 
 		protected override INativeBrowser GetNativeBrowser()
 		{
-			return new IEBrowser(this);
+			return new IEBrowser();
 		}
 
 		public HtmlDialog(IntPtr windowHandle)
@@ -75,24 +72,25 @@ namespace WatiN.Core
 
 		public override INativeDocument OnGetNativeDocument()
 		{
-			return NativeBrowser.CreateDocument(IEUtils.IEDOMFromhWnd(hwnd));
+			return new IEDocument(IEUtils.IEDOMFromhWnd(hwnd));
 		}
 
-		public string GetValue(string attributename)
-		{
+        /// <inheritdoc />
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
 			string value = null;
 
-			if (StringComparer.AreEqual(attributename, "href", true))
+            if (StringComparer.AreEqual(attributeName, "href", true))
 			{
                 UtilityClass.TryActionIgnoreException(() => value = Url);
 			}
-			else if (StringComparer.AreEqual(attributename, "title", true))
+            else if (StringComparer.AreEqual(attributeName, "title", true))
 			{
                 UtilityClass.TryActionIgnoreException(() => value = Title);
 			}
 			else
 			{
-				throw new InvalidAttributeException(attributename, "HTMLDialog");
+                throw new InvalidAttributeException(attributeName, "HTMLDialog");
 			}
 
 			return value;

@@ -59,5 +59,23 @@ namespace WatiN.Core.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection is read-only.
+        /// </summary>
+        internal static string BaseComponentCollection_CollectionIsReadonly {
+            get {
+                return ResourceManager.GetString("BaseComponentCollection_CollectionIsReadonly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection does not support searching by equality..
+        /// </summary>
+        internal static string BaseComponentCollection_DoesNotSupportSearchingByEquality {
+            get {
+                return ResourceManager.GetString("BaseComponentCollection_DoesNotSupportSearchingByEquality", resourceCulture);
+            }
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace WatiN.Core.UtilityClasses
         public static void DumpElements(Document document, ILogWriter logWriter)
         {
             logWriter.LogAction("Dump:");
-            var elements = elementCollection(document);
+            var elements = ElementCollection(document);
             foreach (IHTMLElement e in elements)
             {
                 logWriter.LogAction("id = " + e.id);
@@ -83,7 +83,7 @@ namespace WatiN.Core.UtilityClasses
         public static void DumpElementsWithHtmlSource(Document document, ILogWriter logWriter)
         {
             logWriter.LogAction("Dump:==================================================");
-            var elements = elementCollection(document);
+            var elements = ElementCollection(document);
             foreach (IHTMLElement e in elements)
             {
                 logWriter.LogAction("------------------------- " + e.id);
@@ -162,9 +162,9 @@ namespace WatiN.Core.UtilityClasses
             return theObject.ToString();
         }
 
-        private static IHTMLElementCollection elementCollection(Document document)
+        private static IHTMLElementCollection ElementCollection(Document document)
         {
-            return ((IHTMLDocument2)document.NativeDocument.Object).all;
+            return ((IEDocument)document.NativeDocument).HtmlDocument.all;
         }
 
         /// <summary>

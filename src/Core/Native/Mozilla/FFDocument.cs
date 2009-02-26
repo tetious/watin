@@ -18,58 +18,78 @@
 
 using System.Collections.Generic;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Native.Mozilla
 {
-    public class FFDocument : INativeDocument, IElementCollection
+    public class FFDocument : INativeDocument
     {
-        private readonly string _elementReference;
-        public FireFoxClientPort ClientPort { get; set; }
+        private readonly FFElement containingFrameElement;
 
-        public FFDocument(FireFoxClientPort clientPort) : this (FireFoxClientPort.DocumentVariableName, clientPort)
+        public FFDocument(FireFoxClientPort clientPort)
+            : this(clientPort, FireFoxClientPort.DocumentVariableName)
         {
+        }
+
+        public FFDocument(FireFoxClientPort clientPort, string documentReference)
+            : this(clientPort, documentReference, null)
+        {
+        }
+
+        public FFDocument(FireFoxClientPort clientPort, string documentReference, FFElement containingFrameElement)
+        {
+            DocumentReference = documentReference;
             ClientPort = clientPort;
+
+            this.containingFrameElement = containingFrameElement;
         }
 
-        public FFDocument(string elementReference, FireFoxClientPort clientPort)
+        /// <summary>
+        /// Gets the FireFox client port.
+        /// </summary>
+        public FireFoxClientPort ClientPort { get; private set; }
+
+        /// <summary>
+        /// Gets the name of a variable that stores a reference to the document within FireFox.
+        /// </summary>
+        public string DocumentReference { get; private set; }
+
+        /// <inheritdoc />
+        public INativeElementCollection AllElements
         {
-            _elementReference = elementReference;
-            ClientPort = clientPort;
+            get { return new FFElementCollection(ClientPort, DocumentReference); }
         }
 
-        public object Object
+        /// <inheritdoc />
+        public INativeElement ContainingFrameElement
         {
-            get { return _elementReference; }
+            get { return containingFrameElement; }
         }
 
-        public object Objects
-        {
-            get { return _elementReference; }
-        }
-
+        /// <inheritdoc />
         public INativeElement Body
         {
             get
             {
-                var bodyReference = string.Format("{0}.body", _elementReference);
-                return new FFElement(bodyReference, ClientPort);
+                var bodyReference = string.Format("{0}.body", DocumentReference);
+                return new FFElement(ClientPort, bodyReference);
             }
         }
 
+        /// <inheritdoc />
         public string Url
         {
             get
             {
-                var url = ClientPort.WriteAndRead("{0}.location.href", _elementReference);
+                var url = ClientPort.WriteAndRead("{0}.location.href", DocumentReference);
                 url = string.IsNullOrEmpty(url) ? "about:blank" : url;
                 return url;
             }
         }
 
+        /// <inheritdoc />
         public string Title
         {
-            get { return ClientPort.WriteAndRead("{0}.title", _elementReference); }
+            get { return ClientPort.WriteAndRead("{0}.title", DocumentReference); }
         }
 
         public INativeElement ActiveElement
@@ -80,10 +100,10 @@ namespace WatiN.Core.Native.Mozilla
                 var propertyName = "activeElement";
 
                 var elementvar = FireFoxClientPort.CreateVariableName();
-                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, _elementReference, propertyName);
+                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, DocumentReference, propertyName);
                 var result = ClientPort.WriteAndReadAsBool(command);
 
-                return !result ? new FFElement(elementvar, ClientPort) : null;
+                return !result ? new FFElement(ClientPort, elementvar) : null;
             }
         }
 
@@ -101,28 +121,32 @@ namespace WatiN.Core.Native.Mozilla
 
         public string JavaScriptVariableName
         {
-            get { return _elementReference; }
+            get { return DocumentReference; }
         }
 
-        public List<Frame> Frames(DomContainer domContainer)
+        public IList<INativeDocument> Frames
         {
-            var frames = new List<Frame>();
-
-            var elementFinder = new FFElementFinder(ElementFactory.GetElementTags<Frame>(), null, this, domContainer, ClientPort);
-            var all = elementFinder.FindAll();
-
-            foreach (var frameElement in all)
-            {
-                var frameDocument = frameElement.NativeElement.Object + ".contentDocument";
-                frames.Add(new Frame(domContainer, new FFDocument(frameDocument, ClientPort), frameElement));
+            get
+            { 
+                var frames = new List<INativeDocument>();
+                PopulateFrames(frames, "frame");
+                PopulateFrames(frames, "iframe");
+                return frames;
             }
+        }
 
-            return frames;
+        private void PopulateFrames(IList<INativeDocument> frames, string tagName)
+        {
+            foreach (FFElement frameElement in AllElements.GetElementsByTag(tagName))
+            {
+                var frameDocumentReference = frameElement.ElementReference + ".contentDocument";
+                frames.Add(new FFDocument(ClientPort, frameDocumentReference, frameElement));
+            }
         }
 
         public string GetPropertyValue(string propertyName)
         {
-            var command = string.Format("{0}.{1};", _elementReference, propertyName);
+            var command = string.Format("{0}.{1};", DocumentReference, propertyName);
             
             if (propertyName == Document.ERROR_PROPERTY_NAME)
             {
@@ -130,11 +154,6 @@ namespace WatiN.Core.Native.Mozilla
             }
 
             return ClientPort.WriteAndRead(command);
-        }
-
-        public object Elements
-        {
-            get { return Objects; }
         }
     }
 }

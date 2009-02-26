@@ -25,27 +25,25 @@ namespace WatiN.Core.Native.InternetExplorer
 {
     internal class AllFramesProcessor : IWebBrowser2Processor
     {
-        public List<Frame> elements;
+        public List<INativeDocument> Elements { get; private set; }
 
         private readonly HTMLDocument htmlDocument;
         private readonly IHTMLElementCollection frameElements;
         private int index;
-        private readonly DomContainer _domContainer;
 
-        public AllFramesProcessor(DomContainer domContainer, HTMLDocument htmlDocument)
+        public AllFramesProcessor(HTMLDocument htmlDocument)
         {
-            elements = new List<Frame>();
+            Elements = new List<INativeDocument>();
 
-            frameElements = (IHTMLElementCollection) htmlDocument.all.tags(ElementsSupport.FrameTagName);
+            frameElements = (IHTMLElementCollection) htmlDocument.all.tags("frame");
 
             // If the current document doesn't contain FRAME elements, it then
             // might contain IFRAME elements.
             if (frameElements.length == 0)
             {
-                frameElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.IFrameTagName);
+                frameElements = (IHTMLElementCollection)htmlDocument.all.tags("iframe");
             }
 
-            _domContainer = domContainer;
             this.htmlDocument = htmlDocument;
         }
 
@@ -60,12 +58,8 @@ namespace WatiN.Core.Native.InternetExplorer
             var uniqueId = RetrieveUniqueIdOfFrameElement();
 
             var frameElement = RetrieveSameFrameFromHtmlDocument(uniqueId);
-            var nativeFrameElement = _domContainer.NativeBrowser.CreateElement(frameElement);
-            var watinElement = new Element(_domContainer, nativeFrameElement);
-
-            var frame = new Frame(_domContainer, new IEDocument(webBrowser2.Document), watinElement);
-
-            elements.Add(frame);
+            var nativeFrameElement = new IEElement(frameElement);
+            Elements.Add(new IEDocument((IHTMLDocument2) webBrowser2.Document, nativeFrameElement));
 
             index++;
         }

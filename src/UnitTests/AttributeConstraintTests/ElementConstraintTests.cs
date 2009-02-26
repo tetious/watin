@@ -20,6 +20,7 @@ using System;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
@@ -51,8 +52,9 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 			
             var elementComparerMock = new ElementComparerMock(tagname);
             var elementConstraint = new ElementConstraint(elementComparerMock);
-			
-            Assert.That(elementConstraint.Compare(element) == expectedResult);
+
+            ConstraintContext context = new ConstraintContext();
+            Assert.That(elementConstraint.Matches(element, context) == expectedResult);
         }
 
         [Test]
@@ -67,7 +69,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             Assert.That(link2.Url, Is.EqualTo("http://www.microsoft.com/"));
         }
 
-        public class ElementComparerMock : ICompareElement 
+        public class ElementComparerMock : Comparer<Element>
         {
             private readonly string _expectedTagName;
 			
@@ -75,7 +77,8 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             {
                 _expectedTagName = expectedTagName;
             }
-            public bool Compare(Element element)
+
+            public override bool Compare(Element element)
             {
                 return _expectedTagName == element.TagName;
             }

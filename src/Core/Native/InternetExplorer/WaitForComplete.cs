@@ -122,7 +122,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             try
             {
-                return (IHTMLDocument2) domContainer.NativeDocument.Object;
+                return ((IEDocument)domContainer.NativeDocument).HtmlDocument;
             }
             catch
             {
@@ -191,8 +191,8 @@ namespace WatiN.Core.Native.InternetExplorer
         protected override void WaitForCompleteOrTimeout()
         {
             WaitWhileMainDocumentNotAvailable(_domContainer);
-            WaitWhileDocumentStateNotComplete((IHTMLDocument2)_domContainer.NativeDocument.Object);
-            WaitForFramesToComplete((IHTMLDocument2)_domContainer.NativeDocument.Object);
+            WaitWhileDocumentStateNotComplete(GetDomContainerDocument(_domContainer));
+            WaitForFramesToComplete(GetDomContainerDocument(_domContainer));
         }
     }
 }

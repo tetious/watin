@@ -18,6 +18,7 @@
 
 using NUnit.Framework;
 using WatiN.Core.Constraints;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
@@ -26,13 +27,13 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     {
         private MockAttributeBag mockAttributeBag;
 
-        private BaseConstraint findBy1;
-        private BaseConstraint findBy2;
-        private BaseConstraint findBy3;
-        private BaseConstraint findBy4;
-        private BaseConstraint findBy5;
+        private Constraint findBy1;
+        private Constraint findBy2;
+        private Constraint findBy3;
+        private Constraint findBy4;
+        private Constraint findBy5;
 
-        private BaseConstraint findBy;
+        private Constraint findBy;
 
         [SetUp]
         public void Setup()
@@ -78,7 +79,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [TearDown]
         public void TearDown()
         {
-            Assert.IsFalse(findBy.Compare(mockAttributeBag));
+            Assert.IsFalse(findBy.Matches(mockAttributeBag, new ConstraintContext()));
         }
     }
 }

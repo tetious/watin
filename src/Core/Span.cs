@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML span element.
 	/// </summary>
     [ElementTag("span")]
-    public class Span : ElementsContainer<Span>
+    public class Span : ElementContainer<Span>
 	{
 		public Span(DomContainer domContainer, INativeElement htmlSpanElement) : base(domContainer, htmlSpanElement) {}
 

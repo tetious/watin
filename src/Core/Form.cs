@@ -26,7 +26,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML Form element.
 	/// </summary>
     [ElementTag("form")]
-	public class Form : ElementsContainer<Form>
+	public class Form : ElementContainer<Form>
 	{
 		public Form(DomContainer domContainer, INativeElement htmlFormElement) : base(domContainer, htmlFormElement) {}
 

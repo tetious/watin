@@ -1,41 +1,40 @@
-#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
-
-//Copyright 2006-2009 Jeroen van Menen
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//       http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
-
-#endregion Copyright
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
 {
     /// <summary>
-	/// Summary description for ElementsContainer.
-	/// </summary>
-    public class ElementsContainer<E> : Element<E>, IElementsContainer, IElementCollection where E : Element
-	{		
-		public ElementsContainer(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement) {}
+    /// Wraps a <see cref="DomContainer" /> and <see cref="INativeElementCollection" /> as
+    /// an implementation of <see cref="IElementContainer" />.
+    /// </summary>
+    internal class NativeElementCollectionAdapter : IElementContainer
+    {
+        private readonly DomContainer domContainer;
+        private readonly INativeElementCollection nativeElementCollection;
 
-        public ElementsContainer(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
+        /// <summary>
+        /// Creates a new adapter.
+        /// </summary>
+        /// <param name="domContainer">The DOM container</param>
+        /// <param name="nativeElementCollection">The native element collection</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="domContainer"/> or
+        /// <paramref name="nativeElementCollection"/> is null</exception>
+        public NativeElementCollectionAdapter(DomContainer domContainer,
+            INativeElementCollection nativeElementCollection)
+        {
+            if (domContainer == null)
+                throw new ArgumentNullException("domContainer");
+            if (nativeElementCollection == null)
+                throw new ArgumentNullException("nativeElementCollection");
 
-		#region IElementsContainer
+            this.domContainer = domContainer;
+            this.nativeElementCollection = nativeElementCollection;
+        }
 
+        #region IElementsContainer Members
 
         public Area Area(string elementId)
         {
@@ -47,9 +46,9 @@ namespace WatiN.Core
             return Area(Find.ByDefault(elementId));
         }
 
-        public Area Area(BaseConstraint findBy)
+        public Area Area(Constraint findBy)
         {
-            return ElementsSupport.Area(DomContainer, findBy, this);
+            return new Area(domContainer, CreateElementFinder<Area>(findBy));
         }
 
         public Area Area(Predicate<Area> predicate)
@@ -59,7 +58,7 @@ namespace WatiN.Core
 
         public AreaCollection Areas
         {
-            get { return ElementsSupport.Areas(DomContainer, this); }
+            get { return new AreaCollection(domContainer, CreateElementFinder<Area>(null)); }
         }
 
         public Button Button(string elementId)
@@ -72,19 +71,19 @@ namespace WatiN.Core
             return Button(Find.ByDefault(elementId));
         }
 
-        public Button Button(BaseConstraint findBy)
-        {
-            return ElementsSupport.Button(DomContainer, findBy, this);
-        }
-
         public Button Button(Predicate<Button> predicate)
         {
             return Button(Find.ByElement(predicate));
         }
 
+        public Button Button(Constraint findBy)
+        {
+            return new Button(domContainer, CreateElementFinder<Button>(findBy));
+        }
+
         public ButtonCollection Buttons
         {
-            get { return ElementsSupport.Buttons(DomContainer, this); }
+            get { return new ButtonCollection(domContainer, CreateElementFinder<Button>(null)); }
         }
 
         public CheckBox CheckBox(string elementId)
@@ -97,19 +96,19 @@ namespace WatiN.Core
             return CheckBox(Find.ByDefault(elementId));
         }
 
-        public CheckBox CheckBox(BaseConstraint findBy)
-        {
-            return ElementsSupport.CheckBox(DomContainer, findBy, this);
-        }
-
         public CheckBox CheckBox(Predicate<CheckBox> predicate)
         {
             return CheckBox(Find.ByElement(predicate));
         }
 
+        public CheckBox CheckBox(Constraint findBy)
+        {
+            return new CheckBox(domContainer, CreateElementFinder<CheckBox>(findBy));
+        }
+
         public CheckBoxCollection CheckBoxes
         {
-            get { return ElementsSupport.CheckBoxes(DomContainer, this); }
+            get { return new CheckBoxCollection(domContainer, CreateElementFinder<CheckBox>(null)); }
         }
 
         public Element Element(string elementId)
@@ -122,9 +121,9 @@ namespace WatiN.Core
             return Element(Find.ByDefault(elementId));
         }
 
-        public Element Element(BaseConstraint findBy)
+        public Element Element(Constraint findBy)
         {
-            return ElementsSupport.Element(DomContainer, findBy, this);
+            return new Element(domContainer, CreateElementFinder<Element>(findBy));
         }
 
         public Element Element(Predicate<Element> predicate)
@@ -132,14 +131,19 @@ namespace WatiN.Core
             return Element(Find.ByElement(predicate));
         }
 
-        public Element Element(string tagname, BaseConstraint findBy, params string[] inputtypes)
-        {
-            return ElementsSupport.Element(DomContainer, tagname, findBy, this, inputtypes);
-        }
-
         public ElementCollection Elements
         {
-            get { return ElementsSupport.Elements(DomContainer, this); }
+            get { return new ElementCollection(domContainer, CreateElementFinder<Element>(null)); }
+        }
+
+        public Element ElementWithTag(string tagName, Constraint findBy, params string[] inputTypes)
+        {
+            return new Element(domContainer, CreateElementFinder(findBy, tagName, inputTypes));
+        }
+
+        public ElementCollection ElementsWithTag(string tagName, params string[] inputTypes)
+        {
+            return new ElementCollection(domContainer, CreateElementFinder(null, tagName, inputTypes));
         }
 
         public FileUpload FileUpload(string elementId)
@@ -152,9 +156,9 @@ namespace WatiN.Core
             return FileUpload(Find.ByDefault(elementId));
         }
 
-        public FileUpload FileUpload(BaseConstraint findBy)
+        public FileUpload FileUpload(Constraint findBy)
         {
-            return ElementsSupport.FileUpload(DomContainer, findBy, this);
+            return new FileUpload(domContainer, CreateElementFinder<FileUpload>(findBy));
         }
 
         public FileUpload FileUpload(Predicate<FileUpload> predicate)
@@ -164,7 +168,7 @@ namespace WatiN.Core
 
         public FileUploadCollection FileUploads
         {
-            get { return ElementsSupport.FileUploads(DomContainer, this); }
+            get { return new FileUploadCollection(domContainer, CreateElementFinder<FileUpload>(null)); }
         }
 
         public Form Form(string elementId)
@@ -177,9 +181,9 @@ namespace WatiN.Core
             return Form(Find.ByDefault(elementId));
         }
 
-        public Form Form(BaseConstraint findBy)
+        public Form Form(Constraint findBy)
         {
-            return ElementsSupport.Form(DomContainer, findBy, this);
+            return new Form(domContainer, CreateElementFinder<Form>(findBy));
         }
 
         public Form Form(Predicate<Form> predicate)
@@ -189,7 +193,7 @@ namespace WatiN.Core
 
         public FormCollection Forms
         {
-            get { return ElementsSupport.Forms(DomContainer, this); }
+            get { return new FormCollection(domContainer, CreateElementFinder<Form>(null)); }
         }
 
         public Label Label(string elementId)
@@ -202,9 +206,9 @@ namespace WatiN.Core
             return Label(Find.ByDefault(elementId));
         }
 
-        public Label Label(BaseConstraint findBy)
+        public Label Label(Constraint findBy)
         {
-            return ElementsSupport.Label(DomContainer, findBy, this);
+            return new Label(domContainer, CreateElementFinder<Label>(findBy));
         }
 
         public Label Label(Predicate<Label> predicate)
@@ -214,7 +218,7 @@ namespace WatiN.Core
 
         public LabelCollection Labels
         {
-            get { return ElementsSupport.Labels(DomContainer, this); }
+            get { return new LabelCollection(domContainer, CreateElementFinder<Label>(null)); }
         }
 
         public Link Link(string elementId)
@@ -227,9 +231,9 @@ namespace WatiN.Core
             return Link(Find.ByDefault(elementId));
         }
 
-        public Link Link(BaseConstraint findBy)
+        public Link Link(Constraint findBy)
         {
-            return ElementsSupport.Link(DomContainer, findBy, this);
+            return new Link(domContainer, CreateElementFinder<Link>(findBy));
         }
 
         public Link Link(Predicate<Link> predicate)
@@ -239,7 +243,7 @@ namespace WatiN.Core
 
         public LinkCollection Links
         {
-            get { return ElementsSupport.Links(DomContainer, this); }
+            get { return new LinkCollection(domContainer, CreateElementFinder<Link>(null)); }
         }
 
         public Para Para(string elementId)
@@ -252,9 +256,9 @@ namespace WatiN.Core
             return Para(Find.ByDefault(elementId));
         }
 
-        public Para Para(BaseConstraint findBy)
+        public Para Para(Constraint findBy)
         {
-            return ElementsSupport.Para(DomContainer, findBy, this);
+            return new Para(domContainer, CreateElementFinder<Para>(findBy));
         }
 
         public Para Para(Predicate<Para> predicate)
@@ -264,7 +268,7 @@ namespace WatiN.Core
 
         public ParaCollection Paras
         {
-            get { return ElementsSupport.Paras(DomContainer, this); }
+            get { return new ParaCollection(domContainer, CreateElementFinder<Para>(null)); }
         }
 
         public RadioButton RadioButton(string elementId)
@@ -277,9 +281,9 @@ namespace WatiN.Core
             return RadioButton(Find.ByDefault(elementId));
         }
 
-        public RadioButton RadioButton(BaseConstraint findBy)
+        public RadioButton RadioButton(Constraint findBy)
         {
-            return ElementsSupport.RadioButton(DomContainer, findBy, this);
+            return new RadioButton(domContainer, CreateElementFinder<RadioButton>(findBy));
         }
 
         public RadioButton RadioButton(Predicate<RadioButton> predicate)
@@ -289,7 +293,7 @@ namespace WatiN.Core
 
         public RadioButtonCollection RadioButtons
         {
-            get { return ElementsSupport.RadioButtons(DomContainer, this); }
+            get { return new RadioButtonCollection(domContainer, CreateElementFinder<RadioButton>(null)); }
         }
 
         public SelectList SelectList(string elementId)
@@ -302,9 +306,9 @@ namespace WatiN.Core
             return SelectList(Find.ByDefault(elementId));
         }
 
-        public SelectList SelectList(BaseConstraint findBy)
+        public SelectList SelectList(Constraint findBy)
         {
-            return ElementsSupport.SelectList(DomContainer, findBy, this);
+            return new SelectList(domContainer, CreateElementFinder<SelectList>(findBy));
         }
 
         public SelectList SelectList(Predicate<SelectList> predicate)
@@ -314,7 +318,7 @@ namespace WatiN.Core
 
         public SelectListCollection SelectLists
         {
-            get { return ElementsSupport.SelectLists(DomContainer, this); }
+            get { return new SelectListCollection(domContainer, CreateElementFinder<SelectList>(null)); }
         }
 
         public Table Table(string elementId)
@@ -327,9 +331,9 @@ namespace WatiN.Core
             return Table(Find.ByDefault(elementId));
         }
 
-        public Table Table(BaseConstraint findBy)
+        public Table Table(Constraint findBy)
         {
-            return ElementsSupport.Table(DomContainer, findBy, this);
+            return new Table(domContainer, CreateElementFinder<Table>(findBy));
         }
 
         public Table Table(Predicate<Table> predicate)
@@ -339,7 +343,7 @@ namespace WatiN.Core
 
         public TableCollection Tables
         {
-            get { return ElementsSupport.Tables(DomContainer, this); }
+            get { return new TableCollection(domContainer, CreateElementFinder<Table>(null)); }
         }
 
         public TableBody TableBody(string elementId)
@@ -352,19 +356,19 @@ namespace WatiN.Core
             return TableBody(Find.ByDefault(elementId));
         }
 
-        public virtual TableBody TableBody(BaseConstraint findBy)
+        public TableBody TableBody(Constraint findBy)
         {
-            return ElementsSupport.TableBody(DomContainer, findBy, this);
+            return new TableBody(domContainer, CreateElementFinder<TableBody>(findBy));
         }
 
-        public virtual TableBody TableBody(Predicate<TableBody> predicate)
+        public TableBody TableBody(Predicate<TableBody> predicate)
         {
             return TableBody(Find.ByElement(predicate));
         }
 
-        public virtual TableBodyCollection TableBodies
+        public TableBodyCollection TableBodies
         {
-            get { return ElementsSupport.TableBodies(DomContainer, this); }
+            get { return new TableBodyCollection(domContainer, CreateElementFinder<TableBody>(null)); }
         }
 
         public TableCell TableCell(string elementId)
@@ -377,9 +381,9 @@ namespace WatiN.Core
             return TableCell(Find.ByDefault(elementId));
         }
 
-        public TableCell TableCell(BaseConstraint findBy)
+        public TableCell TableCell(Constraint findBy)
         {
-            return ElementsSupport.TableCell(DomContainer, findBy, this);
+            return new TableCell(domContainer, CreateElementFinder<TableCell>(findBy));
         }
 
         public TableCell TableCell(Predicate<TableCell> predicate)
@@ -387,28 +391,9 @@ namespace WatiN.Core
             return TableCell(Find.ByElement(predicate));
         }
 
-		/// <summary>
-		/// Finds a TableCell by the n-th index of an id. 
-		/// index counting is zero based.
-		/// </summary>  
-		/// <example>
-		/// This example will get the Text of the third(!) tablecell 
-		/// with "tablecellid" as it's id value. 
-		/// <code>ie.TableCell("tablecellid", 2).Text</code>
-		/// </example>
-        public TableCell TableCell(string elementId, int index)
-        {
-            return ElementsSupport.TableCell(DomContainer, elementId, index, this);
-        }
-
-        public TableCell TableCell(Regex elementId, int index)
-        {
-            return ElementsSupport.TableCell(DomContainer, elementId, index, this);
-        }
-
         public TableCellCollection TableCells
         {
-            get { return ElementsSupport.TableCells(DomContainer, this); }
+            get { return new TableCellCollection(domContainer, CreateElementFinder<TableCell>(null)); }
         }
 
         public TableRow TableRow(string elementId)
@@ -421,19 +406,19 @@ namespace WatiN.Core
             return TableRow(Find.ByDefault(elementId));
         }
 
-        public virtual TableRow TableRow(BaseConstraint findBy)
+        public TableRow TableRow(Constraint findBy)
         {
-            return ElementsSupport.TableRow(DomContainer, findBy, this);
+            return new TableRow(domContainer, CreateElementFinder<TableRow>(findBy));
         }
 
-        public virtual TableRow TableRow(Predicate<TableRow> predicate)
+        public TableRow TableRow(Predicate<TableRow> predicate)
         {
             return TableRow(Find.ByElement(predicate));
         }
 
-        public virtual TableRowCollection TableRows
+        public TableRowCollection TableRows
         {
-            get { return ElementsSupport.TableRows(DomContainer, this); }
+            get { return new TableRowCollection(domContainer, CreateElementFinder<TableRow>(null)); }
         }
 
         public TextField TextField(string elementId)
@@ -446,9 +431,9 @@ namespace WatiN.Core
             return TextField(Find.ByDefault(elementId));
         }
 
-        public TextField TextField(BaseConstraint findBy)
+        public TextField TextField(Constraint findBy)
         {
-            return ElementsSupport.TextField(DomContainer, findBy, this);
+            return new TextField(domContainer, CreateElementFinder<TextField>(findBy));
         }
 
         public TextField TextField(Predicate<TextField> predicate)
@@ -458,7 +443,7 @@ namespace WatiN.Core
 
         public TextFieldCollection TextFields
         {
-            get { return ElementsSupport.TextFields(DomContainer, this); }
+            get { return new TextFieldCollection(domContainer, CreateElementFinder<TextField>(null)); }
         }
 
         public Span Span(string elementId)
@@ -471,9 +456,9 @@ namespace WatiN.Core
             return Span(Find.ByDefault(elementId));
         }
 
-        public Span Span(BaseConstraint findBy)
+        public Span Span(Constraint findBy)
         {
-            return ElementsSupport.Span(DomContainer, findBy, this);
+            return new Span(domContainer, CreateElementFinder<Span>(findBy));
         }
 
         public Span Span(Predicate<Span> predicate)
@@ -483,7 +468,7 @@ namespace WatiN.Core
 
         public SpanCollection Spans
         {
-            get { return ElementsSupport.Spans(DomContainer, this); }
+            get { return new SpanCollection(domContainer, CreateElementFinder<Span>(null)); }
         }
 
         public Div Div(string elementId)
@@ -496,9 +481,9 @@ namespace WatiN.Core
             return Div(Find.ByDefault(elementId));
         }
 
-        public Div Div(BaseConstraint findBy)
+        public Div Div(Constraint findBy)
         {
-            return ElementsSupport.Div(DomContainer, findBy, this);
+            return new Div(domContainer, CreateElementFinder<Div>(findBy));
         }
 
         public Div Div(Predicate<Div> predicate)
@@ -508,7 +493,7 @@ namespace WatiN.Core
 
         public DivCollection Divs
         {
-            get { return ElementsSupport.Divs(DomContainer, this); }
+            get { return new DivCollection(domContainer, CreateElementFinder<Div>(null)); }
         }
 
         public Image Image(string elementId)
@@ -521,9 +506,9 @@ namespace WatiN.Core
             return Image(Find.ByDefault(elementId));
         }
 
-        public Image Image(BaseConstraint findBy)
+        public Image Image(Constraint findBy)
         {
-            return ElementsSupport.Image(DomContainer, findBy, this);
+            return new Image(domContainer, CreateElementFinder<Image>(findBy));
         }
 
         public Image Image(Predicate<Image> predicate)
@@ -533,23 +518,31 @@ namespace WatiN.Core
 
         public ImageCollection Images
         {
-            get { return ElementsSupport.Images(DomContainer, this); }
+            get { return new ImageCollection(domContainer, CreateElementFinder<Image>(null)); }
         }
+
         #endregion
 
-		object IElementCollection.Elements
-		{
-			get
-			{
-				try
-				{
-				    return Exists ? NativeElement.Objects : null;
-				}
-				catch
-				{
-					return null;
-				}
-			}
-		}
-	}
+        private NativeElementFinder CreateElementFinder<TElement>(Constraint findBy)
+            where TElement : Element
+        {
+            return new NativeElementFinder(nativeElementCollection, domContainer, ElementFactory.GetElementTags<TElement>(), findBy);
+        }
+
+        private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, string[] inputTypes)
+        {
+            var tags = new List<ElementTag>();
+            if (inputTypes != null && inputTypes.Length != 0)
+            {
+                foreach (string inputType in inputTypes)
+                    tags.Add(new ElementTag(tagName, inputType));
+            }
+            else
+            {
+                tags.Add(new ElementTag(tagName));
+            }
+
+            return new NativeElementFinder(nativeElementCollection, domContainer, tags, findBy);
+        }
+    }
 }

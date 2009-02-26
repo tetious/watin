@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using mshtml;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
@@ -68,7 +69,7 @@ namespace WatiN.Core
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
 		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
 		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -88,9 +89,9 @@ namespace WatiN.Core
 		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
 		/// </code>
 		/// </example>
-		public static IE AttachToIENoWait(BaseConstraint findBy)
+		public static IE AttachToIENoWait(Constraint findBy)
 		{
-			return findIE(findBy, Settings.AttachToIETimeOut, false);
+			return FindIE(findBy, Settings.AttachToIETimeOut, false);
 		}
 		
 		/// <summary>
@@ -98,7 +99,7 @@ namespace WatiN.Core
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
 		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
 		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
@@ -118,9 +119,9 @@ namespace WatiN.Core
 		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
 		/// </code>
 		/// </example>
-		public static IE AttachToIE(BaseConstraint findBy)
+		public static IE AttachToIE(Constraint findBy)
 		{
-			return findIE(findBy, Settings.AttachToIETimeOut, true);
+			return FindIE(findBy, Settings.AttachToIETimeOut, true);
 		}
 
 		/// <summary>
@@ -128,7 +129,7 @@ namespace WatiN.Core
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
 		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
 		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
 		/// <param name="timeout">The number of seconds to wait before timing out</param>
 		/// <returns>An <see cref="IE"/> instance.</returns>
@@ -150,9 +151,9 @@ namespace WatiN.Core
 		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
 		/// </code>
 		/// </example>
-		public static IE AttachToIE(BaseConstraint findBy, int timeout)
+		public static IE AttachToIE(Constraint findBy, int timeout)
 		{
-			return findIE(findBy, timeout, true);
+			return FindIE(findBy, timeout, true);
 		}
 		
 		/// <summary>
@@ -160,7 +161,7 @@ namespace WatiN.Core
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
 		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
 		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
 		/// <param name="timeout">The number of seconds to wait before timing out</param>
 		/// <returns>An <see cref="IE"/> instance.</returns>
@@ -182,20 +183,20 @@ namespace WatiN.Core
 		/// IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Exa"), 60);
 		/// </code>
 		/// </example>
-		public static IE AttachToIENoWait(BaseConstraint findBy, int timeout)
+		public static IE AttachToIENoWait(Constraint findBy, int timeout)
 		{
-			return findIE(findBy, timeout, false);
+			return FindIE(findBy, timeout, false);
 		}
 
 		/// <summary>
 		/// Does the specified Internet Explorer exist.
 		/// </summary>
-		/// <param name="findBy">The <see cref="BaseConstraint"/> of the IE window to find. 
+		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
 		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="BaseConstraint"/>. Otherwise it returns <c>false</c>. </returns>
-		public static bool Exists(BaseConstraint findBy)
+		/// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+		public static bool Exists(Constraint findBy)
 		{
-			return (null != findInternetExplorer(findBy));
+            return null != FindIEPartiallyInitialized(findBy);
 		}
 
 		/// <summary>
@@ -579,18 +580,26 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="iwebBrowser2">An object implementing IWebBrowser2 (like Interop.SHDocVw.InternetExplorer object)</param>
 		public IE(object iwebBrowser2)
+            : this(iwebBrowser2, true)
 		{
-			CheckThreadApartmentStateIsSTA();
+		}
 
-			var internetExplorer = iwebBrowser2 as IWebBrowser2;
+        private IE(object iwebBrowser2, bool finishInitialization)
+        {
+            CheckThreadApartmentStateIsSTA();
+
+            var internetExplorer = iwebBrowser2 as IWebBrowser2;
 
             if (internetExplorer == null)
-			{
+            {
                 throw new ArgumentException("iwebBrowser2 needs to implement shdocvw.IWebBrowser2");
-			}
+            }
 
-			InitIEAndStartDialogWatcher(internetExplorer);
-		}
+            this.ie = internetExplorer;
+
+            if (finishInitialization)
+                FinishInitialization(null);
+        }
 
 		private void CreateNewIEAndGoToUri(Uri uri, IDialogHandler logonDialogHandler, bool createInNewProcess)
 		{
@@ -601,12 +610,16 @@ namespace WatiN.Core
 			if (createInNewProcess)
 			{
 				Logger.LogAction("Creating IE instance in a new process");
-				InitIEAndStartDialogWatcher(CreateIEInNewProcess(), uri);
+
+                ie = CreateIEPartiallyInitializedInNewProcess().ie;
+                FinishInitialization(uri);
 			}
 			else
 			{
 				Logger.LogAction("Creating IE instance");
-				InitIEAndStartDialogWatcher(new InternetExplorerClass(), uri);
+
+                ie = new InternetExplorerClass();
+                FinishInitialization(uri);
 			}
 
 			if (logonDialogHandler != null)
@@ -622,26 +635,25 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		private static IWebBrowser2 CreateIEInNewProcess()
+		private static IE CreateIEPartiallyInitializedInNewProcess()
 		{
 			var m_Proc = Process.Start("IExplore.exe", "about:blank");
 
-			const int timeout = 5000;
-			var timeoutTimer = new SimpleTimer(timeout);
+            var action = new TryActionUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
+            var ie = action.Try(() =>
+            {
+                m_Proc.Refresh();
+                var mainWindowHandle = m_Proc.MainWindowHandle;
 
-			do
-			{
-				m_Proc.Refresh();
-				var mainWindowHandle = m_Proc.MainWindowHandle;
+                return mainWindowHandle != IntPtr.Zero
+                    ? FindIEPartiallyInitialized(new AttributeConstraint("hwnd", mainWindowHandle.ToString()))
+                    : null;
+            });
 
-				if (mainWindowHandle != IntPtr.Zero)
-				{
-					return findInternetExplorer(new AttributeConstraint("hwnd", mainWindowHandle.ToString()), Settings.AttachToIETimeOut);
-				}
-			    Thread.Sleep(500);
-			} while (!timeoutTimer.Elapsed);
+            if (ie != null)
+                return ie;
 
-			throw new IENotFoundException("hwnd not zero", timeout);
+			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToIETimeOut);
 		}
 
 		private static void CheckThreadApartmentStateIsSTA()
@@ -653,72 +665,54 @@ namespace WatiN.Core
 			}
 		}
 
-		private void InitIEAndStartDialogWatcher(IWebBrowser2 internetExplorer)
+        private IE FinishInitialization(Uri uri)
+        {
+            // Due to UAC in Vista the navigate has to be done
+            // before showing the new Internet Explorer instance
+            if (uri != null)
+            {
+                NavigateTo(uri);
+            }
+            ie.Visible = Settings.MakeNewIeInstanceVisible;
+
+            StartDialogWatcher();
+            return this;
+        }
+
+	    private static IE FindIE(Constraint findBy, int timeout, bool waitForComplete)
 		{
-			InitIEAndStartDialogWatcher(internetExplorer, null);
-		}
+            Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ToString());
 
-		private void InitIEAndStartDialogWatcher(IWebBrowser2 internetExplorer, Uri uri)
-		{
-			ie = internetExplorer;
+            var action = new TryActionUntilTimeOut(timeout) { SleepTime = 500 };
+            var ie = action.Try(() => FindIEPartiallyInitialized(findBy));
+            if (ie != null)
+            {
+                ie.FinishInitialization(null);
 
-			// Due to UAC in Vista the navigate has to be done
-			// before showing the new Internet Explorer instance
-			if (uri != null)
-			{
-				navigateTo(uri);
-			}
-			ie.Visible = Settings.MakeNewIeInstanceVisible;
-			StartDialogWatcher();
-		}
-
-		private static IE findIE(BaseConstraint findBy, int timeout, bool waitForComplete)
-		{
-			var internetExplorer = findInternetExplorer(findBy, timeout);
-
-			if (internetExplorer != null)
-			{
-				var ie = new IE(internetExplorer);
                 if (waitForComplete)
-                {
-			        ie.WaitForComplete();
-			    }
+                    ie.WaitForComplete();
 
-				return ie;
-			}
+                return ie;
+            }
 
-			throw new IENotFoundException(findBy.ConstraintToString(), timeout);
+			throw new IENotFoundException(findBy.ToString(), timeout);
 		}
 
-		private static IWebBrowser2 findInternetExplorer(BaseConstraint findBy, int timeout)
-		{
-			Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy.ConstraintToString());
-
-		    var action = new TryActionUntilTimeOut(timeout) {SleepTime = 500};
-		    var internetExplorer = action.Try(() => findInternetExplorer(findBy));
-
-		    return internetExplorer;
-		}
-
-		private static IWebBrowser2 findInternetExplorer(BaseConstraint findBy)
+		private static IE FindIEPartiallyInitialized(Constraint findBy)
 		{
 			var allBrowsers = new ShellWindows2();
-			var attributeBag = new IEAttributeBag();
 
 		    foreach (IWebBrowser2 browser in allBrowsers)
 		    {
-                attributeBag.InternetExplorer = browser;
-
-                if (findBy.Compare(attributeBag))
-                {
-                    return attributeBag.InternetExplorer;
-                }
+                var ie = new IE(browser, false);
+                if (ie.Matches(findBy))
+                    return ie;
 		    }
 
 			return null;
 		}
 
-	    protected override void navigateTo(Uri url)
+	    protected override void NavigateTo(Uri url)
 		{
 			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
 
@@ -728,7 +722,7 @@ namespace WatiN.Core
 		}
 
 
-        protected override void navigateToNoWait(Uri url)
+        protected override void NavigateToNoWait(Uri url)
         {
             var thread = new Thread(GoToNoWaitInternal);
             thread.SetApartmentState(ApartmentState.STA);
@@ -740,7 +734,7 @@ namespace WatiN.Core
         private void GoToNoWaitInternal(object uriIn)
         {
             var uri = (Uri)uriIn;
-            navigateTo(uri);
+            NavigateTo(uri);
         }
 
 		/// <summary>
@@ -1086,7 +1080,7 @@ namespace WatiN.Core
 
 		public override INativeDocument OnGetNativeDocument()
 		{
-			return NativeBrowser.CreateDocument(ie.Document);
+            return new IEDocument((IHTMLDocument2)ie.Document);
 		}
 
 		/// <summary>
@@ -1159,7 +1153,7 @@ namespace WatiN.Core
 
         public new IEBrowser NativeBrowser
         {
-            get { return new IEBrowser(this); }
+            get { return new IEBrowser(); }
         }
 
 		protected override INativeBrowser GetNativeBrowser()
@@ -1172,7 +1166,7 @@ namespace WatiN.Core
 		/// Find.ByUrl and Find.ByTitle are supported.
 		/// </summary>
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
-		public HtmlDialog HtmlDialog(BaseConstraint findBy)
+		public HtmlDialog HtmlDialog(Constraint findBy)
 		{
 			return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
 		}
@@ -1183,24 +1177,50 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
 		/// <param name="timeout">Number of seconds before the search times out.</param>
-		public HtmlDialog HtmlDialog(BaseConstraint findBy, int timeout)
+		public HtmlDialog HtmlDialog(Constraint findBy, int timeout)
 		{
 			return findHtmlDialog(findBy, timeout);
 		}
 
-		private HtmlDialog findHtmlDialog(BaseConstraint findBy, int timeout)
+		private HtmlDialog findHtmlDialog(Constraint findBy, int timeout)
 		{
-			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ConstraintToString());
+			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ToString());
 
 		    var action = new TryActionUntilTimeOut(timeout){SleepTime = 500};
             var result = action.Try(() => HtmlDialogs.Filter(findBy));
             
             if (result == null)
             {
-                throw new HtmlDialogNotFoundException(findBy.ConstraintToString(), timeout);
+                throw new HtmlDialogNotFoundException(findBy.ToString(), timeout);
             }
             
             return result;
 		}
-	}
+
+        /// <inheritdoc />
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            var name = attributeName.ToLowerInvariant();
+            string value = null;
+
+            if (name.Equals("href"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = ie.LocationURL);
+            }
+            else if (name.Equals("title"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = ((HTMLDocument)ie.Document).title);
+            }
+            else if (name.Equals("hwnd"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = ie.HWND.ToString());
+            }
+            else
+            {
+                throw new InvalidAttributeException(attributeName, "IE");
+            }
+
+            return value;
+        }
+    }
 }

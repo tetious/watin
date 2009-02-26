@@ -25,7 +25,6 @@ using System.Threading;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
@@ -36,7 +35,8 @@ namespace WatiN.Core
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
-	public class Element<E> : Element where E : Element
+	public class Element<TElement> : Element
+        where TElement : Element
 	{
 	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
 	    {}
@@ -50,7 +50,7 @@ namespace WatiN.Core
         /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
         /// </summary>
         /// <param name="predicate">The expression to use.</param>
-        public void WaitUntil(Predicate<E> predicate)
+        public void WaitUntil(Predicate<TElement> predicate)
         {
             WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
         }
@@ -60,7 +60,7 @@ namespace WatiN.Core
 		/// </summary>
         /// <param name="predicate">The expression to use.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(Predicate<E> predicate, int timeout)
+		public void WaitUntil(Predicate<TElement> predicate, int timeout)
 		{
             WaitUntil(Find.ByElement(predicate), timeout);
         }
@@ -70,7 +70,7 @@ namespace WatiN.Core
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
-	public class Element : IAttributeBag
+	public class Element : Component
 	{
         private INativeElement _nativeElement;
         private ElementFinder _elementFinder;
@@ -291,39 +291,28 @@ namespace WatiN.Core
             get { return new Style(NativeElement); }
 		}
 
-		/// <summary>
-		/// This methode can be used if the attribute isn't available as a property of
-		/// Element or a subclass of Element.
-		/// </summary>
-		/// <param name="attributeName">The attribute name. This could be different then named in
-		/// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
-		/// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
-        public string GetAttributeValue(string attributeName)
-		{
-		    return GetAttributeValue(attributeName, NativeElement);
-        }
-
-        public static string GetAttributeValue(string attributeName, INativeElement nativeElement)
-		{
-			if (UtilityClass.IsNullOrEmpty(attributeName))
-			{
-				throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
-			}
+        /// <inheritdoc />
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            if (UtilityClass.IsNullOrEmpty(attributeName))
+            {
+                throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
+            }
 
             var toLowerInvariant = attributeName.ToLowerInvariant();
-            
+
             if (toLowerInvariant == "style")
-			{
-                return nativeElement.GetStyleAttributeValue("cssText");
-			}
+            {
+                return NativeElement.GetStyleAttributeValue("cssText");
+            }
 
             if (toLowerInvariant.StartsWith("style."))
             {
-                return nativeElement.GetStyleAttributeValue(attributeName.Substring(6));
+                return NativeElement.GetStyleAttributeValue(attributeName.Substring(6));
             }
 
-			return nativeElement.GetAttributeValue(attributeName);
-		}
+            return NativeElement.GetAttributeValue(attributeName);
+        }
 
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -761,8 +750,8 @@ namespace WatiN.Core
 		/// Waits until the given <paramref name="constraint" /> matches.
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
 		/// </summary>
-		/// <param name="constraint">The BaseConstraint.</param>
-		public void WaitUntil(BaseConstraint constraint)
+		/// <param name="constraint">The Constraint.</param>
+		public void WaitUntil(Constraint constraint)
 		{
 			WaitUntil(constraint, Settings.WaitUntilExistsTimeOut);
 		}
@@ -771,7 +760,7 @@ namespace WatiN.Core
 		/// Waits until the given <paramref name="predicate" /> matches.
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
 		/// </summary>
-		/// <param name="predicate">The BaseConstraint.</param>
+		/// <param name="predicate">The Constraint.</param>
 		public void WaitUntil<E>(Predicate<E> predicate) where E : Element
 		{
 			WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
@@ -780,19 +769,19 @@ namespace WatiN.Core
         /// <summary>
 		/// Waits until the given <paramref name="constraint" /> matches.
 		/// </summary>
-		/// <param name="constraint">The BaseConstraint.</param>
+		/// <param name="constraint">The Constraint.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(BaseConstraint constraint, int timeout)
+		public void WaitUntil(Constraint constraint, int timeout)
 		{
 			// Calling Exists will refresh the reference to the html element
 			// so the compare is against the current html element (and not 
 			// against some cached reference.
             var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeout)
             {
-                ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ConstraintToString())
+                ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ToString())
             };
 
-            tryActionUntilTimeOut.Try(() => Exists && constraint.Compare(this));
+            tryActionUntilTimeOut.Try(() => Exists && Matches(constraint));
 		}
 
 	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
@@ -955,7 +944,7 @@ namespace WatiN.Core
         /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(Find.ByText("First name"));
         /// </code>
         /// </example>
-        public T Ancestor<T>(BaseConstraint findBy) where T : Element
+        public T Ancestor<T>(Constraint findBy) where T : Element
         {
     	    return (T)Ancestor(typeof(T), findBy);
         }
@@ -993,7 +982,7 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(Type ancestorType)
 		{
-			return Ancestor(ancestorType, new AlwaysTrueConstraint());
+			return Ancestor(ancestorType, Find.Any);
 		}
 
 		/// <summary>
@@ -1008,7 +997,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(BaseConstraint findBy)
+		public Element Ancestor(Constraint findBy)
 		{
 			var parentElement = Parent;
 
@@ -1017,14 +1006,14 @@ namespace WatiN.Core
                 return null;
             }
             
-            return findBy.Compare(parentElement) ? parentElement : parentElement.Ancestor(findBy);
+            return Matches(findBy) ? parentElement : parentElement.Ancestor(findBy);
 		}
 
 		/// <summary>
-		/// Gets the closest ancestor of the specified Type and BaseConstraint.
+		/// Gets the closest ancestor of the specified Type and Constraint.
 		/// </summary>
 		/// <param name="ancestorType">Type of the ancestor.</param>
-		/// <param name="findBy">The BaseConstraint to match with.</param>
+		/// <param name="findBy">The Constraint to match with.</param>
 		/// <returns>
 		/// An instance of the ancestorType. If no ancestor of ancestorType is found <code>null</code> is returned.
 		/// </returns>
@@ -1035,7 +1024,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div), Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(Type ancestorType, BaseConstraint findBy)
+		public Element Ancestor(Type ancestorType, Constraint findBy)
 		{
 			if (!ancestorType.IsSubclassOf(typeof (Element)) && (ancestorType != typeof (Element)))
 			{
@@ -1053,7 +1042,7 @@ namespace WatiN.Core
 		/// <returns>
 		/// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
 		/// If no specific type is available, an element of type ElementContainer will be returned. 
-		/// If there is no ancestor that matches Tag and BaseConstraint, <code>null</code> is returned.</returns>
+		/// If there is no ancestor that matches Tag and Constraint, <code>null</code> is returned.</returns>
 		/// </returns>
 		/// <example>
 		/// The following example returns the Div a textfield is located in.
@@ -1062,7 +1051,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(string tagName, BaseConstraint findBy)
+		public Element Ancestor(string tagName, Constraint findBy)
 		{
 			var findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
 			                                   && findBy;
@@ -1078,7 +1067,7 @@ namespace WatiN.Core
         /// <returns>
 		/// <returns>An typed instance of the element matching the Tag and the AttributeConstriant.
 		/// If no specific type is available, an element of type ElementContainer will be returned. 
-		/// If there is no ancestor that matches Tag and BaseConstraint, <code>null</code> is returned.</returns>
+		/// If there is no ancestor that matches Tag and Constraint, <code>null</code> is returned.</returns>
 		/// </returns>
 		/// <example>
 		/// The following example returns the Div a textfield is located in.
@@ -1111,17 +1100,29 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(string tagName)
 		{
-			return Ancestor(tagName, new AlwaysTrueConstraint());
-		}
-
-		public string GetValue(string attributename)
-		{
-            return GetAttributeValue(attributename);
+			return Ancestor(tagName, Find.Any);
 		}
 
         public void SetAttributeValue(string attributeName, string value)
         {
             NativeElement.SetAttributeValue(attributeName, value);
         }
-	}
+
+        /// <summary>
+        /// Creates an element finder for elements within specialized collections.
+        /// </summary>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="nativeElementCollection">The native element collection</param>
+        /// <param name="findBy">The constraint, or null if none</param>
+        /// <returns>The native element finder</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nativeElementCollection"/> is null</exception>
+        protected ElementFinder CreateElementFinder<TElement>(INativeElementCollection nativeElementCollection, Constraint findBy)
+            where TElement : Element
+        {
+            if (nativeElementCollection == null)
+                throw new ArgumentNullException("nativeElementCollection");
+
+            return new NativeElementFinder(nativeElementCollection, DomContainer, ElementFactory.GetElementTags<TElement>(), findBy);
+        }
+    }
 }

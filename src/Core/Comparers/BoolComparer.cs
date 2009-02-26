@@ -26,7 +26,11 @@ namespace WatiN.Core.Comparers
         /// <summary>
         /// Initializes a new instance of the <see cref="BoolComparer"/> class.
         /// </summary>
-        /// <param name="value">The given value will be used for the comparision(s) done by <see cref="BaseComparer.Compare(string)"/>.</param>
-		public BoolComparer(bool value) : base(value.ToString()) {}
+        /// <param name="referenceValue">If the value is true, then will compare case-insensitively with "true"
+        /// otherwise will compare case-insensitively with "false"</param>
+        public BoolComparer(bool referenceValue)
+            : base(referenceValue.ToString())
+        {
+        }
 	}
 }

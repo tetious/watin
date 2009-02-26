@@ -25,6 +25,9 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class StringEqualsAndCaseInsensitiveComparer : StringComparer
 	{
-		public StringEqualsAndCaseInsensitiveComparer(string value) : base(value, true) {}
+        public StringEqualsAndCaseInsensitiveComparer(string comparisonValue)
+            : base(comparisonValue, true)
+        {
+        }
 	}
 }

@@ -133,6 +133,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparers\PredicateComparer.cs" />
+    <Compile Include="Constraints\AnyConstraint.cs" />
+    <Compile Include="Constraints\Constraint.cs" />
+    <Compile Include="Constraints\ConstraintContext.cs" />
+    <Compile Include="Component.cs" />
+    <Compile Include="Constraints\AndConstraint.cs" />
+    <Compile Include="Constraints\ComponentConstraint.cs" />
+    <Compile Include="Constraints\NoneConstraint.cs" />
+    <Compile Include="Constraints\OrConstraint.cs" />
+    <Compile Include="BaseComponentCollection.cs" />
+    <Compile Include="IAttributeBag.cs" />
+    <Compile Include="IComponentCollection.cs" />
+    <Compile Include="ElementSelector.cs" />
+    <Compile Include="NativeElementCollectionAdapter.cs" />
     <Compile Include="IElementCollection.cs" />
     <Compile Include="ElementFinder.cs" />
     <Compile Include="Area.cs">
@@ -142,11 +156,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnumerableElementFinder.cs" />
-    <Compile Include="Native\InternetExplorer\IEElementCollectionFinder.cs" />
-    <Compile Include="Native\Mozilla\FFElementCollectionFinder.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />
+    <Compile Include="Native\INativeElementCollection.cs" />
     <Compile Include="Native\INativeDocument.cs" />
     <Compile Include="Native\INativeElement.cs" />
     <Compile Include="Native\InternetExplorer\AllFramesProcessor.cs" />
@@ -155,7 +168,7 @@
     <Compile Include="Native\InternetExplorer\IEBrowser.cs" />
     <Compile Include="Native\InternetExplorer\IEDocument.cs" />
     <Compile Include="Native\InternetExplorer\IEElement.cs" />
-    <Compile Include="Native\InternetExplorer\IEElementFinder.cs" />
+    <Compile Include="Native\InternetExplorer\IEElementCollection.cs" />
     <Compile Include="Native\InternetExplorer\IEWaitForComplete.cs" />
     <Compile Include="Native\InternetExplorer\IWebBrowser2Processor.cs" />
     <Compile Include="Native\InternetExplorer\ShellWindows2.cs" />
@@ -164,11 +177,11 @@
     <Compile Include="Native\Mozilla\FFBrowser.cs" />
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\Mozilla\FFElement.cs" />
-    <Compile Include="Native\Mozilla\FFElementFinder.cs" />
     <Compile Include="Native\Mozilla\FFUtils.cs" />
     <Compile Include="Native\Mozilla\FFWaitForComplete.cs" />
     <Compile Include="Native\Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Native\Mozilla\FireFoxException.cs" />
+    <Compile Include="Native\Mozilla\FFElementCollection.cs" />
     <Compile Include="Native\Windows\IEnumUnknown.cs" />
     <Compile Include="Native\Windows\IOleContainer.cs" />
     <Compile Include="Native\Windows\IServiceProvider.cs" />
@@ -201,14 +214,12 @@
     <Compile Include="Comparers\AlwaysTrueComparer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Comparers\BaseComparer.cs">
+    <Compile Include="Comparers\Comparer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Comparers\BoolComparer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Comparers\PredicateElementComparer.cs" />
-    <Compile Include="Comparers\PredicateStringComparer.cs" />
     <Compile Include="Comparers\RegexComparer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -227,13 +238,7 @@
     <Compile Include="Comparers\UriComparer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Constraints\AlwaysTrueConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Constraints\AttributeConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\BaseConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\ElementConstraint.cs">
@@ -249,9 +254,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\ProximityTextConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\TableRowAttributeConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DefaultSettings.cs">
@@ -335,10 +337,7 @@
     <Compile Include="ElementCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ElementsContainer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ElementsSupport.cs">
+    <Compile Include="ElementContainer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ElementTag.cs">
@@ -425,9 +424,6 @@
     <Compile Include="IE.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IEAttributeBag.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IECollection.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -437,22 +433,10 @@
     <Compile Include="ImageCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\IAttributeBag.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Interfaces\ICompare.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Interfaces\ICompareElement.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\IDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\IElementCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Interfaces\IElementsContainer.cs">
+    <Compile Include="IElementContainer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interfaces\IFindByDefaultFactory.cs">
@@ -467,7 +451,7 @@
     <Compile Include="Interfaces\IWait.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Native\NativeElementFinder.cs" />
+    <Compile Include="NativeElementFinder.cs" />
     <Compile Include="Label.cs">
       <SubType>Code</SubType>
     </Compile>

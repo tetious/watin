@@ -34,13 +34,14 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using mshtml;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UtilityClasses
 {
     /// <summary>
     /// This class contains functionality to capture an image from a web page and save it to a file.
-    /// The code was written by Doug Weems at http://www.codeproject.com/cs/media/IECapture.asp/>
+    /// The code was written by Doug Weems at http://www.codeproject.com/cs/media/IECapture.asp/
     /// </summary>
     public class CaptureWebPage
     {
@@ -100,7 +101,7 @@ namespace WatiN.Core.UtilityClasses
 
         public System.Drawing.Image CaptureWebPageImage(bool writeUrl, bool showGuides, int scalePercentage)
         {
-            return CaptureWebPageImage(_domContainer.hWnd, (IHTMLDocument2) _domContainer.NativeDocument.Object, writeUrl, showGuides, scalePercentage);
+            return CaptureWebPageImage(_domContainer.hWnd, ((IEDocument) _domContainer.NativeDocument).HtmlDocument, writeUrl, showGuides, scalePercentage);
         }
 
         private static System.Drawing.Image CaptureWebPageImage(IntPtr browserHWND, IHTMLDocument2 myDoc, bool writeUrl, bool showGuides, int scalePercentage)

@@ -28,13 +28,13 @@ namespace WatiN.Core
     public class FindByDefaultFactory : IFindByDefaultFactory
     {
         /// <inheritdoc />
-        public BaseConstraint ByDefault(string value)
+        public Constraint ByDefault(string value)
         {
             return Find.ById(value);
         }
 
         /// <inheritdoc />
-        public BaseConstraint ByDefault(Regex value)
+        public Constraint ByDefault(Regex value)
         {
             return Find.ById(value);
         }

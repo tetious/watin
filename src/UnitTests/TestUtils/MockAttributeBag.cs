@@ -17,27 +17,34 @@
 #endregion Copyright
 
 using System.Collections.Specialized;
+using Moq;
+using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.TestUtils
 {
-	public class MockAttributeBag : IAttributeBag
-	{
-		public NameValueCollection attributeValues = new NameValueCollection();
+    public class MockAttributeBag : IAttributeBag
+    {
+        public NameValueCollection attributeValues = new NameValueCollection();
 
-		public MockAttributeBag(string attributeName, string value)
-		{
-			Add(attributeName, value);
-		}
+        public MockAttributeBag(string attributeName, string value)
+        {
+            Add(attributeName, value);
+        }
 
-		public void Add(string attributeName, string value)
-		{
-			attributeValues.Add(attributeName.ToLower(), value);
-		}
+        public void Add(string attributeName, string value)
+        {
+            attributeValues.Add(attributeName.ToLower(), value);
+        }
 
-		public string GetValue(string attributename)
-		{
-			return attributeValues.Get(attributename.ToLower());
-		}
-	}
+        public string GetAttributeValue(string attributeName)
+        {
+            return attributeValues.Get(attributeName.ToLower());
+        }
+
+        public T GetAdapter<T>() where T : class
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

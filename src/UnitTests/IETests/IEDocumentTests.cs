@@ -15,12 +15,6 @@ namespace WatiN.Core.UnitTests.IETests
             get { return MainURI; }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void ConstructorShouldThrowExceptionIfArgumentNotOfTypeIHTMLDocument()
-        {
-            new IEDocument(new object());
-        }
-
         [Test]
         public void NativeDocumentShouldBeSetByConstructor()
         {
@@ -30,7 +24,7 @@ namespace WatiN.Core.UnitTests.IETests
             var ieDocument = new IEDocument(htmlDocument);
 
             // WHEN
-            var nativeDocument = ieDocument.Object;
+            var nativeDocument = ieDocument.HtmlDocument;
 
             // THEN
             Assert.That(ReferenceEquals(nativeDocument, htmlDocument));
@@ -53,15 +47,15 @@ namespace WatiN.Core.UnitTests.IETests
             var nativeElement = ieDocument.Body;
 
             // THEN
-            Assert.That(nativeElement is IEElement, Is.True, "Unexpected type");
-            Assert.That(ReferenceEquals(nativeElement.Object, htmlElement), "Unexpected instance");
+            IEElement ieElement = (IEElement)nativeElement;
+            Assert.That(ReferenceEquals(ieElement.HtmlElement, htmlElement), "Unexpected instance");
         }
 
         [Test]
         public void UrlShouldReturnUrlOfCurrentDocument()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument((IHTMLDocument2)((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var url = ieDocument.Url;
@@ -74,7 +68,7 @@ namespace WatiN.Core.UnitTests.IETests
         public void TitleShouldReturnTitleofThePage()
         {
             // GIVEN
-            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument((IHTMLDocument2)((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var title = ieDocument.Title;
@@ -87,7 +81,7 @@ namespace WatiN.Core.UnitTests.IETests
         {
             // GIVEN
             Ie.CheckBox("Checkbox1").Focus();
-            var ieDocument = new IEDocument(((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
+            var ieDocument = new IEDocument((IHTMLDocument2)((SHDocVw.IWebBrowser2)Ie.InternetExplorer).Document);
 
             // WHEN
             var activeElement = ieDocument.ActiveElement;

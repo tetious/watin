@@ -24,7 +24,7 @@ namespace WatiN.Core.Comparers
 	/// <summary>
 	/// Class that supports comparing a <see cref="Uri"/> instance with a string value.
 	/// </summary>
-	public class UriComparer : BaseComparer
+	public class UriComparer : Comparer<string>
 	{
 		private readonly Uri uriToCompareWith;
 		private readonly bool _ignoreQuery;

@@ -75,7 +75,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
                                 var tableCell = browser.TableCell(Find.ByText("b1"));
-		                        Assert.IsInstanceOfType(typeof (TableRow), tableCell.ParentTableRow, "Should be a TableRow Type");
+		                        Assert.IsInstanceOfType(typeof (TableRow), tableCell.ContainingTableRow, "Should be a TableRow Type");
 		                        Assert.AreEqual("row1", tableCell.ParentTableRow.Id, "Unexpected id");
 		                    });
 		}

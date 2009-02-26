@@ -17,26 +17,28 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Comparers
 {
     /// <summary>
-    /// This class supports comparing classes op type <see cref="Element"/> using a <see cref="Predicate{E}"/>.
+    /// A covariant comparer implementation based on a predicate delegate.
     /// </summary>
-    /// <typeparam name="E">An instance or sub type of type <see cref="Element"/></typeparam>
-    public class PredicateElementComparer<E> : BaseComparer, ICompareElement where E : Element
+    public class PredicateComparer<TPredicateValue, TComparerValue> : Comparer<TComparerValue>
+        where TPredicateValue : TComparerValue
     {
-        private readonly Predicate<E> _compareElement;
+        private readonly Predicate<TPredicateValue> predicate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PredicateElementComparer&lt;E&gt;"/> class.
+        /// Creates a predicate-based comparer.
         /// </summary>
-        /// <param name="predicate">The predicate will be used by <see cref="Compare(Element)"/>.</param>
-        public PredicateElementComparer(Predicate<E> predicate)
-        {
-            _compareElement = predicate;	
+        /// <param name="predicate">The predicate.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is null</exception>
+        public PredicateComparer(Predicate<TPredicateValue> predicate)
+		{
+            if (predicate == null)
+                throw new ArgumentNullException("predicate");
+
+            this.predicate = predicate;	
         }
 
         /// <summary>
@@ -44,16 +46,9 @@ namespace WatiN.Core.Comparers
         /// </summary>
         /// <param name="element">The element to evaluate.</param>
         /// <returns>The result of the comparison done by the predicate</returns>
-        public virtual bool Compare(Element element)
+        public override bool Compare(TComparerValue element)
         {
-            try
-            {
-                return _compareElement.Invoke((E)element);
-            }
-            catch (Exception e)
-            {
-                throw new WatiNException("Exception during execution of predicate for " + element.OuterHtml, e);
-            }
+            return element is TPredicateValue && predicate((TPredicateValue)element);
         }
     }
 }

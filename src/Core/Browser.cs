@@ -100,11 +100,11 @@ namespace WatiN.Core
         /// </example>
         public void GoTo(Uri url)
         {
-            navigateTo(url);
+            NavigateTo(url);
             WaitForComplete();
         }
 
-        protected abstract void navigateTo(Uri url);
+        protected abstract void NavigateTo(Uri url);
 
         /// <summary>
         /// Navigates the browser to the given <paramref name="url" /> 
@@ -162,11 +162,11 @@ namespace WatiN.Core
         /// </example>
         public void GoToNoWait(Uri url)
         {
-            navigateToNoWait(url);
+            NavigateToNoWait(url);
         }
 
 
-        protected abstract void navigateToNoWait(Uri url);
+        protected abstract void NavigateToNoWait(Uri url);
 
         /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" />.

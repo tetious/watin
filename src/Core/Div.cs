@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML div element.
 	/// </summary>
     [ElementTag("div")]
-    public class Div : ElementsContainer<Div>
+    public class Div : ElementContainer<Div>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.

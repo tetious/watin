@@ -22,15 +22,23 @@ namespace WatiN.Core.Native
 {
     public interface INativeDocument
     {
-        object Object { get; }
-        object Objects { get; }
+        /// <summary>
+        /// Gets the collection of all elements in the document.
+        /// </summary>
+        INativeElementCollection AllElements { get; }
+
+        /// <summary>
+        /// Gets the containing frame element, or null if none.
+        /// </summary>
+        INativeElement ContainingFrameElement { get; }
+
         INativeElement Body { get; }
         string Url { get; }
         string Title { get; }
         INativeElement ActiveElement { get; }
         void RunScript(string scriptCode, string language);
-        string JavaScriptVariableName {get;}
-        List<Frame> Frames(DomContainer domContainer);
+        string JavaScriptVariableName { get; }
+        IList<INativeDocument> Frames { get; }
 
         string GetPropertyValue(string propertyName);
     }

@@ -18,105 +18,98 @@
 
 // This constraint class is kindly donated by Seven Simple Machines
 
-using System.Collections;
-using mshtml;
+using System.Collections.Generic;
+using System.IO;
 using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {
     /// <summary>
     /// Use this class to find a form field whose associated label contains a particular value.
     /// This constraint class is kindly donated by Seven Simple Machines.
-	/// </summary>
-	/// <example>
-	/// This shows how to find a text field with an associated label containing the text "User name:".
-	/// <code>ie.TextField( new LabelTextConstraint("User name:") ).TypeText("MyUserName")</code>
-	/// or use
+    /// </summary>
+    /// <example>
+    /// This shows how to find a text field with an associated label containing the text "User name:".
+    /// <code>ie.TextField( new LabelTextConstraint("User name:") ).TypeText("MyUserName")</code>
+    /// or use
     /// <code>ie.TextField(Find.ByLabelText("User name:")).TypeText("MyUserName")</code>
-	/// </example>
-	public class LabelTextConstraint : AttributeConstraint
-	{
-		private readonly string labelText;
-        private Hashtable labelIdsWithMatchingText;
-		
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
-		/// </summary>
-		/// <param name="labelText">The text that represents the label for the form element.</param>
-		public LabelTextConstraint( string labelText ) : base( Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText) )
-		{
-			this.labelText = labelText.Trim();
-		}
+    /// </example>
+    public class LabelTextConstraint : AttributeConstraint
+    {
+        private readonly string labelText;
 
         /// <summary>
-        /// This method expects an <see cref="Element"/> which it will use
-        /// to determine if the element is 
-        /// the element for which a label is specified with the searched for innertext.
+        /// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
         /// </summary>
-        /// <param name="attributeBag">Value to compare with</param>
-        /// <returns>
-        /// 	<c>true</c> if the searched for value equals the given value
-        /// </returns>
-        protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-			// Get a reference to the element which is probably a TextField, Checkbox or RadioButton
-            Element element = attributeBag as Element;
-            if (element == null)
-                throw new WatiNException("This constraint class can only be used to compare against an element");
-			
-			// Get all elements and filter this for Labels
-            if (labelIdsWithMatchingText == null)
-            {
-                InitLabelIdsWithMatchingText(element);
-            }
-
-            return labelIdsWithMatchingText != null ? labelIdsWithMatchingText.Contains(element.Id) : false;
-		}
-
-        private void InitLabelIdsWithMatchingText(Element element)
+        /// <param name="labelText">The text that represents the label for the form element.</param>
+        public LabelTextConstraint(string labelText)
+            : base(Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText))
         {
-            labelIdsWithMatchingText = new Hashtable();
-
-            var domContainer = element.DomContainer;
-
-            var labels = domContainer.Labels.Filter(e =>
-                                                        {
-                                                            var text = e.Text;
-                                                            if (string.IsNullOrEmpty(text)) return false;
-                                                            return StringComparer.AreEqual(text.Trim(), labelText);
-                                                        });
-
-            foreach (Label label in labels)
-            {
-                var forElementWithId = label.For;
-                labelIdsWithMatchingText.Add(forElementWithId, forElementWithId);
-            }
-
-//            var htmlDocument = (IHTMLDocument2)element.document;
-//            var labelElements = (IHTMLElementCollection)htmlDocument.all.tags(ElementsSupport.LabelTagName);
-//
-//            // Get the list of id's of controls that these labels are for
-//            for (var i = 0; i < labelElements.length; i++)
-//            {
-//                var label = (IHTMLElement) labelElements.item(i, null);
-//                
-//                // Store the id if there is a label text match
-//                if (!StringComparer.AreEqual(label.innerText.Trim(), labelText)) continue;
-//                
-//                var htmlFor = ((IHTMLLabelElement)label).htmlFor;
-//                labelIdsWithMatchingText.Add(htmlFor,htmlFor);
-//            }
+            this.labelText = labelText.Trim();
         }
 
-        /// <summary>
-        /// Writes out the constraint into a <see cref="string"/>.
-        /// </summary>
-        /// <returns>The constraint text</returns>
-		public override string ConstraintToString()
-		{
-			return "Label with text '" + labelText +"'";
-		}
-	}
+        /// <inheritdoc />
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            Element element = attributeBag.GetAdapter<Element>();
+            if (element == null)
+                throw new WatiNException("This constraint class can only be used to compare against an element");
+
+            var cache = (LabelCache)context.GetData(this);
+            if (cache == null)
+            {
+                cache = new LabelCache(labelText);
+                context.SetData(this, cache);
+            }
+
+            return cache.IsMatch(element);
+        }
+
+        /// <inheritdoc />
+        public override void WriteDescriptionTo(TextWriter writer)
+        {
+            writer.Write("With Label Text '{0}'", labelText);
+        }
+
+        private sealed class LabelCache
+        {
+            private readonly string labelText;
+            private Dictionary<string, bool> labelIdsWithMatchingText;
+
+            public LabelCache(string labelText)
+            {
+                this.labelText = labelText;
+            }
+
+            public bool IsMatch(Element element)
+            {
+                if (labelIdsWithMatchingText == null)
+                    InitLabelIdsWithMatchingText(element);
+
+                return labelIdsWithMatchingText.ContainsKey(element.Id ?? @"");
+            }
+
+            private void InitLabelIdsWithMatchingText(Element element)
+            {
+                labelIdsWithMatchingText = new Dictionary<string, bool>();
+
+                DomContainer domContainer = element.DomContainer;
+
+                LabelCollection labels = domContainer.Labels.Filter(e =>
+                {
+                    string text = e.Text;
+                    if (string.IsNullOrEmpty(text)) return false;
+                    return StringComparer.AreEqual(text.Trim(),
+                        labelText);
+                });
+
+                foreach (Label label in labels)
+                {
+                    string forElementWithId = label.For;
+                    labelIdsWithMatchingText.Add(forElementWithId, true);
+                }
+            }
+        }
+    }
 }

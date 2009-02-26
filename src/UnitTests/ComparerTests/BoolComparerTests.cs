@@ -29,7 +29,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CompareToTrue()
 		{
-			ICompare comparer = new BoolComparer(true);
+			Comparer<string> comparer = new BoolComparer(true);
 
 			Assert.IsTrue(comparer.Compare(true.ToString()), "true.ToString()");
 			Assert.IsTrue(comparer.Compare("true"), "true");
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void CompareToFalse()
 		{
-			ICompare comparer = new BoolComparer(false);
+			Comparer<string> comparer = new BoolComparer(false);
 
 			Assert.IsTrue(comparer.Compare(false.ToString()), "false.ToString()");
 			Assert.IsTrue(comparer.Compare("false"), "false");

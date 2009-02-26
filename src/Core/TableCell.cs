@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System;
+using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -24,20 +26,47 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML td element.
 	/// </summary>
     [ElementTag("td")]
-    public class TableCell : ElementsContainer<TableCell>
+    // TODO: Adding th support in this way would break many test out in the field
+    //       maybe add a TableHeaderCell element instead.
+    //[ElementTag("th")] S
+    public class TableCell : ElementContainer<TableCell>
 	{
 		public TableCell(DomContainer domContainer, INativeElement htmlTableCell) : base(domContainer, htmlTableCell) {}
 
         public TableCell(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		/// <summary>
-		/// Gets the parent <see cref="TableRow"/> of this <see cref="TableCell"/>.
-		/// </summary>
-		/// <value>The parent table row.</value>
-		public TableRow ParentTableRow
-		{
-			get { return (TableRow) Ancestor(typeof (TableRow)); }
-		}
+        /// <summary>
+        /// Gets the table that contains this cell.
+        /// </summary>
+        public Table ContainingTable
+        {
+            get { return Ancestor<Table>(); }
+        }
+
+        /// <summary>
+        /// Gets the table body that contains this cell.
+        /// </summary>
+        public TableBody ContainingTableBody
+        {
+            get { return Ancestor<TableBody>(); }
+        }
+
+        /// <summary>
+        /// Gets the table row that contains this cell.
+        /// </summary>
+        public TableRow ContainingTableRow
+        {
+            get { return Ancestor<TableRow>(); }
+        }
+
+        /// <summary>
+        /// Gets the table row that contains this cell.
+        /// </summary>
+        [Obsolete("Use ContainingTableRow instead.")]
+        public TableRow ParentTableRow
+        {
+            get { return ContainingTableRow; }
+        }
 
 		/// <summary>
 		/// Gets the index of the <see cref="TableCell"/> in the <see cref="TableCellCollection"/> of the parent <see cref="TableRow"/>.

@@ -22,7 +22,6 @@ using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
 using WatiN.Core.UnitTests.TestUtils;
 using TimeoutException=WatiN.Core.Exceptions.TimeoutException;
@@ -59,7 +58,7 @@ namespace WatiN.Core.UnitTests
             var documentType = typeof(Document);
             
             // WHEN 
-            var actual = documentType.GetInterface(typeof(IElementsContainer).ToString());
+            var actual = documentType.GetInterface(typeof(IElementContainer).ToString());
 
             // THEN
 		    Assert.That(actual, Is.Not.Null, "document should implement IElementsContainer");
@@ -558,6 +557,22 @@ namespace WatiN.Core.UnitTests
 
     public class TestDocument : Document
     {
-        public TestDocument(DomContainer container, INativeDocument document) : base(container, document) {}
+        private readonly INativeDocument document;
+
+        public TestDocument(DomContainer container, INativeDocument document)
+            : base(container)
+        {
+            this.document = document;
+        }
+
+        public override INativeDocument NativeDocument
+        {
+            get { return document; }
+        }
+
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

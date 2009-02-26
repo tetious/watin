@@ -25,12 +25,12 @@ namespace WatiN.Core.Exceptions
     [Serializable]
 	public class ReEntryException : WatiNException
 	{
-		public ReEntryException(BaseConstraint constraint) : base(createMessage(constraint)) {}
+		public ReEntryException(Constraint constraint) : base(CreateMessage(constraint)) {}
         public ReEntryException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 
-		private static string createMessage(BaseConstraint constraint)
+		private static string CreateMessage(Constraint constraint)
 		{
-			return string.Format("The compare methode of a constraint class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' with constraint: {1}.", constraint.GetType().ToString(), constraint.ConstraintToString());
+			return string.Format("The compare methode of a constraint class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' with constraint: {1}.", constraint.GetType(), constraint);
 		}
 	}
 }

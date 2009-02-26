@@ -16,12 +16,46 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections.Specialized;
 
 namespace WatiN.Core.Native
 {
     public interface INativeElement
     {
+        /// <summary>
+        /// Gets a collection consisting of the immediate children of this element.
+        /// </summary>
+        INativeElementCollection Children { get; }
+
+        /// <summary>
+        /// Gets a collection consisting of all descendants of this element.
+        /// </summary>
+        INativeElementCollection AllDescendants { get; }
+
+        /// <summary>
+        /// Gets a collection consisting of the table rows within a TABLE or TBODY element.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
+        INativeElementCollection TableRows { get; }
+
+        /// <summary>
+        /// Gets a collection consisting of the table bodies within a TABLE element.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
+        INativeElementCollection TableBodies { get; }
+
+        /// <summary>
+        /// Gets a collection consisting of the table cells within a TR element.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
+        INativeElementCollection TableCells { get; }
+
+        /// <summary>
+        /// Gets a collection consisting of the options within a SELECT element.
+        /// </summary>
+        INativeElementCollection Options { get; }
+
         /// <summary>
         /// Returns the text displayed after this element when it's wrapped
         /// in a Label element; otherwise it returns <c>null</c>.
@@ -93,38 +127,11 @@ namespace WatiN.Core.Native
         void FireEvent(string eventName, NameValueCollection eventProperties);
         bool IsElementReferenceStillValid();
         string TagName { get; }
-        object Object { get; }
-        object Objects { get; }
         void FireEventNoWait(string eventName, NameValueCollection eventProperties);
         void Select();
         void SubmitForm();
         void SetFileUploadFile(Element element, string fileName);
 
         void WaitUntilReady();
-
-
-        /// <summary>
-        /// Should return an <see cref="ElementFinder"/> which enumerates the tBodies of a table
-        /// </summary>
-        /// <returns></returns>
-        ElementFinder TableBodies(DomContainer domContainer);
-        
-        /// <summary>
-        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a table
-        /// </summary>
-        /// <returns></returns>
-        ElementFinder TableRows(DomContainer domContainer);
-
-        /// <summary>
-        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a table
-        /// </summary>
-        /// <returns></returns>
-        ElementFinder TableCells(DomContainer domContainer);
-
-        /// <summary>
-        /// Should return an <see cref="ElementFinder"/> which enumerates the rows of a tbody element
-        /// </summary>
-        /// <returns></returns>
-        ElementFinder TableBodyRows(DomContainer domContainer);
     }
 }

@@ -24,35 +24,43 @@ namespace WatiN.Core.Comparers
 	/// <summary>
 	/// Class that supports an exact comparison of two string values.
 	/// </summary>
-	public class StringComparer : BaseComparer
+	public class StringComparer : Comparer<string>
 	{
-		private readonly bool _ignorecase;
-		protected string valueToCompareWith;
+		private readonly bool ignoreCase;
+		private readonly string comparisonValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringComparer"/> class.
         /// The string comparison done by <see cref="Compare(string)"/> will ignore any case differences.
         /// </summary>
-        /// <param name="value">The value used to compare against.</param>
-        public StringComparer(string value) : this(value, false) { }
+        /// <param name="expectedValue">The value used to compare against.</param>
+        public StringComparer(string expectedValue) 
+            : this(expectedValue, false) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringComparer"/> class and allows
         /// to specify the behavior regarding case sensitive comparisons.
         /// </summary>
-        /// <param name="value">The value used to compare against.</param>
-        /// <param name="ignorecase">if set to <c>false</c> <see cref="Compare(string)"/>
+        /// <param name="comparisonValue">The value used to compare against.</param>
+        /// <param name="ignoreCase">if set to <c>false</c> <see cref="Compare(string)"/>
         /// will also check the casing of the <see cref="string"/>.</param>
-		public StringComparer(string value, bool ignorecase)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparisonValue"/> is null</exception>
+		public StringComparer(string comparisonValue, bool ignoreCase)
 		{
-			_ignorecase = ignorecase;
-			
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
-			valueToCompareWith = value;
+            if (comparisonValue == null)
+                throw new ArgumentNullException("comparisonValue");
+           
+            this.ignoreCase = ignoreCase;			
+			this.comparisonValue = comparisonValue;
 		}
+
+        /// <summary>
+        /// Gets the value to compare against.
+        /// </summary>
+        protected string ComparisonValue
+        {
+            get { return comparisonValue; }
+        }
 
         /// <summary>
         /// Compares the specified value. 
@@ -61,9 +69,11 @@ namespace WatiN.Core.Comparers
         /// <returns>The result of the comparison.</returns>
 		public override bool Compare(string value)
 		{
-			if (value == null) return false;
+			if (value == null)
+                return false;
 
-			return (String.Compare(value, valueToCompareWith, _ignorecase, CultureInfo.InvariantCulture) == 0);
+			return string.Compare(value, comparisonValue,
+                ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture) == 0;
 		}
 
         /// <summary>
@@ -74,7 +84,7 @@ namespace WatiN.Core.Comparers
         /// </returns>
 		public override string ToString()
 		{
-			return valueToCompareWith;
+			return comparisonValue;
 		}
 
 		/// <summary>
@@ -97,7 +107,8 @@ namespace WatiN.Core.Comparers
 		/// <returns><c>true</c> or <c>false</c></returns>
 		public static bool AreEqual(string lhs, string rhs, bool ignoreCase)
 		{
-            if (lhs == null) return false;
+            if (lhs == null)
+                return false;
 
 			return new StringComparer(lhs, ignoreCase).Compare(rhs);
 		}

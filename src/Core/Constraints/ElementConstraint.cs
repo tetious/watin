@@ -16,37 +16,55 @@
 
 #endregion Copyright
 
+using System;
+using System.IO;
+using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {
-	public class ElementConstraint : BaseConstraint 
+    /// <summary>
+    /// An element-based constraint.
+    /// </summary>
+	public class ElementConstraint : Constraint 
 	{
-		private readonly ICompareElement _comparer;
+		private readonly Comparer<Element> comparer;
 
-		public ElementConstraint(ICompareElement comparer)
+        /// <summary>
+        /// Creates an element constraint.
+        /// </summary>
+        /// <param name="comparer">The comparer</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="comparer"/> is null</exception>
+        public ElementConstraint(Comparer<Element> comparer)
 		{
-			_comparer = comparer;
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+			this.comparer = comparer;
 		}
 
-		protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-            var element = attributeBag as Element;
+        /// <summary>
+        /// Gets the element comparer.
+        /// </summary>
+        public Comparer<Element> Comparer
+        {
+            get { return comparer; }
+        }
+
+        /// <inheritdoc />
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            Element element = attributeBag.GetAdapter<Element>();
             if (element == null)
                 throw new WatiNException("This constraint class can only be used to compare against an element");
 
-            return EvaluateAndOrAttributes(attributeBag, _comparer.Compare(element));
+            return comparer.Compare(element);
 		}
 
-		public override string ConstraintToString()
-		{
-			return "Custom constraint";
-		}
-		
-		public ICompareElement Comparer
-		{
-			get { return _comparer; }
-		}
+        /// <inheritdoc />
+        public override void WriteDescriptionTo(TextWriter writer)
+        {
+            writer.Write("Custom Constraint");
+        }		
 	}
 }

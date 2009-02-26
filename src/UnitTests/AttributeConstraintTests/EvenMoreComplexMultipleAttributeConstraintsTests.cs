@@ -28,20 +28,19 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     {
         private Mock<IAttributeBag> mockAttributeBag;
 
-        private BaseConstraint findBy1;
-        private BaseConstraint findBy2;
-        private BaseConstraint findBy3;
-        private BaseConstraint findBy4;
-        private BaseConstraint findBy5;
-        private BaseConstraint findBy6;
-        private BaseConstraint findBy7;
-        private BaseConstraint findBy8;
-        private BaseConstraint findBy;
+        private Constraint findBy1;
+        private Constraint findBy2;
+        private Constraint findBy3;
+        private Constraint findBy4;
+        private Constraint findBy5;
+        private Constraint findBy6;
+        private Constraint findBy7;
+        private Constraint findBy8;
+        private Constraint findBy;
 
         [SetUp]
         public void Setup()
         {
-
             mockAttributeBag = new Mock<IAttributeBag>();
             findBy = null;
 
@@ -76,14 +75,14 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         [TearDown]
         public void TearDown()
         {
-            mockAttributeBag.Expect(bag => bag.GetValue("1")).Returns("true");
-            mockAttributeBag.Expect(bag => bag.GetValue("2")).Returns("false");
-            mockAttributeBag.Expect(bag => bag.GetValue("4")).Returns("true");
-            mockAttributeBag.Expect(bag => bag.GetValue("5")).Returns("false");
-            mockAttributeBag.Expect(bag => bag.GetValue("7")).Returns("true");
-            mockAttributeBag.Expect(bag => bag.GetValue("8")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("1")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("2")).Returns("false");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("4")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("5")).Returns("false");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("7")).Returns("true");
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("8")).Returns("true");
             
-            Assert.IsTrue(findBy.Compare(mockAttributeBag.Object));
+            Assert.IsTrue(findBy.Matches(mockAttributeBag.Object, new ConstraintContext()));
 
             mockAttributeBag.VerifyAll();
         }

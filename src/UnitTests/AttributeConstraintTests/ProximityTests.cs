@@ -24,6 +24,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Native.InternetExplorer;
 
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
@@ -148,7 +149,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // don't think that the inserted style is being applied.
         public void ShouldNotBeAffectedByStyles() {
             // Create a style that drastically affects the span tags
-            var body = ((IHTMLDocument2)Ie.NativeDocument.Object).body;
+            var body = ((IEDocument)Ie.NativeDocument).HtmlDocument.body;
             body.insertAdjacentHTML( "afterBegin", "<style type=\"text/css\">span {display:block; position:absolute; left:0; top:0;}</style>" );
 			
             // Test that text near an element is not then confused with another, closer element
@@ -171,14 +172,14 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         //		<SPAN id=spanValidateCode><SPAN id=spanValidateCode>Code</SPAN> and Confirm Code must match!</SPAN>
         // Note that this test would also be caught be the more general test that makes sure the HTML isn't changed.
         public void ShouldNotDuplicateSpanElementsPrecedingTheText() {
-            var document = (IHTMLDocument2)Ie.NativeDocument.Object;
+            var document = ((IEDocument)Ie.NativeDocument).HtmlDocument;
             var span = (IHTMLElement)document.all.item("spanValidateCode", null);
             var originalContent = span.outerHTML;
 			
             var inputCode = Ie.TextField(new ProximityTextConstraint("Code"));
             Assert.AreEqual("inputCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
 
-            document = (IHTMLDocument2)Ie.NativeDocument.Object;
+            document = ((IEDocument)Ie.NativeDocument).HtmlDocument;
             var obj = document.all.item( "spanValidateCode", null );
             Assert.IsNotNull( obj, "Enclosing span element no longer exists or is not unique.");
             Assert.That(obj, Is.TypeOf(typeof(mshtml.HTMLSpanElementClass)), "Enclosing span element no longer exists or is not unique.");

@@ -30,52 +30,70 @@ namespace WatiN.Core.Native.InternetExplorer
 {
     public class IEDocument : INativeDocument
     {
-        private readonly IHTMLDocument2 _nativeDocument;
+        private readonly IHTMLDocument2 htmlDocument;
+        private readonly IEElement containingFrameElement;
 
-        public IEDocument(object document)
+        public IEDocument(IHTMLDocument2 htmlDocument)
+            : this(htmlDocument, null)
         {
-            if (!(document is IHTMLDocument2)) throw new ArgumentException("document should be of type IHTMLDocument2");
-
-            _nativeDocument = (IHTMLDocument2) document;
         }
 
-        public object Object
+        public IEDocument(IHTMLDocument2 htmlDocument, IEElement containingFrameElement)
         {
-            get { return _nativeDocument; }
+            if (htmlDocument == null)
+                throw new ArgumentNullException("htmlDocument");
+
+            this.htmlDocument = htmlDocument;
+            this.containingFrameElement = containingFrameElement;
         }
 
-        public object Objects
+        /// <summary>
+        /// Gets the underlying <see cref="IHTMLDocument2" /> object.
+        /// </summary>
+        public IHTMLDocument2 HtmlDocument
         {
-            get { return _nativeDocument.all; }
+            get { return htmlDocument; }
+        }
+
+        /// <inheritdoc />
+        public INativeElementCollection AllElements
+        {
+            get { return new IEElementCollection(htmlDocument.all); }
+        }
+
+        /// <inheritdoc />
+        public INativeElement ContainingFrameElement
+        {
+            get { return containingFrameElement; }
         }
 
         public INativeElement Body
         {
             get
             {
-                return _nativeDocument.body != null ? new IEElement(_nativeDocument.body) : null;
+                return htmlDocument.body != null ? new IEElement(htmlDocument.body) : null;
             }
         }
 
         public string Url
         {
-            get { return _nativeDocument.url; }
+            get { return htmlDocument.url; }
         }
 
         public string Title
         {
-            get { return _nativeDocument.title; }
+            get { return htmlDocument.title; }
         }
 
         public INativeElement ActiveElement
         {
-            get { return new IEElement(_nativeDocument.activeElement); }
+            get { return new IEElement(htmlDocument.activeElement); }
         }
 
         public void RunScript(string scriptCode, string language)
         {
             Logger.LogDebug(scriptCode);
-            UtilityClass.RunScript(scriptCode, language, _nativeDocument.parentWindow);
+            UtilityClass.RunScript(scriptCode, language, htmlDocument.parentWindow);
         }
 
         public string JavaScriptVariableName
@@ -83,18 +101,19 @@ namespace WatiN.Core.Native.InternetExplorer
             get { return "document"; }
         }
 
-        public List<Frame> Frames(DomContainer domContainer)
+        public IList<INativeDocument> Frames
         {
-            var processor = new AllFramesProcessor(domContainer, (HTMLDocument)_nativeDocument);
-
-            IEUtils.EnumIWebBrowser2Interfaces(processor);
-
-            return processor.elements;
+            get
+            {
+                var processor = new AllFramesProcessor((HTMLDocument)htmlDocument);
+                IEUtils.EnumIWebBrowser2Interfaces(processor);
+                return processor.Elements;
+            }
         }
 
         public string GetPropertyValue(string propertyName)
         {
-            var domDocumentExpando = (IExpando)_nativeDocument;
+            var domDocumentExpando = (IExpando)htmlDocument;
 
             var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
             if (errorProperty != null)

@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
@@ -31,17 +30,15 @@ namespace WatiN.Core
     /// <typeparam name="TElement">The element type</typeparam>
     /// <typeparam name="TCollection">The derived collection type</typeparam>
     public abstract class BaseElementCollection<TElement, TCollection>
-        : IElementCollection<TElement>
+        : BaseComponentCollection<TElement, TCollection>, IElementCollection<TElement>
         where TElement : Element
         where TCollection : BaseElementCollection<TElement, TCollection>
 	{
 		private readonly DomContainer domContainer;
 		private readonly ElementFinder elementFinder;
-        private List<TElement> cachedElements;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ButtonCollection"/> class.
-		/// Mainly used by WatiN internally.
+		/// Creates a base collection.
 		/// </summary>
 		/// <param name="domContainer">The DOM container</param>
 		/// <param name="elementFinder">The element finder</param>
@@ -58,47 +55,6 @@ namespace WatiN.Core
             this.elementFinder = elementFinder;
         }
 
-	    /// <inheritdoc />
-        public int Count
-        {
-            get { return CachedElements.Count; }
-        }
-
-        /// <inheritdoc />
-        public void CopyTo(TElement[] array, int arrayIndex)
-        {
-            if (array == null)
-                throw new ArgumentNullException("array");
-
-            foreach (TElement element in CachedElements)
-                array[arrayIndex++] = element;
-        }
-
-        /// <summary>
-        /// Gets the element at the specified index in the collection.
-        /// </summary>
-        /// <param name="index">The zero-based index</param>
-        /// <returns>The element</returns>
-        public TElement this[int index]
-        {
-            get { return CachedElements[index]; }
-        }
-
-	    bool ICollection<TElement>.IsReadOnly
-	    {
-	        get { return true; }
-	    }
-
-	    /// <summary>
-		/// Gets the number of elements in the collection.
-		/// </summary>
-		/// <value>The number of elements in the collection</value>
-        [Obsolete("Use Count property instead.")]
-		public int Length
-		{
-			get { return Count; }
-		}
-
         /// <inheritdoc />
 		public bool Exists(string elementId)
 		{
@@ -109,73 +65,6 @@ namespace WatiN.Core
         public bool Exists(Regex elementId)
 		{
             return Exists(Find.ByDefault(elementId));
-		}
-
-        /// <inheritdoc />
-        public bool Exists(BaseConstraint findBy)
-		{
-            return elementFinder.Filter(findBy).Exists();
-		}
-
-        /// <inheritdoc />
-        public bool Exists(Predicate<TElement> predicate)
-        {
-            return Exists(Find.ByElement(predicate));
-        }
-
-        /// <inheritdoc />
-        public TElement First()
-        {
-            if (cachedElements != null)
-                return cachedElements.Count != 0 ? cachedElements[0] : null;
-
-            return (TElement) elementFinder.FindFirst();
-        }
-
-        /// <inheritdoc />
-        public TElement First(BaseConstraint findBy)
-        {
-            return (TElement)elementFinder.Filter(findBy).FindFirst();
-        }
-
-        /// <inheritdoc />
-        public TElement First(Predicate<TElement> predicate)
-        {
-            return First(Find.ByElement(predicate));
-        }
-
-        /// <summary>
-        /// Returned a filtered view of the collection consisting only of the elements that
-        /// match the given constraint.
-        /// </summary>
-        /// <param name="findBy">The constraint to match</param>
-        /// <returns>The filtered element collection</returns>
-        public TCollection Filter(BaseConstraint findBy)
-        {
-            return CreateFilteredCollection(elementFinder.Filter(findBy));
-        }
-
-	    /// <summary>
-        /// Returned a filtered view of the collection consisting only of the elements that
-        /// match the given predicate.
-        /// </summary>
-        /// <param name="predicate">The predicate to match</param>
-        /// <returns>The filtered element collection</returns>
-        public TCollection Filter(Predicate<TElement> predicate)
-        {
-            return Filter(Find.ByElement(predicate));
-        }
-
-        /// <inheritdoc />
-	    public IEnumerator<TElement> GetEnumerator()
-		{
-            foreach (var element in elementFinder.FindAll())
-                yield return (TElement) element;
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
 		}
 
         /// <summary>
@@ -197,11 +86,24 @@ namespace WatiN.Core
 	    /// <summary>
         /// Creates a filtered instance of the collection with the given finder.
         /// </summary>
-        /// <param name="elementFinder">The element finder</param>
+        /// <param name="elementFinder">The element finder, not null</param>
         /// <returns>The element collection</returns>
         protected abstract TCollection CreateFilteredCollection(ElementFinder elementFinder);
 
-        IElementCollection<TElement> IElementCollection<TElement>.Filter(BaseConstraint findBy)
+        /// <inheritdoc />
+        protected sealed override TCollection CreateFilteredCollection(Constraint findBy)
+        {
+            return CreateFilteredCollection(elementFinder.Filter(findBy));
+        }
+
+        /// <inheritdoc />
+        protected sealed override IEnumerable<TElement> GetElements()
+        {
+            foreach (TElement element in elementFinder.FindAll())
+                yield return element;
+        }
+
+        IElementCollection<TElement> IElementCollection<TElement>.Filter(Constraint findBy)
         {
             return Filter(findBy);
         }
@@ -210,78 +112,5 @@ namespace WatiN.Core
         {
             return Filter(predicate);
         }
-
-        private IList<TElement> CachedElements
-        {
-            get
-            {
-                if (cachedElements == null)
-                {
-                    cachedElements = new List<TElement>();
-                    foreach (TElement element in elementFinder.FindAll())
-                        cachedElements.Add(element);
-                }
-
-                return cachedElements;
-            }
-        }
-
-        #region Unsupported List Methods
-
-        int IList<TElement>.IndexOf(TElement item)
-	    {
-            ThrowCollectionDoesNotSupportSearchingByElement();
-            return 0;
-	    }
-
-        bool ICollection<TElement>.Contains(TElement item)
-        {
-            ThrowCollectionDoesNotSupportSearchingByElement();
-            return false;
-        }
-
-	    void IList<TElement>.Insert(int index, TElement item)
-	    {
-            ThrowCollectionIsReadOnly();
-        }
-
-	    void IList<TElement>.RemoveAt(int index)
-	    {
-            ThrowCollectionIsReadOnly();
-	    }
-
-	    TElement IList<TElement>.this[int index]
-	    {
-	        get { return this[index]; }
-	        set { ThrowCollectionIsReadOnly(); }
-	    }
-
-        void ICollection<TElement>.Add(TElement item)
-        {
-            ThrowCollectionIsReadOnly();
-        }
-
-        void ICollection<TElement>.Clear()
-        {
-            ThrowCollectionIsReadOnly();
-        }
-
-        bool ICollection<TElement>.Remove(TElement item)
-        {
-            ThrowCollectionIsReadOnly();
-            return false;
-        }
-
-        private static void ThrowCollectionDoesNotSupportSearchingByElement()
-        {
-            throw new NotSupportedException("Collection does not support searching by element.");
-        }
-
-	    private static void ThrowCollectionIsReadOnly()
-        {
-            throw new NotSupportedException("Collection is read-only");
-        }
-
-        #endregion
     }
 }

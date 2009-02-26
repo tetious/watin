@@ -17,72 +17,47 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Interfaces;
+using System.IO;
 
 namespace WatiN.Core.Constraints
 {
 	/// <summary>
-	/// Class to find an element by the n-th index.
-	/// Index counting is zero based.
-	/// </summary>  
-	/// <example>
-	/// This example will get the second link of the collection of links
-	/// which have "linkname" as their name value. 
-	/// <code>ie.Link(new IndexConstraint(1) &amp;&amp; Find.ByName("linkname"))</code>
-	/// You could also consider filtering the Links collection and getting
-	/// the second item in the collection, like this:
-	/// <code>ie.Links.Filter(Find.ByName("linkname"))[1]</code>
-	/// </example>
-	public class IndexConstraint : BaseConstraint
+    /// A constraint that matches the element with the Nth zero-based index.
+	/// </summary>
+    /// <remarks>
+    /// <para>
+    /// This constraint works by counting the number of times the match method
+    /// is called and returning true when the counter reaches N, starting from zero.
+    /// </para>
+    /// </remarks>
+	public class IndexConstraint : Constraint
 	{
-		private int index;
-		private int counter = -1;
+        private readonly int index;
 
+        /// <summary>
+        /// Creates an index constraint.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to match</param>
 		public IndexConstraint(int index)
 		{
 			if (index < 0)
-			{
 				throw new ArgumentOutOfRangeException("index", index, "Should be zero or more.");
-			}
 
 			this.index = index;
 		}
 
-		public override void Reset()
-		{
-			counter = -1;
-			base.Reset ();
-		}
+        /// <inheritdoc />
+        public override void WriteDescriptionTo(TextWriter writer)
+        {
+            writer.Write("Index = {0}", index);
+        }
 
-		protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-			bool resultOr;
-
-			bool resultAnd = false;
-			resultOr = false;
-
-			if (_andBaseConstraint != null)
-			{
-				resultAnd = _andBaseConstraint.Compare(attributeBag);
-			}
-
-			if (resultAnd || _andBaseConstraint == null)
-			{
-				counter++;
-			}
-
-			if (_orBaseConstraint != null && resultAnd == false)
-			{
-				resultOr = _orBaseConstraint.Compare(attributeBag);
-			}
-
-			return (counter == index) || resultOr;
-		}
-
-		public override string ConstraintToString()
-		{
-			return "Index = " + index;
-		}
-
+        /// <inheritdoc />
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            int counter = ((int?)context.GetData(this)).GetValueOrDefault();
+            context.SetData(this, counter + 1);
+            return counter == index;
+        }
 	}
 }

@@ -16,7 +16,8 @@
 
 #endregion Copyright
 
-using WatiN.Core.Interfaces;
+using System;
+using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -26,21 +27,32 @@ namespace WatiN.Core
 	/// </summary>
     [ElementTag("frame", Index = 0)]
     [ElementTag("iframe", Index = 1)]
-    public class Frame : Document, IAttributeBag
+    public class Frame : Document
 	{
-		private readonly Element _frameElement;
+		private readonly Element frameElement;
+        private readonly INativeDocument frameDocument;
 
 		/// <summary>
 		/// This constructor will mainly be used by the constructor of FrameCollection
 		/// to create an instance of a Frame.
 		/// </summary>
-		/// <param name="domContainer">The domContainer.</param>
-		/// <param name="frameDocument">The HTML document.</param>
-		/// <param name="frameElement"></param>
-		public Frame(DomContainer domContainer, INativeDocument frameDocument, Element frameElement) : base(domContainer, frameDocument)
+		/// <param name="domContainer">The domContainer</param>
+		/// <param name="frameDocument">The document within the frame</param>
+		public Frame(DomContainer domContainer, INativeDocument frameDocument)
+            : base(domContainer)
 		{
-		    _frameElement = frameElement;
+            if (frameDocument == null)
+                throw new ArgumentNullException("frameDocument");
+
+            this.frameDocument = frameDocument;
+            frameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
 		}
+
+        /// <inheritdoc />
+        public override INativeDocument NativeDocument
+        {
+            get { return frameDocument; }
+        }
 
 		public string Name
 		{
@@ -52,9 +64,10 @@ namespace WatiN.Core
 			get { return GetAttributeValue("id"); }
 		}
 
-		public string GetAttributeValue(string attributename)
-		{
-            switch (attributename.ToLowerInvariant())
+        /// <inheritdoc />
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            switch (attributeName.ToLowerInvariant())
             {
                 case "url":
                     return Url;
@@ -63,13 +76,8 @@ namespace WatiN.Core
                     return Url;
 
                 default:
-                    return _frameElement.GetAttributeValue(attributename);
+                    return frameElement.GetAttributeValue(attributeName);
             }
-		}
-
-	    public string GetValue(string attributename)
-		{
-			return GetAttributeValue(attributename);
-		}
+        }
 	}
 }

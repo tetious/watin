@@ -17,10 +17,9 @@
 #endregion Copyright
 
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
-using WatiN.Core.Interfaces;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Constraints
 {
@@ -33,125 +32,115 @@ namespace WatiN.Core.Constraints
 	/// or use 
 	/// <code>ie.Link(Find.By("id", "testlinkid")).Url</code>
 	/// </example>
-	public class AttributeConstraint : BaseConstraint
+	public class AttributeConstraint : Constraint
 	{
-		private string attributeName;
-		private string valueToLookFor;
-		protected ICompare comparer;
+		private readonly string attributeName;
+        private readonly Comparer<string> comparer;
+        private readonly string description;
+        private readonly string comparisonValue;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
+		/// Creates an attribute constraint to search for an exact match by string value.
 		/// </summary>
 		/// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
-		/// <param name="value">The value to look for.</param>
-		public AttributeConstraint(string attributeName, string value)
+		/// <param name="comparisonValue">The value to look for</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="attributeName"/>
+        /// or <paramref name="comparisonValue"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
+		public AttributeConstraint(string attributeName, string comparisonValue)
+            : this(attributeName, new WatiN.Core.Comparers.StringComparer(comparisonValue),
+            string.Format("= '{0}'", comparisonValue))
 		{
-			CheckArgumentNotNull("value", value);
-			Init(attributeName, value, new WatiN.Core.Comparers.StringComparer(value));
+            this.comparisonValue = comparisonValue;
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
-		/// </summary>
-		/// <param name="attributeName">Name of the AttributeConstraint as recognised by Internet Explorer.</param>
-		/// <param name="regex">The regular expression to use.</param>
-		public AttributeConstraint(string attributeName, Regex regex)
-		{
-			CheckArgumentNotNull("regex", regex);
-			Init(attributeName, regex.ToString(), new RegexComparer(regex));
-		}
+        /// <summary>
+        /// Creates an attribute constraint to search for a match by regular expression.
+        /// </summary>
+        /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
+        /// <param name="regex">The regular expression to look for</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="attributeName"/>
+        /// or <paramref name="regex"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
+        public AttributeConstraint(string attributeName, Regex regex)
+            : this(attributeName, new RegexComparer(regex),
+            string.Format("~= '{0}'", regex))
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeConstraint"/> class.
-		/// </summary>
-		/// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
-		/// <param name="comparer">The comparer.</param>
-		public AttributeConstraint(string attributeName, ICompare comparer)
-		{
-			CheckArgumentNotNull("comparer", comparer);
-			Init(attributeName, comparer.ToString(), comparer);
-		}
+        /// <summary>
+        /// Creates an attribute constraint to search for a match using a custom comparer.
+        /// </summary>
+        /// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
+        /// <param name="comparer">The attribute value comparer</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="attributeName"/>
+        /// or <paramref name="comparer"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
+        public AttributeConstraint(string attributeName, Comparer<string> comparer)
+            : this(attributeName, comparer, "Using Custom Comparer")
+        {
+        }
 
-		private void Init(string attributeName, string value, ICompare comparerInstance)
-		{
-			CheckArgumentNotNullOrEmpty("attributeName", attributeName);
+        private AttributeConstraint(string attributeName, Comparer<string> comparer, string description)
+        {
+            if (attributeName == null)
+                throw new ArgumentNullException("attributeName");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+            if (description == null)
+                throw new ArgumentNullException("description");
 
-			this.attributeName = attributeName;
-			valueToLookFor = value;
-			comparer = comparerInstance;
-		}
+            this.attributeName = attributeName;
+            this.comparer = comparer;
+            this.description = description;
+        }
 
-		/// <summary>
+        /// <summary>
+        /// Gets the name of the attribute.
+        /// </summary>
+        /// <value>The name of the attribute.</value>
+        public string AttributeName
+        {
+            get { return attributeName; }
+        }
+
+        /// <summary>
+        /// Gets the comparison value, or null if a custom comparer or regex is used instead.
+        /// </summary>
+        public string Value
+        {
+            get { return comparisonValue; }
+        }
+
+        /// <summary>
 		/// Gets the comparer used to match the expected attribute value with 
-		/// the attribute value of an html element on a webpage.
+		/// the actual attribute value of an html element on a webpage.
 		/// </summary>
 		/// <value>The comparer.</value>
-		public ICompare Comparer
+		public Comparer<string> Comparer
 		{
 			get { return comparer; }
 		}
 
-		/// <summary>
-		/// Gets the name of the attribute.
-		/// </summary>
-		/// <value>The name of the attribute.</value>
-		public virtual string AttributeName
-		{
-			get { return attributeName; }
-		}
+        /// <inheritdoc />
+        public override void WriteDescriptionTo(TextWriter writer)
+        {
+            writer.Write("Attribute '{0}' {1}", attributeName, description);
+        }
 
-		/// <summary>
-		/// Gets the value to look for or the regex pattern that will be used.
-		/// </summary>
-		/// <value>The value.</value>
-		public virtual string Value
-		{
-			get { return valueToLookFor; }
-		}
+        /// <inheritdoc />
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            string attributeValue = attributeBag.GetAttributeValue(attributeName);
+            return comparer.Compare(attributeValue);
+        }
 
-		/// <summary>
-		/// Does the compare without calling <see cref="BaseConstraint.LockCompare"/> and <see cref="BaseConstraint.UnLockCompare"/>.
-		/// </summary>
-		/// <param name="attributeBag">The attribute bag.</param>
-		protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-			return EvaluateAndOrAttributes(attributeBag, comparer.Compare(attributeBag.GetValue(attributeName)));
-		}
-
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// The Value of this <see cref="AttributeConstraint" />
-		/// </returns>
-		public override string ToString()
-		{
-			return Value;
-		}
-
-        /// <summary>
-        /// Writes out the constraint into a <see cref="string"/>.
-        /// </summary>
-        /// <returns>The constraint text</returns>
-		public override string ConstraintToString()
-		{
-			return "Attribute '" + AttributeName + "' with value '" + Value +"'";
-		}
-
-		private static void CheckArgumentNotNullOrEmpty(string argumentName, string argumentValue)
-		{
-			if (UtilityClass.IsNullOrEmpty(argumentValue))
-			{
-				throw new ArgumentNullException(argumentName, "Null and Empty are not allowed.");
-			}
-		}
-
-		private static void CheckArgumentNotNull(string argumentName, object argumentValue)
-		{
-			if (argumentValue == null)
-			{
-				throw new ArgumentNullException(argumentName, "Null is not allowed.");
-			}
-		}
+        /// <inheritdoc />
+        protected internal override string GetElementIdHint()
+        {
+            return string.Compare(attributeName, @"id", StringComparison.InvariantCultureIgnoreCase) == 0
+                ? comparisonValue
+                : null;
+        }
 	}
 }

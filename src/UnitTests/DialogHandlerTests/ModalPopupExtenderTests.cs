@@ -57,13 +57,13 @@ namespace WatiN.Core.UnitTests
 	{
 		public VisibleAttribute(bool visible) : base("visible", new BoolComparer(visible)) {}
 
-		protected override bool DoCompare(IAttributeBag attributeBag)
-		{
-            Element element = attributeBag as Element;
+        protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
+        {
+            Element element = attributeBag.GetAdapter<Element>();
+            if (element == null)
+                return false;
 
-            if (element == null) return false;
-
-			return comparer.Compare(IsVisible(element).ToString());
+			return Comparer.Compare(IsVisible(element).ToString());
 		}
 
 		public bool IsVisible(Element element)
