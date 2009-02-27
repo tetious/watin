@@ -32,11 +32,9 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         {
             // Given
             var mockAttributeBag = new Mock<IAttributeBag>().Object;
-            var constraintMock = new Mock<Constraint>();
             ConstraintContext context = new ConstraintContext();
-            constraintMock.Expect(constraint => constraint.Matches(mockAttributeBag, context)).Returns(false);
 
-            var notConstraint = new NotConstraint(constraintMock.Object);
+            var notConstraint = new NotConstraint(Find.None);
 
             // WHEN
             var result = notConstraint.Matches(mockAttributeBag, context);
@@ -49,13 +47,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         public void AttributeOperatorNotOverload()
         {
             // Given
-            var constraintMock = new Mock<Constraint>();
             var mockAttributeBag = new Mock<IAttributeBag>().Object;
             ConstraintContext context = new ConstraintContext();
-            constraintMock.Expect(constraint => constraint.Matches(mockAttributeBag, context)).Returns(false);
 
             // WHEN
-            var attributenot = !constraintMock.Object;
+            var attributenot = !Find.Any;
 
             // THEN
             Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");

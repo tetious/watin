@@ -19,6 +19,7 @@
 using System;
 using System.Runtime.Serialization;
 using WatiN.Core.Constraints;
+using WatiN.Core.Properties;
 
 namespace WatiN.Core.Exceptions
 {
@@ -30,7 +31,7 @@ namespace WatiN.Core.Exceptions
 
 		private static string CreateMessage(Constraint constraint)
 		{
-			return string.Format("The compare methode of a constraint class can't be reentered during execution of the compare. The exception occurred in an instance of '{0}' with constraint: {1}.", constraint.GetType(), constraint);
+			return string.Format(Resources.ReEntryException_MessageFormat, constraint.GetType(), constraint);
 		}
 	}
 }

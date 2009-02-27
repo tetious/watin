@@ -279,11 +279,17 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         {
             var mockAttributeBag = new Mock<IAttributeBag>();
             
+            // Note: Creating a re-entrant constraint is now much more difficult than
+            //       before because constraints are immutable.  Even the code findBy |= findBy
+            //       will not create a re-entrant constraint, it will just be an Or constraint
+            //       with two identical clauses.  Given this change in constraint construction
+            //       we should consider removing the re-entrance checks in the future.  -- Jeff.
             Constraint findBy = Find.By("tag", "value");
-            findBy.Or(findBy);
+            findBy |=  new PredicateConstraint<IAttributeBag>(bag => findBy.Matches(bag, new ConstraintContext()));
 
             ConstraintContext context = new ConstraintContext();
             mockAttributeBag.Expect(bag => bag.GetAttributeValue("tag")).Returns("val");
+            mockAttributeBag.Expect(bag => bag.GetAdapter<IAttributeBag>()).Returns(mockAttributeBag.Object);
 
             findBy.Matches(mockAttributeBag.Object, context);
 

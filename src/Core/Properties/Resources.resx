@@ -129,4 +129,7 @@
   <data name="Control_HasAlreadyBeenInitialized" xml:space="preserve">
     <value>The control has already been initialized.</value>
   </data>
+  <data name="ReEntryException_MessageFormat" xml:space="preserve">
+    <value>A match operation has been aborted because it appeared to be re-entrant.  The exception occurred in an instance of '{0}' with constraint: {1}.</value>
+  </data>
 </root>

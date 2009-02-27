@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.Constraints
 {
@@ -39,6 +41,9 @@ namespace WatiN.Core.Constraints
     /// </example>
     public abstract class Constraint
     {
+        [ThreadStatic]
+        private static Dictionary<Constraint, bool> enteredConstraints;
+
         /// <summary>
         /// Returns true if the constraint matches an object described by an attribute bag.
         /// </summary>
@@ -53,7 +58,15 @@ namespace WatiN.Core.Constraints
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            return MatchesImpl(attributeBag, context);
+            try
+            {
+                EnterMatch();
+                return MatchesImpl(attributeBag, context);
+            }
+            finally
+            {
+                ExitMatch();
+            }
         }
 
         /// <summary>
@@ -234,6 +247,34 @@ namespace WatiN.Core.Constraints
         internal protected virtual string GetElementIdHint()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Tracks when a constraint's Match method has been entered by the current thread.
+        /// </summary>
+        /// <exception cref="ReEntryException">Thrown if reentrance has been detected</exception>
+        private void EnterMatch()
+        {
+            if (enteredConstraints == null)
+            {
+                enteredConstraints = new Dictionary<Constraint, bool>();
+            }
+            else
+            {
+                if (enteredConstraints.ContainsKey(this))
+                    throw new ReEntryException(this);
+            }
+
+            enteredConstraints.Add(this, false);
+        }
+
+        /// <summary>
+        /// Tracks when a constraint's Match method has been exited by the current thread.
+        /// </summary>
+        private void ExitMatch()
+        {
+            if (enteredConstraints != null)
+                enteredConstraints.Remove(this);
         }
     }
 }

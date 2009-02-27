@@ -95,5 +95,14 @@ namespace WatiN.Core.Properties {
                 return ResourceManager.GetString("PageMetadata_PageTypeIsExpectedToBeASubclassOfPage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A match operation has been aborted because it appeared to be re-entrant.  The exception occurred in an instance of &apos;{0}&apos; with constraint: {1}..
+        /// </summary>
+        internal static string ReEntryException_MessageFormat {
+            get {
+                return ResourceManager.GetString("ReEntryException_MessageFormat", resourceCulture);
+            }
+        }
     }
 }
