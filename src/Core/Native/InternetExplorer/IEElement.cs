@@ -17,7 +17,9 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using mshtml;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
@@ -298,12 +300,12 @@ namespace WatiN.Core.Native.InternetExplorer
         }
 
         /// <inheritdoc />
-        public void SetFileUploadFile(Element element, string fileName)
+        public void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName)
         {
             var uploadDialogHandler = new FileUploadDialogHandler(fileName);
-            using (new UseDialogOnce(element.DomContainer.DialogWatcher, uploadDialogHandler))
+            using (new UseDialogOnce(dialogWatcher, uploadDialogHandler))
             {
-                element.Click();
+                ClickOnElement();
             }
         }
 
@@ -431,6 +433,31 @@ namespace WatiN.Core.Native.InternetExplorer
 
             var ihtmlElement = ((IHTMLElement)_element);
             throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
+        }
+
+        /// <inheritdoc />
+	    public Rectangle GetElementBounds()
+	    {
+            return GetHtmlElementBounds(HtmlElement);
+	    }
+
+        internal static Rectangle GetHtmlElementBounds(IHTMLElement element)
+        {
+            int left = element.offsetLeft;
+            int top = element.offsetTop;
+
+            IHTMLElement parentElement = element.parentElement;
+            while (parentElement != null)
+            {
+                left += parentElement.offsetLeft;
+                top += parentElement.offsetTop;
+                parentElement = parentElement.parentElement;
+            }
+
+            int width = element.offsetWidth / 2; // n.b. not sure why we are dividing by 2 -- JB
+            int height = element.offsetHeight / 2;
+
+            return new Rectangle(left, top, width, height);
         }
     }
 

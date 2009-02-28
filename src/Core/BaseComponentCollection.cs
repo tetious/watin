@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Properties;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -34,7 +35,7 @@ namespace WatiN.Core
         where TComponent : Component
         where TCollection : BaseComponentCollection<TComponent, TCollection>
 	{
-        private List<TComponent> cachedElements;
+        private LazyList<TComponent> cache;
 
 		/// <summary>
 		/// Creates a base collection.
@@ -46,17 +47,13 @@ namespace WatiN.Core
 	    /// <inheritdoc />
         public int Count
         {
-            get { return CachedElements.Count; }
+            get { return Cache.Count; }
         }
 
         /// <inheritdoc />
         public void CopyTo(TComponent[] array, int arrayIndex)
         {
-            if (array == null)
-                throw new ArgumentNullException("array");
-
-            foreach (TComponent element in CachedElements)
-                array[arrayIndex++] = element;
+            Cache.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -66,13 +63,8 @@ namespace WatiN.Core
         /// <returns>The element</returns>
         public TComponent this[int index]
         {
-            get { return CachedElements[index]; }
+            get { return Cache[index]; }
         }
-
-	    bool ICollection<TComponent>.IsReadOnly
-	    {
-	        get { return true; }
-	    }
 
 	    /// <summary>
 		/// Gets the number of elements in the collection.
@@ -110,9 +102,6 @@ namespace WatiN.Core
         /// <inheritdoc />
         public TComponent First()
         {
-            if (cachedElements != null)
-                return cachedElements.Count != 0 ? cachedElements[0] : null;
-
             foreach (TComponent component in this)
                 return component;
 
@@ -170,10 +159,7 @@ namespace WatiN.Core
         /// <inheritdoc />
 	    public IEnumerator<TComponent> GetEnumerator()
 		{
-            if (cachedElements != null)
-                return cachedElements.GetEnumerator();
-
-            return GetElements().GetEnumerator();
+            return Cache.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -205,16 +191,15 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets a list of elements that have been enumerated and cached.
+        /// Gets a lazily-populated list of all components within the collection.
         /// </summary>
-        protected IList<TComponent> CachedElements
+        protected IList<TComponent> Cache
         {
             get
             {
-                if (cachedElements == null)
-                    cachedElements = new List<TComponent>(GetElements());
-
-                return cachedElements;
+                if (cache == null)
+                    cache = new LazyList<TComponent>(GetElements());
+                return cache;
             }
         }
 
@@ -228,7 +213,12 @@ namespace WatiN.Core
             return Filter(predicate);
         }
 
-        #region Unsupported List Methods
+        #region Hidden / Unsupported List Methods
+
+        bool ICollection<TComponent>.IsReadOnly
+        {
+            get { return true; }
+        }
 
         int IList<TComponent>.IndexOf(TComponent item)
 	    {

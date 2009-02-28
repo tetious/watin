@@ -49,7 +49,7 @@ namespace WatiN.Core
 				throw new FileNotFoundException("File does not exist", fileName);
 			}
 
-            NativeElement.SetFileUploadFile(this, fileName);
+            NativeElement.SetFileUploadFile(DomContainer.DialogWatcher, fileName);
 		}
 	}
 }

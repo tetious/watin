@@ -408,6 +408,7 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\LazyList.cs" />
     <Compile Include="WaitForCompleteBase.cs" />
     <Compile Include="FireFox.cs" />
     <Compile Include="Browser.cs" />

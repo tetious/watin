@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections.Generic;
+using System.Drawing;
 using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.Native.Mozilla
@@ -154,6 +155,12 @@ namespace WatiN.Core.Native.Mozilla
             }
 
             return ClientPort.WriteAndRead(command);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Rectangle> GetTextBounds(string text)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

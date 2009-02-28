@@ -17,7 +17,10 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
+using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core.Native
 {
@@ -130,8 +133,14 @@ namespace WatiN.Core.Native
         void FireEventNoWait(string eventName, NameValueCollection eventProperties);
         void Select();
         void SubmitForm();
-        void SetFileUploadFile(Element element, string fileName);
+        void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName);
 
         void WaitUntilReady();
+
+        /// <summary>
+        /// Gets the bounds of the element.
+        /// </summary>
+        /// <returns>The element bounds in screen coordinates</returns>
+        Rectangle GetElementBounds();
     }
 }

@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace WatiN.Core.Native
 {
@@ -41,5 +42,12 @@ namespace WatiN.Core.Native
         IList<INativeDocument> Frames { get; }
 
         string GetPropertyValue(string propertyName);
+
+        /// <summary>
+        /// Gets the bounds of all matching text substrings within the document.
+        /// </summary>
+        /// <param name="text">The text to find</param>
+        /// <returns>The text bounds in screen coordinates</returns>
+        IEnumerable<Rectangle> GetTextBounds(string text);
     }
 }

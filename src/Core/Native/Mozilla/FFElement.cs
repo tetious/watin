@@ -19,7 +19,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Text.RegularExpressions;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.Mozilla
@@ -353,7 +355,7 @@ namespace WatiN.Core.Native.Mozilla
             FireEvent("submit", null);
         }
 
-        public void SetFileUploadFile(Element element, string fileName)
+        public void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName)
         {
             fileName = fileName.Replace(@"\", @"\\");
             SetAttributeValue("value", fileName);
@@ -427,6 +429,12 @@ namespace WatiN.Core.Native.Mozilla
         public void WaitUntilReady()
         {
             // TODO: Is this needed for FireFox?
+        }
+
+        /// <inheritdoc />
+        public Rectangle GetElementBounds()
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

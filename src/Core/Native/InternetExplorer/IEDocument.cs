@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
@@ -128,6 +129,86 @@ namespace WatiN.Core.Native.InternetExplorer
             }
 
             return null;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Rectangle> GetTextBounds(string text)
+        {
+            // Use the findText feature to search for text in the body
+            // Add all matching ranges to the collection
+
+            // See http://msdn2.microsoft.com/en-us/library/aa741525.aspx for details on the flags
+            // Note that this is not multi-lingual
+
+            var body = htmlDocument.body as IHTMLBodyElement;
+            if (body == null)
+                yield break;
+
+            IHTMLTxtRange textRange = body.createTextRange();
+            if (textRange == null)
+                yield break;
+
+            while (textRange.findText(text, 0, 0))
+            {
+                Rectangle rectangle = GetTextBoundsByInsertingElement(textRange, htmlDocument);
+                yield return rectangle;
+
+                // Move the pointer to just past the current range and search the balance of the doc
+                textRange.moveStart("Character", textRange.htmlText.Length);
+
+                // Not sure why, but MS find dialog uses this to get the range to the end
+                textRange.moveEnd("Textedit", 1);
+            }
+
+        }
+
+        private static Rectangle GetTextBoundsByInsertingElement(IHTMLTxtRange textRange, IHTMLDocument2 document)
+        {
+            // A bit of a hack: create an HTML element around the selected
+            // text and get the location of that element from document.all[].
+            // Note that this is actually pretty common hack for search/highlight functions:
+            // http://www.pcmag.com/article2/0,2704,1166598,00.asp
+            // http://www.codeproject.com/miscctrl/chtmlview_search.asp
+            // http://www.itwriting.com/phorum/read.php?3,1561,1562,quote=1
+
+            // Save the text
+            string oldHtmlText = textRange.htmlText;
+
+            // Sometimes the text range contains the containing HTML element such as a SPAN tag.
+            // eg. "<SPAN id=spanValidateCode>Code and Confirm Code must match!</SPAN>"
+            //
+            // This is ok.  We just grab the bounds of the whole element, which happens to be the
+            // one returned by parentElement().
+            if (oldHtmlText != textRange.text)
+            {
+                return IEElement.GetHtmlElementBounds(textRange.parentElement());
+            }
+
+            // Create a unique ID
+            string id = @"__WatiNTextRange_" + Guid.NewGuid();
+
+            // Add a span tag the the HTML
+            string code = String.Format("<span id=\"{0}\">{1}</span>", id, oldHtmlText);
+            textRange.pasteHTML(code);
+
+            // Get the element's position
+            var element = (IHTMLElement)document.all.item(id, null);
+
+            // Build the bounds
+            Rectangle bounds = IEElement.GetHtmlElementBounds(element);
+
+            // Restore the HTML
+
+            // This only seems to work if the text is not immediately preceded by a span element.
+            // In that case it fails because it seems to grab the parent span element when identifying
+            // the 'outerHTML' and then duplicates that for each pass.
+            element.outerHTML = oldHtmlText;
+
+            // Doesn't work: Does not replace the text when pasted into place despite suggestions in implementations 
+            // listed above
+            //textRange.pasteHTML( oldHtml );
+
+            return bounds;
         }
     }
 }

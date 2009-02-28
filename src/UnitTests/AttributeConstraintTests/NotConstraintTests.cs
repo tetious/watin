@@ -55,7 +55,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
             // THEN
             Assert.IsInstanceOfType(typeof (NotConstraint), attributenot, "Expected NotAttributeConstraint instance");
-            Assert.IsTrue(attributenot.Matches(mockAttributeBag, context));
+            Assert.IsFalse(attributenot.Matches(mockAttributeBag, context));
         }
     }
 }

@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using mshtml;
 using WatiN.Core.Exceptions;
@@ -105,9 +107,8 @@ namespace WatiN.Core.Constraints
         private sealed class ProximityCache
         {
             private readonly string labelText;
-            private ArrayList fieldElements;
-            private ArrayList labelElements;
-            private IHTMLElement nearestFormElement;
+            private string nearestElementId;
+            private bool populated;
 
             public ProximityCache(string labelText)
             {
@@ -116,67 +117,45 @@ namespace WatiN.Core.Constraints
 
             public bool IsMatch(Element element)
             {
-                var ieElement = element.NativeElement as IEElement;
-                if (ieElement == null)
-                    throw new NotSupportedException("This feature is only supported by IE currently.");
+                if (!populated)
+                {
+                    Element nearestElement = FindNearestElement(element.DomContainer);
+                    if (nearestElement != null)
+                        nearestElementId = nearestElement.Id;
 
-                IHTMLElement htmlElement = ieElement.HtmlElement;
-                var htmlDocument = (IHTMLDocument2) htmlElement.document;
+                    populated = true;
+                }
 
-                // Only supports input and textarea elements
-                string tagName = htmlElement.tagName.ToLowerInvariant();
-                if (tagName != "input" && tagName != "textarea")
-                    return false;
-
-                // Get all text and filter this for the phrase, building a bounding box for each instance
-                VerifyLabelElements(htmlDocument);
-
-                // If no matching text then this there is no field
-                if (labelElements == null || labelElements.Count == 0)
-                    return false;
-
-                // Get all the form field elements
-                VerifyFieldElements(htmlDocument);
-
-                // If no form field elements where found then there is not match
-                if (fieldElements == null || fieldElements.Count == 0)
-                    return false;
-
-                // Measure the 'proximity' of each valid text node to the input elements and find the closest form element
-                if (nearestFormElement == null)
-                    FindNearestFormElement(htmlDocument);
-
-                // If no form field elements where found to be 'near' the tex then there's no match
-                // NB: This can't really happen at this point unless there's something really screwy going on
-                if (nearestFormElement == null)
-                    return false;
-
-                return htmlElement.id == nearestFormElement.id;
+                return nearestElementId != null && nearestElementId == element.Id;
             }
 
-            /// <summary>
-            /// Helper function to calculate the distance between text nodes and form field elements and find the 
-            /// closest form element to a selected text node.
-            /// </summary>
-            private void FindNearestFormElement(IHTMLDocument2 document)
+            private Element FindNearestElement(DomContainer container)
             {
+                List<Rectangle> labelBounds = new List<Rectangle>(container.NativeDocument.GetTextBounds(labelText));
+
+                List<KeyValuePair<Element, Rectangle>> elementBounds = new List<KeyValuePair<Element, Rectangle>>();
+                AddElementBounds(elementBounds, container.Buttons);
+                AddElementBounds(elementBounds, container.CheckBoxes);
+                AddElementBounds(elementBounds, container.FileUploads);
+                AddElementBounds(elementBounds, container.RadioButtons);
+                AddElementBounds(elementBounds, container.SelectLists);
+                AddElementBounds(elementBounds, container.TextFields);
+
                 // Here's a description of the approach taken:
                 // This method calculates and tallies the distance between the nearest edges of the rectangles
                 // for each form element and each text node's bounding box
                 // It records the form element that is closest to a text node (shortest distance) as it traveses the sets
                 // The logic here is that the distance between midpoints is going to determine the nearest item
 
-                double shortestDistance = double.MaxValue;
+                int shortestDistance = int.MaxValue;
+                Element nearestElement = null;
 
-                for (int i = 0; i < labelElements.Count; i++)
+                foreach (var labelRect in labelBounds)
                 {
-                    Rectangle labelBounds = GetLabelCoodsByInsertingElement((IHTMLTxtRange) labelElements[i], document);
-
-                    for (int j = 0; j < fieldElements.Count; j++)
+                    foreach (var elementPair in elementBounds)
                     {
-                        var field = (IHTMLElement) fieldElements[j];
-                        Rectangle fieldBounds = GetIHTMLElementBounds(field);
-
+                        var element = elementPair.Key;
+                        var elementRect = elementPair.Value;
 
                         /* We need to look at distance between nearest faces to handle cases like this:
                          * 
@@ -189,7 +168,7 @@ namespace WatiN.Core.Constraints
                          * 
                          */
 
-                        double distance = DistanceBetweenRectangles(fieldBounds, labelBounds);
+                        int distance = DistanceBetweenRectangles(labelRect, elementRect);
 
                         /*
                          * However, may not win in this situation[1]:
@@ -216,163 +195,37 @@ namespace WatiN.Core.Constraints
                          * 
                         */
 
-
-                        if (shortestDistance > distance)
+                        if (distance < shortestDistance)
                         {
                             shortestDistance = distance;
-                            nearestFormElement = field;
+                            nearestElement = element;
                         }
                     }
                 }
+
+                return nearestElement;
+            }
+
+            private static void AddElementBounds<TElement>(IList<KeyValuePair<Element, Rectangle>> elementBounds, IElementCollection<TElement> elements)
+                where TElement : Element
+            {
+                foreach (Element element in elements)
+                    elementBounds.Add(new KeyValuePair<Element, Rectangle>(element, element.NativeElement.GetElementBounds()));
             }
 
             /// <summary>
-            /// Quick method to calculate distance between two points.
+            /// Quick method to calculate squared distance between two points.
             /// </summary>
             /// <param name="x1">X-coordinate of the first point</param>
             /// <param name="y1">Y-coordinate of the first point</param>
             /// <param name="x2">X-coordinate of the second point</param>
             /// <param name="y2">Y-coordinate of the second point</param>
             /// <returns></returns>
-            private static double calculateDistance(double x1, double y1, double x2, double y2)
+            private static int CalculateSquaredDistance(int x1, int y1, int x2, int y2)
             {
-                return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-            }
-
-            private static Rectangle GetLabelCoodsByInsertingElement(IHTMLTxtRange label, IHTMLDocument2 document)
-            {
-                // A bit of a hack: create an HTML element around the selected
-                // text and get the location of that element from document.all[].
-                // Note that this is actually pretty common hack for search/highlight functions:
-                // http://www.pcmag.com/article2/0,2704,1166598,00.asp
-                // http://www.codeproject.com/miscctrl/chtmlview_search.asp
-                // http://www.itwriting.com/phorum/read.php?3,1561,1562,quote=1
-
-                // Save the text
-                string oldText = label.text;
-
-                // NB: Because of a weird bug in IHTMLElement.outerHTML (see test case 
-                // ProximityTests.ShouldNotDuplicateSpanElementsPrecedingTheText) we need
-                // to use the text and not htmlText of the label.
-                // If there's any HTML in the label it will be lost when the test completes
-                // so check here and throw an exception
-                // TODO: It might still be possible to fix this by saving document.body.outerHTML 
-                // at start-up and replacing that entirely at the completion of each search pass
-                // but that seems messy and resource intensive.
-                if (oldText != label.htmlText)
-                {
-                    throw new ArgumentException(
-                        "The text to match for the field element should not have any HTML in it.", "labelText");
-                }
-
-                // Create a unique ID
-                const int maxTries = 1000;
-                const string rootId = "ProximityTextConstraintId";
-                int i = 0;
-                string id = rootId + i;
-                while (i < maxTries && document.all.item(id, null) != null)
-                {
-                    id = rootId + ++i;
-                }
-                if (i >= maxTries) return new Rectangle();
-
-                // Add a span tag the the HTML
-                string code = String.Format("<span id=\"{0}\">{1}</span>", id, oldText);
-                label.pasteHTML(code);
-
-                // Get the element's position
-                var element = (IHTMLElement) document.all.item(id, null);
-
-                // Build the bounds
-                Rectangle bounds = GetIHTMLElementBounds(element);
-
-                // Restore the HTML
-
-                // This only seems to work if the text is not immediately preceded by a span element.
-                // In that case it fails because it seems to grab the parent span element when identifying
-                // the 'outerHTML' and then duplicates that for each pass.
-                element.outerHTML = oldText;
-
-                // Doesn't work: Does not replace the text when pasted into place despite suggestions in implementations 
-                // listed above
-                //label.pasteHTML( oldHtml );
-
-                return bounds;
-            }
-
-            private static Rectangle GetIHTMLElementBounds(IHTMLElement element)
-            {
-                var bounds = new Rectangle();
-                bounds.left = Convert.ToInt32(element.offsetLeft);
-                bounds.top = Convert.ToInt32(element.offsetTop);
-                IHTMLElement parentElement = element.parentElement;
-                while (parentElement != null)
-                {
-                    bounds.left += parentElement.offsetLeft;
-                    bounds.top += parentElement.offsetTop;
-                    parentElement = parentElement.parentElement;
-                }
-                bounds.right = bounds.left + Convert.ToInt32(element.offsetWidth) / 2;
-                bounds.bottom = bounds.top + Convert.ToInt32(element.offsetHeight) / 2;
-
-                return bounds;
-            }
-
-            /// <summary>
-            /// Helper function to build up the list of text nodes containing the desired text
-            /// </summary>
-            private void VerifyLabelElements(IHTMLDocument2 document)
-            {
-                labelElements = new ArrayList();
-
-                var bodyElement = document.body as IHTMLBodyElement;
-                if (bodyElement == null)
-                    return;
-
-                IHTMLTxtRange textRange = bodyElement.createTextRange();
-                if (textRange == null)
-                    return;
-
-                // Use the findText feature to search for text in the body
-                // Add all matching ranges to the collection
-
-                // See http://msdn2.microsoft.com/en-us/library/aa741525.aspx for details on the flags
-                // Note that this is not multi-lingual
-                while (textRange.findText(labelText, 0, 0))
-                {
-                    labelElements.Add(textRange.duplicate());
-                    // Move the pointer to just past the current range and search the balance of the doc
-                    textRange.moveStart("Character", textRange.htmlText.Length);
-                    // Not sure why, but MS find dialog uses this to get the range to the end
-                    textRange.moveEnd("Textedit", 1);
-                }
-            }
-
-            /// <summary>
-            /// Helper function to build up the list of form field elements
-            /// </summary>
-            private void VerifyFieldElements(IHTMLDocument2 document)
-            {
-                if (fieldElements == null)
-                {
-                    fieldElements = new ArrayList();
-
-                    IHTMLElementCollection allElements = document.all;
-                    var inputElements = (IHTMLElementCollection) allElements.tags("input");
-                    var textareaElements = (IHTMLElementCollection) allElements.tags("textarea");
-
-                    // Merge the two collections
-                    for (int i = 0; i < inputElements.length; i++)
-                    {
-                        var node = (IHTMLElement) inputElements.item(i, null);
-                        fieldElements.Add(node);
-                    }
-                    for (int i = 0; i < textareaElements.length; i++)
-                    {
-                        var node = (IHTMLElement) textareaElements.item(i, null);
-                        fieldElements.Add(node);
-                    }
-                }
+                int width = x1 - x2;
+                int height = y1 - y2;
+                return width * width + height * height;
             }
 
             /// <summary>
@@ -381,7 +234,7 @@ namespace WatiN.Core.Constraints
             /// <param name="r1">The first rectangle</param>
             /// <param name="r2">The seconed rectangle</param>
             /// <returns>The shoutest distance between the nearest faces or vetices</returns>
-            private static double DistanceBetweenRectangles(Rectangle r1, Rectangle r2)
+            private static int DistanceBetweenRectangles(Rectangle r1, Rectangle r2)
             {
                 /*
                  * Because the rectangles are right, all faces will either be perpendicular or parallel.
@@ -408,36 +261,36 @@ namespace WatiN.Core.Constraints
                  */
 
                 // Are rectangles overlapped at all?
-                if ((r1.top > r2.top && r1.top < r2.bottom)
-                    || (r2.top > r1.top && r2.top < r1.bottom)
-                        || (r1.left > r2.left && r1.left < r2.right)
-                            || (r2.left > r1.left && r2.left < r1.right))
+                if ((r1.Top > r2.Top && r1.Top < r2.Bottom)
+                    || (r2.Top > r1.Top && r2.Top < r1.Bottom)
+                        || (r1.Left > r2.Left && r1.Left < r2.Right)
+                            || (r2.Left > r1.Left && r2.Left < r1.Right))
                 {
                     // Normal distance between nearest parallel faces
-                    double shortestDistance = int.MaxValue;
+                    int shortestDistance = int.MaxValue;
 
-                    double distance = Math.Abs(r1.left - r2.left);
+                    int distance = Math.Abs(r1.Left - r2.Left);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.left - r2.right);
+                    distance = Math.Abs(r1.Left - r2.Right);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.right - r2.left);
+                    distance = Math.Abs(r1.Right - r2.Left);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.right - r2.right);
+                    distance = Math.Abs(r1.Right - r2.Right);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.top - r2.top);
+                    distance = Math.Abs(r1.Top - r2.Top);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.top - r2.bottom);
+                    distance = Math.Abs(r1.Top - r2.Bottom);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.bottom - r2.top);
+                    distance = Math.Abs(r1.Bottom - r2.Top);
                     if (distance < shortestDistance) shortestDistance = distance;
 
-                    distance = Math.Abs(r1.bottom - r2.bottom);
+                    distance = Math.Abs(r1.Bottom - r2.Bottom);
                     if (distance < shortestDistance) shortestDistance = distance;
 
                     return shortestDistance;
@@ -445,73 +298,62 @@ namespace WatiN.Core.Constraints
                 else
                 {
                     // Distance between nearest vertices
-                    double shortestDistance = int.MaxValue;
+                    int shortestSquaredDistance = int.MaxValue;
 
-                    double distance = calculateDistance(r1.left, r1.top, r2.left, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    int squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.top, r2.right, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.top, r2.left, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.top, r2.right, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
-
-
-                    distance = calculateDistance(r1.right, r1.top, r2.left, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
-
-                    distance = calculateDistance(r1.right, r1.top, r2.right, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
-
-                    distance = calculateDistance(r1.right, r1.top, r2.left, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
-
-                    distance = calculateDistance(r1.right, r1.top, r2.right, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
 
-                    distance = calculateDistance(r1.left, r1.bottom, r2.left, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.bottom, r2.right, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.bottom, r2.left, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.left, r1.bottom, r2.right, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
 
-                    distance = calculateDistance(r1.right, r1.bottom, r2.left, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.right, r1.bottom, r2.right, r2.top);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.right, r1.bottom, r2.left, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    distance = calculateDistance(r1.right, r1.bottom, r2.right, r2.bottom);
-                    if (distance < shortestDistance) shortestDistance = distance;
+                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    return shortestDistance;
+
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Top);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Bottom);
+                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                    return (int) Math.Ceiling(Math.Sqrt(shortestSquaredDistance));
                 }
             }
-        }
-
-        /// <summary>
-        /// Holds the coordinates of a rectangle.
-        /// </summary>
-        private struct Rectangle
-        {
-            public double bottom;
-            public double left;
-            public double right;
-            public double top;
         }
     }
 }

@@ -110,38 +110,36 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         }
 
         [Test]
-        public void ShouldWorkWithTableLayout() 
+        public void ShouldWorkWithTableLayoutFromCellOnLeft()
         {
+            TextField code = Ie.TextField(new ProximityTextConstraint("Code"));
+            Assert.AreEqual("inputCode", code.Id, "Proximity for table layout of text and field did not find correct field.");
 			
             TextField inputConfirmCode = Ie.TextField(new ProximityTextConstraint("Confirm Code"));
             Assert.AreEqual("inputConfirmCode", inputConfirmCode.Id, "Proximity for table layout of text and field did not find correct field.");
-			
         }
 		
         [Test]
-        public void ShouldWorkWithValidationMessage() 
+        public void ShouldWorkWithTableLayoutFromCellOnRight()
         {
-			
-            TextField inputCode = Ie.TextField(new ProximityTextConstraint("Code"));
-            Assert.AreEqual("inputCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
+
+            TextField inputCode = Ie.TextField(new ProximityTextConstraint("Code and Confirm Code must match!"));
+            Assert.AreEqual("inputConfirmCode", inputCode.Id, "Proximity for table layout of text and field did not find correct field.");
 			
         }
 
-        [Test, ExpectedException(typeof(ElementNotFoundException))]
+        [Test]
         public void ShouldFailWhenTextIsNotOnPage() {
 			
-            Settings.WaitUntilExistsTimeOut = 1;
             TextField inputDoesNotExist = Ie.TextField( new ProximityTextConstraint(  "Aldm4em9dj54bnsvk49sk4ndlkDKj 4KVj FDS" ) );
-            inputDoesNotExist.TypeText( "" );	// To activate the lookup
+            Assert.IsFalse(inputDoesNotExist.Exists);
         }
 		
-        [Test, ExpectedException(typeof(ElementNotFoundException))]
+        [Test]
         public void ShouldFailWhenTextIsPartOfAnHtmlElement() 
         {
-			
-            Settings.WaitUntilExistsTimeOut = 1;
             TextField inputDoesNotExist = Ie.TextField( new ProximityTextConstraint( "submitTable" ) );
-            inputDoesNotExist.TypeText( "" );	// To activate the lookup
+            Assert.IsFalse(inputDoesNotExist.Exists);
         }
 
         [Test]
@@ -171,7 +169,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // Becomes this after attempting comparison form elements:
         //		<SPAN id=spanValidateCode><SPAN id=spanValidateCode>Code</SPAN> and Confirm Code must match!</SPAN>
         // Note that this test would also be caught be the more general test that makes sure the HTML isn't changed.
-        public void ShouldNotDuplicateSpanElementsPrecedingTheText() {
+        public void ShouldNotDuplicateSpanElementsPrecedingTheText() { // BROKEN!!!
             var document = ((IEDocument)Ie.NativeDocument).HtmlDocument;
             var span = (IHTMLElement)document.all.item("spanValidateCode", null);
             var originalContent = span.outerHTML;
@@ -187,13 +185,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             Assert.AreEqual( originalContent, span.outerHTML, "Content of enclosing span changed during testing." );
         }
 		
-        [Test, ExpectedException(typeof(ElementNotFoundException))]
-        public void ShouldFailWhenLabelContainsHtml() {
-			
-            Settings.WaitUntilExistsTimeOut = 1;
+        [Test]
+        public void ShouldFailWhenLabelContainsHtml()
+        {
             var inputFirstName = Ie.TextField(new ProximityTextConstraint("First Name:<br />"));
-            inputFirstName.TypeText( "" );	// To activate the lookup
-			
+            Assert.IsFalse(inputFirstName.Exists);
         }
 		
         // TODO: More tests

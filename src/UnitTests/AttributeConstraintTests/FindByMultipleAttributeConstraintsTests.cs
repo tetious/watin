@@ -230,23 +230,21 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ConstraintContext context = new ConstraintContext();
 
             mockAttributeBag.Expect(bag => bag.GetAttributeValue("name")).Returns("Z");
-            mockAttributeBag.Expect(bag => bag.GetAttributeValue("value")).Returns("text");
 
-            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context));
-
-            mockAttributeBag.Expect(bag => bag.GetAttributeValue("name")).Returns("Z");
-            mockAttributeBag.Expect(bag => bag.GetAttributeValue("value")).Returns("some other text");
-
-            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context));
+            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context), "False because index will be 0 when evaluated.");
 
             mockAttributeBag.Expect(bag => bag.GetAttributeValue("name")).Returns("Y");
 
-            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context));
+            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context), "False because index will be skipped since first clause fails to match.");
 
             mockAttributeBag.Expect(bag => bag.GetAttributeValue("name")).Returns("Z");
             mockAttributeBag.Expect(bag => bag.GetAttributeValue("value")).Returns("text");
 
-            Assert.IsTrue(findBy.Matches(mockAttributeBag.Object, context));
+            Assert.IsTrue(findBy.Matches(mockAttributeBag.Object, context), "True because index will be 1 when evaluated.");
+
+            mockAttributeBag.Expect(bag => bag.GetAttributeValue("name")).Returns("Z");
+
+            Assert.IsFalse(findBy.Matches(mockAttributeBag.Object, context), "False because index will be 2 when evaluated.");
 
             mockAttributeBag.VerifyAll();
         }
