@@ -35,5 +35,11 @@ namespace WatiN.Core.Comparers
         {
             return element.GetType() == type;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("is of type '{0}'", type);
+        }
     }
 }

@@ -62,14 +62,6 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void ToStringTest()
-		{
-			StringEqualsAndCaseInsensitiveComparer comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
-
-			Assert.AreEqual("A test value", comparer.ToString());
-		}
-
-		[Test]
 		public void CompareShouldBeCultureInvariant()
 		{
 			// Get the tr-TR (Turkish-Turkey) culture.
@@ -93,5 +85,11 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new StringEqualsAndCaseInsensitiveComparer("A test value");
+            Assert.AreEqual("equals 'A test value' ignoring case", comparer.ToString());
+        }
 	}
 }

@@ -1169,7 +1169,7 @@ namespace WatiN.Core
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
 		public HtmlDialog HtmlDialog(Constraint findBy)
 		{
-			return findHtmlDialog(findBy, Settings.AttachToIETimeOut);
+			return FindHtmlDialog(findBy, Settings.AttachToIETimeOut);
 		}
 
 		/// <summary>
@@ -1180,10 +1180,10 @@ namespace WatiN.Core
 		/// <param name="timeout">Number of seconds before the search times out.</param>
 		public HtmlDialog HtmlDialog(Constraint findBy, int timeout)
 		{
-			return findHtmlDialog(findBy, timeout);
+			return FindHtmlDialog(findBy, timeout);
 		}
 
-		private HtmlDialog findHtmlDialog(Constraint findBy, int timeout)
+		private HtmlDialog FindHtmlDialog(Constraint findBy, int timeout)
 		{
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ToString());
 

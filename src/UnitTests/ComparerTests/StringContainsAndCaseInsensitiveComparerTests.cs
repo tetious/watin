@@ -58,12 +58,11 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(comparer.Compare(null), "null should not match");
 		}
 
-		[Test]
-		public void ToStringTest()
-		{
-			StringContainsAndCaseInsensitiveComparer comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
-
-			Assert.AreEqual("A test value", comparer.ToString());
-		}
-	}
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new StringContainsAndCaseInsensitiveComparer("A test value");
+            Assert.AreEqual("contains 'A test value' ignoring case", comparer.ToString());
+        }
+    }
 }

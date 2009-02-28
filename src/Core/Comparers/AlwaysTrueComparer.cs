@@ -49,5 +49,11 @@ namespace WatiN.Core.Comparers
 		{
 			return true;
 		}
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "is anything";
+        }
 	}
 }

@@ -59,12 +59,11 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(comparer.Compare(null), "null should not match");
 		}
 
-		[Test]
-		public void ToStringTest()
-		{
-			RegexComparer comparer = new RegexComparer(new Regex("^A test value$"));
-
-			Assert.AreEqual("WatiN.Core.Comparers.RegexComparer matching against: ^A test value$", comparer.ToString());
-		}
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new RegexComparer(new Regex("^A test value$"));
+            Assert.AreEqual("matches '^A test value$'", comparer.ToString());
+        }
 	}
 }

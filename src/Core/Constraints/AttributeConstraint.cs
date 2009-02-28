@@ -36,7 +36,6 @@ namespace WatiN.Core.Constraints
 	{
 		private readonly string attributeName;
         private readonly Comparer<string> comparer;
-        private readonly string description;
         private readonly string comparisonValue;
 
 		/// <summary>
@@ -48,8 +47,7 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="comparisonValue"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
 		public AttributeConstraint(string attributeName, string comparisonValue)
-            : this(attributeName, new WatiN.Core.Comparers.StringComparer(comparisonValue),
-            string.Format("= '{0}'", comparisonValue))
+            : this(attributeName, new WatiN.Core.Comparers.StringComparer(comparisonValue))
 		{
             this.comparisonValue = comparisonValue;
 		}
@@ -63,8 +61,7 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="regex"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
         public AttributeConstraint(string attributeName, Regex regex)
-            : this(attributeName, new RegexComparer(regex),
-            string.Format("~= '{0}'", regex))
+            : this(attributeName, new RegexComparer(regex))
         {
         }
 
@@ -77,22 +74,14 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="comparer"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
         public AttributeConstraint(string attributeName, Comparer<string> comparer)
-            : this(attributeName, comparer, "Using Custom Comparer")
-        {
-        }
-
-        private AttributeConstraint(string attributeName, Comparer<string> comparer, string description)
         {
             if (attributeName == null)
                 throw new ArgumentNullException("attributeName");
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
-            if (description == null)
-                throw new ArgumentNullException("description");
 
             this.attributeName = attributeName;
             this.comparer = comparer;
-            this.description = description;
         }
 
         /// <summary>
@@ -125,7 +114,7 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         public override void WriteDescriptionTo(TextWriter writer)
         {
-            writer.Write("Attribute '{0}' {1}", attributeName, description);
+            writer.Write("Attribute '{0}' {1}", attributeName, comparer);
         }
 
         /// <inheritdoc />

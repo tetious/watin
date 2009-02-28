@@ -76,17 +76,6 @@ namespace WatiN.Core.Comparers
                 ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture) == 0;
 		}
 
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
-		public override string ToString()
-		{
-			return comparisonValue;
-		}
-
 		/// <summary>
 		/// Compare the two values with <seealso cref="CultureInfo"/> set to InvariantCulture.
 		/// </summary>
@@ -112,5 +101,11 @@ namespace WatiN.Core.Comparers
 
 			return new StringComparer(lhs, ignoreCase).Compare(rhs);
 		}
-	}
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("equals '{0}'{1}", comparisonValue, ignoreCase ? " ignoring case" : "");
+        }
+    }
 }

@@ -61,5 +61,12 @@ namespace WatiN.Core.UnitTests
 			Assert.IsFalse(comparer.Compare("true"), "true");
 			Assert.IsFalse(comparer.Compare("some other string"), "some other string");
 		}
+
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new BoolComparer(false);
+            Assert.AreEqual("equals 'False' ignoring case", comparer.ToString());
+        }
 	}
 }

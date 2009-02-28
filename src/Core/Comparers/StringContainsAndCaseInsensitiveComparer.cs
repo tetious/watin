@@ -50,5 +50,11 @@ namespace WatiN.Core.Comparers
 
             return value.IndexOf(ComparisonValue, StringComparison.InvariantCultureIgnoreCase) >= 0;
 		}
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("contains '{0}' ignoring case", ComparisonValue);
+        }
 	}
 }

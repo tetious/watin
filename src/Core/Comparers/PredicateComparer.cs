@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.Exceptions;
 
 namespace WatiN.Core.Comparers
 {
@@ -48,7 +49,20 @@ namespace WatiN.Core.Comparers
         /// <returns>The result of the comparison done by the predicate</returns>
         public override bool Compare(TComparerValue element)
         {
-            return element is TPredicateValue && predicate((TPredicateValue)element);
+            try
+            {
+                return element is TPredicateValue && predicate((TPredicateValue)element);
+            }
+            catch (Exception ex)
+            {
+                throw new WatiNException(string.Format("Exception occurred during execution of predicate for '{0}'", element), ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "satisfies predicate";
         }
     }
 }

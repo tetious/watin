@@ -62,14 +62,6 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void ToStringTest()
-		{
-			StringComparer comparer = new StringComparer("A test value");
-
-			Assert.AreEqual("A test value", comparer.ToString());
-		}
-
-		[Test]
 		public void TestsStaticCompare()
 		{
 			Assert.That(StringComparer.AreEqual("WatiN", "WatiN"), Is.True);
@@ -105,6 +97,14 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new StringComparer("A test value");
+            Assert.AreEqual("equals 'A test value'", comparer.ToString());
 
+            comparer = new StringComparer("A test value", true);
+            Assert.AreEqual("equals 'A test value' ignoring case", comparer.ToString());
+        }
 	}
 }

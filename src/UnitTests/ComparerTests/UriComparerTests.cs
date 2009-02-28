@@ -97,24 +97,6 @@ namespace WatiN.Core.UnitTests
 			new UriComparer(null);
 		}
 
-		[Test]
-		public void ToStringTest()
-		{
-			var comparer = new UriComparer(new Uri("http://watin.sourceforge.net"));
-
-			Assert.AreEqual("http://watin.sourceforge.net/", comparer.ToString());
-		}
-
-		[Test]
-		public void ToStringTestWithEncodedQueryString()
-		{
-            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
-
-			var comparer = new UriComparer(new Uri(url));
-
-			Assert.That(comparer.ToString(), Is.EqualTo(url));
-		}
-
 	    [Test]
 	    public void WhenEncounteringABadUrlCompareShouldReturnFalse()
 	    {
@@ -179,5 +161,14 @@ namespace WatiN.Core.UnitTests
             Assert.That(comparer.Compare(url), Is.True);
         }
 
+        [Test]
+        public void ToStringShouldDescribeTheCondition()
+        {
+            var comparer = new UriComparer(new Uri("http://www.google.com/"), false);
+            Assert.AreEqual("equals uri 'http://www.google.com/'", comparer.ToString());
+
+            comparer = new UriComparer(new Uri("http://www.google.com/q?a%26b"), true);
+            Assert.AreEqual("equals uri 'http://www.google.com/q?a%26b' ignoring query parameters", comparer.ToString());
+        }
 	}
 }

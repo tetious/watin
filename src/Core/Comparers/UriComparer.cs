@@ -88,15 +88,10 @@ namespace WatiN.Core.Comparers
 			return url.AbsoluteUri.Split('?')[0];
 		}
 
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
-		public override string ToString()
-		{
-			return uriToCompareWith.AbsoluteUri;
-		}
-	}
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("equals uri '{0}'{1}", uriToCompareWith.AbsoluteUri, _ignoreQuery ? " ignoring query parameters" : "");
+        }
+    }
 }
