@@ -33,16 +33,16 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Gets the count of the messages in the que of displayed alert and confirm windows.
+		/// Gets the count of the messages in the queue of displayed alert and confirm windows.
 		/// </summary>
-		/// <value>The count of the alert and confirm messages in the que.</value>
+		/// <value>The count of the alert and confirm messages in the queue.</value>
 		public int Count
 		{
 			get { return alertQueue.Count; }
 		}
 
 		/// <summary>
-		/// Pops the most recent message from a que of displayed alert and confirm windows.
+		/// Pops the most recent message from a queue of displayed alert and confirm windows.
 		/// Use this method to get the displayed message.
 		/// </summary>
 		/// <returns>The displayed message.</returns>
@@ -57,9 +57,9 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Gets the alert and confirm messages in the que of displayed alert and confirm windows.
+		/// Gets the alert and confirm messages in the queue of displayed alert and confirm windows.
 		/// </summary>
-		/// <value>The alert and confirm messages in the que.</value>
+		/// <value>The alert and confirm messages in the queue.</value>
 		public string[] Alerts
 		{
 			get
@@ -71,7 +71,7 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Clears all the messages from the que of displayed alert and confirm windows.
+		/// Clears all the messages from the queue of displayed alert and confirm windows.
 		/// </summary>
 		public void Clear()
 		{

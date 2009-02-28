@@ -169,7 +169,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         // Becomes this after attempting comparison form elements:
         //		<SPAN id=spanValidateCode><SPAN id=spanValidateCode>Code</SPAN> and Confirm Code must match!</SPAN>
         // Note that this test would also be caught be the more general test that makes sure the HTML isn't changed.
-        public void ShouldNotDuplicateSpanElementsPrecedingTheText() { // BROKEN!!!
+        public void ShouldNotDuplicateSpanElementsPrecedingTheText() {
             var document = ((IEDocument)Ie.NativeDocument).HtmlDocument;
             var span = (IHTMLElement)document.all.item("spanValidateCode", null);
             var originalContent = span.outerHTML;
