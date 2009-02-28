@@ -471,7 +471,7 @@ namespace WatiN.Core.UnitTests.IETests
             var startTime = DateTime.Now;
             const int timeoutTime = 5;
             const string ieTitle = "Non Existing IE Title";
-            const string expectedMessage = "Could not find an IE window matching constraint: Attribute 'title' with value 'non existing ie title'. Search expired after '5' seconds.";
+            const string expectedMessage = "Could not find an IE window matching constraint: Attribute 'title' contains 'Non Existing IE Title' ignoring case. Search expired after '5' seconds.";
 
             try
             {

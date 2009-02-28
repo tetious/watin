@@ -46,6 +46,11 @@ namespace WatiN.Core
 
 			var assembly = Assembly.GetExecutingAssembly();
             RegisterElementTypes(assembly);
+
+            // Map the Element type to the special Any tag value.
+            RegisterElementTags(typeof(Element), new[] { ElementTag.Any });
+            RegisterNativeElementBasedFactories(typeof(Element));
+            RegisterElementFinderBasedFactories(typeof(Element));
         }
 
         /// <summary>
@@ -144,6 +149,11 @@ namespace WatiN.Core
             elementTagAttributes.Sort();
 
             var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
+            return RegisterElementTags(elementType, tags);
+        }
+
+        private static bool RegisterElementTags(Type elementType, IList<ElementTag> tags)
+        {
             elementTagsByType.Add(elementType, tags);
 
             foreach (var tag in tags)

@@ -78,7 +78,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets a list of unique tag names from <see cref="ElementTags"/>.
         /// </summary>
-        /// <value>The element tag names.</value>
+        /// <value>The element tag names, which may contain null to signify that any tag is allowed</value>
         public IEnumerable<string> ElementTagNames
         {
             get { return ElementTag.ElementTagNames(ElementTags); }

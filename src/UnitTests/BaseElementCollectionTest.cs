@@ -31,7 +31,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void FirstWithAttributConstraint()
+		public void FirstWithAttributeConstraint()
 		{
 		    ExecuteTest(browser =>
 		                    {

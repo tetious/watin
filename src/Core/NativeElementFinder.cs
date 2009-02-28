@@ -74,7 +74,9 @@ namespace WatiN.Core
 
         private IEnumerable<Element> FindElementsByTag(string tagName)
         {
-            return WrapMatchingElements(nativeElementCollection.GetElementsByTag(tagName));
+            return WrapMatchingElements(tagName == null
+                ? nativeElementCollection.GetElements()
+                : nativeElementCollection.GetElementsByTag(tagName));
         }
 
         private IEnumerable<Element> FindElementsById(string id)
