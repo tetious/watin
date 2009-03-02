@@ -204,8 +204,8 @@ namespace WatiN.Core.UnitTests
 			{
 				frame = document.Frame(findBy);
 			}
-			Assert.IsNotNull(frame, "Frame '" + findBy.Value + "' not found");
-			Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy + ", " + findBy.Value);
+            Assert.IsNotNull(frame, "Frame '" + findBy.Comparer + "' not found");
+            Assert.AreEqual(expectedFrameName, frame.Name, "Incorrect frame for " + findBy + ", " + findBy.Comparer);
 		}
 	}
 }

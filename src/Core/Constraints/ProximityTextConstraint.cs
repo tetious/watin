@@ -19,13 +19,10 @@
 // This constraint class is kindly donated by Seven Simple Machines
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using mshtml;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Native.InternetExplorer;
 
 namespace WatiN.Core.Constraints
 {

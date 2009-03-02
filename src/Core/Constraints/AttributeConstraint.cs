@@ -47,7 +47,7 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="comparisonValue"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
 		public AttributeConstraint(string attributeName, string comparisonValue)
-            : this(attributeName, new WatiN.Core.Comparers.StringComparer(comparisonValue))
+            : this(attributeName, new Comparers.StringComparer(comparisonValue))
 		{
             this.comparisonValue = comparisonValue;
 		}
@@ -63,6 +63,7 @@ namespace WatiN.Core.Constraints
         public AttributeConstraint(string attributeName, Regex regex)
             : this(attributeName, new RegexComparer(regex))
         {
+            comparisonValue = regex.ToString();
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace WatiN.Core.Constraints
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
         public AttributeConstraint(string attributeName, Comparer<string> comparer)
         {
-            if (attributeName == null)
+            if (string.IsNullOrEmpty(attributeName))
                 throw new ArgumentNullException("attributeName");
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
@@ -91,14 +92,6 @@ namespace WatiN.Core.Constraints
         public string AttributeName
         {
             get { return attributeName; }
-        }
-
-        /// <summary>
-        /// Gets the comparison value, or null if a custom comparer or regex is used instead.
-        /// </summary>
-        public string Value
-        {
-            get { return comparisonValue; }
         }
 
         /// <summary>

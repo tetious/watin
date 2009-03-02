@@ -59,13 +59,13 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.That(value.AttributeName, Is.EqualTo(htmlfor), "Wrong attributename");
-			Assert.AreEqual("foridvalue", value.Value, "Wrong value");
+			Assert.That(value.Comparer.ToString(), Text.Contains("'foridvalue'"), "Wrong value");
 
 			var regex = new Regex("^id");
 			value = Find.ByFor(regex);
 			var mockAttributeBag = new MockAttributeBag(htmlfor, "idvalue");
 
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
             Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ^id should match");
 
 			value = Find.ByFor(new StringContainsAndCaseInsensitiveComparer("VAl"));
@@ -87,10 +87,10 @@ namespace WatiN.Core.UnitTests
 
 			const string id = "id";
 			Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("idvalue", value.Value, "Wrong value");
+			Assert.That(value.Comparer.ToString(), Text.Contains("'idvalue'"), "Wrong value");
 
 			var mockAttributeBag = new MockAttributeBag("id", "idvalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
             value = Find.ById(new StringContainsAndCaseInsensitiveComparer("Val"));
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "Comparer not used");
 
@@ -102,7 +102,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void IdWithRegexAndComparer()
 		{
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
             var mockAttributeBag = new MockAttributeBag("id", "idvalue");
 
 			Constraint value = Find.ById(new Regex("lue$"));
@@ -128,12 +128,12 @@ namespace WatiN.Core.UnitTests
 
 			const string name = "alt";
 			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("alt text", value.Value, "Wrong value");
+            Assert.That(value.Comparer.ToString(), Text.Contains("'alt text'"), "Wrong value");
 
 			var regex = new Regex("ext$");
 			value = Find.ByAlt(regex);
 			var mockAttributeBag = new MockAttributeBag(name, "alt text");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ext$ should match");
 
@@ -160,12 +160,12 @@ namespace WatiN.Core.UnitTests
 
 			const string name = "name";
 			Assert.AreEqual(name, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("namevalue", value.Value, "Wrong value");
+            Assert.That(value.Comparer.ToString(), Text.Contains("'namevalue'"), "Wrong value");
 
 			var regex = new Regex("lue$");
 			value = Find.ByName(regex);
 			var mockAttributeBag = new MockAttributeBag(name, "namevalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex lue$ should match");
 
@@ -187,12 +187,12 @@ namespace WatiN.Core.UnitTests
 
 			const string innertext = "innertext";
 			Assert.AreEqual(innertext, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("^ *textvalue *$", value.Value, "Wrong value");
+		    Assert.That(value.Comparer.ToString(), Text.Contains("'^ *textvalue *$'"), "Wrong value");
 
 			var regex = new Regex("lue$");
 			value = Find.ByText(regex);
 			var mockAttributeBag = new MockAttributeBag(innertext, "textvalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex lue$ should match");
 
@@ -212,7 +212,7 @@ namespace WatiN.Core.UnitTests
 
             var value = Find.ByText("textvalue");
             var mockAttributeBag = new MockAttributeBag(innertext, "textvalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
             Assert.That(value.Matches(mockAttributeBag, context), Is.True, "Exact match expected");
 
             mockAttributeBag = new MockAttributeBag(innertext, " textvalue");
@@ -251,12 +251,12 @@ namespace WatiN.Core.UnitTests
 
 			const string fullAttributeName = "style.background-color";
 			Assert.AreEqual(fullAttributeName, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("red", value.Value, "Wrong value");
+	        Assert.That(value.Comparer.ToString(), Text.Contains("'red'"), "Wrong value");
 
 			var regex = new Regex("een$");
 			value = Find.ByStyle(attributeName, regex);
 			var mockAttributeBag = new MockAttributeBag(fullAttributeName, "green");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex een$ should match");
 
@@ -285,7 +285,7 @@ namespace WatiN.Core.UnitTests
 			AssertUrlValue(value);
 
 			var mockAttributeBag = new MockAttributeBag("href", url);
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			value = Find.ByUrl(new StringContainsAndCaseInsensitiveComparer("/watin.Sour"));
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "Comparer not used");
@@ -315,10 +315,10 @@ namespace WatiN.Core.UnitTests
 		private static void AssertUrlValue(AttributeConstraint value)
 		{
 			Assert.AreEqual(_href, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual(WatiNURI.AbsoluteUri, value.Value, "Wrong value");
+			Assert.That(value.Comparer.ToString(),Text.Contains("'" + WatiNURI.AbsoluteUri + "'"), "Wrong value");
 
             var mockAttributeBag = new MockAttributeBag(_href, WatiNURI.AbsoluteUri);
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Should match WatiN url");
 
@@ -338,7 +338,7 @@ namespace WatiN.Core.UnitTests
 			var regex = new Regex("^http://watin");
 			var value = Find.ByUrl(regex);
 			var mockAttributeBag = new MockAttributeBag(_href, "http://watin.sourceforge.net");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ^http://watin should match");
 		}
@@ -360,11 +360,11 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringContainsAndCaseInsensitiveComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(title, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("titlevalue", value.Value, "Wrong value");
+			Assert.That(value.Comparer.ToString(),Text.Contains("'titlevalue'"), "Wrong value");
 
 
 			var mockAttributeBag = new MockAttributeBag(title, String.Empty);
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsFalse(value.Matches(mockAttributeBag, context), "Empty should not match");
 
@@ -416,14 +416,13 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(valueAttrib, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("valuevalue", value.Value, "Wrong value");
-			Assert.AreEqual("valuevalue", value.ToString(), "Wrong ToString result");
+			Assert.That(value.Comparer.ToString(),Text.Contains("'valuevalue'"), "Wrong value");
 
 			var regex = new Regex("lue$");
 			value = Find.ByValue(regex);
 
 			var mockAttributeBag = new MockAttributeBag(valueAttrib, "valuevalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex lue$ should match");
 
@@ -446,10 +445,10 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(src, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("image.gif", value.Value, "Wrong value");
+            Assert.That(value.Comparer.ToString(),Text.Contains("'image.gif'"), "Wrong value");
 
 			var mockAttributeBag = new MockAttributeBag(src, "/images/image.gif");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsFalse(value.Matches(mockAttributeBag, context), "Should not match /images/image.gif");
 
@@ -528,7 +527,7 @@ namespace WatiN.Core.UnitTests
 		public void NewAttributeWithEmptyValue()
 		{
 			var attribute = new AttributeConstraint("id", string.Empty);
-			Assert.IsEmpty(attribute.Value);
+            Assert.That(attribute.Comparer.ToString(), Text.Contains("''"));
 		}
 
 		[Test, ExpectedException(typeof (ArgumentNullException))]
@@ -545,10 +544,10 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			Assert.AreEqual(id, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("idvalue", value.Value, "Wrong value");
+            Assert.That(value.Comparer.ToString(), Text.Contains("'idvalue'") , "Wrong value");
 
 			var mockAttributeBag = new MockAttributeBag(id, "idvalue");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Compare should match");
 
@@ -585,13 +584,13 @@ namespace WatiN.Core.UnitTests
 
 			const string classname = "className";
 			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
-			Assert.AreEqual("highlighted", value.Value, "Wrong value");
+            Assert.That(value.Comparer.ToString(), Text.Contains("'highlighted'"), "Wrong value");
 
 			var regex = new Regex("ghted$");
 			value = Find.ByClass(regex);
 
 			var mockAttributeBag = new MockAttributeBag(classname, "highlighted");
-            ConstraintContext context = new ConstraintContext();
+            var context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ghted$ should match");
 
@@ -610,19 +609,21 @@ namespace WatiN.Core.UnitTests
             Assert.That(Find.First().ToString(), Is.EqualTo("Index = 0"));
         }
 		
-        // TODO: Make it a multi browser test when ProximityTextConstraint is none IE specific
 		[Test]
 		public void ShouldFindFormElementsByNearbyText() 
 		{
-		    var inputUsername = Ie.TextField(Find.Near("User Name"));
-		    Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find 'User Name' field.");
+		    ExecuteTest(browser =>
+		                    {
+                                var inputUsername = browser.TextField(Find.Near("User Name"));
+		                        Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find 'User Name' field.");
 
-		    var inputPassword = Ie.TextField(Find.Near("Password"));
-		    Assert.AreEqual("inputPassword", inputPassword.Id, "Left/right proximity for text did not find 'Password' field.");
+                                var inputPassword = browser.TextField(Find.Near("Password"));
+		                        Assert.AreEqual("inputPassword", inputPassword.Id, "Left/right proximity for text did not find 'Password' field.");
 		
-		    // Test with a constraint
-		    var inputUsername2 = Ie.TextField(new ProximityTextConstraint("User Name"));
-		    Assert.AreEqual(inputUsername.Id, inputUsername2.Id, "Find.Near and ProximityTextConstraint did not find same element.");
+		                        // Test with a constraint
+                                var inputUsername2 = browser.TextField(new ProximityTextConstraint("User Name"));
+		                        Assert.AreEqual(inputUsername.Id, inputUsername2.Id, "Find.Near and ProximityTextConstraint did not find same element.");
+		                    });
 		}
 		
 		[Test]
