@@ -78,10 +78,9 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
         {
-            var document = (HTMLDocument) htmlDocument;
-            while (document.readyState != "complete")
+            while (!IsDocumentReadyStateAvailable(htmlDocument) && htmlDocument.readyState != "complete")
             {
-                ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + document.readyState + "'");
+                ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + htmlDocument.readyState + "'");
                 Sleep("WaitWhileDocumentStateNotComplete");
             }
         }
@@ -108,26 +107,12 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
         {
-            try
-            {
-                return frame.Document as IHTMLDocument2;
-            }
-            catch
-            {
-                return null;
-            }
+            return UtilityClass.TryFuncIgnoreException(() => frame.Document as IHTMLDocument2);
         }
 
         protected virtual IHTMLDocument2 GetDomContainerDocument(DomContainer domContainer)
         {
-            try
-            {
-                return ((IEDocument)domContainer.NativeDocument).HtmlDocument;
-            }
-            catch
-            {
-                return null;
-            }
+            return UtilityClass.TryFuncIgnoreException(() => ((IEDocument)domContainer.NativeDocument).HtmlDocument);
         }
 
         protected virtual bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
