@@ -1016,7 +1016,7 @@ namespace WatiN.Core
                 return null;
             }
             
-            return Matches(findBy) ? parentElement : parentElement.Ancestor(findBy);
+            return parentElement.Matches(findBy) ? parentElement : parentElement.Ancestor(findBy);
 		}
 
 		/// <summary>

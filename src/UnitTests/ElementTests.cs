@@ -59,8 +59,14 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()
 		{
+            // GIVEN
 			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
-			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(typeof (Div)));
+		    
+            // WHEN
+            var ancestor = tableCell.Ancestor(typeof (Div));
+		    
+            //THEN
+            Assert.IsInstanceOfType(typeof (Div), ancestor);
 		}
 
         // TODO: This should be mocked cause there is no browser logic involved
@@ -93,6 +99,7 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 		public void AncestorTagNameAndAttributeConstraintShouldReturnTypedElement()
 		{
+            // GIVEN
 	        var nativeElementMock = new Mock<INativeElement>();
 			var firstParentDivMock = new Mock<INativeElement>();
 			var secondParentDivMock = new Mock<INativeElement>();
@@ -103,16 +110,22 @@ namespace WatiN.Core.UnitTests
             nativeElementMock.Expect(native => native.Parent).Returns(firstParentDivMock.Object);
 			
             firstParentDivMock.Expect(first => first.TagName).Returns("div");
-            firstParentDivMock.Expect(first => first.GetAttributeValue("tagname")).Returns("div");
+            firstParentDivMock.Expect(first => first.GetAttributeValue("tagName")).Returns("div");
             firstParentDivMock.Expect(first => first.GetAttributeValue("innertext")).Returns("first ancestor");
 
 			firstParentDivMock.Expect(first => first.Parent).Returns(secondParentDivMock.Object);
 			
             secondParentDivMock.Expect(second => second.TagName).Returns("div");
-            secondParentDivMock.Expect(second => second.GetAttributeValue("tagname")).Returns("div");
+            secondParentDivMock.Expect(second => second.GetAttributeValue("tagName")).Returns("div");
             secondParentDivMock.Expect(second => second.GetAttributeValue("innertext")).Returns("second ancestor");
 
+            // WHEN
 			var ancestor = element.Ancestor("Div", Find.ByText("second ancestor"));
+
+            // THEN
+            nativeElementMock.VerifyAll();
+            firstParentDivMock.VerifyAll();
+            secondParentDivMock.VerifyAll();
 
 			Assert.IsInstanceOfType(typeof (Div), ancestor);
 			Assert.That(ancestor.Text, Is.EqualTo("second ancestor"));
