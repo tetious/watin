@@ -26,34 +26,36 @@ namespace WatiN.Core
     /// <summary>
     /// Finds elements within native element containers.
     /// </summary>
-    internal class NativeElementFinder : ElementFinder
+    public class NativeElementFinder : ElementFinder
     {
-        private readonly INativeElementCollection nativeElementCollection;
+        public delegate INativeElementCollection NativeElementCollectionFactory();
+
         private readonly DomContainer domContainer;
+        private readonly NativeElementCollectionFactory factory;
 
         /// <summary>
         /// Creates an element finder.
         /// </summary>
         /// <param name="domContainer">The DOM container</param>
-        /// <param name="nativeElementCollection">The native element container</param>
+        /// <param name="factory">The factory to get the element(s) to search in</param>
         /// <param name="elementTags">The element tags considered by the finder, or null if all tags considered</param>
         /// <param name="constraint">The constraint used by the finder to filter elements, or null if no additional constraint</param>
-        public NativeElementFinder(INativeElementCollection nativeElementCollection, DomContainer domContainer, IList<ElementTag> elementTags, Constraint constraint)
+        public NativeElementFinder(NativeElementCollectionFactory factory, DomContainer domContainer, IList<ElementTag> elementTags, Constraint constraint)
             : base(elementTags, constraint)
         {
-            if (nativeElementCollection == null)
-                throw new ArgumentNullException("nativeElementCollection");
+            if (factory == null)
+                throw new ArgumentNullException("factory");
             if (domContainer == null)
                 throw new ArgumentNullException("domContainer");
 
-            this.nativeElementCollection = nativeElementCollection;
+            this.factory = factory;
             this.domContainer = domContainer;
         }
 
         /// <inheritdoc />
         protected override ElementFinder FilterImpl(Constraint findBy)
         {
-            return new NativeElementFinder(nativeElementCollection, domContainer, ElementTags, Constraint & findBy);
+            return new NativeElementFinder(factory, domContainer, ElementTags, Constraint & findBy);
         }
 
         /// <inheritdoc />
@@ -75,13 +77,13 @@ namespace WatiN.Core
         private IEnumerable<Element> FindElementsByTag(string tagName)
         {
             return WrapMatchingElements(tagName == null
-                ? nativeElementCollection.GetElements()
-                : nativeElementCollection.GetElementsByTag(tagName));
+                ? GetNativeElementCollection().GetElements()
+                : GetNativeElementCollection().GetElementsByTag(tagName));
         }
 
         private IEnumerable<Element> FindElementsById(string id)
         {
-            return WrapMatchingElements(nativeElementCollection.GetElementsById(id));
+            return WrapMatchingElements(GetNativeElementCollection().GetElementsById(id));
         }
 
         private IEnumerable<Element> WrapMatchingElements(IEnumerable<INativeElement> nativeElements)
@@ -119,9 +121,16 @@ namespace WatiN.Core
             return ElementTag.IsMatch(ElementTags, nativeElement);
         }
 
-        private bool IsMatchByConstraint(Element element, ConstraintContext context)
+        private bool IsMatchByConstraint(Component element, ConstraintContext context)
         {
             return element.Matches(Constraint, context);
         }
+
+        private INativeElementCollection GetNativeElementCollection()
+        {
+            var nativeElementCollection = factory.Invoke();
+            return nativeElementCollection ?? EmptyElementCollection.Empty;
+        }
+
     }
 }

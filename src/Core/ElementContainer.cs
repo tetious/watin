@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Native;
@@ -36,7 +35,12 @@ namespace WatiN.Core
 
         private NativeElementCollectionAdapter All
         {
-            get { return new NativeElementCollectionAdapter(DomContainer, NativeElement.AllDescendants); }
+            get
+            {
+                return new NativeElementCollectionAdapter(DomContainer,
+                                                          CreateNativeElementCollectionFactory(
+                                                              nativeElement => nativeElement.AllDescendants));
+            }
         }
 
         #region IElementsContainer
@@ -555,7 +559,7 @@ namespace WatiN.Core
 
         public TChildElement ElementOfType<TChildElement>(Predicate<TChildElement> predicate) where TChildElement : Element
         {
-            return All.ElementOfType<TChildElement>(predicate);
+            return All.ElementOfType(predicate);
         }
 
         public ElementCollection<TChildElement> ElementsOfType<TChildElement>() where TChildElement : Element
@@ -585,7 +589,7 @@ namespace WatiN.Core
 
         public TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
         {
-            return All.Control<TControl>(predicate);
+            return All.Control(predicate);
         }
 
         public ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()

@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
+using StringComparer=WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.Constraints
 {
@@ -36,9 +37,9 @@ namespace WatiN.Core.Constraints
 	{
 		private readonly string attributeName;
         private readonly Comparer<string> comparer;
-        private readonly string comparisonValue;
+	    private string idValue;
 
-		/// <summary>
+	    /// <summary>
 		/// Creates an attribute constraint to search for an exact match by string value.
 		/// </summary>
 		/// <param name="attributeName">Name of the attribute as recognised by Internet Explorer.</param>
@@ -47,10 +48,7 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="comparisonValue"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
 		public AttributeConstraint(string attributeName, string comparisonValue)
-            : this(attributeName, new Comparers.StringComparer(comparisonValue))
-		{
-            this.comparisonValue = comparisonValue;
-		}
+            : this(attributeName, new Comparers.StringComparer(comparisonValue)) { }
 
         /// <summary>
         /// Creates an attribute constraint to search for a match by regular expression.
@@ -61,10 +59,7 @@ namespace WatiN.Core.Constraints
         /// or <paramref name="regex"/> is null</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="attributeName"/> is empty</exception>
         public AttributeConstraint(string attributeName, Regex regex)
-            : this(attributeName, new RegexComparer(regex))
-        {
-            comparisonValue = regex.ToString();
-        }
+            : this(attributeName, new RegexComparer(regex)) { }
 
         /// <summary>
         /// Creates an attribute constraint to search for a match using a custom comparer.
@@ -120,9 +115,16 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         protected internal override string GetElementIdHint()
         {
-            return string.Compare(attributeName, @"id", StringComparison.InvariantCultureIgnoreCase) == 0
-                ? comparisonValue
-                : null;
+            if (idValue == null)
+            {
+                idValue = string.Empty;
+                if (string.Compare(attributeName, @"id", StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    var stringComparer = Comparer as StringComparer;
+                    if (stringComparer != null) idValue = stringComparer.ComparisonValue;
+                }                
+            }
+            return idValue == string.Empty ? null : idValue;
         }
 	}
 }

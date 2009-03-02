@@ -174,7 +174,7 @@ namespace WatiN.Core
 		/// <returns></returns>
 		public Option Option(Constraint findBy)
 		{
-            return new Option(DomContainer, CreateElementFinder<Option>(NativeElement.Options, findBy));
+            return new Option(DomContainer, CreateElementFinder<Option>(nativeElement => nativeElement.Options, findBy));
 		}
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace WatiN.Core
 		/// </summary>
 		public OptionCollection Options
 		{
-            get { return new OptionCollection(DomContainer, CreateElementFinder<Option>(NativeElement.Options, null)); }
+            get { return new OptionCollection(DomContainer, CreateElementFinder<Option>(nativeElement => nativeElement.Options, null)); }
 		}
 
 		/// <summary>

@@ -30,6 +30,9 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
+
+    public delegate INativeElementCollection NativeElementCollectionFactory(INativeElement nativeElement);
+
 	/// <summary>
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
@@ -639,7 +642,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				if (_nativeElement == null)
+				if (!HasNativeElement)
 				{
 					try
 					{
@@ -668,7 +671,7 @@ namespace WatiN.Core
 			get
 			{
 				RefreshNativeElement();
-				return _nativeElement != null;
+				return HasNativeElement;
 			}
 		}
 
@@ -799,7 +802,7 @@ namespace WatiN.Core
 	        // Does it make sense to go into the do loop?
 			if (waitUntilExists)
 			{
-			    if (_nativeElement != null)
+			    if (HasNativeElement)
 				{
 					return;
 				}
@@ -811,7 +814,7 @@ namespace WatiN.Core
 			}
 			else
 			{
-				if (_nativeElement == null)
+				if (!HasNativeElement)
 				{
 					return;
 				}
@@ -875,11 +878,16 @@ namespace WatiN.Core
 		{
 			if (_elementFinder != null)
 			{
-				_nativeElement = null;
+				ClearNativeElement();
 			}
 		}
 
-		/// <summary>
+        private void ClearNativeElement()
+        {
+            _nativeElement = null;
+        }
+
+        /// <summary>
 		/// Calls <see cref="Refresh"/> and returns the element.
 		/// </summary>
 		/// <returns></returns>
@@ -887,11 +895,10 @@ namespace WatiN.Core
 		{
 			if (_elementFinder != null)
 			{
-                _nativeElement = null;
+                ClearNativeElement();
 
-                Element foundElement = _elementFinder.FindFirst();
-                if (foundElement != null)
-                    _nativeElement = foundElement._nativeElement;
+                var foundElement = _elementFinder.FindFirst();
+                if (foundElement != null) _nativeElement = foundElement._nativeElement;
 			}
 			else
 			{
@@ -901,11 +908,11 @@ namespace WatiN.Core
 				// These checks are only necessary if element field
 				// is set during the construction of an ElementCollection
 				// or a more specialized element collection (like TextFieldCollection)
-				if (_nativeElement != null)
+				if (HasNativeElement)
 				{
 					if (_nativeElement.IsElementReferenceStillValid() == false)
 					{
-						_nativeElement = null;
+                        ClearNativeElement();
 					}
 				}
 			}
@@ -913,7 +920,12 @@ namespace WatiN.Core
 			return _nativeElement;
 		}
 
-		/// <summary>
+        public bool HasNativeElement
+        {
+            get { return _nativeElement != null; }
+        }
+
+        /// <summary>
 		/// Waits till the page load is complete. This should only be used on rare occasions
 		/// because WatiN calls this function for you when it handles events (like Click etc..)
 		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitForCompleteTimeOut"/>
@@ -1126,13 +1138,22 @@ namespace WatiN.Core
         /// <param name="findBy">The constraint, or null if none</param>
         /// <returns>The native element finder</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="nativeElementCollection"/> is null</exception>
-        protected ElementFinder CreateElementFinder<TElement>(INativeElementCollection nativeElementCollection, Constraint findBy)
+        protected ElementFinder CreateElementFinder<TElement>(NativeElementCollectionFactory nativeElementCollection, Constraint findBy)
             where TElement : Element
         {
             if (nativeElementCollection == null)
                 throw new ArgumentNullException("nativeElementCollection");
 
-            return new NativeElementFinder(nativeElementCollection, DomContainer, ElementFactory.GetElementTags<TElement>(), findBy);
+            return new NativeElementFinder(CreateNativeElementCollectionFactory(nativeElementCollection), DomContainer, ElementFactory.GetElementTags<TElement>(), findBy);
         }
-    }
+
+        protected NativeElementFinder.NativeElementCollectionFactory CreateNativeElementCollectionFactory(NativeElementCollectionFactory factory)
+        {
+            return () =>
+                       {
+                           RefreshNativeElement();
+                           return HasNativeElement ? factory.Invoke(NativeElement) : null;
+                       };
+        }
+	}
 }

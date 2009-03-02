@@ -87,7 +87,7 @@ namespace WatiN.Core
         /// <returns>The table row</returns>
         public TableRow OwnTableRow(Constraint findBy)
         {
-            return new TableRow(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, findBy));
+            return new TableRow(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, findBy));
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace WatiN.Core
         /// <returns>The table row collection</returns>
         public TableRowCollection OwnTableRows
         {
-            get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, null)); }
+            get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, null)); }
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace WatiN.Core
         /// <returns>The table body</returns>
         public TableBody OwnTableBody(Constraint findBy)
         {
-            return new TableBody(DomContainer, CreateElementFinder<TableBody>(NativeElement.TableBodies, findBy));
+            return new TableBody(DomContainer, CreateElementFinder<TableBody>(nativeElement => nativeElement.TableBodies, findBy));
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace WatiN.Core
         /// <returns>The table body collection</returns>
         public TableBodyCollection OwnTableBodies
         {
-            get { return new TableBodyCollection(DomContainer, CreateElementFinder<TableBody>(NativeElement.TableBodies, null)); }
+            get { return new TableBodyCollection(DomContainer, CreateElementFinder<TableBody>(nativeElement => nativeElement.TableBodies, null)); }
         }
 
         /// <summary>

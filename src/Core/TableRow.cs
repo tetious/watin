@@ -98,7 +98,7 @@ namespace WatiN.Core
         /// <returns>The table cell</returns>
         public TableCell OwnTableCell(Constraint findBy)
         {
-            return new TableCell(DomContainer, CreateElementFinder<TableCell>(NativeElement.TableRows, findBy));
+            return new TableCell(DomContainer, CreateElementFinder<TableCell>(nativeElement => nativeElement.TableRows, findBy));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace WatiN.Core
         /// <returns>The table cell collection</returns>
         public TableCellCollection OwnTableCells
         {
-            get { return new TableCellCollection(DomContainer, CreateElementFinder<TableCell>(NativeElement.TableCells, null)); }
+            get { return new TableCellCollection(DomContainer, CreateElementFinder<TableCell>(nativeElement => nativeElement.TableCells, null)); }
         }
 
         /// <summary>

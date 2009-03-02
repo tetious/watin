@@ -13,25 +13,25 @@ namespace WatiN.Core
     internal class NativeElementCollectionAdapter : IElementContainer
     {
         private readonly DomContainer domContainer;
-        private readonly INativeElementCollection nativeElementCollection;
+        private readonly NativeElementFinder.NativeElementCollectionFactory nativeElementCollectionFactory;
 
         /// <summary>
         /// Creates a new adapter.
         /// </summary>
         /// <param name="domContainer">The DOM container</param>
-        /// <param name="nativeElementCollection">The native element collection</param>
+        /// <param name="factory">The native element collection</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="domContainer"/> or
-        /// <paramref name="nativeElementCollection"/> is null</exception>
+        /// <paramref name="factory"/> is null</exception>
         public NativeElementCollectionAdapter(DomContainer domContainer,
-            INativeElementCollection nativeElementCollection)
+            NativeElementFinder.NativeElementCollectionFactory factory)
         {
             if (domContainer == null)
                 throw new ArgumentNullException("domContainer");
-            if (nativeElementCollection == null)
-                throw new ArgumentNullException("nativeElementCollection");
+            if (factory == null)
+                throw new ArgumentNullException("factory");
 
             this.domContainer = domContainer;
-            this.nativeElementCollection = nativeElementCollection;
+            nativeElementCollectionFactory = factory;
         }
 
         #region IElementsContainer Members
@@ -581,15 +581,15 @@ namespace WatiN.Core
         private NativeElementFinder CreateElementFinder<TElement>(Constraint findBy)
             where TElement : Element
         {
-            return new NativeElementFinder(nativeElementCollection, domContainer, ElementFactory.GetElementTags<TElement>(), findBy);
+            return new NativeElementFinder(nativeElementCollectionFactory, domContainer, ElementFactory.GetElementTags<TElement>(), findBy);
         }
 
-        private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, string[] inputTypes)
+        private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, ICollection<string> inputTypes)
         {
             var tags = new List<ElementTag>();
-            if (inputTypes != null && inputTypes.Length != 0)
+            if (inputTypes != null && inputTypes.Count != 0)
             {
-                foreach (string inputType in inputTypes)
+                foreach (var inputType in inputTypes)
                     tags.Add(new ElementTag(tagName, inputType));
             }
             else
@@ -597,7 +597,8 @@ namespace WatiN.Core
                 tags.Add(new ElementTag(tagName));
             }
 
-            return new NativeElementFinder(nativeElementCollection, domContainer, tags, findBy);
+            return new NativeElementFinder(nativeElementCollectionFactory, domContainer, tags, findBy);
         }
+
     }
 }

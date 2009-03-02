@@ -92,7 +92,7 @@ namespace WatiN.Core
         /// <returns>The table row</returns>
         public TableRow OwnTableRow(Constraint findBy)
         {
-            return new TableRow(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, findBy));
+            return new TableRow(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, findBy));
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace WatiN.Core
         /// <returns>The table row collection</returns>
         public TableRowCollection OwnTableRows
         {
-            get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(NativeElement.TableRows, null)); }
+            get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, null)); }
         }
 
         /// <summary>

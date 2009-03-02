@@ -461,7 +461,7 @@ namespace WatiN.Core
 
         private NativeElementCollectionAdapter All
         {
-            get { return new NativeElementCollectionAdapter(DomContainer, NativeDocument.AllElements); }
+            get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.AllElements); }
         }
 
         #region IElementsContainer

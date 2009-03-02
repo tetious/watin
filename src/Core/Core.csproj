@@ -148,6 +148,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ControlCollection.cs" />
+    <Compile Include="Native\EmptyElementCollection.cs" />
     <Compile Include="IAttributeBag.cs" />
     <Compile Include="IComponentCollection.cs" />
     <Compile Include="ElementSelector.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="AreaCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EnumerableElementFinder.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />

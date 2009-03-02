@@ -57,7 +57,7 @@ namespace WatiN.Core.Comparers
         /// <summary>
         /// Gets the value to compare against.
         /// </summary>
-        protected string ComparisonValue
+        public string ComparisonValue
         {
             get { return comparisonValue; }
         }
