@@ -37,6 +37,7 @@ namespace WatiN.Core
 		internal const string styleBaseAttribute = "style.";
 		internal const string innerTextAttribute = "innertext";
 		internal const string titleAttribute = "title";
+		internal const string tagNameAttribute = "tagName";
 		internal const string valueAttribute = "value";
 		internal const string hrefAttribute = "href";
 		internal const string classNameAttribute = "className";

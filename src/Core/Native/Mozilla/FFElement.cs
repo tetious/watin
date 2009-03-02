@@ -342,7 +342,7 @@ namespace WatiN.Core.Native.Mozilla
 
         public string TagName
         {
-            get { return GetFromAttributeCache("TagName", () => GetProperty("tagName")); }
+            get { return GetFromAttributeCache("TagName", () => GetProperty(Find.tagNameAttribute)); }
         }
 
         public void Select()

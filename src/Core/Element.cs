@@ -1063,7 +1063,7 @@ namespace WatiN.Core
 		/// </example>
 		public Element Ancestor(string tagName, Constraint findBy)
 		{
-			var findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
+			var findAncestor = Find.By(Find.tagNameAttribute, new StringEqualsAndCaseInsensitiveComparer(tagName))
 			                                   && findBy;
 
 			return Ancestor(findAncestor);
