@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using mshtml;
 
@@ -6,9 +7,9 @@ namespace WatiN.Core.Native.InternetExplorer
 {
     internal class IEElementCollection : INativeElementCollection
     {
-        private readonly IHTMLElementCollection htmlElementCollection;
+        private readonly IEnumerable htmlElementCollection;
 
-        public IEElementCollection(IHTMLElementCollection htmlElementCollection)
+        public IEElementCollection(IEnumerable htmlElementCollection)
         {
             if (htmlElementCollection == null)
                 throw new ArgumentNullException("htmlElementCollection");
@@ -28,7 +29,10 @@ namespace WatiN.Core.Native.InternetExplorer
             if (tagName == null)
                 throw new ArgumentNullException("tagName");
 
-            return AsNative((IHTMLElementCollection)htmlElementCollection.tags(tagName));
+            var elementCollection = htmlElementCollection as IHTMLElementCollection;
+            if (elementCollection == null) return AsNative(htmlElementCollection);
+            
+            return AsNative((IHTMLElementCollection)elementCollection.tags(tagName));
         }
 
         /// <inheritdoc />
@@ -51,7 +55,7 @@ namespace WatiN.Core.Native.InternetExplorer
             }
         }
 
-        private static IEnumerable<INativeElement> AsNative(IHTMLElementCollection htmlElementCollection)
+        private static IEnumerable<INativeElement> AsNative(IEnumerable htmlElementCollection)
         {
             foreach (IHTMLElement htmlElement in htmlElementCollection)
                 yield return new IEElement(htmlElement);

@@ -22,11 +22,16 @@ namespace WatiN.Core.Native.Mozilla
         /// <inheritdoc />
         public IEnumerable<INativeElement> GetElements()
         {
-            return GetElementsByTag("*");
+            return GetElementByTagImpl("*");
         }
 
         /// <inheritdoc />
-        public IEnumerable<INativeElement> GetElementsByTag(string tagName)
+        public virtual IEnumerable<INativeElement> GetElementsByTag(string tagName)
+        {
+            return GetElementByTagImpl(tagName);
+        }
+
+        protected IEnumerable<INativeElement> GetElementByTagImpl(string tagName)
         {
             if (tagName == null)
                 throw new ArgumentNullException("tagName");
@@ -58,7 +63,12 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <inheritdoc />
-        public IEnumerable<INativeElement> GetElementsById(string id)
+        public virtual IEnumerable<INativeElement> GetElementsById(string id)
+        {
+            return GetElementsByIdImpl(id);
+        }
+
+        protected IEnumerable<INativeElement> GetElementsByIdImpl(string id)
         {
             if (id == null)
                 throw new ArgumentNullException("id");

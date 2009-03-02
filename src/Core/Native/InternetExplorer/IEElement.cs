@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -109,9 +110,9 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLSelectElement htmlSelectElement = HtmlElement as IHTMLSelectElement;
+                var htmlSelectElement = HtmlElement as IHTMLSelectElement;
                 if (htmlSelectElement != null)
-                    return new IEElementCollection((IHTMLElementCollection)htmlSelectElement.options);
+                    return new IEElementCollection(htmlSelectElement);
 
                 throw new InvalidOperationException("The element must be a SELECT.");
             }
