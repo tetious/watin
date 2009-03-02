@@ -1,0 +1,335 @@
+// --------------------------------------------------------------------------------------------------------------------- 
+// <copyright file="Chrome.cs">
+//   Copyright 2006-2009 Jeroen van Menen
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+// </copyright>
+// <summary>
+//   Defines the Chrome type.
+// </summary>
+// ---------------------------------------------------------------------------------------------------------------------
+#region 
+
+#endregion Copyright
+
+namespace WatiN.Core
+{
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+
+    using Logging;
+
+    using Microsoft.Win32;
+
+    using Native.Chrome;
+
+    using UtilityClasses;
+
+    using WatiN.Core.Native;
+
+    /// <summary>
+    /// Main class used to access web pages in Google Chrome.
+    /// </summary>
+    public class Chrome : Browser
+    {
+        /// <summary>
+        /// Path to the chrome executable.
+        /// </summary>
+        private static string pathToExe;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Chrome"/> class.
+        /// </summary>
+        public Chrome() : this(new Uri("about:blank"))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Chrome"/> class.
+        /// </summary>
+        /// <param name="url">The initail URL to load.</param>
+        public Chrome(string url) : this(new Uri(url))
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Chrome"/> class.
+        /// </summary>
+        /// <param name="url">The initial URL to load.</param>
+        public Chrome(Uri url)
+        {
+            this.CreateChromeInstance(url);
+            this.WaitForComplete();
+        }
+
+        /// <summary>
+        /// Gets the number of running FireFox processes.
+        /// </summary>
+        /// <value>The number of running FireFox processes.</value>
+        public static int CurrentProcessCount
+        {
+            get
+            {
+                int chromeCount = 0;
+
+                foreach (var process in Process.GetProcesses())
+                {
+                    if (process.ProcessName.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+                    {
+                        chromeCount++;
+                    }
+                }
+
+                return chromeCount;
+            }
+        }
+
+        /// <summary>
+        /// Gets the path to FireFox executable.
+        /// </summary>
+        /// <value>The path to exe.</value>
+        public static string PathToExe
+        {
+            get
+            {
+                if (pathToExe == null)
+                {
+                    pathToExe = GetExecutablePath();
+                }
+
+                return pathToExe;
+            }
+        }
+
+        /// <summary>
+        /// Gets window pointer to the current browser.
+        /// </summary>
+        /// <value>
+        /// The windows pointer to the current browser.
+        /// </value>
+        public override IntPtr hWnd
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the native browser.
+        /// </summary>
+        /// <value>The native browser.</value>
+        public new ChromeBrowser NativeBrowser
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the current Chrome process.
+        /// </summary>
+        /// <value>The current Chrome process or null if none is found.</value>
+        internal static Process CurrentProcess
+        {
+            get
+            {
+                Process chromeProcess = null;
+
+                foreach (var process in Process.GetProcesses())
+                {
+                    if (process.ProcessName.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+                    {
+                        chromeProcess = process;
+                    }
+                }
+
+                return chromeProcess;
+            }
+        }
+
+        /// <summary>
+        /// Creates the Chrome process.
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="waitForMainWindow">if set to <c>true</c> [wait for main window].</param>
+        /// <returns>Chrome process.</returns>
+        internal static Process CreateProcess(string arguments, bool waitForMainWindow)
+        {
+            var chromeProcess = new Process { StartInfo = { FileName = PathToExe, Arguments = arguments } };
+
+            chromeProcess.Start();
+            chromeProcess.WaitForInputIdle(5000);
+            chromeProcess.Refresh();
+
+            if (waitForMainWindow)
+            {
+                var action = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut) { SleepTime = 200 };
+                var result = action.Try(() =>
+                                        {
+                                            chromeProcess.Refresh();
+                                            if (!chromeProcess.HasExited && chromeProcess.MainWindowHandle != IntPtr.Zero)
+                                            {
+                                                Logger.LogAction("Waited for Chrome, main window handle found.");
+                                                return true;
+                                            }
+                                            return false;
+                                        });
+
+                if (!result)
+                {
+                    Debug.WriteLine("Timer elapsed waiting for Chrome to start.");
+                }
+            }
+
+            return chromeProcess;
+        }
+
+        /// <summary>
+        /// This method must be overriden by all sub classes
+        /// </summary>
+        /// <returns>The native document.</returns>
+        public override INativeDocument OnGetNativeDocument()
+        {
+            return new ChromeDocument(this.NativeBrowser.ClientPort);
+        }
+
+        /// <summary>
+        /// Waits for the page to be completely loaded.
+        /// </summary>
+        /// <param name="waitForCompleteTimeOut">
+        /// The number of seconds to wait before timing out
+        /// </param>
+        public override void WaitForComplete(int waitForCompleteTimeOut)
+        {
+            // TODO: Implement functionality
+        }
+
+        /// <summary>
+        /// Does the refresh.
+        /// </summary>
+        protected override void DoRefresh()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Does the reopen.
+        /// </summary>
+        protected override void DoReopen()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the value of an attribute that can be used for constraint evaluation.
+        /// </summary>
+        /// <param name="attributeName">
+        /// The name of the attribute, not null
+        /// </param>
+        /// <returns>
+        /// The attribute's associated value or null if none
+        /// </returns>
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the native browser.
+        /// </summary>
+        /// <returns>The native browser.</returns>
+        protected override INativeBrowser GetNativeBrowser()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Navigates the browser back to the previously display Url
+        /// </summary>
+        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
+        protected override bool GoBack()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Navigates the browser forward to the next displayed Url (like the forward
+        /// button in Internet Explorer).
+        /// </summary>
+        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
+        protected override bool GoForward()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Navigates to the specified <paramref name="url"/>.
+        /// </summary>
+        /// <param name="url">The URL to navigate to.</param>
+        protected override void NavigateTo(Uri url)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Navigates to the specified <paramref name="url"/> without waiting for the page to finish loading.
+        /// </summary>
+        /// <param name="url">The URL to navigate to.</param>
+        protected override void NavigateToNoWait(Uri url)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Initalizes the chrome executable path.
+        /// </summary>
+        /// <returns>The chrome executable path</returns>
+        private static string GetExecutablePath()
+        {
+            string path;
+            var chromeKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome\");
+            if (chromeKey != null)
+            {
+                path = Path.Combine((string)chromeKey.GetValue("InstallLocation"), "chrome.exe");
+
+                if (!File.Exists(path))
+                {
+                    throw new FileNotFoundException("Error locating chrome executable", path);
+                }
+            }
+            else
+            {
+                throw new ChromeException(@"Unable to determine the location of Chrome, please make sure you have installed it on your computer, tried looking for the registry key HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome\InstallLocation");                
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Creates the chrome instance.
+        /// </summary>
+        /// <param name="url">The URL to navigate to.</param>
+        private void CreateChromeInstance(Uri url)
+        {
+            Logger.LogAction("Creating Chrome instance");
+
+            UtilityClass.MoveMousePoinerToTopLeft(Settings.AutoMoveMousePointerToTopLeft);
+
+            var clientPort = new ChromeClientPort();
+            clientPort.Connect(url);
+
+            this.NativeBrowser = new ChromeBrowser(clientPort);
+        }
+    }
+}

@@ -61,9 +61,10 @@ namespace WatiN.Core
 			}
 		}
 
-		/// <summary>
-		/// This method must be overriden by all sub classes
-		/// </summary>
+        /// <summary>
+        /// Gets the native document.
+        /// </summary>
+        /// <returns>The native document.</returns>
 		public abstract INativeDocument OnGetNativeDocument();
 
 		/// <summary>

@@ -104,6 +104,10 @@ namespace WatiN.Core
             WaitForComplete();
         }
 
+        /// <summary>
+        /// Navigates to the specified <paramref name="url"/>.
+        /// </summary>
+        /// <param name="url">The URL to navigate to.</param>
         protected abstract void NavigateTo(Uri url);
 
         /// <summary>
@@ -165,7 +169,10 @@ namespace WatiN.Core
             NavigateToNoWait(url);
         }
 
-
+        /// <summary>
+        /// Navigates to the specified <paramref name="url"/> without waiting for the page to finish loading.
+        /// </summary>
+        /// <param name="url">The URL to navigate to.</param>
         protected abstract void NavigateToNoWait(Uri url);
 
         /// <summary>
@@ -219,6 +226,10 @@ namespace WatiN.Core
             return succeeded;
         }
 
+        /// <summary>
+        /// Navigates the browser back to the previously display Url
+        /// </summary>
+        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
         protected abstract bool GoBack();
 
         /// <summary>
@@ -243,6 +254,11 @@ namespace WatiN.Core
             return succeeded;
         }
 
+        /// <summary>
+        /// Navigates the browser forward to the next displayed Url (like the forward
+        /// button in Internet Explorer). 
+        /// </summary>
+        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
         protected abstract bool GoForward();
 
         /// <summary>

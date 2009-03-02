@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chrome.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />
     <Compile Include="Constraints\AnyConstraint.cs" />
     <Compile Include="Constraints\Constraint.cs" />
@@ -161,6 +162,10 @@
     <Compile Include="AreaCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Native\Chrome\ChromeBrowser.cs" />
+    <Compile Include="Native\Chrome\ChromeClientPort.cs" />
+    <Compile Include="Native\Chrome\ChromeDocument.cs" />
+    <Compile Include="Native\Chrome\ChromeException.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />
