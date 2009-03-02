@@ -99,7 +99,7 @@ namespace WatiN.Core.Native.Mozilla
 
                 var propertyValue = GetProperty(propertyName);
 
-                if (propertyName == "innerHTML") propertyValue = InnerHtmlToInnerText(propertyValue);
+                propertyValue = (propertyName == "innerHTML" ? InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
 
                 return propertyValue;
             }
@@ -450,16 +450,7 @@ namespace WatiN.Core.Native.Mozilla
 
             if (TagName.ToLowerInvariant() == "pre") return innerHtml;
 
-            // remove all \n (newline) and any following spaces
-            var newlineSpaces = new Regex("\r\n *");
-            var returnValue = newlineSpaces.Replace(innerHtml, "");
-            
-            // remove all \n (newline) and any following spaces
-            var simpleNewlineSpaces = new Regex("\n *");
-            returnValue = simpleNewlineSpaces.Replace(returnValue, "");
-
-            // that's it for text nodes
-            if (IsTextNodeType) return returnValue;
+            var returnValue = NewLineCleanup(innerHtml);
 
             // remove all but the last param tag by \r\n
             var param = new Regex("</p>");
@@ -481,9 +472,6 @@ namespace WatiN.Core.Native.Mozilla
             var tag = new Regex(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
             returnValue = tag.Replace(returnValue, "");
 
-//            tag = new Regex(@"</\w> *");
-//            returnValue = tag.Replace(returnValue, "");
-
             // remove comment
             tag = new Regex("<!--.*-->");
             returnValue = tag.Replace(returnValue, "");
@@ -494,6 +482,18 @@ namespace WatiN.Core.Native.Mozilla
 
             // remove spaces at the beginning of the text
             return returnValue.TrimStart();
+        }
+
+        private string NewLineCleanup(string innerHtml)
+        {
+// remove all \n (newline) and any following spaces
+            var newlineSpaces = new Regex("\r\n *");
+            var returnValue = newlineSpaces.Replace(innerHtml, "");
+            
+            // remove all \n (newline) and any following spaces
+            var simpleNewlineSpaces = new Regex("\n *");
+            returnValue = simpleNewlineSpaces.Replace(returnValue, "");
+            return returnValue;
         }
 
         private T GetFromAttributeCache<T>(string key, TryFunc<T> function)

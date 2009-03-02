@@ -123,7 +123,7 @@ namespace WatiN.Core
 
         public Element Element(Constraint findBy)
         {
-            return new Element(domContainer, CreateElementFinder<Element>(findBy));
+            return new ElementContainer<Element>(domContainer, CreateElementFinder<Element>(findBy));
         }
 
         public Element Element(Predicate<Element> predicate)

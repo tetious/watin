@@ -280,9 +280,12 @@ namespace WatiN.Core.UnitTests
 
 		                        // Textbefore and TextAfter tests
                                 var checkBox = browser.CheckBox("Checkbox21");
-			
-		                        Assert.AreEqual("Test label before: ", checkBox.TextBefore, "Unexpected checkBox.TextBefore");
-		                        Assert.AreEqual(" Test label after", checkBox.TextAfter, "Unexpected checkBox.TextAfter");
+
+		                        var textBefore = checkBox.TextBefore;
+		                        Assert.AreEqual("Test label before: ", textBefore, "Unexpected checkBox.TextBefore");
+                                
+                                var textAfter = checkBox.TextAfter;
+                                Assert.AreEqual(" Test label after", textAfter, "Unexpected checkBox.TextAfter");
 
 		                        var label = checkBox.Parent;
 		                        Assert.That(label, Is.InstanceOfType(typeof(Label)), "Expected a label");
