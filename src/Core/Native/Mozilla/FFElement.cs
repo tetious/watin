@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -28,6 +28,8 @@ namespace WatiN.Core.Native.Mozilla
 {
     public class FFElement : INativeElement
     {
+        public delegate T DoFuncWithValue<T>(string value);
+
         private const int NodeType_Text = 3;
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace WatiN.Core.Native.Mozilla
         /// I.e. for options myOption.getAttribute("selected"); returns nothing if it's selected. 
         /// However  myOption.selected returns true.
         /// </summary>
-        private static readonly IList<string> ReadPropertyInsteadOfAttribute = new[]
+        public static readonly IList<string> ReadPropertyInsteadOfAttribute = new[]
         {
             "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
             "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
@@ -46,7 +48,7 @@ namespace WatiN.Core.Native.Mozilla
         /// I.e. the Checked property is set be the click event on RadioButton.Checked and CheckBox.Checked
         /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
         /// </summary>
-        private static readonly IList<string> IgnoreSettingOfValue = new[]
+        public static readonly IList<string> IgnoreSettingOfValue = new[]
         {
             "checked"
         };
@@ -54,7 +56,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
-        private static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
         {
             {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
         };
@@ -62,7 +64,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
-        private static readonly Dictionary<string, TryFuncValue<string>> SetPropertyTransformations = new Dictionary<string, TryFuncValue<string>>
+        public static readonly Dictionary<string, DoFuncWithValue<string>> SetPropertyTransformations = new Dictionary<string, DoFuncWithValue<string>>
         {
             {"value", value => "'" + value + "'"}
         };
@@ -496,7 +498,7 @@ namespace WatiN.Core.Native.Mozilla
             return returnValue;
         }
 
-        private T GetFromAttributeCache<T>(string key, TryFunc<T> function)
+        private T GetFromAttributeCache<T>(string key, DoFunc<T> function)
         {
             if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
 

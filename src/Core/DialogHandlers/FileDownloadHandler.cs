@@ -120,7 +120,7 @@ namespace WatiN.Core.DialogHandlers
 	                var close = new WinButton(2, new Hwnd(window.Hwnd));
 	                close.Click();
 
-	                var actionUntilTimeOut = new TryActionUntilTimeOut(5);
+	                var actionUntilTimeOut = new TryFuncUntilTimeOut(5);
                     actionUntilTimeOut.Try(() => window.Exists());
 
                     // TODO: What to do if the window doesn't close after timeout?
@@ -260,7 +260,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="waitDurationInSeconds">duration in seconds to wait</param>
 		public void WaitUntilFileDownloadDialogIsHandled(int waitDurationInSeconds)
 		{
-	        var tryActionUntilTimeOut = new TryActionUntilTimeOut(waitDurationInSeconds);
+	        var tryActionUntilTimeOut = new TryFuncUntilTimeOut(waitDurationInSeconds);
             tryActionUntilTimeOut.Try(() => HasHandledFileDownloadDialog);
 
 	        if (!HasHandledFileDownloadDialog)
@@ -275,7 +275,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="waitDurationInSeconds">duration in seconds to wait</param>
 		public void WaitUntilDownloadCompleted(int waitDurationInSeconds)
 		{
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(waitDurationInSeconds);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(waitDurationInSeconds);
             tryActionUntilTimeOut.Try(() => !ExistsOrNull(DownloadProgressDialog));
 
 			if (ExistsOrNull(DownloadProgressDialog))

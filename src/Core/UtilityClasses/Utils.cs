@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Text;
@@ -37,6 +36,8 @@ namespace WatiN.Core.UtilityClasses
     /// </summary>
     public class UtilityClass
     {
+        public delegate void DoAction();
+
         /// <summary>
         /// Prevent creating an instance of this class (contains only static members)
         /// </summary>
@@ -367,7 +368,7 @@ namespace WatiN.Core.UtilityClasses
             return format;
         }
 
-        public static void TryActionIgnoreException(TryAction action)
+        public static void TryActionIgnoreException(DoAction action)
         {
             try
             {
@@ -377,7 +378,7 @@ namespace WatiN.Core.UtilityClasses
 
         }
 
-        public static T TryFuncIgnoreException<T>(TryFunc<T> action)
+        public static T TryFuncIgnoreException<T>(DoFunc<T> action)
         {
             try
             {

@@ -1,4 +1,4 @@
-#if SPEEDTEST
+//#if SPEEDTEST
 using System;
 using NUnit.Framework;
 using System.Linq;
@@ -22,25 +22,26 @@ namespace WatiN.Core.UnitTests.DotNet35
                 StopWatch stopWatch1 = new StopWatch();
                 stopWatch1.Start();
 
-                for (int i = 0; i < 500; i++)
+                const int numberOfLookUps = 500;
+                for (var i = 0; i < numberOfLookUps; i++)
                 {
                     var textField = ie.TextField(t => t.Name == "TextareaName");
                     Assert.That(textField.Exists);
                 }
                 stopWatch1.Stop();
 
-                StopWatch stopWatch2 = new StopWatch();
+                var stopWatch2 = new StopWatch();
                 stopWatch2.Start();
 
-                for (int i = 0; i < 500; i++)
+                for (var i = 0; i < numberOfLookUps; i++)
                 {
                     var textField = ie.TextField(Find.ByName("TextareaName"));
                     Assert.That(textField.Exists);
                 }
                 stopWatch2.Stop();
 
-                Console.WriteLine("1: " + stopWatch1.TicksSpend + " " + stopWatch1.TicksSpend / 1000);
-                Console.WriteLine("2: " + stopWatch2.TicksSpend + " " + stopWatch2.TicksSpend / 1000);
+                Console.WriteLine("1: " + stopWatch1.TicksSpend / numberOfLookUps + " " + stopWatch1.TicksSpend + " " + stopWatch1.TicksSpend / 1000);
+                Console.WriteLine("2: " + stopWatch1.TicksSpend / numberOfLookUps + " " + stopWatch2.TicksSpend + " " + stopWatch2.TicksSpend / 1000);
             }
         }
 
@@ -75,11 +76,11 @@ namespace WatiN.Core.UnitTests.DotNet35
         {
             using (var ie = new IE("www.google.com"))
             {
-                var buttons = from textfield in ie.TextFields 
-                              where textfield.Name == "btnG" 
-                              select textfield;
-                
-                Assert.That(buttons.First().Name, Is.EqualTo("btnG"));
+                var buttons = from button in ie.Buttons
+                              where button.GetValue("Name") == "btnG"
+                              select button;
+
+                Assert.That(buttons.First().GetValue("Name"), Is.EqualTo("btnG"));
             }
         }
 
@@ -234,4 +235,4 @@ namespace WatiN.Core.UnitTests.DotNet35
         }
     }
 }
-#endif
+//#endif

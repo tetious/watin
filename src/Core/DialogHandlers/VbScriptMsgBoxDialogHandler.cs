@@ -107,7 +107,7 @@ namespace WatiN.Core.DialogHandlers
 
         public bool WaitUntilHandled(int timeoutAfterSeconds)
 	    {
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeoutAfterSeconds);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeoutAfterSeconds);
             tryActionUntilTimeOut.Try(() => HasHandledDialog);
 
 	        return HasHandledDialog;

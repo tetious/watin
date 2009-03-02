@@ -3,9 +3,8 @@ using System.Threading;
 
 namespace WatiN.Core.UtilityClasses
 {
-    public delegate T TryFunc<T>();
-    public delegate T TryFuncValue<T>(string value);
-    public delegate void TryAction();
+    public delegate T DoFunc<T>();
+
     public delegate string BuildTimeOutExceptionMessage();
 
     /// <summary>
@@ -13,12 +12,12 @@ namespace WatiN.Core.UtilityClasses
     /// <example>
     /// The following code shows a basic usage:
     /// <code>
-    /// var action = new TryActionUntilTimeOut(5);
+    /// var action = new TryFuncUntilTimeOut(5);
     /// var result = action.Try(() => false == true);
     /// </code>
     /// </example>
     /// </summary>
-    public class TryActionUntilTimeOut
+    public class TryFuncUntilTimeOut
     {
         /// <summary>
         /// Gets or sets the interval between retries of the action..
@@ -52,29 +51,29 @@ namespace WatiN.Core.UtilityClasses
         public BuildTimeOutExceptionMessage ExceptionMessage { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TryActionUntilTimeOut"/> class.
+        /// Initializes a new instance of the <see cref="TryFuncUntilTimeOut"/> class.
         /// </summary>
         /// <param name="timeout">The timeout in seconds.</param>
-        public TryActionUntilTimeOut(int timeout)
+        public TryFuncUntilTimeOut(int timeout)
         {
             Timeout = timeout;
             SleepTime = Settings.SleepTime;
         }
 
-        public static T Try<T>(int timeout, TryFunc<T> func)
+        public static T Try<T>(int timeout, DoFunc<T> func)
         {
-            var tryAction = new TryActionUntilTimeOut(timeout);
-            return tryAction.Try(func);
+            var tryFunc = new TryFuncUntilTimeOut(timeout);
+            return tryFunc.Try(func);
         }
 
         /// <summary>
-        /// Tries the specified action until the result of the action is not equal to <c>default(T)</c>
+        /// Tries the specified action until the result of the action is not equal to <c>default{T}</c>
         /// or the time out is reached.
         /// </summary>
         /// <typeparam name="T">The result type of the action</typeparam>
         /// <param name="func">The action.</param>
-        /// <returns>The result of the action of <c>default(T)</c> when time out occured.</returns>
-        public T Try<T>(TryFunc<T> func)
+        /// <returns>The result of the action of <c>default{T}</c> when time out occured.</returns>
+        public T Try<T>(DoFunc<T> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 

@@ -789,7 +789,7 @@ namespace WatiN.Core
 			// Calling Exists will refresh the reference to the html element
 			// so the compare is against the current html element (and not 
 			// against some cached reference.
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeout)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
             {
                 ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ToString())
             };
@@ -825,7 +825,7 @@ namespace WatiN.Core
 
         private void LoopUntilExistsEqualsWaitUntilExistsArgument(bool waitUntilExists, int timeout)
         {
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeout)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
                 {
                     ExceptionMessage = () => string.Format("waiting {0} seconds for element to {1}.", timeout,
                                                   waitUntilExists ? "show up" : "disappear")

@@ -43,10 +43,11 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		// need to be checked whether this is valid for other operating 
-		// systems - chcecked on WinXP and Win2003
-		private const string printWarningDialogStyle = "96C820C4";
+		// systems - checked on WinXP and Win2003
+		private const string printDialogStyle = "96C820C4";
+        private const string printDialogStyleVista = "96C800C4";
 
-		private ButtonsEnum buttonToPush;
+        private ButtonsEnum buttonToPush;
 
 		public PrintDialogHandler(ButtonsEnum
 		                          	buttonToPush)
@@ -83,7 +84,7 @@ namespace WatiN.Core.DialogHandlers
 		/// </returns>
 		public bool IsPrintDialog(Window window)
 		{
-			return (window.StyleInHex == printWarningDialogStyle);
+			return (window.StyleInHex == printDialogStyle || window.StyleInHex == printDialogStyleVista);
 		}
 	}
 }

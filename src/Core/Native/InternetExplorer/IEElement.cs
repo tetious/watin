@@ -422,7 +422,7 @@ namespace WatiN.Core.Native.InternetExplorer
             // it's quite probable that it will never reach Complete.
             // Like for elements that could not load an image or ico
             // or some other bits not part of the HTML page.     
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(30);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(30);
             var ihtmlElement2 = ((IHTMLElement2)_element);
             var success = tryActionUntilTimeOut.Try(() =>
             {

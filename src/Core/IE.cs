@@ -639,7 +639,7 @@ namespace WatiN.Core
 		{
 			var m_Proc = Process.Start("IExplore.exe", "about:blank");
 
-            var action = new TryActionUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
+            var action = new TryFuncUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
             var ie = action.Try(() =>
             {
                 m_Proc.Refresh();
@@ -683,7 +683,7 @@ namespace WatiN.Core
 		{
             Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy);
 
-            var action = new TryActionUntilTimeOut(timeout) { SleepTime = 500 };
+            var action = new TryFuncUntilTimeOut(timeout) { SleepTime = 500 };
             var ie = action.Try(() => FindIEPartiallyInitialized(findBy));
             if (ie != null)
             {
@@ -1187,7 +1187,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ToString());
 
-		    var action = new TryActionUntilTimeOut(timeout){SleepTime = 500};
+		    var action = new TryFuncUntilTimeOut(timeout){SleepTime = 500};
             var result = action.Try(() => HtmlDialogs.First(findBy));
             
             if (result == null)

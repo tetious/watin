@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Web;
 using System.Windows.Forms;
@@ -111,7 +111,7 @@ namespace WatiN.Core.UnitTests
 
                                 Assert.That(browser.Url, Is.EqualTo(AboutBlank));
 
-                                TryActionUntilTimeOut.Try(3, () => browser.Uri == MainURI);
+                                TryFuncUntilTimeOut.Try(3, () => browser.Uri == MainURI);
                                 browser.WaitForComplete();
 
                                 Assert.AreEqual(MainURI, new Uri(browser.Url));

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.UtilityClasses;
@@ -15,7 +15,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         public void ShouldNotAllowNullAsAction()
         {
             // Given
-            var timeout = new TryActionUntilTimeOut(30);
+            var timeout = new TryFuncUntilTimeOut(30);
             
             // When
             try
@@ -36,7 +36,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         {
             // GIVEN
             var actionCalled = false;
-            var timeOut = new TryActionUntilTimeOut(2);
+            var timeOut = new TryFuncUntilTimeOut(2);
             
             // WHEN
             timeOut.Try(() => { actionCalled = true; return true; });
@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         public void TryShouldReturnTrueIfNoTimeOut()
         {
             // GIVEN
-            var timeOut = new TryActionUntilTimeOut(1);
+            var timeOut = new TryFuncUntilTimeOut(1);
             
             // WHEN
             var result = timeOut.Try(() => true );
@@ -63,7 +63,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         public void TryShouldReturnFalseIfDidTimeOut()
         {
             // GIVEN
-            var timeOut = new TryActionUntilTimeOut(1);
+            var timeOut = new TryFuncUntilTimeOut(1);
             
             // WHEN
             var result = timeOut.Try(() => false );
@@ -76,7 +76,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         public void ShouldTimeOutifActionDidNotReturnSucces()
         {
             // GIVEN
-            var timeOut = new TryActionUntilTimeOut(1);
+            var timeOut = new TryFuncUntilTimeOut(1);
             
             // WHEN
             timeOut.Try(() => false );
@@ -90,7 +90,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         {
             // GIVEN
             var timeoutsec = 1;
-            var timeOut = new TryActionUntilTimeOut(timeoutsec)
+            var timeOut = new TryFuncUntilTimeOut(timeoutsec)
                               {
                                   ExceptionMessage = () => string.Format("returning false for {0} seconds", timeoutsec)
                               };
@@ -116,7 +116,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         public void ShouldSetInnerExcpetionWithLastException()
         {
             // GIVEN
-            var timeOut = new TryActionUntilTimeOut(1)
+            var timeOut = new TryFuncUntilTimeOut(1)
                               {
                                   ExceptionMessage = () => "throwing exceptions"
                               };
@@ -149,7 +149,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             Settings.SleepTime = 123;
 
             // WHEN
-            var timeOut = new TryActionUntilTimeOut(1);
+            var timeOut = new TryFuncUntilTimeOut(1);
 
             // THEN
             Assert.That(timeOut.SleepTime, Is.EqualTo(123), "Unexpected default timeout");

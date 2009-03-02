@@ -255,7 +255,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(string text, int timeOut)
         {
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeOut)
             {
                 SleepTime = 50,
                 ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.WaitUntilExistsTimeOut, text)
@@ -286,7 +286,7 @@ namespace WatiN.Core
         /// </returns>
         public void WaitUntilContainsText(Regex regex, int timeOut)
         {
-            var tryActionUntilTimeOut = new TryActionUntilTimeOut(timeOut)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeOut)
             {
                 SleepTime = 50,
                 ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex)
