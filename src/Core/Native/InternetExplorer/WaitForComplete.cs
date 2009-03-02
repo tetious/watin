@@ -141,14 +141,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual bool IsIEReadyStateComplete(IWebBrowser2 ie)
         {
-            try
-            {
-                return ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE;
-            }
-            catch
-            {
-                return false;
-            }
+            return UtilityClass.TryFuncIgnoreException(() => ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE);
         }
 
         protected virtual void WaitWhileIEBusy(IWebBrowser2 ie)
@@ -163,14 +156,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual bool IsIEBusy(IWebBrowser2 ie)
         {
-            try
-            {
-                return ie.Busy;
-            }
-            catch
-            {
-                return false;
-            }
+            return UtilityClass.TryFuncIgnoreException(() => ie.Busy);
         }
 
         protected override void WaitForCompleteOrTimeout()

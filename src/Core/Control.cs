@@ -297,10 +297,10 @@ namespace WatiN.Core
         /// <inheritdoc />
         public override string ToString()
         {
-            StringBuilder description = new StringBuilder();
+            var description = new StringBuilder();
             description.Append(GetType().Name);
 
-            Element element = GetUntypedElement();
+            var element = GetUntypedElement();
             if (element != null)
             {
                 description.Append(@" (");

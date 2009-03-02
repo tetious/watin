@@ -295,6 +295,27 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "PredicateComparer not used");
 		}
 
+	    [Test]
+	    public void ShouldFindEscapedUrl()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+                                browser.GoTo(MainURI);
+
+	                            // GIVEN
+                                var escapedUrl = "https://www.watin.net/How%20To%20Use%20WatiN.pdf";
+
+	                            // WHEN
+	                            var link = browser.Link(Find.ByUrl(escapedUrl));
+
+	                            // THEN
+	                            Assert.That(link.Exists, Is.True);
+	                        });
+
+
+	    }
+
+
 		[Test, ExpectedException(typeof (UriFormatException))]
 		public void FindingEmptyUrlNotAllowed()
 		{
