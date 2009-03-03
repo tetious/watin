@@ -3,54 +3,32 @@ using System.Collections.Generic;
 
 namespace WatiN.Core.Native.Mozilla
 {
-    internal class FFElementCollection : INativeElementCollection
+    internal class FFElementCollection : JSElementCollectionBase
     {
-        private readonly FireFoxClientPort clientPort;
-        private readonly string containerReference;
-
-        public FFElementCollection(FireFoxClientPort clientPort, string containerReference)
+        public FFElementCollection(FireFoxClientPort clientPort, string containerReference) : base(clientPort, containerReference)
         {
-            if (clientPort == null)
-                throw new ArgumentNullException("clientPort");
-            if (containerReference == null)
-                throw new ArgumentNullException("containerReference");
-
-            this.clientPort = clientPort;
-            this.containerReference = containerReference;
         }
 
-        /// <inheritdoc />
-        public IEnumerable<INativeElement> GetElements()
-        {
-            return GetElementByTagImpl("*");
-        }
-
-        /// <inheritdoc />
-        public virtual IEnumerable<INativeElement> GetElementsByTag(string tagName)
-        {
-            return GetElementByTagImpl(tagName);
-        }
-
-        protected IEnumerable<INativeElement> GetElementByTagImpl(string tagName)
+        protected override IEnumerable<INativeElement> GetElementByTagImpl(string tagName)
         {
             if (tagName == null)
                 throw new ArgumentNullException("tagName");
 
-            Initialize();
+            this.Initialize();
 
             var elementArrayReference = FireFoxClientPort.CreateVariableName();
             var command = string.Format(
-                "{0} = {1}.getElementsByTagName(\"{2}\");"
-                + "{0}.length;", elementArrayReference, containerReference, tagName);
+                    "{0} = {1}.getElementsByTagName(\"{2}\");"
+                    + "{0}.length;", elementArrayReference, this.containerReference, tagName);
 
-            int numberOfElements = clientPort.WriteAndReadAsInt(command);
+            int numberOfElements = this.clientPort.WriteAndReadAsInt(command);
 
             try
             {
                 for (var index = 0; index < numberOfElements; index++)
                 {
                     var elementReference = string.Concat(elementArrayReference, "[", index.ToString(), "]");
-                    var ffElement = new FFElement(clientPort, elementReference);
+                    var ffElement = new FFElement((FireFoxClientPort)this.clientPort, elementReference);
                     ffElement.ReAssignElementReference();
                     yield return ffElement;
                 }
@@ -58,47 +36,24 @@ namespace WatiN.Core.Native.Mozilla
             finally
             {
                 command = string.Format("delete {0};", elementArrayReference);
-                clientPort.Write(command);
+                this.clientPort.Write(command);
             }
         }
 
-        /// <inheritdoc />
-        public virtual IEnumerable<INativeElement> GetElementsById(string id)
-        {
-            return GetElementsByIdImpl(id);
-        }
-
-        protected IEnumerable<INativeElement> GetElementsByIdImpl(string id)
+        protected override IEnumerable<INativeElement> GetElementsByIdImpl(string id)
         {
             if (id == null)
                 throw new ArgumentNullException("id");
 
-            Initialize();
+            this.Initialize();
 
-            var documentReference = GetDocumentReference(containerReference);
+            var documentReference = GetDocumentReference(this.containerReference);
 
             var elementReference = FireFoxClientPort.CreateVariableName();
             var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
 
-            if (clientPort.WriteAndReadAsBool(command))
-                yield return new FFElement(clientPort, elementReference);
-        }
-
-        private void Initialize()
-        {
-            // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            clientPort.InitializeDocument();
-        }
-
-        private static string GetDocumentReference(string referencedElement)
-        {
-            if (referencedElement.Contains(".") &&
-                !(referencedElement.EndsWith("contentDocument") || referencedElement.EndsWith("ownerDocument")))
-            {
-                return referencedElement + ".ownerDocument";
-            }
-
-            return referencedElement;
+            if (this.clientPort.WriteAndReadAsBool(command))
+                yield return new FFElement((FireFoxClientPort)this.clientPort, elementReference);
         }
     }
 }

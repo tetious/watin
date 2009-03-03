@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
-
-//Copyright 2006-2009 Jeroen van Menen
+// --------------------------------------------------------------------------------------------------------------------- 
+// <copyright file="FireFoxClientPort.cs">
+//   Copyright 2006-2009 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -13,56 +13,31 @@
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
-
-#endregion Copyright
-
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Windows.Forms;
-using WatiN.Core.Logging;
-using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
+// </copyright>
+// <summary>
+//   The firefox client port used to communicate with the remote automation server jssh.
+// </summary>
+// ---------------------------------------------------------------------------------------------------------------------
 
 namespace WatiN.Core.Native.Mozilla
 {
-    public class FireFoxClientPort : IDisposable
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Windows.Forms;
+
+    using WatiN.Core.Logging;
+    using WatiN.Core.Native.Windows;
+    using WatiN.Core.UtilityClasses;
+
+    /// <summary>
+    /// The firefox client port used to communicate with the remote automation server jssh.
+    /// </summary>
+    public class FireFoxClientPort : ClientPortBase, IDisposable
     {
-        #region Private fields
-
-        /// <summary>
-        /// Used by CreateElementVariableName
-        /// </summary>
-        private static long elementCounter;
-
-        /// <summary>
-        /// Underlying socket used to create a <see cref="NetworkStream"/>.
-        /// </summary>
-        private Socket telnetSocket;
-
-        /// <summary>
-        /// The last reponse recieved from the jssh server
-        /// </summary>
-        private string lastResponse;
-        private string lastResponseRaw;
-
-        /// <summary>
-        /// The entire response from the jssh server so far.
-        /// </summary>
-        private StringBuilder response;
-
-        /// <summary>
-        /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
-        /// </summary>
-        private bool disposed;
-
-        #endregion
-
-        #region Public constants
-
         /// <summary>
         /// Name of the javascript variable that references the XUL:browser object.
         /// </summary>
@@ -78,81 +53,73 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         public const string WindowVariableName = "window";
 
-        #endregion
-
-        #region Constructors / destructors
+        /// <summary>
+        /// Used by CreateElementVariableName
+        /// </summary>
+        private static long elementCounter;
 
         /// <summary>
+        /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
+        /// </summary>
+        private bool disposed;
+
+        /// <summary>
+        /// Underlying socket used to create a <see cref="NetworkStream"/>.
+        /// </summary>
+        private Socket telnetSocket;
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="FireFoxClientPort"/> class. 
         /// Releases unmanaged resources and performs other cleanup operations before the
         /// <see cref="FireFox"/> is reclaimed by garbage collection.
         /// </summary>
         ~FireFoxClientPort()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
-        #endregion
-
-        #region Public instance properties
-
         /// <summary>
-        /// <c>true</c> if we have successfully connected to FireFox
+        /// Gets a value indicating whether this <see cref="FireFoxClientPort"/> is connected.
         /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected { get; private set; }
 
         /// <summary>
-        /// The last reponse recieved from the jssh server
+        /// Gets a value indicating whether the main FireFox window is visible, it's possible that the
+        /// main FireFox window is not visible if a previous shutdown didn't complete correctly
+        /// in which case the restore / resume previous session dialog may be visible.
         /// </summary>
-        private string LastResponse
+        internal bool IsMainWindowVisible
         {
             get
             {
-                return LastResponseIsNull ? null : lastResponse;
+                var result = NativeMethods.GetWindowText(this.Process.MainWindowHandle).Contains("Mozilla Firefox");
+                return result;
             }
         }
 
         /// <summary>
-        /// The entire response from the jssh server so far.
+        /// Gets Process.
         /// </summary>
-        public string Response
-        {
-            get { return response.ToString(); }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether last response is null.
-        /// </summary>
-        /// <value><c>true</c> if last response is null; otherwise, <c>false</c>.</value>
-        private bool LastResponseIsNull
-        {
-            get
-            {
-                return lastResponse.Equals("null", StringComparison.OrdinalIgnoreCase);
-            }
-        }
-
-        /// <summary>
-        /// Retruns the last reponse as a Boolen, default to false if converting <see cref="LastResponse"/> fails.
-        /// </summary>
-        private bool LastResponseAsBool
-        {
-            get
-            {
-                bool lastBoolResponse;
-                Boolean.TryParse(LastResponse, out lastBoolResponse);
-                return lastBoolResponse;
-            }
-        }
-
-        #endregion
-
-        #region Internal instance properties
-
+        /// <value>
+        /// The process.
+        /// </value>
         internal Process Process { get; private set; }
 
-        #endregion
-
-        #region Public static methods
+        /// <summary>
+        /// Gets a value indicating whether IsRestoreSessionDialogVisible.
+        /// </summary>
+        /// <value>
+        /// The is restore session dialog visible.
+        /// </value>
+        private bool IsRestoreSessionDialogVisible
+        {
+            get
+            {
+                var result = NativeMethods.GetWindowText(this.Process.MainWindowHandle).Contains("Firefox - ");
+                return result;
+            }
+        }
 
         /// <summary>
         /// Creates a unique variable name
@@ -165,60 +132,42 @@ namespace WatiN.Core.Native.Mozilla
             return string.Format("{0}.watin{1}", DocumentVariableName, elementCounter);
         }
 
-        #endregion
-
-        #region Public instance methods
-
         /// <summary>
-        /// Reloads the javascript variables that are scoped at the document level.
         /// </summary>
-        public void InitializeDocument()
-        {
-            // Check to see if setting the reference (and doing the loop for activeElement which is time consuming)
-            // is needed.
-            var needToUpdateDocumentReference = WriteAndReadAsBool("{0} != {1}.document", DocumentVariableName, WindowVariableName);
-            if (!needToUpdateDocumentReference) return;
-
-            // Sets up the document variable
-            Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
-
-            // Javascript to implement document.activeElement if not supported by browser (FireFox 2.x)
-            Write("if (" + DocumentVariableName + ".activeElement == null){" + DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;" +
-                  "var allElements = " + DocumentVariableName + ".getElementsByTagName(\"*\");" +
-                  "for (i = 0; i < allElements.length; i++){" +
-                  "allElements[i].addEventListener(\"focus\", function (event) {" +
-                  DocumentVariableName + ".activeElement = event.target;}, false);}}");
-        }
-
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <exception cref="FireFoxException">
+        /// </exception>
         public void Connect(string url)
         {
             if (string.IsNullOrEmpty(url)) url = "about:blank";
 
-            ValidateCanConnect();
-            disposed = false;
+            this.ValidateCanConnect();
+            this.disposed = false;
             
             Logger.LogDebug("Attempting to connect to jssh server on localhost port 9997.");
             
-            lastResponse = string.Empty;
-            response = new StringBuilder();
+            this.LastResponse = string.Empty;
+            this.Response = new StringBuilder();
 
-            Process = Core.FireFox.CreateProcess(url + " -jssh", true);
+            this.Process = Core.FireFox.CreateProcess(url + " -jssh", true);
 
-            if (!IsMainWindowVisible)
+            if (!this.IsMainWindowVisible)
             {
-                if (IsRestoreSessionDialogVisible)
+                if (this.IsRestoreSessionDialogVisible)
                 {
-                    NativeMethods.SetForegroundWindow(Process.MainWindowHandle);
+                    NativeMethods.SetForegroundWindow(this.Process.MainWindowHandle);
                     SendKeys.SendWait("{TAB}");
                     SendKeys.SendWait("{ENTER}");
                 }
             }
 
-            telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {Blocking = true};
+            this.telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {Blocking = true};
 
             try
             {
-                telnetSocket.Connect(IPAddress.Parse("127.0.0.1"), 9997);
+                this.telnetSocket.Connect(IPAddress.Parse("127.0.0.1"), 9997);
             }
             catch (SocketException sockException)
             {
@@ -226,56 +175,10 @@ namespace WatiN.Core.Native.Mozilla
                 throw new FireFoxException("Unable to connect to jssh server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
             }
 
-            Connected = true;
-            WaitForConnectionEstablished();
+            this.Connected = true;
+            this.WaitForConnectionEstablished();
             Logger.LogDebug("Successfully connected to FireFox using jssh.");
-            DefineDefaultJSVariables();
-        }
-
-        private void ValidateCanConnect()
-        {
-            if (Connected)
-            {
-                throw new FireFoxException("Already connected to jssh server.");
-            }
-
-            if (Core.FireFox.CurrentProcessCount > 0 && !Settings.CloseExistingBrowserInstances)
-            {
-                throw new FireFoxException("Existing instances of FireFox detected.");
-            }
-            
-            if (Core.FireFox.CurrentProcessCount > 0)
-            {
-                Core.FireFox.CurrentProcess.Kill();
-            }
-        }
-
-        private bool IsRestoreSessionDialogVisible
-        {
-            get
-            {
-                var result = NativeMethods.GetWindowText(Process.MainWindowHandle).Contains("Firefox - ");
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating if the main FireFox window is visible, it's possible that the
-        /// main FireFox window is not visible if a previous shutdown didn't complete correctly
-        /// in which case the restore / resume previous session dialog may be visible.
-        /// </summary>
-        internal bool IsMainWindowVisible
-        {
-            get
-            {
-                var result = NativeMethods.GetWindowText(Process.MainWindowHandle).Contains("Mozilla Firefox");
-                return result;
-            }
-        }
-
-        private int LastResponseAsInt
-        {
-            get { return string.IsNullOrEmpty(LastResponse) ? 0 : int.Parse(lastResponse); }
+            this.DefineDefaultJSVariables();
         }
 
         ///<summary>
@@ -284,7 +187,7 @@ namespace WatiN.Core.Native.Mozilla
         ///<filterpriority>2</filterpriority>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
 
             // This object will be cleaned up by the Dispose method.
             // Therefore, you should call GC.SupressFinalize to
@@ -294,32 +197,51 @@ namespace WatiN.Core.Native.Mozilla
             GC.SuppressFinalize(this);
         }
 
-        #endregion Public instance methods
+        /// <summary>
+        /// Reloads the javascript variables that are scoped at the document level.
+        /// </summary>
+        public override void InitializeDocument()
+        {
+            // Check to see if setting the reference (and doing the loop for activeElement which is time consuming)
+            // is needed.
+            var needToUpdateDocumentReference = this.WriteAndReadAsBool("{0} != {1}.document", DocumentVariableName, WindowVariableName);
+            if (!needToUpdateDocumentReference) return;
 
-        #region Protected instance methods
+            // Sets up the document variable
+            this.Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
+
+            // Javascript to implement document.activeElement if not supported by browser (FireFox 2.x)
+            this.Write("if (" + DocumentVariableName + ".activeElement == null){" + DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;" +
+                       "var allElements = " + DocumentVariableName + ".getElementsByTagName(\"*\");" +
+                       "for (i = 0; i < allElements.length; i++){" +
+                       "allElements[i].addEventListener(\"focus\", function (event) {" +
+                       DocumentVariableName + ".activeElement = event.target;}, false);}}");
+        }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
         /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        /// <param name="disposing">
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.
+        /// </param>
         protected void Dispose(bool disposing)
         {
             // Check to see if Dispose has already been called.
-            if (!disposed)
+            if (!this.disposed)
             {
                 // If disposing equals true, dispose all managed 
                 // and unmanaged resources.
                 if (disposing)
                 {
                     // Dispose managed resources.
-                    if (telnetSocket != null && telnetSocket.Connected && !Process.HasExited)
+                    if (this.telnetSocket != null && this.telnetSocket.Connected && !this.Process.HasExited)
                     {
                         try
                         {
                             Logger.LogDebug("Closing connection to jssh");
-                            Write(string.Format("{0}.close();", WindowVariableName));
-                            telnetSocket.Close();
-                            Process.WaitForExit(5000);
+                            this.Write(string.Format("{0}.close();", WindowVariableName));
+                            this.telnetSocket.Close();
+                            this.Process.WaitForExit(5000);
                         }
                         catch (IOException ex)
                         {
@@ -330,32 +252,75 @@ namespace WatiN.Core.Native.Mozilla
 
                 // Call the appropriate methods to clean up 
                 // unmanaged resources here.
-                if (Process != null)
+                if (this.Process != null)
                 {
-                    if (!Process.HasExited)
+                    if (!this.Process.HasExited)
                     {
                         Logger.LogDebug("Closing FireFox");
-                        Process.Kill();
+                        this.Process.Kill();
                     }
                 }
             }
 
-            disposed = true;
-            Connected = false;
+            this.disposed = true;
+            this.Connected = false;
         }
 
-        #endregion Protected instance methods
+        /// <summary>
+        /// Writes the specified data to the jssh server.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <param name="resultExpected">
+        /// </param>
+        /// <param name="checkForErrors">
+        /// </param>
+        /// <param name="args">
+        /// </param>
+        protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
+        {
+            var command = UtilityClass.StringFormat(data, args);
 
-        #region Private static methods
+            this.SendCommand(command);
+            this.ReadResponse(resultExpected, checkForErrors);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="response">
+        /// The response.
+        /// </param>
+        /// <exception cref="FireFoxException">
+        /// </exception>
+        private static void CheckForError(string response)
+        {
+            if (string.IsNullOrEmpty(response))
+            {
+                return;
+            }
+
+            if (response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new FireFoxException(string.Format("Error sending last message to jssh server: {0}", response));
+            }
+        }
 
         /// <summary>
         /// Cleans the response.
         /// </summary>
-        /// <param name="response">The response.</param>
-        /// <returns>Response from FireFox with out any of the telnet UI characters</returns>
+        /// <param name="response">
+        /// The response.
+        /// </param>
+        /// <returns>
+        /// Response from FireFox with out any of the telnet UI characters
+        /// </returns>
         private static string CleanTelnetResponse(string response)
         {
-            //HACK refactor in the future, should find a cleaner way of doing this.
+            // HACK refactor in the future, should find a cleaner way of doing this.
             if (!string.IsNullOrEmpty(response))
             {
                 if (response.EndsWith(string.Format("{0}>", "\n")))
@@ -408,114 +373,32 @@ namespace WatiN.Core.Native.Mozilla
             return response;
         }
 
-        #endregion
-
-        #region Private instance methods
-
         /// <summary>
         /// Defines the default JS variables used to automate FireFox.
         /// </summary>
         private void DefineDefaultJSVariables()
         {
-            Write("var w0 = getWindows()[0];");
-            Write("var {0} = w0.content;", WindowVariableName);
-            Write("var {0} = w0.document;", DocumentVariableName);
-            Write("var {0} = w0.getBrowser();", BrowserVariableName);
-        }
-
-        /// <summary>
-        /// Writes a line to the jssh server.
-        /// </summary>
-        private void WaitForConnectionEstablished()
-        {
-            SendCommand("\n");
-            
-            var rawResponse = string.Empty;
-            var responseToWaitFor = "Welcome to the Mozilla JavaScript Shell!\n\n> \n> \n> "; //.Replace("\n", Environment.NewLine);
-
-            while (rawResponse != responseToWaitFor)
-            {
-                ReadResponse(false, true);
-                rawResponse += lastResponseRaw;
-            }
-        }
-
-        /// <summary>
-        /// Writes the specified data to the jssh server.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="resultExpected"></param>
-        /// <param name="checkForErrors"></param>
-        /// <param name="args"></param>
-        private void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
-        {
-            var command = UtilityClass.StringFormat(data, args);
-
-            SendCommand(command);
-            ReadResponse(resultExpected, checkForErrors);
-        }
-
-        private void SendCommand(string data)
-        {
-            if (!Connected)
-            {
-                throw new FireFoxException("You must connect before writing to the server.");
-            }
-
-            var bytes = Encoding.ASCII.GetBytes(data + "\n");
-
-            Logger.LogDebug("sending: {0}", data);
-            using (var networkStream = new NetworkStream(telnetSocket))
-            {
-                networkStream.Write(bytes, 0, bytes.Length);
-                networkStream.Flush();
-            }
-        }
-
-        /// <summary>
-        /// Writes the specified data to the jssh server.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
-        public void Write(string data, params object[] args)
-        {
-            var command = data.EndsWith(";") == false ? data + ";" : data;
-            SendAndRead(command + " true;", true, true, args);
-        }
-
-        public string WriteAndReadIgnoreError(string data, params object[] args)
-        {
-            SendAndRead(data, false, false, args);
-            return LastResponse;
-        }
-
-        public string WriteAndRead(string data, params object[] args)
-        {
-            SendAndRead(data, false, true, args);
-            return LastResponse;
-        }
-
-        public bool WriteAndReadAsBool(string data, params object[] args)
-        {
-            SendAndRead(data, true, true, args);
-            return LastResponseAsBool;
-        }
-
-        public int WriteAndReadAsInt(string data, params object[] args)
-        {
-            SendAndRead(data, true, true, args);
-            return LastResponseAsInt;
+            this.Write("var w0 = getWindows()[0];");
+            this.Write("var {0} = w0.content;", WindowVariableName);
+            this.Write("var {0} = w0.document;", DocumentVariableName);
+            this.Write("var {0} = w0.getBrowser();", BrowserVariableName);
         }
 
         /// <summary>
         /// Reads the response from the jssh server.
         /// </summary>
+        /// <param name="resultExpected">
+        /// The result Expected.
+        /// </param>
+        /// <param name="checkForErrors">
+        /// The check For Errors.
+        /// </param>
         private void ReadResponse(bool resultExpected, bool checkForErrors)
         {
-            var stream = new NetworkStream(telnetSocket);
+            var stream = new NetworkStream(this.telnetSocket);
             
-            lastResponse = string.Empty;
-            lastResponseRaw = string.Empty;
+            this.LastResponse = string.Empty;
+            this.LastResponseRaw = string.Empty;
 
             var bufferSize = 4096;
             var buffer = new byte[bufferSize];
@@ -533,33 +416,86 @@ namespace WatiN.Core.Native.Mozilla
                 readData = Encoding.UTF8.GetString(buffer, 0, read);
 
                 Logger.LogDebug("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
-                lastResponseRaw += readData;
-                lastResponse += CleanTelnetResponse(readData);
-            } while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(lastResponse)));
+                this.LastResponseRaw += readData;
+                this.LastResponse += CleanTelnetResponse(readData);
+            }
+            while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
 
             // Convert \n to newline
-            lastResponse = lastResponse.Replace("\n", Environment.NewLine);
+            if (this.LastResponse != null)
+            {
+                this.LastResponse = this.LastResponse.Replace("\n", Environment.NewLine);
+            }
             
-            response.Append(lastResponse);
+            this.Response.Append(this.LastResponse);
 
             if (checkForErrors)
             {
-                CheckForError(lastResponse);
+                CheckForError(this.LastResponse);
             }
-
         }
 
-        private static void CheckForError(string response)
+        /// <summary>
+        /// Sends a command to the FireFox remote server.
+        /// </summary>
+        /// <param name="data">
+        /// The data to send.
+        /// </param>
+        /// <exception cref="FireFoxException">When not connected.</exception>
+        private void SendCommand(string data)
         {
-            if (response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
+            if (!this.Connected)
             {
-                throw new FireFoxException(string.Format("Error sending last message to jssh server: {0}", response));
+                throw new FireFoxException("You must connect before writing to the server.");
+            }
+
+            var bytes = Encoding.ASCII.GetBytes(data + "\n");
+
+            Logger.LogDebug("sending: {0}", data);
+            using (var networkStream = new NetworkStream(this.telnetSocket))
+            {
+                networkStream.Write(bytes, 0, bytes.Length);
+                networkStream.Flush();
             }
         }
 
-        #endregion private instance methods
+        /// <summary>
+        /// </summary>
+        /// <exception cref="FireFoxException">
+        /// </exception>
+        private void ValidateCanConnect()
+        {
+            if (this.Connected)
+            {
+                throw new FireFoxException("Already connected to jssh server.");
+            }
+
+            if (Core.FireFox.CurrentProcessCount > 0 && !Settings.CloseExistingBrowserInstances)
+            {
+                throw new FireFoxException("Existing instances of FireFox detected.");
+            }
+            
+            if (Core.FireFox.CurrentProcessCount > 0)
+            {
+                Core.FireFox.CurrentProcess.Kill();
+            }
+        }
+
+        /// <summary>
+        /// Writes a line to the jssh server.
+        /// </summary>
+        private void WaitForConnectionEstablished()
+        {
+            this.SendCommand("\n");
+            
+            var rawResponse = string.Empty;
+            var responseToWaitFor = "Welcome to the Mozilla JavaScript Shell!\n\n> \n> \n> "; // .Replace("\n", Environment.NewLine);
+
+            while (rawResponse != responseToWaitFor)
+            {
+                this.ReadResponse(false, true);
+                rawResponse += this.LastResponseRaw;
+            }
+        }
     }
 }

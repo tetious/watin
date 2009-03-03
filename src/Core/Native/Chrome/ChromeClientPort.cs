@@ -35,7 +35,7 @@ namespace WatiN.Core.Native.Chrome
     /// <summary>
     /// Handles telnet communication to the Chrome browser shell.
     /// </summary>
-    public class ChromeClientPort : IDisposable
+    public class ChromeClientPort : ClientPortBase, IDisposable
     {
         /// <summary>
         /// The port used to connect to chrome.
@@ -75,38 +75,10 @@ namespace WatiN.Core.Native.Chrome
         internal Process Process { get; private set; }
 
         /// <summary>
-        /// Gets or sets the last response recieved from the chrome.
-        /// </summary>
-        private string LastResponse
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the last response recieved from chrome in raw format.
-        /// </summary>
-        private string LastResponseRaw
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets the last command send to the chrome client.
         /// </summary>
         /// <value>The last command send.</value>
         private string LastCommandSend
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the entire response from the jssh server so far.
-        /// </summary>
-        /// <value>The response.</value>
-        private StringBuilder Response
         {
             get;
             set;
@@ -175,15 +147,25 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
-        /// Writes command to chrome and then reads the responce.
+        /// Initializes the document.
+        /// </summary>
+        public override void InitializeDocument()
+        {            
+        }
+
+        /// <summary>
+        /// Writes the specified data to the jssh server.
         /// </summary>
         /// <param name="data">The data to write.</param>
-        /// <param name="args">The args to apply to the data.</param>
-        /// <returns>Response from Chrome.</returns>
-        public string WriteAndRead(string data, params object[] args)
+        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
+        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
+        /// <param name="args">Arguments to format with the data.</param>
+        protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
-            this.SendAndRead(data, false, true, args);
-            return this.LastResponse;
+            var command = UtilityClass.StringFormat(data, args);
+
+            this.SendCommand(command);
+            this.ReadResponse(resultExpected, checkForErrors);
         }
 
         /// <summary>
@@ -266,21 +248,6 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
-        /// </summary>
-        /// <param name="data">The data to write.</param>
-        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
-        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
-        /// <param name="args">Arguments to format with the data.</param>
-        private void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
-        {
-            var command = UtilityClass.StringFormat(data, args);
-
-            this.SendCommand(command);
-            this.ReadResponse(resultExpected, checkForErrors);
-        }
-
-        /// <summary>
         /// Sends the command.
         /// </summary>
         /// <param name="data">The data to send.</param>
@@ -329,7 +296,7 @@ namespace WatiN.Core.Native.Chrome
 
                 Logger.LogDebug("chrome says: '" + readData.Replace("\n", "[newline]") + "'");
                 this.LastResponseRaw += readData;
-                this.LastResponse += CleanTelnetResponse(readData);
+                this.LastResponse += this.CleanTelnetResponse(readData);
             } 
             while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
 

@@ -159,6 +159,26 @@ namespace WatiN.Core
         }
 
         /// <summary>
+        /// This method must be overriden by all sub classes
+        /// </summary>
+        /// <returns>The native document.</returns>
+        public override INativeDocument OnGetNativeDocument()
+        {
+            return new ChromeDocument(this.NativeBrowser.ClientPort);
+        }
+
+        /// <summary>
+        /// Waits for the page to be completely loaded.
+        /// </summary>
+        /// <param name="waitForCompleteTimeOut">
+        /// The number of seconds to wait before timing out
+        /// </param>
+        public override void WaitForComplete(int waitForCompleteTimeOut)
+        {
+            // TODO: Implement functionality
+        }
+
+        /// <summary>
         /// Creates the Chrome process.
         /// </summary>
         /// <param name="arguments">The arguments.</param>
@@ -196,23 +216,28 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// This method must be overriden by all sub classes
+        /// Releases unmanaged and - optionally - managed resources
         /// </summary>
-        /// <returns>The native document.</returns>
-        public override INativeDocument OnGetNativeDocument()
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
         {
-            return new ChromeDocument(this.NativeBrowser.ClientPort);
-        }
+            // Check to see if Dispose has already been called.
+            if (IsDisposed)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// Waits for the page to be completely loaded.
-        /// </summary>
-        /// <param name="waitForCompleteTimeOut">
-        /// The number of seconds to wait before timing out
-        /// </param>
-        public override void WaitForComplete(int waitForCompleteTimeOut)
-        {
-            // TODO: Implement functionality
+            // If disposing equals true, dispose all managed 
+            // and unmanaged resources.
+            if (disposing)
+            {
+                // Dispose managed resources.
+                this.NativeBrowser.ClientPort.Dispose();
+            }
+
+            // Call the appropriate methods to clean up 
+            // unmanaged resources here.
+            base.Dispose(disposing);
         }
 
         /// <summary>

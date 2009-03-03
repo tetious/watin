@@ -290,7 +290,7 @@ namespace WatiN.Core
         /// </summary>
         protected override void DoRefresh()
         {
-            NativeBrowser.Reload();
+            NativeBrowser.Reload(false);
         }
 
         /// <summary>

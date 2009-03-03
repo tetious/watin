@@ -51,7 +51,7 @@ namespace WatiN.Core.Native.Chrome
         {
             get
             {
-                throw new System.NotImplementedException();
+                return new ChromeElementCollection(ClientPort, DocumentReference); 
             }
         }
 

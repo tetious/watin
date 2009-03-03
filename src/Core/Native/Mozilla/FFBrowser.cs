@@ -104,9 +104,19 @@ namespace WatiN.Core.Native.Mozilla
         /// <summary>
         /// Reloads this instance.
         /// </summary>
+        /// <param name="forceGet">When it is <c>true</c>, causes the page to always be reloaded from the server. 
+        /// If it is <c>false</c>, the browser may reload the page from its cache.</param>
+        public void Reload(bool forceGet)
+        {
+            ClientPort.Write("{0}.location.reload({1});", FireFoxClientPort.WindowVariableName, forceGet.ToString().ToLower());
+        }
+
+        /// <summary>
+        /// Reloads this instance.
+        /// </summary>
         public void Reload()
         {
-            ClientPort.Write("{0}.location.reload(true);", FireFoxClientPort.WindowVariableName);
+            this.Reload(false);
         }
 
         public bool IsLoading()

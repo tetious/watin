@@ -21,9 +21,12 @@
 
 namespace WatiN.Core.UnitTests.ChromeTests
 {
+    using System.Web;
+
     using Logging;
 
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
 
     /// <summary>
     /// Tests behaviour specific to the <see cref="Chrome"/> class.
@@ -37,6 +40,28 @@ namespace WatiN.Core.UnitTests.ChromeTests
         public ChromeTests()
         {
             Logger.LogWriter = new DebugLogWriter();
+        }
+
+        [Test]
+        public void CheckFireFoxIsInheritingProperTypes()
+        {
+            using (var chrome = new Chrome())
+            {
+                Assert.IsInstanceOfType(typeof(Chrome), chrome, "Should be a Chrome instance");
+                Assert.IsInstanceOfType(typeof(Browser), chrome, "Should be a Browser instance");
+                Assert.IsInstanceOfType(typeof(DomContainer), chrome, "Should be a DomContainer instance");
+            }
+        }
+
+        [Test, Category("InternetConnectionNeeded"), Ignore("Work in progress")]
+        public void GoogleSearchWithEncodedQueryStringInConstructor()
+        {
+            var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
+
+            using (var chrome = new Chrome(url))
+            {
+                Assert.That(chrome.TextField(Find.ByName("q")).Value, Is.EqualTo("a+b"));
+            }
         }
 
         [Test]
