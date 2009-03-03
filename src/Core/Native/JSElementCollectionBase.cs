@@ -32,7 +32,7 @@ namespace WatiN.Core.Native
 
         protected string containerReference;
 
-        public JSElementCollectionBase(ClientPortBase clientPort, string containerReference)
+        protected JSElementCollectionBase(ClientPortBase clientPort, string containerReference)
         {
             if (clientPort == null)
                 throw new ArgumentNullException("clientPort");
@@ -46,7 +46,7 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         public IEnumerable<INativeElement> GetElements()
         {
-            return this.GetElementByTagImpl("*");
+            return GetElementByTagImpl("*");
         }
 
         protected abstract IEnumerable<INativeElement> GetElementByTagImpl(string tagName);
@@ -56,7 +56,7 @@ namespace WatiN.Core.Native
         protected void Initialize()
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            this.clientPort.InitializeDocument();
+            clientPort.InitializeDocument();
         }
 
         protected static string GetDocumentReference(string referencedElement)
@@ -73,13 +73,13 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         public virtual IEnumerable<INativeElement> GetElementsById(string id)
         {
-            return this.GetElementsByIdImpl(id);
+            return GetElementsByIdImpl(id);
         }
 
         /// <inheritdoc />
         public virtual IEnumerable<INativeElement> GetElementsByTag(string tagName)
         {
-            return this.GetElementByTagImpl(tagName);
+            return GetElementByTagImpl(tagName);
         }
     }
 }

@@ -913,7 +913,7 @@ namespace WatiN.Core
         /// </example>
         public static ElementConstraint ByTextInColumn(string text, int columnIndex)
         {
-            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(text)));
+            return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(new StringEqualsAndCaseInsensitiveComparer(text))));
         }
 
         /// <summary>

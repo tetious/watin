@@ -136,6 +136,7 @@
     <None Include="App.config" />
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
+    <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="ChromeTests\ChromeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

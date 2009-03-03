@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Native;
 using WatiN.Core.UnitTests.TestUtils;
@@ -167,21 +168,6 @@ namespace WatiN.Core.UnitTests
             );
 		}
 
-	    [Test, Ignore]
-	    public void ShouldCloseBrowser()
-	    {
-	        ExecuteTest(browser =>
-	                        {
-	                            // GIVEN
-	                            var command = "window.close();";
-
-	                            // WHEN
-	                            browser.Eval(command);
-
-	                            // THEN
-	                            Assert.That(browser.Url, Is.Null, "Expected no url");
-	                        });
-	    }
 
 		[Test]
 		public void RunScriptAndEval()

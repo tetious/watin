@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                var tableBodies = browser.Table("Table1").TableBodies;
+                                var tableBodies = browser.Table("Table1").OwnTableBodies;
 		                        Assert.AreEqual(2, tableBodies.Count, "Unexpected number of tbodies");
 		                        Assert.AreEqual("tbody1", tableBodies[0].Id, "Unexpected tbody[0].id");
 		                        Assert.AreEqual("tbody3", tableBodies[1].Id, "Unexpected tbody[1].id");
@@ -57,13 +57,12 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                var tableBody = browser.Table("Table1").TableBodies[0];
+                                var tableBody = browser.Table("Table1").OwnTableBodies[0];
 
 		                        Assert.AreEqual(1, tableBody.Tables.Count, "Expected nested table");
-		                        Assert.AreEqual(2, tableBody.TableRows.Count, "Expected 2 rows");
-		                        Assert.AreEqual("1", tableBody.TableRows[0].Id, "Unexpected tablerows[0].id");
-		                        Assert.AreEqual("3", tableBody.TableRows[1].Id, "Unexpected tablerows[1].id");
-
+		                        Assert.AreEqual(2, tableBody.OwnTableRows.Count, "Expected 2 rows");
+                                Assert.AreEqual("1", tableBody.OwnTableRows[0].Id, "Unexpected tablerows[0].id");
+                                Assert.AreEqual("3", tableBody.OwnTableRows[1].Id, "Unexpected tablerows[1].id");
 		                    });
 		}
 

@@ -149,6 +149,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ControlCollection.cs" />
+    <Compile Include="DialogHandlers\CloseIEDialogHandler.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />
     <Compile Include="Native\EmptyElementCollection.cs" />
     <Compile Include="IAttributeBag.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Native\IClientPort.cs" />
     <Compile Include="Native\ClientPortBase.cs" />
     <Compile Include="Native\JSElementCollectionBase.cs" />
+    <Compile Include="Native\Mozilla\FFElementArray.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />

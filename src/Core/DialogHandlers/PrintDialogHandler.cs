@@ -42,9 +42,10 @@ namespace WatiN.Core.DialogHandlers
 			Cancel = 2,
 		}
 
-		// need to be checked whether this is valid for other operating 
-		// systems - checked on WinXP and Win2003
+		// need to be checked whether this is valid for other operating systems 
+        // for WinXP and Win2003
 		private const string printDialogStyle = "96C820C4";
+        // for Vista and Win2008
         private const string printDialogStyleVista = "96C800C4";
 
         private ButtonsEnum buttonToPush;

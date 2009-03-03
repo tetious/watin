@@ -160,7 +160,7 @@ namespace WatiN.Core.Native.Mozilla
 
         public INativeElementCollection Children
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".childNodes"); }
+            get { return new FFElementArray(ClientPort, ElementReference + ".childNodes"); }
         }
 
         public INativeElementCollection AllDescendants
@@ -170,22 +170,22 @@ namespace WatiN.Core.Native.Mozilla
 
         public INativeElementCollection TableRows
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".rows"); }
+            get { return new FFElementArray(ClientPort, ElementReference + ".rows"); }
         }
 
         public INativeElementCollection TableBodies
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".tBodies"); }
+            get { return new FFElementArray(ClientPort, ElementReference + ".tBodies"); }
         }
 
         public INativeElementCollection TableCells
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".cells"); }
+            get { return new FFElementArray(ClientPort, ElementReference + ".cells"); }
         }
 
         public INativeElementCollection Options
         {
-            get { return new FFElementCollection(ClientPort, ElementReference + ".options"); }
+            get { return new FFElementArray(ClientPort, ElementReference + ".options"); }
         }
 
         /// <summary>
@@ -436,7 +436,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <inheritdoc />
         public Rectangle GetElementBounds()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -486,9 +486,9 @@ namespace WatiN.Core.Native.Mozilla
             return returnValue.TrimStart();
         }
 
-        private string NewLineCleanup(string innerHtml)
+        private static string NewLineCleanup(string innerHtml)
         {
-// remove all \n (newline) and any following spaces
+            // remove all \n (newline) and any following spaces
             var newlineSpaces = new Regex("\r\n *");
             var returnValue = newlineSpaces.Replace(innerHtml, "");
             

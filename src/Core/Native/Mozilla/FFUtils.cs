@@ -26,5 +26,42 @@ namespace WatiN.Core.Native.Mozilla
         {
             return "window.setTimeout(function() {" + command + ";" + "}, 5);";
         }
+
+        public static IEnumerable<FFElement> ElementArrayEnumerator(string getElementsCommand, FireFoxClientPort clientPort)
+        {
+            var ElementArrayName = FireFoxClientPort.CreateVariableName();
+
+            var numberOfElements = GetNumberOfElements(getElementsCommand, clientPort, ElementArrayName);
+
+            try
+            {
+                for (var index = 0; index < numberOfElements; index++)
+                {
+                    var indexedElementVariableName = string.Concat(ElementArrayName, "[", index.ToString(), "]");
+                    var ffElement = new FFElement(clientPort, indexedElementVariableName);
+
+                    yield return ffElement;
+                }
+            }
+            finally
+            {
+                DeleteElementArray(ElementArrayName, clientPort);
+            }
+        }
+
+        private static void DeleteElementArray(string elementName, FireFoxClientPort clientPort)
+        {
+            var command = string.Format("delete {0};", elementName);
+
+            clientPort.Write(command);
+        }
+
+        private static int GetNumberOfElements(string getElementsCommand, FireFoxClientPort clientPort, string elementArrayName)
+        {
+            var command = string.Format("{0}={1}; {0}.length;", elementArrayName, getElementsCommand);
+
+            return clientPort.WriteAndReadAsInt(command);
+        }
+
     }
 }

@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
-using System.Collections.Generic;
 
 namespace WatiN.Core.UnitTests
 {
@@ -87,7 +86,7 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-		[Test, ExpectedException(typeof (SelectListItemNotFoundException), ExpectedMessage = "No item was found in the selectlist matching constraint: Attribute 'innertext' with value 'None existing item'")]
+        [Test, ExpectedException(typeof(SelectListItemNotFoundException), ExpectedMessage = "No item was found in the selectlist matching constraint: Attribute 'innertext' equals 'None existing item' ignoring case")]
 		public void SelectItemNotFoundException()
 		{
 		    ExecuteTest(browser =>
@@ -128,7 +127,7 @@ namespace WatiN.Core.UnitTests
 
 		                        // Collection iteration and comparing the result with Enumerator
 		                        var count = 0;
-		                        foreach (SelectList selectList in selectLists)
+		                        foreach (var selectList in selectLists)
 		                        {
 		                            selectListEnumerator.MoveNext();
 		                            var enumSelectList = selectListEnumerator.Current;

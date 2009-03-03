@@ -14,29 +14,17 @@ namespace WatiN.Core.Native.Mozilla
             if (tagName == null)
                 throw new ArgumentNullException("tagName");
 
-            this.Initialize();
+            Initialize();
 
-            var elementArrayReference = FireFoxClientPort.CreateVariableName();
-            var command = string.Format(
-                    "{0} = {1}.getElementsByTagName(\"{2}\");"
-                    + "{0}.length;", elementArrayReference, this.containerReference, tagName);
+            var command = string.Format("{0}.getElementsByTagName(\"{1}\");", containerReference, tagName);
+            // TODO (prevent chatter): Force setting of tagName on FFElement to prevent calls to FireFox to (again) establish the tagName of the Element
+            var ffElements = FFUtils.ElementArrayEnumerator(command, (FireFoxClientPort) clientPort);
 
-            int numberOfElements = this.clientPort.WriteAndReadAsInt(command);
-
-            try
+            foreach (var ffElement in ffElements)
             {
-                for (var index = 0; index < numberOfElements; index++)
-                {
-                    var elementReference = string.Concat(elementArrayReference, "[", index.ToString(), "]");
-                    var ffElement = new FFElement((FireFoxClientPort)this.clientPort, elementReference);
-                    ffElement.ReAssignElementReference();
-                    yield return ffElement;
-                }
-            }
-            finally
-            {
-                command = string.Format("delete {0};", elementArrayReference);
-                this.clientPort.Write(command);
+                // TODO (prevent chatter): Delay reassigning until after this ffElement is known to be a match
+                ffElement.ReAssignElementReference();
+                yield return ffElement;
             }
         }
 
@@ -45,15 +33,15 @@ namespace WatiN.Core.Native.Mozilla
             if (id == null)
                 throw new ArgumentNullException("id");
 
-            this.Initialize();
+            Initialize();
 
-            var documentReference = GetDocumentReference(this.containerReference);
+            var documentReference = GetDocumentReference(containerReference);
 
             var elementReference = FireFoxClientPort.CreateVariableName();
             var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
 
-            if (this.clientPort.WriteAndReadAsBool(command))
-                yield return new FFElement((FireFoxClientPort)this.clientPort, elementReference);
+            if (clientPort.WriteAndReadAsBool(command))
+                yield return new FFElement((FireFoxClientPort)clientPort, elementReference);
         }
     }
 }

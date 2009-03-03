@@ -115,8 +115,8 @@ namespace WatiN.Core.UnitTests
 
 		                        // test: ignore case of the text to find
 		                        var row = table.FindRow("A2", 1);
-		                        Assert.IsNotNull(row, "Row with a1 expected");
-		                        Assert.AreEqual("a2", row.TableCells[1].Text, "Unexpected text in cell");
+		                        Assert.IsNotNull(row, "Row with a2 expected");
+                                Assert.That(row.TableCells[1].Text, Is.EqualTo("a2"), "Unexpected text in cell");
 		                    });
 		}
 
@@ -178,7 +178,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-        public void TableFindRowInDirectChildrenShouldIgnoreTableCellsInsideOfNestedTables()
+        public void TableFindRowInOwnTableRowsShouldIgnoreTableCellsInsideOfNestedTables()
 		{
 		    ExecuteTest(browser =>
 		                    {
@@ -273,7 +273,6 @@ namespace WatiN.Core.UnitTests
             ExecuteTest(browser =>
                             {
                                 var table = browser.Table(tableId);
-                                Assert.That(table.Exists);
 
                                 var tableRow = table.FindRow(c => c.Text == "b2", 1);
 
