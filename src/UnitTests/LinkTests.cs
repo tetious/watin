@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Links()
 		{
-			const int expectedLinkCount = 3;
+			const int expectedLinkCount = 4;
 
 		    ExecuteTest(browser =>
 		                    {

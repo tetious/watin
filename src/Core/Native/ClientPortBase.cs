@@ -62,11 +62,7 @@ namespace WatiN.Core.Native
             {
                 return this.LastResponseIsNull ? null : this.lastResponse;
             }
-            
-            set
-            {
-                this.lastResponse = value;
-            }
+            set { lastResponse = value; }
         }
 
         /// <summary>
@@ -188,5 +184,10 @@ namespace WatiN.Core.Native
         /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
         /// <param name="args">Arguments to format with the data.</param>        
         protected abstract void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args);
+
+        protected void AddToLastResponse(string response)
+        {
+            lastResponse += response;
+        }
     }
 }

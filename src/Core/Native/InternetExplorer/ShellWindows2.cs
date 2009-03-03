@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.UtilityClasses;
 using IServiceProvider = WatiN.Core.Native.Windows.IServiceProvider;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -43,13 +44,14 @@ namespace WatiN.Core.Native.InternetExplorer
 
                 foreach (var window in windows)
                 {
-                    var document2 = IEUtils.IEDOMFromhWnd(window.Hwnd);
+                    var hwnd = window.Hwnd;
+                    var document2 = UtilityClass.TryFuncIgnoreException(() => IEUtils.IEDOMFromhWnd(hwnd));
                     if (document2 == null) continue;
 
-                    var parentWindow = document2.parentWindow;
+                    var parentWindow = UtilityClass.TryFuncIgnoreException(() => document2.parentWindow);
                     if (parentWindow == null) continue;
 
-                    var webBrowser2 = RetrieveIWebBrowser2FromIHtmlWindw2Instance(parentWindow);
+                    var webBrowser2 = UtilityClass.TryFuncIgnoreException(() => RetrieveIWebBrowser2FromIHtmlWindw2Instance(parentWindow));
                     if (webBrowser2 == null) continue;
 
                     _browsers.Add(webBrowser2);

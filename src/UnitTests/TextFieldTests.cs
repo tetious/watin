@@ -256,7 +256,7 @@ namespace WatiN.Core.UnitTests
 		                        }
 		                        catch (ElementNotFoundException e)
 		                        {
-                                    Assert.That(e.Message, Text.StartsWith("Could not find INPUT (hidden) or INPUT (password) or INPUT (text) or INPUT (textarea) or TEXTAREA element tag matching criteria: Attribute 'id' with value 'noneexistingtextfieldid' at file://"));
+                                    Assert.That(e.Message, Text.StartsWith("Could not find INPUT (hidden) or INPUT (password) or INPUT (text) or INPUT (textarea) or TEXTAREA element tag matching criteria: Attribute 'id' equals 'noneexistingtextfieldid' at file://"));
 		                            Assert.That(e.Message, Text.EndsWith("main.html"));
 		                        }
 		                    });

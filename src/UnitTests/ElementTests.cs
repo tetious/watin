@@ -647,7 +647,7 @@ namespace WatiN.Core.UnitTests
 		}
 
         // TODO: This should be mocked cause there is no browser logic involved
-		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' with value 'True'")]
+		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' equals 'True'")]
 		public void WaitUntilTimesOut()
 		{
 			element = Ie.Form("Form");

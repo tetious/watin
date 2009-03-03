@@ -417,7 +417,7 @@ namespace WatiN.Core.Native.Mozilla
 
                 Logger.LogDebug("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
                 this.LastResponseRaw += readData;
-                this.LastResponse += CleanTelnetResponse(readData);
+                AddToLastResponse(CleanTelnetResponse(readData));
             }
             while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
 
