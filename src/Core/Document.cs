@@ -834,7 +834,7 @@ namespace WatiN.Core
         [Obsolete("Use TableCell(Find.By(elementId) & Find.ByIndex(index)) instead, or possibly OwnTableCell(...).")]
         public TableCell TableCell(string elementId, int index)
         {
-            return TableCell(Find.ById(elementId) & Find.ByIndex(index));
+            return TableCell(Find.ById(elementId) & Find.ByIndex(index) & Find.Any);
         }
 
         [Obsolete("Use TableCell(Find.By(elementId) & Find.ByIndex(index)) instead, or possibly OwnTableCell(...).")]

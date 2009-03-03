@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="ControlCollection.cs" />
     <Compile Include="DialogHandlers\CloseIEDialogHandler.cs" />
+    <Compile Include="IdHinter.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />
     <Compile Include="Native\EmptyElementCollection.cs" />
     <Compile Include="IAttributeBag.cs" />

@@ -235,21 +235,6 @@ namespace WatiN.Core.Constraints
         protected abstract bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context);
 
         /// <summary>
-        /// If the constraint can only match elements with a particular id, returns the id,
-        /// otherwise returns null.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// The default implementation returns null.
-        /// </para>
-        /// </remarks>
-        /// <returns>The id or null if the constraint could match elements with no particular id</returns>
-        internal protected virtual string GetElementIdHint()
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Tracks when a constraint's Match method has been entered by the current thread.
         /// </summary>
         /// <exception cref="ReEntryException">Thrown if reentrance has been detected</exception>

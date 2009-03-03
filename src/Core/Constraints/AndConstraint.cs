@@ -46,6 +46,24 @@ namespace WatiN.Core.Constraints
             this.second = second;
         }
 
+        /// <summary>
+        /// Gets the first constraint that will be evaluated.
+        /// </summary>
+        /// <value>The first <see cref="Constraint"/>.</value>
+        public Constraint First
+        {
+            get { return first; }
+        }
+
+        /// <summary>
+        /// Gets the second constraint that will be evaluated.
+        /// </summary>
+        /// <value>The second <see cref="Constraint"/>.</value>
+        public Constraint Second
+        {
+            get { return second; }
+        }
+
         /// <inheritdoc />
         public override void WriteDescriptionTo(TextWriter writer)
         {
@@ -61,16 +79,6 @@ namespace WatiN.Core.Constraints
         {
             return first.Matches(attributeBag, context)
                 && second.Matches(attributeBag, context);
-        }
-
-        /// <inheritdoc />
-        protected internal override string GetElementIdHint()
-        {
-            // If either branch requires a particular element id then the expression
-            // as a whole can only match an element with that id.  It could be that
-            // both branches require different element ids, in which case the expression
-            // will match nothing (but this will be determined by the element finder instead).
-            return first.GetElementIdHint() ?? second.GetElementIdHint();
         }
 	}
 }

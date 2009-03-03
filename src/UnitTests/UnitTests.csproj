@@ -138,6 +138,7 @@
     <Compile Include="AreaTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="ChromeTests\ChromeTests.cs" />
+    <Compile Include="NativeElementFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -20,7 +20,6 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
-using StringComparer=WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.Constraints
 {
@@ -37,7 +36,6 @@ namespace WatiN.Core.Constraints
 	{
 		private readonly string attributeName;
         private readonly Comparer<string> comparer;
-	    private string idValue;
 
 	    /// <summary>
 		/// Creates an attribute constraint to search for an exact match by string value.
@@ -108,23 +106,8 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
-            string attributeValue = attributeBag.GetAttributeValue(attributeName);
+            var attributeValue = attributeBag.GetAttributeValue(attributeName);
             return comparer.Compare(attributeValue);
-        }
-
-        /// <inheritdoc />
-        protected internal override string GetElementIdHint()
-        {
-            if (idValue == null)
-            {
-                idValue = string.Empty;
-                if (string.Compare(attributeName, @"id", StringComparison.InvariantCultureIgnoreCase) == 0)
-                {
-                    var stringComparer = Comparer as StringComparer;
-                    if (stringComparer != null) idValue = stringComparer.ComparisonValue;
-                }                
-            }
-            return idValue == string.Empty ? null : idValue;
         }
 	}
 }

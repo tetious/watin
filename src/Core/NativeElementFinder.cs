@@ -61,7 +61,7 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
-            var id = Constraint.GetElementIdHint();
+            var id = GetElementIdHint(Constraint);
             return id != null ? FindElementsById(id) : FindElementByTags();
         }
 
@@ -89,11 +89,12 @@ namespace WatiN.Core
         private IEnumerable<Element> WrapMatchingElements(IEnumerable<INativeElement> nativeElements)
         {
             var context = new ConstraintContext();
-            foreach (INativeElement nativeElement in nativeElements)
+            foreach (var nativeElement in nativeElements)
             {
                 var element = WrapElementIfMatch(nativeElement, context);
-                if (element != null)
-                    yield return element;
+                if (element == null) continue;
+                
+                yield return element;
             }
         }
 
@@ -132,5 +133,14 @@ namespace WatiN.Core
             return nativeElementCollection ?? EmptyElementCollection.Empty;
         }
 
+        /// <summary>
+        /// If the constraint can only match on element with a particular id, returns the id,
+        /// otherwise returns null.
+        /// </summary>
+        /// <returns>The id or null if the constraint could match elements with no particular id</returns>
+        protected virtual string GetElementIdHint(Constraint constraint)
+        {
+            return IdHinter.GetIdHint(constraint);
+        }
     }
 }
