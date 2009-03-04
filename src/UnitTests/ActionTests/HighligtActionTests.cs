@@ -48,6 +48,27 @@ namespace WatiN.Core.UnitTests.ActionTests
         }
 
         [Test]
+        public void ShouldReturnToOriginalBackgroundColorWhenCallingHighLight()
+        {
+            // GIVEN
+            var domContainer = new Mock<DomContainer>().Object;
+            var nativeElementMock = new Mock<INativeElement>();
+            var element = new Element(domContainer, nativeElementMock.Object);
+
+            Settings.HighLightColor = "myTestColor";
+            var highLight = new HighlightAction(element);
+            nativeElementMock.Expect(nativeElement => nativeElement.GetStyleAttributeValue("backgroundColor")).Returns("initialColor");
+            
+            // WHEN
+            highLight.Highlight(true);
+            highLight.Highlight(false);
+
+            // THEN
+            nativeElementMock.Verify(nativeElement => nativeElement.SetStyleAttributeValue("backgroundColor", "myTestColor"));
+            nativeElementMock.Verify(nativeElement => nativeElement.SetStyleAttributeValue("backgroundColor", "initialColor"));
+        }
+
+        [Test]
         public void ShouldIgnoreStackEmptyExceptionWhenColorStackIsEmpty()
         {
             // GIVEN

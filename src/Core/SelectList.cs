@@ -58,7 +58,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Clearing selection(s) in " + GetType().Name + " '" + Id + "'");
 
-			var options = Options.Filter(GetIsSelectedAttribute());
+			var options = Options.Filter(IsSelectedConstraint());
 
 			foreach (Option option in options)
 			{
@@ -89,7 +89,7 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Selecting '" + text + "' in " + GetType().Name + " '" + Id + "'");
 
-			SelectByTextOrValue(GetTextAttribute(text));
+			SelectByTextOrValue(TextCaseInsensitiveConstraint(text));
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace WatiN.Core
 		/// <returns><see cref="Options" /></returns>
 		public Option Option(string text)
 		{
-			return Option(GetTextAttribute(text));
+			return Option(TextCaseInsensitiveConstraint(text));
 		}
 
 		/// <summary>
@@ -204,7 +204,7 @@ namespace WatiN.Core
 			{
 				var items = new ArrayList();
 
-				var options = Options.Filter(GetIsSelectedAttribute());
+				var options = Options.Filter(IsSelectedConstraint());
 				foreach (Option option in options)
 				{
 					if (option.Selected)
@@ -226,7 +226,7 @@ namespace WatiN.Core
 			{
 				var items = new StringCollection();
 
-				var options = Options.Filter(GetIsSelectedAttribute());
+				var options = Options.Filter(IsSelectedConstraint());
 				foreach (Option option in options)
 				{
 					items.Add(option.Text);
@@ -259,7 +259,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				var option = Option(GetIsSelectedAttribute());
+				var option = Option(IsSelectedConstraint());
 
 				return option.Exists ? option : null;
 			}
@@ -276,16 +276,11 @@ namespace WatiN.Core
 			get { return SelectedOption != null; }
 		}
 
-		private static AttributeConstraint GetIsSelectedAttribute()
-		{
-			return new AttributeConstraint("selected", new Comparers.StringComparer(true.ToString(), true));
-		}
-
 		private void SelectByTextOrValue(Constraint findBy)
 		{
 			var options = Options.Filter(findBy);
 
-			foreach (Option option in options)
+			foreach (var option in options)
 			{
 				option.Select();
 			}
@@ -296,7 +291,12 @@ namespace WatiN.Core
 			}
 		}
 
-		private static AttributeConstraint GetTextAttribute(string text)
+        private static AttributeConstraint IsSelectedConstraint()
+        {
+            return new AttributeConstraint("selected", new StringEqualsAndCaseInsensitiveComparer(true.ToString()));
+        }
+        
+        private static AttributeConstraint TextCaseInsensitiveConstraint(string text)
 		{
 			return Find.ByText(new StringEqualsAndCaseInsensitiveComparer(text));
 		}
