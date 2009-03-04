@@ -38,7 +38,7 @@ namespace WatiN.Core.Exceptions
 
 		private static string CreateMessage(string tagName, string criteria, string url, string innerException)
 		{
-			string message = "Could not find " + UtilityClass.ToString(tagName) + " element tag";
+			var message = string.Format("Could not find {0} element tag", tagName ?? string.Empty);
 
             if (UtilityClass.IsNotNullOrEmpty(criteria))
 			{

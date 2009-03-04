@@ -20,7 +20,6 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Web;
-using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
@@ -29,7 +28,6 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.IETests
 {
@@ -627,7 +625,7 @@ namespace WatiN.Core.UnitTests.IETests
 
         internal static bool IsIEFrame(IntPtr hWnd)
         {
-            return UtilityClass.CompareClassNames(hWnd, "IEFrame");
+            return NativeMethods.CompareClassNames(hWnd, "IEFrame");
         }
 
     }

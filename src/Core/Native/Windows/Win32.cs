@@ -19,10 +19,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using mshtml;
-using SHDocVw;
-using WatiN.Core.Native.InternetExplorer;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.Windows
 {
@@ -277,9 +273,6 @@ namespace WatiN.Core.Native.Windows
 
         #endregion DllImport User32
 
-        [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
-
         [DllImport("kernel32")]
         internal static extern int GetCurrentThreadId();
 
@@ -350,13 +343,27 @@ namespace WatiN.Core.Native.Windows
 
         private static bool EnumChildWindows(IntPtr hWnd, ref IntPtr lParam)
         {
-            if (UtilityClass.CompareClassNames(hWnd, enumChildWindowClassName))
+            if (CompareClassNames(hWnd, enumChildWindowClassName))
             {
                 lParam = hWnd;
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Compares the class names.
+        /// </summary>
+        /// <param name="hWnd">The hWND of the window if which the class name should be retrieved.</param>
+        /// <param name="expectedClassName">Expected name of the class.</param>
+        /// <returns></returns>
+        public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
+        {
+            if (hWnd == IntPtr.Zero) return false;
+
+            var className = GetClassName(hWnd);
+            return className.Equals(expectedClassName);
         }
 
         #endregion Methods

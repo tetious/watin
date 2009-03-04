@@ -248,7 +248,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (eventProperties == null)
             {
-                UtilityClass.FireEvent(DispHtmlBaseElement, eventName);
+                IEUtils.FireEvent(DispHtmlBaseElement, eventName);
             }
             else
             {
@@ -259,14 +259,14 @@ namespace WatiN.Core.Native.InternetExplorer
                     SetAttributeValue("value", newValue);
                 }
 
-                UtilityClass.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
+                IEUtils.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
             }
         }
 
         /// <inheritdoc />
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            var scriptCode = UtilityClass.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
+            var scriptCode = IEUtils.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
             var window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
 
             var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
@@ -475,7 +475,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public void FireEvent()
         {
-            UtilityClass.RunScript(_scriptCode, _window);
+            IEUtils.RunScript(_scriptCode, _window);
         }
     }
 }

@@ -137,11 +137,11 @@
     <None Include="App.config" />
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
-    <Compile Include="ChromeTests\ChromeBrowserTestManager.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="ChromeTests\ChromeTests.cs" />
     <Compile Include="ActionTests\HighligtActionTests.cs" />
     <Compile Include="NativeElementFinderTests.cs" />
+    <Compile Include="Native\Windows\NativeMethodsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -172,7 +172,7 @@
     <Compile Include="BaseElementCollectionTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IETests\ShellWindows2Tests.cs" />
+    <Compile Include="Native\IETests\ShellWindows2Tests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -268,14 +268,14 @@
     <Compile Include="ElementTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FireFoxTests\FFBrowserTestManager.cs" />
+    <Compile Include="Native\FireFoxTests\FFBrowserTestManager.cs" />
     <Compile Include="FileUploadTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FindTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FireFoxTests\FireFoxTests.cs" />
+    <Compile Include="Native\FireFoxTests\FireFoxTests.cs" />
     <Compile Include="FormTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -293,12 +293,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestUtils\IBrowserTestManager.cs" />
-    <Compile Include="IETests\IEBrowserTestManager.cs" />
+    <Compile Include="Native\IETests\IEBrowserTestManager.cs" />
     <Compile Include="TestUtils\HtmlInjector.cs" />
-    <Compile Include="IETests\IETests.cs">
+    <Compile Include="Native\IETests\IETests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IETests\IEDocumentTests.cs" />
+    <Compile Include="Native\IETests\IEDocumentTests.cs" />
     <Compile Include="IFramesTests.cs">
       <SubType>Code</SubType>
     </Compile>

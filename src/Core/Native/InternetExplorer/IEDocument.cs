@@ -93,7 +93,7 @@ namespace WatiN.Core.Native.InternetExplorer
         public void RunScript(string scriptCode, string language)
         {
             Logger.LogDebug(scriptCode);
-            UtilityClass.RunScript(scriptCode, language, htmlDocument.parentWindow);
+            IEUtils.RunScript(scriptCode, language, htmlDocument.parentWindow);
         }
 
         public string JavaScriptVariableName

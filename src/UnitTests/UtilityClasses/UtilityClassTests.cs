@@ -32,28 +32,6 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         }
 
         [Test]
-        public void DumpElements()
-        {
-            UtilityClass.DumpElements(Ie);
-        }
-
-        [Test]
-        public void DumpElementsElab()
-        {
-            Ie.GoTo(FramesetURI);
-
-            UtilityClass.DumpElementsWithHtmlSource(Ie);
-        }
-
-        [Test]
-        public void ShowFrames()
-        {
-            Ie.GoTo(FramesetURI);
-
-            UtilityClass.DumpFrames(Ie);
-        }
-
-        [Test]
         public void IsNullOrEmpty()
         {
             Assert.IsTrue(UtilityClass.IsNullOrEmpty(null), "null should return true");
@@ -71,11 +49,6 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             Assert.IsTrue(UtilityClass.IsNotNullOrEmpty("test"), "string 'test' should return true");
         }
 
-        [Test]
-        public void CompareClassNameWithIntPtrZeroShouldReturnFalse()
-        {
-            Assert.IsFalse(UtilityClass.CompareClassNames(IntPtr.Zero, "className"));
-        }
 
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void SimpleTimerWithNegativeTimeoutNotAllowed()
@@ -106,14 +79,6 @@ namespace WatiN.Core.UnitTests.UtilityClasses
             Assert.IsFalse(timer.Elapsed);
             Thread.Sleep(1000);
             Assert.IsTrue(timer.Elapsed);
-        }
-
-        [Test]
-        public void ToStringTests()
-        {
-            Assert.IsEmpty(UtilityClass.ToString(null), "Null should return empty string");
-            Assert.IsEmpty(UtilityClass.ToString(string.Empty), "Empty should return empty string");
-            Assert.AreEqual("test", UtilityClass.ToString("test"), "test should return test");
         }
 
         [Test]

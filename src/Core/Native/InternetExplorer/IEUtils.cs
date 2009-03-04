@@ -28,17 +28,127 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Specialized;
 using System.Runtime.InteropServices;
+using System.Text;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
 using IEnumUnknown=WatiN.Core.Native.Windows.IEnumUnknown;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    internal class IEUtils
+    public class IEUtils
     {
+        [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
+
+        /// <summary>
+        /// Runs the javascript code in IE.
+        /// </summary>
+        /// <param name="scriptCode">The javascript code.</param>
+        /// <param name="window">The parent window of the document.</param>
+        public static void RunScript(string scriptCode, IHTMLWindow2 window)
+        {
+            RunScript(scriptCode, "javascript", window);
+        }
+
+        /// <summary>
+        /// Runs the script code in IE.
+        /// </summary>
+        /// <param name="scriptCode">The script code.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="window">The parent window of the document.</param>
+        public static void RunScript(string scriptCode, string language, IHTMLWindow2 window)
+        {
+            try
+            {
+                window.execScript(scriptCode, language);
+            }
+            catch (Exception ex)
+            {
+                throw new RunScriptException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Fires the given event on the given element.
+        /// </summary>
+        /// <param name="element">Element to fire the event on</param>
+        /// <param name="eventName">Name of the event to fire</param>
+        public static void FireEvent(DispHTMLBaseElement element, string eventName)
+        {
+            var collection = new NameValueCollection { { "button", "1" } };
+
+            FireEvent(element, eventName, collection);
+        }
+
+
+        public static StringBuilder CreateJavaScriptFireEventCode(NameValueCollection eventObjectProperties, DispHTMLBaseElement element, string eventName)
+        {
+            var scriptCode = new StringBuilder();
+            scriptCode.Append("var newEvt = document.createEventObject();");
+
+            CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
+
+            scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
+            return scriptCode;
+        }
+
+        private static void CreateJavaScriptEventObject(StringBuilder scriptCode, NameValueCollection eventObjectProperties)
+        {
+            if (eventObjectProperties == null) return;
+
+            for (var index = 0; index < eventObjectProperties.Count; index++)
+            {
+                if (eventObjectProperties.GetKey(index) == "charCode") continue;
+
+                scriptCode.Append("newEvt.");
+                scriptCode.Append(eventObjectProperties.GetKey(index));
+                scriptCode.Append(" = ");
+                scriptCode.Append(eventObjectProperties.GetValues(index)[0]);
+                scriptCode.Append(";");
+            }
+        }
+
+        /// <summary>
+        /// Fires the given event on the given element.
+        /// </summary>
+        /// <param name="element">Element to fire the event on</param>
+        /// <param name="eventName">Name of the event to fire</param>
+        /// <param name="eventObjectProperties">The event object properties.</param>
+        public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
+        {
+            var scriptCode = CreateJavaScriptFireEventCode(eventObjectProperties, element, eventName);
+
+            try
+            {
+                var window = ((IHTMLDocument2)element.document).parentWindow;
+                RunScript(scriptCode.ToString(), window);
+            }
+            catch (RunScriptException)
+            {
+                // In a cross domain automation scenario a System.UnauthorizedAccessException 
+                // is thrown. The following code doesn't seem to have any effect,
+                // but maybe someday MicroSoft fixes the issue... so I wrote the code anyway.
+                object dummyEvt = null;
+                object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
+
+                var eventObj = (IHTMLEventObj2)parentEvt;
+
+                for (var index = 0; index < eventObjectProperties.Count; index++)
+                {
+                    var property = eventObjectProperties.GetKey(index);
+                    var value = eventObjectProperties.GetValues(index)[0];
+
+                    eventObj.setAttribute(property, value, 0);
+                }
+
+                element.FireEvent(eventName, ref parentEvt);
+            }
+        }
+
         public static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)
         {
             var IID_IHTMLDocument2 = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
@@ -61,7 +171,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 {
                     // Get the object from lRes
                     IHTMLDocument2 ieDOMFromhWnd = null;
-                    var hr = NativeMethods.ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
+                    var hr = ObjectFromLresult(lRes, ref IID_IHTMLDocument2, 0, ref ieDOMFromhWnd);
                     if (hr != 0)
                     {
                         throw new COMException("ObjectFromLresult has thrown an exception", hr);
@@ -74,12 +184,12 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public static bool IsIETridentDlgFrame(IntPtr hWnd)
         {
-            return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
+            return NativeMethods.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
         }
 
         public static bool IsIEServerWindow(IntPtr hWnd)
         {
-            return UtilityClass.CompareClassNames(hWnd, "Internet Explorer_Server");
+            return NativeMethods.CompareClassNames(hWnd, "Internet Explorer_Server");
         }
 
         internal static void EnumIWebBrowser2Interfaces(IWebBrowser2Processor processor)
