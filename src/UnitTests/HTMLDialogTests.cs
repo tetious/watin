@@ -101,7 +101,7 @@ namespace WatiN.Core.UnitTests
 		public void HTMLDialogNotFoundException()
 		{
 			const int timeoutTime = 2;
-			const string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' with value 'popuptest'. (Search expired after '2' seconds). Is there a popup blocker active?";
+			const string expectedMessage = "Could not find a HTMLDialog matching criteria: Attribute 'title' contains 'PopUpTest' ignoring case. (Search expired after '2' seconds). Is there a popup blocker active?";
 
             var startTime = DateTime.Now;
 

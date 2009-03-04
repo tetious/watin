@@ -355,6 +355,7 @@
     <Compile Include="UtilityClasses\UtilityClassTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WatiNSanityTests.cs" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\CrossDomainFrameset.html" />
     <Content Include="html\formsubmit.html" />
