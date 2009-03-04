@@ -31,7 +31,7 @@ namespace WatiN.Core
 {
     public class FireFox : Browser 
     {
-        private FFBrowser nativeBrowser;
+        private FFBrowser ffBrowser;
 
         #region Public constructors / destructor
 
@@ -81,15 +81,9 @@ namespace WatiN.Core
 //            get { return Core.BrowserType.FireFox; }
 //        }
 
-        public new FFBrowser NativeBrowser
-        {
-            get { return nativeBrowser; }
-            private set { nativeBrowser = value; }
-        }
-
         protected override INativeBrowser GetNativeBrowser()
         {
-            return NativeBrowser;
+            return ffBrowser;
         }
 
         #endregion Public instance properties
@@ -98,32 +92,32 @@ namespace WatiN.Core
 
         protected override bool GoBack()
         {
-            return NativeBrowser.Back();
+            return ffBrowser.Back();
         }
 
         protected override bool GoForward()
         {
-            return NativeBrowser.Forward();
+            return ffBrowser.Forward();
         }
 
         protected override void NavigateTo(Uri url)
         {
-            NativeBrowser.LoadUri(url);
+            ffBrowser.LoadUri(url);
         }
 
         protected override void NavigateToNoWait(Uri url)
         {
-            NativeBrowser.LoadUriNoWait(url);
+            ffBrowser.LoadUriNoWait(url);
         }
 
         public override IntPtr hWnd
         {
-            get { return NativeBrowser.hWnd; }
+            get { return ffBrowser.hWnd; }
         }
 
         public override INativeDocument OnGetNativeDocument()
         {
-            return new FFDocument(NativeBrowser.ClientPort);
+            return new FFDocument(ffBrowser.ClientPort);
         }
 
         /// <summary>
@@ -290,7 +284,7 @@ namespace WatiN.Core
         /// </summary>
         protected override void DoRefresh()
         {
-            NativeBrowser.Reload(false);
+            ffBrowser.Reload(false);
         }
 
         /// <summary>
@@ -301,8 +295,8 @@ namespace WatiN.Core
         /// </remarks>
         protected override void DoReopen()
         {
-            NativeBrowser.ClientPort.Dispose();
-            NativeBrowser.ClientPort.Connect(string.Empty);
+            ffBrowser.ClientPort.Dispose();
+            ffBrowser.ClientPort.Connect(string.Empty);
             WaitForComplete();
         }
 
@@ -311,7 +305,7 @@ namespace WatiN.Core
         /// </summary>
         public override void WaitForComplete(int waitForCompleteTimeOut)
         {
-            WaitForComplete(new FFWaitForComplete(NativeBrowser, waitForCompleteTimeOut));
+            WaitForComplete(new FFWaitForComplete(ffBrowser, waitForCompleteTimeOut));
         }
         
         #endregion Public instance methods
@@ -331,7 +325,7 @@ namespace WatiN.Core
             if (disposing)
             {
                 // Dispose managed resources.
-                NativeBrowser.ClientPort.Dispose();
+                ffBrowser.ClientPort.Dispose();
             }
 
             // Call the appropriate methods to clean up 
@@ -357,7 +351,7 @@ namespace WatiN.Core
 
             var clientPort = new FireFoxClientPort();
             clientPort.Connect(url);
-            NativeBrowser = new FFBrowser(clientPort);
+            ffBrowser = new FFBrowser(clientPort);
             WaitForComplete();
         }
 

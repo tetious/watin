@@ -17,10 +17,10 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Threading;
+using WatiN.Core.Actions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -77,9 +77,9 @@ namespace WatiN.Core
         private INativeElement _nativeElement;
         private ElementFinder _elementFinder;
 
-		private Stack _originalcolor;
+        private HighlightAction _highlightAction;
 
-		/// <summary>
+        /// <summary>
 		/// This constructor is mainly used from within WatiN.
 		/// </summary>
 		/// <param name="domContainer"><see cref="DomContainer" /> this element is located in</param>
@@ -606,28 +606,10 @@ namespace WatiN.Core
 		{
 		    if (!Settings.HighLightElement) return;
 		    
-            if (_originalcolor == null)
-		    {
-		        _originalcolor = new Stack();
-		    }
+            if (_highlightAction == null)
+                _highlightAction = new HighlightAction(this);
 
-		    if (doHighlight)
-		    {
-		        _originalcolor.Push(NativeElement.GetStyleAttributeValue("backgroundColor"));
-		        SetBackgroundColor(Settings.HighLightColor);
-		    }
-		    else
-		    {
-		        if(_originalcolor.Count > 0)
-		        {
-		            SetBackgroundColor(_originalcolor.Pop() as string);
-		        }
-		    }
-		}
-
-		private void SetBackgroundColor(string color) 
-		{
-            UtilityClass.TryActionIgnoreException(() => NativeElement.SetStyleAttributeValue("backgroundColor", color ?? ""));
+		    _highlightAction.Highlight(doHighlight);
 		}
 
         /// <summary>
@@ -791,7 +773,7 @@ namespace WatiN.Core
 			// against some cached reference.
             var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
             {
-                ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint.ToString())
+                ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint)
             };
 
             tryActionUntilTimeOut.Try(() => Exists && Matches(constraint));
