@@ -17,8 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using mshtml;
@@ -281,12 +279,16 @@ namespace WatiN.Core.Native.InternetExplorer
             if (input != null)
             {
                 input.select();
+                FireEvent("onSelect", null);
+                
                 return;
             }
             var textarea = _element as IHTMLTextAreaElement;
             if (textarea != null)
             {
                 textarea.select();
+                FireEvent("onSelect", null);
+
                 return;
             }
 
@@ -297,7 +299,6 @@ namespace WatiN.Core.Native.InternetExplorer
         public void SubmitForm()
         {
             HtmlFormElement.submit();
-
         }
 
         /// <inheritdoc />

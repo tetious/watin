@@ -36,6 +36,7 @@ DONE JVM - Remove depenency on IHTMLStyle
 DONE JVM - Move Submit to NativeElement
 
 ** Move IE specific classes to specific folder(s) and namespace(s)
+DONE JVM
 
 ** Option
 DONE JVM - Handle selected with NativeElement

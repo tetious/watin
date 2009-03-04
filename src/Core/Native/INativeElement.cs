@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using WatiN.Core.DialogHandlers;
@@ -37,19 +36,19 @@ namespace WatiN.Core.Native
         INativeElementCollection AllDescendants { get; }
 
         /// <summary>
-        /// Gets a collection consisting of the table rows within a TABLE or TBODY element.
+        /// Gets a collection consisting of the immediate rows within a TABLE or TBODY element.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
         INativeElementCollection TableRows { get; }
 
         /// <summary>
-        /// Gets a collection consisting of the table bodies within a TABLE element.
+        /// Gets a collection consisting of the immediate tbodies within a TABLE element.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
         INativeElementCollection TableBodies { get; }
 
         /// <summary>
-        /// Gets a collection consisting of the table cells within a TR element.
+        /// Gets a collection consisting of the immediate cells within a TR element.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if applied to an element of the wrong type</exception>
         INativeElementCollection TableCells { get; }
@@ -116,7 +115,7 @@ namespace WatiN.Core.Native
         /// Element or a subclass of Element.
         /// </summary>
         /// <param name="attributeName">The attribute name. This could be different then named in
-        /// the HTML. It should be the name of the property exposed by IE on it's element object.</param>
+        /// the HTML. It should be the name of the property exposed by the element DOM object.</param>
         /// <returns>The value of the attribute if available; otherwise <c>null</c> is returned.</returns>
         string GetAttributeValue(string attributeName);
 
@@ -131,10 +130,27 @@ namespace WatiN.Core.Native
         bool IsElementReferenceStillValid();
         string TagName { get; }
         void FireEventNoWait(string eventName, NameValueCollection eventProperties);
+        
+        /// <summary>
+        /// Should fire the (on)Select event on the element.
+        /// </summary>
         void Select();
+
+        /// <summary>
+        /// Called when to submit the form.
+        /// </summary>
         void SubmitForm();
+
+        /// <summary>
+        /// Called when the file upload dialog should be filled in
+        /// </summary>
+        /// <param name="dialogWatcher">To inject a dialog handler into to handle the file upload dialog.</param>
+        /// <param name="fileName">The file name to enter into the dialog filename field.</param>
         void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName);
 
+        /// <summary>
+        /// Waits until the element is fully loaded in the DOM and/or ready to be used.
+        /// </summary>
         void WaitUntilReady();
 
         /// <summary>

@@ -16,11 +16,9 @@
 
 #endregion Copyright
 
-using System;
-using WatiN.Core.Exceptions;
+using WatiN.Core.Actions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
-using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -36,7 +34,9 @@ namespace WatiN.Core
     [ElementTag("textarea", Index = 4)]
     public class TextField : Element<TextField>
 	{
-		public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
+	    private TypeTextAction _typeTextAction;
+
+	    public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
         public TextField(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
@@ -66,59 +66,35 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Typing '" + value + "' into " + GetType().Name + " '" + ToString() + "'");
 
-			TypeAppendClearText(value, false, false);
+            TypeTextAction.TypeText(value);
 		}
 
 		public void AppendText(string value)
 		{
 			Logger.LogAction("Appending '" + value + "' to " + GetType().Name + " '" + ToString() + "'");
 
-			TypeAppendClearText(value, true, false);
+            TypeTextAction.AppendText(value);
 		}
 
 		public void Clear()
 		{
 			Logger.LogAction("Clearing " + GetType().Name + " '" + ToString() + "'");
 
-			TypeAppendClearText(null, false, true);
+            TypeTextAction.Clear();
 		}
 
-		private void TypeAppendClearText(string value, bool append, bool clear)
-		{
-			CheckIfTypingIsPossibleInThisTextField();
-
-            value = ReplaceNewLineWithCorrectCharacters(value);
-
-			Highlight(true);
-			Focus();
-			if (!append) Select();
-			if (!append) setValue("");
-			if (!clear) doKeyPress(value);
-			Highlight(false);
-			if (!append) Change();
-            if (!append) UtilityClass.TryActionIgnoreException(Blur);
-		}
-
-		private static string ReplaceNewLineWithCorrectCharacters(string value)
-		{
-			if (value != null)
-			{
-				value = value.Replace(Environment.NewLine, "\n");
-			}
-			return value;
-		}
-
-		private void CheckIfTypingIsPossibleInThisTextField()
-		{
-			if (!Enabled)
-			{
-				throw new ElementDisabledException(ToString());
-			}
-			if (ReadOnly)
-			{
-				throw new ElementReadOnlyException(ToString());
-			}
-		}
+	    public TypeTextAction TypeTextAction
+	    {
+	        get
+	        {
+	            if (_typeTextAction == null)
+	            {
+	                _typeTextAction = new TypeTextAction(this);
+	            }
+	            return _typeTextAction;
+	        }
+            set { _typeTextAction = value;}
+	    }
 
 		public string Value
 		{
@@ -127,12 +103,12 @@ namespace WatiN.Core
 			    var value = GetAttributeValue("value");
 			    return string.IsNullOrEmpty(value) ? null : value;
 			}
-		    // Don't use this set property internally (in this class) but use setValue. 
+		    // Don't use this set property internally (in this class). 
 			set
 			{
 				Logger.LogAction("Setting " + GetType().Name + " '" + ToString() + "' to '" + value + "'");
 
-				setValue(value);
+                SetAttributeValue("value", value);
 			}
 		}
 
@@ -147,7 +123,6 @@ namespace WatiN.Core
 		public void Select()
 		{
             NativeElement.Select();
-			FireEvent("onSelect");
 		}
 
 		public override string ToString()
@@ -170,57 +145,6 @@ namespace WatiN.Core
 		public string Name
 		{
             get { return GetAttributeValue("name"); }
-		}
-
-		private void setValue(string value)
-		{
-            SetAttributeValue("value", value);
-		}
-
-	    private void doKeyPress(string value)
-		{
-            var doKeyDown = true;
-            var doKeyUp = true;
-
-            // TODO "Move" ShouldEventBeFired to INativeElement + implementations 
-            IEElement ieElement = NativeElement as IEElement;
-            if (ieElement != null)
-	        {
-                doKeyDown = ShouldEventBeFired(ieElement.HtmlElement.onkeydown);
-                doKeyUp = ShouldEventBeFired(ieElement.HtmlElement.onkeyup);
-	        }
-
-			var length = value.Length;
-			if (MaxLength != 0 && length > MaxLength)
-			{
-				length = MaxLength;
-			}
-
-			for (var i = 0; i < length; i++)
-			{
-				//TODO: Make typing speed a variable
-				//        Thread.Sleep(0); 
-
-				var subString = value.Substring(i, 1);
-				var character = char.Parse(subString);
-
-				if (doKeyDown)
-				{
-					KeyDown(character);
-				}
-				
-                KeyPress(character);
-
-                if (doKeyUp)
-				{
-					KeyUp(character);
-				}
-			}
-		}
-
-		private static bool ShouldEventBeFired(Object value)
-		{
-			return (value != DBNull.Value);
 		}
 	}
 }
