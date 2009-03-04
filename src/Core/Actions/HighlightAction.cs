@@ -21,7 +21,7 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Actions
 {
-    public class HighlightAction
+    internal class HighlightAction
     {
         private readonly Element _element;
         private readonly Stack _colorCallStack = new Stack();

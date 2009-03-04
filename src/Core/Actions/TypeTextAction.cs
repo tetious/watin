@@ -23,7 +23,7 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Actions
 {
-    public class TypeTextAction
+    public class TypeTextAction : ITypeTextAction
     {
         private readonly TextField _textField;
 

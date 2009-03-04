@@ -34,7 +34,7 @@ namespace WatiN.Core
     [ElementTag("textarea", Index = 4)]
     public class TextField : Element<TextField>
 	{
-	    private TypeTextAction _typeTextAction;
+	    private ITypeTextAction _typeTextAction;
 
 	    public TextField(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 
@@ -83,7 +83,7 @@ namespace WatiN.Core
             TypeTextAction.Clear();
 		}
 
-	    public TypeTextAction TypeTextAction
+	    public ITypeTextAction TypeTextAction
 	    {
 	        get
 	        {
