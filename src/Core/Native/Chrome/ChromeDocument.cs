@@ -51,7 +51,7 @@ namespace WatiN.Core.Native.Chrome
         {
             get
             {
-                return new ChromeElementCollection(ClientPort, DocumentReference); 
+                return new ChromeElementCollection(this.ClientPort, this.DocumentReference); 
             }
         }
 
@@ -86,7 +86,7 @@ namespace WatiN.Core.Native.Chrome
         {
             get
             {
-                var url = this.ClientPort.Print("{0}.location.href", this.DocumentReference);
+                var url = this.ClientPort.WriteAndRead("{0}.location.href", this.DocumentReference);
                 url = string.IsNullOrEmpty(url) ? "about:blank" : url;
                 return url;
             }

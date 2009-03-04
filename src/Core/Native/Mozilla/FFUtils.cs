@@ -27,9 +27,9 @@ namespace WatiN.Core.Native.Mozilla
             return "window.setTimeout(function() {" + command + ";" + "}, 5);";
         }
 
-        public static IEnumerable<FFElement> ElementArrayEnumerator(string getElementsCommand, FireFoxClientPort clientPort)
+        public static IEnumerable<JSElement> ElementArrayEnumerator(string getElementsCommand, ClientPortBase clientPort)
         {
-            var ElementArrayName = FireFoxClientPort.CreateVariableName();
+            var ElementArrayName = clientPort.CreateVariableName();
 
             var numberOfElements = GetNumberOfElements(getElementsCommand, clientPort, ElementArrayName);
 
@@ -38,7 +38,7 @@ namespace WatiN.Core.Native.Mozilla
                 for (var index = 0; index < numberOfElements; index++)
                 {
                     var indexedElementVariableName = string.Concat(ElementArrayName, "[", index.ToString(), "]");
-                    var ffElement = new FFElement(clientPort, indexedElementVariableName);
+                    var ffElement = new JSElement(clientPort, indexedElementVariableName);
 
                     yield return ffElement;
                 }
@@ -49,14 +49,14 @@ namespace WatiN.Core.Native.Mozilla
             }
         }
 
-        private static void DeleteElementArray(string elementName, FireFoxClientPort clientPort)
+        private static void DeleteElementArray(string elementName, ClientPortBase clientPort)
         {
             var command = string.Format("delete {0};", elementName);
 
             clientPort.Write(command);
         }
 
-        private static int GetNumberOfElements(string getElementsCommand, FireFoxClientPort clientPort, string elementArrayName)
+        private static int GetNumberOfElements(string getElementsCommand, ClientPortBase clientPort, string elementArrayName)
         {
             var command = string.Format("{0}={1}; {0}.length;", elementArrayName, getElementsCommand);
 

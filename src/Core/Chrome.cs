@@ -59,8 +59,11 @@ namespace WatiN.Core
         /// Initializes a new instance of the <see cref="Chrome"/> class.
         /// </summary>
         /// <param name="url">The initail URL to load.</param>
-        public Chrome(string url) : this(new Uri(url))
-        {            
+        public Chrome(string url)
+        {
+            // We don't call this(new Uri), because we don't want an escaped url.
+            this.CreateChromeInstance(url);
+            this.WaitForComplete();
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace WatiN.Core
         /// <param name="url">The initial URL to load.</param>
         public Chrome(Uri url)
         {
-            this.CreateChromeInstance(url);
+            this.CreateChromeInstance(url.ToString());
             this.WaitForComplete();
         }
 
@@ -203,6 +206,7 @@ namespace WatiN.Core
                                                 Logger.LogAction("Waited for Chrome, main window handle found.");
                                                 return true;
                                             }
+
                                             return false;
                                         });
 
@@ -345,7 +349,7 @@ namespace WatiN.Core
         /// Creates the chrome instance.
         /// </summary>
         /// <param name="url">The URL to navigate to.</param>
-        private void CreateChromeInstance(Uri url)
+        private void CreateChromeInstance(string url)
         {
             Logger.LogAction("Creating Chrome instance");
 

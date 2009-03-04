@@ -1,44 +1,46 @@
 using System;
 using System.Collections.Generic;
 
-namespace WatiN.Core.Native.Mozilla
+namespace WatiN.Core.Native
 {
-    public class FFElementArray : INativeElementCollection
-    {
-        public delegate bool IsMatch(FFElement ffElement);
+    using Mozilla;
 
-        public FireFoxClientPort ClientPort { get; private set; }
+    public class JSElementArray : INativeElementCollection
+    {
+        public delegate bool IsMatch(JSElement jsElement);
+
+        public ClientPortBase ClientPort { get; private set; }
         public string GetCommand { get; private set; }
 
-        public FFElementArray(FireFoxClientPort clientPort, string getCommand)
+        public JSElementArray(ClientPortBase clientPort, string getCommand)
         {
             if (clientPort == null) throw new ArgumentNullException("clientPort");
             if (getCommand == null) throw new ArgumentNullException("getCommand");
 
-            ClientPort = clientPort;
-            GetCommand = getCommand;
+            this.ClientPort = clientPort;
+            this.GetCommand = getCommand;
         }
 
         public IEnumerable<INativeElement> GetElements()
         {
-            return GetArrayElements(ffElement => true);
+            return this.GetArrayElements(ffElement => true);
         }
 
         public IEnumerable<INativeElement> GetElementsByTag(string tagName)
         {
-            return GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.TagName, tagName, true));
+            return this.GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.TagName, tagName, true));
         }
 
         public IEnumerable<INativeElement> GetElementsById(string id)
         {
-            return GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.GetAttributeValue("id"), id, true));
+            return this.GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.GetAttributeValue("id"), id, true));
         }
 
         private IEnumerable<INativeElement> GetArrayElements(IsMatch constraint)
         {
-            Initialize();
+            this.Initialize();
 
-            var ffElements = FFUtils.ElementArrayEnumerator(GetCommand, ClientPort);
+            var ffElements = FFUtils.ElementArrayEnumerator(this.GetCommand, this.ClientPort);
 
             foreach (var ffElement in ffElements)
             {
@@ -52,7 +54,7 @@ namespace WatiN.Core.Native.Mozilla
         private void Initialize()
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            ClientPort.InitializeDocument();
+            this.ClientPort.InitializeDocument();
         }
     }
 }

@@ -357,7 +357,6 @@ namespace WatiN.Core
 
             var clientPort = new FireFoxClientPort();
             clientPort.Connect(url);
-
             NativeBrowser = new FFBrowser(clientPort);
             WaitForComplete();
         }

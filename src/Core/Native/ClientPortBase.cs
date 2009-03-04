@@ -35,11 +35,24 @@ namespace WatiN.Core.Native
         private string lastResponse;
 
         /// <summary>
+        /// Used by CreateElementVariableName
+        /// </summary>
+        private static long elementCounter;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ClientPortBase"/> class.
         /// </summary>
         protected ClientPortBase()
         {
             this.Response = new StringBuilder();
+        }
+
+        /// <summary>
+        /// Gets the name of the javascript variable that references the DOM:document object.
+        /// </summary>
+        public abstract string DocumentVariableName
+        {
+            get;
         }
 
         /// <summary>
@@ -117,7 +130,7 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <param name="data">The data to write.</param>
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
-        public void Write(string data, params object[] args)
+        public virtual void Write(string data, params object[] args)
         {
             var command = data.EndsWith(";") == false ? data + ";" : data;
             this.SendAndRead(command + " true;", true, true, args);
@@ -129,7 +142,7 @@ namespace WatiN.Core.Native
         /// <param name="data">The data to write.</param>
         /// <param name="args">The arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         /// <returns>The response to the data written.</returns>
-        public string WriteAndReadIgnoreError(string data, params object[] args)
+        public virtual string WriteAndReadIgnoreError(string data, params object[] args)
         {
             this.SendAndRead(data, false, false, args);
             return this.LastResponse;
@@ -141,7 +154,7 @@ namespace WatiN.Core.Native
         /// <param name="data">The data to write.</param>
         /// <param name="args">The arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         /// <returns>The response to the data written.</returns>
-        public string WriteAndRead(string data, params object[] args)
+        public virtual string WriteAndRead(string data, params object[] args)
         {
             this.SendAndRead(data, false, true, args);
             return this.LastResponse;
@@ -153,7 +166,7 @@ namespace WatiN.Core.Native
         /// <param name="data">The data to write.</param>
         /// <param name="args">The arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         /// <returns>A boolean value from the response to the data written.</returns>
-        public bool WriteAndReadAsBool(string data, params object[] args)
+        public virtual bool WriteAndReadAsBool(string data, params object[] args)
         {
             this.SendAndRead(data, true, true, args);
             return this.LastResponseAsBool;
@@ -165,7 +178,7 @@ namespace WatiN.Core.Native
         /// <param name="data">The data to write.</param>
         /// <param name="args">The arguments to be passed to <see cref="string.Format(string,object[])"/></param>
         /// <returns>An integer value parsed from the response.</returns>
-        public int WriteAndReadAsInt(string data, params object[] args)
+        public virtual int WriteAndReadAsInt(string data, params object[] args)
         {
             this.SendAndRead(data, true, true, args);
             return this.LastResponseAsInt;
@@ -188,6 +201,21 @@ namespace WatiN.Core.Native
         protected void AddToLastResponse(string response)
         {
             lastResponse += response;
+        }
+
+        /// <summary>
+        /// Creates a unique variable name, i.e. doc.watin23
+        /// </summary>
+        /// <returns>A unique variable.</returns>
+        public string CreateVariableName()
+        {
+            if (elementCounter == long.MaxValue)
+            {
+                elementCounter = 0;
+            }
+
+            elementCounter++;
+            return string.Format("{0}.watin{1}", this.DocumentVariableName, elementCounter);
         }
     }
 }

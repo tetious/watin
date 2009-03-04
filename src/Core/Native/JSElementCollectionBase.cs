@@ -23,6 +23,8 @@ namespace WatiN.Core.Native
     using System;
     using System.Collections.Generic;
 
+    using Mozilla;
+
     /// <summary>
     /// Base element collection common to all browsers that communicate with WatiN using javascript.
     /// </summary>
@@ -43,20 +45,56 @@ namespace WatiN.Core.Native
             this.containerReference = containerReference;
         }
 
-        /// <inheritdoc />
+
+        /// <summary>
+        /// Gets all the native elements.
+        /// </summary>
+        /// <returns>Enumeration of native elements</returns>
         public IEnumerable<INativeElement> GetElements()
         {
-            return GetElementByTagImpl("*");
+            return this.GetElementByTagImpl("*");
         }
 
-        protected abstract IEnumerable<INativeElement> GetElementByTagImpl(string tagName);
+        /// <summary>
+        /// Gets a collection of elements by tag name.
+        /// </summary>
+        /// <param name="tagName">Name of the tag.</param>
+        /// <returns>Collection of elements for the given <paramref name="tagName"/>.</returns>
+        protected virtual IEnumerable<INativeElement> GetElementByTagImpl(string tagName)
+        {
+            if (tagName == null)
+            {
+                throw new ArgumentNullException("tagName");
+            }
 
+            this.Initialize();
+
+            var command = string.Format("{0}.getElementsByTagName(\"{1}\");", containerReference, tagName);
+            // TODO (prevent chatter): Force setting of tagName on JSElement to prevent calls to FireFox to (again) establish the tagName of the Element
+            var ffElements = FFUtils.ElementArrayEnumerator(command, clientPort);
+
+            foreach (var ffElement in ffElements)
+            {
+                // TODO (prevent chatter): Delay reassigning until after this ffElement is known to be a match
+                ffElement.ReAssignElementReference();
+                yield return ffElement;
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of elements by id.
+        /// </summary>
+        /// <param name="id">Name of the tag.</param>
+        /// <returns>Collection of elements for the given <paramref name="id"/>.</returns>
         protected abstract IEnumerable<INativeElement> GetElementsByIdImpl(string id);
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         protected void Initialize()
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            clientPort.InitializeDocument();
+            this.clientPort.InitializeDocument();
         }
 
         protected static string GetDocumentReference(string referencedElement)

@@ -24,9 +24,11 @@ using System.Text.RegularExpressions;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.UtilityClasses;
 
-namespace WatiN.Core.Native.Mozilla
+namespace WatiN.Core.Native
 {
-    public class FFElement : INativeElement
+    using Mozilla;
+
+    public class JSElement : INativeElement
     {
         public delegate T DoFuncWithValue<T>(string value);
 
@@ -38,10 +40,10 @@ namespace WatiN.Core.Native.Mozilla
         /// However  myOption.selected returns true.
         /// </summary>
         public static readonly IList<string> ReadPropertyInsteadOfAttribute = new[]
-        {
-            "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
-            "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
-        };
+                                                                                  {
+                                                                                          "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
+                                                                                          "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
+                                                                                  };
 
         /// <summary>
         /// List of html attributes that should not be changed when SetAttributeValue is called
@@ -49,43 +51,43 @@ namespace WatiN.Core.Native.Mozilla
         /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
         /// </summary>
         public static readonly IList<string> IgnoreSettingOfValue = new[]
-        {
-            "checked"
-        };
+                                                                        {
+                                                                                "checked"
+                                                                        };
 
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
         public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
-        {
-            {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
-        };
+                                                                                  {
+                                                                                          {Find.innerTextAttribute, "textContent"}, {Find.forAttribute, "for"}
+                                                                                  };
 
         /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
         public static readonly Dictionary<string, DoFuncWithValue<string>> SetPropertyTransformations = new Dictionary<string, DoFuncWithValue<string>>
-        {
-            {"value", value => "'" + value + "'"}
-        };
+                                                                                                            {
+                                                                                                                    {"value", value => "'" + value + "'"}
+                                                                                                            };
 
         private Dictionary<string, object> _attributeCache;
 
-        public FFElement(FireFoxClientPort clientPort, string elementReference)
+        public JSElement(ClientPortBase clientPort, string elementReference)
         {
             if (clientPort == null)
                 throw new ArgumentNullException("clientPort");
             if (elementReference == null)
                 throw new ArgumentNullException("elementReference");
 
-            ClientPort = clientPort;
-            ElementReference = elementReference;
+            this.ClientPort = clientPort;
+            this.ElementReference = elementReference;
         }
 
         /// <summary>
         /// Gets the FireFox client port.
         /// </summary>
-        public FireFoxClientPort ClientPort { get; private set; }
+        public ClientPortBase ClientPort { get; private set; }
 
         /// <summary>
         /// Gets the name of a variable that stores a reference to the element within FireFox.
@@ -97,11 +99,11 @@ namespace WatiN.Core.Native.Mozilla
             get
             {
                 var propertyName = "textContent";
-                if (!IsTextNodeType) propertyName = "innerHTML";
+                if (!this.IsTextNodeType) propertyName = "innerHTML";
 
-                var propertyValue = GetProperty(propertyName);
+                var propertyValue = this.GetProperty(propertyName);
 
-                propertyValue = (propertyName == "innerHTML" ? InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
+                propertyValue = (propertyName == "innerHTML" ? this.InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
 
                 return propertyValue;
             }
@@ -111,11 +113,11 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                return GetFromAttributeCache("Type", () =>
-                                                         {
-                                                             var value = GetAttribute("type");
-                                                             return value ?? "text";
-                                                         });
+                return this.GetFromAttributeCache("Type", () =>
+                                                     {
+                                                         var value = this.GetAttribute("type");
+                                                         return value ?? "text";
+                                                     });
             }
         }
 
@@ -123,18 +125,18 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var clone = FireFoxClientPort.CreateVariableName();
-                var div = FireFoxClientPort.CreateVariableName();
-                var outerHtml = FireFoxClientPort.CreateVariableName();
+                var clone = this.ClientPort.CreateVariableName();
+                var div = this.ClientPort.CreateVariableName();
+                var outerHtml = this.ClientPort.CreateVariableName();
 
-                var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
-                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
+                var command = string.Format("{0}={1}.cloneNode(true);", clone, this.ElementReference);
+                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, this.ElementReference);
                 command += string.Format("{0}.appendChild({1});", div, clone);
                 command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
                 command += string.Format("{0}=null;{1}=null;", div, clone);
                 command += string.Format("{0};", outerHtml);
 
-                var result = ClientPort.WriteAndRead(command);
+                var result = this.ClientPort.WriteAndRead(command);
 
                 // remove all \n (newline) and any following spaces
                 var newlineSpaces = new Regex("\n *");
@@ -148,11 +150,11 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                return GetFromAttributeCache("IsTextNodeType", () =>
-                                                                   {
-                                                                       var nodeTypeValue = GetProperty("nodeType");
-                                                                       return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
-                                                                   });
+                return this.GetFromAttributeCache("IsTextNodeType", () =>
+                                                               {
+                                                                   var nodeTypeValue = this.GetProperty("nodeType");
+                                                                   return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
+                                                               });
             }
         }
 
@@ -160,32 +162,32 @@ namespace WatiN.Core.Native.Mozilla
 
         public INativeElementCollection Children
         {
-            get { return new FFElementArray(ClientPort, ElementReference + ".childNodes"); }
+            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".childNodes"); }
         }
 
         public INativeElementCollection AllDescendants
         {
-            get { return new FFElementCollection(ClientPort, ElementReference); }
+            get { return new FFElementCollection(this.ClientPort, this.ElementReference); }
         }
 
         public INativeElementCollection TableRows
         {
-            get { return new FFElementArray(ClientPort, ElementReference + ".rows"); }
+            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".rows"); }
         }
 
         public INativeElementCollection TableBodies
         {
-            get { return new FFElementArray(ClientPort, ElementReference + ".tBodies"); }
+            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".tBodies"); }
         }
 
         public INativeElementCollection TableCells
         {
-            get { return new FFElementArray(ClientPort, ElementReference + ".cells"); }
+            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".cells"); }
         }
 
         public INativeElementCollection Options
         {
-            get { return new FFElementArray(ClientPort, ElementReference + ".options"); }
+            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".options"); }
         }
 
         /// <summary>
@@ -195,7 +197,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var element = GetElementByProperty("nextSibling");
+                var element = this.GetElementByProperty("nextSibling");
 
                 if (element == null || !element.IsTextNodeType) return string.Empty;
 
@@ -210,7 +212,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var element = GetElementByProperty("previousSibling");
+                var element = this.GetElementByProperty("previousSibling");
 
                 if (element == null || !element.IsTextNodeType) return string.Empty;
 
@@ -222,7 +224,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var element = GetElementByProperty("nextSibling");
+                var element = this.GetElementByProperty("nextSibling");
 
                 while (true)
                 {
@@ -231,7 +233,7 @@ namespace WatiN.Core.Native.Mozilla
                         return element;
                     }
 
-                    element = (FFElement)element.NextSibling;
+                    element = (JSElement)element.NextSibling;
                 }
             }
         }
@@ -240,7 +242,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                var element = GetElementByProperty("previousSibling");
+                var element = this.GetElementByProperty("previousSibling");
 
                 while (true)
                 {
@@ -249,14 +251,14 @@ namespace WatiN.Core.Native.Mozilla
                         return element;
                     }
 
-                    element = (FFElement)element.PreviousSibling;
+                    element = (JSElement)element.PreviousSibling;
                 }
             }
         }
 
         public INativeElement Parent
         {
-            get { return GetElementByProperty("parentNode"); }
+            get { return this.GetElementByProperty("parentNode"); }
         }
 
         public string GetAttributeValue(string attributeName)
@@ -269,13 +271,13 @@ namespace WatiN.Core.Native.Mozilla
 
             // Special cases
             var attribName = attributeName.ToLowerInvariant();
-            if (attribName == "tagname") return TagName;
-            if (attribName == "type") return InputType;
-            if (attribName == "outerhtml") return OuterHtml;
-            if (attributeName == "textContent") return TextContent;
+            if (attribName == "tagname") return this.TagName;
+            if (attribName == "type") return this.InputType;
+            if (attribName == "outerhtml") return this.OuterHtml;
+            if (attributeName == "textContent") return this.TextContent;
 
             // Return value
-            return ReadPropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
+            return ReadPropertyInsteadOfAttribute.Contains(attributeName) ? this.GetProperty(attributeName) : this.GetAttribute(attributeName);
         }
 
         public void SetAttributeValue(string attributeName, string value)
@@ -292,88 +294,88 @@ namespace WatiN.Core.Native.Mozilla
             // Handle properties different from attributes
             if (ReadPropertyInsteadOfAttribute.Contains(attributeName))
             {
-                SetProperty(attributeName, value);
+                this.SetProperty(attributeName, value);
                 return;
             }
 
-            SetAttribute(attributeName, value);
+            this.SetAttribute(attributeName, value);
         }
 
         public string GetStyleAttributeValue(string attributeName)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
-            var attributeValue = GetProperty("style." + attributeName);
+            var attributeValue = this.GetProperty("style." + attributeName);
             return string.IsNullOrEmpty(attributeValue) ? null : attributeValue;
         }
 
         public void SetStyleAttributeValue(string attributeName, string value)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
-            SetProperty("style." + attributeName, "'" + value + "'");
+            this.SetProperty("style." + attributeName, "'" + value + "'");
         }
 
         public void ClickOnElement()
         {
-            FireEvent("click", null);
+            this.FireEvent("click", null);
         }
 
         public void SetFocus()
         {
-            ExecuteMethod("focus");
+            this.ExecuteMethod("focus");
         }
 
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
-            ExecuteEvent(eventName, eventProperties, true);
+            this.ExecuteEvent(eventName, eventProperties, true);
         }
 
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            ExecuteEvent(eventName, eventProperties, false);
+            this.ExecuteEvent(eventName, eventProperties, false);
         }
 
         public bool IsElementReferenceStillValid()
         {
-            if (UtilityClass.IsNullOrEmpty(ElementReference)) return false;
+            if (UtilityClass.IsNullOrEmpty(this.ElementReference)) return false;
 
-            var command = string.Format("{0} != null && {0}.offsetParent != null; ", ElementReference);
+            var command = string.Format("{0} != null && {0}.offsetParent != null; ", this.ElementReference);
 
-            return ClientPort.WriteAndReadAsBool(command);
+            return this.ClientPort.WriteAndReadAsBool(command);
         }
 
         public string TagName
         {
-            get { return GetFromAttributeCache("TagName", () => GetProperty(Find.tagNameAttribute)); }
+            get { return this.GetFromAttributeCache("TagName", () => this.GetProperty(Find.tagNameAttribute)); }
         }
 
         public void Select()
         {
-            FireEvent("select", null);
+            this.FireEvent("select", null);
         }
 
         public void SubmitForm()
         {
-            FireEvent("submit", null);
+            this.FireEvent("submit", null);
         }
 
         public void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName)
         {
             fileName = fileName.Replace(@"\", @"\\");
-            SetAttributeValue("value", fileName);
+            this.SetAttributeValue("value", fileName);
         }
 
         #endregion
 
         public string GetAttribute(string attributeName)
         {
-            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", ElementReference, attributeName);
-            return ClientPort.WriteAndRead(getAttributeWrite);
+            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", this.ElementReference, attributeName);
+            return this.ClientPort.WriteAndRead(getAttributeWrite);
         }
 
         public void SetAttribute(string attributeName, string value)
         {
-            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
+            this.ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", this.ElementReference, attributeName, value);
         }
 
         /// <summary>
@@ -383,8 +385,8 @@ namespace WatiN.Core.Native.Mozilla
         /// <returns></returns>
         public string GetProperty(string propertyName)
         {
-            var command = string.Format("{0}.{1};", ElementReference, propertyName);
-            return ClientPort.WriteAndRead(command);
+            var command = string.Format("{0}.{1};", this.ElementReference, propertyName);
+            return this.ClientPort.WriteAndRead(command);
         }
 
         /// <summary>
@@ -396,8 +398,8 @@ namespace WatiN.Core.Native.Mozilla
         {
             if (SetPropertyTransformations.ContainsKey(propertyName)) value = SetPropertyTransformations[propertyName].Invoke(value);
             
-            var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
-            ClientPort.Write(command);
+            var command = string.Format("{0}.{1} = {2};", this.ElementReference, propertyName, value);
+            this.ClientPort.Write(command);
         }
 
         /// <summary>
@@ -406,7 +408,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <param name="methodName">Name of the method to execute.</param>
         public void ExecuteMethod(string methodName)
         {
-            ClientPort.Write("{0}.{1}();", ElementReference, methodName);
+            this.ClientPort.Write("{0}.{1}();", this.ElementReference, methodName);
         }
 
         /// <summary>
@@ -414,18 +416,18 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>Returns the element that is returned by the specified property</returns>
-        public FFElement GetElementByProperty(string propertyName)
+        public JSElement GetElementByProperty(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
             {
                 throw new ArgumentNullException("propertyName");
             }
 
-            var elementvar = FireFoxClientPort.CreateVariableName();
-            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
-            var exists = ClientPort.WriteAndReadAsBool(command);
+            var elementvar = this.ClientPort.CreateVariableName();
+            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, this.ElementReference, propertyName);
+            var exists = this.ClientPort.WriteAndReadAsBool(command);
 
-            return exists ? new FFElement(ClientPort, elementvar) : null;
+            return exists ? new JSElement(this.ClientPort, elementvar) : null;
         }
 
         public void WaitUntilReady()
@@ -450,7 +452,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             if (string.IsNullOrEmpty(innerHtml)) return string.Empty;
 
-            if (TagName.ToLowerInvariant() == "pre") return innerHtml;
+            if (this.TagName.ToLowerInvariant() == "pre") return innerHtml;
 
             var returnValue = NewLineCleanup(innerHtml);
 
@@ -500,13 +502,13 @@ namespace WatiN.Core.Native.Mozilla
 
         private T GetFromAttributeCache<T>(string key, DoFunc<T> function)
         {
-            if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
+            if (this._attributeCache == null) this._attributeCache = new Dictionary<string, object>();
 
-            if (!_attributeCache.ContainsKey(key))
+            if (!this._attributeCache.ContainsKey(key))
             {
-                _attributeCache.Add(key, function.Invoke());
+                this._attributeCache.Add(key, function.Invoke());
             }
-            return (T) _attributeCache[key];
+            return (T) this._attributeCache[key];
         }
 
         /// <summary>
@@ -526,26 +528,26 @@ namespace WatiN.Core.Native.Mozilla
 
             if (eventname.Contains("mouse") || eventname == "click")
             {
-                command = CreateMouseEventCommand(eventname);
+                command = this.CreateMouseEventCommand(eventname);
             }
             else if (eventname.Contains("key"))
             {
-                command = CreateKeyEventCommand(eventname, eventProperties);
+                command = this.CreateKeyEventCommand(eventname, eventProperties);
             }
             else
             {
-                command = CreateHTMLEventCommand(eventname);
+                command = this.CreateHTMLEventCommand(eventname);
             }
 
 
-            command += "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
+            command += "var res = " + this.ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
 
             if (WaitForEventToComplete == false)
             {
                 command = FFUtils.WrapCommandInTimer(command);
             }
             
-            ClientPort.WriteAndReadAsBool(command);
+            this.ClientPort.WriteAndReadAsBool(command);
 
         }
 
@@ -562,7 +564,7 @@ namespace WatiN.Core.Native.Mozilla
 
         private string CreateHTMLEventCommand(string eventname)
         {
-            return "var event = " +  ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
+            return "var event = " +  this.ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
                    "event.initEvent(\"" + eventname + "\",true,true);";
         }
 
@@ -571,7 +573,7 @@ namespace WatiN.Core.Native.Mozilla
             // Params for the initMouseEvent:
             // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
 
-            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
+            return "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
                    "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
         }
 
@@ -587,7 +589,7 @@ namespace WatiN.Core.Native.Mozilla
             // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
             if (eventname == "keypress") keyCode = "0";
             
-            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+            return "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
                    "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
         }
 
@@ -611,10 +613,10 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         internal void ReAssignElementReference()
         {
-            var elementVariableName = FireFoxClientPort.CreateVariableName();
-            ClientPort.Write("{0}={1};", elementVariableName, ElementReference);
+            var elementVariableName = this.ClientPort.CreateVariableName();
+            this.ClientPort.Write("{0}={1};", elementVariableName, this.ElementReference);
 
-            ElementReference = elementVariableName;
+            this.ElementReference = elementVariableName;
         }
     }
 }

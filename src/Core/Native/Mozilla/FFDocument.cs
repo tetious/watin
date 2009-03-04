@@ -24,10 +24,10 @@ namespace WatiN.Core.Native.Mozilla
 {
     public class FFDocument : INativeDocument
     {
-        private readonly FFElement containingFrameElement;
+        private readonly JSElement containingFrameElement;
 
         public FFDocument(FireFoxClientPort clientPort)
-            : this(clientPort, FireFoxClientPort.DocumentVariableName)
+            : this(clientPort, clientPort.DocumentVariableName)
         {
         }
 
@@ -36,7 +36,7 @@ namespace WatiN.Core.Native.Mozilla
         {
         }
 
-        public FFDocument(FireFoxClientPort clientPort, string documentReference, FFElement containingFrameElement)
+        public FFDocument(FireFoxClientPort clientPort, string documentReference, JSElement containingFrameElement)
         {
             DocumentReference = documentReference;
             ClientPort = clientPort;
@@ -72,7 +72,7 @@ namespace WatiN.Core.Native.Mozilla
             get
             {
                 var bodyReference = string.Format("{0}.body", DocumentReference);
-                return new FFElement(ClientPort, bodyReference);
+                return new JSElement(ClientPort, bodyReference);
             }
         }
 
@@ -100,11 +100,11 @@ namespace WatiN.Core.Native.Mozilla
                 // TODO: Make "activeElement" a FireFox constant
                 var propertyName = "activeElement";
 
-                var elementvar = FireFoxClientPort.CreateVariableName();
+                var elementvar = this.ClientPort.CreateVariableName();
                 var command = string.Format("{0}={1}.{2};{0}==null", elementvar, DocumentReference, propertyName);
                 var result = ClientPort.WriteAndReadAsBool(command);
 
-                return !result ? new FFElement(ClientPort, elementvar) : null;
+                return !result ? new JSElement(ClientPort, elementvar) : null;
             }
         }
 
@@ -138,7 +138,7 @@ namespace WatiN.Core.Native.Mozilla
 
         private void PopulateFrames(IList<INativeDocument> frames, string tagName)
         {
-            foreach (FFElement frameElement in AllElements.GetElementsByTag(tagName))
+            foreach (JSElement frameElement in AllElements.GetElementsByTag(tagName))
             {
                 var frameDocumentReference = frameElement.ElementReference + ".contentDocument";
                 frames.Add(new FFDocument(ClientPort, frameDocumentReference, frameElement));

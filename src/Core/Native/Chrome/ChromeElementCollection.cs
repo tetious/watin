@@ -21,7 +21,10 @@
 
 namespace WatiN.Core.Native.Chrome
 {
+    using System;
     using System.Collections.Generic;
+
+    using Mozilla;
 
     /// <summary>
     /// Chrome implementation of the <see cref="INativeElementCollection"/>.
@@ -39,11 +42,6 @@ namespace WatiN.Core.Native.Chrome
         /// </param>
         public ChromeElementCollection(ClientPortBase clientPort, string containerReference) : base(clientPort, containerReference)
         {
-        }
-
-        protected override IEnumerable<INativeElement> GetElementByTagImpl(string tagName)
-        {
-            throw new System.NotImplementedException();
         }
 
         protected override IEnumerable<INativeElement> GetElementsByIdImpl(string id)

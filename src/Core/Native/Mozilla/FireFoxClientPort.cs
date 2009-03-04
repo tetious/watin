@@ -44,19 +44,9 @@ namespace WatiN.Core.Native.Mozilla
         public const string BrowserVariableName = "browser";
 
         /// <summary>
-        /// Name of the javascript variable that references the DOM:document object.
-        /// </summary>
-        public const string DocumentVariableName = "doc";
-
-        /// <summary>
         /// Name of the javascript variable that references the DOM:window object.
         /// </summary>
         public const string WindowVariableName = "window";
-
-        /// <summary>
-        /// Used by CreateElementVariableName
-        /// </summary>
-        private static long elementCounter;
 
         /// <summary>
         /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
@@ -83,6 +73,17 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the javascript variable that references the DOM:document object.
+        /// </summary>
+        public override string DocumentVariableName
+        {
+            get
+            {
+                return "doc";
+            }   
+        }
 
         /// <summary>
         /// Gets a value indicating whether the main FireFox window is visible, it's possible that the
@@ -119,17 +120,6 @@ namespace WatiN.Core.Native.Mozilla
                 var result = NativeMethods.GetWindowText(this.Process.MainWindowHandle).Contains("Firefox - ");
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Creates a unique variable name
-        /// </summary>
-        /// <returns></returns>
-        public static string CreateVariableName()
-        {
-            if (elementCounter == long.MaxValue) elementCounter = 0;
-            elementCounter++;
-            return string.Format("{0}.watin{1}", DocumentVariableName, elementCounter);
         }
 
         /// <summary>

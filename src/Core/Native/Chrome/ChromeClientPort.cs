@@ -69,6 +69,17 @@ namespace WatiN.Core.Native.Chrome
         public bool Connected { get; private set; }
 
         /// <summary>
+        /// Gets the name of the javascript variable that references the DOM:document object.
+        /// </summary>
+        public override string DocumentVariableName
+        {
+            get
+            {
+                return "document";
+            }
+        }
+
+        /// <summary>
         /// Gets the Chrome process.
         /// </summary>
         /// <value>The process.</value>
@@ -104,7 +115,7 @@ namespace WatiN.Core.Native.Chrome
         /// Connects to the Chrome browser and navigates to the specified URL.
         /// </summary>
         /// <param name="url">The URL to connect to.</param>
-        public void Connect(Uri url)
+        public void Connect(string url)
         {
             this.ValidateCanConnect();
             this.disposed = false;
@@ -133,18 +144,7 @@ namespace WatiN.Core.Native.Chrome
             Logger.LogDebug(string.Format("Successfully connected to Chrome on port.{0}", ChromePort));
             
             //DefineDefaultJSVariables();
-        }
-
-        /// <summary>
-        /// Invokes the chrome remote shell port print command for the specified paraments.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <returns>The result of the print command.</returns>
-        public string Print(string value, string arguments)
-        {
-            return this.WriteAndRead(string.Format("print {0}", string.Format(value, arguments)));
-        }
+        }        
 
         /// <summary>
         /// Initializes the document.
@@ -154,7 +154,7 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
+        /// Writes the specified data to the remote server.
         /// </summary>
         /// <param name="data">The data to write.</param>
         /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
@@ -163,7 +163,22 @@ namespace WatiN.Core.Native.Chrome
         protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
             var command = UtilityClass.StringFormat(data, args);
+            command = "print " + command;            
 
+            this.SendCommand(command);
+            this.ReadResponse(resultExpected, checkForErrors);
+        }
+
+        /// <summary>
+        /// Writes the specified data to the remote server.
+        /// </summary>
+        /// <param name="data">The data to write.</param>
+        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
+        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
+        /// <param name="args">Arguments to format with the data.</param>
+        private void SendRawAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
+        {
+            var command = UtilityClass.StringFormat(data, args);
             this.SendCommand(command);
             this.ReadResponse(resultExpected, checkForErrors);
         }
@@ -348,8 +363,8 @@ namespace WatiN.Core.Native.Chrome
                 rawResponse += this.LastResponseRaw;
             }
 
-            string response = this.WriteAndRead("debug()");
-            Debug.WriteLine(response);
+            this.SendRawAndRead("debug()", true, true);
+            Debug.WriteLine(this.LastResponse);
         }
     }
 }

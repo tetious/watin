@@ -5,9 +5,19 @@ using NUnit.Framework.SyntaxHelpers;
 
 namespace WatiN.Core.UnitTests.FireFoxTests
 {
+    using Logging;
+
     [TestFixture]
     public class FireFoxTests : BaseWatiNTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FireFoxTests"/> class.
+        /// </summary>
+        public FireFoxTests()
+        {
+            Logger.LogWriter = new DebugLogWriter();
+        }
+
         [Test]
         public void CheckFireFoxIsInheritingProperTypes()
         {

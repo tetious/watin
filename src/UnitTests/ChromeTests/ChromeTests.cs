@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests.ChromeTests
             }
         }
 
-        [Test, Category("InternetConnectionNeeded"), Ignore("Work in progress")]
+        [Test, Category("InternetConnectionNeeded")]
         public void GoogleSearchWithEncodedQueryStringInConstructor()
         {
             var url = string.Format("http://www.google.com/search?q={0}", HttpUtility.UrlEncode("a+b"));
