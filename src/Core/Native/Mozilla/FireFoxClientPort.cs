@@ -55,6 +55,9 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         private Socket telnetSocket;
 
+        private bool _emulateActiveElement;
+        private bool _emulateActiveElementChecked;
+
         /// <summary>
         /// Finalizes an instance of the <see cref="FireFoxClientPort"/> class. 
         /// Releases unmanaged resources and performs other cleanup operations before the
@@ -197,12 +200,24 @@ namespace WatiN.Core.Native.Mozilla
             // Sets up the document variable
             this.Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
 
+            if (!EmulateActiveElement()) return;
+
             // Javascript to implement document.activeElement if not supported by browser (FireFox 2.x)
-            this.Write("if (" + DocumentVariableName + ".activeElement == null){" + DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;" +
+            this.Write(DocumentVariableName + ".activeElement = " + DocumentVariableName + ".body;" +
                        "var allElements = " + DocumentVariableName + ".getElementsByTagName(\"*\");" +
                        "for (i = 0; i < allElements.length; i++){" +
                        "allElements[i].addEventListener(\"focus\", function (event) {" +
-                       DocumentVariableName + ".activeElement = event.target;}, false);}}");
+                       DocumentVariableName + ".activeElement = event.target;}, false);}");
+        }
+
+        private bool EmulateActiveElement()
+        {
+            if (!_emulateActiveElementChecked)
+            {
+                _emulateActiveElement = WriteAndReadAsBool(DocumentVariableName + ".activeElement == null");
+                _emulateActiveElementChecked = true;
+            }
+            return _emulateActiveElement;
         }
 
         /// <summary>
