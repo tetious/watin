@@ -1064,22 +1064,13 @@ namespace WatiN.Core
 
 		private bool IsInternetExplorerStillAvailable()
 		{
-			try
-			{
-				// Call a property of the
-				// ie instance to see of it isn't disposed by 
-				// another IE instance.
-				var hwndDummy = ie.HWND;
-			}
-			catch
-			{
-				return false;
-			}
-
-			return true;
+		    // Call a property of the
+            // ie instance to see of it isn't disposed by 
+            // another IE instance.
+		    return UtilityClass.TryFuncIgnoreException(() => ie.HWND != 0);
 		}
 
-		public override INativeDocument OnGetNativeDocument()
+	    public override INativeDocument OnGetNativeDocument()
 		{
             return new IEDocument((IHTMLDocument2)ie.Document);
 		}
@@ -1175,7 +1166,7 @@ namespace WatiN.Core
 
 		private HtmlDialog FindHtmlDialog(Constraint findBy, int timeout)
 		{
-			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy.ToString());
+			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy);
 
 		    var action = new TryFuncUntilTimeOut(timeout){SleepTime = 500};
             var result = action.Try(() => HtmlDialogs.First(findBy));
