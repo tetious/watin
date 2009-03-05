@@ -1152,16 +1152,6 @@ namespace WatiN.Core
 			get { return new IntPtr(ie.HWND); }
 		}
 
-        public new IEBrowser NativeBrowser
-        {
-            get { return new IEBrowser(); }
-        }
-
-		protected override INativeBrowser GetNativeBrowser()
-		{
-            return NativeBrowser;
-		}
-
 		/// <summary>
 		/// Find a HtmlDialog by an attribute. Currently 
 		/// Find.ByUrl and Find.ByTitle are supported.

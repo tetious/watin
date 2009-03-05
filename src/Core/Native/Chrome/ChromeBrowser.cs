@@ -22,7 +22,7 @@ namespace WatiN.Core.Native.Chrome
     /// Native driver the communicates with the Chrome browser using a
     /// telnet session <see cref="ClientPort"/>.
     /// </summary>
-    public class ChromeBrowser : INativeBrowser
+    public class ChromeBrowser
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeBrowser"/> class.

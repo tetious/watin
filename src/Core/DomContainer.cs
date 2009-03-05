@@ -100,13 +100,6 @@ namespace WatiN.Core
 	    /// <value>The dialog watcher.</value>
 	    public DialogWatcher DialogWatcher { get; private set; }
 
-	    public INativeBrowser NativeBrowser
-		{
-            get { return GetNativeBrowser(); }
-		}
-
-        protected abstract INativeBrowser GetNativeBrowser();
-
 		/// <summary>
 		/// Adds the dialog handler.
 		/// </summary>

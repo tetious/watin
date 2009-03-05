@@ -81,11 +81,6 @@ namespace WatiN.Core
 //            get { return Core.BrowserType.FireFox; }
 //        }
 
-        protected override INativeBrowser GetNativeBrowser()
-        {
-            return ffBrowser;
-        }
-
         #endregion Public instance properties
 
         #region Public instance methods

@@ -127,7 +127,7 @@ namespace WatiN.Core
         /// Gets the native browser.
         /// </summary>
         /// <value>The native browser.</value>
-        public new ChromeBrowser NativeBrowser
+        public ChromeBrowser NativeBrowser
         {
             get;
             private set;
@@ -264,15 +264,6 @@ namespace WatiN.Core
         /// The attribute's associated value or null if none
         /// </returns>
         protected override string GetAttributeValueImpl(string attributeName)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets the native browser.
-        /// </summary>
-        /// <returns>The native browser.</returns>
-        protected override INativeBrowser GetNativeBrowser()
         {
             throw new System.NotImplementedException();
         }
