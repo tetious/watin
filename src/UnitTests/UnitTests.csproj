@@ -141,6 +141,7 @@
     <Compile Include="ChromeTests\ChromeTests.cs" />
     <Compile Include="ActionTests\HighligtActionTests.cs" />
     <Compile Include="NativeElementFinderTests.cs" />
+    <Compile Include="Native\JSElementCollectionBaseTests.cs" />
     <Compile Include="Native\Windows\NativeMethodsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -26,7 +26,7 @@ namespace WatiN.Core.Native
     /// <summary>
     /// Base element collection common to all browsers that communicate with WatiN using javascript.
     /// </summary>
-    internal abstract class JSElementCollectionBase : INativeElementCollection
+    public abstract class JSElementCollectionBase : INativeElementCollection
     {
         protected ClientPortBase clientPort;
 
@@ -50,7 +50,7 @@ namespace WatiN.Core.Native
         /// <returns>Enumeration of native elements</returns>
         public IEnumerable<INativeElement> GetElements()
         {
-            return this.GetElementByTagImpl("*");
+            return GetElementByTagImpl("*");
         }
 
         /// <summary>
@@ -65,18 +65,23 @@ namespace WatiN.Core.Native
                 throw new ArgumentNullException("tagName");
             }
 
-            this.Initialize();
+            Initialize();
 
-            var command = string.Format("{0}.getElementsByTagName(\"{1}\");", containerReference, tagName);
-            // TODO (prevent chatter): Force setting of tagName on JSElement to prevent calls to FireFox to (again) establish the tagName of the Element
-            var ffElements = FFUtils.ElementArrayEnumerator(command, clientPort);
+            var command = string.Format("{0}.getElementsByTagName(\"{1}\")", containerReference, tagName);
+            var ffElements = GetElementArrayEnumerator(command);
 
             foreach (var ffElement in ffElements)
             {
+                if (tagName != "*") ffElement.TagName = tagName;
                 // TODO (prevent chatter): Delay reassigning until after this ffElement is known to be a match
                 ffElement.ReAssignElementReference();
                 yield return ffElement;
             }
+        }
+
+        protected virtual IEnumerable<JSElement> GetElementArrayEnumerator(string command)
+        {
+            return FFUtils.ElementArrayEnumerator(command, clientPort);
         }
 
         /// <summary>
@@ -92,7 +97,7 @@ namespace WatiN.Core.Native
         protected void Initialize()
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            this.clientPort.InitializeDocument();
+            clientPort.InitializeDocument();
         }
 
         protected static string GetDocumentReference(string referencedElement)

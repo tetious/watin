@@ -80,8 +80,8 @@ namespace WatiN.Core.Native
             if (elementReference == null)
                 throw new ArgumentNullException("elementReference");
 
-            this.ClientPort = clientPort;
-            this.ElementReference = elementReference;
+            ClientPort = clientPort;
+            ElementReference = elementReference;
         }
 
         /// <summary>
@@ -99,11 +99,11 @@ namespace WatiN.Core.Native
             get
             {
                 var propertyName = "textContent";
-                if (!this.IsTextNodeType) propertyName = "innerHTML";
+                if (!IsTextNodeType) propertyName = "innerHTML";
 
-                var propertyValue = this.GetProperty(propertyName);
+                var propertyValue = GetProperty(propertyName);
 
-                propertyValue = (propertyName == "innerHTML" ? this.InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
+                propertyValue = (propertyName == "innerHTML" ? InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
 
                 return propertyValue;
             }
@@ -113,9 +113,9 @@ namespace WatiN.Core.Native
         {
             get
             {
-                return this.GetFromAttributeCache("Type", () =>
+                return GetFromAttributeCache("Type", () =>
                                                      {
-                                                         var value = this.GetAttribute("type");
+                                                         var value = GetAttribute("type");
                                                          return value ?? "text";
                                                      });
             }
@@ -125,18 +125,18 @@ namespace WatiN.Core.Native
         {
             get
             {
-                var clone = this.ClientPort.CreateVariableName();
-                var div = this.ClientPort.CreateVariableName();
-                var outerHtml = this.ClientPort.CreateVariableName();
+                var clone = ClientPort.CreateVariableName();
+                var div = ClientPort.CreateVariableName();
+                var outerHtml = ClientPort.CreateVariableName();
 
-                var command = string.Format("{0}={1}.cloneNode(true);", clone, this.ElementReference);
-                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, this.ElementReference);
+                var command = string.Format("{0}={1}.cloneNode(true);", clone, ElementReference);
+                command += string.Format("{0}={1}.ownerDocument.createElement('div');", div, ElementReference);
                 command += string.Format("{0}.appendChild({1});", div, clone);
                 command += string.Format("{0}={1}.innerHTML;", outerHtml, div);
                 command += string.Format("{0}=null;{1}=null;", div, clone);
                 command += string.Format("{0};", outerHtml);
 
-                var result = this.ClientPort.WriteAndRead(command);
+                var result = ClientPort.WriteAndRead(command);
 
                 // remove all \n (newline) and any following spaces
                 var newlineSpaces = new Regex("\n *");
@@ -346,7 +346,8 @@ namespace WatiN.Core.Native
 
         public string TagName
         {
-            get { return this.GetFromAttributeCache("TagName", () => this.GetProperty(Find.tagNameAttribute)); }
+            get { return GetFromAttributeCache("tagName", () => GetProperty(Find.tagNameAttribute)); }
+            internal set { AddToAttributeCache("tagName", value);}
         }
 
         public void Select()
@@ -502,13 +503,33 @@ namespace WatiN.Core.Native
 
         private T GetFromAttributeCache<T>(string key, DoFunc<T> function)
         {
-            if (this._attributeCache == null) this._attributeCache = new Dictionary<string, object>();
+            AddToAttributeCache(key, function);
+            return (T)AttributeCache[key];
+        }
 
-            if (!this._attributeCache.ContainsKey(key))
+        private void AddToAttributeCache<T>(string key, DoFunc<T> function)
+        {
+            if (!AttributeCache.ContainsKey(key))
             {
-                this._attributeCache.Add(key, function.Invoke());
+                AttributeCache.Add(key, function.Invoke());
             }
-            return (T) this._attributeCache[key];
+        }
+
+        private void AddToAttributeCache(string key, object value)
+        {
+            if (!AttributeCache.ContainsKey(key))
+            {
+                AttributeCache.Add(key, value);
+            }
+        }
+
+        protected Dictionary<string, object> AttributeCache
+        {
+            get
+            {
+                if (_attributeCache == null) _attributeCache = new Dictionary<string, object>();
+                return _attributeCache;
+            }
         }
 
         /// <summary>
