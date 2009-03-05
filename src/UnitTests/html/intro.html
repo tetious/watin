@@ -1,14 +1,20 @@
-<form id="TheForm" action="theApp.html" method=get>
-Waiting 5 seconds...
-</form>
+<!-- saved from url=(0029)http://watin.sourceforge.net/ -->
+<html>
+<head>
+<title>Redirecting test page</title>
+<script type="text/javascript" language="javascript">
 
-<script language=javascript>
+    function CallNextPage() {
+        document.forms[0].submit();
+    }
 
-function CallNextPage()
-{
-    document.forms[0].submit();
-}
-
-setTimeout('CallNextPage()',5000);
+    setTimeout('CallNextPage()', 5000);
 
 </script>
+</head>
+<body>
+<form id="TheForm" action="theApp.html" method="get">
+Waiting 5 seconds...
+</form>
+</body>
+</html>
