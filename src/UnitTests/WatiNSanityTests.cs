@@ -1,4 +1,22 @@
-﻿using System;
+﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+
+//Copyright 2006-2009 Jeroen van Menen
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+#endregion Copyright
+
+using System;
 using System.Globalization;
 using System.IO;
 using NUnit.Framework;
@@ -69,6 +87,8 @@ namespace WatiN.Core.UnitTests
         public void ShouldEnsureThatEachCodeFileHasACopyRightHeader()
         {
             var copyRightHeader =
+                "#region WatiN Copyright (C) 2006-2009 Jeroen van Menen" + Environment.NewLine +
+                "" + Environment.NewLine +
                 "//Copyright 2006-2009 Jeroen van Menen" + Environment.NewLine +
                 "//" + Environment.NewLine +
                 "//   Licensed under the Apache License, Version 2.0 (the \"License\");" + Environment.NewLine +
@@ -81,7 +101,9 @@ namespace WatiN.Core.UnitTests
                 "//   distributed under the License is distributed on an \"AS IS\" BASIS," + Environment.NewLine +
                 "//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." + Environment.NewLine +
                 "//   See the License for the specific language governing permissions and" + Environment.NewLine +
-                "//   limitations under the License." + Environment.NewLine;
+                "//   limitations under the License." + Environment.NewLine +
+                "" + Environment.NewLine +
+                "#endregion Copyright" + Environment.NewLine;
 
             Console.WriteLine(copyRightHeader);
             Console.WriteLine();
@@ -94,7 +116,8 @@ namespace WatiN.Core.UnitTests
             foreach (var codeFile in codeFiles)
             {
                 // skip svn files
-                if (!codeFile.EndsWith("cs",true,CultureInfo.InvariantCulture)) 
+                if (!codeFile.EndsWith("cs",true,CultureInfo.InvariantCulture) ||
+                    codeFile.EndsWith("Resources.Designer.cs", true, CultureInfo.InvariantCulture)) 
                 {
                     continue;
                 }
@@ -107,7 +130,7 @@ namespace WatiN.Core.UnitTests
                 Console.WriteLine();
             }
 
-            Assert.That(fail, Is.False, "Not all test html files are correctly Marked Of The Web");
+            Assert.That(fail, Is.False, "Not all code files have the correct copyright header");
         }
     }
 }

@@ -1,4 +1,22 @@
-﻿using System;
+﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+
+//Copyright 2006-2009 Jeroen van Menen
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+#endregion Copyright
+
+using System;
 using System.Collections.Generic;
 
 namespace WatiN.Core.Native.Mozilla
@@ -23,7 +41,7 @@ namespace WatiN.Core.Native.Mozilla
             var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
 
             if (clientPort.WriteAndReadAsBool(command))
-                yield return new JSElement(this.clientPort, elementReference);
+                yield return new JSElement(clientPort, elementReference);
         }
     }
 }

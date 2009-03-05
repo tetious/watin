@@ -14,17 +14,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-// ---------------------------------------------------------------------------
-//
-// Copyright (c) Doug Weems.
-// http://www.codeproject.com/cs/media/IECapture.asp
-// 
-// You may use this code for fun and knowledge.
-// You can compile and use the application as is or copy out what you need.  
-// This code makes for a really useful tool.
-// 
-// ---------------------------------------------------------------------------
-
 #endregion Copyright
 
 using System;
