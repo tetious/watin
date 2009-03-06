@@ -461,6 +461,19 @@ namespace WatiN.Core.Native.InternetExplorer
 
             return new Rectangle(left, top, width, height);
         }
+
+        public override bool Equals(object obj)
+        {
+            var ieElement = obj as IEElement;
+
+            return ieElement != null && Equals(ieElement.DispHtmlBaseElement.uniqueNumber, DispHtmlBaseElement.uniqueNumber);
+        }
+
+        public override int GetHashCode()
+        {
+            return DispHtmlBaseElement.uniqueNumber;
+        }
+
     }
 
     internal class AsyncScriptRunner

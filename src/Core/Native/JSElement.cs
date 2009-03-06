@@ -442,6 +442,21 @@ namespace WatiN.Core.Native
             throw new NotImplementedException();
         }
 
+        public override bool Equals(object obj)
+        {
+            var jsElement = obj as JSElement;
+            return jsElement != null && IsReferenceEqual(jsElement.ElementReference, ElementReference);
+        }
+
+        private bool IsReferenceEqual(string left, string right)
+        {
+            return ClientPort.WriteAndReadAsBool("{0}=={1};", left, right);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         /// <summary>
         /// Makes innerHtml inner text (IE) look a like. It comes close but it seems not to cover all
         /// conversions cause comparing browser.body.innertext between a IE and FireFox instances will 

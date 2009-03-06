@@ -1112,6 +1112,17 @@ namespace WatiN.Core
             NativeElement.SetAttributeValue(attributeName, value);
         }
 
+        public override bool Equals(object obj)
+        {
+            var element = obj as Element;
+            return element != null && NativeElement.Equals(element.NativeElement);
+        }
+
+        public override int GetHashCode()
+        {
+            return NativeElement.GetHashCode();
+        }
+
         /// <summary>
         /// Creates an element finder for elements within specialized collections.
         /// </summary>

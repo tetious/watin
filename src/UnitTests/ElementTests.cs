@@ -1090,5 +1090,72 @@ namespace WatiN.Core.UnitTests
             // THEN
             Assert.AreEqual(styleAttributeValue, value);
         }
+
+	    [Test]
+	    public void ShouldBeEqual()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var form = browser.Form("FormInputElement");
+	                            
+                                // WHEN
+                                var areEqual = form.Equals(form);
+
+	                            // THEN
+	                            Assert.That(areEqual, Is.True, "Should be equal to its self");
+	                        });
+	    }
+
+	    [Test]
+	    public void ShouldBeEqualAlthoughDifferentInstance()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var form = browser.Form("FormInputElement");
+	                            var parentForm = browser.TextField("Textarea1").Parent;
+	                            
+                                // WHEN
+	                            var areEqual = form.Equals(parentForm);
+
+	                            // THEN
+	                            Assert.That(areEqual, Is.True, "Should reference same (html) element");
+	                        });
+	    }
+
+	    [Test]
+	    public void ShouldNotBeEqual()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var form = browser.Form("FormInputElement");
+	                            var textField = browser.TextField("Textarea1");
+	                            
+                                // WHEN
+                                var areEqual = form.Equals(textField);
+
+	                            // THEN
+	                            Assert.That(areEqual, Is.False, "Should not reference same (html) element");
+	                        });
+	    }
+
+	    [Test]
+	    public void ShouldNotBeEqualWithNull()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var form = browser.Form("FormInputElement");
+	                            
+                                // WHEN
+                                var areEqual = form.Equals(null);
+
+	                            // THEN
+	                            Assert.That(areEqual, Is.False, "Should not be equal with null");
+	                        });
+	    }
+
 	}
 }
