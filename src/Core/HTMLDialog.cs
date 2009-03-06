@@ -39,6 +39,11 @@ namespace WatiN.Core
 			get { return hwnd; }
 		}
 
+	    public override INativeBrowser NativeBrowser
+		{
+			get { return new IEBrowser();}
+		}
+
 		public HtmlDialog(IntPtr windowHandle)
 		{
 			hwnd = windowHandle;

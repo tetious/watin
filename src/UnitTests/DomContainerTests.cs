@@ -120,6 +120,11 @@ namespace WatiN.Core.UnitTests
                 return ReturnNativeDocument;
             }
 
+            public override INativeBrowser NativeBrowser
+            {
+                get { throw new NotImplementedException(); }
+            }
+
             protected override string GetAttributeValueImpl(string attributeName)
             {
                 throw new NotImplementedException();

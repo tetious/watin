@@ -17,13 +17,15 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
+using WatiN.Core.Constraints;
 
 namespace WatiN.Core.Native.Mozilla
 {
     /// <summary>
     /// Wrapper around the XUL:browser class, see: http://developer.mozilla.org/en/docs/XUL:browser
     /// </summary>
-    public class FFBrowser
+    public class FFBrowser : INativeBrowser
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FFBrowser"/> class.

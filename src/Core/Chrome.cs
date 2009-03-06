@@ -127,11 +127,12 @@ namespace WatiN.Core
         /// Gets the native browser.
         /// </summary>
         /// <value>The native browser.</value>
-        public ChromeBrowser NativeBrowser
+        public override INativeBrowser NativeBrowser
         {
-            get;
-            private set;
+            get { return ChromeBrowser; }
         }
+
+        private ChromeBrowser ChromeBrowser { get; set; }
 
         /// <summary>
         /// Gets the current Chrome process.
@@ -161,7 +162,7 @@ namespace WatiN.Core
         /// <returns>The native document.</returns>
         public override INativeDocument OnGetNativeDocument()
         {
-            return new ChromeDocument(this.NativeBrowser.ClientPort);
+            return new ChromeDocument(ChromeBrowser.ClientPort);
         }
 
         /// <summary>
@@ -230,7 +231,7 @@ namespace WatiN.Core
             if (disposing)
             {
                 // Dispose managed resources.
-                this.NativeBrowser.ClientPort.Dispose();
+                ChromeBrowser.ClientPort.Dispose();
             }
 
             // Call the appropriate methods to clean up 
@@ -343,7 +344,7 @@ namespace WatiN.Core
             var clientPort = new ChromeClientPort();
             clientPort.Connect(url);
 
-            this.NativeBrowser = new ChromeBrowser(clientPort);
+            ChromeBrowser = new ChromeBrowser(clientPort);
         }
     }
 }

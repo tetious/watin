@@ -179,12 +179,14 @@
     <Compile Include="Native\JSElementArray.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
+    <Compile Include="Native\INativeBrowser.cs" />
     <Compile Include="Native\INativeElementCollection.cs" />
     <Compile Include="Native\INativeDocument.cs" />
     <Compile Include="Native\INativeElement.cs" />
     <Compile Include="Native\InternetExplorer\AllFramesProcessor.cs" />
     <Compile Include="Native\InternetExplorer\FrameByIndexProcessor.cs" />
     <Compile Include="Native\InternetExplorer\FrameCountProcessor.cs" />
+    <Compile Include="Native\InternetExplorer\IEBrowser.cs" />
     <Compile Include="Native\InternetExplorer\IEDocument.cs" />
     <Compile Include="Native\InternetExplorer\IEElement.cs" />
     <Compile Include="Native\InternetExplorer\IEElementCollection.cs" />

@@ -16,27 +16,12 @@
 
 #endregion Copyright
 
-namespace WatiN.Core.Native.Chrome
+namespace WatiN.Core.Native
 {
     /// <summary>
-    /// Native driver the communicates with the Chrome browser using a
-    /// telnet session <see cref="ClientPort"/>.
+    /// Provides access to native services offered by a web browser.
     /// </summary>
-    public class ChromeBrowser : INativeBrowser
+    public interface INativeBrowser 
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChromeBrowser"/> class.
-        /// </summary>
-        /// <param name="clientPort">The client port.</param>
-        public ChromeBrowser(ChromeClientPort clientPort)
-        {
-            this.ClientPort = clientPort;
-        }
-
-        /// <summary>
-        /// Gets the client port.
-        /// </summary>
-        /// <value>The client port.</value>
-        public ChromeClientPort ClientPort { get; private set; }
     }
 }
