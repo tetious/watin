@@ -92,6 +92,22 @@
     <ErrorReport>prompt</ErrorReport>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ChromeTesting|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ChromeTesting\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;IncludeChromeInUnitTesting</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <NoWarn>1591,618</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -138,7 +154,8 @@
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
-    <Compile Include="ChromeTests\ChromeTests.cs" />
+    <Compile Include="Native\ChromeTests\ChromeBrowserTestManager.cs" />
+    <Compile Include="Native\ChromeTests\ChromeTests.cs" />
     <Compile Include="ActionTests\HighligtActionTests.cs" />
     <Compile Include="NativeElementFinderTests.cs" />
     <Compile Include="Native\JSElementCollectionBaseTests.cs" />

@@ -27,7 +27,9 @@ using WatiN.Core.UnitTests.Interfaces;
 
 namespace WatiN.Core.UnitTests
 {
-	public abstract class BaseWithBrowserTests : BaseWatiNTest
+    using Native.ChromeTests;
+
+    public abstract class BaseWithBrowserTests : BaseWatiNTest
 	{
         /// <summary>
         /// The test method to execute.
@@ -36,6 +38,7 @@ namespace WatiN.Core.UnitTests
 
 	    private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
 	    private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
+	    private readonly IBrowserTestManager chromeManager = new ChromeBrowserTestManager();
 
 	    public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
 
@@ -63,10 +66,12 @@ namespace WatiN.Core.UnitTests
 		public override void FixtureSetup()
 		{
             base.FixtureSetup();
-
+#if !IncludeChromeInUnitTesting
             BrowsersToTestWith.Add(ieManager);
             BrowsersToTestWith.Add(ffManager);
-
+#else
+		    BrowsersToTestWith.Add(chromeManager);
+#endif
             Logger.LogWriter = new ConsoleLogWriter();
 		}
 

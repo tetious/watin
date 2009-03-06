@@ -15,18 +15,23 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AutomatedDebug|Any CPU = AutomatedDebug|Any CPU
+		ChromeTesting|Any CPU = ChromeTesting|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.ChromeTesting|Any CPU.ActiveCfg = Debug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.ChromeTesting|Any CPU.Build.0 = Debug|Any CPU
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.ChromeTesting|Any CPU.ActiveCfg = ChromeTesting|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.ChromeTesting|Any CPU.Build.0 = ChromeTesting|Any CPU
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU

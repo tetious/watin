@@ -1,0 +1,17 @@
+<TemplatesExport family="File Templates">
+  <Template uid="d2b57fc4-bde7-4364-be9e-c85322a8d833" text="#region WatiN Copyright (C) 2006-2009 Jeroen van Menen&#xD;&#xA;&#xD;&#xA;//Copyright 2006-2009 Jeroen van Menen&#xD;&#xA;//&#xD;&#xA;//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#xD;&#xA;//   you may not use this file except in compliance with the License.&#xD;&#xA;//   You may obtain a copy of the License at&#xD;&#xA;//&#xD;&#xA;//       http://www.apache.org/licenses/LICENSE-2.0&#xD;&#xA;//&#xD;&#xA;//   Unless required by applicable law or agreed to in writing, software&#xD;&#xA;//   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xD;&#xA;//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;&#xA;//   See the License for the specific language governing permissions and&#xD;&#xA;//   limitations under the License.&#xD;&#xA;&#xD;&#xA;#endregion Copyright&#xD;&#xA;&#xD;&#xA;namespace $NAMESPACE$&#xD;&#xA;{&#xD;&#xA;  public class $CLASS$ &#xD;&#xA;  {&#xD;&#xA;    $END$&#xD;&#xA;  }&#xD;&#xA;}" shortcut="" description="WatiN Class" reformat="true" shortenQualifiedReferences="true">
+    <Context>
+      <ProjectLanguageContext language="CSharp" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="CLASS" expression="getFileNameWithoutExtension()" initialRange="-1" />
+      <Variable name="NAMESPACE" expression="fileDefaultNamespace()" initialRange="-1" />
+    </Variables>
+    <CustomProperties>
+      <Property key="FileName" value="Class" />
+      <Property key="Extension" value="cs" />
+      <Property key="ValidateFileName" value="False" />
+    </CustomProperties>
+  </Template>
+</TemplatesExport>

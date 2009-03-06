@@ -31,7 +31,7 @@ namespace WatiN.Core.UnitTests
     public class BrowserTests : BaseWithBrowserTests
     {
         [Test, Category("InternetConnectionNeeded")]
-        public void Google()
+        public void GoogleFindSearchButtonAndClick()
         {
             ExecuteTest(browser =>
                             {

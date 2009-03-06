@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-namespace WatiN.Core.UnitTests.ChromeTests
+namespace WatiN.Core.UnitTests.Native.ChromeTests
 {
     using System.Web;
 
@@ -29,7 +29,7 @@ namespace WatiN.Core.UnitTests.ChromeTests
     /// Tests behaviour specific to the <see cref="Chrome"/> class.
     /// </summary>
     [TestFixture]
-    public class ChromeTests
+    public class ChromeTests : BaseWatiNTest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeTests"/> class.
@@ -37,6 +37,15 @@ namespace WatiN.Core.UnitTests.ChromeTests
         public ChromeTests()
         {
             Logger.LogWriter = new DebugLogWriter();
+        }
+
+        [Test, Category("InternetConnectionNeeded")]
+        public void AddProtocolToUrlIfOmmitted()
+        {
+            using (var chrome = new Chrome("www.google.com"))
+            {
+                Assert.That(chrome.Url, Text.StartsWith("http://"));
+            }
         }
 
         [Test]
@@ -68,6 +77,24 @@ namespace WatiN.Core.UnitTests.ChromeTests
             {
                 Assert.AreEqual("about:blank", chrome.Url);
             }
+        }
+
+        [Test]
+        public void NewChromeWithUri()
+        {
+            using (var chrome = new Chrome(MainURI))
+            {
+                Assert.AreEqual(MainURI, chrome.Uri);
+            }
+        }
+
+        [Test]
+        public void NewFireFoxWithUriShouldAutoClose()
+        {
+            Assert.That(Chrome.CurrentProcessCount, Is.EqualTo(0), "pre-condition: Expected no running chrome instances");
+            using (new Chrome(MainURI)) { }
+
+            Assert.That(Chrome.CurrentProcessCount, Is.EqualTo(0), "Expected no running chrome instances");
         }
     }
 }
