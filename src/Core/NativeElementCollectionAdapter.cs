@@ -602,21 +602,11 @@ namespace WatiN.Core
             return new NativeElementFinder(nativeElementCollectionFactory, domContainer, ElementFactory.GetElementTags<TElement>(), findBy);
         }
 
-        private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, ICollection<string> inputTypes)
+        private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, params string[] inputTypes)
         {
-            var tags = new List<ElementTag>();
-            if (inputTypes != null && inputTypes.Count != 0)
-            {
-                foreach (var inputType in inputTypes)
-                    tags.Add(new ElementTag(tagName, inputType));
-            }
-            else
-            {
-                tags.Add(new ElementTag(tagName));
-            }
+            var tags = ElementTag.ToElementTags(tagName, inputTypes);
 
-            return new NativeElementFinder(nativeElementCollectionFactory, domContainer, tags, findBy);
+            return new NativeElementFinder(nativeElementCollectionFactory, domContainer, new List<ElementTag>(tags), findBy);
         }
-
     }
 }

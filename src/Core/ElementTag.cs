@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using WatiN.Core.Native;
@@ -262,6 +263,20 @@ namespace WatiN.Core
                 tagNames.Add(elementTag.TagName);
             }
             return tagNames;
+	    }
+
+	    public static IEnumerable<ElementTag> ToElementTags(string tagName, params string[] inputTypes)
+	    {
+            if (inputTypes != null && ((ICollection)inputTypes).Count != 0)
+            {
+                foreach (var inputType in inputTypes)
+                     yield return new ElementTag(tagName, inputType);
+            }
+            else
+            {
+                yield return new ElementTag(tagName);
+            }
+	        
 	    }
 	}
 }
