@@ -17,8 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
-using WatiN.Core.Constraints;
 
 namespace WatiN.Core.Native.Mozilla
 {
@@ -52,20 +50,23 @@ namespace WatiN.Core.Native.Mozilla
             get { return ClientPort.Process.MainWindowHandle; }
         }
 
-        /// <summary>
-        /// Navigates to the previous page in the browser history.
-        /// </summary>
-        public bool Back()
+        /// <inheritdoc />
+        public bool GoBack()
         {
             return Navigate("goBack");
         }
 
-        /// <summary>
-        /// Navigates to the next back in the browser history.
-        /// </summary>
-        public bool Forward()
+        /// <inheritdoc />
+        public bool GoForward()
         {
             return Navigate("goForward");
+        }
+
+        /// <inheritdoc />
+        public void Reopen()
+        {
+            ClientPort.Dispose();
+            ClientPort.Connect(string.Empty);
         }
 
         private bool Navigate(string action)
@@ -76,15 +77,17 @@ namespace WatiN.Core.Native.Mozilla
             return ClientPort.WriteAndReadAsBool("window.document.WatiNGoBackCheck!={0};", ticks);
         }
 
-        /// <summary>
-        /// Load a URL into the document. see: http://developer.mozilla.org/en/docs/XUL:browser#m-loadURI
-        /// </summary>
-        /// <param name="url">The URL to laod.</param>
-        public void LoadUri(Uri url)
+        /// <inheritdoc />
+        public void NavigateTo(Uri url)
         {
             LoadUri(url, true);
         }
 
+        /// <summary>
+        /// Load a URL into the document. see: http://developer.mozilla.org/en/docs/XUL:browser#m-loadURI
+        /// </summary>
+        /// <param name="url">The URL to laod.</param>
+        /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
         private void LoadUri(Uri url, bool waitForComplete)
         {
             var command = string.Format("{0}.loadURI(\"{1}\");", BrowserVariableName, url.AbsoluteUri);
@@ -96,7 +99,8 @@ namespace WatiN.Core.Native.Mozilla
             ClientPort.Write(command);
         }
 
-        public void LoadUriNoWait(Uri url)
+        /// <inheritdoc />
+        public void NavigateToNoWait(Uri url)
         {
             LoadUri(url, false);
         }
@@ -111,12 +115,10 @@ namespace WatiN.Core.Native.Mozilla
             ClientPort.Write("{0}.location.reload({1});", FireFoxClientPort.WindowVariableName, forceGet.ToString().ToLower());
         }
 
-        /// <summary>
-        /// Reloads this instance.
-        /// </summary>
-        public void Reload()
+        /// <inheritdoc />
+        public void Refresh()
         {
-            this.Reload(false);
+            Reload(false);
         }
 
         public bool IsLoading()

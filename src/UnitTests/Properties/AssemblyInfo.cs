@@ -27,7 +27,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WatiN")]
-[assembly: AssemblyCopyright("2006 - 2008 Jeroen van Menen")]
+[assembly: AssemblyCopyright("2006 - 2009 Jeroen van Menen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -42,4 +42,4 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.9.0.0005")]
+[assembly: AssemblyVersion("1.9.0.0007")]

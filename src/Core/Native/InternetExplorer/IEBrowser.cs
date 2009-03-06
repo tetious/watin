@@ -16,9 +16,85 @@
 
 #endregion Copyright
 
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using SHDocVw;
+
 namespace WatiN.Core.Native.InternetExplorer
 {
 	public class IEBrowser : INativeBrowser 
 	{
+	    private readonly IWebBrowser2 _webBrowser2;
+
+	    public IEBrowser(IWebBrowser2 webBrowser2)
+	    {
+	        _webBrowser2 = webBrowser2;
+	    }
+
+	    /// <inheritdoc />
+        public void NavigateTo(Uri url)
+	    {
+            object nil = null;
+            object absoluteUri = url.AbsoluteUri;
+            _webBrowser2.Navigate2(ref absoluteUri, ref nil, ref nil, ref nil, ref nil);
+        }
+
+        /// <inheritdoc />
+        public void NavigateToNoWait(Uri url)
+	    {
+            var thread = new Thread(GoToNoWaitInternal);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start(url);
+            thread.Join(500);
+        }
+
+        [STAThread]
+        private void GoToNoWaitInternal(object uriIn)
+        {
+            var uri = (Uri)uriIn;
+            NavigateTo(uri);
+        }
+
+        /// <inheritdoc />
+        public bool GoBack()
+	    {
+            try
+            {
+                _webBrowser2.GoBack();
+                return true;
+            }
+            catch (COMException)
+            {
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool GoForward()
+	    {
+            try
+            {
+                _webBrowser2.GoForward();
+                return true;
+            }
+            catch (COMException)
+            {
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public void Reopen()
+	    {
+	        throw new System.NotImplementedException();
+	    }
+
+        /// <inheritdoc />
+        public void Refresh()
+	    {
+            object REFRESH_COMPLETELY = 3;
+            _webBrowser2.Refresh2(ref REFRESH_COMPLETELY);
+        }
 	}
 }

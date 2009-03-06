@@ -76,11 +76,6 @@ namespace WatiN.Core
 
         #region Public instance properties
 
-//        public BrowserType BrowserType
-//        {
-//            get { return Core.BrowserType.FireFox; }
-//        }
-
         public override INativeBrowser NativeBrowser
         {
             get { return ffBrowser; }
@@ -89,26 +84,6 @@ namespace WatiN.Core
         #endregion Public instance properties
 
         #region Public instance methods
-
-        protected override bool GoBack()
-        {
-            return ffBrowser.Back();
-        }
-
-        protected override bool GoForward()
-        {
-            return ffBrowser.Forward();
-        }
-
-        protected override void NavigateTo(Uri url)
-        {
-            ffBrowser.LoadUri(url);
-        }
-
-        protected override void NavigateToNoWait(Uri url)
-        {
-            ffBrowser.LoadUriNoWait(url);
-        }
 
         public override IntPtr hWnd
         {
@@ -277,27 +252,6 @@ namespace WatiN.Core
             }
 
             return path;
-        }
-
-        /// <summary>
-        /// Reloads the currently displayed webpage.
-        /// </summary>
-        protected override void DoRefresh()
-        {
-            ffBrowser.Reload(false);
-        }
-
-        /// <summary>
-        /// Closes then reopens the browser navigating to a blank page.
-        /// </summary>
-        /// <remarks>
-        /// Useful when clearing the cookie cache and continuing execution to a test.
-        /// </remarks>
-        protected override void DoReopen()
-        {
-            ffBrowser.ClientPort.Dispose();
-            ffBrowser.ClientPort.Connect(string.Empty);
-            WaitForComplete();
         }
 
         /// <summary>

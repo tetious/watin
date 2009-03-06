@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using WatiN.Core.Logging;
+using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
@@ -27,6 +28,9 @@ namespace WatiN.Core
 {
     public abstract class Browser : DomContainer
     {
+
+        public abstract INativeBrowser NativeBrowser { get; }
+
         /// <summary>
         /// Brings the referenced Internet Explorer to the front (makes it the top window)
         /// </summary>
@@ -118,15 +122,11 @@ namespace WatiN.Core
         /// </example>
         public void GoTo(Uri url)
         {
-            NavigateTo(url);
+            Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
+
+            NativeBrowser.NavigateTo(url);
             WaitForComplete();
         }
-
-        /// <summary>
-        /// Navigates to the specified <paramref name="url"/>.
-        /// </summary>
-        /// <param name="url">The URL to navigate to.</param>
-        protected abstract void NavigateTo(Uri url);
 
         /// <summary>
         /// Navigates the browser to the given <paramref name="url" /> 
@@ -184,14 +184,8 @@ namespace WatiN.Core
         /// </example>
         public void GoToNoWait(Uri url)
         {
-            NavigateToNoWait(url);
+            NativeBrowser.NavigateToNoWait(url);
         }
-
-        /// <summary>
-        /// Navigates to the specified <paramref name="url"/> without waiting for the page to finish loading.
-        /// </summary>
-        /// <param name="url">The URL to navigate to.</param>
-        protected abstract void NavigateToNoWait(Uri url);
 
         /// <summary>
         /// Navigates Internet Explorer to the given <paramref name="url" />.
@@ -229,7 +223,7 @@ namespace WatiN.Core
         /// <returns><c>true</c> if navigating back to a previous url was possible, otherwise <c>false</c></returns>
         public bool Back()
         {
-            var succeeded = GoBack();
+            var succeeded = NativeBrowser.GoBack();
             
             if (succeeded)
             {
@@ -245,19 +239,13 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Navigates the browser back to the previously display Url
-        /// </summary>
-        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
-        protected abstract bool GoBack();
-
-        /// <summary>
         /// Navigates the browser forward to the next displayed Url (like the forward
         /// button in Internet Explorer). 
         /// </summary>
         /// <returns><c>true</c> if navigating forward to a previous url was possible, otherwise <c>false</c></returns>
         public bool Forward()
         {
-            var succeeded = GoForward();
+            var succeeded = NativeBrowser.GoForward();
 
             if (succeeded)
             {
@@ -271,13 +259,6 @@ namespace WatiN.Core
 
             return succeeded;
         }
-
-        /// <summary>
-        /// Navigates the browser forward to the next displayed Url (like the forward
-        /// button in Internet Explorer). 
-        /// </summary>
-        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
-        protected abstract bool GoForward();
 
         /// <summary>
         /// Closes and then reopens the browser with a blank page.
@@ -305,10 +286,9 @@ namespace WatiN.Core
         public void Reopen()
         {
             Logger.LogAction("Reopening browser (closing current and creating new instance)");
-            DoReopen();
+            NativeBrowser.Reopen();
+            WaitForComplete();
         }
-
-        protected abstract void DoReopen();
 
         /// <summary>
         /// Reloads the currently displayed webpage (like the Refresh/reload button in 
@@ -317,11 +297,8 @@ namespace WatiN.Core
         public void Refresh()
         {
             Logger.LogAction("Refreshing browser from '" + Url + "'");
-            DoRefresh();
+            NativeBrowser.Refresh();
             WaitForComplete();
         }
-
-        protected abstract void DoRefresh();
-
     }
 }

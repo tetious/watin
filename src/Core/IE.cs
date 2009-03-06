@@ -18,7 +18,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 using mshtml;
 using SHDocVw;
@@ -637,9 +636,9 @@ namespace WatiN.Core
 
 		private static IE CreateIEPartiallyInitializedInNewProcess()
 		{
-			var m_Proc = Process.Start("IExplore.exe", "about:blank");
+			var m_Proc = CreateIExploreInNewProcess();
 
-            var action = new TryFuncUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
+		    var action = new TryFuncUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
             var ie = action.Try(() =>
             {
                 m_Proc.Refresh();
@@ -650,13 +649,23 @@ namespace WatiN.Core
                     : null;
             });
 
-            if (ie != null)
-                return ie;
+            if (ie != null) return ie;
 
 			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToIETimeOut);
 		}
 
-		private static void CheckThreadApartmentStateIsSTA()
+	    private static Process CreateIExploreInNewProcess()
+	    {
+	        var m_Proc = Process.Start("IExplore.exe", "about:blank");
+	        if (m_Proc == null)
+	        {
+	            throw new WatiNException("Could not start IExplore.exe process");
+	        }
+
+	        return m_Proc;
+	    }
+
+	    private static void CheckThreadApartmentStateIsSTA()
 		{
             var isSTA = (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA);
 			if (!isSTA)
@@ -665,18 +674,17 @@ namespace WatiN.Core
 			}
 		}
 
-        private IE FinishInitialization(Uri uri)
+        private void FinishInitialization(Uri uri)
         {
             // Due to UAC in Vista the navigate has to be done
             // before showing the new Internet Explorer instance
             if (uri != null)
             {
-                NavigateTo(uri);
+                GoTo(uri);
             }
             ie.Visible = Settings.MakeNewIeInstanceVisible;
 
             StartDialogWatcher();
-            return this;
         }
 
 	    private static IE FindIE(Constraint findBy, int timeout, bool waitForComplete)
@@ -713,31 +721,6 @@ namespace WatiN.Core
 			return null;
 		}
 
-	    protected override void NavigateTo(Uri url)
-		{
-			Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
-
-			object nil = null;
-	        object absoluteUri = url.AbsoluteUri;
-	        ie.Navigate2(ref absoluteUri, ref nil, ref nil, ref nil, ref nil);
-		}
-
-
-        protected override void NavigateToNoWait(Uri url)
-        {
-            var thread = new Thread(GoToNoWaitInternal);
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start(url);
-            thread.Join(500);
-        }
-
-        [STAThread]
-        private void GoToNoWaitInternal(object uriIn)
-        {
-            var uri = (Uri)uriIn;
-            NavigateTo(uri);
-        }
-
 		/// <summary>
         /// Use this method to gain access to the IWebBrowser2 interface of Internet Explorer.
 		/// Do this by referencing the Interop.SHDocVw assembly (supplied in the WatiN distribution)
@@ -746,42 +729,6 @@ namespace WatiN.Core
 		public object InternetExplorer
 		{
 			get { return ie; }
-		}
-
-		protected override bool GoBack()
-		{
-		    try
-		    {
-		        ie.GoBack();
-		        return true;
-            }
-            catch (COMException)
-		    {
-		        return false;
-            }
-		}
-
-        protected override bool GoForward()
-		{
-		    try
-		    {
-		        ie.GoForward();
-		        return true;
-		    }
-            catch (COMException)
-		    {
-		        return false;
-            }
-		}
-
-		/// <summary>
-		/// Reloads the currently displayed webpage (like the Refresh button in 
-		/// Internet Explorer).
-		/// </summary>
-		protected override void DoRefresh()
-		{
-			object REFRESH_COMPLETELY = 3;
-			ie.Refresh2(ref REFRESH_COMPLETELY);
 		}
 
 	    /// <summary>
@@ -822,7 +769,7 @@ namespace WatiN.Core
 	        DisposeAndCloseIE(true);
 		}
 
-		protected override void DoReopen()
+		protected void DoReopen()
 		{
 			Reopen(new Uri("about:blank"), null, false);
 		}
@@ -1145,7 +1092,7 @@ namespace WatiN.Core
 
         public override INativeBrowser NativeBrowser
         {
-           get { return new IEBrowser(); }
+           get { return new IEBrowser(ie); }
         }
 
 		/// <summary>

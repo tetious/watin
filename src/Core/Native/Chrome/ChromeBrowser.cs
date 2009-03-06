@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System;
+
 namespace WatiN.Core.Native.Chrome
 {
     /// <summary>
@@ -38,5 +40,41 @@ namespace WatiN.Core.Native.Chrome
         /// </summary>
         /// <value>The client port.</value>
         public ChromeClientPort ClientPort { get; private set; }
+
+        /// <inheritdoc />
+        public void NavigateTo(Uri url)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public void NavigateToNoWait(Uri url)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public bool GoBack()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public bool GoForward()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public void Reopen()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public void Refresh()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

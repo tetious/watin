@@ -240,73 +240,6 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Does the refresh.
-        /// </summary>
-        protected override void DoRefresh()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Does the reopen.
-        /// </summary>
-        protected override void DoReopen()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets the value of an attribute that can be used for constraint evaluation.
-        /// </summary>
-        /// <param name="attributeName">
-        /// The name of the attribute, not null
-        /// </param>
-        /// <returns>
-        /// The attribute's associated value or null if none
-        /// </returns>
-        protected override string GetAttributeValueImpl(string attributeName)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Navigates the browser back to the previously display Url
-        /// </summary>
-        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
-        protected override bool GoBack()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Navigates the browser forward to the next displayed Url (like the forward
-        /// button in Internet Explorer).
-        /// </summary>
-        /// <returns><c>True</c> if succeded otherwise <c>false</c>.</returns>
-        protected override bool GoForward()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Navigates to the specified <paramref name="url"/>.
-        /// </summary>
-        /// <param name="url">The URL to navigate to.</param>
-        protected override void NavigateTo(Uri url)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Navigates to the specified <paramref name="url"/> without waiting for the page to finish loading.
-        /// </summary>
-        /// <param name="url">The URL to navigate to.</param>
-        protected override void NavigateToNoWait(Uri url)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
         /// Initalizes the chrome executable path.
         /// </summary>
         /// <returns>The chrome executable path</returns>
@@ -345,6 +278,11 @@ namespace WatiN.Core
             clientPort.Connect(url);
 
             ChromeBrowser = new ChromeBrowser(clientPort);
+        }
+
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
