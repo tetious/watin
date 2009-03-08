@@ -18,9 +18,9 @@
 
 using System.Collections.Generic;
 
-namespace WatiN.Core.Native.Mozilla
+namespace WatiN.Core.Native
 {
-    internal static class FFUtils
+    internal static class JSUtils
     {
         public static string WrapCommandInTimer(string command)
         {

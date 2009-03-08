@@ -175,8 +175,10 @@
     <Compile Include="Native\Chrome\ChromeException.cs" />
     <Compile Include="Native\IClientPort.cs" />
     <Compile Include="Native\ClientPortBase.cs" />
+    <Compile Include="Native\JavaScriptEngineType.cs" />
     <Compile Include="Native\JSElementCollectionBase.cs" />
     <Compile Include="Native\JSElementArray.cs" />
+    <Compile Include="Native\JSBrowserBase.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />
@@ -198,7 +200,7 @@
     <Compile Include="Native\Mozilla\FFBrowser.cs" />
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\JSElement.cs" />
-    <Compile Include="Native\Mozilla\FFUtils.cs" />
+    <Compile Include="Native\JSUtils.cs" />
     <Compile Include="Native\Mozilla\FFWaitForComplete.cs" />
     <Compile Include="Native\Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Native\Mozilla\FireFoxException.cs" />

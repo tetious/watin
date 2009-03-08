@@ -19,22 +19,23 @@
 namespace WatiN.Core.Native
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
 
     /// <summary>
     /// Common client port behaviour.
     /// </summary>
-    public abstract class ClientPortBase : IClientPort
+    public abstract class ClientPortBase : IClientPort, IDisposable
     {
-        /// <summary>
-        /// Gets the last response recieved from the jssh server
-        /// </summary>
-        private string lastResponse;
-
         /// <summary>
         /// Used by CreateElementVariableName
         /// </summary>
         private static long elementCounter;
+
+        /// <summary>
+        /// Gets the last response recieved from the jssh server
+        /// </summary>
+        private string lastResponse;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientPortBase"/> class.
@@ -51,6 +52,30 @@ namespace WatiN.Core.Native
         {
             get;
         }
+
+        /// <summary>
+        /// Gets the type of java script engine.
+        /// </summary>
+        /// <value>The type of java script engine.</value>
+        public abstract JavaScriptEngineType JavaScriptEngine
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the name of the browser variable.
+        /// </summary>
+        /// <value>The name of the browser variable.</value>
+        public abstract string BrowserVariableName
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets or sets the browser process.
+        /// </summary>
+        /// <value>The browser process.</value>
+        internal Process Process { get; set; }
 
         /// <summary>
         /// Gets or sets the entire response from the remote server so far.
@@ -72,7 +97,11 @@ namespace WatiN.Core.Native
             {
                 return this.LastResponseIsNull ? null : this.lastResponse;
             }
-            set { lastResponse = value; }
+
+            set
+            {
+                this.lastResponse = value;
+            }
         }
 
         /// <summary>
@@ -187,20 +216,6 @@ namespace WatiN.Core.Native
         public abstract void InitializeDocument();
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
-        /// </summary>
-        /// <param name="data">The data to write.</param>
-        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
-        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
-        /// <param name="args">Arguments to format with the data.</param>        
-        protected abstract void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args);
-
-        protected void AddToLastResponse(string response)
-        {
-            lastResponse += response;
-        }
-
-        /// <summary>
         /// Creates a unique variable name, i.e. doc.watin23
         /// </summary>
         /// <returns>A unique variable.</returns>
@@ -213,6 +228,36 @@ namespace WatiN.Core.Native
 
             elementCounter++;
             return string.Format("{0}.watin{1}", this.DocumentVariableName, elementCounter);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
+        public abstract void Dispose();
+
+        /// <summary>
+        /// Connects to the Chrome browser and navigates to the specified URL.
+        /// </summary>
+        /// <param name="url">The URL to connect to.</param>
+        public abstract void Connect(string url);
+
+        /// <summary>
+        /// Writes the specified data to the jssh server.
+        /// </summary>
+        /// <param name="data">The data to write.</param>
+        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
+        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
+        /// <param name="args">Arguments to format with the data.</param>        
+        protected abstract void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args);
+
+        /// <summary>
+        /// Adds the specified <paramref name="response"/> to the last response field.
+        /// </summary>
+        /// <param name="response">The response to add.</param>
+        protected void AddToLastResponse(string response)
+        {
+            this.lastResponse += response;
         }
     }
 }

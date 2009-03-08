@@ -21,8 +21,6 @@ namespace WatiN.Core.Native
     using System;
     using System.Collections.Generic;
 
-    using Mozilla;
-
     /// <summary>
     /// Base element collection common to all browsers that communicate with WatiN using javascript.
     /// </summary>
@@ -81,7 +79,7 @@ namespace WatiN.Core.Native
 
         protected virtual IEnumerable<JSElement> GetElementArrayEnumerator(string command)
         {
-            return FFUtils.ElementArrayEnumerator(command, clientPort);
+            return JSUtils.ElementArrayEnumerator(command, clientPort);
         }
 
         /// <summary>
@@ -89,7 +87,25 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <param name="id">Name of the tag.</param>
         /// <returns>Collection of elements for the given <paramref name="id"/>.</returns>
-        protected abstract IEnumerable<INativeElement> GetElementsByIdImpl(string id);
+        protected IEnumerable<INativeElement> GetElementsByIdImpl(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException("id");
+            }
+
+            this.Initialize();
+
+            var documentReference = GetDocumentReference(containerReference);
+
+            var elementReference = this.clientPort.CreateVariableName();
+            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
+
+            if (this.clientPort.WriteAndReadAsBool(command))
+            {
+                yield return new JSElement(this.clientPort, elementReference);
+            }
+        }
 
         /// <summary>
         /// Initializes this instance.

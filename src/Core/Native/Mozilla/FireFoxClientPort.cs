@@ -34,12 +34,7 @@ namespace WatiN.Core.Native.Mozilla
     /// The firefox client port used to communicate with the remote automation server jssh.
     /// </summary>
     public class FireFoxClientPort : ClientPortBase, IDisposable
-    {
-        /// <summary>
-        /// Name of the javascript variable that references the XUL:browser object.
-        /// </summary>
-        public const string BrowserVariableName = "browser";
-
+    {        
         /// <summary>
         /// Name of the javascript variable that references the DOM:window object.
         /// </summary>
@@ -86,6 +81,30 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <summary>
+        /// Gets the type of java script engine.
+        /// </summary>
+        /// <value>The type of java script engine.</value>
+        public override JavaScriptEngineType JavaScriptEngine
+        {
+            get
+            {
+                return JavaScriptEngineType.Mozilla;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the browser variable.
+        /// </summary>
+        /// <value>The name of the browser variable.</value>
+        public override string BrowserVariableName
+        {
+            get
+            {
+                return "browser";
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the main FireFox window is visible, it's possible that the
         /// main FireFox window is not visible if a previous shutdown didn't complete correctly
         /// in which case the restore / resume previous session dialog may be visible.
@@ -98,14 +117,6 @@ namespace WatiN.Core.Native.Mozilla
                 return result;
             }
         }
-
-        /// <summary>
-        /// Gets Process.
-        /// </summary>
-        /// <value>
-        /// The process.
-        /// </value>
-        internal Process Process { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether IsRestoreSessionDialogVisible.
@@ -129,7 +140,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </param>
         /// <exception cref="FireFoxException">
         /// </exception>
-        public void Connect(string url)
+        public override void Connect(string url)
         {
             if (string.IsNullOrEmpty(url)) url = "about:blank";
 
@@ -175,7 +186,7 @@ namespace WatiN.Core.Native.Mozilla
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         ///</summary>
         ///<filterpriority>2</filterpriority>
-        public void Dispose()
+        public override void Dispose()
         {
             this.Dispose(true);
 

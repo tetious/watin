@@ -48,6 +48,15 @@ namespace WatiN.Core.UnitTests.Native.ChromeTests
             }
         }
 
+        [Test, Ignore("Known issue, requires solution")]
+        public void InnerTextIsNotTruncated()
+        {
+            using (var chrome = new Chrome(MainURI))
+            {
+                Assert.That(chrome.Text, Text.DoesNotContain("... (length:"), "Body inner text was truncated, a known issue which requires a work around.");
+            }
+        }
+
         [Test]
         public void CheckFireFoxIsInheritingProperTypes()
         {
@@ -89,7 +98,7 @@ namespace WatiN.Core.UnitTests.Native.ChromeTests
         }
 
         [Test]
-        public void NewFireFoxWithUriShouldAutoClose()
+        public void NewChromeWithUriShouldAutoClose()
         {
             Assert.That(Chrome.CurrentProcessCount, Is.EqualTo(0), "pre-condition: Expected no running chrome instances");
             using (new Chrome(MainURI)) { }

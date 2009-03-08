@@ -580,7 +580,7 @@ namespace WatiN.Core.Native
 
             if (WaitForEventToComplete == false)
             {
-                command = FFUtils.WrapCommandInTimer(command);
+                command = JSUtils.WrapCommandInTimer(command);
             }
             
             this.ClientPort.WriteAndReadAsBool(command);
@@ -624,9 +624,23 @@ namespace WatiN.Core.Native
             // After a lot of searching it seems that keyCode is not supported in keypress event
             // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
             if (eventname == "keypress") keyCode = "0";
+
+            string eventCommand;
+            switch (this.ClientPort.JavaScriptEngine)
+            {
+                case JavaScriptEngineType.WebKit:
+                    eventCommand = "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                        "event.initKeyboardEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
+                    break;
+                case JavaScriptEngineType.Mozilla:
+                    eventCommand = "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                        "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
+                    break;
+                default:
+                    throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this.ClientPort.JavaScriptEngine));
+            }
             
-            return "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
-                   "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
+            return eventCommand;
         }
 
         private static string GetEventPropertyValue(NameValueCollection eventProperties, string propertyName, string defaultValue)

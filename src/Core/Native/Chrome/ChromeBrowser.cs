@@ -16,65 +16,56 @@
 
 #endregion Copyright
 
-using System;
-
 namespace WatiN.Core.Native.Chrome
 {
+    using System;
+    using System.Threading;
+
     /// <summary>
     /// Native driver the communicates with the Chrome browser using a
-    /// telnet session <see cref="ClientPort"/>.
+    /// telnet session <see cref="ClientPortBase"/>.
     /// </summary>
-    public class ChromeBrowser : INativeBrowser
+    public class ChromeBrowser : JSBrowserBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeBrowser"/> class.
         /// </summary>
         /// <param name="clientPort">The client port.</param>
-        public ChromeBrowser(ChromeClientPort clientPort)
+        public ChromeBrowser(ClientPortBase clientPort) : base(clientPort)
         {
-            this.ClientPort = clientPort;
         }
 
         /// <summary>
-        /// Gets the client port.
+        /// Load a URL into the document. see: http://developer.mozilla.org/en/docs/XUL:browser#m-loadURI
         /// </summary>
-        /// <value>The client port.</value>
-        public ChromeClientPort ClientPort { get; private set; }
-
-        /// <inheritdoc />
-        public void NavigateTo(Uri url)
+        /// <param name="url">The URL to laod.</param>
+        /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
+        protected override void LoadUri(Uri url, bool waitForComplete)
         {
-            throw new System.NotImplementedException();
+            var command = string.Format("window.location.href='{0}\';", url.AbsoluteUri);
+            if (!waitForComplete)
+            {
+                command = JSUtils.WrapCommandInTimer(command);
+            }
+
+            this.ClientPort.Write("document.write(\"<script>{0}</script>\")", command);
+            this.ReAttachToTab();
         }
 
-        /// <inheritdoc />
-        public void NavigateToNoWait(Uri url)
+        /// <summary>
+        /// Reattaches to the first tab. This is required every time the document
+        /// </summary>
+        /// <returns></returns>
+        private void ReAttachToTab()
         {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public bool GoBack()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public bool GoForward()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public void Reopen()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public void Refresh()
-        {
-            throw new System.NotImplementedException();
+            string result;
+            this.ClientPort.WriteAndRead("exit", true, true);            
+            
+            // #Hack instead of sleeping create function which exit's and debugs until the current page 
+            // is not about:blank.             
+            Thread.Sleep(100);
+            
+            result = this.ClientPort.WriteAndRead("debug()", true, true);
         }
     }
 }

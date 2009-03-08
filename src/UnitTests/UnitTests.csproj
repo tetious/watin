@@ -94,7 +94,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ChromeTesting|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ChromeTesting\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DEBUG;IncludeChromeInUnitTesting</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>

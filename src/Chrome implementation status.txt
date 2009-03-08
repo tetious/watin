@@ -1,0 +1,20 @@
+Known issues:
+--------------
+1: print function, used by the remote automation server to send output back to watin, truncates output.
+This meanas that we can't query for text values longer than ~70 characters. Breaks a lot of the value functions as well as inner outer text etc...
+
+Tests passing:
+---------------
+All AreaTests (4)
+BaseElementCollectionTest (3)
+
+Working on
+-----------
+BrowserTests.GoogleFindSearchButtonAndClick
+
+
+Possible refactoring
+---------------------
+1. FFElementCollection and ChromeElementCollection do not provide additional behaviour, it's all implemented by base JSElementCollectionBase. Maybe kill FF/Chrome classes and just use JSElementCollectionBase?
+
+2. ChromeClientPort and FireFoxClientPort share many similar functions

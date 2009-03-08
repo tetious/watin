@@ -32,7 +32,7 @@ namespace WatiN.Core.Native.Chrome
     /// <summary>
     /// Handles telnet communication to the Chrome browser shell.
     /// </summary>
-    public class ChromeClientPort : ClientPortBase, IDisposable
+    public class ChromeClientPort : ClientPortBase
     {
         /// <summary>
         /// The port used to connect to chrome.
@@ -77,10 +77,28 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
-        /// Gets the Chrome process.
+        /// Gets the type of java script engine.
         /// </summary>
-        /// <value>The process.</value>
-        internal Process Process { get; private set; }
+        /// <value>The type of java script engine.</value>
+        public override JavaScriptEngineType JavaScriptEngine
+        {
+            get
+            {
+                return JavaScriptEngineType.WebKit;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the browser variable.
+        /// </summary>
+        /// <value>The name of the browser variable.</value>
+        public override string BrowserVariableName
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the last command send to the chrome client.
@@ -96,7 +114,7 @@ namespace WatiN.Core.Native.Chrome
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <filterpriority>2</filterpriority>
-        public void Dispose()
+        public override void Dispose()
         {
             this.Dispose(true);
 
@@ -112,7 +130,7 @@ namespace WatiN.Core.Native.Chrome
         /// Connects to the Chrome browser and navigates to the specified URL.
         /// </summary>
         /// <param name="url">The URL to connect to.</param>
-        public void Connect(string url)
+        public override void Connect(string url)
         {
             this.ValidateCanConnect();
             this.disposed = false;
@@ -159,23 +177,18 @@ namespace WatiN.Core.Native.Chrome
         /// <param name="args">Arguments to format with the data.</param>
         protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
-            var command = UtilityClass.StringFormat(data, args);
-            command = "print " + command;            
+            if (string.IsNullOrEmpty(data))
+            {
+                return;
+            }
 
-            this.SendCommand(command);
-            this.ReadResponse(resultExpected, checkForErrors);
-        }
-
-        /// <summary>
-        /// Writes the specified data to the remote server.
-        /// </summary>
-        /// <param name="data">The data to write.</param>
-        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
-        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
-        /// <param name="args">Arguments to format with the data.</param>
-        private void SendRawAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
-        {
             var command = UtilityClass.StringFormat(data, args);
+
+            if (!command.StartsWith("debug()") && !command.StartsWith("exit"))
+            {
+                command = "print " + command;
+            }            
+
             this.SendCommand(command);
             this.ReadResponse(resultExpected, checkForErrors);
         }
@@ -227,17 +240,36 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
+        /// Writes the specified data to the remote server.
+        /// </summary>
+        /// <param name="data">The data to write.</param>
+        /// <param name="resultExpected"><c>true</c> if a result is expected.</param>
+        /// <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
+        /// <param name="args">Arguments to format with the data.</param>
+        private void SendRawAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
+        {
+            var command = UtilityClass.StringFormat(data, args);
+            this.SendCommand(command);
+            this.ReadResponse(resultExpected, checkForErrors);
+        }
+
+        /// <summary>
         /// Checks the response for an error.
         /// </summary>
         /// <param name="response">The response.</param>
         private static void CheckForError(string response)
         {
-            if (response.StartsWith("unknown command", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
+            if (string.IsNullOrEmpty(response))
             {
-                throw new ChromeException(string.Format("Error sending last message to jssh server: {0}", response));
+                return;
+            }
+
+            if (response.StartsWith("unknown command", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("\"Uncaught SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
+                response.StartsWith("Uncaught ReferenceError", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new ChromeException(string.Format("Error sending last message to chrome remote server: {0}", response));
             }
         }
 
@@ -313,7 +345,10 @@ namespace WatiN.Core.Native.Chrome
             while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
 
             // Convert \n to newline
-            this.LastResponse = this.LastResponse.Replace("\n", Environment.NewLine);
+            if (this.LastResponse != null)
+            {
+                this.LastResponse = this.LastResponse.Replace("\n", Environment.NewLine);
+            }
 
             this.Response.Append(this.LastResponse);
 

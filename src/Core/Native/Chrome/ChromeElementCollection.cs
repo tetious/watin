@@ -40,10 +40,5 @@ namespace WatiN.Core.Native.Chrome
         public ChromeElementCollection(ClientPortBase clientPort, string containerReference) : base(clientPort, containerReference)
         {
         }
-
-        protected override IEnumerable<INativeElement> GetElementsByIdImpl(string id)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace WatiN.Core.Native.Chrome
         /// Initializes a new instance of the <see cref="ChromeDocument"/> class.
         /// </summary>
         /// <param name="clientPort">The client port.</param>
-        public ChromeDocument(ChromeClientPort clientPort)
+        public ChromeDocument(ClientPortBase clientPort)
         {
             this.ClientPort = clientPort;
             this.DocumentReference = "document";
@@ -39,7 +39,7 @@ namespace WatiN.Core.Native.Chrome
         /// <summary>
         /// Gets the FireFox client port.
         /// </summary>
-        public ChromeClientPort ClientPort { get; private set; }
+        public ClientPortBase ClientPort { get; private set; }
 
         /// <summary>
         /// Gets the collection of all elements in the document.
@@ -71,7 +71,8 @@ namespace WatiN.Core.Native.Chrome
         {
             get
             {
-                throw new System.NotImplementedException();
+                var bodyReference = string.Format("{0}.body", this.DocumentReference);
+                return new JSElement(this.ClientPort, bodyReference);
             }
         }
 

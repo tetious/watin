@@ -26,17 +26,17 @@ namespace WatiN.Core.Native.Mozilla
     {
         private readonly JSElement containingFrameElement;
 
-        public FFDocument(FireFoxClientPort clientPort)
+        public FFDocument(ClientPortBase clientPort)
             : this(clientPort, clientPort.DocumentVariableName)
         {
         }
 
-        public FFDocument(FireFoxClientPort clientPort, string documentReference)
+        public FFDocument(ClientPortBase clientPort, string documentReference)
             : this(clientPort, documentReference, null)
         {
         }
 
-        public FFDocument(FireFoxClientPort clientPort, string documentReference, JSElement containingFrameElement)
+        public FFDocument(ClientPortBase clientPort, string documentReference, JSElement containingFrameElement)
         {
             DocumentReference = documentReference;
             ClientPort = clientPort;
@@ -47,7 +47,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <summary>
         /// Gets the FireFox client port.
         /// </summary>
-        public FireFoxClientPort ClientPort { get; private set; }
+        public ClientPortBase ClientPort { get; private set; }
 
         /// <summary>
         /// Gets the name of a variable that stores a reference to the document within FireFox.

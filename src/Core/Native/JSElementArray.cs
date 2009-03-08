@@ -21,8 +21,6 @@ using System.Collections.Generic;
 
 namespace WatiN.Core.Native
 {
-    using Mozilla;
-
     public class JSElementArray : INativeElementCollection
     {
         public delegate bool IsMatch(JSElement jsElement);
@@ -58,7 +56,7 @@ namespace WatiN.Core.Native
         {
             this.Initialize();
 
-            var ffElements = FFUtils.ElementArrayEnumerator(this.GetCommand, this.ClientPort);
+            var ffElements = JSUtils.ElementArrayEnumerator(this.GetCommand, this.ClientPort);
 
             foreach (var ffElement in ffElements)
             {

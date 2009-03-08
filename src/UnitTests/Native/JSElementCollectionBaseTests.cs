@@ -68,7 +68,46 @@ namespace WatiN.Core.UnitTests.Native
             get { return "document"; }
         }
 
+        /// <summary>
+        /// Gets the type of java script engine.
+        /// </summary>
+        /// <value>The type of java script engine.</value>
+        public override JavaScriptEngineType JavaScriptEngine
+        {
+            get
+            {
+                return JavaScriptEngineType.Mozilla;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the browser variable.
+        /// </summary>
+        /// <value>The name of the browser variable.</value>
+        public override string BrowserVariableName
+        {
+            get { return "browser"; }
+        }
+
         public override void InitializeDocument()
+        {
+            return;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
+        public override void Dispose()
+        {
+            return;
+        }
+
+        /// <summary>
+        /// Connects to the Chrome browser and navigates to the specified URL.
+        /// </summary>
+        /// <param name="url">The URL to connect to.</param>
+        public override void Connect(string url)
         {
             return;
         }
@@ -88,12 +127,7 @@ namespace WatiN.Core.UnitTests.Native
         protected override IEnumerable<JSElement> GetElementArrayEnumerator(string command)
         {
             return new List<JSElement> {new wrappedJSElement(clientPort, "elementRef1")};
-        }
-
-        protected override IEnumerable<INativeElement> GetElementsByIdImpl(string id)
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 
     public class wrappedJSElement : JSElement
