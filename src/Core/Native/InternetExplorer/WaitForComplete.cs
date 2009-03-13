@@ -60,7 +60,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 try
                 {
                     WaitWhileIEBusy(frame);
-                    waitWhileIEStateNotComplete(frame);
+                    WaitWhileIEReadyStateNotComplete(frame);
                     WaitWhileFrameDocumentNotAvailable(frame);
 
                     document = (IHTMLDocument2) frame.Document;
@@ -78,31 +78,23 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
         {
-            while (!IsDocumentReadyStateAvailable(htmlDocument) && htmlDocument.readyState != "complete")
-            {
-                ThrowExceptionWhenTimeout("waiting for document state complete. Last state was '" + htmlDocument.readyState + "'");
-                Sleep("WaitWhileDocumentStateNotComplete");
-            }
+            WaitUntil(() => DocumentReadyStateIsAvailable(htmlDocument),
+                      () => "waiting for document ready state available.");
+
+            WaitUntil(() => htmlDocument.readyState == "complete",
+                      () => "waiting for document state complete. Last state was '" + htmlDocument.readyState + "'");
         }
 
         protected virtual void WaitWhileMainDocumentNotAvailable(DomContainer domContainer)
         {
-            while (!IsDocumentReadyStateAvailable(GetDomContainerDocument(domContainer)))
-            {
-                ThrowExceptionWhenTimeout("waiting for main document becoming available");
-
-                Sleep("WaitWhileMainDocumentNotAvailable");
-            }
+            WaitUntil(() => DocumentReadyStateIsAvailable(GetDomContainerDocument(domContainer)),
+                      () => "waiting for main document becoming available");
         }
 
         protected virtual void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
         {
-            while (!IsDocumentReadyStateAvailable(GetFrameDocument(frame)))
-            {
-                ThrowExceptionWhenTimeout("waiting for frame document becoming available");
-
-                Sleep("WaitWhileFrameDocumentNotAvailable");
-            }
+            WaitUntil(() => DocumentReadyStateIsAvailable(GetFrameDocument(frame)),
+                      () => "waiting for frame document becoming available");
         }
 
         protected virtual IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
@@ -115,7 +107,7 @@ namespace WatiN.Core.Native.InternetExplorer
             return UtilityClass.TryFuncIgnoreException(() => ((IEDocument)domContainer.NativeDocument).HtmlDocument);
         }
 
-        protected virtual bool IsDocumentReadyStateAvailable(IHTMLDocument2 document)
+        protected virtual bool DocumentReadyStateIsAvailable(IHTMLDocument2 document)
         {
             if (document == null) return false;
 
@@ -129,34 +121,26 @@ namespace WatiN.Core.Native.InternetExplorer
                                                            });
         }
 
-        protected virtual void waitWhileIEStateNotComplete(IWebBrowser2 ie)
+        protected virtual void WaitWhileIEReadyStateNotComplete(IWebBrowser2 ie)
         {
-            while (IsIEReadyStateComplete(ie))
-            {
-                ThrowExceptionWhenTimeout("Internet Explorer state not complete");
-
-                Sleep("waitWhileIEStateNotComplete");
-            }
+            WaitUntil(() => IEReadyStateIsComplete(ie),
+                      () => "Internet Explorer state not complete");
         }
 
-        protected virtual bool IsIEReadyStateComplete(IWebBrowser2 ie)
+        protected virtual bool IEReadyStateIsComplete(IWebBrowser2 ie)
         {
-            return UtilityClass.TryFuncIgnoreException(() => ie.ReadyState != tagREADYSTATE.READYSTATE_COMPLETE);
+            return UtilityClass.TryFuncIgnoreException(() => ie.ReadyState == tagREADYSTATE.READYSTATE_COMPLETE);
         }
 
         protected virtual void WaitWhileIEBusy(IWebBrowser2 ie)
         {
-            while (IsIEBusy(ie))
-            {
-                ThrowExceptionWhenTimeout("Internet Explorer busy");
-
-                Sleep("WaitWhileIEBusy 2");
-            }
+            WaitUntil(() => IENotBusy(ie),
+                      () => "Internet Explorer busy");
         }
 
-        protected virtual bool IsIEBusy(IWebBrowser2 ie)
+        protected virtual bool IENotBusy(IWebBrowser2 ie)
         {
-            return UtilityClass.TryFuncIgnoreException(() => ie.Busy);
+            return UtilityClass.TryFuncIgnoreException(() => !ie.Busy);
         }
 
         protected override void WaitForCompleteOrTimeout()

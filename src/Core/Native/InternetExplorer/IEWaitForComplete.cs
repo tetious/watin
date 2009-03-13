@@ -39,7 +39,7 @@ namespace WatiN.Core.Native.InternetExplorer
             InitTimeout();
 
             WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
-            waitWhileIEStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
+            WaitWhileIEReadyStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
 
             WaitForCompleteOrTimeout();
         }

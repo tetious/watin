@@ -17,14 +17,16 @@
 #endregion Copyright
 
 using System.Threading;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
     public abstract class WaitForCompleteBase : IWait
     {
-        private SimpleTimer _waitForCompleteTimeout;
+        private SimpleTimer _waitForCompleteTimer;
         private readonly int _waitForCompleteTimeOut;
         private int _milliSecondsTimeOut = 100;
 
@@ -77,8 +79,8 @@ namespace WatiN.Core
         /// <returns></returns>
         protected virtual SimpleTimer InitTimeout()
         {
-            _waitForCompleteTimeout = new SimpleTimer(_waitForCompleteTimeOut);
-            return _waitForCompleteTimeout;
+            _waitForCompleteTimer = new SimpleTimer(_waitForCompleteTimeOut);
+            return _waitForCompleteTimer;
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace WatiN.Core
         /// return value will be true</returns>
         protected virtual bool IsTimedOut()
         {
-            return _waitForCompleteTimeout.Elapsed;
+            return _waitForCompleteTimer.Elapsed;
         }
 
         /// <summary>
@@ -104,6 +106,14 @@ namespace WatiN.Core
             {
                 throw new Exceptions.TimeoutException(timeoutMessage);
             }
+        }
+
+        protected void WaitUntil(DoFunc<bool> waitWhile, BuildTimeOutExceptionMessage exceptionMessage)
+        {
+            if (_waitForCompleteTimer == null) throw new WatiNException("_waitForCompleteTimer not initialized");
+            
+            var timeOut = new TryFuncUntilTimeOut(_waitForCompleteTimer) {ExceptionMessage = exceptionMessage};
+            timeOut.Try(waitWhile);
         }
     }
 }

@@ -39,12 +39,8 @@ namespace WatiN.Core.Native.Mozilla
 
         protected virtual void WaitWhileDocumentNotAvailable()
         {
-            while (nativeBrowser.IsLoading())
-            {
-                ThrowExceptionWhenTimeout("waiting for main document becoming available");
-
-                Sleep("FFWaitForComplete.WaitWhileDocumentNotAvailable");
-            }
+            WaitUntil(() => !nativeBrowser.IsLoading(),
+                      () => "waiting for main document becoming available");
 
             nativeBrowser.ClientPort.InitializeDocument();
         }

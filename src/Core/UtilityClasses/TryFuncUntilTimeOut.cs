@@ -37,6 +37,8 @@ namespace WatiN.Core.UtilityClasses
     /// </summary>
     public class TryFuncUntilTimeOut
     {
+        private readonly SimpleTimer _timer;
+
         /// <summary>
         /// Gets or sets the interval between retries of the action..
         /// </summary>
@@ -78,6 +80,15 @@ namespace WatiN.Core.UtilityClasses
             SleepTime = Settings.SleepTime;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TryFuncUntilTimeOut"/> class.
+        /// </summary>
+        /// <param name="timer">The timer instance which will be used when executing <see cref="Try{T}(DoFunc{T})"/>.</param>
+        public TryFuncUntilTimeOut(SimpleTimer timer) : this (0)
+        {
+            _timer = timer;
+        }
+
         public static T Try<T>(int timeout, DoFunc<T> func)
         {
             var tryFunc = new TryFuncUntilTimeOut(timeout);
@@ -96,7 +107,7 @@ namespace WatiN.Core.UtilityClasses
             if (func == null) throw new ArgumentNullException("func");
 
             var defaultT = default(T);
-            var timeoutTimer = new SimpleTimer(Timeout);
+            var timeoutTimer = GetTimer();
 
             do
             {
@@ -118,6 +129,11 @@ namespace WatiN.Core.UtilityClasses
             HandleTimeOut();
 
             return defaultT;
+        }
+
+        private SimpleTimer GetTimer()
+        {
+            return _timer ?? new SimpleTimer(Timeout);
         }
 
         private void HandleTimeOut()
