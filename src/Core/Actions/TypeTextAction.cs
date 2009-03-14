@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -119,13 +119,13 @@ namespace WatiN.Core.Actions
         protected virtual bool ShouldKeyDownEventByFired()
         {
             var ieElement = _textField.NativeElement as IEElement;
-            return ieElement == null || ShouldEventBeFired(ieElement.HtmlElement.onkeydown);
+            return ieElement == null || ShouldEventBeFired(ieElement.AsHtmlElement.onkeydown);
         }
 
         protected virtual bool ShouldKeyUpEventByFired()
         {
             var ieElement = _textField.NativeElement as IEElement;
-            return ieElement == null || ShouldEventBeFired(ieElement.HtmlElement.onkeyup);
+            return ieElement == null || ShouldEventBeFired(ieElement.AsHtmlElement.onkeyup);
         }
 
         private static bool ShouldEventBeFired(Object value)

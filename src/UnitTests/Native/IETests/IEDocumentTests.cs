@@ -66,7 +66,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             // THEN
             IEElement ieElement = (IEElement)nativeElement;
-            Assert.That(ReferenceEquals(ieElement.HtmlElement, htmlElement), "Unexpected instance");
+            Assert.That(ReferenceEquals(ieElement.AsHtmlElement, htmlElement), "Unexpected instance");
         }
 
         [Test]

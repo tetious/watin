@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -76,7 +76,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
             var ieElement = (IEElement)element.NativeElement;
 
             var pos = 0;
-            var offsetParent = ieElement.HtmlElement.offsetParent;
+            var offsetParent = ieElement.AsHtmlElement.offsetParent;
             if (offsetParent != null)
             {
                 var domContainer = element.DomContainer;

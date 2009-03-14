@@ -768,7 +768,7 @@ namespace WatiN.Core.UnitTests
             IEElement ieElement = (IEElement)element.NativeElement;
 
 			var pos = 0;
-            var offsetParent = ieElement.HtmlElement.offsetParent;
+            var offsetParent = ieElement.AsHtmlElement.offsetParent;
 			if (offsetParent != null)
 			{
 			    var domContainer = element.DomContainer;

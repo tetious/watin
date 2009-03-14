@@ -43,7 +43,7 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <summary>
         /// Gets the underlying <see cref="IHTMLElement" /> object.
         /// </summary>
-        public IHTMLElement HtmlElement
+        public IHTMLElement AsHtmlElement
         {
             get { return (IHTMLElement)_element; }
         }
@@ -51,13 +51,13 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public INativeElementCollection Children
         {
-            get { return new IEElementCollection((IHTMLElementCollection)HtmlElement.children); }
+            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.children); }
         }
 
         /// <inheritdoc />
         public INativeElementCollection AllDescendants
         {
-            get { return new IEElementCollection((IHTMLElementCollection)HtmlElement.all); }
+            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.all); }
         }
 
         /// <inheritdoc />
@@ -65,11 +65,11 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTable htmlTable = HtmlElement as IHTMLTable;
+                IHTMLTable htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
                     return new IEElementCollection(htmlTable.rows);
 
-                IHTMLTableSection htmlTableSection = HtmlElement as IHTMLTableSection;
+                IHTMLTableSection htmlTableSection = AsHtmlElement as IHTMLTableSection;
                 if (htmlTableSection != null)
                     return new IEElementCollection(htmlTableSection.rows);
 
@@ -82,7 +82,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTable htmlTable = HtmlElement as IHTMLTable;
+                IHTMLTable htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
                     return new IEElementCollection(htmlTable.tBodies);
 
@@ -95,7 +95,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTableRow htmlTableRow = HtmlElement as IHTMLTableRow;
+                IHTMLTableRow htmlTableRow = AsHtmlElement as IHTMLTableRow;
                 if (htmlTableRow != null)
                     return new IEElementCollection(htmlTableRow.cells);
 
@@ -108,7 +108,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                var htmlSelectElement = HtmlElement as IHTMLSelectElement;
+                var htmlSelectElement = AsHtmlElement as IHTMLSelectElement;
                 if (htmlSelectElement != null)
                     return new IEElementCollection(htmlSelectElement);
 
@@ -119,13 +119,13 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public string TextAfter
         {
-            get { return HtmlElement2.getAdjacentText("afterEnd"); }
+            get { return AsHtmlElement2.getAdjacentText("afterEnd"); }
         }
 
         /// <inheritdoc />
         public string TextBefore
         {
-            get { return HtmlElement2.getAdjacentText("beforeBegin"); }
+            get { return AsHtmlElement2.getAdjacentText("beforeBegin"); }
         }
 
         /// <inheritdoc />
@@ -133,7 +133,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                var node = domNode.nextSibling;
+                var node = AsDomNode.nextSibling;
                 while (node != null)
                 {
                     var nextSibling = node as IHTMLElement;
@@ -153,7 +153,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                var node = domNode.previousSibling;
+                var node = AsDomNode.previousSibling;
                 while (node != null)
                 {
                     var previousSibling = node as IHTMLElement;
@@ -173,7 +173,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                var parentNode = domNode.parentNode as IHTMLElement;
+                var parentNode = AsDomNode.parentNode as IHTMLElement;
                 return parentNode != null ? new IEElement(parentNode) : null;
             }
         }
@@ -183,7 +183,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (attributeName.ToLowerInvariant() == "tagname") return TagName;
 
-            var attributeValue = HtmlElement.getAttribute(attributeName, 0);
+            var attributeValue = AsHtmlElement.getAttribute(attributeName, 0);
 
             if (DidReturnObjectReference(attributeValue))
             {
@@ -200,7 +200,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private object RetrieveNodeValue(string attributeName)
         {
-            var ihtmlElement4 = HtmlElement as IHTMLElement4;
+            var ihtmlElement4 = AsHtmlElement as IHTMLElement4;
             return ihtmlElement4 == null ? null : ihtmlElement4.getAttributeNode(attributeName).nodeValue;
         }
 
@@ -215,7 +215,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             value = HandleAttributesWhichHaveNoValuePart(attributeName, value);
 
-            HtmlElement.setAttribute(attributeName, value, 0);
+            AsHtmlElement.setAttribute(attributeName, value, 0);
         }
 
         private static string HandleAttributesWhichHaveNoValuePart(string attributeName, string value)
@@ -232,13 +232,13 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public void ClickOnElement()
         {
-            DispHtmlBaseElement.click();
+            AsDispHTMLBaseElement.click();
         }
 
         /// <inheritdoc />
         public void SetFocus()
         {
-            DispHtmlBaseElement.focus();
+            AsDispHTMLBaseElement.focus();
         }
 
         /// <inheritdoc />
@@ -246,7 +246,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (eventProperties == null)
             {
-                IEUtils.FireEvent(DispHtmlBaseElement, eventName);
+                IEUtils.FireEvent(AsDispHTMLBaseElement, eventName);
             }
             else
             {
@@ -257,15 +257,15 @@ namespace WatiN.Core.Native.InternetExplorer
                     SetAttributeValue("value", newValue);
                 }
 
-                IEUtils.FireEvent(DispHtmlBaseElement, eventName, eventProperties);
+                IEUtils.FireEvent(AsDispHTMLBaseElement, eventName, eventProperties);
             }
         }
 
         /// <inheritdoc />
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            var scriptCode = IEUtils.CreateJavaScriptFireEventCode(eventProperties, DispHtmlBaseElement, eventName);
-            var window = ((IHTMLDocument2)DispHtmlBaseElement.document).parentWindow;
+            var scriptCode = IEUtils.CreateJavaScriptFireEventCode(eventProperties, AsDispHTMLBaseElement, eventName);
+            var window = ((IHTMLDocument2)AsDispHTMLBaseElement.document).parentWindow;
 
             var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
 
@@ -298,7 +298,7 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public void SubmitForm()
         {
-            HtmlFormElement.submit();
+            AsHtmlFormElement.submit();
         }
 
         /// <inheritdoc />
@@ -311,7 +311,7 @@ namespace WatiN.Core.Native.InternetExplorer
             }
         }
 
-        private IHTMLFormElement HtmlFormElement
+        private IHTMLFormElement AsHtmlFormElement
         {
             get { return (IHTMLFormElement)_element; }
         }
@@ -330,7 +330,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
             }
 
-            var attributeValue = GetStyleAttributeValue(attributeName, HtmlElement.style);
+            var attributeValue = GetStyleAttributeValue(attributeName, AsHtmlElement.style);
 
             if (attributeValue == DBNull.Value || attributeValue == null)
             {
@@ -359,15 +359,15 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
-            HtmlElement.style.setAttribute(attributeName, value, 0);
+            AsHtmlElement.style.setAttribute(attributeName, value, 0);
         }
 
-        private IHTMLElement2 HtmlElement2
+        private IHTMLElement2 AsHtmlElement2
         {
             get { return (IHTMLElement2)_element; }
         }
 
-        private IHTMLDOMNode domNode
+        private IHTMLDOMNode AsDomNode
         {
             get { return (IHTMLDOMNode)_element; }
         }
@@ -376,7 +376,7 @@ namespace WatiN.Core.Native.InternetExplorer
         /// Gets the DispHtmlBaseElement />.
         /// </summary>
         /// <value>The DispHtmlBaseElement.</value>
-        private DispHTMLBaseElement DispHtmlBaseElement
+        private DispHTMLBaseElement AsDispHTMLBaseElement
         {
             get { return (DispHTMLBaseElement)_element; }
         }
@@ -386,12 +386,12 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             try
             {
-                if (HtmlElement.sourceIndex < 0)
+                if (AsHtmlElement.sourceIndex < 0)
                 {
                     return false;
                 }
 
-                return HtmlElement.offsetParent != null;
+                return AsHtmlElement.offsetParent != null;
             }
             catch
             {
@@ -402,12 +402,14 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public string TagName
         {
-            get { return HtmlElement.tagName; }
+            get { return AsHtmlElement.tagName; }
         }
 
         /// <inheritdoc />
         public void WaitUntilReady()
         {
+            WaitUntilElementAvailable();
+
             //TODO: See if this method could be dropped, it seems to give
             //      more trouble (uninitialized state of elements)
             //      then benefits (I just introduced this method to be on 
@@ -423,8 +425,8 @@ namespace WatiN.Core.Native.InternetExplorer
             // it's quite probable that it will never reach Complete.
             // Like for elements that could not load an image or ico
             // or some other bits not part of the HTML page.     
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(30);
-            var ihtmlElement2 = ((IHTMLElement2)_element);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
+            var ihtmlElement2 = AsHtmlElement2;
             var success = tryActionUntilTimeOut.Try(() =>
             {
                 var readyState = ihtmlElement2.readyStateValue;
@@ -433,14 +435,28 @@ namespace WatiN.Core.Native.InternetExplorer
 
             if (success) return;
 
-            var ihtmlElement = ((IHTMLElement)_element);
-            throw new WatiNException("Element didn't reach readystate = complete within 30 seconds: " + ihtmlElement.outerText);
+            throw new WatiNException(String.Format("Element didn't reach readystate = complete within {0} seconds: {1}", Settings.WaitForCompleteTimeOut, AsHtmlElement.outerText));
+        }
+
+        private void WaitUntilElementAvailable()
+        {
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
+            var ihtmlElement = AsHtmlElement;
+            var success = tryActionUntilTimeOut.Try(() =>
+            {
+                var tagName = ihtmlElement.tagName;
+                return true;
+            });
+
+            if (success) return;
+
+            throw new WatiNException(String.Format("Element wasn't available within {0} seconds.", Settings.WaitForCompleteTimeOut));
         }
 
         /// <inheritdoc />
 	    public Rectangle GetElementBounds()
 	    {
-            return GetHtmlElementBounds(HtmlElement);
+            return GetHtmlElementBounds(AsHtmlElement);
 	    }
 
         internal static Rectangle GetHtmlElementBounds(IHTMLElement element)
@@ -466,12 +482,12 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             var ieElement = obj as IEElement;
 
-            return ieElement != null && Equals(ieElement.DispHtmlBaseElement.uniqueNumber, DispHtmlBaseElement.uniqueNumber);
+            return ieElement != null && Equals(ieElement.AsDispHTMLBaseElement.uniqueNumber, AsDispHTMLBaseElement.uniqueNumber);
         }
 
         public override int GetHashCode()
         {
-            return DispHtmlBaseElement.uniqueNumber;
+            return AsDispHTMLBaseElement.uniqueNumber;
         }
 
     }
