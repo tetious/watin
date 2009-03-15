@@ -55,17 +55,18 @@ namespace WatiN.Core.Native.Chrome
         /// <summary>
         /// Reattaches to the first tab. This is required every time the document
         /// </summary>
-        /// <returns></returns>
         private void ReAttachToTab()
-        {
-            string result;
-            this.ClientPort.WriteAndRead("exit", true, true);            
-            
-            // #Hack instead of sleeping create function which exit's and debugs until the current page 
-            // is not about:blank.             
-            Thread.Sleep(100);
-            
-            result = this.ClientPort.WriteAndRead("debug()", true, true);
+        {            
+            do
+            {
+                this.ClientPort.WriteAndRead("exit", true, true);
+
+                // #Hack instead of sleeping create function which exit's and debugs until the current page 
+                // is not about:blank.             
+                Thread.Sleep(100);
+                this.ClientPort.WriteAndRead("debug()", true, true);
+            } 
+            while (this.ClientPort.LastResponseRaw.Contains("attached to about:blank"));
         }
     }
 }

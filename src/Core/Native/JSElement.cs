@@ -615,24 +615,36 @@ namespace WatiN.Core.Native
 
         private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
         {
-            // Params for the initKeyEvent:
-            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
-
             var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
             var charCode = GetEventPropertyValue(eventProperties, "charCode", "0");
-            
-            // After a lot of searching it seems that keyCode is not supported in keypress event
-            // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
-            if (eventname == "keypress") keyCode = "0";
+                        
+            string eventCommand = string.Empty;
 
-            string eventCommand;
             switch (this.ClientPort.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
-                    eventCommand = "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
-                        "event.initKeyboardEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
+                    // HACK: Webkit doesn't seem to support manually firing keyboard events, 
+                    // event listeners will get fired for the key events, but the event target seems to ignore it.
+                    // We get around this by manually appending the value to the element between keydown and keypress.
+                    if (eventname == "keypress")
+                    {
+                        eventCommand = "if(" + this.ElementReference + ".type==\"text\"){" + this.ElementReference
+                                       + ".value+=\"" + Convert.ToChar(Convert.ToInt32(keyCode)) + "\";};";
+                    }
+
+                    eventCommand += "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"Events\");" +
+                        "event.initEvent('" + eventname + "', true, true);event.keyCode=" + keyCode + ";";
                     break;
                 case JavaScriptEngineType.Mozilla:
+                    // After a lot of searching it seems that keyCode is not supported in keypress event
+                    // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
+                    if (eventname == "keypress")
+                    {
+                        keyCode = "0";
+                    }
+
+                    // Params for the initKeyEvent:
+                    // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
                     eventCommand = "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
                         "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
                     break;

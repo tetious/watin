@@ -105,5 +105,15 @@ namespace WatiN.Core.UnitTests.Native.ChromeTests
 
             Assert.That(Chrome.CurrentProcessCount, Is.EqualTo(0), "Expected no running chrome instances");
         }
+
+        [Test]
+        public void CanTypeTextIntoATextField()
+        {
+            using (Chrome chrome = new Chrome(MainURI))
+            {
+                chrome.TextField("name").TypeText("Hello world");
+                Assert.That(chrome.TextField("name").Text, Is.EqualTo("Hello world"));
+            }
+        }
     }
 }

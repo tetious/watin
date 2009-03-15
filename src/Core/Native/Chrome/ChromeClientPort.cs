@@ -341,8 +341,8 @@ namespace WatiN.Core.Native.Chrome
                 Logger.LogDebug("chrome says: '" + readData.Replace("\n", "[newline]") + "'");
                 this.LastResponseRaw += readData;
                 this.LastResponse += this.CleanTelnetResponse(readData);
-            } 
-            while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
+            }
+            while (!readData.EndsWith("> ") && !readData.Trim().EndsWith("lost connection to tab") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(this.LastResponse)));
 
             // Convert \n to newline
             if (this.LastResponse != null)

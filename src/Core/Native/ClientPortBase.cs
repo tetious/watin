@@ -78,6 +78,17 @@ namespace WatiN.Core.Native
         internal Process Process { get; set; }
 
         /// <summary>
+        /// Gets or sets the last response without any cleaning applied to it.
+        /// </summary>
+        /// <value>The last response raw.</value>
+        internal string LastResponseRaw
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the entire response from the remote server so far.
         /// </summary>
         /// <value>The response from the remote server so far.</value>
@@ -115,17 +126,6 @@ namespace WatiN.Core.Native
                 Boolean.TryParse(this.LastResponse, out lastBoolResponse);
                 return lastBoolResponse;
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the last response without any cleaning applied to it.
-        /// </summary>
-        /// <value>The last response raw.</value>
-        protected string LastResponseRaw
-        {
-            get;
-
-            set;
         }
 
         /// <summary>
