@@ -98,8 +98,6 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void ClickingOnLinkWithJavaScriptInHrefShouldWork()
 	    {
-	        Settings.MakeNewIeInstanceVisible = true;
-
 	        ExecuteTest(browser =>
 	                        {
                                 // GIVEN
@@ -112,6 +110,24 @@ namespace WatiN.Core.UnitTests
                                 
                                 // THEN
                                 Assert.That(browser.TextField("hrefclickresult").Value, Is.EqualTo("success"));
+	                        });
+	    }
+
+	    [Test]
+	    public void ShouldBePossibleToGetImageInsideLink()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+                                // GIVEN
+	                            browser.GoTo(ImagesURI);
+
+                                var link = browser.Link("linkWithImage");
+                                
+                                // WHEN
+	                            var images = link.Images.Count;
+
+	                            // THEN
+                                Assert.That(images, Is.EqualTo(1));
 	                        });
 	    }
 

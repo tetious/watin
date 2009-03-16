@@ -24,7 +24,7 @@ namespace WatiN.Core
 	/// This class provides specialized functionality for a HTML link element.
 	/// </summary>
     [ElementTag("a")]
-    public class Link : Element<Link>
+    public class Link : ElementContainer<Link>
 	{
         public Link(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
 

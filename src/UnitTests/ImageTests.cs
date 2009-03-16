@@ -97,7 +97,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        const int expectedImagesCount = 4;
+		                        const int expectedImagesCount = 5;
                                 Assert.AreEqual(expectedImagesCount, browser.Images.Count, "Unexpected number of Images");
 
 		                        // Collection.Length
@@ -107,7 +107,8 @@ namespace WatiN.Core.UnitTests
                                 Assert.AreEqual("Image1", browser.Images[0].Id);
                                 Assert.AreEqual("Image2", browser.Images[1].Id);
                                 Assert.AreEqual("Image3", browser.Images[2].Id);
-                                Assert.AreEqual("Image4", browser.Images[3].Id);
+                                Assert.AreEqual("linkimage", browser.Images[3].Id);
+                                Assert.AreEqual("Image4", browser.Images[4].Id);
 
 		                        IEnumerable ImageEnumerable = formImages;
 		                        var ImageEnumerator = ImageEnumerable.GetEnumerator();
