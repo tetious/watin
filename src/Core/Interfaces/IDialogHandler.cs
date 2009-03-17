@@ -18,10 +18,10 @@
 
 using WatiN.Core.Native.Windows;
 
-namespace WatiN.Core.DialogHandlers
+namespace WatiN.Core.Interfaces
 {
-	public interface IDialogHandler
-	{
-		bool HandleDialog(Window window);
-	}
+    public interface IDialogHandler
+    {
+        bool HandleDialog(Window window);
+    }
 }

@@ -30,12 +30,12 @@ namespace WatiN.Core
 
         public Label(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public string AccessKey
+        public virtual string AccessKey
 		{
 			get { return GetAttributeValue("accessKey"); }
 		}
 
-		public string For
+        public virtual string For
 		{
 			get { return GetAttributeValue(Find.forAttribute); }
 		}

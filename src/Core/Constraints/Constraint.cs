@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {

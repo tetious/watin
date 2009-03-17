@@ -32,36 +32,24 @@ namespace WatiN.Core
 
         public Image(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public string Src
+        public virtual string Src
 		{
-			get
-			{
-				return GetAttributeValue("src");
-			}
+			get { return GetAttributeValue("src"); }
 		}
 
-		public Uri Uri
+        public virtual Uri Uri
 		{
-			get
-			{
-				return new Uri(Src);
-			}
+			get { return new Uri(Src); }
 		}
 
-		public string Alt
-		{
-			get
-			{
-				return GetAttributeValue("alt");
-			}
+        public virtual string Alt 
+        { 
+            get { return GetAttributeValue("alt"); }
 		}
 
-		public string Name
+        public virtual string Name
 		{
-			get
-			{
-				return GetAttributeValue("name");
-			}
+			get { return GetAttributeValue("name"); }
 		}
 	}
 }

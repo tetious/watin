@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.DialogHandlers
 {

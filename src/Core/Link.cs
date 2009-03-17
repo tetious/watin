@@ -30,7 +30,7 @@ namespace WatiN.Core
 
         public Link(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public string Url
+        public virtual string Url
 		{
 			get { return GetAttributeValue("href"); }
 		}

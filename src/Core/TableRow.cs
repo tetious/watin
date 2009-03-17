@@ -37,7 +37,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table that contains this row.
         /// </summary>
-		public Table ContainingTable
+        public virtual Table ContainingTable
 		{
 			get { return Ancestor<Table>(); }
 		}
@@ -45,7 +45,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table body that contains this row.
         /// </summary>
-        public TableBody ContainingTableBody
+        public virtual TableBody ContainingTableBody
         {
             get { return Ancestor<TableBody>(); }
         }
@@ -54,7 +54,7 @@ namespace WatiN.Core
         /// Gets the table that contains this row.
         /// </summary>
         [Obsolete("Use ContainingTable instead.")]
-        public Table ParentTable
+        public virtual Table ParentTable
         {
             get { return ContainingTable; }
         }
@@ -63,7 +63,7 @@ namespace WatiN.Core
 		/// Gets the index of the <see cref="TableRow"/> in the <see cref="TableRowCollection"/> of the parent <see cref="Table"/>.
 		/// </summary>
 		/// <value>The index of the row.</value>
-		public int Index
+        public virtual int Index
 		{
 			get { return int.Parse(GetAttributeValue("rowIndex")); }
 		}
@@ -74,7 +74,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id</param>
         /// <returns>The table cell</returns>
-        public TableCell OwnTableCell(string elementId)
+        public virtual TableCell OwnTableCell(string elementId)
         {
             return OwnTableCell(Find.ById(elementId));
         }
@@ -85,7 +85,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id regular expression</param>
         /// <returns>The table cell</returns>
-        public TableCell OwnTableCell(Regex elementId)
+        public virtual TableCell OwnTableCell(Regex elementId)
         {
             return OwnTableCell(Find.ById(elementId));
         }
@@ -96,7 +96,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="findBy">The constraint</param>
         /// <returns>The table cell</returns>
-        public TableCell OwnTableCell(Constraint findBy)
+        public virtual TableCell OwnTableCell(Constraint findBy)
         {
             return new TableCell(DomContainer, CreateElementFinder<TableCell>(nativeElement => nativeElement.TableCells, findBy));
         }
@@ -107,7 +107,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="predicate">The predicate</param>
         /// <returns>The table cell</returns>
-        public TableCell OwnTableCell(Predicate<TableCell> predicate)
+        public virtual TableCell OwnTableCell(Predicate<TableCell> predicate)
         {
             return OwnTableCell(Find.ByElement(predicate));
         }
@@ -117,7 +117,7 @@ namespace WatiN.Core
         /// might be nested within it).
         /// </summary>
         /// <returns>The table cell collection</returns>
-        public TableCellCollection OwnTableCells
+        public virtual TableCellCollection OwnTableCells
         {
             get { return new TableCellCollection(DomContainer, CreateElementFinder<TableCell>(nativeElement => nativeElement.TableCells, null)); }
         }
@@ -128,7 +128,7 @@ namespace WatiN.Core
         /// </summary>
         /// <value>The table cells collection.</value>
         [Obsolete("Use OwnTableCells instead.")]
-        public TableCellCollection TableCellsDirectChildren
+        public virtual TableCellCollection TableCellsDirectChildren
         {
             get { return OwnTableCells; }
         }

@@ -54,7 +54,7 @@ namespace WatiN.Core
 		/// This method clears the selected items in the select box and waits for the 
 		/// onchange event to complete after the list is cleared
 		/// </summary>
-		public void ClearList()
+        public virtual void ClearList()
 		{
 			Logger.LogAction("Clearing selection(s) in " + GetType().Name + " '" + Id + "'");
 
@@ -75,7 +75,7 @@ namespace WatiN.Core
 		/// Gets a value indicating whether this <see cref="SelectList"/> allows multiple select.
 		/// </summary>
 		/// <value><c>true</c> if multiple; otherwise, <c>false</c>.</value>
-		public bool Multiple
+        public virtual bool Multiple
 		{
 			get { return bool.Parse(GetAttributeValue("multiple")); }
 		}
@@ -85,7 +85,7 @@ namespace WatiN.Core
 		/// Raises NoValueFoundException if the specified value is not found.
 		/// </summary>
 		/// <param name="text">The text.</param>
-		public void Select(string text)
+        public virtual void Select(string text)
 		{
 			Logger.LogAction("Selecting '" + text + "' in " + GetType().Name + " '" + Id + "'");
 
@@ -97,7 +97,7 @@ namespace WatiN.Core
 		/// Raises NoValueFoundException if the specified value is not found.
 		/// </summary>
 		/// <param name="regex">The regex.</param>
-		public void Select(Regex regex)
+        public virtual void Select(Regex regex)
 		{
 			Logger.LogAction("Selecting text using regular expresson '" + regex + "' in " + GetType().Name + " '" + Id + "'");
 
@@ -109,7 +109,7 @@ namespace WatiN.Core
 		/// Raises NoValueFoundException if the specified value is not found.
 		/// </summary>
 		/// <param name="value">The value.</param>
-		public void SelectByValue(string value)
+        public virtual void SelectByValue(string value)
 		{
 			Logger.LogAction("Selecting item with value '" + value + "' in " + GetType().Name + " '" + Id + "'");
 
@@ -121,7 +121,7 @@ namespace WatiN.Core
 		/// Raises NoValueFoundException if the specified value is not found.
 		/// </summary>
 		/// <param name="regex">The regex.</param>
-		public void SelectByValue(Regex regex)
+        public virtual void SelectByValue(Regex regex)
 		{
 			Logger.LogAction("Selecting text using regular expresson '" + regex + "' in " + GetType().Name + " '" + Id + "'");
 
@@ -132,7 +132,7 @@ namespace WatiN.Core
 		/// Returns all the items in the select list as an array.
 		/// An empty array is returned if the select box has no contents.
 		/// </summary>
-		public StringCollection AllContents
+        public virtual StringCollection AllContents
 		{
 			get
 			{
@@ -152,7 +152,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <returns><see cref="Options" /></returns>
-		public Option Option(string text)
+        public virtual Option Option(string text)
 		{
 			return Option(TextCaseInsensitiveConstraint(text));
 		}
@@ -162,7 +162,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <returns><see cref="Options" /></returns>
-		public Option Option(Regex text)
+        public virtual Option Option(Regex text)
 		{
 			return Option(Find.ByText(text));
 		}
@@ -172,7 +172,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="findBy">The find by to use.</param>
 		/// <returns></returns>
-		public Option Option(Constraint findBy)
+        public virtual Option Option(Constraint findBy)
 		{
             return new Option(DomContainer, CreateElementFinder<Option>(nativeElement => nativeElement.Options, findBy));
 		}
@@ -182,7 +182,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="predicate">The expression to use.</param>
 		/// <returns></returns>
-		public Option Option(Predicate<Option> predicate)
+        public virtual Option Option(Predicate<Option> predicate)
 		{
 			return Option(Find.ByElement((predicate)));
 		}
@@ -190,7 +190,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Returns all the <see cref="Core.Option"/> elements in the <see cref="SelectList"/>.
 		/// </summary>
-		public OptionCollection Options
+        public virtual OptionCollection Options
 		{
             get { return new OptionCollection(DomContainer, CreateElementFinder<Option>(nativeElement => nativeElement.Options, null)); }
 		}
@@ -198,7 +198,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Returns the selected option(s) in an array list.
 		/// </summary>
-		public ArrayList SelectedOptions
+        public virtual ArrayList SelectedOptions
 		{
 			get
 			{
@@ -220,7 +220,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Returns the selected item(s) in a <see cref="StringCollection"/>.
 		/// </summary>
-		public StringCollection SelectedItems
+        public virtual StringCollection SelectedItems
 		{
 			get
 			{
@@ -241,7 +241,7 @@ namespace WatiN.Core
 		/// Use SelectedItems to get a StringCollection of all selected items.
 		/// When there's no item selected, the return value will be null.
 		/// </summary>
-		public string SelectedItem
+        public virtual string SelectedItem
 		{
 			get
 			{
@@ -255,7 +255,7 @@ namespace WatiN.Core
 		/// Use SelectedOptions to get an ArrayList of all selected options.
 		/// When there's no option selected, the return value will be null.
 		/// </summary>
-		public Option SelectedOption
+        public virtual Option SelectedOption
 		{
 			get
 			{
@@ -271,7 +271,7 @@ namespace WatiN.Core
 		/// <value>
 		/// 	<c>true</c> if this instance has selected items; otherwise, <c>false</c>.
 		/// </value>
-		public bool HasSelectedItems
+        public virtual bool HasSelectedItems
 		{
 			get { return SelectedOption != null; }
 		}

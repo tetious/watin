@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using WatiN.Core.Constraints;
 
-namespace WatiN.Core
+namespace WatiN.Core.Interfaces
 {
     /// <summary>
     /// Represents a read-only list of components that can be enumerated, searched and filtered.

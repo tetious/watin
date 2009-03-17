@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Properties;
 using WatiN.Core.UtilityClasses;
 

@@ -54,12 +54,12 @@ namespace WatiN.Core
             get { return frameDocument; }
         }
 
-		public string Name
+        public virtual string Name
 		{
 			get { return GetAttributeValue("name"); }
 		}
 
-		public string Id
+        public virtual string Id
 		{
 			get { return GetAttributeValue("id"); }
 		}

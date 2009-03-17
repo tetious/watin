@@ -32,7 +32,7 @@ namespace WatiN.Core
 
         public FileUpload(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public string FileName
+        public virtual string FileName
 		{
 			get
 			{
@@ -41,7 +41,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public void Set(string fileName)
+        public virtual void Set(string fileName)
 		{
 			var info = new FileInfo(fileName);
 			if (!info.Exists)

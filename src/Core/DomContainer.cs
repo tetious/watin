@@ -98,7 +98,7 @@ namespace WatiN.Core
 	    /// Gets the dialog watcher.
 	    /// </summary>
 	    /// <value>The dialog watcher.</value>
-	    public DialogWatcher DialogWatcher { get; private set; }
+        public virtual DialogWatcher DialogWatcher { get; private set; }
 
 		/// <summary>
 		/// Adds the dialog handler.

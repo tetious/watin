@@ -17,9 +17,8 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.Interfaces;
 
-namespace WatiN.Core
+namespace WatiN.Core.Interfaces
 {
     public interface ISettings
     {

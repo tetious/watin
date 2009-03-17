@@ -52,7 +52,7 @@ namespace WatiN.Core
         /// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
         /// </summary>
         /// <param name="predicate">The expression to use.</param>
-        public void WaitUntil(Predicate<TElement> predicate)
+        public virtual void WaitUntil(Predicate<TElement> predicate)
         {
             WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
         }
@@ -62,7 +62,7 @@ namespace WatiN.Core
 		/// </summary>
         /// <param name="predicate">The expression to use.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(Predicate<TElement> predicate, int timeout)
+        public virtual void WaitUntil(Predicate<TElement> predicate, int timeout)
 		{
             WaitUntil(Find.ByElement(predicate), timeout);
         }

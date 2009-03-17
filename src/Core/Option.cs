@@ -44,7 +44,7 @@ namespace WatiN.Core
 		/// Returns the value.
 		/// </summary>
 		/// <value>The value.</value>
-		public string Value
+        public virtual string Value
 		{
 			get { return GetAttributeValue("value"); }
 		}
@@ -53,7 +53,7 @@ namespace WatiN.Core
 		/// Gets a value indicating whether this <see cref="Option"/> is selected.
 		/// </summary>
 		/// <value><c>true</c> if selected; otherwise, <c>false</c>.</value>
-		public bool Selected
+        public virtual bool Selected
 		{
 			get { return bool.Parse(GetAttributeValue("selected")); }
 		}
@@ -62,7 +62,7 @@ namespace WatiN.Core
 		/// Returns the index of this <see cref="Option"/> in the <see cref="SelectList"/>.
 		/// </summary>
 		/// <value>The index.</value>
-		public int Index
+        public virtual int Index
 		{
 			get { return int.Parse(GetAttributeValue("index")); }
 		}
@@ -71,7 +71,7 @@ namespace WatiN.Core
 		/// Gets a value indicating whether this <see cref="Option"/> is selected by default.
 		/// </summary>
 		/// <value><c>true</c> if selected by default; otherwise, <c>false</c>.</value>
-		public bool DefaultSelected
+        public virtual bool DefaultSelected
 		{
 			get { return bool.Parse(GetAttributeValue("defaultSelected")); }
 		}
@@ -81,7 +81,7 @@ namespace WatiN.Core
 		/// fires the "onchange" event on the selectlist and waits for it
 		/// to complete.
 		/// </summary>
-		public void Clear()
+        public virtual void Clear()
 		{
 			setSelected(false, true);
 		}
@@ -91,7 +91,7 @@ namespace WatiN.Core
 		/// fires the "onchange" event on the selectlist and does not wait for it
 		/// to complete.
 		/// </summary>
-		public void ClearNoWait()
+        public virtual void ClearNoWait()
 		{
 			setSelected(false, false);
 		}
@@ -101,7 +101,7 @@ namespace WatiN.Core
 		/// fires the "onchange" event on the selectlist and waits for it
 		/// to complete.
 		/// </summary>
-		public void Select()
+        public virtual void Select()
 		{
 			setSelected(true, true);
 		}
@@ -111,7 +111,7 @@ namespace WatiN.Core
 		/// fires the "onchange" event on the selectlist and does not wait for it
 		/// to complete.
 		/// </summary>
-		public void SelectNoWait()
+        public virtual void SelectNoWait()
 		{
 			setSelected(true, false);
 		}
@@ -131,7 +131,7 @@ namespace WatiN.Core
 		/// Gets the parent <see cref="SelectList"/>.
 		/// </summary>
 		/// <value>The parent <see cref="SelectList"/>.</value>
-		public SelectList ParentSelectList
+        public virtual SelectList ParentSelectList
 		{
 			get { return Ancestor<SelectList>(); }
 		}

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;

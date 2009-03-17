@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.IO;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {

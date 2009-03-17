@@ -32,7 +32,7 @@ namespace WatiN.Core
 
         public RadioCheck(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public bool Checked
+        public virtual bool Checked
 		{
 			get { return bool.Parse(GetAttributeValue("checked")); }
 			set

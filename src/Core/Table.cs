@@ -63,7 +63,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(string elementId)
+        public virtual TableRow OwnTableRow(string elementId)
         {
             return OwnTableRow(Find.ById(elementId));
         }
@@ -74,7 +74,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id regular expression</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Regex elementId)
+        public virtual TableRow OwnTableRow(Regex elementId)
         {
             return OwnTableRow(Find.ById(elementId));
         }
@@ -85,7 +85,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="findBy">The constraint</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Constraint findBy)
+        public virtual TableRow OwnTableRow(Constraint findBy)
         {
             return new TableRow(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, findBy));
         }
@@ -96,7 +96,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="predicate">The predicate</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Predicate<TableRow> predicate)
+        public virtual TableRow OwnTableRow(Predicate<TableRow> predicate)
         {
             return OwnTableRow(Find.ByElement(predicate));
         }
@@ -106,7 +106,7 @@ namespace WatiN.Core
         /// might be nested within it).
         /// </summary>
         /// <returns>The table row collection</returns>
-        public TableRowCollection OwnTableRows
+        public virtual TableRowCollection OwnTableRows
         {
             get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, null)); }
         }
@@ -117,7 +117,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id</param>
         /// <returns>The table body</returns>
-        public TableBody OwnTableBody(string elementId)
+        public virtual TableBody OwnTableBody(string elementId)
         {
             return OwnTableBody(Find.ById(elementId));
         }
@@ -128,7 +128,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id regular expression</param>
         /// <returns>The table body</returns>
-        public TableBody OwnTableBody(Regex elementId)
+        public virtual TableBody OwnTableBody(Regex elementId)
         {
             return OwnTableBody(Find.ById(elementId));
         }
@@ -139,7 +139,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="findBy">The constraint</param>
         /// <returns>The table body</returns>
-        public TableBody OwnTableBody(Constraint findBy)
+        public virtual TableBody OwnTableBody(Constraint findBy)
         {
             return new TableBody(DomContainer, CreateElementFinder<TableBody>(nativeElement => nativeElement.TableBodies, findBy));
         }
@@ -150,7 +150,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="predicate">The predicate</param>
         /// <returns>The table body</returns>
-        public TableBody OwnTableBody(Predicate<TableBody> predicate)
+        public virtual TableBody OwnTableBody(Predicate<TableBody> predicate)
         {
             return OwnTableBody(Find.ByElement(predicate));
         }
@@ -160,7 +160,7 @@ namespace WatiN.Core
         /// might be nested within it).
         /// </summary>
         /// <returns>The table body collection</returns>
-        public TableBodyCollection OwnTableBodies
+        public virtual TableBodyCollection OwnTableBodies
         {
             get { return new TableBodyCollection(DomContainer, CreateElementFinder<TableBody>(nativeElement => nativeElement.TableBodies, null)); }
         }
@@ -173,7 +173,7 @@ namespace WatiN.Core
         /// <param name="findText">The text to find.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRow(string findText, int inColumn)
+        public virtual TableRow FindRow(string findText, int inColumn)
         {
             Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
             return FindInTableRows(Find.ByTextInColumn(findText, inColumn));
@@ -187,7 +187,7 @@ namespace WatiN.Core
         /// <param name="findText">The text to find.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInOwnTableRows(string findText, int inColumn)
+        public virtual TableRow FindRowInOwnTableRows(string findText, int inColumn)
         {
             Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
             return FindInOwnTableRows(Find.ByTextInColumn(findText, inColumn));
@@ -201,7 +201,7 @@ namespace WatiN.Core
         /// <param name="findTextRegex">The regular expression the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRow(Regex findTextRegex, int inColumn)
+        public virtual TableRow FindRow(Regex findTextRegex, int inColumn)
         {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
             return FindInTableRows(Find.ByTextInColumn(findTextRegex, inColumn));
@@ -215,7 +215,7 @@ namespace WatiN.Core
         /// <param name="findTextRegex">The regular expression the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInOwnTableRows(Regex findTextRegex, int inColumn)
+        public virtual TableRow FindRowInOwnTableRows(Regex findTextRegex, int inColumn)
         {
             Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
             return FindInOwnTableRows(Find.ByTextInColumn(findTextRegex, inColumn));
@@ -229,7 +229,7 @@ namespace WatiN.Core
         /// <param name="comparer">The comparer that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRow(Comparer<string> comparer, int inColumn)
+        public virtual TableRow FindRow(Comparer<string> comparer, int inColumn)
         {
             Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
             return FindInTableRows(Find.ByTextInColumn(comparer, inColumn));
@@ -243,7 +243,7 @@ namespace WatiN.Core
         /// <param name="comparer">The comparer that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInOwnTableRows(Comparer<string> comparer, int inColumn)
+        public virtual TableRow FindRowInOwnTableRows(Comparer<string> comparer, int inColumn)
         {
             Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
             return FindInOwnTableRows(Find.ByTextInColumn(comparer, inColumn));
@@ -257,7 +257,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRow(Predicate<string> predicate, int inColumn)
+        public virtual TableRow FindRow(Predicate<string> predicate, int inColumn)
         {
             return FindInTableRows(Find.ByTextInColumn(predicate, inColumn));
         }
@@ -270,7 +270,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInOwnTableRows(Predicate<string> predicate, int inColumn)
+        public virtual TableRow FindRowInOwnTableRows(Predicate<string> predicate, int inColumn)
         {
             return FindInOwnTableRows(Find.ByTextInColumn(predicate, inColumn));
         }
@@ -283,7 +283,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
+        public virtual TableRow FindRow(Predicate<TableCell> predicate, int inColumn)
         {
             return FindInTableRows(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }
@@ -296,7 +296,7 @@ namespace WatiN.Core
         /// <param name="predicate">The predicate that the cell text must match.</param>
         /// <param name="inColumn">Index of the column to find the text in.</param>
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
-        public TableRow FindRowInOwnTableRows(Predicate<TableCell> predicate, int inColumn)
+        public virtual TableRow FindRowInOwnTableRows(Predicate<TableCell> predicate, int inColumn)
         {
             return FindInOwnTableRows(Find.ByExistenceOfRelatedElement<TableCell>(row => TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }

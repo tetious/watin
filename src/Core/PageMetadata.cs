@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using WatiN.Core.Properties;
 
@@ -47,12 +48,11 @@ namespace WatiN.Core
 
             this.pageType = pageType;
 
-            PageAttribute pageAttrib = GetPageAttribute(pageType);
-            if (pageAttrib != null)
-            {
-                urlRegex = pageAttrib.UrlRegex != null ? new Regex(pageAttrib.UrlRegex) : null;
-                isSecure = pageAttrib.IsSecure;
-            }
+            var pageAttrib = GetPageAttribute(pageType);
+            if (pageAttrib == null) return;
+
+            urlRegex = pageAttrib.UrlRegex != null ? new Regex(pageAttrib.UrlRegex) : null;
+            isSecure = pageAttrib.IsSecure;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace WatiN.Core
             get { return isSecure; }
         }
 
-        private static PageAttribute GetPageAttribute(Type pageType)
+        private static PageAttribute GetPageAttribute(ICustomAttributeProvider pageType)
         {
             var attribs = pageType.GetCustomAttributes(typeof(PageAttribute), true);
             return attribs.Length != 0 ? (PageAttribute) attribs[0] : null;

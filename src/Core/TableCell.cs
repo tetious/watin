@@ -38,7 +38,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table that contains this cell.
         /// </summary>
-        public Table ContainingTable
+        public virtual Table ContainingTable
         {
             get { return Ancestor<Table>(); }
         }
@@ -46,7 +46,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table body that contains this cell.
         /// </summary>
-        public TableBody ContainingTableBody
+        public virtual TableBody ContainingTableBody
         {
             get { return Ancestor<TableBody>(); }
         }
@@ -54,7 +54,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table row that contains this cell.
         /// </summary>
-        public TableRow ContainingTableRow
+        public virtual TableRow ContainingTableRow
         {
             get { return Ancestor<TableRow>(); }
         }
@@ -63,7 +63,7 @@ namespace WatiN.Core
         /// Gets the table row that contains this cell.
         /// </summary>
         [Obsolete("Use ContainingTableRow instead.")]
-        public TableRow ParentTableRow
+        public virtual TableRow ParentTableRow
         {
             get { return ContainingTableRow; }
         }
@@ -72,7 +72,7 @@ namespace WatiN.Core
 		/// Gets the index of the <see cref="TableCell"/> in the <see cref="TableCellCollection"/> of the parent <see cref="TableRow"/>.
 		/// </summary>
 		/// <value>The index of the cell.</value>
-		public int Index
+        public virtual int Index
 		{
 			get { return int.Parse(GetAttributeValue("cellIndex")); }
 		}

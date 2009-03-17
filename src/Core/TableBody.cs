@@ -57,7 +57,7 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the table that contains this body.
         /// </summary>
-        public Table ContainingTable
+        public virtual Table ContainingTable
         {
             get { return Ancestor<Table>(); }
         }
@@ -68,7 +68,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(string elementId)
+        public virtual TableRow OwnTableRow(string elementId)
         {
             return OwnTableRow(Find.ById(elementId));
         }
@@ -79,7 +79,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="elementId">The element id regular expression</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Regex elementId)
+        public virtual TableRow OwnTableRow(Regex elementId)
         {
             return OwnTableRow(Find.ById(elementId));
         }
@@ -90,7 +90,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="findBy">The constraint</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Constraint findBy)
+        public virtual TableRow OwnTableRow(Constraint findBy)
         {
             return new TableRow(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, findBy));
         }
@@ -101,7 +101,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="predicate">The predicate</param>
         /// <returns>The table row</returns>
-        public TableRow OwnTableRow(Predicate<TableRow> predicate)
+        public virtual TableRow OwnTableRow(Predicate<TableRow> predicate)
         {
             return OwnTableRow(Find.ByElement(predicate));
         }
@@ -111,7 +111,7 @@ namespace WatiN.Core
         /// might be nested within it).
         /// </summary>
         /// <returns>The table row collection</returns>
-        public TableRowCollection OwnTableRows
+        public virtual TableRowCollection OwnTableRows
         {
             get { return new TableRowCollection(DomContainer, CreateElementFinder<TableRow>(nativeElement => nativeElement.TableRows, null)); }
         }
@@ -122,7 +122,7 @@ namespace WatiN.Core
         /// </summary>
         /// <value>The table rows collection.</value>
         [Obsolete("Use OwnTableRows instead.")]
-        public TableRowCollection TableRowsDirectChildren
+        public virtual TableRowCollection TableRowsDirectChildren
         {
             get { return OwnTableRows; }
         }

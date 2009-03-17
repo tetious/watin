@@ -55,7 +55,7 @@ namespace WatiN.Core
 	        WaitForComplete(new WaitForComplete(this, waitForCompleteTimeOut));
 	    }
 
-	    public void Close()
+	    public virtual void Close()
 		{
 			var dialog = new Window(hwnd);
 			if (dialog.Visible)

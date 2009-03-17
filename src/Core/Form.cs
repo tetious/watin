@@ -32,7 +32,7 @@ namespace WatiN.Core
 
         public Form(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public void Submit()
+		public virtual void Submit()
 		{
 			Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");
 
@@ -54,7 +54,7 @@ namespace WatiN.Core
 			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();
 		}
 
-		public string Name
+        public virtual string Name
 		{
 			get { return GetAttributeValue("name"); }
 		}

@@ -40,7 +40,7 @@ namespace WatiN.Core
 
         public TextField(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 
-		public int MaxLength
+		public virtual int MaxLength
 		{
 			get
 			{
@@ -53,7 +53,7 @@ namespace WatiN.Core
 			}
 		}
 
-		public bool ReadOnly
+        public virtual bool ReadOnly
 		{
 			get
 			{
@@ -96,7 +96,7 @@ namespace WatiN.Core
             set { _typeTextAction = value;}
 	    }
 
-		public string Value
+        public virtual string Value
 		{
 			get
 			{
@@ -120,7 +120,7 @@ namespace WatiN.Core
 			get { return Value; }
 		}
 
-		public void Select()
+        public virtual void Select()
 		{
             NativeElement.Select();
 		}
@@ -142,7 +142,7 @@ namespace WatiN.Core
 			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();
 		}
 
-		public string Name
+        public virtual string Name
 		{
             get { return GetAttributeValue("name"); }
 		}

@@ -233,7 +233,7 @@ namespace WatiN.Core
         /// <summary>
         /// Returns true if the element wrapped by the control exists.
         /// </summary>
-        public bool Exists
+        public virtual bool Exists
         {
             get { return Element.Exists; }
         }

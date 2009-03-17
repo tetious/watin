@@ -157,8 +157,8 @@
     <Compile Include="IdHinter.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />
     <Compile Include="Native\EmptyElementCollection.cs" />
-    <Compile Include="IAttributeBag.cs" />
-    <Compile Include="IComponentCollection.cs" />
+    <Compile Include="Interfaces\IAttributeBag.cs" />
+    <Compile Include="Interfaces\IComponentCollection.cs" />
     <Compile Include="ElementSelector.cs" />
     <Compile Include="NativeElementCollectionAdapter.cs" />
     <Compile Include="IElementCollection.cs" />

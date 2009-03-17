@@ -18,7 +18,7 @@
 
 using System;
 
-namespace WatiN.Core
+namespace WatiN.Core.Interfaces
 {
     /// <summary>
     /// Provides values for attributes used during constraint matching.

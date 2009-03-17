@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Native;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
 {
@@ -34,14 +34,6 @@ namespace WatiN.Core.UnitTests
     [TestFixture]
     public class WatiNSanityTests : BaseWatiNTest
     {
-        private readonly List<Type> ExcludedTypes = new List<Type>
-                                                        {
-                                                            typeof(UtilityClass.DoAction), 
-                                                            typeof(DoFunc<>), 
-                                                            typeof(JSElement.DoFuncWithValue<>), 
-                                                            typeof(JSElementArray.IsMatch), 
-                                                        };
-
         [Test]
         public void ShouldEnsureThatEachHtmlFileHasAProperMarkOfTheWebComment()
         {
@@ -146,39 +138,124 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void ShouldBePossibleToOverridePublicPropertiesAndMethods()
+        public void ShouldBePossibleToOverridePublicProperties()
         {
             // GIVEN
-            var assembly = Assembly.GetAssembly(typeof(Browser));
+            var excludedProperties = new List<string> 
+            { 
+                "TextField.get_TypeTextAction",
+                "TextField.set_TypeTextAction",
+                "FileUpload.get_FileName",
+                "Control.get_Element",
+                "IE.get_InternetExplorer",
+                "IE.get_AutoClose",
+                "IE.set_AutoClose",
+                "IE.get_HtmlDialogs",
+                "IE.get_HtmlDialogsNoWait",
+                "Page.get_Metadata",
+                "Page.get_Document"
+            };
 
-            foreach (var type in assembly.GetTypes())
+            string missedProperties = null;
+            
+            // WHEN
+            foreach (var type in GetTypesToCheck())
             {
-                if (!type.IsSubclassOf(typeof(Component)) && !type.IsSubclassOf(typeof(BaseComponentCollection<,>))) continue;
-                if (type.IsNotPublic) continue;
-
                 foreach (var propertyInfo in type.GetProperties())
                 {
                     var accessors = propertyInfo.GetAccessors(false);
                     if (accessors == null) continue;
+                    
                     foreach (var accessor in accessors)
                     {
-                        if (accessor.IsVirtual) continue;
-                        if (!accessor.IsPublic) continue;
-                        if (accessor.DeclaringType != type) continue;
-                        if (accessor.IsAbstract) continue;
-                        if (accessor.IsStatic) continue;
-
-                        Console.WriteLine(type.Name + "." + accessor.Name);
+                        missedProperties = Check(type, accessor, excludedProperties, missedProperties);
                     }
-
-                    // TODO implement IsVirtual check on methods
-
                 }
             }
 
+            // THEN
+            Assert.That(missedProperties, Is.Null, "Found properties which aren't virtual or excluded");
+        }
+
+        [Test]
+        public void ShouldBePossibleToOverridePublicMethods()
+        {
+            // GIVEN
+            var excludedMethods = new List<string> 
+            { 
+                "TextField.TypeText",
+                "TextField.AppendText",
+                "TextField.Clear",
+                "TextField.get_TypeTextAction",
+                "TextField.set_TypeTextAction",
+                "ElementContainer`1.TableCell",
+                "ElementContainer`1.TableCell",
+                "DomContainer.AddDialogHandler",
+                "DomContainer.RemoveDialogHandler",
+                "DomContainer.WaitForComplete",
+                "DomContainer.WaitForComplete",
+                "Control.get_Element",
+                "IE.get_InternetExplorer",
+                "IE.Close",
+                "IE.Reopen",
+                "IE.ClearCookies",
+                "IE.ClearCookies",
+                "IE.ClearCache",
+                "IE.GetCookie",
+                "IE.SetCookie",
+                "IE.get_AutoClose",
+                "IE.set_AutoClose",
+                "IE.get_HtmlDialogs",
+                "IE.get_HtmlDialogsNoWait",
+                "IE.HtmlDialog",
+                "IE.HtmlDialog",
+                "Page.get_Metadata",
+                "Page.get_Document"
+            };
+
+            string missedMethods = null;
+
             // WHEN
+            foreach (var type in GetTypesToCheck())
+            {
+                foreach (var methodInfo in type.GetMethods())
+                {
+                    missedMethods = Check(type, methodInfo, excludedMethods, missedMethods);
+                }
+            }
 
             // THEN
+            Assert.That(missedMethods, Is.Null, "Found methods which aren't virtual or excluded");
         }
+
+        private static IEnumerable<Type> GetTypesToCheck()
+        {
+            var assembly = Assembly.GetAssembly(typeof(Browser));
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (!type.IsSubclassOf(typeof (Component)) && !type.IsSubclassOf(typeof (BaseComponentCollection<,>)))
+                    continue;
+                if (type.IsNotPublic) continue;
+
+                yield return type;
+            }
+        }
+
+        private static string Check(Type type, MethodBase method, ICollection<string> excludedProperties, string missedProperties)
+        {
+            if (method.IsVirtual) return missedProperties;
+            if (!method.IsPublic) return missedProperties;
+            if (method.DeclaringType != type && !method.DeclaringType.IsInterface) return missedProperties;
+            if (method.IsAbstract) return missedProperties;
+            if (method.IsStatic) return missedProperties;
+
+            var fullName = type.Name + "." + method.Name;
+            if (excludedProperties.Contains(fullName)) return missedProperties;
+
+            missedProperties += fullName + Environment.NewLine;
+            return missedProperties;
+        }
+
     }
 }

@@ -289,12 +289,6 @@ namespace WatiN.Core
 
         #endregion Protected instance methods
 
-        #region Private instance methods
-
-
-
-        #endregion Private instance methods
-
         #region Private static methods
 
         private void CreateFireFoxInstance(string url)

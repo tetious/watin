@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
+using WatiN.Core.Interfaces;
 
 namespace WatiN.Core.Constraints
 {
