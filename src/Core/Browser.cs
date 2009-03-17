@@ -34,7 +34,7 @@ namespace WatiN.Core
         /// <summary>
         /// Brings the referenced Internet Explorer to the front (makes it the top window)
         /// </summary>
-        public void BringToFront()
+        public virtual void BringToFront()
         {
             if (NativeMethods.GetForegroundWindow() == hWnd) return;
             
@@ -50,7 +50,7 @@ namespace WatiN.Core
         /// Gets the window style.
         /// </summary>
         /// <returns>The style currently applied to the ie window.</returns>
-        public NativeMethods.WindowShowStyle GetWindowStyle()
+        public virtual NativeMethods.WindowShowStyle GetWindowStyle()
         {
             var placement = new WINDOWPLACEMENT();
             placement.length = Marshal.SizeOf(placement);
@@ -64,7 +64,7 @@ namespace WatiN.Core
         /// Make the referenced Internet Explorer full screen, minimized, maximized and more.
         /// </summary>
         /// <param name="showStyle">The style to apply.</param>
-        public void ShowWindow(NativeMethods.WindowShowStyle showStyle)
+        public virtual void ShowWindow(NativeMethods.WindowShowStyle showStyle)
         {
             NativeMethods.ShowWindow(hWnd, (int) showStyle);
         }
@@ -73,7 +73,7 @@ namespace WatiN.Core
         /// Sends a Tab key to the IE window to simulate tabbing through
         /// the elements (and adres bar).
         /// </summary>
-        public void PressTab()
+        public virtual void PressTab()
         {
             if (Debugger.IsAttached) return;
 
@@ -120,7 +120,7 @@ namespace WatiN.Core
         ///  }
         /// </code>
         /// </example>
-        public void GoTo(Uri url)
+        public virtual void GoTo(Uri url)
         {
             Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
 
@@ -152,7 +152,7 @@ namespace WatiN.Core
         ///  }
         /// </code>
         /// </example>
-        public void GoToNoWait(string url)
+        public virtual void GoToNoWait(string url)
         {
             GoToNoWait(UtilityClass.CreateUri(url));
         }
@@ -182,7 +182,7 @@ namespace WatiN.Core
         ///  }
         /// </code>
         /// </example>
-        public void GoToNoWait(Uri url)
+        public virtual void GoToNoWait(Uri url)
         {
             NativeBrowser.NavigateToNoWait(url);
         }
@@ -210,7 +210,7 @@ namespace WatiN.Core
         ///  }
         /// </code>
         /// </example>
-        public void GoTo(string url)
+        public virtual void GoTo(string url)
         {
             GoTo(UtilityClass.CreateUri(url));
         }
@@ -221,7 +221,7 @@ namespace WatiN.Core
         /// button in Internet Explorer).
         /// </summary>
         /// <returns><c>true</c> if navigating back to a previous url was possible, otherwise <c>false</c></returns>
-        public bool Back()
+        public virtual bool Back()
         {
             var succeeded = NativeBrowser.GoBack();
             
@@ -243,7 +243,7 @@ namespace WatiN.Core
         /// button in Internet Explorer). 
         /// </summary>
         /// <returns><c>true</c> if navigating forward to a previous url was possible, otherwise <c>false</c></returns>
-        public bool Forward()
+        public virtual bool Forward()
         {
             var succeeded = NativeBrowser.GoForward();
 
@@ -283,7 +283,7 @@ namespace WatiN.Core
         ///  }
         /// </code>
         /// </example>
-        public void Reopen()
+        public virtual void Reopen()
         {
             Logger.LogAction("Reopening browser (closing current and creating new instance)");
             NativeBrowser.Reopen();
@@ -294,7 +294,7 @@ namespace WatiN.Core
         /// Reloads the currently displayed webpage (like the Refresh/reload button in 
         /// a browser).
         /// </summary>
-        public void Refresh()
+        public virtual void Refresh()
         {
             Logger.LogAction("Refreshing browser from '" + Url + "'");
             NativeBrowser.Refresh();

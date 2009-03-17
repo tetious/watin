@@ -39,7 +39,7 @@ namespace WatiN.Core
         /// <param name="constraint">The constraint to match</param>
         /// <returns>True if the component matches the constraint</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="constraint"/> is null</exception>
-        public bool Matches(Constraint constraint)
+        public virtual bool Matches(Constraint constraint)
         {
             if (constraint == null)
                 throw new ArgumentNullException("constraint");
@@ -55,7 +55,7 @@ namespace WatiN.Core
         /// <returns>True if the component matches the constraint</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="constraint"/> or
         /// <paramref name="context"/> is null</exception>
-        public bool Matches(Constraint constraint, ConstraintContext context)
+        public virtual bool Matches(Constraint constraint, ConstraintContext context)
         {
             if (constraint == null)
                 throw new ArgumentNullException("constraint");
@@ -66,7 +66,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        public string GetAttributeValue(string attributeName)
+        public virtual string GetAttributeValue(string attributeName)
         {
             if (attributeName == null)
                 throw new ArgumentNullException("attributeName");
@@ -87,7 +87,7 @@ namespace WatiN.Core
         /// <param name="attributeName">The name of the attribute</param>
         /// <returns>The attribute's associated value or null if none</returns>
         [Obsolete("Use GetAttributeValue instead.")]
-        public string GetValue(string attributeName)
+        public virtual string GetValue(string attributeName)
         {
             return GetAttributeValue(attributeName);
         }

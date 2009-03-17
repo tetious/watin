@@ -112,7 +112,7 @@ namespace WatiN.Core
 		/// Gets the name of the stylesheet class assigned to this ellement (if any).
 		/// </summary>
 		/// <value>The name of the class.</value>
-		public string ClassName
+        public virtual string ClassName
 		{
 			get { return GetAttributeValue("className"); }
 		}
@@ -121,7 +121,7 @@ namespace WatiN.Core
 		/// Gets a value indicating whether this <see cref="Element"/> is completely loaded.
 		/// </summary>
 		/// <value><c>true</c> if complete; otherwise, <c>false</c>.</value>
-		public bool Complete
+        public virtual bool Complete
 		{
 			get
 		{
@@ -138,7 +138,7 @@ namespace WatiN.Core
 		/// Gets a value indicating whether this <see cref="Element"/> is enabled.
 		/// </summary>
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
-		public bool Enabled
+        public virtual bool Enabled
 		{
 			get
 			{
@@ -152,7 +152,7 @@ namespace WatiN.Core
 		/// Gets the id of this element as specified in the HTML.
 		/// </summary>
 		/// <value>The id.</value>
-		public string Id
+        public virtual string Id
 		{
 			get { return GetAttributeValue("id"); }
 		}
@@ -171,7 +171,7 @@ namespace WatiN.Core
 		/// Returns the text displayed after this element when it's wrapped
 		/// in a Label element; otherwise it returns <c>null</c>.
 		/// </summary>
-		public string TextAfter
+        public virtual string TextAfter
 		{
 			get { return NativeElement.TextAfter; }
 		}
@@ -180,7 +180,7 @@ namespace WatiN.Core
 		/// Returns the text displayed before this element when it's wrapped
 		/// in a Label element; otherwise it returns <c>null</c>.
 		/// </summary>
-		public string TextBefore
+        public virtual string TextBefore
 		{
 			get { return NativeElement.TextBefore; }
 		}
@@ -189,7 +189,7 @@ namespace WatiN.Core
 		/// Gets the inner HTML of this element.
 		/// </summary>
 		/// <value>The inner HTML.</value>
-		public string InnerHtml
+        public virtual string InnerHtml
 		{
 			get { return GetAttributeValue("innerHTML"); }
 		}
@@ -198,7 +198,7 @@ namespace WatiN.Core
 		/// Gets the outer text.
 		/// </summary>
 		/// <value>The outer text.</value>
-		public string OuterText
+        public virtual string OuterText
 		{
 			get { return GetAttributeValue("outerText"); }
 		}
@@ -207,7 +207,7 @@ namespace WatiN.Core
 		/// Gets the outer HTML.
 		/// </summary>
 		/// <value>The outer HTML.</value>
-		public string OuterHtml
+        public virtual string OuterHtml
 		{
 			get { return GetAttributeValue("outerHTML"); }
 		}
@@ -216,7 +216,7 @@ namespace WatiN.Core
 		/// Gets the tag name of this element.
 		/// </summary>
 		/// <value>The name of the tag.</value>
-		public string TagName
+        public virtual string TagName
 		{
 			get { return NativeElement.TagName; }
 		}
@@ -225,7 +225,7 @@ namespace WatiN.Core
 		/// Gets the title.
 		/// </summary>
 		/// <value>The title.</value>
-		public string Title
+        public virtual string Title
 		{
 			get { return GetAttributeValue("title"); }
 		}
@@ -234,7 +234,7 @@ namespace WatiN.Core
 		/// Gets the next sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The next sibling.</value>
-		public Element NextSibling
+        public virtual Element NextSibling
 		{
 			get
 			{
@@ -246,7 +246,7 @@ namespace WatiN.Core
 		/// Gets the previous sibling of this element in the Dom of the HTML page.
 		/// </summary>
 		/// <value>The previous sibling.</value>
-		public Element PreviousSibling
+        public virtual Element PreviousSibling
 		{
 			get
 			{
@@ -280,7 +280,7 @@ namespace WatiN.Core
 		/// watinDiv.Links[1].Click();
 		/// </code>
 		/// </example>
-		public Element Parent
+        public virtual Element Parent
 		{
 			get
 			{
@@ -288,7 +288,7 @@ namespace WatiN.Core
             }
         }
 
-		public Style Style
+        public virtual Style Style
 		{
             get { return new Style(NativeElement); }
 		}
@@ -298,7 +298,7 @@ namespace WatiN.Core
         /// </summary>
         /// <typeparam name="TControl">The <see cref="Control{TElement}" /> subclass</typeparam>
         /// <returns>The control</returns>
-        public TControl As<TControl>()
+        public virtual TControl As<TControl>()
             where TControl : Control, new()
         {
             return Control.CreateControl<TControl>(this);
@@ -342,7 +342,7 @@ namespace WatiN.Core
 		/// Clicks this element and waits till the event is completely finished (page is loaded 
 		/// and ready) .
 		/// </summary>
-		public void Click()
+        public virtual void Click()
 		{
 			if (!Enabled)
 			{
@@ -369,7 +369,7 @@ namespace WatiN.Core
 		/// for the click event to be finished. Mostly used when a 
 		/// HTMLDialog is displayed after clicking the element.
 		/// </summary>
-		public void ClickNoWait()
+        public virtual void ClickNoWait()
 		{
 			if (!Enabled)
 			{
@@ -388,7 +388,7 @@ namespace WatiN.Core
         /// <summary>
 		/// Gives the (input) focus to this element.
 		/// </summary>
-		public void Focus()
+        public virtual void Focus()
 		{
 			if (!Enabled)
 			{
@@ -402,7 +402,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Doubleclicks this element.
 		/// </summary>
-		public void DoubleClick()
+        public virtual void DoubleClick()
 		{
 			if (!Enabled)
 			{
@@ -417,7 +417,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Does a keydown on this element.
 		/// </summary>
-		public void KeyDown()
+        public virtual void KeyDown()
 		{
 			FireEvent("onKeyDown");
 		}
@@ -425,7 +425,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Does a keydown on this element.
 		/// </summary>
-		public void KeyDown(char character)
+        public virtual void KeyDown(char character)
 		{
 			FireEvent("onKeyDown", GetKeyCodeEventProperty(character));
 		}
@@ -433,12 +433,12 @@ namespace WatiN.Core
 		/// <summary>
 		/// Does a keyspress on this element.
 		/// </summary>
-		public void KeyPress()
+        public virtual void KeyPress()
 		{
 			FireEvent("onKeyPress");
 		}
 
-		public void KeyPress(char character)
+        public virtual void KeyPress(char character)
 		{
 			FireEvent("onKeyPress", GetKeyCodeEventProperty(character));
 		}
@@ -455,7 +455,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Does a keyup on this element.
 		/// </summary>
-		public void KeyUp()
+        public virtual void KeyUp()
 		{
 			FireEvent("onKeyUp");
 		}
@@ -464,7 +464,7 @@ namespace WatiN.Core
 		/// Does a keyup on this element.
 		/// </summary>
 		/// <param name="character">The character.</param>
-		public void KeyUp(char character)
+        public virtual void KeyUp(char character)
 		{
 			FireEvent("onKeyUp", GetKeyCodeEventProperty(character));
 		}
@@ -473,7 +473,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Fires the blur event on this element.
 		/// </summary>
-		public void Blur()
+        public virtual void Blur()
 		{
 			FireEvent("onBlur");
 		}
@@ -481,7 +481,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Fires the change event on this element.
 		/// </summary>
-		public void Change()
+        public virtual void Change()
 		{
 			FireEvent("onChange");
 		}
@@ -489,7 +489,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Fires the mouseenter event on this element.
 		/// </summary>
-		public void MouseEnter()
+        public virtual void MouseEnter()
 		{
 			FireEvent("onMouseEnter");
 		}
@@ -497,7 +497,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Fires the mousedown event on this element.
 		/// </summary>
-		public void MouseDown()
+        public virtual void MouseDown()
 		{
 			FireEvent("onmousedown");
 		}
@@ -505,7 +505,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Fires the mouseup event on this element.
 		/// </summary>
-		public void MouseUp()
+        public virtual void MouseUp()
 		{
 			FireEvent("onmouseup");
 		}
@@ -515,7 +515,7 @@ namespace WatiN.Core
 		/// and waits for it to complete.
 		/// </summary>
 		/// <param name="eventName">Name of the event.</param>
-		public void FireEvent(string eventName)
+        public virtual void FireEvent(string eventName)
 		{
 			fireEvent(eventName, true, null);
 		}
@@ -527,7 +527,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="eventName">Name of the event.</param>
 		/// <param name="eventProperties">The event properties that need to be set.</param>
-		public void FireEvent(string eventName, NameValueCollection eventProperties)
+        public virtual void FireEvent(string eventName, NameValueCollection eventProperties)
 		{
 			fireEvent(eventName, true, eventProperties);
 		}
@@ -535,7 +535,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Only fires the specified <paramref name="eventName"/> on this element.
 		/// </summary>
-		public void FireEventNoWait(string eventName)
+        public virtual void FireEventNoWait(string eventName)
 		{
 			fireEvent(eventName, false, null);
 		}
@@ -548,7 +548,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="eventProperties">The event properties that need to be set.</param>
-        public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
+        public virtual void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
             fireEvent(eventName, false, eventProperties);
         }
@@ -578,7 +578,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Flashes this element 5 times.
 		/// </summary>
-		public void Flash()
+        public virtual void Flash()
 		{
 			Flash(5);
 		}
@@ -587,7 +587,7 @@ namespace WatiN.Core
 		/// Flashes this element the specified number of flashes.
 		/// </summary>
 		/// <param name="numberOfFlashes">The number of flashes.</param>
-		public void Flash(int numberOfFlashes)
+        public virtual void Flash(int numberOfFlashes)
 		{
 			for (var counter = 0; counter < numberOfFlashes; counter++)
 			{
@@ -602,7 +602,7 @@ namespace WatiN.Core
 		/// Highlights this element.
 		/// </summary>
 		/// <param name="doHighlight">if set to <c>true</c> the element is highlighted; otherwise it's not.</param>
-		public void Highlight(bool doHighlight)
+        public virtual void Highlight(bool doHighlight)
 		{
 		    if (!Settings.HighLightElement) return;
 		    
@@ -615,12 +615,12 @@ namespace WatiN.Core
         /// <summary>
         /// Gets the DomContainer for this element.
         /// </summary>
-        public DomContainer DomContainer { get; private set; }
+        public virtual DomContainer DomContainer { get; private set; }
 
 		/// <summary>
 		/// Gets a reference to the wrapper which incapsulates a native element in the browser.
 		/// </summary>
-		public INativeElement NativeElement
+        public virtual INativeElement NativeElement
 		{
 			get
 			{
@@ -661,7 +661,7 @@ namespace WatiN.Core
 		/// Waits until the element exists or will time out after 30 seconds.
 		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitUntilExistsTimeOut"/>
 		/// </summary>
-		public void WaitUntilExists()
+        public virtual void WaitUntilExists()
 		{
 			// Wait 30 seconds max
 			WaitUntilExists(Settings.WaitUntilExistsTimeOut);
@@ -671,7 +671,7 @@ namespace WatiN.Core
 		/// Waits until the element exists. Wait will time out after <paramref name="timeout"/> seconds.
 		/// </summary>
 		/// <param name="timeout">The timeout in seconds.</param>
-		public void WaitUntilExists(int timeout)
+        public virtual void WaitUntilExists(int timeout)
 		{
 			waitUntilExistsOrNot(timeout, true);
 		}
@@ -680,7 +680,7 @@ namespace WatiN.Core
 		/// Waits until the element no longer exists or will time out after 30 seconds.
 		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitUntilExistsTimeOut"/>
 		/// </summary>
-		public void WaitUntilRemoved()
+        public virtual void WaitUntilRemoved()
 		{
 			// Wait 30 seconds max
 			WaitUntilRemoved(Settings.WaitUntilExistsTimeOut);
@@ -690,7 +690,7 @@ namespace WatiN.Core
 		/// Waits until the element no longer exists. Wait will time out after <paramref name="timeout"/> seconds.
 		/// </summary>
 		/// <param name="timeout">The timeout in seconds.</param>
-		public void WaitUntilRemoved(int timeout)
+        public virtual void WaitUntilRemoved(int timeout)
 		{
 			waitUntilExistsOrNot(timeout, false);
 		}
@@ -701,7 +701,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="attributename">The attributename.</param>
 		/// <param name="expectedValue">The expected value.</param>
-		public void WaitUntil(string attributename, string expectedValue)
+        public virtual void WaitUntil(string attributename, string expectedValue)
 		{
 			WaitUntil(attributename, expectedValue, Settings.WaitUntilExistsTimeOut);
 		}
@@ -713,7 +713,7 @@ namespace WatiN.Core
 		/// <param name="attributename">The attributename.</param>
 		/// <param name="expectedValue">The expected value.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(string attributename, string expectedValue, int timeout)
+        public virtual void WaitUntil(string attributename, string expectedValue, int timeout)
 		{
 			WaitUntil(new AttributeConstraint(attributename, expectedValue), timeout);
 		}
@@ -724,7 +724,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="attributename">The attributename.</param>
 		/// <param name="expectedValue">The expected value.</param>
-		public void WaitUntil(string attributename, Regex expectedValue)
+        public virtual void WaitUntil(string attributename, Regex expectedValue)
 		{
 			WaitUntil(attributename, expectedValue, Settings.WaitUntilExistsTimeOut);
 		}
@@ -736,7 +736,7 @@ namespace WatiN.Core
 		/// <param name="attributename">The attributename.</param>
 		/// <param name="expectedValue">The expected value.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(string attributename, Regex expectedValue, int timeout)
+        public virtual void WaitUntil(string attributename, Regex expectedValue, int timeout)
 		{
 			WaitUntil(new AttributeConstraint(attributename, expectedValue), timeout);
 		}
@@ -746,7 +746,7 @@ namespace WatiN.Core
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
 		/// </summary>
 		/// <param name="constraint">The Constraint.</param>
-		public void WaitUntil(Constraint constraint)
+        public virtual void WaitUntil(Constraint constraint)
 		{
 			WaitUntil(constraint, Settings.WaitUntilExistsTimeOut);
 		}
@@ -756,7 +756,7 @@ namespace WatiN.Core
 		/// Wait will time out after <see cref="Settings.WaitUntilExistsTimeOut"/> seconds.
 		/// </summary>
 		/// <param name="predicate">The Constraint.</param>
-		public void WaitUntil<E>(Predicate<E> predicate) where E : Element
+        public virtual void WaitUntil<E>(Predicate<E> predicate) where E : Element
 		{
 			WaitUntil(Find.ByElement(predicate), Settings.WaitUntilExistsTimeOut);
 		}
@@ -766,7 +766,7 @@ namespace WatiN.Core
 		/// </summary>
 		/// <param name="constraint">The Constraint.</param>
 		/// <param name="timeout">The timeout.</param>
-		public void WaitUntil(Constraint constraint, int timeout)
+        public virtual void WaitUntil(Constraint constraint, int timeout)
 		{
 			// Calling Exists will refresh the reference to the html element
 			// so the compare is against the current html element (and not 
@@ -856,7 +856,7 @@ namespace WatiN.Core
 		/// select.Refresh(); // this will have the expected effect
 		/// </code>
 		/// </example>
-		public void Refresh()
+        public virtual void Refresh()
 		{
 			if (_elementFinder != null)
 			{
@@ -902,7 +902,7 @@ namespace WatiN.Core
 			return _nativeElement;
 		}
 
-        public bool HasNativeElement
+        public virtual bool HasNativeElement
         {
             get { return _nativeElement != null; }
         }
@@ -912,7 +912,7 @@ namespace WatiN.Core
 		/// because WatiN calls this function for you when it handles events (like Click etc..)
 		/// To change the default time out, set <see cref="P:WatiN.Core.Settings.WaitForCompleteTimeOut"/>
 		/// </summary>
-		public void WaitForComplete()
+        public virtual void WaitForComplete()
 		{
 			DomContainer.WaitForComplete();
 		}
@@ -929,7 +929,7 @@ namespace WatiN.Core
 	    /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;;
 	    /// </code>
 	    /// </example>
-        public T Ancestor<T>() where T : Element
+        public virtual T Ancestor<T>() where T : Element
         {
     	    return (T)Ancestor(typeof(T));
         }
@@ -948,7 +948,7 @@ namespace WatiN.Core
         /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(Find.ByText("First name"));
         /// </code>
         /// </example>
-        public T Ancestor<T>(Constraint findBy) where T : Element
+        public virtual T Ancestor<T>(Constraint findBy) where T : Element
         {
     	    return (T)Ancestor(typeof(T), findBy);
         }
@@ -967,7 +967,7 @@ namespace WatiN.Core
         /// Div mainDiv = ie.TextField("firstname").Ancestor&lt;Div&gt;(div => div.Text == "First name");
         /// </code>
         /// </example>
-        public T Ancestor<T>(Predicate<T> predicate) where T : Element
+        public virtual T Ancestor<T>(Predicate<T> predicate) where T : Element
         {
     	    return (T)Ancestor(typeof(T), Find.ByElement(predicate));
         }
@@ -984,7 +984,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div));
 		/// </code>
 		/// </example>
-		public Element Ancestor(Type ancestorType)
+        public virtual Element Ancestor(Type ancestorType)
 		{
 			return Ancestor(ancestorType, Find.Any);
 		}
@@ -1001,7 +1001,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(Constraint findBy)
+        public virtual Element Ancestor(Constraint findBy)
 		{
 			var parentElement = Parent;
 
@@ -1028,7 +1028,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor(typeof(Div), Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(Type ancestorType, Constraint findBy)
+        public virtual Element Ancestor(Type ancestorType, Constraint findBy)
 		{
 			if (!ancestorType.IsSubclassOf(typeof (Element)) && (ancestorType != typeof (Element)))
 			{
@@ -1055,7 +1055,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(string tagName, Constraint findBy)
+        public virtual Element Ancestor(string tagName, Constraint findBy)
 		{
 			var findAncestor = Find.By(Find.tagNameAttribute, new StringEqualsAndCaseInsensitiveComparer(tagName))
 			                                   && findBy;
@@ -1080,7 +1080,7 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div", Find.ByText("First name"));
 		/// </code>
 		/// </example>
-		public Element Ancestor(string tagName, Predicate<Element> predicate)
+        public virtual Element Ancestor(string tagName, Predicate<Element> predicate)
 		{
 			var findAncestor = Find.By("tagname", new StringEqualsAndCaseInsensitiveComparer(tagName))
                                                && Find.ByElement(predicate);
@@ -1102,12 +1102,12 @@ namespace WatiN.Core
 		/// Div mainDiv = ie.TextField("firstname").Ancestor("Div");
 		/// </code>
 		/// </example>
-		public Element Ancestor(string tagName)
+        public virtual Element Ancestor(string tagName)
 		{
 			return Ancestor(tagName, Find.Any);
 		}
 
-        public void SetAttributeValue(string attributeName, string value)
+        public virtual void SetAttributeValue(string attributeName, string value)
         {
             NativeElement.SetAttributeValue(attributeName, value);
         }

@@ -45,13 +45,13 @@ namespace WatiN.Core
         }
 
 	    /// <inheritdoc />
-        public int Count
+        public virtual int Count
         {
             get { return Cache.Count; }
         }
 
         /// <inheritdoc />
-        public void CopyTo(TComponent[] array, int arrayIndex)
+        public virtual void CopyTo(TComponent[] array, int arrayIndex)
         {
             Cache.CopyTo(array, arrayIndex);
         }
@@ -61,7 +61,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="index">The zero-based index</param>
         /// <returns>The element</returns>
-        public TComponent this[int index]
+        public virtual TComponent this[int index]
         {
             get { return Cache[index]; }
         }
@@ -71,13 +71,13 @@ namespace WatiN.Core
 		/// </summary>
 		/// <value>The number of elements in the collection</value>
         [Obsolete("Use Count property instead.")]
-		public int Length
+        public virtual int Length
 		{
 			get { return Count; }
 		}
 
         /// <inheritdoc />
-        public bool Exists(Constraint findBy)
+        public virtual bool Exists(Constraint findBy)
 		{
             if (findBy == null)
                 throw new ArgumentNullException("findBy");
@@ -91,7 +91,7 @@ namespace WatiN.Core
 		}
 
         /// <inheritdoc />
-        public bool Exists(Predicate<TComponent> predicate)
+        public virtual bool Exists(Predicate<TComponent> predicate)
         {
             if (predicate == null)
                 throw new ArgumentNullException("predicate");
@@ -100,16 +100,16 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        public TComponent First()
+        public virtual TComponent First()
         {
-            foreach (TComponent component in this)
+            foreach (var component in this)
                 return component;
 
             return null;
         }
 
         /// <inheritdoc />
-        public TComponent First(Constraint findBy)
+        public virtual TComponent First(Constraint findBy)
         {
             if (findBy == null)
                 throw new ArgumentNullException("findBy");
@@ -123,7 +123,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        public TComponent First(Predicate<TComponent> predicate)
+        public virtual TComponent First(Predicate<TComponent> predicate)
         {
             if (predicate == null)
                 throw new ArgumentNullException("predicate");
@@ -137,7 +137,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="findBy">The constraint to match</param>
         /// <returns>The filtered element collection</returns>
-        public TCollection Filter(Constraint findBy)
+        public virtual TCollection Filter(Constraint findBy)
         {
             if (findBy == null)
                 throw new ArgumentNullException("findBy");
@@ -151,13 +151,13 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="predicate">The predicate to match</param>
         /// <returns>The filtered element collection</returns>
-        public TCollection Filter(Predicate<TComponent> predicate)
+        public virtual TCollection Filter(Predicate<TComponent> predicate)
         {
             return Filter(CreateConstraintFromPredicate(predicate));
         }
 
         /// <inheritdoc />
-	    public IEnumerator<TComponent> GetEnumerator()
+        public virtual IEnumerator<TComponent> GetEnumerator()
 		{
             return Cache.GetEnumerator();
 		}

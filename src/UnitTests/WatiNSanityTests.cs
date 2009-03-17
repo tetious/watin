@@ -17,10 +17,14 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Native;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
 {
@@ -30,6 +34,14 @@ namespace WatiN.Core.UnitTests
     [TestFixture]
     public class WatiNSanityTests : BaseWatiNTest
     {
+        private readonly List<Type> ExcludedTypes = new List<Type>
+                                                        {
+                                                            typeof(UtilityClass.DoAction), 
+                                                            typeof(DoFunc<>), 
+                                                            typeof(JSElement.DoFuncWithValue<>), 
+                                                            typeof(JSElementArray.IsMatch), 
+                                                        };
+
         [Test]
         public void ShouldEnsureThatEachHtmlFileHasAProperMarkOfTheWebComment()
         {
@@ -131,6 +143,42 @@ namespace WatiN.Core.UnitTests
             }
 
             Assert.That(fail, Is.False, "Not all code files have the correct copyright header");
+        }
+
+        [Test]
+        public void ShouldBePossibleToOverridePublicPropertiesAndMethods()
+        {
+            // GIVEN
+            var assembly = Assembly.GetAssembly(typeof(Browser));
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (!type.IsSubclassOf(typeof(Component)) && !type.IsSubclassOf(typeof(BaseComponentCollection<,>))) continue;
+                if (type.IsNotPublic) continue;
+
+                foreach (var propertyInfo in type.GetProperties())
+                {
+                    var accessors = propertyInfo.GetAccessors(false);
+                    if (accessors == null) continue;
+                    foreach (var accessor in accessors)
+                    {
+                        if (accessor.IsVirtual) continue;
+                        if (!accessor.IsPublic) continue;
+                        if (accessor.DeclaringType != type) continue;
+                        if (accessor.IsAbstract) continue;
+                        if (accessor.IsStatic) continue;
+
+                        Console.WriteLine(type.Name + "." + accessor.Name);
+                    }
+
+                    // TODO implement IsVirtual check on methods
+
+                }
+            }
+
+            // WHEN
+
+            // THEN
         }
     }
 }

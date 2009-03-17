@@ -60,20 +60,20 @@ namespace WatiN.Core
         /// </summary>
         /// <typeparam name="TControl">The <see cref="Control{TElement}" /> subclass</typeparam>
         /// <returns>The collection of controls</returns>
-        public ControlCollection<TControl> As<TControl>()
+        public virtual ControlCollection<TControl> As<TControl>()
             where TControl : Control, new()
         {
             return ControlCollection<TControl>.CreateControlCollection(this);
         }
 
         /// <inheritdoc />
-		public bool Exists(string elementId)
+        public virtual bool Exists(string elementId)
 		{
 			return Exists(Find.ByDefault(elementId));
 		}
 
         /// <inheritdoc />
-        public bool Exists(Regex elementId)
+        public virtual bool Exists(Regex elementId)
 		{
             return Exists(Find.ByDefault(elementId));
 		}

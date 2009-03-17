@@ -51,7 +51,7 @@ namespace WatiN.Core
 		/// The text displayed at the button.
 		/// </summary>
 		/// <value>The displayed text.</value>
-		public string Value
+        public virtual string Value
 		{
 			get { return GetAttributeValue("value"); }
 		}

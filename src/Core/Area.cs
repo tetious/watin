@@ -45,7 +45,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Gets the alt-text of the area element.
 		/// </summary>
-		public string Alt
+        public virtual string Alt
 		{
 			get { return GetAttributeValue("alt"); }
 		}
@@ -53,7 +53,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Gets the target url of the area element.
 		/// </summary>
-		public string Url
+        public virtual string Url
 		{
 			get { return GetAttributeValue("href"); }
 		}
@@ -61,7 +61,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Gets the coordinates the area element.
 		/// </summary>
-		public string Coords
+        public virtual string Coords
 		{
 			get { return GetAttributeValue("coords"); }
 		}
@@ -69,7 +69,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Gets the shape of the area element.
 		/// </summary>
-		public string Shape
+        public virtual string Shape
 		{
 			get { return GetAttributeValue("shape"); }
 		}

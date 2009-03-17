@@ -49,7 +49,7 @@ namespace WatiN.Core
 		/// Gets the process ID the Internet Explorer or HTMLDialog is running in.
 		/// </summary>
 		/// <value>The process ID.</value>
-		public int ProcessID
+        public virtual int ProcessID
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace WatiN.Core
 		public abstract INativeDocument OnGetNativeDocument();
 
 		/// <summary>
-		/// Returns the 'raw' html document for the internet explorer DOM.
+		/// Returns a browser specific <see cref="INativeDocument"/> instance.
 		/// </summary>
 		public override INativeDocument NativeDocument
 		{
@@ -168,7 +168,7 @@ namespace WatiN.Core
 		/// If you want more controle over the output, use <seealso cref="CaptureWebPage.CaptureWebPageToFile(string, bool, bool, int, int)"/>
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-        public void CaptureWebPageToFile(string filename)
+        public virtual void CaptureWebPageToFile(string filename)
 		{
 			var captureWebPage = new CaptureWebPage(this);
 			captureWebPage.CaptureWebPageToFile(filename, false, false, 100, 100);

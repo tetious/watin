@@ -143,7 +143,7 @@ namespace WatiN.Core
         /// </summary>
         /// <exception cref="WatiNException">Thrown if the control object does not have a reference
         /// to an element or if the element does not satisfy the control's constraints</exception>
-        new public TElement Element
+        new public virtual TElement Element
         {
             get
             {

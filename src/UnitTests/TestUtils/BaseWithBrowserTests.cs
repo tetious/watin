@@ -66,12 +66,12 @@ namespace WatiN.Core.UnitTests
 		public override void FixtureSetup()
 		{
             base.FixtureSetup();
-#if !IncludeChromeInUnitTesting
+//#if !IncludeChromeInUnitTesting
             BrowsersToTestWith.Add(ieManager);
             BrowsersToTestWith.Add(ffManager);
-#else
+//#else
 		    BrowsersToTestWith.Add(chromeManager);
-#endif
+//#endif
             Logger.LogWriter = new ConsoleLogWriter();
 		}
 
