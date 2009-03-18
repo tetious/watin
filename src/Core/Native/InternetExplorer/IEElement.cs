@@ -410,20 +410,15 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             WaitUntilElementAvailable();
 
-            //TODO: See if this method could be dropped, it seems to give
-            //      more trouble (uninitialized state of elements)
-            //      then benefits (I just introduced this method to be on 
-            //      the save side)
-
             if (ElementTag.IsMatch(ElementFactory.GetElementTags<Image>(), this))
             {
                 return;
             }
 
-            // Wait if the readystate of an element is BETWEEN
+            // Wait as long as the readystate of an element is BETWEEN
             // Uninitialized and Complete. If it's uninitialized,
             // it's quite probable that it will never reach Complete.
-            // Like for elements that could not load an image or ico
+            // Like for elements that could not load an image or icon
             // or some other bits not part of the HTML page.     
             var tryActionUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
             var ihtmlElement2 = AsHtmlElement2;

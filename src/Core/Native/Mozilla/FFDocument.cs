@@ -97,11 +97,8 @@ namespace WatiN.Core.Native.Mozilla
         {
             get
             {
-                // TODO: Make "activeElement" a FireFox constant
-                var propertyName = "activeElement";
-
-                var elementvar = this.ClientPort.CreateVariableName();
-                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, DocumentReference, propertyName);
+                var elementvar = ClientPort.CreateVariableName();
+                var command = string.Format("{0}={1}.{2};{0}==null", elementvar, DocumentReference, "activeElement");
                 var result = ClientPort.WriteAndReadAsBool(command);
 
                 return !result ? new JSElement(ClientPort, elementvar) : null;

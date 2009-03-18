@@ -62,7 +62,7 @@ namespace WatiN.Core.Native
             {
                 if (!constraint.Invoke(ffElement)) continue;
 
-                ffElement.ReAssignElementReference();
+                ffElement.Pin();
                 yield return ffElement;
             }
         }

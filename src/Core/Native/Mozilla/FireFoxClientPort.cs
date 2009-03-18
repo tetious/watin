@@ -19,7 +19,6 @@
 namespace WatiN.Core.Native.Mozilla
 {
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
@@ -33,13 +32,13 @@ namespace WatiN.Core.Native.Mozilla
     /// <summary>
     /// The firefox client port used to communicate with the remote automation server jssh.
     /// </summary>
-    public class FireFoxClientPort : ClientPortBase, IDisposable
+    public class FireFoxClientPort : ClientPortBase
     {        
         /// <summary>
         /// Name of the javascript variable that references the DOM:window object.
         /// </summary>
         public const string WindowVariableName = "window";
-
+        
         /// <summary>
         /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
         /// </summary>
@@ -252,9 +251,9 @@ namespace WatiN.Core.Native.Mozilla
                         try
                         {
                             Logger.LogDebug("Closing connection to jssh");
-                            this.Write(string.Format("{0}.close();", WindowVariableName));
-                            this.telnetSocket.Close();
-                            this.Process.WaitForExit(5000);
+                            SendCommand(string.Format("{0}.close();", WindowVariableName));
+                            telnetSocket.Close();
+                            Process.WaitForExit(5000);
                         }
                         catch (IOException ex)
                         {
@@ -413,7 +412,7 @@ namespace WatiN.Core.Native.Mozilla
             this.LastResponse = string.Empty;
             this.LastResponseRaw = string.Empty;
 
-            var bufferSize = 4096;
+            const int bufferSize = 4096;
             var buffer = new byte[bufferSize];
 
             while (!stream.CanRead)

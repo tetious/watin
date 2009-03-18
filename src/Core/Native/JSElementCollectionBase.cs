@@ -72,7 +72,7 @@ namespace WatiN.Core.Native
             {
                 if (tagName != "*") ffElement.TagName = tagName;
                 // TODO (prevent chatter): Delay reassigning until after this ffElement is known to be a match
-                ffElement.ReAssignElementReference();
+                ffElement.Pin();
                 yield return ffElement;
             }
         }
