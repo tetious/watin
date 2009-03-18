@@ -123,6 +123,12 @@ namespace WatiN.Core
             }
         }
 
+        /// <inheritdoc />
+        public override bool ContainsText(string text)
+        {
+            return this.ChromeBrowser.ClientPort.WriteAndReadAsInt("document.body.innerText.lastIndexOf('{0}');", text) > -1;
+        }
+
         /// <summary>
         /// Gets the native browser.
         /// </summary>
