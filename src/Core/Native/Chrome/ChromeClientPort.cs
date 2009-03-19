@@ -140,7 +140,7 @@ namespace WatiN.Core.Native.Chrome
             this.LastResponse = string.Empty;
             this.Response = new StringBuilder();
 
-            this.Process = Core.Chrome.CreateProcess(string.Format("--remote-shell-port={0} \"{1}\"", ChromePort, url), true);            
+            this.Process = Core.Chrome.CreateProcess(string.Format("--disable-hang-monitor --remote-shell-port={0} \"{1}\"", ChromePort, url), true);            
 
             this.telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { Blocking = true };
 
@@ -212,7 +212,6 @@ namespace WatiN.Core.Native.Chrome
                         try
                         {
                             Logger.LogDebug("Closing connection to chrome");
-                            this.SendCommand("print window.close()");
                             this.telnetSocket.Close();
                             this.Process.WaitForExit(5000);
                         }

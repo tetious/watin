@@ -179,7 +179,7 @@ namespace WatiN.Core
         /// </param>
         public override void WaitForComplete(int waitForCompleteTimeOut)
         {
-            // TODO: Implement functionality
+            this.WaitForComplete(new JSWaitForComplete(this.ChromeBrowser, waitForCompleteTimeOut));
         }
 
         /// <summary>

@@ -148,7 +148,7 @@ namespace WatiN.Core.Native
         /// </value>
         private int LastResponseAsInt
         {
-            get { return string.IsNullOrEmpty(this.LastResponse) ? 0 : int.Parse(this.lastResponse); }
+            get { return string.IsNullOrEmpty(this.LastResponse) ? 0 : int.Parse(this.lastResponse.Trim()); }
         }
 
         /// <summary>

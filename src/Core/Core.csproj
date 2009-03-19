@@ -201,7 +201,7 @@
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\JSElement.cs" />
     <Compile Include="Native\JSUtils.cs" />
-    <Compile Include="Native\Mozilla\FFWaitForComplete.cs" />
+    <Compile Include="Native\JSWaitForComplete.cs" />
     <Compile Include="Native\Mozilla\FireFoxClientPort.cs" />
     <Compile Include="Native\Mozilla\FireFoxException.cs" />
     <Compile Include="Native\Mozilla\FFElementCollection.cs" />

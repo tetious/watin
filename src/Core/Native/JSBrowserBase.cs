@@ -109,7 +109,15 @@ namespace WatiN.Core.Native
 
         public bool IsLoading()
         {
-            return this.ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", this.BrowserVariableName);
+            switch (this.ClientPort.JavaScriptEngine)
+            {
+                case JavaScriptEngineType.WebKit:
+                    return this.ClientPort.WriteAndReadAsBool("{0}.readyState != 'complete';", this.ClientPort.DocumentVariableName);
+                case JavaScriptEngineType.Mozilla:
+                    return this.ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", this.BrowserVariableName);
+                default:
+                    throw new NotImplementedException();
+            }            
         }
 
         /// <summary>

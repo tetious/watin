@@ -16,33 +16,35 @@
 
 #endregion Copyright
 
-namespace WatiN.Core.Native.Mozilla
+namespace WatiN.Core.Native
 {
-    public class FFWaitForComplete : WaitForCompleteBase
-    {
-        private readonly FFBrowser nativeBrowser;
+    using Mozilla;
 
-        public FFWaitForComplete(FFBrowser nativeBrowser, int waitForCompleteTimeOut): base(waitForCompleteTimeOut)
+    public class JSWaitForComplete : WaitForCompleteBase
+    {
+        private readonly JSBrowserBase nativeBrowser;
+
+        public JSWaitForComplete(JSBrowserBase nativeBrowser, int waitForCompleteTimeOut) : base(waitForCompleteTimeOut)
         {
             this.nativeBrowser = nativeBrowser;
         }
 
         protected override void InitialSleep()
         {
-            // Seems like this is not needed for FireFox
+            // Seems like this is not needed
         }
 
         protected override void WaitForCompleteOrTimeout()
         {
-            WaitWhileDocumentNotAvailable();
+            this.WaitWhileDocumentNotAvailable();
         }
 
         protected virtual void WaitWhileDocumentNotAvailable()
         {
-            WaitUntil(() => !nativeBrowser.IsLoading(),
+            this.WaitUntil(() => !this.nativeBrowser.IsLoading(),
                       () => "waiting for main document becoming available");
 
-            nativeBrowser.ClientPort.InitializeDocument();
+            this.nativeBrowser.ClientPort.InitializeDocument();
         }
     }
 }

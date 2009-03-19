@@ -259,7 +259,7 @@ namespace WatiN.Core
         /// </summary>
         public override void WaitForComplete(int waitForCompleteTimeOut)
         {
-            WaitForComplete(new FFWaitForComplete(ffBrowser, waitForCompleteTimeOut));
+            WaitForComplete(new JSWaitForComplete(ffBrowser, waitForCompleteTimeOut));
         }
         
         #endregion Public instance methods

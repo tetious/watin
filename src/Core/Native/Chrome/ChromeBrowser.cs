@@ -36,7 +36,7 @@ namespace WatiN.Core.Native.Chrome
         }
 
         /// <summary>
-        /// Load a URL into the document. see: http://developer.mozilla.org/en/docs/XUL:browser#m-loadURI
+        /// Load a URL into the document.
         /// </summary>
         /// <param name="url">The URL to laod.</param>
         /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
@@ -48,14 +48,14 @@ namespace WatiN.Core.Native.Chrome
                 command = JSUtils.WrapCommandInTimer(command);
             }
 
-            this.ClientPort.Write("document.write(\"<script>{0}</script>\")", command);
-            this.ReAttachToTab();
+            this.ClientPort.Write(command);
+            this.ReAttachToTab(url);
         }
 
         /// <summary>
         /// Reattaches to the first tab. This is required every time the document
         /// </summary>
-        private void ReAttachToTab()
+        private void ReAttachToTab(Uri url)
         {            
             do
             {
@@ -66,7 +66,7 @@ namespace WatiN.Core.Native.Chrome
                 Thread.Sleep(100);
                 this.ClientPort.WriteAndRead("debug()", true, true);
             } 
-            while (this.ClientPort.LastResponseRaw.Contains("attached to about:blank"));
+            while (this.ClientPort.LastResponseRaw.Contains("attached to about:blank") || url.AbsoluteUri == "about:blank");
         }
     }
 }
