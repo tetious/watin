@@ -126,8 +126,10 @@ namespace WatiN.Core.Native.InternetExplorer
     /// </summary> 
     public class WindowsEnumerator
     {
+        public delegate bool WindowEnumConstraint(Window window);
+
         private List<Window> _windows;
-        private string _classNameFilter;
+        private WindowEnumConstraint _constraint;
 
         /// <summary> 
         /// Get all top-level window information 
@@ -140,7 +142,13 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public List<Window> GetTopLevelWindows(string className)
         {
-            _classNameFilter = className;
+            _constraint = window => !window.HasParentWindow && NativeMethods.CompareClassNames(window.Hwnd, className);
+            return GetWindows(_constraint);
+        }
+
+        public List<Window> GetWindows(WindowEnumConstraint constraint)
+        {
+            _constraint = constraint;
             _windows = new List<Window>();
 
             var hwnd = IntPtr.Zero;
@@ -159,11 +167,12 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public List<Window> GetChildWindows(IntPtr hwnd, string childClass)
         {
-            _classNameFilter = childClass;
+            _constraint = window => NativeMethods.CompareClassNames(window.Hwnd, childClass);
+
             _windows = new List<Window>();
 
             var hWnd = IntPtr.Zero;
-            NativeMethods.EnumChildWindows(hwnd, EnumChildWindowProc, ref hWnd);
+            NativeMethods.EnumChildWindows(hwnd, EnumWindowProc, ref hWnd);
 
             return _windows;
         }
@@ -176,22 +185,6 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <returns>1=keep going, 0=stop</returns> 
         private bool EnumWindowProc(IntPtr hwnd, ref IntPtr lParam)
         {
-            var window = new Window(hwnd);
-
-            // Eliminate windows that are not top-level. 
-            if (!window.HasParentWindow) MatchWindow(window);
-
-            return true;
-        }
-
-        /// <summary> 
-        /// Callback function that does the work of enumerating child windows. 
-        /// </summary> 
-        /// <param name="hwnd">Discovered Window handle</param> 
-        /// <param name="lParam"></param>
-        /// <returns>1=keep going, 0=stop</returns> 
-        private bool EnumChildWindowProc(IntPtr hwnd, ref IntPtr lParam)
-        {
             MatchWindow(new Window(hwnd));
             return true;
         }
@@ -199,7 +192,7 @@ namespace WatiN.Core.Native.InternetExplorer
         private void MatchWindow(Window window)
         {
             // Match the class name if searching for a specific window class. 
-            if (_classNameFilter.Length == 0 || window.ClassName.ToLower() == _classNameFilter.ToLower())
+            if (_constraint == null || _constraint.Invoke(window))
             {
                 _windows.Add(window);
             }

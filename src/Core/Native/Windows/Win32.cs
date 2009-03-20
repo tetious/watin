@@ -361,6 +361,7 @@ namespace WatiN.Core.Native.Windows
         public static bool CompareClassNames(IntPtr hWnd, string expectedClassName)
         {
             if (hWnd == IntPtr.Zero) return false;
+            if (string.IsNullOrEmpty(expectedClassName)) return false;
 
             var className = GetClassName(hWnd);
             return className.Equals(expectedClassName);
