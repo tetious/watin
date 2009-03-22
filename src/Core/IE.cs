@@ -819,40 +819,32 @@ namespace WatiN.Core
 
 		private void DisposeAndCloseIE(bool closeIE)
 		{
-			if (!isDisposed)
-			{
-				if (closeIE && IsInternetExplorerStillAvailable())
-				{
-					//TODO: Since HTMLDialog collection contains all HTMLDialogs
-					//      within the processId of this IE instance, there might be
-					//      other HTMLDialogs not created by this IE instance. Closing
-					//      also those HTMLDialogs seems not right.
-					//      So how will we handle this? For now we keep the "old"
-					//      implementation.
+		    if (isDisposed) return;
+		    
+            if (closeIE && IsInternetExplorerStillAvailable())
+		    {
+		        // Close all open HTMLDialogs
+		        HtmlDialogs.CloseAll();
+		    }
 
-					// Close all open HTMLDialogs
-					HtmlDialogs.CloseAll();
-				}
+		    base.Dispose(true);
 
-				base.Dispose(true);
+		    if (closeIE && IsInternetExplorerStillAvailable())
+		    {
+		        // Ask IE to close
+		        ie.Quit();
+		    }
 
-				if (closeIE && IsInternetExplorerStillAvailable())
-				{
-					// Ask IE to close
-					ie.Quit();
-				}
+		    ie = null;
 
-				ie = null;
+		    if (closeIE)
+		    {
+		        // Wait for IE to close to prevent RPC errors when creating
+		        // a new WatiN.Core.IE instance.
+		        Thread.Sleep(1000);
+		    }
 
-				if (closeIE)
-				{
-					// Wait for IE to close to prevent RPC errors when creating
-					// a new WatiN.Core.IE instance.
-					Thread.Sleep(1000);
-				}
-
-				isDisposed = true;
-			}
+		    isDisposed = true;
 		}
 
 		/// <summary>
@@ -1080,10 +1072,7 @@ namespace WatiN.Core
 
 		private HtmlDialogCollection GetHtmlDialogs(bool waitForComplete)
 		{
-			var p = Process.GetProcessById(ProcessID);
-            var htmlDialogCollection = new HtmlDialogCollection(p, waitForComplete);
-
-			return htmlDialogCollection;
+		    return new HtmlDialogCollection(hWnd, waitForComplete);
 		}
 
 		public override IntPtr hWnd

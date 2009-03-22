@@ -36,8 +36,8 @@ namespace WatiN.Core.UnitTests
 
 		[Test]
 		public void HTMLDialogModalByTitle()
-		{
-			Ie.Button("modalid").ClickNoWait();
+		{			
+            Ie.Button("modalid").ClickNoWait();
 
 			using (var htmlDialog = Ie.HtmlDialog(Find.ByTitle("PopUpTest")))
 			{

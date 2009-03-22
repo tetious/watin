@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using WatiN.Core.Constraints;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
@@ -35,25 +34,37 @@ namespace WatiN.Core
         private readonly Constraint findBy;
         private readonly bool waitForComplete;
 
-	    public HtmlDialogCollection(Process ieProcess, bool waitForComplete)
-		{
+	    public HtmlDialogCollection(IntPtr hWnd, bool waitForComplete)
+	    {
             findBy = Find.Any;
             this.waitForComplete = waitForComplete;
+            htmlDialogs = new List<HtmlDialog>();
+            
+            var toplevelWindow = GetToplevelWindow(hWnd);
 
-			htmlDialogs = new List<HtmlDialog>();
+	        var windows = new WindowsEnumerator();
+            var popups = windows.GetWindows(window => window.ParentHwnd == toplevelWindow.Hwnd && NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));
+            foreach (var window in popups)
+            {
+                var htmlDialog = new HtmlDialog(window.Hwnd);
+                htmlDialogs.Add(htmlDialog);
+            }
+	    }
 
-			var hWnd = IntPtr.Zero;
+	    private static Window GetToplevelWindow(IntPtr hWnd)
+	    {
+	        var toplevelWindow = new Window(hWnd);
+	        do
+	        {
+	            if (toplevelWindow.HasParentWindow)
+	                toplevelWindow = new Window(toplevelWindow.ParentHwnd);
+	            else
+	                break;
+	        } while (true);
+	        return toplevelWindow;
+	    }
 
-			foreach (ProcessThread t in ieProcess.Threads)
-			{
-				var threadId = t.Id;
-
-				NativeMethods.EnumThreadProc callbackProc = EnumChildForTridentDialogFrame;
-				NativeMethods.EnumThreadWindows(threadId, callbackProc, hWnd);
-			}
-        }
-
-        private HtmlDialogCollection(Constraint findBy, List<HtmlDialog> htmlDialogs, bool waitForComplete)
+	    private HtmlDialogCollection(Constraint findBy, List<HtmlDialog> htmlDialogs, bool waitForComplete)
         {
             this.findBy = findBy;
             this.htmlDialogs = htmlDialogs;
@@ -62,13 +73,6 @@ namespace WatiN.Core
 
         public void CloseAll()
         {
-            //TODO: Since HTMLDialog collection contains all HTMLDialogs
-            //      within the processId of this IE instance, there might be
-            //      other HTMLDialogs not created by this IE instance. Closing
-            //      also those HTMLDialogs seems not right.
-            //      So how will we handle this? For now we keep the "old"
-            //      implementation.
-
             // Close all open HTMLDialogs and don't WaitForComplete for each HTMLDialog
             foreach (var htmlDialog in htmlDialogs)
             {
@@ -86,26 +90,13 @@ namespace WatiN.Core
         protected override IEnumerable<HtmlDialog> GetElements()
         {
             var context = new ConstraintContext();
-            foreach (HtmlDialog htmlDialog in htmlDialogs)
+            foreach (var htmlDialog in htmlDialogs)
             {
-                if (htmlDialog.Matches(findBy, context))
-                {
-                    if (waitForComplete)
-                        htmlDialog.WaitForComplete();
-                    yield return htmlDialog;
-                }
+                if (!htmlDialog.Matches(findBy, context)) continue;
+                if (waitForComplete)
+                    htmlDialog.WaitForComplete();
+                yield return htmlDialog;
             }
         }
-
-		private bool EnumChildForTridentDialogFrame(IntPtr hWnd, IntPtr lParam)
-		{
-			if (IEUtils.IsIETridentDlgFrame(hWnd))
-			{
-				var htmlDialog = new HtmlDialog(hWnd);
-				htmlDialogs.Add(htmlDialog);
-			}
-
-			return true;
-		}
 	}
 }
