@@ -939,15 +939,22 @@ namespace WatiN.Core.UnitTests
             domContainerMock.VerifyAll();
 		}
 
+		// TODO: Make this test work when HtmlDialog support is added for FireFox
         [Test]
         public void Bug_1932065_FireEventNoWait_hangs_when_ModalWindow_opened()
         {
-            ExecuteTest(browser =>
-                            {
-                                browser.GoTo(PopUpURI);
-                                browser.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
-                                browser.Button(Find.ById("modalid")).FireEventNoWait("onclick");
-                            });
+                Ie.GoTo(PopUpURI);
+                Ie.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+                Ie.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+                Ie.HtmlDialog(Find.First()).Close();
+
+                	//            ExecuteTest(browser =>
+//                            {
+//                                browser.GoTo(PopUpURI);
+//                                browser.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+//                                browser.Button(Find.ById("modalid")).FireEventNoWait("onclick");
+//                                browser.htmdi
+//                            });
         }
 
         [Test]
