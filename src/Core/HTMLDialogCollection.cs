@@ -40,7 +40,7 @@ namespace WatiN.Core
             this.waitForComplete = waitForComplete;
             htmlDialogs = new List<HtmlDialog>();
             
-            var toplevelWindow = GetToplevelWindow(hWnd);
+            var toplevelWindow = new Window(hWnd).GetToplevelWindow();
 
 	        var windows = new WindowsEnumerator();
             var popups = windows.GetWindows(window => window.ParentHwnd == toplevelWindow.Hwnd && NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));
@@ -49,19 +49,6 @@ namespace WatiN.Core
                 var htmlDialog = new HtmlDialog(window.Hwnd);
                 htmlDialogs.Add(htmlDialog);
             }
-	    }
-
-	    private static Window GetToplevelWindow(IntPtr hWnd)
-	    {
-	        var toplevelWindow = new Window(hWnd);
-	        do
-	        {
-	            if (toplevelWindow.HasParentWindow)
-	                toplevelWindow = new Window(toplevelWindow.ParentHwnd);
-	            else
-	                break;
-	        } while (true);
-	        return toplevelWindow;
 	    }
 
 	    private HtmlDialogCollection(Constraint findBy, List<HtmlDialog> htmlDialogs, bool waitForComplete)

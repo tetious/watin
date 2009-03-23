@@ -34,7 +34,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
 
 			// Create handler for Alert dialogs and register it.
-			AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
+			var dialogHandler = new AlertAndConfirmDialogHandler();
 			using (new UseDialogOnce(Ie.DialogWatcher, dialogHandler))
 			{
 				Assert.AreEqual(0, dialogHandler.Count);
@@ -69,7 +69,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero before test");
 
-			AlertAndConfirmDialogHandler dialogHandler = new AlertAndConfirmDialogHandler();
+			var dialogHandler = new AlertAndConfirmDialogHandler();
 			using (new UseDialogOnce(Ie.DialogWatcher, dialogHandler))
 			{
 				dialogHandler.Pop();

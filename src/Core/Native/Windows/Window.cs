@@ -93,5 +93,19 @@ namespace WatiN.Core.Native.Windows
         {
             NativeMethods.SetActiveWindow(Hwnd);
         }
+
+        public Window GetToplevelWindow()
+        {
+            var toplevelWindow = this;
+            do
+            {
+                if (toplevelWindow.HasParentWindow)
+                    toplevelWindow = new Window(toplevelWindow.ParentHwnd);
+                else
+                    break;
+            } while (true);
+            return toplevelWindow;
+        }
+
     }
 }

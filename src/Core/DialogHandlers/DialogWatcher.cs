@@ -18,11 +18,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
@@ -35,7 +35,7 @@ namespace WatiN.Core.DialogHandlers
 	/// </summary>
 	public class DialogWatcher : IDisposable
 	{
-		private readonly int ieProcessId;
+		private readonly IntPtr _mainWindowHwnd;
 		private bool keepRunning = true;
 		private readonly IList<IDialogHandler> handlers;
 		private readonly Thread watcherThread;
@@ -45,23 +45,24 @@ namespace WatiN.Core.DialogHandlers
 		private Exception lastException;
 
 		/// <summary>
-		/// Gets the dialog watcher for the specified process. It creates
-		/// a new instance if no dialog watcher for the specified process 
-		/// exists.
+		/// Gets the dialog watcher for the specified (main) internet explorer window. 
+		/// It creates new instance if no dialog watcher for the specified window exists.
 		/// </summary>
-		/// <param name="ieProcessId">The ie process id.</param>
+        /// <param name="mainWindowHwnd">The (main) internet explorer window.</param>
 		/// <returns></returns>
-		public static DialogWatcher GetDialogWatcherForProcess(int ieProcessId)
+        public static DialogWatcher GetDialogWatcherForProcess(IntPtr mainWindowHwnd)
 		{
+            var mainHwnd = new Window(mainWindowHwnd).GetToplevelWindow().Hwnd;
+
 			CleanupDialogWatcherCache();
 
-			var dialogWatcher = GetDialogWatcherFromCache(ieProcessId);
+            var dialogWatcher = GetDialogWatcherFromCache(mainHwnd);
 
 			// If no dialogwatcher exists for the ieprocessid then 
 			// create a new one, store it and return it.
 			if (dialogWatcher == null)
 			{
-				dialogWatcher = new DialogWatcher(ieProcessId);
+                dialogWatcher = new DialogWatcher(mainHwnd);
 
 				dialogWatchers.Add(dialogWatcher);
 			}
@@ -69,13 +70,15 @@ namespace WatiN.Core.DialogHandlers
 			return dialogWatcher;
 		}
 
-		public static DialogWatcher GetDialogWatcherFromCache(int ieProcessId)
+		public static DialogWatcher GetDialogWatcherFromCache(IntPtr mainWindowHwnd)
 		{
+		    var mainHwnd = new Window(mainWindowHwnd).GetToplevelWindow().Hwnd;
+
 			// Loop through already created dialogwatchers and
 			// return a dialogWatcher if one exists for the given processid
 			foreach (var dialogWatcher in dialogWatchers)
 			{
-				if (dialogWatcher.ProcessId == ieProcessId)
+                if (dialogWatcher.MainWindowHwnd == mainHwnd)
 				{
 					return dialogWatcher;
 				}
@@ -108,10 +111,10 @@ namespace WatiN.Core.DialogHandlers
 		/// You are encouraged to use the Factory method DialogWatcher.GetDialogWatcherForProcess
 		/// instead.
 		/// </summary>
-		/// <param name="ieProcessId">The ie process id.</param>
-		public DialogWatcher(int ieProcessId)
+		/// <param name="mainWindowHwnd">The ie process id.</param>
+		public DialogWatcher(IntPtr mainWindowHwnd)
 		{
-			this.ieProcessId = ieProcessId;
+			_mainWindowHwnd = mainWindowHwnd;
 
 			handlers = new List<IDialogHandler>();
 
@@ -273,12 +276,12 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Gets the process id this dialog watcher watches.
+		/// Gets the (main) internet explorer window hanlde this dialog watcher watches.
 		/// </summary>
 		/// <value>The process id.</value>
-		public int ProcessId
+		public IntPtr MainWindowHwnd
 		{
-			get { return ieProcessId; }
+			get { return _mainWindowHwnd; }
 		}
 
 		/// <summary>
@@ -289,32 +292,30 @@ namespace WatiN.Core.DialogHandlers
 		{
 			while (keepRunning)
 			{
-				var process = getProcess(ProcessId);
-
-				if (process != null)
-				{
-					foreach (ProcessThread t in process.Threads)
-					{
+                if (new Window(MainWindowHwnd).Exists())
+                {
+                    var winEnumerator = new WindowsEnumerator();
+                    var windows = winEnumerator.GetWindows(win => true);
+				
+                    foreach (var window in windows)
+                    {
                         if (!keepRunning) return;
+                        HandleWindow(new Window(window.Hwnd));
+                    }
 
-						var threadId = t.Id;
-
-						NativeMethods.EnumThreadProc callbackProc = myEnumThreadWindowsProc;
-						NativeMethods.EnumThreadWindows(threadId, callbackProc, IntPtr.Zero);
-					}
-
-					// Keep DialogWatcher responsive during 1 second sleep period
-					var count = 0;
-					while (keepRunning && count < 5)
-					{
-						Thread.Sleep(200);
-						count++;
-					}
-				}
-				else
-				{
-					keepRunning = false;
-				}
+                    // Keep DialogWatcher responsive during 1 second sleep period
+                    var count = 0;
+                    while (keepRunning && count < 5)
+                    {
+                        Thread.Sleep(200);
+                        count++;
+                    }
+                }
+                else
+                {
+                    keepRunning = false;
+                }
+                
 			}
 		}
 
@@ -323,42 +324,7 @@ namespace WatiN.Core.DialogHandlers
 			get { return watcherThread.IsAlive; }
 		}
 
-		/// <summary>
-		/// Gets a value indicating whether the process this dialog watcher
-		/// watches (still) exists.
-		/// </summary>
-		/// <value><c>true</c> if process exists; otherwise, <c>false</c>.</value>
-		public bool ProcessExists
-		{
-			get { return (getProcess(ProcessId) != null); }
-		}
-
 	    public int ReferenceCount { get; private set; }
-
-	    private static Process getProcess(int processId)
-		{
-			Process process;
-			try
-			{
-				process = Process.GetProcessById(processId);
-			}
-			catch (ArgumentException)
-			{
-				// Thrown when the ieProcessId is not running (anymore)
-				process = null;
-			}
-			return process;
-		}
-
-		private bool myEnumThreadWindowsProc(IntPtr hwnd, IntPtr lParam)
-		{
-			// Create a window wrapper class
-			HandleWindow(new Window(hwnd));
-
-			// Always return true so all windows in all threads will
-			// be enumerated.
-			return true;
-		}
 
 		/// <summary>
 		/// Get the last stored exception thrown by a dialog handler while 
@@ -380,7 +346,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="window">The window.</param>
 		public void HandleWindow(Window window)
 		{
-		    if (!window.IsDialog()) return;
+		    if (!window.IsDialog() || window.ParentHwnd != MainWindowHwnd) return;
 
             WaitUntilVisibleOrTimeOut(window);
 
@@ -388,7 +354,7 @@ namespace WatiN.Core.DialogHandlers
 		    // this dialog window
 		    lock (this)
 		    {
-		        foreach (IDialogHandler dialogHandler in handlers)
+		        foreach (var dialogHandler in handlers)
 		        {
 		            try
 		            {

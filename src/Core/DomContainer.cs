@@ -90,7 +90,7 @@ namespace WatiN.Core
 		{
 		    if (!Settings.AutoStartDialogWatcher || DialogWatcher != null) return;
 		    
-            DialogWatcher = DialogWatcher.GetDialogWatcherForProcess(ProcessID);
+            DialogWatcher = DialogWatcher.GetDialogWatcherForProcess(hWnd);
 		    DialogWatcher.IncreaseReferenceCount();
 		}
 

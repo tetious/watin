@@ -25,12 +25,12 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 	[TestFixture]
 	public class LogonDialogHandlerTests
 	{
-		[Test, Ignore()]
+		[Test, Ignore]
 		public void LogonDialogTest()
 		{
-			using (IE ie = new IE())
+			using (var ie = new IE())
 			{
-				LogonDialogHandler logonDialogHandler = new LogonDialogHandler(@"username", "password");
+				var logonDialogHandler = new LogonDialogHandler(@"username", "password");
 				using (new UseDialogOnce(ie.DialogWatcher, logonDialogHandler))
 				{
 					ie.GoTo("https://www.somesecuresite.com");
