@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using NUnit.Framework.SyntaxHelpers;
 using System;
 using Moq;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class ElementStyleTests : BaseWithBrowserTests
 	{
-		private const string expectedStyle = "font-size: 12px; color: white; font-style: italic; font-family: arial; height: 50px; background-color: blue;";
+		private const string expectedStyle = "background-color: blue; font-style: italic; font-family: Arial; height: 50px; color: white; font-size: 12px;";
 		private TextField element;
 
 		public override Uri TestPageUri
@@ -40,7 +41,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        element = browser.TextField("Textarea1");
-		                        Assert.AreEqual(expectedStyle, element.GetAttributeValue("style").ToLowerInvariant());
+		                       AssertStyleText(element.GetAttributeValue("style").ToLowerInvariant());
 		                    });
 		}
 
@@ -50,7 +51,8 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        element = browser.TextField("Textarea1");
-		                        Assert.AreEqual(expectedStyle, element.Style.ToString().ToLowerInvariant());
+		                        Console.WriteLine(element.Style.ToString().ToLowerInvariant());
+		                        AssertStyleText(element.Style.ToString().ToLowerInvariant());
 		                    });
 		}
 
@@ -60,10 +62,22 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
 		                        element = browser.TextField("Textarea1");
-		                        Assert.AreEqual(expectedStyle, element.Style.CssText.ToLowerInvariant());
+		                        AssertStyleText(element.Style.CssText.ToLowerInvariant());
 		                    });
 		}
 
+		private void AssertStyleText(string cssText)
+		{
+			Assert.That(cssText.Length, Is.EqualTo(expectedStyle.Length), "Unexpected length");
+			
+			var items = expectedStyle.Split(Char.Parse(";"));
+			
+			foreach(var item in items)
+			{
+				Assert.That(cssText, Text.Contains(item.ToLowerInvariant()));
+			}
+		}
+			
 		[Test, ExpectedException(typeof (ArgumentNullException))]
 		public void GetAttributeValueOfNullThrowsArgumenNullException()
 		{
