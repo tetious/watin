@@ -180,7 +180,6 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             document = ((IEDocument)Ie.NativeDocument).HtmlDocument;
             var obj = document.all.item( "spanValidateCode", null );
             Assert.IsNotNull( obj, "Enclosing span element no longer exists or is not unique.");
-            Assert.That(obj, Is.TypeOf(typeof(mshtml.HTMLSpanElementClass)), "Enclosing span element no longer exists or is not unique.");
             span = (IHTMLElement)obj;
             Assert.AreEqual( originalContent, span.outerHTML, "Content of enclosing span changed during testing." );
         }
