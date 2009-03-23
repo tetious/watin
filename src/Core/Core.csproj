@@ -216,6 +216,7 @@
     <Compile Include="Native\InternetExplorer\WinInet.cs" />
     <Compile Include="Native\Windows\WindowInfo.cs" />
     <Compile Include="Native\Windows\WindowPlacement.cs" />
+    <Compile Include="Native\Windows\WindowsEnumerator.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PageMetadata.cs" />
     <Compile Include="PageAttribute.cs" />
