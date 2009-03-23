@@ -261,35 +261,34 @@ namespace WatiN.Core.UnitTests
 		}
 
 	    [Test]
-	    public void FindByValueBehavesDifferentlyForIE6And7ThenFireFoxAndIE8()
+	    public void FindByValueBehavesDifferentlyForIEThenFireFox()
 	    {
             // OK, this one is weird. The HTML says value="ButtonElementValue"
-            // but the value attribute returns the innertext(!) in IE6 and IE7.
-            // But FireFox and IE8 do return the value attribute.....
+            // but the value attribute returns the innertext(!) in IE6, IE7 and IE8
+            // But FireFox does return the value attribute.....
             // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
 
-            const string ie6And7Value = "Button Element";
+            const string ieValue = "Button Element";
             const string actualValue = "ButtonElementValue";
 
-            Assert.That(Ie.Button(Find.ByValue(ie6And7Value)).Exists, Is.True, "IE issue");
+        	Assert.That(Ie.Button(Find.ByValue(ieValue)).Exists, Is.True, "IE issue");
             Assert.That(Firefox.Button(Find.ByValue(actualValue)).Exists, Is.True, "Firefox issue");
 	    }
 
 	    [Test]
-	    public void ValueReturnsDifferentValueForIE6And7ThenFireFoxAndIE8()
+	    public void ValueReturnsDifferentValueForIEThenFireFoxAndIE8()
 	    {
             // OK, this one is weird. The HTML says value="ButtonElementValue"
-            // but the value attribute returns the innertext(!) in IE6 and IE7.
-            // But FireFox and IE8 do return the value attribute.....
+            // but the value attribute returns the innertext(!) in IE6, IE7 and IE8.
+            // But FireFox does return the value attribute.....
             // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
 
-            const string ie6And7Value = "Button Element";
+            const string ieValue = "Button Element";
             const string actualValue = "ButtonElementValue";
 
-            Assert.AreEqual(ie6And7Value, Ie.Button("buttonelementid").Value, "IE issue");
+            Assert.AreEqual(ieValue, Ie.Button("buttonelementid").Value, "IE issue");
             Assert.AreEqual(actualValue, Firefox.Button("buttonelementid").Value, "FireFox issue");
 	    }
-
 
         [Test]
         public void SimpleButtonTest()
