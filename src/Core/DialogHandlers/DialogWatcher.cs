@@ -346,7 +346,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="window">The window.</param>
 		public void HandleWindow(Window window)
 		{
-		    if (!window.IsDialog() || window.ParentHwnd != MainWindowHwnd) return;
+			if (!window.IsDialog() || window.GetToplevelWindow().Hwnd != MainWindowHwnd) return;
 
             WaitUntilVisibleOrTimeOut(window);
 
