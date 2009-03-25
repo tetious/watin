@@ -57,6 +57,22 @@ namespace WatiN.Core.DialogHandlers
 			return (string) alertQueue.Dequeue();
 		}
 
+   		/// <summary>
+		/// Peeks at the most recent message from a queue of displayed alert and confirm windows, but does not remove it.
+		/// Use this method to look at the first displayed message but not to remove it.
+		/// </summary>
+		/// <returns>The first displayed message.</returns>
+		/// <exception cref="MissingAlertException">if no alerts are present</exception>
+		public string Peek()
+		{
+			if (alertQueue.Count == 0)
+			{
+				throw new MissingAlertException();
+			}
+
+			return (string)alertQueue.Peek();
+		}
+
 		/// <summary>
 		/// Gets the alert and confirm messages in the queue of displayed alert and confirm windows.
 		/// </summary>
