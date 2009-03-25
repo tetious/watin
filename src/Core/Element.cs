@@ -18,6 +18,9 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WatiN.Core.Actions;
@@ -72,7 +75,8 @@ namespace WatiN.Core
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
-	public class Element : Component
+    [DebuggerDisplay("{DebuggerDisplayProxy()}")]
+    public class Element : Component
 	{
         private INativeElement _nativeElement;
         private ElementFinder _elementFinder;
@@ -149,12 +153,13 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Gets the id of this element as specified in the HTML.
+		/// Gets (or sets) the id of this element as specified in the HTML.
 		/// </summary>
 		/// <value>The id.</value>
         public virtual string Id
 		{
 			get { return GetAttributeValue("id"); }
+            set { SetAttributeValue("id", value); }
 		}
 
 		/// <summary>
@@ -1147,6 +1152,15 @@ namespace WatiN.Core
                            RefreshNativeElement();
                            return HasNativeElement ? factory.Invoke(NativeElement) : null;
                        };
+        }
+
+        protected virtual object DebuggerDisplayProxy()
+        {
+            // Don't display our value if it doesn't exist... it causes the debugger to time out.
+            return String.Format(CultureInfo.InvariantCulture, "{0}@{1:X}[Constraint = \"{2}\", Exists = {3}]", 
+                                 GetType().FullName, RuntimeHelpers.GetHashCode(this),
+                                 _elementFinder != null ? _elementFinder.ConstraintToString() : "",
+                                 Exists);
         }
 	}
 }

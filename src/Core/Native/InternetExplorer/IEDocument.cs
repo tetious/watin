@@ -24,7 +24,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Expando;
 using mshtml;
 using WatiN.Core.Logging;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -115,12 +114,12 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             var domDocumentExpando = (IExpando)htmlDocument;
 
-            var errorProperty = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
-            if (errorProperty != null)
+            var property = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
+            if (property != null)
             {
                 try
                 {
-                    return (string)errorProperty.GetValue(domDocumentExpando, null);
+                    return (string)property.GetValue(domDocumentExpando, null);
                 }
                 catch (COMException)
                 {

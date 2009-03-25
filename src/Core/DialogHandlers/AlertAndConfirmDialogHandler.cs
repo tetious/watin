@@ -46,7 +46,8 @@ namespace WatiN.Core.DialogHandlers
 		/// Use this method to get the displayed message.
 		/// </summary>
 		/// <returns>The displayed message.</returns>
-		public string Pop()
+        /// <exception cref="MissingAlertException">if no alerts are present</exception>
+        public string Pop()
 		{
 			if (alertQueue.Count == 0)
 			{
