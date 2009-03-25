@@ -18,6 +18,7 @@
 
 using System;
 using System.Threading;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
@@ -65,23 +66,33 @@ namespace WatiN.Core.DialogHandlers
 			if (CanHandleDialog(window))
 			{
 				// Find Handle of the "Frame" and then the combo username entry box inside the frame
-				var inputFrameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
-				var usernameControlHandle = NativeMethods.GetChildWindowHwnd(inputFrameHandle, "ComboBoxEx32");
-
-				NativeMethods.SetActiveWindow(usernameControlHandle);
+				var systemCredentialsHwnd = GetSystemCredentialsHwnd(window);
+				
+				NativeMethods.SetActiveWindow(systemCredentialsHwnd);
 				Thread.Sleep(50);
 
-				NativeMethods.SetForegroundWindow(usernameControlHandle);
+				NativeMethods.SetForegroundWindow(systemCredentialsHwnd);
 				Thread.Sleep(50);
 
-                // TODO: Replace by Hwnd.Setfocus and Hwnd.SendString()
-				System.Windows.Forms.SendKeys.SendWait(userName + "{TAB}");
-				Thread.Sleep(500);
-
-                // TODO: Replace by Hwnd.SetFocus, Hwnd.SendString() and WinButton(1, window.Hwnd).Click
-                System.Windows.Forms.SendKeys.SendWait(password + "{ENTER}");
-
-				return true;
+                var windowEnumarator = new WindowsEnumerator();
+                
+                // Find input fields
+                var edits = windowEnumarator.GetChildWindows(systemCredentialsHwnd, "Edit");
+                
+                // Enter userName
+                var hwnd = new Hwnd(edits[0].Hwnd);
+                hwnd.SetFocus();
+            	hwnd.SendString(userName);
+                
+                // Enter password
+                hwnd = new Hwnd(edits[1].Hwnd);
+                hwnd.SetFocus();
+            	hwnd.SendString(password);
+                
+            	// Click OK button
+            	new WinButton(1, window.Hwnd).Click();
+				
+            	return true;
 			}
 
 			return false;
@@ -97,9 +108,14 @@ namespace WatiN.Core.DialogHandlers
 		public override bool CanHandleDialog(Window window)
 		{
 			// If a logon dialog window is found hWnd will be set.
-			return NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential") != IntPtr.Zero;
+			return GetSystemCredentialsHwnd(window) != IntPtr.Zero;
 		}
 
+		private IntPtr GetSystemCredentialsHwnd(Window window)
+		{
+			return NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
+		}
+		
 		private static void checkArgument(string message, string parameter, string parameterName)
 		{
 			if (UtilityClass.IsNullOrEmpty(parameter))

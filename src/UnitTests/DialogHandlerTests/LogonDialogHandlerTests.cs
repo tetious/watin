@@ -25,16 +25,18 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 	[TestFixture]
 	public class LogonDialogHandlerTests
 	{
-		[Test, Ignore]
+		[Test, Category("InternetConnectionNeeded")]
 		public void LogonDialogTest()
 		{
 			using (var ie = new IE())
 			{
-				var logonDialogHandler = new LogonDialogHandler(@"username", "password");
+				var logonDialogHandler = new LogonDialogHandler("test", "this");
 				using (new UseDialogOnce(ie.DialogWatcher, logonDialogHandler))
 				{
-					ie.GoTo("https://www.somesecuresite.com");
+					
+					ie.GoTo("http://irisresearch.library.cornell.edu/control/authBasic/authTest");
 				}
+				ie.WaitUntilContainsText("Basic Authentication test passed successfully",5);
 			}
 		}
 
