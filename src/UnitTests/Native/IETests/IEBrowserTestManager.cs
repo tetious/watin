@@ -47,7 +47,7 @@ namespace WatiN.Core.UnitTests.IETests
             ie = null;
             if (IE.InternetExplorers().Count == 0) return;
 
-            foreach (var explorer in IE.InternetExplorers())
+            foreach (var explorer in IE.InternetExplorersNoWait())
             {
                 Console.WriteLine(explorer.Title + " (" + explorer.Url + ")");
                 explorer.Close();

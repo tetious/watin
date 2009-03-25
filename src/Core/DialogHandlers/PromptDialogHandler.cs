@@ -26,20 +26,29 @@ namespace WatiN.Core.DialogHandlers
         readonly string _input;
         readonly bool _cancel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PromptDialogHandler"/> class.
+        /// </summary>
+        /// <param name="cancel">if set to <c>true</c> <see cref="HandleDialog"/> will click on the Cancel button of the prompt dialog.</param>
         public PromptDialogHandler(bool cancel)
         {
             _cancel = cancel;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PromptDialogHandler"/> class.
+        /// </summary>
+        /// <param name="input">The text will be entered in the input field of the prompt dialog after which the OK button will be clicked.</param>
         public PromptDialogHandler(string input)
         {
             _input = input;
             _cancel = false;
         }
 
+        /// <inheritdoc />
         public override bool HandleDialog(Window window)
         {
-            if (IsPromptDialog(window))
+            if (CanHandleDialog(window))
             {
                 window.ToFront();
                 window.SetActivate();
@@ -66,13 +75,14 @@ namespace WatiN.Core.DialogHandlers
         }
 
         /// <summary>
-        /// Determines whether the window is a prompt dialog.
+        /// Determines whether the window is a prompt dialog by checking the <see cref="Window.StyleInHex"/>.
+        /// Valid value is "94C800C4".
         /// </summary>
         /// <param name="window">The window.</param>
         /// <returns>
         /// 	<c>true</c> if window is a prompt dialog; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsPromptDialog(Window window)
+        public override bool CanHandleDialog(Window window)
         {
             return (window.StyleInHex == "94C800C4");
         }

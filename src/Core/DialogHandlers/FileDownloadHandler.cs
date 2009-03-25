@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
@@ -91,6 +90,17 @@ namespace WatiN.Core.DialogHandlers
 
 			return HandledDownloadProgressDialog(window) || HandledFileSaveDialog(window);
 		}
+
+	    public override bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
+	    {
+	        var mainWindow = new Window(mainWindowHwnd);
+            return CanHandleDialog(window);
+	    }
+
+        public override bool CanHandleDialog(Window window)
+	    {
+	        return IsFileDownloadDialog(window) || IsDownloadProgressDialog(window) || IsFileSaveDialog(window);
+	    }
 
 	    private bool HandledFileSaveDialog(Window window)
 	    {

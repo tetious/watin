@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -42,17 +43,16 @@ namespace WatiN.Core.DialogHandlers
 		private bool closeUnhandledDialogs = Settings.AutoCloseDialogs;
 
 	    private static IList<DialogWatcher> dialogWatchers = new List<DialogWatcher>();
-		private Exception lastException;
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the dialog watcher for the specified (main) internet explorer window. 
 		/// It creates new instance if no dialog watcher for the specified window exists.
 		/// </summary>
         /// <param name="mainWindowHwnd">The (main) internet explorer window.</param>
 		/// <returns></returns>
-        public static DialogWatcher GetDialogWatcherForProcess(IntPtr mainWindowHwnd)
+        public static DialogWatcher GetDialogWatcher(IntPtr mainWindowHwnd)
 		{
-            var mainHwnd = new Window(mainWindowHwnd).GetToplevelWindow().Hwnd;
+            var mainHwnd = new Window(mainWindowHwnd).ToplevelWindow.Hwnd;
 
 			CleanupDialogWatcherCache();
 
@@ -72,7 +72,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public static DialogWatcher GetDialogWatcherFromCache(IntPtr mainWindowHwnd)
 		{
-		    var mainHwnd = new Window(mainWindowHwnd).GetToplevelWindow().Hwnd;
+		    var mainHwnd = new Window(mainWindowHwnd).ToplevelWindow.Hwnd;
 
 			// Loop through already created dialogwatchers and
 			// return a dialogWatcher if one exists for the given processid
@@ -108,10 +108,10 @@ namespace WatiN.Core.DialogHandlers
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DialogWatcher"/> class.
-		/// You are encouraged to use the Factory method DialogWatcher.GetDialogWatcherForProcess
+        /// You are encouraged to use the Factory method <see cref="DialogWatcher.GetDialogWatcherFromCache"/>
 		/// instead.
 		/// </summary>
-		/// <param name="mainWindowHwnd">The ie process id.</param>
+		/// <param name="mainWindowHwnd">The main window handle of internet explorer.</param>
 		public DialogWatcher(IntPtr mainWindowHwnd)
 		{
 			_mainWindowHwnd = mainWindowHwnd;
@@ -326,18 +326,15 @@ namespace WatiN.Core.DialogHandlers
 
 	    public int ReferenceCount { get; private set; }
 
-		/// <summary>
-		/// Get the last stored exception thrown by a dialog handler while 
-		/// calling the <see cref="IDialogHandler.HandleDialog"/> method of the
-		/// dialog handler.
-		/// </summary>
-		/// <value>The last exception.</value>
-		public Exception LastException
-		{
-			get { return lastException; }
-		}
+	    /// <summary>
+	    /// Get the last stored exception thrown by a dialog handler while 
+	    /// calling the <see cref="IDialogHandler.HandleDialog"/> method of the
+	    /// dialog handler.
+	    /// </summary>
+	    /// <value>The last exception.</value>
+	    public Exception LastException { get; private set; }
 
-		/// <summary>
+	    /// <summary>
 		/// If the window is a dialog and visible, it will be passed to
 		/// the registered dialog handlers. I none if these can handle
 		/// it, it will be closed if <see cref="CloseUnhandledDialogs"/>
@@ -346,8 +343,10 @@ namespace WatiN.Core.DialogHandlers
 		/// <param name="window">The window.</param>
 		public void HandleWindow(Window window)
 		{
-			if (!window.IsDialog() || window.GetToplevelWindow().Hwnd != MainWindowHwnd) return;
+			if (!window.IsDialog()) return;
+            if (Process.GetProcessById(window.ProcessID).ProcessName != "iexplore") return;
 
+            // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
 
 		    // Lock the thread and see if a handler will handle
@@ -358,11 +357,14 @@ namespace WatiN.Core.DialogHandlers
 		        {
 		            try
 		            {
-		                if (dialogHandler.HandleDialog(window)) return;
+                        if (dialogHandler.CanHandleDialog(window, MainWindowHwnd))
+                        {
+                            if (dialogHandler.HandleDialog(window)) return;
+                        }
 		            }
 		            catch (Exception e)
 		            {
-		                lastException = e;
+		                LastException = e;
 
 		                Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog:");
 		                Logger.LogAction(e.ToString());
@@ -403,12 +405,12 @@ namespace WatiN.Core.DialogHandlers
 			lock (this)
 			{
 				keepRunning = false;
-				if (IsRunning)
-				{
-					watcherThread.Join();
-				}
-				Clear();
 			}
+			if (IsRunning)
+			{
+				watcherThread.Join();
+			}
+			Clear();
 		}
 
 		#endregion

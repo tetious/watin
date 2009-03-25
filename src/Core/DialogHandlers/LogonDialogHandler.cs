@@ -55,9 +55,14 @@ namespace WatiN.Core.DialogHandlers
 			this.password = password == null ? String.Empty : UtilityClass.EscapeSendKeysCharacters(password);
 		}
 
+        /// <summary>
+        /// Handles the logon dialog by filling in the username and password.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns></returns>
 		public override bool HandleDialog(Window window)
 		{
-			if (IsLogonDialog(window))
+			if (CanHandleDialog(window))
 			{
 				// Find Handle of the "Frame" and then the combo username entry box inside the frame
 				var inputFrameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
@@ -89,7 +94,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <returns>
 		/// 	<c>true</c> if the specified window is a logon dialog; otherwise, <c>false</c>.
 		/// </returns>
-		public virtual bool IsLogonDialog(Window window)
+		public override bool CanHandleDialog(Window window)
 		{
 			// If a logon dialog window is found hWnd will be set.
 			return NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential") != IntPtr.Zero;

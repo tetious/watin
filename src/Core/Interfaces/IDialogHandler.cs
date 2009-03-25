@@ -16,12 +16,26 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.Interfaces
 {
     public interface IDialogHandler
     {
+        /// <summary>
+        /// Handles the dialog and returns true when handled with succes
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         bool HandleDialog(Window window);
+
+        /// <summary>
+        /// Indicates wheter the dialoghandler can handle the given dialog window
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="mainWindowHwnd"></param>
+        /// <returns></returns>
+        bool CanHandleDialog(Window window, IntPtr mainWindowHwnd);
     }
 }

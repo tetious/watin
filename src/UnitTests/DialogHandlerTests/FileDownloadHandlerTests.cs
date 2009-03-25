@@ -18,6 +18,7 @@
 
 using System.IO;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.DialogHandlers;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
@@ -40,12 +41,13 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			ie.Close();
 		}
 
-		[Test, Ignore("Because of timeout issues, run this test manually and not automated"), Category("InternetConnectionNeeded")]
+		[Test] // Ignore("Because of timeout issues, run this test manually and not automated"), Category("InternetConnectionNeeded")]
 		public void DownloadSave()
 		{
 			var file = new FileInfo(@"c:\temp\test.zip");
 			file.Directory.Create();
 			file.Delete();
+            Assert.That(file.Exists, Is.False, file.FullName + " file should not exist before download");
 
 			var fileDownloadHandler = new FileDownloadHandler(file.FullName);
 
@@ -53,13 +55,14 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			{
 				ie.AddDialogHandler(fileDownloadHandler);
 
-				ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
-				//        ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
+//				ie.GoTo("http://watin.sourceforge.net/WatiN-1.0.0.4000-net-1.1.msi");
+				        ie.GoTo("http://watin.sourceforge.net/WatiNRecorder.zip");
 
 				fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(15);
 				fileDownloadHandler.WaitUntilDownloadCompleted(200);
 			}
 
+            file = new FileInfo(@"c:\temp\test.zip");
 			Assert.IsTrue(file.Exists, file.FullName + " file does not exist after download");
 		}
 

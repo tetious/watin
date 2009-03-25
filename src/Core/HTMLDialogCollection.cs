@@ -40,7 +40,7 @@ namespace WatiN.Core
             this.waitForComplete = waitForComplete;
             htmlDialogs = new List<HtmlDialog>();
             
-            var toplevelWindow = new Window(hWnd).GetToplevelWindow();
+            var toplevelWindow = new Window(hWnd).ToplevelWindow;
 
 	        var windows = new WindowsEnumerator();
             var popups = windows.GetWindows(window => window.ParentHwnd == toplevelWindow.Hwnd && NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));

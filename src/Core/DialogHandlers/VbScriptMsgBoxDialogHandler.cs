@@ -16,17 +16,14 @@
 
 #endregion Copyright
 
-using System.Threading;
+using System;
 using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {
-	public class VbScriptMsgBoxDialogHandler : BaseDialogHandler
+	public class VbScriptMsgBoxDialogHandler : WaitUntilHandledDialogHandler
 	{
-		private bool hasHandledDialog;
-
-		public enum Button
+	    public enum Button
 		{
 			OK = 1,
 			Cancel = 2,
@@ -46,25 +43,33 @@ namespace WatiN.Core.DialogHandlers
 
 		public override bool HandleDialog(Window window)
 		{
-			if (IsVBScriptAlert(window))
+			if (CanHandleDialog(window))
 			{
 				ButtonToPush(window).Click();
 
-				hasHandledDialog = true;
+				HasHandledDialog = true;
 				return true;
 			}
 
 			return false;
 		}
 
-		private bool IsVBScriptAlert(Window window)
+        /// <summary>
+        /// Determines whether VbScriptMsgBoxDialogHandler can handle the specified window by checking <see cref="Window.StyleInHex"/>.
+        /// Valid value is "94C803C5".
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>
+        /// 	<c>true</c> if VbScriptMsgBoxDialogHandler can handle the dialog; otherwise, <c>false</c>.
+        /// </returns>
+		public override bool CanHandleDialog(Window window)
 		{
 			return window.StyleInHex == "94C803C5";
 		}
 
 		private WinButton ButtonToPush(Window window)
 		{
-			Button button = IfOKButtonThenGetTheRightButtonId(window, _button);
+			var button = IfOKButtonThenGetTheRightButtonId(window, _button);
 
 			return GetButton(window, button);
 		}
@@ -90,27 +95,10 @@ namespace WatiN.Core.DialogHandlers
 			return button;
 		}
 
-		private WinButton GetButton(Window window, Button button) 
+		private static WinButton GetButton(Window window, Button button) 
 		{
 			return new WinButton((int)button, window.Hwnd);
 		}
 
-	    public bool HasHandledDialog
-	    {
-	        get { return hasHandledDialog; }
-	    }
-
-	    public bool WaitUntilHandled()
-	    {
-            return WaitUntilHandled(Settings.WaitForCompleteTimeOut);
-	    }
-
-        public bool WaitUntilHandled(int timeoutAfterSeconds)
-	    {
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeoutAfterSeconds);
-            tryActionUntilTimeOut.Try(() => HasHandledDialog);
-
-	        return HasHandledDialog;
-	    }
 	}
 }

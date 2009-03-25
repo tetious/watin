@@ -53,11 +53,7 @@ namespace WatiN.Core
 		{
 			get
 			{
-				int iePid;
-
-				NativeMethods.GetWindowThreadProcessId(hWnd, out iePid);
-
-				return iePid;
+                return new Window(hWnd).ProcessID;
 			}
 		}
 
@@ -90,7 +86,7 @@ namespace WatiN.Core
 		{
 		    if (!Settings.AutoStartDialogWatcher || DialogWatcher != null) return;
 		    
-            DialogWatcher = DialogWatcher.GetDialogWatcherForProcess(hWnd);
+            DialogWatcher = DialogWatcher.GetDialogWatcher(hWnd);
 		    DialogWatcher.IncreaseReferenceCount();
 		}
 

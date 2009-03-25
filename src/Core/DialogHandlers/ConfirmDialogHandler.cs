@@ -28,7 +28,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				ThrowExceptionIfDialogDoesNotExist();
 
-				return new WinButton(2, window.Hwnd);
+				return new WinButton(2, _window.Hwnd);
 			}
 		}
 

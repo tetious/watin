@@ -30,7 +30,7 @@ namespace WatiN.Core.DialogHandlers
 
 		private const string certificateWarningDialogStyle = "94C808C4";
 
-		private ButtonsEnum buttonToPush;
+		private readonly ButtonsEnum buttonToPush;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CertificateWarningHandler"/> class.
@@ -52,7 +52,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public override bool HandleDialog(Window window)
 		{
-			if (IsCertificateDialog(window))
+			if (CanHandleDialog(window))
 			{
 				NativeMethods.SetForegroundWindow(window.Hwnd);
 				NativeMethods.SetActiveWindow(window.Hwnd);
@@ -65,21 +65,22 @@ namespace WatiN.Core.DialogHandlers
 			return false;
 		}
 
-		private WinButton ButtonToPush(Window window)
+        /// <summary>
+        /// Determines whether the specified window is a certificate dialog by checking <see cref="Window.StyleInHex"/>.
+        /// valid value is "94C808C4".
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified window is a certificate dialog; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool CanHandleDialog(Window window)
+	    {
+	        return window.StyleInHex == certificateWarningDialogStyle;
+	    }
+
+	    private WinButton ButtonToPush(Window window)
 		{
 			return new WinButton((int) buttonToPush, window.Hwnd);
-		}
-
-		/// <summary>
-		/// Determines whether the specified window is a certificate dialog.
-		/// </summary>
-		/// <param name="window">The window.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified window is a certificate dialog; otherwise, <c>false</c>.
-		/// </returns>
-		public virtual bool IsCertificateDialog(Window window)
-		{
-			return window.StyleInHex == certificateWarningDialogStyle;
 		}
 	}
 }

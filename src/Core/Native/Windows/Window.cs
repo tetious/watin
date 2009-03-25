@@ -94,18 +94,38 @@ namespace WatiN.Core.Native.Windows
             NativeMethods.SetActiveWindow(Hwnd);
         }
 
-        public Window GetToplevelWindow()
+        public Window ToplevelWindow
         {
-            var toplevelWindow = this;
-            do
+            get
             {
-                if (toplevelWindow.HasParentWindow)
-                    toplevelWindow = new Window(toplevelWindow.ParentHwnd);
-                else
-                    break;
-            } while (true);
-            return toplevelWindow;
+                var toplevelWindow = this;
+                do
+                {
+                    if (toplevelWindow.HasParentWindow)
+                        toplevelWindow = new Window(toplevelWindow.ParentHwnd);
+                    else
+                        break;
+                } while (true);
+                return toplevelWindow;
+            }
         }
+
+        /// <summary>
+        /// Gets the process ID in which the window is running.
+        /// </summary>
+        /// <value>The process ID.</value>
+        public virtual int ProcessID
+        {
+            get
+            {
+                int iePid;
+
+                NativeMethods.GetWindowThreadProcessId(Hwnd, out iePid);
+
+                return iePid;
+            }
+        }
+
 
     }
 }

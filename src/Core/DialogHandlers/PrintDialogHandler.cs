@@ -58,7 +58,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public override bool HandleDialog(Window window)
 		{
-			if (IsPrintDialog(window))
+			if (CanHandleDialog(window))
 			{
 				NativeMethods.SetForegroundWindow(window.Hwnd);
 				NativeMethods.SetActiveWindow(window.Hwnd);
@@ -77,13 +77,14 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Determines whether the specified window is a print dialog.
+		/// Determines whether the specified window is a print dialog by checking the <see cref="Window.StyleInHex"/>.
+        /// Valid values are "96C820C4" or "96C800C4".
 		/// </summary>
 		/// <param name="window">The window.</param>
 		/// <returns>
 		/// <c>true</c> if the specified window is a print dialog; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsPrintDialog(Window window)
+		public override bool CanHandleDialog(Window window)
 		{
 			return (window.StyleInHex == printDialogStyle || window.StyleInHex == printDialogStyleVista);
 		}

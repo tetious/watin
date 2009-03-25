@@ -50,7 +50,12 @@ namespace WatiN.Core.DialogHandlers
             return false;
         }
 
-        public virtual bool CanHandleDialog(Window window)
+        /// <summary>
+        /// Checks if <see cref="Window.StyleInHex"/> of the <paramref name="window"/> is equal to "94C801C5".
+        /// </summary>
+        /// <param name="window">The window to validate</param>
+        /// <returns></returns>
+        public override bool CanHandleDialog(Window window)
         {
             return (window.StyleInHex == "94C801C5");
         }

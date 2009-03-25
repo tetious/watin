@@ -579,5 +579,22 @@ namespace WatiN.Core.UnitTests.IETests
                 Assert.That(ie.Button(Find.ByName("btnSomething")).Exists);
             }
         }
+
+        [Test]
+        public void ProcessShouldBe_iexplore()
+        {
+            // GIVEN
+            using(var ie = new IE())
+            {
+                var processId = ie.ProcessID;
+
+                // WHEN
+                var process = Process.GetProcessById(processId);
+
+                // THEN
+                Assert.That(process.ProcessName, Text.Contains("iexplore"));
+            }
+        }
+
     }
 }

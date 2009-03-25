@@ -22,6 +22,14 @@ namespace WatiN.Core.DialogHandlers
 {
 	public class ReturnDialogHandler : ConfirmDialogHandler
 	{
+        /// <summary>
+        /// Determines whether this instance can handle the specified window by checking <see cref="Window.StyleInHex"/>.
+        /// equals "94C803C5" and if the window has a button with Id 1.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance [can handle dialog] the specified window; otherwise, <c>false</c>.
+        /// </returns>
 		public override bool CanHandleDialog(Window window)
 		{
 			return (window.StyleInHex == "94C803C5" && ButtonWithId1Exists(window.Hwnd));

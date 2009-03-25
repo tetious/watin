@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native.Windows;
 
@@ -25,12 +26,10 @@ namespace WatiN.Core.DialogHandlers
 	{
 		public override bool Equals(object obj)
 		{
-			if (obj == null) return false;
-
-			return (GetType().Equals(obj.GetType()));
+		    return obj != null && (GetType().Equals(obj.GetType()));
 		}
 
-		public override int GetHashCode()
+	    public override int GetHashCode()
 		{
 			return GetType().ToString().GetHashCode();
 		}
@@ -38,7 +37,15 @@ namespace WatiN.Core.DialogHandlers
 		#region IDialogHandler Members
 
 		public abstract bool HandleDialog(Window window);
+	    
+        public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
+        {
+            var topLevelHwnd = window.ToplevelWindow.Hwnd;
+            return topLevelHwnd == mainWindowHwnd && CanHandleDialog(window);
+        }
 
-		#endregion
+	    public abstract bool CanHandleDialog(Window window);
+
+	    #endregion
 	}
 }

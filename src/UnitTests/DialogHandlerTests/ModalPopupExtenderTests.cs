@@ -31,19 +31,19 @@ namespace WatiN.Core.UnitTests
 		[Test, Category("InternetConnectionNeeded")]
 		public void ModalPopupExtenderTest()
 		{
-            Div modalDialog = Ie.Div("ctl00_SampleContent_Panel1");
+            var modalDialog = Ie.Div("ctl00_SampleContent_Panel1");
 		    Assert.That(modalDialog.Parent.Style.Display, Is.EqualTo("none"), "modaldialog should not be visible");
 
 			// Show the modaldialog
             Ie.Link("ctl00_SampleContent_LinkButton1").Click();
 
-			modalDialog.WaitUntil(new VisibleAttribute(true), 5);
+			modalDialog.WaitUntil(new VisibleConstraint(true), 5);
 			Assert.IsTrue(modalDialog.Style.Display != "none", "modaldialog should be visible");
 
 			// Hide the modaldialog
-            Button cancel = modalDialog.Button("ctl00_SampleContent_CancelButton");
+            var cancel = modalDialog.Button("ctl00_SampleContent_CancelButton");
 			cancel.Click();
-			modalDialog.WaitUntil(new VisibleAttribute(false), 5);
+			modalDialog.WaitUntil(new VisibleConstraint(false), 5);
             Assert.That(modalDialog.Parent.Style.Display, Is.EqualTo("none"), "modaldialog should be visible again");
 		}
 
@@ -53,25 +53,24 @@ namespace WatiN.Core.UnitTests
 	    }
 	}
 
-	public class VisibleAttribute : AttributeConstraint
+	public class VisibleConstraint : AttributeConstraint
 	{
-		public VisibleAttribute(bool visible) : base("visible", new BoolComparer(visible)) {}
+		public VisibleConstraint(bool visible) : base("visible", new BoolComparer(visible)) {}
 
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
-            Element element = attributeBag.GetAdapter<Element>();
-            if (element == null)
-                return false;
-
-			return Comparer.Compare(IsVisible(element).ToString());
-		}
+            var element = attributeBag.GetAdapter<Element>();
+            return element != null && Comparer.Compare(IsVisible(element).ToString());
+        }
 
 		public bool IsVisible(Element element)
 		{
-			bool isVisible = true;
-			if (element.Parent != null)
+			var isVisible = true;
+		    var parent = element.Parent;
+
+		    if (parent != null)
 			{
-				isVisible = IsVisible(element.Parent);
+				isVisible = IsVisible(parent);
 			}
 
 			if (isVisible)
@@ -80,16 +79,6 @@ namespace WatiN.Core.UnitTests
 			}
 
 			return isVisible;
-		}
-	}
-
-	public class MyIE : IE
-	{
-		public MyIE(string url) : base(url) {}
-
-		public override void WaitForComplete(int timeOutPeriod)
-		{
-			Link("showModalPopupClientButton").WaitUntilExists();
 		}
 	}
 }

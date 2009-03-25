@@ -22,59 +22,59 @@ using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
-	[TestFixture]
-	public class ReturnJavaDialogHandlerTest : BaseWatiNTest
-	{
-		[Test]
-		public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnOkShouldCloseIE()
-		{
-			using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
-			{
-				var returnDialogHandler = new ReturnDialogHandler();
-				ie.AddDialogHandler(returnDialogHandler);
+    [TestFixture]
+    public class ReturnJavaDialogHandlerTest : BaseWatiNTest
+    {
+        [Test]
+        public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnOkShouldCloseIE()
+        {
+            using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
+            {
+                var returnDialogHandler = new ReturnDialogHandler();
+                ie.AddDialogHandler(returnDialogHandler);
 
-				var hWnd = ie.hWnd;
-				// can't use ie.Close() here cause this will cleanup the registered
-				// returnDialogHandler which leads to a timeout on the WaitUntilExists
+                var hWnd = ie.hWnd;
+                // can't use ie.Close() here cause this will cleanup the registered
+                // returnDialogHandler which leads to a timeout on the WaitUntilExists
                 var internetExplorer = (IWebBrowser2)ie.InternetExplorer;
-				internetExplorer.Quit();
+                internetExplorer.Quit();
 
-				returnDialogHandler.WaitUntilExists();
-				returnDialogHandler.OKButton.Click();
+                returnDialogHandler.WaitUntilExists();
+                returnDialogHandler.OKButton.Click();
 
-				Thread.Sleep(2000);
-				Assert.IsFalse(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
-			}
-		}
+                Thread.Sleep(2000);
+                Assert.IsFalse(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
+            }
+        }
 
-		[Test]
-		public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnCancelShouldKeepIEOpen()
-		{
-			using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
-			{
-				var returnDialogHandler = new ReturnDialogHandler();
-				ie.AddDialogHandler(returnDialogHandler);
+        [Test]
+        public void WhenOnBeforeUnloadReturnJavaDialogIsShown_ClickingOnCancelShouldKeepIEOpen()
+        {
+            using (var ie = new IE(OnBeforeUnloadJavaDialogURI))
+            {
+                var returnDialogHandler = new ReturnDialogHandler();
+                ie.AddDialogHandler(returnDialogHandler);
 
-				var hWnd = ie.hWnd;
+                var hWnd = ie.hWnd;
 
-				// can't use ie.Close() here cause this will cleanup the registered
-				// returnDialogHandler which leads to a timeout on the WaitUntilExists
+                // can't use ie.Close() here cause this will cleanup the registered
+                // returnDialogHandler which leads to a timeout on the WaitUntilExists
                 var internetExplorer = (IWebBrowser2)ie.InternetExplorer;
-				internetExplorer.Quit();
+                internetExplorer.Quit();
 
-				returnDialogHandler.WaitUntilExists();
-				returnDialogHandler.CancelButton.Click();
+                returnDialogHandler.WaitUntilExists();
+                returnDialogHandler.CancelButton.Click();
 
-				Thread.Sleep(2000);
-				Assert.IsTrue(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
+                Thread.Sleep(2000);
+                Assert.IsTrue(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
 
-				// finally close the ie instance
-				internetExplorer.Quit();
-				returnDialogHandler.WaitUntilExists();
-				returnDialogHandler.OKButton.Click();
-			}
-		}
-	}
+                // finally close the ie instance
+                internetExplorer.Quit();
+                returnDialogHandler.WaitUntilExists();
+                returnDialogHandler.OKButton.Click();
+            }
+        }
+    }
 }

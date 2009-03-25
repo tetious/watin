@@ -16,20 +16,16 @@
 
 #endregion Copyright
 
-using System.Threading;
 using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {
-	public class SimpleJavaDialogHandler : BaseDialogHandler
+	public class SimpleJavaDialogHandler : WaitUntilHandledDialogHandler
 	{
-		private JavaDialogHandler dialogHandler;
-		private bool clickCancelButton = false;
-		private bool hasHandledDialog = false;
-		private string message;
+		private readonly JavaDialogHandler dialogHandler;
+		private readonly bool clickCancelButton;
 
-		public SimpleJavaDialogHandler()
+	    public SimpleJavaDialogHandler()
 		{
 			dialogHandler = new AlertDialogHandler();
 		}
@@ -40,31 +36,23 @@ namespace WatiN.Core.DialogHandlers
 			dialogHandler = new ConfirmDialogHandler();
 		}
 
-		public string Message
-		{
-			get { return message; }
-		}
+	    public string Message { get; private set; }
 
-		public bool HasHandledDialog
+	    public override bool HandleDialog(Window window)
 		{
-			get { return hasHandledDialog; }
-		}
-
-		public override bool HandleDialog(Window window)
-		{
-			if (dialogHandler.CanHandleDialog(window))
+			if (CanHandleDialog(window))
 			{
-				dialogHandler.window = window;
+				dialogHandler._window = window;
 
-				message = dialogHandler.Message;
+				Message = dialogHandler.Message;
 
-				ConfirmDialogHandler confirmDialogHandler = dialogHandler as ConfirmDialogHandler;
+				var confirmDialogHandler = dialogHandler as ConfirmDialogHandler;
 
 				// hasHandledDialog must be set before the Click and not
 				// after because this code executes on a different Thread
 				// and could lead to property HasHandledDialog returning false
 				// while hasHandledDialog set had to be set.
-				hasHandledDialog = true;
+				HasHandledDialog = true;
 
 				if (confirmDialogHandler != null && clickCancelButton)
 				{
@@ -76,21 +64,12 @@ namespace WatiN.Core.DialogHandlers
 				}
 			}
 
-			return hasHandledDialog;
+			return HasHandledDialog;
 		}
 
-        public bool WaitUntilHandled()
-        {
-            return WaitUntilHandled(Settings.WaitForCompleteTimeOut);
-        }
-
-        public bool WaitUntilHandled(int timeoutAfterSeconds)
-        {
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeoutAfterSeconds);
-            tryActionUntilTimeOut.Try(() => HasHandledDialog);
-
-            return HasHandledDialog;
-        }
-
+	    public override bool CanHandleDialog(Window window)
+	    {
+	        return dialogHandler.CanHandleDialog(window);
+	    }
 	}
 }

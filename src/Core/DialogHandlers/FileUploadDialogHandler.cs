@@ -24,14 +24,23 @@ namespace WatiN.Core.DialogHandlers
 	{
 		private readonly string fileName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileUploadDialogHandler"/> class.
+        /// </summary>
+        /// <param name="fileName">Name of the file which should be uploaded.</param>
 		public FileUploadDialogHandler(string fileName)
 		{
 		    this.fileName = fileName;
 		}
 
+        /// <summary>
+        /// Handles the File upload dialog.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns></returns>
 		public override bool HandleDialog(Window window)
 		{
-			if (IsFileUploadDialog(window))
+            if (CanHandleDialog(window))
 			{
 				var fileNameHandle = NativeMethods.GetChildWindowHwnd(window.Hwnd, "Edit");
 			    var fileNameHwnd = new Hwnd(fileNameHandle);
@@ -48,10 +57,17 @@ namespace WatiN.Core.DialogHandlers
 			return false;
 		}
 
-		public bool IsFileUploadDialog(Window window)
+        /// <summary>
+        /// Determines whether this instance can handle the specified window.
+        /// It check <see cref="Window.StyleInHex"/> for the value "96CC20C4"
+        /// or "96CC02C4".
+        /// </summary>
+        /// <param name="window">The window to validate.</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance can handle the dialog; otherwise, <c>false</c>.
+        /// </returns>
+		public override bool CanHandleDialog(Window window)
 		{
-			// "96CC20C4" is valid for Windows XP, Win 2000 and Win 2003
-			// "96CC02C4" is valid for Windows Vista
 			return (window.StyleInHex == "96CC20C4") || (window.StyleInHex == "96CC02C4");
 		}
 	}

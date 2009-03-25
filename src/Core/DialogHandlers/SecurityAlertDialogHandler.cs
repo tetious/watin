@@ -36,12 +36,12 @@ namespace WatiN.Core.DialogHandlers
 		/// <returns></returns>
 		public override bool HandleDialog(Window window)
 		{
-			if (IsSecurityAlertDialog(window))
+            if (CanHandleDialog(window))
 			{
 				NativeMethods.SetForegroundWindow(window.Hwnd);
 				NativeMethods.SetActiveWindow(window.Hwnd);
 
-				WinButton buttonOk = new WinButton(1, window.Hwnd);
+				var buttonOk = new WinButton(1, window.Hwnd);
 				buttonOk.Click();
 
 				return true;
@@ -51,13 +51,14 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Determines whether the specified window is a security alert dialog.
+		/// Determines whether the specified window is a security alert dialog by checking <see cref="Window.StyleInHex"/>.
+        /// Valid value is "94C80AC4".
 		/// </summary>
 		/// <param name="window">The window.</param>
 		/// <returns>
 		/// 	<c>true</c> if the specified window is a security alert dialog; otherwise, <c>false</c>.
 		/// </returns>
-		public virtual bool IsSecurityAlertDialog(Window window)
+		public override bool CanHandleDialog(Window window)
 		{
 			return window.StyleInHex == securityAlertDialogStyle;
 		}

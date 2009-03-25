@@ -97,7 +97,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		private string GetResultFromMsgBox(int buttons, VbScriptMsgBoxDialogHandler.Button buttonToPush) 
 		{
 			Ie.TextField("msgBoxButtons").TypeText(buttons.ToString());
-			VbScriptMsgBoxDialogHandler handler = new VbScriptMsgBoxDialogHandler(buttonToPush);
+			var handler = new VbScriptMsgBoxDialogHandler(buttonToPush);
 			using(new UseDialogOnce(Ie.DialogWatcher, handler ))
 			{
 				Ie.Button("vbScriptMsgBox").ClickNoWait();

@@ -25,7 +25,7 @@ namespace WatiN.Core.DialogHandlers
 {
 	public class AlertAndConfirmDialogHandler : BaseDialogHandler
 	{
-		private Queue alertQueue;
+		private readonly Queue alertQueue;
 
 		public AlertAndConfirmDialogHandler()
 		{
@@ -64,7 +64,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			get
 			{
-				string[] result = new string[alertQueue.Count];
+				var result = new string[alertQueue.Count];
 				Array.Copy(alertQueue.ToArray(), result, alertQueue.Count);
 				return result;
 			}
@@ -80,9 +80,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public override bool HandleDialog(Window window)
 		{
-			// See if the dialog has a static control with a controlID 
-			// of 0xFFFF. This is unique for alert and confirm dialogboxes.
-			IntPtr handle = NativeMethods.GetDlgItem(window.Hwnd, 0xFFFF);
+			var handle = GetMessageBoxHandle(window);
 
 			if (handle != IntPtr.Zero)
 			{
@@ -95,5 +93,21 @@ namespace WatiN.Core.DialogHandlers
 
 			return false;
 		}
+
+	    private static IntPtr GetMessageBoxHandle(Window window)
+	    {
+	        return NativeMethods.GetDlgItem(window.Hwnd, 0xFFFF);
+	    }
+
+        /// <summary>
+        /// See if the dialog has a static control with a controlID 
+        /// of 0xFFFF. This is unique for alert and confirm dialogboxes.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
+	    public override bool CanHandleDialog(Window window)
+	    {
+	        return GetMessageBoxHandle(window) != IntPtr.Zero;
+	    }
 	}
 }

@@ -26,7 +26,7 @@ namespace WatiN.Core.DialogHandlers
 {
 	public abstract class JavaDialogHandler : BaseDialogHandler
 	{
-		internal Window window;
+		internal Window _window;
 
 		public string Title
 		{
@@ -34,7 +34,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				ThrowExceptionIfDialogDoesNotExist();
 
-				return window.Title;
+				return _window.Title;
 			}
 		}
 
@@ -44,7 +44,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				ThrowExceptionIfDialogDoesNotExist();
 
-				IntPtr messagehWnd = NativeMethods.GetDlgItem(window.Hwnd, 65535);
+				var messagehWnd = NativeMethods.GetDlgItem(_window.Hwnd, 65535);
 				return NativeMethods.GetWindowText(messagehWnd);
 			}
 		}
@@ -55,7 +55,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				ThrowExceptionIfDialogDoesNotExist();
 
-				return new WinButton(getOKButtonID(), window.Hwnd);
+				return new WinButton(getOKButtonID(), _window.Hwnd);
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			if (CanHandleDialog(window))
 			{
-				this.window = window;
+				_window = window;
 
 				while (window.Exists())
 				{
@@ -86,30 +86,23 @@ namespace WatiN.Core.DialogHandlers
             
 			if (!Exists())
 			{
-				throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds.ToString()));
+				throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds));
 			}
 		}
 
-		public abstract bool CanHandleDialog(Window window);
+	    public abstract override bool CanHandleDialog(Window window);
 
 		public bool Exists()
 		{
-			if (window == null) return false;
-
-			return window.Exists();
+		    return _window != null && _window.Exists();
 		}
 
-		protected abstract int getOKButtonID();
+	    protected abstract int getOKButtonID();
 
-		protected bool ButtonWithId1Exists(IntPtr windowHwnd)
+		protected static bool ButtonWithId1Exists(IntPtr windowHwnd)
 		{
-			WinButton button = new WinButton(1, windowHwnd);
+			var button = new WinButton(1, windowHwnd);
 			return button.Exists();
-		}
-
-		protected WinButton createCancelButton(IntPtr windowHwnd)
-		{
-			return new WinButton(2, windowHwnd);
 		}
 
 		protected void ThrowExceptionIfDialogDoesNotExist()
