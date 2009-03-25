@@ -94,7 +94,7 @@ namespace WatiN.Core.Native.Windows
             NativeMethods.SetActiveWindow(Hwnd);
         }
 
-        public Window ToplevelWindow
+        public virtual Window ToplevelWindow
         {
             get
             {

@@ -50,8 +50,7 @@ namespace WatiN.Core.DialogHandlers
 
         private ButtonsEnum buttonToPush;
 
-		public PrintDialogHandler(ButtonsEnum
-		                          	buttonToPush)
+		public PrintDialogHandler(ButtonsEnum buttonToPush)
 		{
 			this.buttonToPush = buttonToPush;
 		}
