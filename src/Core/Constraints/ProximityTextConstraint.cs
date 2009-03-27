@@ -82,7 +82,7 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
-            Element element = attributeBag.GetAdapter<Element>();
+            var element = attributeBag.GetAdapter<Element>();
             if (element == null)
                 throw new WatiNException("This constraint class can only be used to compare against an element");
 
@@ -117,7 +117,7 @@ namespace WatiN.Core.Constraints
             {
                 if (!populated)
                 {
-                    Element nearestElement = FindNearestElement(element.DomContainer);
+                    var nearestElement = FindNearestElement(element.DomContainer);
                     if (nearestElement != null)
                         nearestElementId = nearestElement.Id;
 
@@ -127,11 +127,11 @@ namespace WatiN.Core.Constraints
                 return nearestElementId != null && nearestElementId == element.Id;
             }
 
-            private Element FindNearestElement(DomContainer container)
+            private Element FindNearestElement(Document container)
             {
-                List<Rectangle> labelBounds = new List<Rectangle>(container.NativeDocument.GetTextBounds(labelText));
+                var labelBounds = new List<Rectangle>(container.NativeDocument.GetTextBounds(labelText));
 
-                List<KeyValuePair<Element, Rectangle>> elementBounds = new List<KeyValuePair<Element, Rectangle>>();
+                var elementBounds = new List<KeyValuePair<Element, Rectangle>>();
                 AddElementBounds(elementBounds, container.Buttons);
                 AddElementBounds(elementBounds, container.CheckBoxes);
                 AddElementBounds(elementBounds, container.FileUploads);
@@ -145,7 +145,7 @@ namespace WatiN.Core.Constraints
                 // It records the form element that is closest to a text node (shortest distance) as it traveses the sets
                 // The logic here is that the distance between midpoints is going to determine the nearest item
 
-                int shortestDistance = int.MaxValue;
+                var shortestDistance = int.MaxValue;
                 Element nearestElement = null;
 
                 foreach (var labelRect in labelBounds)
@@ -166,7 +166,7 @@ namespace WatiN.Core.Constraints
                          * 
                          */
 
-                        int distance = DistanceBetweenRectangles(labelRect, elementRect);
+                        var distance = DistanceBetweenRectangles(labelRect, elementRect);
 
                         /*
                          * However, may not win in this situation[1]:
@@ -193,21 +193,20 @@ namespace WatiN.Core.Constraints
                          * 
                         */
 
-                        if (distance < shortestDistance)
-                        {
-                            shortestDistance = distance;
-                            nearestElement = element;
-                        }
+                        if (distance >= shortestDistance) continue;
+                        
+                        shortestDistance = distance;
+                        nearestElement = element;
                     }
                 }
 
                 return nearestElement;
             }
 
-            private static void AddElementBounds<TElement>(IList<KeyValuePair<Element, Rectangle>> elementBounds, IElementCollection<TElement> elements)
+            private static void AddElementBounds<TElement>(ICollection<KeyValuePair<Element, Rectangle>> elementBounds, IEnumerable<TElement> elements)
                 where TElement : Element
             {
-                foreach (Element element in elements)
+                foreach (var element in elements)
                     elementBounds.Add(new KeyValuePair<Element, Rectangle>(element, element.NativeElement.GetElementBounds()));
             }
 
@@ -221,8 +220,8 @@ namespace WatiN.Core.Constraints
             /// <returns></returns>
             private static int CalculateSquaredDistance(int x1, int y1, int x2, int y2)
             {
-                int width = x1 - x2;
-                int height = y1 - y2;
+                var width = x1 - x2;
+                var height = y1 - y2;
                 return width * width + height * height;
             }
 
@@ -265,9 +264,9 @@ namespace WatiN.Core.Constraints
                             || (r2.Left > r1.Left && r2.Left < r1.Right))
                 {
                     // Normal distance between nearest parallel faces
-                    int shortestDistance = int.MaxValue;
+                    var shortestDistance = int.MaxValue;
 
-                    int distance = Math.Abs(r1.Left - r2.Left);
+                    var distance = Math.Abs(r1.Left - r2.Left);
                     if (distance < shortestDistance) shortestDistance = distance;
 
                     distance = Math.Abs(r1.Left - r2.Right);
@@ -293,64 +292,62 @@ namespace WatiN.Core.Constraints
 
                     return shortestDistance;
                 }
-                else
-                {
-                    // Distance between nearest vertices
-                    int shortestSquaredDistance = int.MaxValue;
+                
+                // Distance between nearest vertices
+                var shortestSquaredDistance = int.MaxValue;
 
-                    int squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                var squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Left, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
-
-
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
-
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
-
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
-
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Top, r2.Right, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Left, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Top, r2.Right, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
 
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Top);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Left, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Bottom);
-                    if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+                squaredDistance = CalculateSquaredDistance(r1.Left, r1.Bottom, r2.Right, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
 
-                    return (int) Math.Ceiling(Math.Sqrt(shortestSquaredDistance));
-                }
+
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Top);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Left, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                squaredDistance = CalculateSquaredDistance(r1.Right, r1.Bottom, r2.Right, r2.Bottom);
+                if (squaredDistance < shortestSquaredDistance) shortestSquaredDistance = squaredDistance;
+
+                return (int) Math.Ceiling(Math.Sqrt(shortestSquaredDistance));
             }
         }
     }

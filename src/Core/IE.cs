@@ -1085,11 +1085,6 @@ namespace WatiN.Core
            get { return new IEBrowser(ie); }
         }
 
-        public string Version
-        {
-            get { return ((IEDocument)NativeDocument).HtmlDocument.parentWindow.navigator.appVersion; }
-        }
-
 		/// <summary>
 		/// Find a HtmlDialog by an attribute. Currently 
 		/// Find.ByUrl and Find.ByTitle are supported.

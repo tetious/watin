@@ -27,8 +27,9 @@ namespace WatiN.Core.UnitTests
 	[TestFixture]
 	public class ElementStyleTests : BaseWithBrowserTests
 	{
-		private const string expectedStyle = "background-color: blue; font-style: italic; font-family: Arial; height: 50px; color: white; font-size: 12px;";
-		private TextField element;
+        private const string expectedStyle = "background-color: blue; font-style: italic; font-family: Arial; height: 50px; color: white; font-size: 12px;";
+
+        private TextField element;
 
 		public override Uri TestPageUri
 		{
@@ -74,7 +75,7 @@ namespace WatiN.Core.UnitTests
 			
 			foreach(var item in items)
 			{
-				Assert.That(cssText, Text.Contains(item.ToLowerInvariant()));
+				Assert.That(cssText, Text.Contains(item.ToLowerInvariant().Trim()));
 			}
 		}
 			

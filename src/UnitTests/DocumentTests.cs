@@ -21,7 +21,6 @@ using System.Text.RegularExpressions;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Native;
 using WatiN.Core.UnitTests.TestUtils;
@@ -151,10 +150,7 @@ namespace WatiN.Core.UnitTests
 		                            browser.Eval("a+1");
 		                            Assert.Fail("Expected JavaScriptException");
 		                        }
-		                        catch (JavaScriptException)
-		                        {
-		                            //;
-		                        }
+		                        catch (JavaScriptException){}
 
 		                        // Make sure a valid eval after a failed eval executes OK.
                                 var documentVariableName = browser.NativeDocument.JavaScriptVariableName;
