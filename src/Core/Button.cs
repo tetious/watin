@@ -26,7 +26,6 @@ namespace WatiN.Core
 	/// </summary>
     [ElementTag("input", InputType = "button", Index = 0)]
     [ElementTag("input", InputType = "submit", Index = 1)]
-    //[ElementTag("input", InputType = "image")]
     [ElementTag("input", InputType = "reset", Index = 2)]
     [ElementTag("button", Index = 3)]
     public class Button : Element<Button>

@@ -129,17 +129,5 @@ namespace WatiN.Core.UnitTests
 		                        Assert.AreEqual(expectedImagesCount, count);
 		                    });
 		}
-
-		[Test]
-		public void ButtonFromInputImage()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        var button = browser.Button(Find.BySrc(new Regex("images/watin.jpg")));
-
-		                        Assert.IsTrue(button.Exists, "Button should exist");
-		                        Assert.AreEqual("Image4", button.Id, "Unexpected id");
-		                    });
-		}
     }
 }
