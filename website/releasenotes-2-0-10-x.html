@@ -66,7 +66,7 @@
         <h1>Changes <span class="green">in</span> general</h1>
 		<p>This first beta release of WatiN 2.0 is a major step in multi browser support and offers many new features as well. All WatiN unit tests previously only running tests with IE are now browser agnostic and so verify and enforce the same functional behavior across all browser implementations. Currently the following browsers are supported:<br /><br /> IE6, IE7, IE8 (IE8 mode has some issues), Firefox 2.x and 3.x, Chrome (experimental and a work in progress).
 		</p><p>
-		<p>I would like to thank my fellow committers for their work! <br/>Jeff Brown has completely revamped WatiN's internals and added some exciting new features.<br/>Edward Wild for his initial work on Firefox and adding Chrome support, which is still a work in progress).<br/> And of course thanks go out to all of you who reported a bug or did send in patches!
+		<p>I would like to thank my fellow committers for their work! <br/>Jeff Brown has completely revamped WatiN's internals and added some exciting new features.<br/>Edward Wild for his initial work on Firefox and adding Chrome support, which is still a work in progress.<br/> And of course thanks go out to all of you who reported a bug or did send in patches!
 		</p><p>
 		<strong>Should I upgrade?</strong> My personal opinion: YES (but I do have a slight bias). Even if you don't intend to test on multiple browsers this release will offer you many new features. This release is stable and is in use for a while on severall test projects. But before you replace your current WatiN version, please read the Breaking Changes and Known Issues sections to make an informed decision your self.</p>
 		<p><strong>What's next?</strong> We will continue working on WatiN 2.0 to fix the known issues and incorporate community feedback. We intend to do a release at the end of every month, working towards a final release in june or july. After the 2.0 version has become final, we will set out a new road map for a next release.</p><br />
@@ -177,6 +177,55 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 		2103842	Does not work with IE 8 beta 2.<br />
 		1587084	On Vista AttachTo doesn't return created IE instance(s).<br />
         </p><br />
+		<h1>Tested <span class="green">Environments</span></h1>
+		<p>
+		<table border="1">
+			<tbody>
+				<tr>
+					<td>&nbsp;</td>
+					<td>Windows XP</td>
+					<td>Windows Vista</td>
+					<td>Windows 2003</td>
+					<td>Windows 2008</td>
+				</tr>
+				<tr>
+					<td>IE 6</td>
+					<td>OK</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>IE 7</td>
+					<td>OK</td>
+					<td>-</td>
+					<td>-</td>
+					<td>OK</td>
+				</tr>
+				<tr>
+					<td>IE 8</td>
+					<td>OK</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>Firefox 2</td>
+					<td>OK</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>Firefox 3</td>
+					<td>OK</td>
+					<td>-</td>
+					<td>-</td>
+					<td>OK</td>
+				</tr>
+			</tbody>
+		</table>
+		</p>
       </div>
       <div id="rightbar">
         <div id="sidebar">
