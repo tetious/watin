@@ -107,6 +107,7 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 		</p><br />
 
 		<h1>Technical <span class="green">changes</span></h1>
+		<p>This release <strong>only supports .Net 20 and up</strong>.</p>
 		<p>Greatly <strong>simplified multi browser support</strong> when compared with the CTP releases.</p>
 		<p>WatiN.Core assembly is now <strong>strong-signed</strong> (and so are Interop.SHDocVw.dll and WatiN.UnitTests.dll).</p>
 		<p>Fixed the issue where viewing a nonexistent Element in a <strong>watch was causing the debugger to time</strong> out and refuse to let you view anything else (i.e. the "Function evaluation timed out." error). Added a DebuggerDisplayAttribute that shows the constraint and whether Exists is true or false. Thanks to Chris Donnelly for this patch!</p>
