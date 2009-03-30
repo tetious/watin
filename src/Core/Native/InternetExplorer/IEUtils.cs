@@ -28,7 +28,7 @@ using IEnumUnknown=WatiN.Core.Native.Windows.IEnumUnknown;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    public class IEUtils
+    public static class IEUtils
     {
         [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
@@ -169,11 +169,6 @@ namespace WatiN.Core.Native.InternetExplorer
                 }
             }
             return null;
-        }
-
-        public static bool IsIETridentDlgFrame(IntPtr hWnd)
-        {
-            return NativeMethods.CompareClassNames(hWnd, "Internet Explorer_TridentDlgFrame");
         }
 
         public static bool IsIEServerWindow(IntPtr hWnd)
