@@ -158,6 +158,8 @@ namespace WatiN.Core.Native.Mozilla
                 if (this.IsRestoreSessionDialogVisible)
                 {
                     NativeMethods.SetForegroundWindow(this.Process.MainWindowHandle);
+                    // TODO replace SendKeys cause they will hang the test when running test in a service or on
+                    //      a remote desktop session or on a locked system
                     SendKeys.SendWait("{TAB}");
                     SendKeys.SendWait("{ENTER}");
                 }
