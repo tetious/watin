@@ -10,9 +10,9 @@ WatiN is Apache License 2.0 licensed so before using WatiN please read the licen
 the terms and conditions for using and modifying WatiN.
 
 * Pre requisits
-- WatiN has been tested on Windows XP SP2, Windows 2000 and Windows 2003.
-- Make sure you have a working IE6 or IE7 installed on your machine.
-- The .Net 1.1 or .Net 2.0 framework needs to be installed.
+- WatiN can only be run on a Windows operating system
+- Make sure you have a working IE6, IE7, IE8, Firefox 2 or Firefox 3 installed on your machine.
+- The .Net 2.0 or later framework needs to be installed.
 
 * Installing WatiN
 - Create an installation directory like C:\Program Files\WatiN <versionnumber>.
@@ -21,7 +21,7 @@ the terms and conditions for using and modifying WatiN.
 
 * Using WatiN
 Following are the basic steps:
-- Create a new project in Visual Studio 2003/2005 (or another dev tool like SharpDevelop).
+- Create a new project in Visual Studio 2005/2008 (or another dev tool like SharpDevelop).
 - Create a reference to WatiN.Core.dll in the installation directory.
 - Start coding and exploring the object model (See the code files in the UnitTests directory 
   for code examples).
@@ -39,4 +39,4 @@ http://watin.sourcefoge.net
 
 Enjoy testing with WatiN!
 
-Copyright Jeroen van Menen 2006
+Copyright Jeroen van Menen 2009

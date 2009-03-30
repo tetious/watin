@@ -1,3 +1,61 @@
+WatiN 2.0.10.928 (20 March 2009)
+
+This is the first beta release of WatiN 2.0, offering support for both Internet Explorer, FireFox and Chrome (expirimental)
+
+Many new features have been added and much of the functionality offered in WatiN 1.3 for IE is now also available for FireFox.
+
+For the full release notes visit http://watin.sourceforge.net/releasenotes-2-0-10-x.html
+
+---------------------------------
+
+WatiN 2.0.2.790 (11 Februari 2009)
+
+This is the third CTP release of WatiN 2.0, offering support for both Internet Explorer and FireFox
+
+Changes in this release:
+
+- Implemented support on Mozilla.Frame to get access to elements inside the document of a Frame
+- Implemented support on Mozilla.Frame to get access to elements inside the document of an IFrame
+- Implemented Eval on Mozilla.Document (= FireFox and Frame) and added to the IFrame interface
+
+Fixed bug(s):
+- Form.Submit didn't wait for a possible postback and page load.
+
+---------------------------------
+
+WatiN 2.0.1.754 (15 Januari 2009)
+
+This is the second CTP release of WatiN 2.0, offering support for both Internet Explorer and FireFox
+
+Changes in this release:
+
+- Works with FireFox 3.x and FireFox 2.x (both jssh.xpi plug-ins are included in the Mozilla directory)
+- Greatly improved performance and stability when running tests with FireFox
+
+Fixes reported bugs:
+  * Problem with setting ActiveElement in FF 3.x.
+  * SF issue 1954487  Setting TextField.Value for TextArea in FireFox fails
+  * SF issue 1913072  BrowserFactory.Settings.WaitForCompleteTimeOut doesn't work 
+
+---------------------------------
+
+WatiN 2.0.0.1000 (11 March 2008)
+
+This is a CTP (Community Technology Preview) release of WatiN which offers support for both Internet Explorer and FireFox automation. This release is based
+on using interfaces to provide multi browser support. Example:
+
+IBrowser browser = new IE();
+
+The final release will make use of (common) classes. Example:
+
+Browser browser = new FireFox();
+
+For more information on how to start creating cross browser tests see website\firefox.html.
+
+A big thanks to Edward Wilde for his work on the FireFox WatiN code!
+
+---------------------------------
+
 WatiN 1.3.0.4000 (14 October 2008)
 
 In this release support for lamdba's and Linq is added (for the .Net 2.0 version and higher). New helper methods are added to the Find class, two new DailogHandlers have been added and many smaller changes. This is the last 1.X release and also the last release supporting .Net 1.1. Many thanks to all who contributed to this release!

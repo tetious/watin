@@ -79,12 +79,9 @@ Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can 
   
 DONE JVM - Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
 
-** Interfaces
-- Add interfaces to all elements and elementcollections (like in the current 2.0 CTP). Mainly to provide a way to mock out WatiN in testing tools using WatiN (like stormwind)
-
 
 ** Misc.
-- Move IE.AutoClose functionality used in Dispose to Browser? Are make it a Setting instead? Not implemented in FireFox yet.
+- Move IE.AutoClose functionality used in Dispose, move to Browser? Or make it a Setting instead? Not implemented in FireFox yet.
 - DomContainer.DialogWatcher applicable for Browser/FireFox or IE only?
 - DomContainer.CaptureWebPageToFile applicable for Browser/FireFox or IE only?
 - Move IE.Reopen(url, logonDialogHandler, inNewProcess) to Browser (no logonDialogHandler support for FireFox yet)?

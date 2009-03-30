@@ -107,7 +107,7 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 		</p><br />
 
 		<h1>Technical <span class="green">changes</span></h1>
-		<p>This release <strong>only supports .Net 20 and up</strong>.</p>
+		<p>This release <strong>only supports .Net 2.0 and later</strong>. To run the unit tests you need .Net 3.5.</p>
 		<p>Greatly <strong>simplified multi browser support</strong> when compared with the CTP releases.</p>
 		<p>WatiN.Core assembly is now <strong>strong-signed</strong> (and so are Interop.SHDocVw.dll and WatiN.UnitTests.dll).</p>
 		<p>Fixed the issue where viewing a nonexistent Element in a <strong>watch was causing the debugger to time</strong> out and refuse to let you view anything else (i.e. the "Function evaluation timed out." error). Added a DebuggerDisplayAttribute that shows the constraint and whether Exists is true or false. Thanks to Chris Donnelly for this patch!</p>
@@ -121,7 +121,7 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 <li>DialogHandler support for Firefox is (still) missing.</li>
 <li>HtmlDialog support for Firefox 3.x is missing.</li>
 <li>Find.Near and ProximityTextConstraint not supported by FireFox and Chrome.</li>
-<li>FileUpload.FileName returns on file name without path on Windows 2008 and with "fakepath" on IE8.</li>
+<li>FileUpload.FileName returns a file name without path with IE7 on Windows 2008. It returns a "fakepath" + file name when using IE8.</li>
 		</ul></p><br/>
 
 		
@@ -147,6 +147,7 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 		<p>This list should gives you a good indication of what has changed but doesn't mention every detail.<ul>
 <li>Each and every Element implemented a specific interface (for example ITextField). Since these interfaces are no longer needed for multi browser support, these interfaces are dropped. Instead all properties and methods on the elements are made virtual so they can be overridden if you need to.</li>
 <li>Support for Enum BrowserType is dropped. Since WatiN can support different browsers and you can add your own browser implementation as well, having a fixed Enum with a fixed list of supported browsers would lock things down again.</li>
+<li>Support for BrowserFactory class is dropped. Same reason.</li>
 <li>Support for BrowserFactory class is dropped. Same reason.</li>
 		</ul></p><br />
 		
