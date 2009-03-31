@@ -55,6 +55,23 @@ namespace WatiN.Core.UnitTests.IETests
         }
 
         [Test]
+        public void ShouldBeAbleToGetTheMetaTags()
+        {
+            // GIVEN
+            using (var browser = new IE(MainURI))
+            {
+                var metaTags = browser.ElementsWithTag("meta");
+                Console.WriteLine(metaTags[0].OuterHtml);
+                Assert.That(metaTags.Count, Is.EqualTo(1));
+            }
+
+            // WHEN
+
+            // THEN
+        }
+
+
+        [Test]
         public void CheckIEIsInheritingProperTypes()
         {
             using (var ie = new IE())

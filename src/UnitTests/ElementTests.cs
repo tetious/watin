@@ -165,6 +165,17 @@ namespace WatiN.Core.UnitTests
             Assert.IsTrue(parent.GetType().Equals(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
         }
 
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
+		public void ElementWithTagReturnElementsContainer()
+		{
+			var parent = Ie.ElementWithTag("form", Find.ById("Form"));
+		    var container = parent as IElementContainer;
+            
+            Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
+            Assert.IsTrue(parent.GetType().Equals(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
+        }
+
 		[Test]
 		public void ElementPreviousSiblingShouldReturnNullWhenFirstSibling()
 		{
@@ -351,6 +362,14 @@ namespace WatiN.Core.UnitTests
             Assert.That(container, Is.Not.Null, "Element 2 should be an IElementsContainer");
             Assert.IsTrue(elements[2].GetType().Equals(typeof(ElementContainer<Element>)), "Element 2 should be an ElementsContainer<Element>");
             Assert.IsTrue(elements[3].GetType().Equals(typeof (Div)), "Element 3 should be a div");
+		}
+
+        // TODO: This should be mocked cause there is no browser logic involved
+        [Test]
+		public void ElementWithTagShouldReturnTypedElements()
+		{
+			var elements = Ie.ElementsWithTag("div");
+			Assert.IsTrue(elements[0].GetType().Equals(typeof (Div)), "Element 0 should be a div");
 		}
 
 		[Test]

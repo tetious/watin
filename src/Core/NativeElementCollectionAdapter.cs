@@ -156,7 +156,7 @@ namespace WatiN.Core
 
         public Element ElementWithTag(string tagName, Constraint findBy, params string[] inputTypes)
         {
-            return new Element(domContainer, CreateElementFinder(findBy, tagName, inputTypes));
+            return new ElementContainer<Element>(domContainer, CreateElementFinder(findBy, tagName, inputTypes));
         }
 
         public ElementCollection ElementsWithTag(string tagName, params string[] inputTypes)
