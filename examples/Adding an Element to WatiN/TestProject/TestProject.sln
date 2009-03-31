@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject.csproj", "{EF1CC740-F3EE-4E3B-975E-7170290AB6D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E36D5BB0-60AA-4471-B992-E06345DB9C21}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		TestProject.vsmdi = TestProject.vsmdi
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = TestProject.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF1CC740-F3EE-4E3B-975E-7170290AB6D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1CC740-F3EE-4E3B-975E-7170290AB6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1CC740-F3EE-4E3B-975E-7170290AB6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1CC740-F3EE-4E3B-975E-7170290AB6D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
