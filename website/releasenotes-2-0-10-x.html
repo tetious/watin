@@ -147,8 +147,8 @@ foreach(string dialogHandler in helper.CandidateDialogHandlers)<br/>
 		<p>This list should gives you a good indication of what has changed but doesn't mention every detail.<ul>
 <li>Each and every Element implemented a specific interface (for example ITextField). Since these interfaces are no longer needed for multi browser support, these interfaces are dropped. Instead all properties and methods on the elements are made virtual so they can be overridden if you need to.</li>
 <li>Support for Enum BrowserType is dropped. Since WatiN can support different browsers and you can add your own browser implementation as well, having a fixed Enum with a fixed list of supported browsers would lock things down again.</li>
-<li>Support for BrowserFactory class is dropped. Same reason.</li>
-<li>Support for BrowserFactory class is dropped. Same reason.</li>
+<li>Support for the BrowserFactory class is dropped. Same reason.</li>
+<li>Support for the CrossBrowserTest class is dropped. You can find a similar helper class BaseWithBrowserTests.cs in the directory UnitTests\TestUtils.</li>
 		</ul></p><br />
 		
         <h1>SourceForge <span class="green">Trackers</span></h1>

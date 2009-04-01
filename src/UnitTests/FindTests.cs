@@ -204,8 +204,16 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "PredicateComparer not used");
 		}
 
-
         [Test]
+        public void FindByTextHandlesBackslashes()
+        {
+            var value = Find.ByText(@"abc\xyz");
+            var mockAttributeBag = new MockAttributeBag("innertext", @"abc\xyz");
+            var context = new ConstraintContext();
+            Assert.That(value.Matches(mockAttributeBag, context), Is.True, "With backslash should match");
+        }
+        
+	    [Test]
         public void FindByTextOnTextShouldIgnoreSpacesBeforeOrAfterText()
         {
             const string innertext = "innertext";

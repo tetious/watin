@@ -367,7 +367,8 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByText(string text)
 		{
-            return new AttributeConstraint(innerTextAttribute, new Regex("^ *" + text + " *$"));
+            var escapedText = text == null ? null : text.Replace("\\", "\\\\");
+            return new AttributeConstraint(innerTextAttribute, new Regex("^ *" + escapedText + " *$"));
 		}
 
         /// <summary>
