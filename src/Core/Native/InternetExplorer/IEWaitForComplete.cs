@@ -36,6 +36,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public override void DoWait()
         {
+            InitialSleep();
             InitTimeout();
 
             WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);

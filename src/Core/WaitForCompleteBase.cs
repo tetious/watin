@@ -28,19 +28,14 @@ namespace WatiN.Core
     {
         private SimpleTimer _waitForCompleteTimer;
         private readonly int _waitForCompleteTimeOut;
-        private int _milliSecondsTimeOut = 100;
 
         protected WaitForCompleteBase(int waitForCompleteTimeOut)
         {
             _waitForCompleteTimeOut = waitForCompleteTimeOut;
-            _milliSecondsTimeOut = Settings.SleepTime;
+            MilliSecondsTimeOut = Settings.SleepTime;
         }
 
-        public int MilliSecondsTimeOut
-        {
-            get { return _milliSecondsTimeOut; }
-            set { _milliSecondsTimeOut = value; }
-        }
+        public int MilliSecondsTimeOut { get; set; }
 
         /// <summary>
         /// This method calls InitTimeOut and waits till IE is ready
@@ -56,7 +51,7 @@ namespace WatiN.Core
 
         protected virtual void InitialSleep()
         {
-            Sleep("DoWait");
+            Thread.Sleep(100);
         }
 
         public virtual void Sleep(string logMessage)
