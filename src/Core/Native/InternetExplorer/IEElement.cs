@@ -65,11 +65,11 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTable htmlTable = AsHtmlElement as IHTMLTable;
+                var htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
                     return new IEElementCollection(htmlTable.rows);
 
-                IHTMLTableSection htmlTableSection = AsHtmlElement as IHTMLTableSection;
+                var htmlTableSection = AsHtmlElement as IHTMLTableSection;
                 if (htmlTableSection != null)
                     return new IEElementCollection(htmlTableSection.rows);
 
@@ -82,7 +82,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTable htmlTable = AsHtmlElement as IHTMLTable;
+                var htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
                     return new IEElementCollection(htmlTable.tBodies);
 
@@ -95,7 +95,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             get
             {
-                IHTMLTableRow htmlTableRow = AsHtmlElement as IHTMLTableRow;
+                var htmlTableRow = AsHtmlElement as IHTMLTableRow;
                 if (htmlTableRow != null)
                     return new IEElementCollection(htmlTableRow.cells);
 
@@ -183,7 +183,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (attributeName.ToLowerInvariant() == "tagname") return TagName;
 
-            var attributeValue = AsHtmlElement.getAttribute(attributeName, 0);
+            var attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
 
             if (DidReturnObjectReference(attributeValue))
             {
@@ -196,6 +196,11 @@ namespace WatiN.Core.Native.InternetExplorer
             }
 
             return attributeValue.ToString();
+        }
+
+        private static T GetWithFailOver<T>(DoFunc<T> func)
+        {
+            return UtilityClass.TryFuncFailOver(func, 5, 50);
         }
 
         private object RetrieveNodeValue(string attributeName)
@@ -347,11 +352,11 @@ namespace WatiN.Core.Native.InternetExplorer
             return stringAttributeValue;
         }
 
-        internal static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)
+	    private static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
-            return style.getAttribute(attributeName, 0);
+            return GetWithFailOver(() => style.getAttribute(attributeName, 0));
         }
 
         /// <inheritdoc />
@@ -420,9 +425,9 @@ namespace WatiN.Core.Native.InternetExplorer
             // it's quite probable that it will never reach Complete.
             // Like for elements that could not load an image or icon
             // or some other bits not part of the HTML page.     
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
+            var tryFuncUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
             var ihtmlElement2 = AsHtmlElement2;
-            var success = tryActionUntilTimeOut.Try(() =>
+            var success = tryFuncUntilTimeOut.Try(() =>
             {
                 var readyState = ihtmlElement2.readyStateValue;
                 return (readyState == 0 || readyState == 4);
@@ -456,10 +461,10 @@ namespace WatiN.Core.Native.InternetExplorer
 
         internal static Rectangle GetHtmlElementBounds(IHTMLElement element)
         {
-            int left = element.offsetLeft;
-            int top = element.offsetTop;
+            var left = element.offsetLeft;
+            var top = element.offsetTop;
 
-            IHTMLElement parentElement = element.parentElement;
+            var parentElement = element.parentElement;
             while (parentElement != null)
             {
                 left += parentElement.offsetLeft;
@@ -467,8 +472,8 @@ namespace WatiN.Core.Native.InternetExplorer
                 parentElement = parentElement.parentElement;
             }
 
-            int width = element.offsetWidth / 2; // n.b. not sure why we are dividing by 2 -- JB
-            int height = element.offsetHeight / 2;
+            var width = element.offsetWidth / 2; // n.b. not sure why we are dividing by 2 -- JB
+            var height = element.offsetHeight / 2;
 
             return new Rectangle(left, top, width, height);
         }
@@ -485,22 +490,5 @@ namespace WatiN.Core.Native.InternetExplorer
             return AsDispHTMLBaseElement.uniqueNumber;
         }
 
-    }
-
-    internal class AsyncScriptRunner
-    {
-        private readonly string _scriptCode;
-        private readonly IHTMLWindow2 _window;
-
-        public AsyncScriptRunner(string scriptCode, IHTMLWindow2 window)
-        {
-            _scriptCode = scriptCode;
-            _window = window;
-        }
-
-        public void FireEvent()
-        {
-            IEUtils.RunScript(_scriptCode, _window);
-        }
     }
 }

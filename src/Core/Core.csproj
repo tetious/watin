@@ -177,6 +177,7 @@
     <Compile Include="Native\Chrome\ChromeException.cs" />
     <Compile Include="Native\IClientPort.cs" />
     <Compile Include="Native\ClientPortBase.cs" />
+    <Compile Include="Native\InternetExplorer\AsyncScriptRunner.cs" />
     <Compile Include="Native\JavaScriptEngineType.cs" />
     <Compile Include="Native\JSElementCollectionBase.cs" />
     <Compile Include="Native\JSElementArray.cs" />

@@ -73,7 +73,6 @@ namespace WatiN.Core.Native.InternetExplorer
             FireEvent(element, eventName, collection);
         }
 
-
         public static StringBuilder CreateJavaScriptFireEventCode(NameValueCollection eventObjectProperties, DispHTMLBaseElement element, string eventName)
         {
             var scriptCode = new StringBuilder();

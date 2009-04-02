@@ -146,17 +146,39 @@ namespace WatiN.Core.UtilityClasses
 
         }
 
-        public static T TryFuncIgnoreException<T>(DoFunc<T> action)
+        public static T TryFuncIgnoreException<T>(DoFunc<T> func)
         {
             try
             {
-                return action.Invoke();
+                return func.Invoke();
             }
             catch
             {
                 return default(T);
             }
 
+        }
+
+        public static T TryFuncFailOver<T>(DoFunc<T> func, int numberOfRetries, int sleepTime)
+        {
+            Exception LastException;
+            do
+            {
+                try
+                {
+                    var result = func.Invoke();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    LastException = e;
+                }
+
+                numberOfRetries -= 1;
+                Thread.Sleep(sleepTime);
+            } while (numberOfRetries!=0);
+
+            throw LastException;
         }
 
         /// <summary>

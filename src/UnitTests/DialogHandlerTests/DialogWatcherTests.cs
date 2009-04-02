@@ -16,14 +16,9 @@
 
 #endregion Copyright
 
-using System;
-using Moq;
 using NUnit.Framework;
-using WatiN.Core.DialogHandlers;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
-using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UnitTests
 {

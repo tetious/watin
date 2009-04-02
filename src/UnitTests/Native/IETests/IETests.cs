@@ -28,7 +28,6 @@ using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
-using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UnitTests.IETests
 {
@@ -128,7 +127,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (var ie = new IE())
             {
-                Assert.That(((SHDocVw.IWebBrowser2)ie.InternetExplorer).Visible, "IE Should be visible");
+                Assert.That(((IWebBrowser2)ie.InternetExplorer).Visible, "IE Should be visible");
             }
 
             Settings.MakeNewIeInstanceVisible = false;
@@ -136,7 +135,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (var ie = new IE())
             {
-                Assert.That(((SHDocVw.IWebBrowser2)ie.InternetExplorer).Visible, Is.EqualTo(false), "IE Should be visible");
+                Assert.That(((IWebBrowser2)ie.InternetExplorer).Visible, Is.EqualTo(false), "IE Should be visible");
             }
         }
 
