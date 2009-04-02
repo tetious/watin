@@ -43,12 +43,6 @@ namespace WatiN.Core.UnitTests
 			get { return MainURI; }
 		}
 
-		[SetUp]
-		public override void TestSetUp()
-		{
-			base.TestSetUp();
-		}
-
 		[TearDown]
 		public void TearDown()
 		{

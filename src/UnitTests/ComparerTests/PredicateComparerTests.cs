@@ -17,14 +17,13 @@
 #endregion Copyright
 
 using System;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.ComparerTests
 {
-    using NUnit.Framework;
-    using NUnit.Framework.SyntaxHelpers;
-    using Comparers;
-
     [TestFixture]
     public class PredicateComparerTests : BaseWithBrowserTests
     {
@@ -38,8 +37,10 @@ namespace WatiN.Core.UnitTests
         }
 
         [SetUp]
-        public void SetUp()
+        public override void TestSetUp()
         {
+            base.TestSetUp();
+
             _called = false;
             _value = null;
         }
@@ -48,7 +49,7 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnTrue()
         {
             _returnValue = true;
-            PredicateComparer<string, string> comparer = new PredicateComparer<string, string>(CallThisMethod);
+            var comparer = new PredicateComparer<string, string>(CallThisMethod);
 
             Assert.That(comparer.Compare("test value"), Is.True);
             Assert.That(_called, Is.True);
@@ -59,23 +60,17 @@ namespace WatiN.Core.UnitTests
         public void StringPredicateShouldBeCalledAndReturnFalse()
         {
             _returnValue = false;
-            PredicateComparer<string, string> comparer = new PredicateComparer<string, string>(CallThisMethod);
+            var comparer = new PredicateComparer<string, string>(CallThisMethod);
 
             Assert.That(comparer.Compare("some input"), Is.False);
             Assert.That(_called, Is.True);
             Assert.That(_value, Is.EqualTo("some input"));
         }
 
-        public bool CallThisMethod(string value)
+        private bool CallThisMethod(string value)
         {
             _called = true;
             _value = value;
-            return _returnValue;
-        }
-
-        public bool CallElementCompareMethod(Element element)
-        {
-            _called = true;
             return _returnValue;
         }
 
@@ -83,12 +78,11 @@ namespace WatiN.Core.UnitTests
         public void IfExceptionDuringExecutionOfPredicateItShouldBeClearThatThisAProblemInThePredicate()
         {
             var button = Ie.Button(b =>
-            {
-                if (b.Value == "Button with no Id")
-                    throw new Exception("boo");
-                else
-                    return false;
-            });
+                                       {
+                                           if (b.Value == "Button with no Id")
+                                               throw new Exception("boo");
+                                           return false;
+                                       });
             
             //trigger search of the button
             var exists = button.Exists;

@@ -36,9 +36,9 @@ namespace WatiN.Core.UnitTests
 	    private string _expectedPredicateCompareValue;
 
 	    [SetUp]
-		public void SetUp()
+		public override void TestSetUp()
 		{
-            Settings.Reset();
+            base.TestSetUp();
 			_expectedPredicateCompareValue = null;
 		}
 
