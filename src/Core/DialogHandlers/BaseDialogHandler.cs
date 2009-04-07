@@ -24,11 +24,13 @@ namespace WatiN.Core.DialogHandlers
 {
 	public abstract class BaseDialogHandler : IDialogHandler
 	{
-		public override bool Equals(object obj)
+        /// <inheritdoc />
+        public override bool Equals(object obj)
 		{
 		    return obj != null && (GetType().Equals(obj.GetType()));
 		}
 
+        /// <inheritdoc />
 	    public override int GetHashCode()
 		{
 			return GetType().ToString().GetHashCode();
@@ -36,8 +38,10 @@ namespace WatiN.Core.DialogHandlers
 
 		#region IDialogHandler Members
 
+        /// <inheritdoc />
 		public abstract bool HandleDialog(Window window);
-	    
+
+        /// <inheritdoc />
         public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
         {
             var topLevelHwnd = window.ToplevelWindow.Hwnd;
