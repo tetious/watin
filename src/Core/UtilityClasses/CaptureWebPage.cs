@@ -223,7 +223,7 @@ namespace WatiN.Core.UtilityClasses
 
             NativeMethods.GetClassName(hwnd, sbc, 256);
 
-            if (sbc.ToString().IndexOf("WorkerW", 0) == -1) // IE 7
+            if (sbc.ToString().IndexOf("WorkerW", 0) == -1) // IE 7 or 8
             {
                 while (hwnd != IntPtr.Zero)
                 {
@@ -232,7 +232,18 @@ namespace WatiN.Core.UtilityClasses
                     {
                         break;
                     }
-                    hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_HWNDNEXT);
+					// In IE8, TabWindowClass now belongs as a child class of "Frame Tab"
+					// so step down into Frame Tab and continue start searching for 
+					// TabWindowClass there.
+					if (sbc.ToString().IndexOf("Frame Tab", 0) > -1) // IE 8
+					{
+						//step one deeper for IE 8
+						hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_CHILD);
+					}
+					else
+					{
+						hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_HWNDNEXT);
+					}
                 }
                 hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_CHILD);
             }
