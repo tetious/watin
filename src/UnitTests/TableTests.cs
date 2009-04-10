@@ -172,7 +172,9 @@ namespace WatiN.Core.UnitTests
 
                                 var table = browser.Table("Table1");
 
-		                        Assert.That(table.FindRow("2", 0), Is.Not.Null);
+		                        var row = table.FindRow("2", 0);
+
+		                        Assert.That(row, Is.Not.Null);
 
 		                    });
 		}
@@ -186,7 +188,26 @@ namespace WatiN.Core.UnitTests
 
                                 var table = browser.Table("Table1");
 
-		                        Assert.That(table.FindRowInOwnTableRows("2", 0), Is.Null);
+		                        Assert.That(table.FindRowInOwnTableRows("2", 1), Is.Null);
+
+		                    });
+		}
+
+		[Test]
+        public void TableFindRowInOwnTableRowsWithPredicateShouldIgnoreTableCellsInsideOfNestedTables()
+		{
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TablesUri);
+
+                                // GIVEN
+                                var table1 = browser.Table("Table1");
+                                
+                                // WHEN
+                                var row = table1.FindRowInOwnTableRows(tableCell => Equals(tableCell.Text, "2"), 1);
+
+                                // THEN
+		                        Assert.That(row, Is.Null);
 
 		                    });
 		}
