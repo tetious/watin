@@ -298,7 +298,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRowInOwnTableRows(Predicate<TableCell> predicate, int inColumn)
         {
-            return FindInOwnTableRows(Find.ByExistenceOfRelatedElement<TableRow>(row => row.TableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
+            return FindInOwnTableRows(Find.ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }
 
         public override string ToString()
