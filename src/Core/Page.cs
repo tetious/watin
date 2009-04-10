@@ -54,7 +54,7 @@ namespace WatiN.Core
     /// property to a regular expression that is expected to match part of the page's Url.
     /// If the page is only accessible via HTTPS then also set the IsSecure property to true.</item>
     /// <item>Add properties to provide access to the sub-elements of the page.  When the page
-    /// is used, the <see cref="Document" /> property will be set to the containing document
+    /// is used, the <see cref="Document" /> property will be set to the containing _document
     /// (eg. the web browser or a frame).  Use this property to locate the sub-elements of the page.</item>
     /// <item>Define additional properties and methods as desired to model the state and
     /// behaviors of the page.</item>
@@ -110,8 +110,8 @@ namespace WatiN.Core
     /// <seealso cref="PageAttribute"/>
     public abstract class Page : Component
     {
-        private PageMetadata metadata;
-        private Document document;
+        private PageMetadata _metadata;
+        private Document _document;
  
         /// <summary>
         /// Creates an uninitialized page instance.
@@ -121,61 +121,62 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets declarative metadata about the page.
+        /// Gets declarative _metadata about the page.
         /// </summary>
         public PageMetadata Metadata
         {
             get
             {
-                if (metadata == null)
-                    metadata = new PageMetadata(GetType());
-                return metadata;
+                if (_metadata == null)
+                    _metadata = new PageMetadata(GetType());
+                return _metadata;
             }
         }
 
         /// <summary>
-        /// Gets the document or frame that holds the page content.
+        /// Gets the _document or frame that holds the page content.
         /// </summary>
         /// <remarks>
         /// <para>
         /// This method calls <see cref="VerifyDocumentProperties" /> to ensure that
-        /// the current document represents the correct page (has the correct Url, etc.).
+        /// the current _document represents the correct page (has the correct Url, etc.).
         /// If this verification fails then an exception is thrown.
         /// </para>
         /// </remarks>
         /// <exception cref="WatiNException">Thrown if the page object does not have a reference
-        /// to a document or if the document's properties fail validation.</exception>
+        /// to a _document or if the _document's properties fail validation.</exception>
         public Document Document
         {
             get
             {
-                if (document == null)
+                if (_document == null)
                     throw new WatiNException("The Document is not available because the Page instance has not been fully initialized.");
-                VerifyDocumentProperties(document);
-                return document;
+                VerifyDocumentProperties(_document);
+                return _document;
             }
         }
 
         /// <summary>
-        /// Verifies that the document represents the correct page (has the correct Url, etc.).
+        /// Verifies that the _document represents the correct page (has the correct Url, etc.).
         /// </summary>
         /// <remarks>
         /// <para>
         /// The default implementation calls <see cref="VerifyDocumentUrl" /> to verify the <paramref name="document"/>'s Url.
         /// </para>
         /// <para>
-        /// Subclasses can override this method to customize how document verification takes place.
+        /// Subclasses can override this method to customize how _document verification takes place.
         /// </para>
         /// </remarks>
-        /// <param name="document">The document to verify, not null</param>
-        /// <exception cref="WatiNException">Thrown if the document's properties fail verification</exception>
+        /// <param name="document">The _document to verify, not null</param>
+        /// <exception cref="WatiNException">Thrown if the _document's properties fail verification</exception>
         protected virtual void VerifyDocumentProperties(Document document)
         {
             VerifyDocumentUrl(document.Url);
+            VerifyDocumentIsSecure(document.Url);
         }
 
         /// <summary>
-        /// Verifies that the document's represents the correct page.
+        /// Verifies that the _document's represents the correct page.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -183,10 +184,10 @@ namespace WatiN.Core
         /// to validate the <paramref name="url"/>.
         /// </para>
         /// <para>
-        /// Subclasses can override this method to customize how document Url verification takes place.
+        /// Subclasses can override this method to customize how _document Url verification takes place.
         /// </para>
         /// </remarks>
-        /// <param name="url">The document url to verify, not null</param>
+        /// <param name="url">The _document url to verify, not null</param>
         /// <exception cref="WatiNException">Thrown if the url fails verification</exception>
         protected virtual void VerifyDocumentUrl(string url)
         {
@@ -195,19 +196,21 @@ namespace WatiN.Core
                 throw new WatiNException(String.Format(
                     "Page '{0}' expected the Url to match the regular expression pattern '{1}'.", this, Metadata.UrlRegex));
             }
+        }
 
-            if (Metadata.IsSecure && !Document.Url.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
+        protected virtual void VerifyDocumentIsSecure(string url)
+        {
+            if (Metadata.IsSecure && !url.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new WatiNException(String.Format(
-                    "Page '{0}' expected the Url to begin with 'https:'.", this));
+                throw new WatiNException(String.Format("Page '{0}' expected the Url to begin with 'https:'.", this));
             }
         }
 
         /// <summary>
-        /// Creates an initialized page object from a document.
+        /// Creates an initialized page object from a _document.
         /// </summary>
         /// <typeparam name="T">The page type</typeparam>
-        /// <param name="document">The document or frame represented by the page</param>
+        /// <param name="document">The _document or frame represented by the page</param>
         /// <returns>The page object</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="document"/> is null</exception>
         public static T CreatePage<T>(Document document)
@@ -216,8 +219,7 @@ namespace WatiN.Core
             if (document == null)
                 throw new ArgumentNullException("document");
 
-            T page = new T();
-            page.document = document;
+            var page = new T {_document = document};
             return page;
         }
 
@@ -227,11 +229,11 @@ namespace WatiN.Core
             StringBuilder description = new StringBuilder();
             description.Append(GetType().Name);
 
-            // Note: Uses unvalidated document to avoid throwing an exception if the document is incorrect.
-            if (document != null)
+            // Note: Uses unvalidated _document to avoid throwing an exception if the _document is incorrect.
+            if (_document != null)
             {
                 description.Append(@" (");
-                description.Append(document.Url);
+                description.Append(_document.Url);
                 description.Append(@")");
             }
 

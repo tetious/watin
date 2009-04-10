@@ -44,5 +44,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             WaitForCompleteOrTimeout();
         }
+
+
     }
 }
