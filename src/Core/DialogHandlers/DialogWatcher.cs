@@ -344,7 +344,8 @@ namespace WatiN.Core.DialogHandlers
 		public void HandleWindow(Window window)
 		{
 			if (!window.IsDialog()) return;
-            if (Process.GetProcessById(window.ProcessID).ProcessName != "iexplore") return;
+	        var processName = Process.GetProcessById(window.ProcessID).ProcessName;
+	        if (!(String.Compare(processName, "iexplore", true) == 0)) return;
 
             // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
