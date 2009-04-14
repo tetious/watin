@@ -278,20 +278,49 @@ namespace WatiN.Core
 
 		private void SelectByTextOrValue(Constraint findBy)
 		{
-			var options = Options.Filter(findBy);
-
-			foreach (var option in options)
-			{
-				option.Select();
-			}
-
-			if (options.Count == 0)
-			{
-				throw new SelectListItemNotFoundException(findBy.ToString());
-			}
+            if (Multiple)
+            {
+                SelectMultiple(findBy);
+            }
+            else
+            {
+                SelectSingle(findBy);
+            }
 		}
 
-        private static AttributeConstraint IsSelectedConstraint()
+	    private void SelectSingle(Constraint findBy)
+	    {
+	        try
+	        {
+	            Option(findBy).Select();
+	        }
+	        catch (ElementNotFoundException)
+	        {
+	            throw new SelectListItemNotFoundException(findBy.ToString());
+	        }
+	    }
+
+	    private void SelectMultiple(Constraint findBy)
+	    {
+	        var options = Options.Filter(findBy);
+
+	        if (options.Count == 0)
+	        {
+	            throw new SelectListItemNotFoundException(findBy.ToString());
+	        }
+
+	        // First select all options
+	        foreach (var option in options)
+	        {
+	            if (option.Selected) continue;
+                option.SetAttributeValue("selected", "true");
+	        }
+                
+	        // Then fire the onchange event
+	        FireEvent("onchange");
+	    }
+
+	    private static AttributeConstraint IsSelectedConstraint()
         {
             return new AttributeConstraint("selected", new StringEqualsAndCaseInsensitiveComparer(true.ToString()));
         }

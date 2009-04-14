@@ -39,7 +39,7 @@ namespace WatiN.Core.Native
         /// I.e. for options myOption.getAttribute("selected"); returns nothing if it's selected. 
         /// However  myOption.selected returns true.
         /// </summary>
-        public static readonly IList<string> ReadPropertyInsteadOfAttribute = new[]
+        public static readonly IList<string> UsePropertyInsteadOfAttribute = new[]
                                                                                   {
                                                                                           "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
                                                                                           "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
@@ -277,7 +277,7 @@ namespace WatiN.Core.Native
             if (attributeName == "textContent") return this.TextContent;
 
             // Return value
-            return ReadPropertyInsteadOfAttribute.Contains(attributeName) ? this.GetProperty(attributeName) : this.GetAttribute(attributeName);
+            return UsePropertyInsteadOfAttribute.Contains(attributeName) ? this.GetProperty(attributeName) : this.GetAttribute(attributeName);
         }
 
         public void SetAttributeValue(string attributeName, string value)
@@ -292,7 +292,7 @@ namespace WatiN.Core.Native
             if (IgnoreSettingOfValue.Contains(attributeName)) return;
 
             // Handle properties different from attributes
-            if (ReadPropertyInsteadOfAttribute.Contains(attributeName))
+            if (UsePropertyInsteadOfAttribute.Contains(attributeName))
             {
                 this.SetProperty(attributeName, value);
                 return;

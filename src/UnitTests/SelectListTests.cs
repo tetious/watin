@@ -91,6 +91,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
+		                        Settings.WaitUntilExistsTimeOut = 2;
 		                        var selectList = browser.SelectList("Select1");
 		                        selectList.Select("None existing item");
 		                    });
@@ -101,7 +102,28 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        var selectList = browser.SelectList("Select1");
+                                Settings.WaitUntilExistsTimeOut = 2;
+                                var selectList = browser.SelectList("Select1");
+		                        selectList.Select("Second");
+		                    });
+		}
+
+        [Test, ExpectedException(typeof(SelectListItemNotFoundException), ExpectedMessage = "No item was found in the selectlist matching constraint: Attribute 'innertext' equals 'None existing item' ignoring case")]
+		public void SelectItemNotFoundExceptionForMultiple()
+		{
+		    ExecuteTest(browser =>
+		                    {
+		                        var selectList = browser.SelectList("Select2");
+		                        selectList.Select("None existing item");
+		                    });
+		}
+
+		[Test, ExpectedException(typeof (SelectListItemNotFoundException))]
+		public void SelectPartialTextMatchItemNotFoundExceptionForMultiple()
+		{
+		    ExecuteTest(browser =>
+		                    {
+		                        var selectList = browser.SelectList("Select2");
 		                        selectList.Select("Second");
 		                    });
 		}
