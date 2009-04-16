@@ -300,5 +300,15 @@ namespace WatiN.Core
             NativeBrowser.Refresh();
             WaitForComplete();
         }
+
+        public override IntPtr hWnd
+        {
+            get { return NativeBrowser.hWnd; }
+        }
+
+        public override INativeDocument OnGetNativeDocument()
+        {
+            return NativeBrowser.NativeDocument;
+        }
     }
 }

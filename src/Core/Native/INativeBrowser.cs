@@ -60,5 +60,13 @@ namespace WatiN.Core.Native
         /// a browser).
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// Gets the window handle of the current browser.
+        /// </summary>
+        /// <value>Window handle of the current browser.</value>
+        IntPtr hWnd { get; }
+
+        INativeDocument NativeDocument { get; }
     }
 }

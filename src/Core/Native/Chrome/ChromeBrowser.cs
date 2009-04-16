@@ -35,6 +35,11 @@ namespace WatiN.Core.Native.Chrome
         {
         }
 
+        public override INativeDocument NativeDocument
+        {
+            get { return new ChromeDocument(ClientPort); }
+        }
+
         /// <summary>
         /// Load a URL into the document.
         /// </summary>

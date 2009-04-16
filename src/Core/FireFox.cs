@@ -85,16 +85,6 @@ namespace WatiN.Core
 
         #region Public instance methods
 
-        public override IntPtr hWnd
-        {
-            get { return ffBrowser.hWnd; }
-        }
-
-        public override INativeDocument OnGetNativeDocument()
-        {
-            return new FFDocument(ffBrowser.ClientPort);
-        }
-
         /// <summary>
         /// Gets the number of running FireFox processes.
         /// </summary>

@@ -59,12 +59,11 @@ namespace WatiN.Core
 	/// </example>
 	public class IE : Browser
 	{
-		private IWebBrowser2 ie;
-
 		private bool autoClose = true;
 		private bool isDisposed;
+	    private IEBrowser _ieBrowser;
 
-		/// <summary>
+	    /// <summary>
 		/// Attach to an existing Internet Explorer. 
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
@@ -595,13 +594,18 @@ namespace WatiN.Core
                 throw new ArgumentException("iwebBrowser2 needs to implement shdocvw.IWebBrowser2");
             }
 
-            ie = internetExplorer;
+            CreateIEBrowser(internetExplorer);
 
             if (finishInitialization)
                 FinishInitialization(null);
         }
 
-		private void CreateNewIEAndGoToUri(Uri uri, IDialogHandler logonDialogHandler, bool createInNewProcess)
+	    private void CreateIEBrowser(IWebBrowser2 IWebBrowser2Instance)
+	    {
+	        _ieBrowser = new IEBrowser(IWebBrowser2Instance);
+	    }
+
+	    private void CreateNewIEAndGoToUri(Uri uri, IDialogHandler logonDialogHandler, bool createInNewProcess)
 		{
 			CheckThreadApartmentStateIsSTA();
 
@@ -611,14 +615,14 @@ namespace WatiN.Core
 			{
 				Logger.LogAction("Creating IE instance in a new process");
 
-                ie = CreateIEPartiallyInitializedInNewProcess().ie;
+                _ieBrowser = CreateIEPartiallyInitializedInNewProcess()._ieBrowser;
                 FinishInitialization(uri);
 			}
 			else
 			{
 				Logger.LogAction("Creating IE instance");
 
-                ie = new InternetExplorerClass();
+                CreateIEBrowser(new InternetExplorerClass());
                 FinishInitialization(uri);
 			}
 
@@ -683,7 +687,7 @@ namespace WatiN.Core
             {
                 GoTo(uri);
             }
-            ie.Visible = Settings.MakeNewIeInstanceVisible;
+            _ieBrowser.Visible = Settings.MakeNewIeInstanceVisible;
 
             StartDialogWatcher();
         }
@@ -729,7 +733,7 @@ namespace WatiN.Core
 		/// </summary>
 		public object InternetExplorer
 		{
-			get { return ie; }
+			get { return _ieBrowser.AsIWebBrowser2; }
 		}
 
 	    /// <summary>
@@ -768,11 +772,6 @@ namespace WatiN.Core
 	        }
 
 	        DisposeAndCloseIE(true);
-		}
-
-		protected void DoReopen()
-		{
-			Reopen(new Uri("about:blank"), null, false);
 		}
 
 		/// <summary>
@@ -832,10 +831,10 @@ namespace WatiN.Core
 		    if (closeIE && IsInternetExplorerStillAvailable())
 		    {
 		        // Ask IE to close
-		        ie.Quit();
+		        _ieBrowser.Quit();
 		    }
 
-		    ie = null;
+		    _ieBrowser = null;
 
 		    if (closeIE)
 		    {
@@ -1007,13 +1006,9 @@ namespace WatiN.Core
 		    // Call a property of the
             // ie instance to see of it isn't disposed by 
             // another IE instance.
-		    return UtilityClass.TryFuncIgnoreException(() => ie.HWND != 0);
+		    return UtilityClass.TryFuncIgnoreException(() => hWnd != IntPtr.Zero);
 		}
 
-	    public override INativeDocument OnGetNativeDocument()
-		{
-            return new IEDocument((IHTMLDocument2)ie.Document);
-		}
 
 		/// <summary>
 		/// Waits till the webpage, it's frames and all it's elements are loaded. This
@@ -1075,14 +1070,9 @@ namespace WatiN.Core
 		    return new HtmlDialogCollection(hWnd, waitForComplete);
 		}
 
-		public override IntPtr hWnd
-		{
-			get { return new IntPtr(ie.HWND); }
-		}
-
         public override INativeBrowser NativeBrowser
         {
-           get { return new IEBrowser(ie); }
+           get { return _ieBrowser; }
         }
 
 		/// <summary>
@@ -1129,15 +1119,15 @@ namespace WatiN.Core
 
             if (name.Equals("href"))
             {
-                UtilityClass.TryActionIgnoreException(() => value = ie.LocationURL);
+                UtilityClass.TryActionIgnoreException(() => value = Url);
             }
             else if (name.Equals("title"))
             {
-                UtilityClass.TryActionIgnoreException(() => value = ((HTMLDocument)ie.Document).title);
+                UtilityClass.TryActionIgnoreException(() => value = NativeDocument.Title);
             }
             else if (name.Equals("hwnd"))
             {
-                UtilityClass.TryActionIgnoreException(() => value = ie.HWND.ToString());
+                UtilityClass.TryActionIgnoreException(() => value = hWnd.ToString());
             }
             else
             {

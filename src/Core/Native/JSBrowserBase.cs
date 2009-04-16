@@ -51,14 +51,13 @@ namespace WatiN.Core.Native
             get { return this.ClientPort.BrowserVariableName;  }
         }
 
-        /// <summary>
-        /// Gets the window handle of the current browser.
-        /// </summary>
-        /// <value>Window handle of the current browser.</value>
+        /// <inheritdoc />
         public IntPtr hWnd
         {
             get { return this.ClientPort.Process.MainWindowHandle; }
         }
+
+        public abstract INativeDocument NativeDocument { get; }
 
         /// <inheritdoc />
         public bool GoBack()

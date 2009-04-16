@@ -19,6 +19,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using mshtml;
 using SHDocVw;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -30,6 +31,11 @@ namespace WatiN.Core.Native.InternetExplorer
 	    public IEBrowser(IWebBrowser2 webBrowser2)
 	    {
 	        _webBrowser2 = webBrowser2;
+	    }
+
+	    public object AsIWebBrowser2
+	    {
+            get { return _webBrowser2; }
 	    }
 
 	    /// <inheritdoc />
@@ -95,6 +101,28 @@ namespace WatiN.Core.Native.InternetExplorer
 	    {
             object REFRESH_COMPLETELY = 3;
             _webBrowser2.Refresh2(ref REFRESH_COMPLETELY);
+        }
+
+        /// <inheritdoc />
+        public IntPtr hWnd
+	    {
+            get { return new IntPtr(_webBrowser2.HWND); }
+	    }
+
+	    public INativeDocument NativeDocument
+	    {
+            get { return new IEDocument((IHTMLDocument2) _webBrowser2.Document); }
+	    }
+
+	    public bool Visible
+	    {
+            get { return _webBrowser2.Visible; }
+            set { _webBrowser2.Visible = value; }
+	    }
+
+        public void Quit()
+        {
+            _webBrowser2.Quit();
         }
 	}
 }

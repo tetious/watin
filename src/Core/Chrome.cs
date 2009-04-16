@@ -163,15 +163,6 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// This method must be overriden by all sub classes
-        /// </summary>
-        /// <returns>The native document.</returns>
-        public override INativeDocument OnGetNativeDocument()
-        {
-            return new ChromeDocument(ChromeBrowser.ClientPort);
-        }
-
-        /// <summary>
         /// Waits for the page to be completely loaded.
         /// </summary>
         /// <param name="waitForCompleteTimeOut">
