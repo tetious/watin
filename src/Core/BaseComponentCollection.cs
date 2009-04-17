@@ -36,7 +36,7 @@ namespace WatiN.Core
         where TComponent : Component
         where TCollection : BaseComponentCollection<TComponent, TCollection>
 	{
-        private LazyList<TComponent> cache;
+        private IList<TComponent> cache;
 
 		/// <summary>
 		/// Creates a base collection.

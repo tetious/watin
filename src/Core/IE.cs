@@ -90,7 +90,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIENoWait(Constraint findBy)
 		{
-			return FindIE(findBy, Settings.AttachToIETimeOut, false);
+	        return Browser.AttachToNoWait<IE>(findBy);
 		}
 		
 		/// <summary>
@@ -120,7 +120,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIE(Constraint findBy)
 		{
-			return FindIE(findBy, Settings.AttachToIETimeOut, true);
+		    return AttachTo<IE>(findBy);
 		}
 
 		/// <summary>
@@ -152,10 +152,10 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIE(Constraint findBy, int timeout)
 		{
-			return FindIE(findBy, timeout, true);
+		    return AttachTo<IE>(findBy, timeout);
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
 		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
 		/// The attached Internet Explorer will be closed after destroying the IE instance.
@@ -184,7 +184,7 @@ namespace WatiN.Core
 		/// </example>
 		public static IE AttachToIENoWait(Constraint findBy, int timeout)
 		{
-			return FindIE(findBy, timeout, false);
+			return AttachToNoWait<IE>(findBy, timeout);
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace WatiN.Core
 		/// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
 		public static bool Exists(Constraint findBy)
 		{
-            return null != FindIEPartiallyInitialized(findBy);
+		    return Exists<IE>(findBy);
 		}
 
 		/// <summary>
@@ -583,7 +583,7 @@ namespace WatiN.Core
 		{
 		}
 
-        private IE(object iwebBrowser2, bool finishInitialization)
+	    protected internal IE(object iwebBrowser2, bool finishInitialization)
         {
             CheckThreadApartmentStateIsSTA();
 
@@ -615,7 +615,7 @@ namespace WatiN.Core
 			{
 				Logger.LogAction("Creating IE instance in a new process");
 
-                _ieBrowser = CreateIEPartiallyInitializedInNewProcess()._ieBrowser;
+                _ieBrowser = CreateIEPartiallyInitializedInNewProcess();
                 FinishInitialization(uri);
 			}
 			else
@@ -639,9 +639,10 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		private static IE CreateIEPartiallyInitializedInNewProcess()
+		private static IEBrowser CreateIEPartiallyInitializedInNewProcess()
 		{
 			var m_Proc = CreateIExploreInNewProcess();
+		    var helper = new AttachToIeHelper();
 
 		    var action = new TryFuncUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
             var ie = action.Try(() =>
@@ -650,11 +651,11 @@ namespace WatiN.Core
                 var mainWindowHandle = m_Proc.MainWindowHandle;
 
                 return mainWindowHandle != IntPtr.Zero
-                    ? FindIEPartiallyInitialized(new AttributeConstraint("hwnd", mainWindowHandle.ToString()))
+                    ? helper.FindIEPartiallyInitialized(new AttributeConstraint("hwnd", mainWindowHandle.ToString()))
                     : null;
             });
 
-            if (ie != null) return ie;
+            if (ie != null) return ie._ieBrowser;
 
 			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToIETimeOut);
 		}
@@ -679,7 +680,7 @@ namespace WatiN.Core
 			}
 		}
 
-        private void FinishInitialization(Uri uri)
+	    internal void FinishInitialization(Uri uri)
         {
             // Due to UAC in Vista the navigate has to be done
             // before showing the new Internet Explorer instance
@@ -692,39 +693,7 @@ namespace WatiN.Core
             StartDialogWatcher();
         }
 
-	    private static IE FindIE(Constraint findBy, int timeout, bool waitForComplete)
-		{
-            Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy);
 
-            var action = new TryFuncUntilTimeOut(timeout) { SleepTime = 500 };
-            var ie = action.Try(() => FindIEPartiallyInitialized(findBy));
-            if (ie != null)
-            {
-                ie.FinishInitialization(null);
-
-                if (waitForComplete)
-                    ie.WaitForComplete();
-
-                return ie;
-            }
-
-			throw new IENotFoundException(findBy.ToString(), timeout);
-		}
-
-		private static IE FindIEPartiallyInitialized(Constraint findBy)
-		{
-			var allBrowsers = new ShellWindows2();
-
-            var context = new ConstraintContext();
-            foreach (IWebBrowser2 browser in allBrowsers)
-		    {
-                var ie = new IE(browser, false);
-                if (ie.Matches(findBy, context))
-                    return ie;
-		    }
-
-			return null;
-		}
 
 		/// <summary>
         /// Use this method to gain access to the IWebBrowser2 interface of Internet Explorer.

@@ -17,8 +17,11 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using WatiN.Core.Constraints;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
@@ -26,8 +29,15 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
-    public abstract class Browser : DomContainer
+    public abstract class Browser : DomContainer 
     {
+
+        private static readonly Dictionary<Type, IAttachTo> AttachToHelpers = new Dictionary<Type, IAttachTo>();
+
+        static Browser()
+        {
+            RegisterAttachToHelper(typeof (IE), new AttachToIeHelper());
+        }
 
         public abstract INativeBrowser NativeBrowser { get; }
 
@@ -309,6 +319,45 @@ namespace WatiN.Core
         public override INativeDocument OnGetNativeDocument()
         {
             return NativeBrowser.NativeDocument;
+        }
+
+        public static T AttachTo<T>(Constraint constraint) where T : Browser
+        {
+            return AttachTo<T>(constraint, Settings.AttachToIETimeOut);
+        }
+
+        public static T AttachTo<T>(Constraint constraint, int timeout) where T : Browser
+        {
+            var helper = CreateHelper<T>();
+            return (T) helper.Find(constraint, timeout, true);
+        }
+
+        public static T AttachToNoWait<T>(Constraint constraint) where T : Browser
+        {
+            return AttachToNoWait<T>(constraint, Settings.AttachToIETimeOut);
+        }
+
+        public static T AttachToNoWait<T>(Constraint constraint, int timeout) where T : Browser
+        {
+            var helper = CreateHelper<T>();
+            return (T) helper.Find(constraint, timeout, false);
+        }
+
+        public static bool Exists<T>(Constraint constraint) where T : Browser
+        {
+            var helper = CreateHelper<T>();
+            return helper.Exists(constraint);
+        }
+
+        private static IAttachTo CreateHelper<T>() where T : Browser
+        {
+            if (!AttachToHelpers.ContainsKey(typeof(T))) throw new WatiNException("No AttachToHelper registered for type " + typeof(T));
+            return AttachToHelpers[typeof (T)];
+        }
+
+        public static void RegisterAttachToHelper(Type browserType, IAttachTo attachToHelper)
+        {
+            AttachToHelpers.Add(browserType, attachToHelper);
         }
     }
 }
