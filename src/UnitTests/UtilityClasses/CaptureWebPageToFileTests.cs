@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using NUnit.Framework;
 using System.IO;
@@ -31,6 +32,35 @@ namespace WatiN.Core.UnitTests
         public override Uri TestPageUri
         {
             get { return MainURI; }
+        }
+
+
+        [Test]
+        public void ScreenShotOfHtmlDialogShouldNotBeBlack()
+        {
+            // GIVEN
+            CaptureWebPageMock captureWebPage;
+            Ie.Button("modalid").ClickNoWait();
+
+            using (var htmlDialog = Ie.HtmlDialog(Find.ByTitle("PopUpTest")))
+            {
+                captureWebPage = new CaptureWebPageMock(htmlDialog.DomContainer);
+
+                // WHEN
+                captureWebPage.CaptureWebPageToFile(@"C:\capture.jpg", true, true, 100, 100);
+            }
+
+            // THEN
+            var bitmap = new Bitmap(captureWebPage.Image);
+            var color = bitmap.GetPixel(150,50);
+
+            Assert.That(IsNotEqualToColorBlack(color));
+
+        }
+
+        private static bool IsNotEqualToColorBlack(Color color)
+        {
+           return color.R != 0 && color.G != 0 && color.B !=0;
         }
 
         [Test]
@@ -146,6 +176,7 @@ namespace WatiN.Core.UnitTests
             public bool CallBaseCaptureWebPageToFile { get; set; }
             public string ImageType { get; private set; }
             public ImageCodecInfo ImageCodecInfo { get; private set; }
+            public System.Drawing.Image Image { get; set; }
 
             public CaptureWebPageMock(DomContainer domContainer) : base(domContainer)
             {
@@ -161,6 +192,7 @@ namespace WatiN.Core.UnitTests
             protected override void SaveImage(System.Drawing.Image finalImage, Stream stream, ImageCodecInfo ici, EncoderParameters eps)
             {
                 ImageCodecInfo = ici;
+                Image = finalImage;
             }
         }
     }

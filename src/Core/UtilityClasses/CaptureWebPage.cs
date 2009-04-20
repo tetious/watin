@@ -210,6 +210,13 @@ namespace WatiN.Core.UtilityClasses
 
         private static IntPtr GetHwndContainingAShellDocObjectView(IntPtr browserHWND)
         {
+            // If window is a HtmlDialog then return.
+            var hwnd = browserHWND;
+            if (NativeMethods.CompareClassNames(hwnd, "Internet Explorer_TridentDlgFrame"))
+            {
+                return hwnd;
+            }
+
             // In IE6 and previous, the handle points to a WorkerW window that is a 
             // sibling of the "Document" window (Shell DocObject View) and we can go find
             // it. 
@@ -217,25 +224,20 @@ namespace WatiN.Core.UtilityClasses
             // TabWindowClass window which is the parent of the "Document" window. Loop
             // through these siblings to find that TabWindowClass and then drop down to
             // its children.
-            var hwnd = browserHWND;
             hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_CHILD);
-            var sbc = new StringBuilder(256);
 
-            NativeMethods.GetClassName(hwnd, sbc, 256);
-
-            if (sbc.ToString().IndexOf("WorkerW", 0) == -1) // IE 7 or 8
+            if (!NativeMethods.CompareClassNames(hwnd,"WorkerW")) // IE 7 or 8
             {
                 while (hwnd != IntPtr.Zero)
                 {
-                    NativeMethods.GetClassName(hwnd, sbc, 256);
-                    if (sbc.ToString().IndexOf("TabWindowClass", 0) > -1)
+                    if (NativeMethods.CompareClassNames(hwnd, "TabWindowClass"))
                     {
                         break;
                     }
 					// In IE8, TabWindowClass now belongs as a child class of "Frame Tab"
 					// so step down into Frame Tab and continue start searching for 
 					// TabWindowClass there.
-					if (sbc.ToString().IndexOf("Frame Tab", 0) > -1) // IE 8
+                    if (NativeMethods.CompareClassNames(hwnd, "Frame Tab")) // IE 8
 					{
 						//step one deeper for IE 8
 						hwnd = NativeMethods.GetWindow(hwnd, NativeMethods.GW_CHILD);
@@ -253,13 +255,10 @@ namespace WatiN.Core.UtilityClasses
         private static IntPtr GetHwndForInternetExplorerServer(IntPtr hwnd)
         {
             //Get Browser "Document" Handle
-            var sbc = new StringBuilder(256);
-
             while (hwnd != IntPtr.Zero)
             {
-                NativeMethods.GetClassName(hwnd, sbc, 256);
-
-                if (sbc.ToString().IndexOf("Shell DocObject View", 0) > -1)
+                if (NativeMethods.CompareClassNames(hwnd, "Shell DocObject View") ||
+                    NativeMethods.CompareClassNames(hwnd, "Internet Explorer_TridentDlgFrame"))
                 {
                     hwnd = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "Internet Explorer_Server", IntPtr.Zero);
                     break;
