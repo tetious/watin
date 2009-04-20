@@ -68,7 +68,12 @@ namespace WatiN.Core.Native
         /// </summary>
         public static readonly Dictionary<string, DoFuncWithValue<string>> SetPropertyTransformations = new Dictionary<string, DoFuncWithValue<string>>
                                                                                                             {
-                                                                                                                    {"value", value => "'" + value + "'"}
+                                                                                                                    {"value", value =>
+                                                                                                                          {
+                                                                                                                              var escapedValue = value.Replace("'","\\'");
+                                                                                                                              return "'" + escapedValue + "'";
+                                                                                                                          }
+                                                                                                                    }
                                                                                                             };
 
         private Dictionary<string, object> _attributeCache;

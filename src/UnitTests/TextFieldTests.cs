@@ -86,6 +86,42 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
+		public void TextFieldTypTextShouldDealWithSingleQuotesCorrectly()
+		{
+		    ExecuteTest(browser =>
+		                    {
+                                // GIVEN
+                                const string text = "'single q'u'ote test'";
+
+                                var textField = browser.TextField("name");
+
+                                // WHEN
+		                        textField.TypeText(text);
+
+                                // THEN
+                                Assert.That(textField.Value, Is.EqualTo(text));
+		                    });
+		}
+
+		[Test]
+		public void TextFieldSetValueShouldDealWithSingleQuotesCorrectly()
+		{
+		    ExecuteTest(browser =>
+		                    {
+                                // GIVEN
+                                const string text = "'single q'u'ote test'";
+
+                                var textField = browser.TextField("name");
+
+                                // WHEN
+		                        textField.Value = text;
+
+                                // THEN
+                                Assert.That(textField.Value, Is.EqualTo(text));
+		                    });
+		}
+
+		[Test]
 		public void TextFieldTest()
 		{
 			const string value = "Hello world!";
