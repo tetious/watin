@@ -572,6 +572,15 @@ namespace WatiN.Core
 			CreateNewIEAndGoToUri(uri, logonDialogHandler, createInNewProcess);
 		}
 
+        /// <summary>
+        /// (Re)Use existing <see cref="IEBrowser"/> object. 
+        /// </summary>
+        /// <param name="ieBrowser">An object implementing <see cref="IEBrowser"/>.</param>
+        public IE(IEBrowser ieBrowser)
+        {
+            _ieBrowser = ieBrowser;
+        }
+
 		/// <summary>
 		/// Use existing InternetExplorer object. The param is of type
 		/// object because otherwise all projects using WatiN should also
