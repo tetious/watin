@@ -19,7 +19,6 @@
 namespace WatiN.Core.Native
 {
     using System;
-
     using Mozilla;
 
     /// <summary>
@@ -106,6 +105,14 @@ namespace WatiN.Core.Native
             this.Reload(false);
         }
 
+        /// <summary>
+        /// Closes the browser.
+        /// </summary>
+        public void Close()
+        {
+            this.ClientPort.Write("{0}.close()", FireFoxClientPort.WindowVariableName);
+        }
+
         public bool IsLoading()
         {
             switch (this.ClientPort.JavaScriptEngine)
@@ -125,6 +132,11 @@ namespace WatiN.Core.Native
         /// <param name="url">The URL to laod.</param>
         /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
         protected abstract void LoadUri(Uri url, bool waitForComplete);
+
+        public int WindowCount
+        {
+            get { return this.ClientPort.WriteAndReadAsInt("getWindows().length"); }
+        }
 
         private bool Navigate(string action)
         {

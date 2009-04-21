@@ -20,6 +20,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
+using WatiN.Core.Constraints;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Mozilla;
 using WatiN.Core.Native;
@@ -38,9 +40,14 @@ namespace WatiN.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
-        public FireFox()
+        public FireFox() : this(true) { }
+
+        public FireFox(bool createNew)
         {
-            CreateFireFoxInstance("about:blank");
+            if (createNew)
+                CreateFireFoxInstance("about:blank");
+            else
+                PartialInitFireFox();
         }
 
         /// <summary>
@@ -251,7 +258,20 @@ namespace WatiN.Core
         {
             WaitForComplete(new JSWaitForComplete(ffBrowser, waitForCompleteTimeOut));
         }
-        
+
+        /// <summary>
+        /// Closes the browser.
+        /// </summary>
+        public override void Close()
+        {
+            ffBrowser.Close();
+        }
+
+        public static bool Exists(Constraint findBy)
+        {
+            return new FireFox(false).FindFireFox(findBy);
+        }
+
         #endregion Public instance methods
 
         #region Protected instance methods
@@ -293,11 +313,64 @@ namespace WatiN.Core
             WaitForComplete();
         }
 
-        #endregion
-
-        protected override string GetAttributeValueImpl(string attributeName)
+        public static FireFox AttachToFireFox(Constraint findBy)
         {
-            return null;
+            return AttachToFireFox(findBy, Settings.AttachToIETimeOut);
         }
+
+        public static FireFox AttachToFireFox(Constraint findBy, int timeout)
+        {
+            FireFox result = new FireFox(false);
+            result.AttachToExisting(findBy, timeout, true);
+            return result;
+        }
+
+        public static FireFox AttachToFireFoxNoWait(Constraint findBy)
+        {
+            return AttachToFireFoxNoWait(findBy, Settings.AttachToIETimeOut);
+        }
+
+        public static FireFox AttachToFireFoxNoWait(Constraint findBy, int timeout)
+        {
+            FireFox result = new FireFox(false);
+            result.AttachToExisting(findBy, timeout, false);
+            return result;
+        }
+
+        private void PartialInitFireFox()
+        {
+            var clientPort = new FireFoxClientPort();
+            clientPort.ConnectToExisting();
+            ffBrowser = new FFBrowser(clientPort);
+        }
+
+        private void AttachToExisting(Constraint findBy, int timeout, bool waitForComplete)
+        {
+            var action = new TryFuncUntilTimeOut(timeout) { SleepTime = 500 };
+            bool found = action.Try(() => FindFireFox(findBy));
+            if (found)
+            {
+                if (waitForComplete)
+                    WaitForComplete();
+                return;
+            }
+
+            throw new FireFoxNotFoundException(findBy.ToString(), timeout);
+        }
+
+        private bool FindFireFox(Constraint findBy)
+        {
+            int windowCount = ffBrowser.WindowCount;
+
+            for(int i = 0; i < windowCount; i++)
+            {
+                ((FireFoxClientPort)ffBrowser.ClientPort).DefineDefaultJSVariablesForWindow(i);
+                if (this.Matches(findBy)) return true;
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 }

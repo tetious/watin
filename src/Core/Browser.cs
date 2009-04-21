@@ -311,14 +311,46 @@ namespace WatiN.Core
             WaitForComplete();
         }
 
+        /// <summary>
+        /// Closes the browser.
+        /// </summary>
+        public abstract void Close();
+
         public override IntPtr hWnd
         {
             get { return NativeBrowser.hWnd; }
         }
 
+        /// <inheritdoc />
         public override INativeDocument OnGetNativeDocument()
         {
             return NativeBrowser.NativeDocument;
+        }
+
+        /// <inheritdoc />
+        protected override string GetAttributeValueImpl(string attributeName)
+        {
+            var name = attributeName.ToLowerInvariant();
+            string value = null;
+
+            if (name.Equals("href"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = Url);
+            }
+            else if (name.Equals("title"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = Title);
+            }
+            else if (name.Equals("hwnd"))
+            {
+                UtilityClass.TryActionIgnoreException(() => value = hWnd.ToString());
+            }
+            else
+            {
+                throw new InvalidAttributeException(attributeName, "IE");
+            }
+
+            return value;
         }
 
         public static T AttachTo<T>(Constraint constraint) where T : Browser
@@ -359,5 +391,7 @@ namespace WatiN.Core
         {
             AttachToHelpers.Add(browserType, attachToHelper);
         }
+
+
     }
 }

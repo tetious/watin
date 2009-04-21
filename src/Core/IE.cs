@@ -740,7 +740,7 @@ namespace WatiN.Core
 		///  }
 		/// </code>
 		/// </example>
-		public void Close()
+		public override void Close()
 		{
 	        if (isDisposed) return;
 	        
@@ -1088,31 +1088,5 @@ namespace WatiN.Core
             
             return result;
 		}
-
-        /// <inheritdoc />
-        protected override string GetAttributeValueImpl(string attributeName)
-        {
-            var name = attributeName.ToLowerInvariant();
-            string value = null;
-
-            if (name.Equals("href"))
-            {
-                UtilityClass.TryActionIgnoreException(() => value = Url);
-            }
-            else if (name.Equals("title"))
-            {
-                UtilityClass.TryActionIgnoreException(() => value = NativeDocument.Title);
-            }
-            else if (name.Equals("hwnd"))
-            {
-                UtilityClass.TryActionIgnoreException(() => value = hWnd.ToString());
-            }
-            else
-            {
-                throw new InvalidAttributeException(attributeName, "IE");
-            }
-
-            return value;
-        }
     }
 }

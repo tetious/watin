@@ -243,6 +243,12 @@ namespace WatiN.Core.Native
         public abstract void Connect(string url);
 
         /// <summary>
+        /// Connects to an existing browser
+        /// </summary>
+        public abstract void ConnectToExisting();
+
+
+        /// <summary>
         /// Writes the specified data to the jssh server.
         /// </summary>
         /// <param name="data">The data to write.</param>

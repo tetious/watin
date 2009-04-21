@@ -183,8 +183,16 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (attributeName.ToLowerInvariant() == "tagname") return TagName;
 
-            var attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
-
+            object attributeValue = null;
+            try
+            {
+                attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
+            }
+            catch
+            {
+                Console.WriteLine("Getting attribute: " + attributeName);
+                throw;
+            }
             if (DidReturnObjectReference(attributeValue))
             {
                 attributeValue = RetrieveNodeValue(attributeName);

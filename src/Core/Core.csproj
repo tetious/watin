@@ -158,6 +158,7 @@
     <Compile Include="DialogHandlers\DialogHandlerHelper.cs" />
     <Compile Include="DialogHandlers\RefreshWarningDialogHandler.cs" />
     <Compile Include="DialogHandlers\WaitUntilHandledDialogHandler.cs" />
+    <Compile Include="Exceptions\FireFoxNotFoundException.cs" />
     <Compile Include="IdHinter.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />
     <Compile Include="Native\EmptyElementCollection.cs" />

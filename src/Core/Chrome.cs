@@ -30,6 +30,7 @@ namespace WatiN.Core
 
     using UtilityClasses;
 
+    using WatiN.Core.Constraints;
     using WatiN.Core.Native;
 
     /// <summary>
@@ -174,6 +175,14 @@ namespace WatiN.Core
         }
 
         /// <summary>
+        /// Closes the browser.
+        /// </summary>
+        public override void Close()
+        {
+            this.ChromeBrowser.Close();
+        }
+
+        /// <summary>
         /// Creates the Chrome process.
         /// </summary>
         /// <param name="arguments">The arguments.</param>
@@ -277,7 +286,7 @@ namespace WatiN.Core
             ChromeBrowser = new ChromeBrowser(clientPort);
         }
 
-        protected override string GetAttributeValueImpl(string attributeName)
+        public static Chrome AttachToChrome(Constraint findBy)
         {
             throw new System.NotImplementedException();
         }

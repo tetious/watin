@@ -159,7 +159,12 @@ namespace WatiN.Core.Native.Chrome
             Logger.LogDebug(string.Format("Successfully connected to Chrome on port.{0}", ChromePort));
             
             //DefineDefaultJSVariables();
-        }        
+        }
+
+        public override void ConnectToExisting()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Initializes the document.

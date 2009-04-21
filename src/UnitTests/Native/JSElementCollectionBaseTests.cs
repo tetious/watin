@@ -112,6 +112,11 @@ namespace WatiN.Core.UnitTests.Native
             return;
         }
 
+        public override void ConnectToExisting()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
             return;

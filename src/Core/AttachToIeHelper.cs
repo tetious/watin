@@ -33,7 +33,7 @@ namespace WatiN.Core
 
         protected virtual IE CreateBrowserInstance(IEBrowser browser)
         {
-            return new IE(browser, false);
+            return new IE(browser.AsIWebBrowser2, false);
         }
 
         public Browser Find(Constraint findBy, int timeout, bool waitForComplete)
