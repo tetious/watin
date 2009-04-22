@@ -25,7 +25,7 @@ using WatiN.Core.Interfaces;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
-namespace WatiN.Core.UnitTests.DialogHandlerTests
+namespace WatiN.Core.DialogHandlers
 {
     /// <summary>
     /// This dialoghandler can be used when it isn't clear which DialogHandler should be used to handle a dialog. 
