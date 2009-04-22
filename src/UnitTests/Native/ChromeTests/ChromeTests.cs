@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+#if IncludeChromeInUnitTesting
+
 namespace WatiN.Core.UnitTests.Native.ChromeTests
 {
     using System.Web;
@@ -117,3 +119,4 @@ namespace WatiN.Core.UnitTests.Native.ChromeTests
         }
     }
 }
+#endif

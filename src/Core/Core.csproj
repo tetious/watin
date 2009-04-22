@@ -65,7 +65,7 @@
     <ErrorReport>prompt</ErrorReport>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -137,7 +137,7 @@
     <Compile Include="Actions\HighlightAction.cs" />
     <Compile Include="Actions\ITypeTextAction.cs" />
     <Compile Include="Actions\TypeTextAction.cs" />
-    <Compile Include="AttachToIeHelper.cs" />
+    <Compile Include="Native\InternetExplorer\AttachToIeHelper.cs" />
     <Compile Include="Chrome.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />
     <Compile Include="Constraints\AnyConstraint.cs" />
@@ -158,6 +158,7 @@
     <Compile Include="DialogHandlers\DialogHandlerHelper.cs" />
     <Compile Include="DialogHandlers\RefreshWarningDialogHandler.cs" />
     <Compile Include="DialogHandlers\WaitUntilHandledDialogHandler.cs" />
+    <Compile Include="Interfaces\IAttachTo.cs" />
     <Compile Include="Exceptions\FireFoxNotFoundException.cs" />
     <Compile Include="IdHinter.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />

@@ -73,10 +73,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         public override string DocumentVariableName
         {
-            get
-            {
-                return "doc";
-            }   
+            get { return "doc"; }   
         }
 
         /// <summary>
@@ -97,10 +94,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <value>The name of the browser variable.</value>
         public override string BrowserVariableName
         {
-            get
-            {
-                return "browser";
-            }
+            get { return "browser"; }
         }
 
         /// <summary>

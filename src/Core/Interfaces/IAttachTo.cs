@@ -16,20 +16,13 @@
 
 #endregion Copyright
 
-using System;
-using System.Runtime.Serialization;
+using WatiN.Core.Constraints;
 
-namespace WatiN.Core.Exceptions
+namespace WatiN.Core.Interfaces
 {
-    /// <summary>
-    /// Thrown if the searched for Firefox can't be found.
-    /// </summary>
-    [Serializable]
-    public class FireFoxNotFoundException : WatiNException
+    public interface IAttachTo
     {
-        public FireFoxNotFoundException(string constraint, int waitTimeInSeconds) :
-            base("Could not find a Firefox window matching constraint: " + constraint + ". Search expired after '" + waitTimeInSeconds.ToString() + "' seconds.") { }
-
-        public FireFoxNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        Browser Find(Constraint findBy, int timeout, bool waitForComplete);
+        bool Exists(Constraint constraint);
     }
 }
