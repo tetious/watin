@@ -63,7 +63,7 @@ namespace WatiN.Core
 			{
 				clock = new Timer(timeout*1000);
 				clock.AutoReset = false;
-				clock.Elapsed += new ElapsedEventHandler(ElapsedEvent);
+				clock.Elapsed += ElapsedEvent;
 				clock.Start();
 			}
 		}

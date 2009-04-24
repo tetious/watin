@@ -30,7 +30,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
-			ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
+			var confirmDialogHandler = new ConfirmDialogHandler();
 
 			using (new UseDialogOnce(Ie.DialogWatcher, confirmDialogHandler))
 			{
@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 
 				confirmDialogHandler.WaitUntilExists();
 
-				string message = confirmDialogHandler.Message;
+				var message = confirmDialogHandler.Message;
 				confirmDialogHandler.OKButton.Click();
 
 				Ie.WaitForComplete();
@@ -53,7 +53,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
-			ConfirmDialogHandler confirmDialogHandler = new ConfirmDialogHandler();
+			var confirmDialogHandler = new ConfirmDialogHandler();
 
 			using (new UseDialogOnce(Ie.DialogWatcher, confirmDialogHandler))
 			{

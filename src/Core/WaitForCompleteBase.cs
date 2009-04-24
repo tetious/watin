@@ -26,7 +26,7 @@ namespace WatiN.Core
 {
     public abstract class WaitForCompleteBase : IWait
     {
-        private SimpleTimer _waitForCompleteTimer;
+        private SimpleTimer _timer;
         private readonly int _waitForCompleteTimeOut;
 
         protected WaitForCompleteBase(int waitForCompleteTimeOut)
@@ -36,6 +36,19 @@ namespace WatiN.Core
         }
 
         public int MilliSecondsTimeOut { get; set; }
+
+        public SimpleTimer Timer
+        {
+            get
+            {
+                if (_timer == null)
+                {
+                    _timer = new SimpleTimer(_waitForCompleteTimeOut);
+                }
+                return _timer;
+            }
+            set { _timer = value; }
+        }
 
         /// <summary>
         /// This method calls InitTimeOut and waits till IE is ready
@@ -74,8 +87,8 @@ namespace WatiN.Core
         /// <returns></returns>
         protected virtual SimpleTimer InitTimeout()
         {
-            _waitForCompleteTimer = new SimpleTimer(_waitForCompleteTimeOut);
-            return _waitForCompleteTimer;
+            _timer = null;
+            return Timer;
         }
 
         /// <summary>
@@ -87,7 +100,7 @@ namespace WatiN.Core
         /// return value will be true</returns>
         protected virtual bool IsTimedOut()
         {
-            return _waitForCompleteTimer.Elapsed;
+            return Timer.Elapsed;
         }
 
         /// <summary>
@@ -105,9 +118,9 @@ namespace WatiN.Core
 
         protected void WaitUntil(DoFunc<bool> waitWhile, BuildTimeOutExceptionMessage exceptionMessage)
         {
-            if (_waitForCompleteTimer == null) throw new WatiNException("_waitForCompleteTimer not initialized");
+            if (Timer == null) throw new WatiNException("_waitForCompleteTimer not initialized");
             
-            var timeOut = new TryFuncUntilTimeOut(_waitForCompleteTimer) {ExceptionMessage = exceptionMessage};
+            var timeOut = new TryFuncUntilTimeOut(Timer) {ExceptionMessage = exceptionMessage};
             timeOut.Try(waitWhile);
         }
     }

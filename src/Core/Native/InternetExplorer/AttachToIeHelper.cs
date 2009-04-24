@@ -51,19 +51,35 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             Logger.LogAction("Busy finding Internet Explorer matching constriant " + findBy);
 
-            var action = new TryFuncUntilTimeOut(timeout) { SleepTime = 500 };
-            var ie = action.Try(() => FindIEPartiallyInitialized(findBy));
+            var timer = new SimpleTimer(timeout);
+
+            var ie = TryFindIe(findBy, timer);
+            
             if (ie != null)
             {
-                ie.FinishInitialization(null);
-
-                if (waitForComplete)
-                    ie.WaitForComplete();
-
-                return ie;
+                return FinishInitializationAndWaitForComplete(ie, timer, waitForComplete);
             }
 
             throw new IENotFoundException(findBy.ToString(), timeout);
+        }
+
+        private Browser FinishInitializationAndWaitForComplete(IE ie, SimpleTimer timer, bool waitForComplete)
+        {
+            ie.FinishInitialization(null);
+
+            if (waitForComplete)
+            {
+                var ieWaitForComplete = new IEWaitForComplete(ie) { Timer = timer };
+                ie.WaitForComplete(ieWaitForComplete);
+            }
+
+            return ie;
+        }
+
+        private IE TryFindIe(Constraint findBy, SimpleTimer timer)
+        {
+            var action = new TryFuncUntilTimeOut(timer) { SleepTime = 500 };
+            return action.Try(() => FindIEPartiallyInitialized(findBy));
         }
 
         public bool Exists(Constraint constraint)
