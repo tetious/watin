@@ -47,12 +47,25 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
-            T value = attributeBag.GetAdapter<T>();
-            if (value == null)
-                throw new WatiNException(string.Format("This constraint class can only be used to compare against values adaptable to {0}.", typeof(T)));
+            var typeToConvertTo = typeof(T);
+            if (typeToConvertTo.IsSubclassOf(typeof(Control)))
+            {
+                if (attributeBag.GetType().IsSubclassOf(typeof(Element)))
+                {
+                    T control = Control.CreateControl(typeToConvertTo, (Element) attributeBag) as T;
+                    return predicate(control);
+                }
+            }
+            else
+            {
+                T value = attributeBag.GetAdapter<T>();
+                if (value == null)
+                    throw new WatiNException(string.Format("The PredicateConstraint class can only be used to compare against values adaptable to {0}.", typeToConvertTo));
 
-            return predicate(value);
-		}
+                return predicate(value);
+            }
+            return false;
+        }
 
         /// <inheritdoc />
         public override void WriteDescriptionTo(TextWriter writer)

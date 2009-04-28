@@ -294,6 +294,28 @@ namespace WatiN.Core
         }
 
         /// <summary>
+        /// Creates a control object of the desired type that wraps the specified <see cref="Element" />.
+        /// </summary>
+        /// <param name="TControl"></param>
+        /// <param name="element">The <see cref="Element" /> that the control should wrap</param>
+        /// <returns>The control object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="element"/> is null</exception>
+        public static Control CreateControl(Type TControl, Element element)
+        {
+            if (element == null)
+                throw new ArgumentNullException("element");
+
+            if (!TControl.IsSubclassOf(typeof (Control)))
+                throw new ArgumentException("TControl");
+
+            var constructor = TControl.GetConstructor(new Type[]{});
+            var control = constructor.Invoke(new object[] {}) as Control;
+
+            control.Initialize(element);
+            return control;
+        }
+
+        /// <summary>
         /// Gets a control of the desired type within an element container.
         /// </summary>
         /// <typeparam name="TControl">The <see cref="Control{TElement}" /> subclass</typeparam>
