@@ -1010,7 +1010,7 @@ namespace WatiN.Core
 
         public virtual TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
 	    {
-            return All.Control<TControl>(predicate);
+            return All.Control(predicate);
 	    }
 
         public virtual ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()

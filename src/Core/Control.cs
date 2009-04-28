@@ -155,6 +155,16 @@ namespace WatiN.Core
             }
         }
 
+        public override bool Exists
+        {
+            get
+            {
+                if (element == null)
+                    throw new WatiNException("The Element is not available because the Control instance has not been fully initialized.");
+                return element.Exists;
+            }
+        }
+
         /// <summary>
         /// Verifies that the element represents the correct kind of element for the control.
         /// </summary>
@@ -235,7 +245,17 @@ namespace WatiN.Core
         /// </summary>
         public virtual bool Exists
         {
-            get { return Element.Exists; }
+            get
+            {
+                try
+                {
+                    return Element.Exists;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
 
         /// <summary>
