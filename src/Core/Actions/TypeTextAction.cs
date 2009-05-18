@@ -86,12 +86,13 @@ namespace WatiN.Core.Actions
             return value;
         }
 
-        private void doKeyPress(string value)
+        protected virtual void doKeyPress(string value)
         {
             var doKeyDown = ShouldKeyDownEventByFired();
             var doKeyUp = ShouldKeyUpEventByFired();
 
-            var length = value.Length;
+
+            var length = value != null ? value.Length : 0;
             if (_textField.MaxLength != 0 && length > _textField.MaxLength)
             {
                 length = _textField.MaxLength;
@@ -104,16 +105,31 @@ namespace WatiN.Core.Actions
 
                 if (doKeyDown)
                 {
-                    _textField.KeyDown(character);
+                    FireKeyDown(character);
                 }
 
-                _textField.KeyPress(character);
+                FireKeyPress(character);
 
                 if (doKeyUp)
                 {
-                    _textField.KeyUp(character);
+                    FireKeyUp(character);
                 }
             }
+        }
+
+        protected virtual void FireKeyUp(char character)
+        {
+            _textField.KeyUp(character);
+        }
+
+        protected virtual void FireKeyPress(char character)
+        {
+            _textField.KeyPress(character);
+        }
+
+        protected virtual void FireKeyDown(char character)
+        {
+            _textField.KeyDown(character);
         }
 
         protected virtual bool ShouldKeyDownEventByFired()
