@@ -17,7 +17,10 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Runtime.InteropServices;
+using System.Text;
 using WatiN.Core.Logging;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
@@ -73,6 +76,38 @@ namespace WatiN.Core.Native
         #endregion
 
         private WinInet() {}
+
+        private static string RetrieveIECookiesForUrl(string url)
+        {
+            var cookieHeader = new StringBuilder(new String(' ', 256), 256);
+            int datasize = cookieHeader.Length;
+            if (!InternetGetCookie(url, null, cookieHeader, ref datasize))
+            {
+                if (datasize < 0)
+                    return String.Empty;
+                cookieHeader = new StringBuilder(datasize);
+                InternetGetCookie(url, null, cookieHeader, ref datasize);
+            }
+            return cookieHeader.ToString();
+        }
+
+        public static CookieContainer GetCookieContainerForUrl(Uri url)
+        {
+            var container = new CookieContainer();
+            string cookieHeaders = RetrieveIECookiesForUrl(url.AbsoluteUri);
+            if (cookieHeaders.Length > 0)
+            {
+                try { container.SetCookies(url, cookieHeaders); }
+                catch (CookieException) { }
+            }
+            return container;
+        }
+
+        public static CookieCollection GetCookiesForUrl(Uri url)
+        {
+            var container = GetCookieContainerForUrl(url);
+            return container.GetCookies(url);
+        }
 
         public static string GetCookie(string url, string cookieName)
         {
@@ -345,6 +380,10 @@ namespace WatiN.Core.Native
             EntryPoint = "InternetSetOptionW")]
         [return : MarshalAs(UnmanagedType.Bool)]
         private static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int lpdwBufferLength);
+
+        [DllImport("wininet.dll", SetLastError = true,
+            CharSet = CharSet.Unicode)]
+        public static extern bool InternetGetCookie (string url, string name, StringBuilder data, ref int dataSize);
 
         [DllImport("wininet.dll", SetLastError = true,
             CharSet = CharSet.Unicode,

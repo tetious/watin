@@ -961,6 +961,16 @@ namespace WatiN.Core
 			return WinInet.GetCookie(url, cookieName);
 		}
 
+        public System.Net.CookieContainer GetCookieContainerForUrl(Uri url)
+        {
+            return WinInet.GetCookieContainerForUrl(url);
+        }
+
+        public System.Net.CookieCollection GetCookiesForUrl(Uri url)
+        {
+            return WinInet.GetCookiesForUrl(url);
+        }
+
 		/// <summary>
 		/// Sets the value of a cookie.
 		/// </summary>

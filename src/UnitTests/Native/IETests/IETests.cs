@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using System.Web;
 using NUnit.Framework;
@@ -303,7 +304,6 @@ namespace WatiN.Core.UnitTests.IETests
             Assert.IsFalse(IsIEWindowOpen("main"), "Internet Explorer should be closed by IE.Dispose");
         }
 
-
         [Test]
         public void Cookies()
         {
@@ -322,6 +322,11 @@ namespace WatiN.Core.UnitTests.IETests
 
                 ie.SetCookie("http://2.watin.com/", "test-cookie=def; expires=Wed, 01-Jan-2020 00:00:00 GMT");
                 Assert.AreEqual("test-cookie=def", ie.GetCookie("http://2.watin.com/", "test-cookie"));
+
+                CookieCollection collection = ie.GetCookiesForUrl(new Uri("http://2.watin.com/"));
+                Assert.AreEqual(1, collection.Count);
+                Assert.AreEqual(collection[0].Name, "test-cookie");
+                Assert.AreEqual(collection[0].Value, "def");
 
                 // Clear cookies under one subdomain.
                 ie.ClearCookies("http://1.watin.com/");
