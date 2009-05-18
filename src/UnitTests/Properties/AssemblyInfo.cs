@@ -23,7 +23,7 @@ using System.Reflection;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("WatiN")]
-[assembly: AssemblyDescription("Web Application Testing In dotNet")]
+[assembly: AssemblyDescription("Web Application Testing In .Net")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WatiN")]
@@ -42,4 +42,4 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.0.11.949")]
+[assembly: AssemblyVersion("2.0.11.956")]

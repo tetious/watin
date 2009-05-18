@@ -164,6 +164,11 @@ namespace WatiN.Core
             return new ElementCollection(domContainer, CreateElementFinder(null, tagName, inputTypes));
         }
 
+        public ElementCollection ElementsWithTag(IList<ElementTag> elementTags)
+        {
+            return new ElementCollection(domContainer, CreateElementFinder(null, elementTags));
+        }
+
         public FileUpload FileUpload(string elementId)
         {
             return FileUpload(Find.ByDefault(elementId));
@@ -606,6 +611,11 @@ namespace WatiN.Core
         {
             var tags = ElementTag.ToElementTags(tagName, inputTypes);
 
+            return CreateElementFinder(findBy, tags);
+        }
+
+        private NativeElementFinder CreateElementFinder(Constraint findBy, IEnumerable<ElementTag> tags)
+        {
             return new NativeElementFinder(nativeElementCollectionFactory, domContainer, new List<ElementTag>(tags), findBy);
         }
     }

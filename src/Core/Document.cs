@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -576,7 +577,12 @@ namespace WatiN.Core
             return All.ElementsWithTag(tagName, inputTypes);
         }
 
-        public virtual TElement ElementOfType<TElement>(string elementId) where TElement : Element
+	    public ElementCollection ElementsWithTag(IList<ElementTag> elementTags)
+	    {
+	        return All.ElementsWithTag(elementTags);
+	    }
+
+	    public virtual TElement ElementOfType<TElement>(string elementId) where TElement : Element
         {
             return All.ElementOfType<TElement>(elementId);
         }

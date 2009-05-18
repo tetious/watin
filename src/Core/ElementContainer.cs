@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Native;
@@ -153,6 +154,11 @@ namespace WatiN.Core
         public ElementCollection ElementsWithTag(string tagName, params string[] inputTypes)
         {
             return All.ElementsWithTag(tagName, inputTypes);
+        }
+
+        public ElementCollection ElementsWithTag(IList<ElementTag> elementTags)
+        {
+            return All.ElementsWithTag(elementTags);
         }
 
         public FileUpload FileUpload(string elementId)
