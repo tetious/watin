@@ -398,7 +398,7 @@
     <Content Include="html\Tables.html" />
     <Content Include="html\TestEvents.html" />
     <Content Include="html\theApp.html" />
-    <Content Include="html\~^+{}[].txt" />
+    <Content Include="html\~^+{}[]%28%29.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

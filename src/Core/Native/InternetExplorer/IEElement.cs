@@ -22,6 +22,7 @@ using System.Drawing;
 using mshtml;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -183,14 +184,14 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (attributeName.ToLowerInvariant() == "tagname") return TagName;
 
-            object attributeValue = null;
+            object attributeValue;
             try
             {
                 attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
             }
             catch
             {
-                Console.WriteLine("Getting attribute: " + attributeName);
+                Logger.LogDebug("Getting attribute: " + attributeName);
                 throw;
             }
             if (DidReturnObjectReference(attributeValue))

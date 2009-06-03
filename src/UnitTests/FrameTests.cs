@@ -196,6 +196,31 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
+	    [Test]
+	    public void ShouldBeAbleToSetFrameAttribute()
+	    {
+            ExecuteTest(browser =>
+                            {
+	                            // GIVEN
+                                var mainFrame = browser.Frame("mainid");
+                                Assert.That(mainFrame.GetAttributeValue("myAttrib"), Is.Null, "pre-condition failed");
+                                
+                                // WHEN
+                                mainFrame.SetAttributeValue("myAttrib", "myValue");
+
+                                //THEN
+                                Assert.That(mainFrame.GetAttributeValue("myAttrib"), Is.EqualTo("myValue"));
+                            }
+                );
+
+	        
+
+	        // WHEN
+
+	        // THEN
+	    }
+
+
 		private static void AssertFindFrame(Document document, AttributeConstraint findBy, string expectedFrameName)
 		{
 			Frame frame = null;

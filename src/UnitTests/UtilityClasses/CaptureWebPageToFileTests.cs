@@ -34,6 +34,21 @@ namespace WatiN.Core.UnitTests
             get { return MainURI; }
         }
 
+        [Test]
+        public void ScreenShotOfIeShouldNotBeBlack()
+        {
+            // GIVEN
+            var captureWebPage = new CaptureWebPageMock(Ie.DomContainer);
+
+            // WHEN
+            captureWebPage.CaptureWebPageToFile(@"C:\capture.jpg", true, true, 100, 100);
+
+            // THEN
+            var bitmap = new Bitmap(captureWebPage.Image);
+            var color = bitmap.GetPixel(150,50);
+
+            Assert.That(IsNotEqualToColorBlack(color));
+        }
 
         [Test]
         public void ScreenShotOfHtmlDialogShouldNotBeBlack()
@@ -173,10 +188,10 @@ namespace WatiN.Core.UnitTests
 
         private class CaptureWebPageMock : CaptureWebPage
         {
-            public bool CallBaseCaptureWebPageToFile { get; set; }
+            public bool CallBaseCaptureWebPageToFile { private get; set; }
             public string ImageType { get; private set; }
             public ImageCodecInfo ImageCodecInfo { get; private set; }
-            public System.Drawing.Image Image { get; set; }
+            public System.Drawing.Image Image { get; private set; }
 
             public CaptureWebPageMock(DomContainer domContainer) : base(domContainer)
             {

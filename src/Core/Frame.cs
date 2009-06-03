@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -29,8 +28,8 @@ namespace WatiN.Core
     [ElementTag("iframe", Index = 1)]
     public class Frame : Document
 	{
-		private readonly Element frameElement;
-        private readonly INativeDocument frameDocument;
+		private readonly Element _frameElement;
+        private readonly INativeDocument _frameDocument;
 
 		/// <summary>
 		/// This constructor will mainly be used by the constructor of FrameCollection
@@ -44,14 +43,14 @@ namespace WatiN.Core
             if (frameDocument == null)
                 throw new ArgumentNullException("frameDocument");
 
-            this.frameDocument = frameDocument;
-            frameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
+            _frameDocument = frameDocument;
+            _frameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
 		}
 
         /// <inheritdoc />
         public override INativeDocument NativeDocument
         {
-            get { return frameDocument; }
+            get { return _frameDocument; }
         }
 
         public virtual string Name
@@ -76,8 +75,14 @@ namespace WatiN.Core
                     return Url;
 
                 default:
-                    return frameElement.GetAttributeValue(attributeName);
+                    return _frameElement.GetAttributeValue(attributeName);
             }
         }
+
+        public void SetAttributeValue(string attributeName, string value)
+        {
+            _frameElement.SetAttributeValue(attributeName, value);
+        }
+
 	}
 }
