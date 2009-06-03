@@ -84,8 +84,8 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         [Test]
         public void ShouldEscapeSendKeysCharacters()
         {
-            var original = @"C:\TAdev\~%^+{}[]Test\Doc.txt";
-            var expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}Test\Doc.txt";
+            var original = @"C:\TAdev\~%^+{}[]()Test\Doc.txt";
+            var expected = @"C:\TAdev\{~}{%}{^}{+}{{}{}}{[}{]}{(}{)}Test\Doc.txt";
 
             Assert.AreEqual(expected, UtilityClass.EscapeSendKeysCharacters(original));
         }

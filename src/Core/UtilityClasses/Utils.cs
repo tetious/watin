@@ -84,7 +84,7 @@ namespace WatiN.Core.UtilityClasses
 
         public static string EscapeSendKeysCharacters(string value) 
         {
-            const string sendKeysCharactersToBeEscaped = "~%^+{}[]";
+            const string sendKeysCharactersToBeEscaped = "~%^+{}[]()";
 
             if(value.IndexOfAny(sendKeysCharactersToBeEscaped.ToCharArray()) > -1)
             {

@@ -119,13 +119,14 @@ namespace WatiN.Core.UnitTests
 		                        Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
 		                        Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");
 
-		                        var file = new Uri(HtmlTestBaseURI, @"~^+{}[].txt").LocalPath;
+		                        const string fileName = @"~^+{}[]().txt";
+                                var file = new Uri(HtmlTestBaseURI, fileName).LocalPath;
 
 		                        // WHEN
 		                        fileUpload.Set(file);
 
 		                        // THEN
-		                        Assert.That(fileUpload.FileName, Is.EqualTo(file), "Unexpected filename");
+                                Assert.That(fileUpload.FileName, Text.EndsWith(fileName), "Unexpected filename");
 		                    });
 		}
 
