@@ -93,7 +93,6 @@ namespace WatiN.Core.DialogHandlers
 
 	    public override bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
 	    {
-	        var mainWindow = new Window(mainWindowHwnd);
             return CanHandleDialog(window);
 	    }
 

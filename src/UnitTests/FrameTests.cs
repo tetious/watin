@@ -212,12 +212,6 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(mainFrame.GetAttributeValue("myAttrib"), Is.EqualTo("myValue"));
                             }
                 );
-
-	        
-
-	        // WHEN
-
-	        // THEN
 	    }
 
 
