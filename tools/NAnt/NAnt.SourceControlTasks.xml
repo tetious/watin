@@ -679,11 +679,10 @@
               </code>
             </example>
         </member>
-        <member name="M:NAnt.SourceControl.Tasks.CvsPass.InitializeTask(System.Xml.XmlNode)">
+        <member name="M:NAnt.SourceControl.Tasks.CvsPass.Initialize">
             <summary>
             Ensures all information is available to execute the <see cref="T:NAnt.Core.Task"/>.
             </summary>
-            <param name="taskNode">The <see cref="T:System.Xml.XmlNode"/> used to initialize the <see cref="T:NAnt.Core.Task"/>.</param>
         </member>
         <member name="M:NAnt.SourceControl.Tasks.CvsPass.ExecuteTask">
             <summary>
@@ -1267,12 +1266,11 @@
             attributes useful in the context of the <see cref="T:NAnt.SourceControl.Tasks.CvsTask"/>.
             </summary>
         </member>
-        <member name="M:NAnt.SourceControl.Types.CvsFileSet.InitializeElement(System.Xml.XmlNode)">
+        <member name="M:NAnt.SourceControl.Types.CvsFileSet.Initialize">
             <summary>
             Initialize the <see cref="T:NAnt.SourceControl.Types.CvsFileSet"/> object and locate the .cvsignore
             files to add to the exclude list.
             </summary>
-            <param name="elementNode"></param>
         </member>
         <member name="P:NAnt.SourceControl.Types.CvsFileSet.UseCvsIgnore">
             <summary>

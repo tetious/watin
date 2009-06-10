@@ -109,7 +109,10 @@
             Extracts files from a zip file.
             </summary>
             <remarks>
-              <para>Uses <see href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</see> (SharpZipLib), an open source Zip/GZip library written entirely in C#.</para>
+              <para>
+              Uses <see href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</see>
+              (SharpZipLib), an open source Zip/GZip library written entirely in C#.
+              </para>
             </remarks>
             <example>
               <para>Extracts all the file from the zip, preserving the directory structure.</para>
@@ -125,13 +128,14 @@
             Extracts the files from the zip file.
             </summary>
         </member>
-        <member name="M:NAnt.Compression.Tasks.UnZipTask.ExtractFile(System.IO.Stream,System.String,System.DateTime)">
+        <member name="M:NAnt.Compression.Tasks.UnZipTask.ExtractFile(System.IO.Stream,System.String,System.DateTime,System.Int64)">
             <summary>
             Extracts a file entry from the specified stream.
             </summary>
             <param name="inputStream">The <see cref="T:System.IO.Stream"/> containing the compressed entry.</param>
             <param name="entryName">The name of the entry including directory information.</param>
             <param name="entryDate">The date of the entry.</param>
+            <param name="entrySize">The uncompressed size of the entry.</param>
             <exception cref="T:NAnt.Core.BuildException">
               <para>The destination directory for the entry could not be created.</para>
               <para>-or-</para>
@@ -182,7 +186,10 @@
             Creates a zip file from the specified filesets.
             </summary>
             <remarks>
-              <para>Uses <see href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</see> (SharpZipLib), an open source Tar/Zip/GZip library written entirely in C#.</para>
+              <para>
+              Uses <see href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</see>
+              (SharpZipLib), an open source Tar/Zip/GZip library written entirely in C#.
+              </para>
             </remarks>
             <example>
               <para>

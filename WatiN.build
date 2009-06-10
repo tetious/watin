@@ -94,7 +94,7 @@ Copyright 2006-2009 Jeroen van Menen
         <include name="${pia.dir}\Microsoft.mshtml.dll"/>
         <include name="${bin.dir}\${core.assembly.name}"/>
         <include name="${libraries.dir}\nunit.framework.dll"/>
-        <include name="${libraries.dir}\Rhino.Mocks.dll"/>
+        <include name="${libraries.dir}\Moq.dll"/>
         <include name="System.dll"/>
       </references>
       <nowarn>
@@ -104,19 +104,9 @@ Copyright 2006-2009 Jeroen van Menen
     </csc>
 
     <copy file="${libraries.dir}\nunit.framework.dll" todir="${bin.dir}" />
-    <copy file="${libraries.dir}\Rhino.Mocks.dll" todir="${bin.dir}" />
+    <copy file="${libraries.dir}\Moq.dll" todir="${bin.dir}" />
 
     <call target="copy-testdata" />
-  </target>
-
-  <target name="set-net-1.1-version">
-    <property name="nant.settings.currentframework"	value="net-1.1" overwrite="false" />
-    <property name="net.framework.fullname"         value=".Net 1.1" />
-    <property name="project.properties.define"      value="NET11" />
-    <property name="libraries.dir"                  value="${base.dir}\lib\Net\1.1" />
-    <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-1.1-bin\nunit-console.exe" />
-
-    <call target="init-properties"  />
   </target>
 
   <target name="set-net-2.0-version">
@@ -124,6 +114,16 @@ Copyright 2006-2009 Jeroen van Menen
     <property name="net.framework.fullname"         value=".Net 2.0" />
     <property name="project.properties.define"      value="" />
     <property name="libraries.dir"                  value="${base.dir}\lib\Net\2.0" />
+    <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
+
+    <call target="init-properties"  />
+  </target>
+
+  <target name="set-net-3.5-version">
+    <property name="nant.settings.currentframework"	value="net-3.5" overwrite="false" />
+    <property name="net.framework.fullname"         value=".Net 3.5" />
+    <property name="project.properties.define"      value="" />
+    <property name="libraries.dir"                  value="${base.dir}\lib\Net\3.5" />
     <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
 
     <call target="init-properties"  />
@@ -332,12 +332,12 @@ Copyright 2006-2009 Jeroen van Menen
         value="..\..\bin\Interop.SHDocVw.dll" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
-        xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Rhino.Mocks']/@HintPath"
+        xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'Moq']/@HintPath"
         value="..\..\bin\nunit.framework.dll" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
         xpath="//VisualStudioProject/CSHARP/Build/References/Reference[@Name = 'nunit.framework']/@HintPath"
-        value="..\..\bin\Rhino.Mocks.dll" />
+        value="..\..\bin\Moq.dll" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
             xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
@@ -422,46 +422,45 @@ Copyright 2006-2009 Jeroen van Menen
   </target>
 
   <target name="full" description="Compiles, tests, and produces distributions">
-    <call target="full-net-1.1" />
     <call target="full-net-2.0" />
   </target>
 
-  <target name="buildandtest" description="Compiles net 1.1, tests net 1.1, and compiles net 2.0 versions">
-    <call target="build-net-1.1" />
+  <target name="buildandtest" description="Compiles and runs tests">
     <call target="build-net-2.0" />
-  </target>
-
-  <target name="full-net-1.1" if="${framework::sdk-exists('net-1.1')}" description="Compiles, tests, and produces distributions for .Net 1.1" >
-    <call target="set-net-1.1-version" />
-    <call target="clean" />
-    <call target="build" />
-    <!--call target="run-unit-tests-with-coverage" /-->
-    <call target="ndoc" />
-    <call target="dist" />
-    <call target="installer"  />
   </target>
 
   <target name="full-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">
     <call target="set-net-2.0-version" />
     <call target="clean" />
     <call target="build" />
-    <!--call target="run-unit-tests" /-->
+    <call target="run-unit-tests" />
     <call target="ndoc" />
     <call target="dist" />
     <call target="installer"  />
   </target>
 
-  <target name="build-net-1.1" if="${framework::sdk-exists('net-1.1')}" description="Compiles, tests, and produces distributions for .Net 1.1" >
-    <call target="set-net-1.1-version" />
-    <call target="clean" />
-    <call target="build" />
-    <call target="run-unit-tests-with-coverage" />
-  </target>
-
-  <target name="build-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests, and produces distributions for .Net 2.0">
+  <target name="build-net-2.0" if="${framework::sdk-exists('net-2.0')}" description="Compiles, tests for .Net 2.0">
     <call target="set-net-2.0-version" />
     <call target="clean" />
     <call target="build" />
+    <call target="run-unit-tests" />
+  </target>
+  
+  <target name="full-net-3.5" if="${framework::sdk-exists('net-3.5')}" description="Compiles, tests, and produces distributions for .Net 3.5">
+    <call target="set-net-3.5-version" />
+    <call target="clean" />
+    <call target="build" />
+    <call target="run-unit-tests" />
+    <call target="ndoc" />
+    <call target="dist" />
+    <call target="installer"  />
+  </target>
+
+  <target name="build-net-3.5" if="${framework::sdk-exists('net-3.5')}" description="Compiles, tests for .Net 3.5">
+    <call target="set-net-3.5-version" />
+    <call target="clean" />
+    <call target="build" />
+    <call target="run-unit-tests" />
   </target>
 
 </project>

@@ -249,6 +249,17 @@
             The current element in the collection.
             </returns>
         </member>
+        <member name="M:NAnt.VSNet.Extensibility.IProjectBuildProvider.IsSupported(System.String,System.Xml.XmlElement)">
+            <summary>
+            Returns a number representing how much this file fits this project type.
+            </summary>
+            <param name="projectExt"></param>
+            <param name="xmlDefinition"></param>
+            <returns></returns>
+            <remarks>
+            This enables the override in other providers. Do not return big numbers, mainly when compring only on filename.
+            </remarks>
+        </member>
         <member name="T:NAnt.VSNet.Rainier.Solution">
             <summary>
             Analyses Microsoft Visual Studio .NET 2002 (Rainier) solution files.
@@ -1741,6 +1752,11 @@
             for use with COM components; otherwise, <see langword="false" />.
             </value>
         </member>
+        <member name="T:NAnt.VSNet.EverettSolution">
+            <summary>
+            Analyses Microsoft Visual Studio .NET 2003 (Everett) solution files.
+            </summary>
+        </member>
         <member name="T:NAnt.VSNet.GenericSolution">
             <summary>
             Supports grouping of individual projects, and treating them as a solution.
@@ -2324,6 +2340,11 @@
             A Visual J# project.
             </summary>
         </member>
+        <member name="F:NAnt.VSNet.ProjectType.MSBuild">
+            <summary>
+            MSBuild project.
+            </summary>
+        </member>
         <member name="T:NAnt.VSNet.BuildResult">
             <summary>
             Specifies the result of the build.
@@ -2354,6 +2375,11 @@
             Visual Studio.NET 2003
             </summary>
         </member>
+        <member name="F:NAnt.VSNet.ProductVersion.Whidbey">
+            <summary>
+            Visual Studio 2005
+            </summary>
+        </member>
         <member name="T:NAnt.VSNet.ProjectLocation">
             <summary>
             Indentifies the physical location of a managed project.
@@ -2361,7 +2387,7 @@
         </member>
         <member name="F:NAnt.VSNet.ProjectLocation.Local">
             <summary>
-            A local project. 
+            A local project.
             </summary>
         </member>
         <member name="F:NAnt.VSNet.ProjectLocation.Web">
@@ -2531,7 +2557,7 @@
             Factory class for VS.NET projects.
             </summary>
         </member>
-        <member name="M:NAnt.VSNet.ProjectFactory.#ctor">
+        <member name="M:NAnt.VSNet.ProjectFactory.#ctor(NAnt.VSNet.Tasks.SolutionTask)">
             <summary>
             Initializes a new instance of the <see cref="T:NAnt.VSNet.ProjectFactory"/>
             class.
@@ -2653,6 +2679,11 @@
             <remarks>
             Valid commands are those in a .bat file. For more info see MSDN.
             </remarks>
+        </member>
+        <member name="T:NAnt.VSNet.RainierSolution">
+            <summary>
+            Analyses Microsoft Visual Studio .NET 2002 (Rainier) solution files.
+            </summary>
         </member>
         <member name="M:NAnt.VSNet.ReferencesResolver.InitializeLifetimeService">
             <summary>
