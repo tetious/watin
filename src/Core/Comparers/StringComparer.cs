@@ -26,8 +26,8 @@ namespace WatiN.Core.Comparers
 	/// </summary>
 	public class StringComparer : Comparer<string>
 	{
-		private readonly bool ignoreCase;
-		private readonly string comparisonValue;
+		private readonly bool _ignoreCase;
+		private readonly string _comparisonValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringComparer"/> class.
@@ -50,8 +50,8 @@ namespace WatiN.Core.Comparers
             if (comparisonValue == null)
                 throw new ArgumentNullException("comparisonValue");
            
-            this.ignoreCase = ignoreCase;			
-			this.comparisonValue = comparisonValue;
+            _ignoreCase = ignoreCase;			
+			_comparisonValue = comparisonValue;
 		}
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace WatiN.Core.Comparers
         /// </summary>
         public string ComparisonValue
         {
-            get { return comparisonValue; }
+            get { return _comparisonValue; }
         }
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace WatiN.Core.Comparers
 			if (value == null)
                 return false;
 
-			return string.Compare(value, comparisonValue,
-                ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture) == 0;
+			return string.Compare(value, _comparisonValue,
+                _ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture) == 0;
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace WatiN.Core.Comparers
         /// <inheritdoc />
         public override string ToString()
         {
-            return string.Format("equals '{0}'{1}", comparisonValue, ignoreCase ? " ignoring case" : "");
+            return string.Format("equals '{0}'{1}", _comparisonValue, _ignoreCase ? " ignoring case" : "");
         }
     }
 }

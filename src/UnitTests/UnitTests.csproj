@@ -156,6 +156,7 @@
     <Compile Include="ControlTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
+    <Compile Include="IdHinterTests.cs" />
     <Compile Include="Native\ChromeTests\ChromeBrowserTestManager.cs" />
     <Compile Include="Native\ChromeTests\ChromeTests.cs" />
     <Compile Include="ActionTests\HighligtActionTests.cs" />

@@ -30,7 +30,7 @@ namespace WatiN.Core
     /// var idHint = IdHinter.GetIdHint(Find.ById("someId"));
     /// </code>
     /// </example>
-    internal class IdHinter
+    public class IdHinter
     {
         private readonly Constraint _constraint;
         private string _idValue;
@@ -81,6 +81,8 @@ namespace WatiN.Core
 
             if (!IsAllowedConstraint) return null;
             if (!IsIdAttributeConstraint) return null;
+
+            if (AsAttributeConstraint.Comparer.GetType().Equals(typeof(Comparers.StringComparer)) == false) return null;
 
             var comparer = AsAttributeConstraint.Comparer as Comparers.StringComparer;
             if (comparer == null) return null;
