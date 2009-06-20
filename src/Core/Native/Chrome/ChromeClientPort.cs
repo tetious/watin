@@ -19,6 +19,8 @@
 namespace WatiN.Core.Native.Chrome
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Net;
@@ -34,6 +36,11 @@ namespace WatiN.Core.Native.Chrome
     /// </summary>
     public class ChromeClientPort : ClientPortBase
     {
+        /// <summary>
+        /// List of known errors  that the Google remote port might return.
+        /// </summary>
+        private static readonly List<string> knownResponseErrors = new List<string> { "unknown command", "TypeError", "SyntaxError", "\"Uncaught SyntaxError", "Uncaught ReferenceError", "true\r\r\n\"Not allowed to load local resource: file:///" };
+
         /// <summary>
         /// The port used to connect to chrome.
         /// </summary>
@@ -217,6 +224,7 @@ namespace WatiN.Core.Native.Chrome
                         try
                         {
                             Logger.LogDebug("Closing connection to chrome");
+                            this.SendCommand("print window.close()");
                             this.telnetSocket.Close();
                             this.Process.WaitForExit(5000);
                         }
@@ -268,13 +276,13 @@ namespace WatiN.Core.Native.Chrome
                 return;
             }
 
-            if (response.StartsWith("unknown command", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("\"Uncaught SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("Uncaught ReferenceError", StringComparison.InvariantCultureIgnoreCase))
+            foreach (string knownResponseError in knownResponseErrors)
             {
-                throw new ChromeException(string.Format("Error sending last message to chrome remote server: {0}", response));
-            }
+                if (response.StartsWith(knownResponseError, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new ChromeException(string.Format("Error sending last message to chrome remote server: {0}", response));    
+                }
+            }            
         }
 
         /// <summary>
@@ -292,6 +300,7 @@ namespace WatiN.Core.Native.Chrome
             return data
                     .Replace(string.Format("{0}\r", this.LastCommandSend), string.Empty)
                     .Replace(string.Format("{0}v8(running)> ", Environment.NewLine), string.Empty)
+                    .Replace(string.Format("{0}v8(paused)> ", Environment.NewLine), string.Empty)
                     .Trim(); 
         }
 

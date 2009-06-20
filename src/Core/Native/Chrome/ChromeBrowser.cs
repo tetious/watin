@@ -47,16 +47,25 @@ namespace WatiN.Core.Native.Chrome
         /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
         protected override void LoadUri(Uri url, bool waitForComplete)
         {
-            var command = string.Format("window.location.href='{0}\';", url.AbsoluteUri);
-            if (!waitForComplete)
+            if (!url.IsFile)
             {
-                command = JSUtils.WrapCommandInTimer(command);
+                var command = string.Format("window.location.href='{0}\';", url.AbsoluteUri);
+                if (!waitForComplete)
+                {
+                    command = JSUtils.WrapCommandInTimer(command);
+                }
+
+                this.ClientPort.Write(command);
+                this.ReAttachToTab(url);
             }
-
-            this.ClientPort.Write(command);
-            this.ReAttachToTab(url);
+            else
+            {
+                // Need to reopen Chrome to go to a file based url.
+                // #TODO if the current url is a file url do we still need to??
+                this.Reopen(url);
+            }
         }
-
+        
         /// <summary>
         /// Reattaches to the first tab. This is required every time the document
         /// </summary>
@@ -71,7 +80,7 @@ namespace WatiN.Core.Native.Chrome
                 Thread.Sleep(100);
                 this.ClientPort.WriteAndRead("debug()", true, true);
             } 
-            while (this.ClientPort.LastResponseRaw.Contains("attached to about:blank") || url.AbsoluteUri == "about:blank");
+            while (this.ClientPort.LastResponseRaw.Contains("attached to about:blank") && url.AbsoluteUri != "about:blank");
         }
     }
 }

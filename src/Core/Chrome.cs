@@ -120,7 +120,7 @@ namespace WatiN.Core
         {
             get
             {
-                throw new System.NotImplementedException();
+                return ChromeBrowser.hWnd;
             }
         }
 

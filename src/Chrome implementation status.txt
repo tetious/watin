@@ -7,10 +7,15 @@ Tests passing:
 ---------------
 All AreaTests (4)
 BaseElementCollectionTest (3)
+BrowserTests.GoogleFindSearchButtonAndClick
+BrowserTests.GoogleSearchWithEncodedQueryStringInGoTo
+BrowserTests.WindowStyle
+BrowserTests.AutoMoveMousePointerToTopLeft
+BrowserTests.GoToUrl
 
 Working on
 -----------
-BrowserTests.GoogleFindSearchButtonAndClick
+BrowserTests.GoToUrlNoWait
 
 
 Possible refactoring

@@ -73,9 +73,9 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         public void Reopen()
         {
-            this.ClientPort.Dispose();
-            this.ClientPort.Connect(string.Empty);
+            this.Reopen(null);
         }
+
 
         /// <inheritdoc />
         public void NavigateTo(Uri url)
@@ -115,15 +115,28 @@ namespace WatiN.Core.Native
 
         public bool IsLoading()
         {
+            bool loading;
             switch (this.ClientPort.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
-                    return this.ClientPort.WriteAndReadAsBool("{0}.readyState != 'complete';", this.ClientPort.DocumentVariableName);
+                    loading = this.ClientPort.WriteAndReadAsBool("{0}.readyState != 'complete';", this.ClientPort.DocumentVariableName);
+                    this.ClientPort.WriteAndRead("{0}.readyState;", this.ClientPort.DocumentVariableName);
+                    this.ClientPort.WriteAndRead("window.location.href");
+                    break;
                 case JavaScriptEngineType.Mozilla:
-                    return this.ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", this.BrowserVariableName);
+                    loading = this.ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", this.BrowserVariableName);
+                    break;
                 default:
                     throw new NotImplementedException();
-            }            
+            }
+
+            return loading;
+        }
+
+        protected void Reopen(Uri url)
+        {
+            this.ClientPort.Dispose();
+            this.ClientPort.Connect(url == null ? string.Empty : url.ToString());
         }
 
         /// <summary>
