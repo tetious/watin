@@ -1177,5 +1177,45 @@ namespace WatiN.Core.UnitTests
 	                        });
 	    }
 
+        [Test]
+        public void ToStringWhenDescriptionIsNotSetShouldDescribeElement()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+                var form = browser.Form("FormInputElement");
+
+                // WHEN
+                var description = form.Description;
+                var toString = form.ToString();
+
+                // THEN
+                Assert.That(description, Is.Null);
+                Assert.That(toString, Is.EqualTo("FormInputElement"));
+            });
+        }
+
+        [Test]
+        public void ToStringWhenDescriptionIsSetShouldReturnDescription()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+#if !NET20
+                var form = browser.Form("FormInputElement").WithDescription("foo");
+#else
+                var form = browser.Form("FormInputElement");
+                form.Description = "foo";
+#endif
+
+                // WHEN
+                var description = form.Description;
+                var toString = form.ToString();
+
+                // THEN
+                Assert.That(description, Is.EqualTo("foo"));
+                Assert.That(toString, Is.EqualTo("foo"));
+            });
+        }
 	}
 }

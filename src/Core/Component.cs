@@ -26,8 +26,13 @@ namespace WatiN.Core
     /// Describes a WatiN component such as an element, document, browser or custom control
     /// which may be located using various constraints.
     /// </summary>
-    public abstract class Component : IAttributeBag
+    public abstract class Component : IAttributeBag, IHasDescription
     {
+        /// <summary>
+        /// Gets or sets the description of the component, or null if none.
+        /// </summary>
+        public string Description { get; set; }
+
         /// <summary>
         /// Returns true if the component matches the specified constraint.
         /// </summary>

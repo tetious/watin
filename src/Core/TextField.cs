@@ -125,8 +125,9 @@ namespace WatiN.Core
             NativeElement.Select();
 		}
 
-		public override string ToString()
-		{
+        /// <inheritdoc />
+        protected override string DefaultToString()
+        {
 		    var title = Title;
 		    if (UtilityClass.IsNotNullOrEmpty(title))
 			{

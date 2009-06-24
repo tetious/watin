@@ -19,6 +19,7 @@
 using System;
 using System.Text;
 using WatiN.Core.Exceptions;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -54,7 +55,7 @@ namespace WatiN.Core
     /// property to a regular expression that is expected to match part of the page's Url.
     /// If the page is only accessible via HTTPS then also set the IsSecure property to true.</item>
     /// <item>Add properties to provide access to the sub-elements of the page.  When the page
-    /// is used, the <see cref="Document" /> property will be set to the containing _document
+    /// is used, the <see cref="Document" /> property will be set to the containing document
     /// (eg. the web browser or a frame).  Use this property to locate the sub-elements of the page.</item>
     /// <item>Define additional properties and methods as desired to model the state and
     /// behaviors of the page.</item>
@@ -101,14 +102,35 @@ namespace WatiN.Core
     /// }
     /// </code>
     /// <para>
-    /// Within a test, we can use the functionality of the sign in page like this:
+    /// Within the page class, you may also use the <see cref="FindByAttribute" /> and <see cref="DescriptionAttribute" />
+    /// attributes to declaratively refer to elements of the page.  Here is part of the same example
+    /// above using attributes instead of properties.
+    /// </para>
+    /// <code>
+    /// [Page(UrlRegex = "SignIn.aspx", IsSecure = true)]
+    /// public class SignInPage : Page
+    /// {
+    ///     [FindBy(Name = "username"), Description("User name text field.")]
+    ///     public TextField UserNameTextField;
+    ///     
+    ///     [FindBy(Name = "password"), Description("Password text field.")]
+    ///     public TextField PasswordNameTextField;
+    ///     
+    ///     [FindBy(Name = "signIn"), Description("Sign in button.")]
+    ///     public TextField SignInButton;
+    ///     
+    ///     // etc...
+    /// }
+    /// </code>
+    /// <para>
+    /// Finally, within the test we use the functionality of the sign in page like this:
     /// </para>
     /// <code>
     /// browser.Page&lt;SignInPage&gt;>().SignIn("somebody", "letmein");
     /// </code>
     /// </example>
     /// <seealso cref="PageAttribute"/>
-    public abstract class Page : Component
+    public abstract class Page : Composite
     {
         private PageMetadata _metadata;
         private Document _document;
@@ -121,7 +143,7 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets declarative _metadata about the page.
+        /// Gets declarative metadata about the page.
         /// </summary>
         public PageMetadata Metadata
         {
@@ -134,17 +156,17 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets the _document or frame that holds the page content.
+        /// Gets the document or frame that holds the page content.
         /// </summary>
         /// <remarks>
         /// <para>
         /// This method calls <see cref="VerifyDocumentProperties" /> to ensure that
-        /// the current _document represents the correct page (has the correct Url, etc.).
+        /// the current document represents the correct page (has the correct Url, etc.).
         /// If this verification fails then an exception is thrown.
         /// </para>
         /// </remarks>
         /// <exception cref="WatiNException">Thrown if the page object does not have a reference
-        /// to a _document or if the _document's properties fail validation.</exception>
+        /// to a document or if the document's properties fail validation.</exception>
         public Document Document
         {
             get
@@ -157,18 +179,18 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Verifies that the _document represents the correct page (has the correct Url, etc.).
+        /// Verifies that the document represents the correct page (has the correct Url, etc.).
         /// </summary>
         /// <remarks>
         /// <para>
         /// The default implementation calls <see cref="VerifyDocumentUrl" /> to verify the <paramref name="document"/>'s Url.
         /// </para>
         /// <para>
-        /// Subclasses can override this method to customize how _document verification takes place.
+        /// Subclasses can override this method to customize how document verification takes place.
         /// </para>
         /// </remarks>
-        /// <param name="document">The _document to verify, not null</param>
-        /// <exception cref="WatiNException">Thrown if the _document's properties fail verification</exception>
+        /// <param name="document">The document to verify, not null</param>
+        /// <exception cref="WatiNException">Thrown if the document's properties fail verification</exception>
         protected virtual void VerifyDocumentProperties(Document document)
         {
             VerifyDocumentUrl(document.Url);
@@ -176,7 +198,7 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Verifies that the _document's represents the correct page.
+        /// Verifies that the document's represents the correct page.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -184,10 +206,10 @@ namespace WatiN.Core
         /// to validate the <paramref name="url"/>.
         /// </para>
         /// <para>
-        /// Subclasses can override this method to customize how _document Url verification takes place.
+        /// Subclasses can override this method to customize how document Url verification takes place.
         /// </para>
         /// </remarks>
-        /// <param name="url">The _document url to verify, not null</param>
+        /// <param name="url">The document url to verify, not null</param>
         /// <exception cref="WatiNException">Thrown if the url fails verification</exception>
         protected virtual void VerifyDocumentUrl(string url)
         {
@@ -207,10 +229,10 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Creates an initialized page object from a _document.
+        /// Creates an initialized page object from a document.
         /// </summary>
         /// <typeparam name="T">The page type</typeparam>
-        /// <param name="document">The _document or frame represented by the page</param>
+        /// <param name="document">The document or frame represented by the page</param>
         /// <returns>The page object</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="document"/> is null</exception>
         public static T CreatePage<T>(Document document)
@@ -219,17 +241,21 @@ namespace WatiN.Core
             if (document == null)
                 throw new ArgumentNullException("document");
 
-            var page = new T {_document = document};
+            var page = new T();
+            page.Initialize(document);
             return page;
         }
 
         /// <inheritdoc />
         public override string ToString()
         {
+            if (UtilityClass.IsNotNullOrEmpty(Description))
+                return Description;
+
             StringBuilder description = new StringBuilder();
             description.Append(GetType().Name);
 
-            // Note: Uses unvalidated _document to avoid throwing an exception if the _document is incorrect.
+            // Note: Uses unvalidated document to avoid throwing an exception if the document is incorrect.
             if (_document != null)
             {
                 description.Append(@" (");
@@ -253,6 +279,23 @@ namespace WatiN.Core
         protected sealed override string GetAttributeValueImpl(string attributeName)
         {
             return Document.GetAttributeValue(attributeName);
+        }
+
+        /// <summary>
+        /// Initializes the contents of the page object.
+        /// </summary>
+        protected virtual void InitializeContents()
+        {
+            InitializeContents(_document);
+        }
+
+        private void Initialize(Document document)
+        {
+            if (_document != null)
+                throw new InvalidOperationException("The page has already been initialized.");
+
+            _document = document;
+            InitializeContents();
         }
     }
 }

@@ -301,7 +301,8 @@ namespace WatiN.Core
             return FindInOwnTableRows(Find.ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(Find.ByIndex(inColumn) & Find.ByElement(predicate))));
         }
 
-        public override string ToString()
+        /// <inheritdoc />
+        protected override string DefaultToString()
         {
             return Id;
         }

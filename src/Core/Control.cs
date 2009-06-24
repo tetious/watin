@@ -21,6 +21,7 @@ using System.Text;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Properties;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -126,7 +127,27 @@ namespace WatiN.Core
     /// }
     /// </code>
     /// <para>
-    /// Within a test, we can use the calendar control like this:
+    /// Within the control class, you may also use the <see cref="FindByAttribute" /> and <see cref="DescriptionAttribute" />
+    /// attributes to declaratively refer to elements of the control.  Here is part of the same example
+    /// above using attributes instead of properties.
+    /// </para>
+    /// <code>
+    /// public class CalendarControl : Control&lt;Div&gt;
+    /// {
+    ///     [FindBy(Name = "month"), Description("Month drop down.")]
+    ///     private SelectList MonthSelectList;
+    ///     
+    ///     [FindBy(Name = "year"), Description("Year drop down.")]
+    ///     private SelectList YearSelectList;
+    ///     
+    ///     [FindBy(Name = "dateLabel"), Description("Date label.")]
+    ///     private Div DateLabelDiv;
+    ///     
+    ///     // etc...
+    /// }
+    /// </code>
+    /// <para>
+    /// Finally, within the test we use the calendar control like this:
     /// </para>
     /// <code>
     /// browser.Control&lt;CalendarControl&gt;>(Find.ById("fromDate")).Date = DateTime.Now;
@@ -195,6 +216,7 @@ namespace WatiN.Core
                     "The element was of type '{0}' but expected an element of type {1}.", untypedElement.GetType(), typeof(TElement)));
 
             element = typedElement;
+            InitializeContents();
         }
 
         internal sealed override void Initialize(IElementContainer elementContainer, Constraint findBy)
@@ -203,6 +225,15 @@ namespace WatiN.Core
                 throw new InvalidOperationException(Resources.Control_HasAlreadyBeenInitialized);
 
             element = elementContainer.ElementOfType<TElement>(ElementConstraint & findBy);
+            InitializeContents();
+        }
+
+        /// <summary>
+        /// Initializes the contents of the control object.
+        /// </summary>
+        protected virtual void InitializeContents()
+        {
+            InitializeContents(element as IElementContainer);
         }
 
         internal sealed override Element GetUntypedElement()
@@ -228,7 +259,7 @@ namespace WatiN.Core
     /// </remarks>
     /// <seealso cref="Control{TElement}"/>
     /// <seealso cref="Page" />
-    public abstract class Control : Component
+    public abstract class Control : Composite
     {
         /// <summary>
         /// Gets the element wrapped by the control.
@@ -357,6 +388,9 @@ namespace WatiN.Core
         /// <inheritdoc />
         public override string ToString()
         {
+            if (UtilityClass.IsNotNullOrEmpty(Description))
+                return Description;
+
             var description = new StringBuilder();
             description.Append(GetType().Name);
 

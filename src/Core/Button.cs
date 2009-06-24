@@ -64,13 +64,8 @@ namespace WatiN.Core
 			get { return Value; }
 		}
 
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
-		public override string ToString()
+        /// <inheritdoc />
+		protected override string DefaultToString()
 		{
 			return Value;
 		}

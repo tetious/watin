@@ -340,8 +340,16 @@ namespace WatiN.Core
 		/// </returns>
 		public override string ToString()
 		{
-		    return UtilityClass.IsNotNullOrEmpty(Title) ? Title : Text;
+            return UtilityClass.IsNotNullOrEmpty(Description) ? Description : DefaultToString();
 		}
+
+        /// <summary>
+        /// Obtains a default description of the element to be used when <see cref="IHasDescription.Description" /> is null.
+        /// </summary>
+        protected virtual string DefaultToString()
+        {
+            return UtilityClass.IsNotNullOrEmpty(Title) ? Title : Text;
+        }
 
         /// <summary>
 		/// Clicks this element and waits till the event is completely finished (page is loaded 
@@ -678,7 +686,7 @@ namespace WatiN.Core
 		/// <param name="timeout">The timeout in seconds.</param>
         public virtual void WaitUntilExists(int timeout)
 		{
-			waitUntilExistsOrNot(timeout, true);
+			WaitUntilExistsOrNot(timeout, true);
 		}
 
 		/// <summary>
@@ -697,7 +705,7 @@ namespace WatiN.Core
 		/// <param name="timeout">The timeout in seconds.</param>
         public virtual void WaitUntilRemoved(int timeout)
 		{
-			waitUntilExistsOrNot(timeout, false);
+			WaitUntilExistsOrNot(timeout, false);
 		}
 
 		/// <summary>
@@ -784,7 +792,7 @@ namespace WatiN.Core
             tryActionUntilTimeOut.Try(() => Exists && Matches(constraint));
 		}
 
-	    private void waitUntilExistsOrNot(int timeout, bool waitUntilExists)
+	    private void WaitUntilExistsOrNot(int timeout, bool waitUntilExists)
 	    {
 	        // Does it make sense to go into the do loop?
 			if (waitUntilExists)

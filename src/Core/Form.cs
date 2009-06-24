@@ -40,8 +40,9 @@ namespace WatiN.Core
 			WaitForComplete();
 		}
 
-		public override string ToString()
-		{
+        /// <inheritdoc />
+        protected override string DefaultToString()
+        {
 			if (UtilityClass.IsNotNullOrEmpty(Title))
 			{
 				return Title;

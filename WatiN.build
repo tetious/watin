@@ -54,6 +54,8 @@ Copyright 2006-2009 Jeroen van Menen
   <property name="ndoc2.console.file"							value="${tools.dir}\NDoc2\NDocConsole.exe" />
   <property name="wix.dir"                      	value="${tools.dir}\WiX" />
 
+  <property name="key.file" value="${source.dir}\WatiN.snk" />
+
   <!-- User targets -->
   <target name="clean" description="Delete Automated Build artifacts">
     <delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
@@ -62,9 +64,9 @@ Copyright 2006-2009 Jeroen van Menen
   <target name="build">
     <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
 
-    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}"/>
+    <tlbimp typelib="${shdocvw.typlib}" output="${bin.dir}\${shdocvw.assembly.name}" namespace="${shdocvw.namespace}" keyfile="${key.file}" />
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}" >
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${core.assembly.file}" doc="${bin.dir}\${core.xmldoc.name}"  keyfile="${key.file}">
       <sources>
         <include name="${core.source.dir}\**.cs"/>
       </sources>
@@ -72,20 +74,21 @@ Copyright 2006-2009 Jeroen van Menen
         <include name="${bin.dir}\${shdocvw.assembly.name}"/>
         <include name="${pia.dir}\Microsoft.mshtml.dll"/>
         <include name="System.dll"/>
+        <include name="System.Core.dll"/>
         <include name="System.Drawing.dll"/>
         <include name="System.Windows.Forms.dll"/>
       </references>
       <nowarn>
         <warning number="0618" />
         <warning number="1591" />
-        <warning number="1616" if="${string::contains('${nant.settings.currentframework}','net-2.0')}"/>
+        <warning number="1616" if="${string::contains('${net.framework}','net-2.0')}"/>
       </nowarn>
     </csc>
 
     <property name="core.assembly.version" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(core.assembly.file))}" />
     <property name="core.assembly.buildmajorminor" value="${string::substring(core.assembly.version, 0, string::get-length(core.assembly.version) - int::parse(5))}" />
 
-    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}" >
+    <csc define="${project.properties.define}" debug="true" rebuild="true" target="library" output="${bin.dir}\${unittests.assembly.name}" keyfile="${key.file}">
       <sources>
         <include name="${unittests.source.dir}\**.cs"/>
       </sources>
@@ -96,10 +99,11 @@ Copyright 2006-2009 Jeroen van Menen
         <include name="${libraries.dir}\nunit.framework.dll"/>
         <include name="${libraries.dir}\Moq.dll"/>
         <include name="System.dll"/>
+        <include name="System.Core.dll"/>
       </references>
       <nowarn>
         <warning number="0618" />
-        <warning number="1616" if="${string::contains('${nant.settings.currentframework}','net-2.0')}"/>
+        <warning number="1616" if="${string::contains('${net.framework}','net-2.0')}"/>
       </nowarn>
     </csc>
 
@@ -110,9 +114,10 @@ Copyright 2006-2009 Jeroen van Menen
   </target>
 
   <target name="set-net-2.0-version">
-    <property name="nant.settings.currentframework"	value="net-2.0" overwrite="false" />
+    <property name="nant.settings.currentframework" value="net-3.5" overwrite="false" /> <!-- use .Net 3.5 compiler but we only use a restricted subset of features -->
+    <property name="net.framework"                  value="net-2.0" overwrite="false" />
     <property name="net.framework.fullname"         value=".Net 2.0" />
-    <property name="project.properties.define"      value="" />
+    <property name="project.properties.define"      value="NET20" />
     <property name="libraries.dir"                  value="${base.dir}\lib\Net\2.0" />
     <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
 
@@ -120,9 +125,10 @@ Copyright 2006-2009 Jeroen van Menen
   </target>
 
   <target name="set-net-3.5-version">
-    <property name="nant.settings.currentframework"	value="net-3.5" overwrite="false" />
+    <property name="nant.settings.currentframework" value="net-3.5" overwrite="false" />
+    <property name="net.framework"                  value="net-3.5" overwrite="false" />
     <property name="net.framework.fullname"         value=".Net 3.5" />
-    <property name="project.properties.define"      value="" />
+    <property name="project.properties.define"      value="NET35" />
     <property name="libraries.dir"                  value="${base.dir}\lib\Net\3.5" />
     <property name="path.nunit.console"	            value="${tools.dir}\NUnit\Net-2.0-bin\nunit-console.exe" />
 
@@ -130,7 +136,7 @@ Copyright 2006-2009 Jeroen van Menen
   </target>
 
   <target name="init-properties">
-    <property name="build.dir"                      value="${build.base.dir}\${nant.settings.currentframework}" />
+    <property name="build.dir"                      value="${build.base.dir}\${net.framework}" />
 
     <property name="bin.dir" 			                  value="${build.dir}\bin" />
     <property name="reports.dir" 			              value="${build.dir}\test-reports" />
@@ -320,11 +326,11 @@ Copyright 2006-2009 Jeroen van Menen
 
     <!-- Adjust conditional compilation constants -->
     <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
-        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
+        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[starts-with(@Name, 'Debug')]/@DefineConstants"
         value="DEBUG;TRACE;${project.properties.define}" />
 
     <xmlpoke file="${distribution.dir}\src\Core\Core.csproj"
-        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Release']/@DefineConstants"
+        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[starts-with(@Name, 'Release')]/@DefineConstants"
         value="TRACE;${project.properties.define}" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
@@ -340,17 +346,17 @@ Copyright 2006-2009 Jeroen van Menen
         value="..\..\bin\Moq.dll" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
-            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Debug']/@DefineConstants"
+            xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[starts-with(@Name, 'Debug')]/@DefineConstants"
             value="DEBUG;TRACE;${project.properties.define}" />
 
     <xmlpoke file="${distribution.dir}\src\UnitTests\UnitTests.csproj"
-        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[@Name = 'Release']/@DefineConstants"
+        xpath="//VisualStudioProject/CSHARP/Build/Settings/Config[starts-with(@Name, 'Release')]/@DefineConstants"
         value="TRACE;${project.properties.define}" />
 
     <!-- Create distribution zip file -->
     <property name="core.assembly.file" value="${bin.dir}\${core.assembly.name}" />
 
-    <property name="distribution.zip.name" value="${project.name}-${core.assembly.version}-${nant.settings.currentframework}.zip" />
+    <property name="distribution.zip.name" value="${project.name}-${core.assembly.version}-${net.framework}.zip" />
     <zip zipfile="${build.dir}\${distribution.zip.name}">
       <fileset basedir="${distribution.dir}">
         <include name="\**" />
@@ -383,10 +389,10 @@ Copyright 2006-2009 Jeroen van Menen
     <mkdir dir="${installer.wixobj.dir}" />
     <copy file="${installer.source.dir}\License.rtf" todir="${installer.wixobj.dir}" />
 
-    <property name="extension" value="${string::replace(nant.settings.currentframework, '.', '')}" />
+    <property name="extension" value="${string::replace(net.framework, '.', '')}" />
     <property name="extension" value="${string::replace(extension, 'net-', 'n')}" />
     <property name="installer.installdir.name" value="${core.assembly.buildmajorminor}.${extension}" />
-    <property name="installer.file.name" value="${project.name}-${core.assembly.version}-${nant.settings.currentframework}.msi" />
+    <property name="installer.file.name" value="${project.name}-${core.assembly.version}-${net.framework}.msi" />
 
     <!-- Create new product guid -->
     <xmlpoke file="${installer.source.dir}\Setup.wxs"
@@ -403,7 +409,7 @@ Copyright 2006-2009 Jeroen van Menen
         <define name="var.distdir" value="${distribution.dir}\" />
         <define name="var.productname" value="${project.name} ${core.assembly.buildmajorminor} for ${net.framework.fullname} " />
         <define name="var.productversion" value="${core.assembly.version}" />
-        <define name="var.installdir.longname" value="${core.assembly.buildmajorminor}-${nant.settings.currentframework}" />
+        <define name="var.installdir.longname" value="${core.assembly.buildmajorminor}-${net.framework}" />
         <define name="var.installdir.name" value="${installer.installdir.name}" />
       </defines>
       <sources basedir="${installer.source.dir}">

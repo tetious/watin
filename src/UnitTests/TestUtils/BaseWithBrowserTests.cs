@@ -150,6 +150,11 @@ namespace WatiN.Core.UnitTests
             }
         }
 
-	    private static bool InsideExecuteTest { get; set; }
+        public void ExecuteTestWithAnyBrowser(BrowserTest testMethod)
+        {
+            ExecuteTest(testMethod, Ie);
+        }
+
+        private static bool InsideExecuteTest { get; set; }
 	}
 }

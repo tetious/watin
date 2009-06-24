@@ -45,8 +45,9 @@ namespace WatiN.Core
 			}
 		}
 
-		public override string ToString()
-		{
+        /// <inheritdoc />
+        protected override string DefaultToString()
+        {
 			return Id;
 		}
 	}
