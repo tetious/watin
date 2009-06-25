@@ -494,7 +494,7 @@ namespace WatiN.Core.Native
             returnValue = hr.Replace(returnValue, "\r\n");
 
             // remove tags (beginning and end tags)
-            var tag = new Regex(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
+            var tag = new Regex(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?>");
             returnValue = tag.Replace(returnValue, "");
 
             // remove comment

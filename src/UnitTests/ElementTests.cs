@@ -1217,5 +1217,16 @@ namespace WatiN.Core.UnitTests
                 Assert.That(toString, Is.EqualTo("foo"));
             });
         }
+
+        [Test]
+        public void ShouldRenderInnerTextCorrectlyWhenTagContainsSubTags()
+        {
+            ExecuteTest(browser =>
+            {
+                var link = browser.Link("testlinkid3");
+                Assert.That(link.Text, Is.EqualTo("Escaped url test"));
+            });
+        }
+
 	}
 }
