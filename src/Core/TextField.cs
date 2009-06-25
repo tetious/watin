@@ -140,7 +140,7 @@ namespace WatiN.Core
 				return id;
 			}
 
-			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.ToString();
+			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.DefaultToString();
 		}
 
         public virtual string Name
