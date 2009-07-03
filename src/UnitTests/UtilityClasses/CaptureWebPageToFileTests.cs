@@ -38,16 +38,25 @@ namespace WatiN.Core.UnitTests
         public void ScreenShotOfIeShouldNotBeBlack()
         {
             // GIVEN
-            var captureWebPage = new CaptureWebPageMock(Ie.DomContainer);
+            Ie.Visible = true;
+            try
+            {
+                var captureWebPage = new CaptureWebPageMock(Ie.DomContainer);
 
-            // WHEN
-            captureWebPage.CaptureWebPageToFile(@"C:\capture.jpg", true, true, 100, 100);
+                // WHEN
+                captureWebPage.CaptureWebPageToFile(@"C:\capture.jpg", true, true, 100, 100);
 
-            // THEN
-            var bitmap = new Bitmap(captureWebPage.Image);
-            var color = bitmap.GetPixel(150,50);
+                // THEN
+                var bitmap = new Bitmap(captureWebPage.Image);
+                var color = bitmap.GetPixel(150,50);
 
-            Assert.That(IsNotEqualToColorBlack(color));
+                Assert.That(IsNotEqualToColorBlack(color));
+                
+            }
+            finally
+            {
+                Ie.Visible = Settings.MakeNewIeInstanceVisible;
+            }
         }
 
         [Test]
@@ -75,7 +84,7 @@ namespace WatiN.Core.UnitTests
 
         private static bool IsNotEqualToColorBlack(Color color)
         {
-           return color.R != 0 && color.G != 0 && color.B !=0;
+            return color.R != 0 && color.G != 0 && color.B != 0;
         }
 
         [Test]

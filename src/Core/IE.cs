@@ -1084,6 +1084,12 @@ namespace WatiN.Core
 			return FindHtmlDialog(findBy, timeout);
 		}
 
+	    public bool Visible
+	    {
+            get { return _ieBrowser.Visible; }
+            set { _ieBrowser.Visible = value; }
+	    }
+
 		private HtmlDialog FindHtmlDialog(Constraint findBy, int timeout)
 		{
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy);
