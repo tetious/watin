@@ -184,6 +184,7 @@
     <Compile Include="ComponentFinder.cs" />
     <Compile Include="ComponentFinderAttribute.cs" />
     <Compile Include="Composite.cs" />
+    <Compile Include="Body.cs" />
     <Compile Include="DescriptionAttribute.cs" />
     <Compile Include="FindByAttribute.cs" />
     <Compile Include="IHasDescription.cs" />
@@ -484,6 +485,7 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\EmptyArray.cs" />
     <Compile Include="UtilityClasses\LazyList.cs" />
     <Compile Include="WaitForCompleteBase.cs" />
     <Compile Include="FireFox.cs" />

@@ -120,15 +120,18 @@ namespace WatiN.Core
 			}
 		}
 
-	    private Element Body
-	    {
-	        get
-	        {
+        /// <summary>
+        /// Gets the Body element of the webpage, or null if none.
+        /// </summary>
+        /// <value>The body, or null if none.</value>
+        public Body Body
+        {
+            get
+            {
                 var body = NativeDocument.Body;
-                return body != null ? new Element(DomContainer, body) : null;
-
-	        }
-	    }
+                return body != null ? new Body(DomContainer, body) : null;
+            }
+        }
 
 		/// <summary>
 		/// Gets the inner text of the Body part of the webpage.

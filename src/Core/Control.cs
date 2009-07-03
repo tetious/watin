@@ -327,21 +327,26 @@ namespace WatiN.Core
         /// <summary>
         /// Creates a control object of the desired type that wraps the specified <see cref="Element" />.
         /// </summary>
-        /// <param name="TControl"></param>
+        /// <param name="controlType">The control type</param>
         /// <param name="element">The <see cref="Element" /> that the control should wrap</param>
         /// <returns>The control object</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="element"/> is null</exception>
-        public static Control CreateControl(Type TControl, Element element)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="controlType" /> or <paramref name="element"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="controlType"/> is not a subclass of <see cref="Control" />
+        /// or if it does not have a default constructor</exception>
+        public static Control CreateControl(Type controlType, Element element)
         {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+            if (!controlType.IsSubclassOf(typeof(Control)))
+                throw new ArgumentException("Control type must be a subclass of Control.", "controlType");
             if (element == null)
                 throw new ArgumentNullException("element");
 
-            if (!TControl.IsSubclassOf(typeof (Control)))
-                throw new ArgumentException("TControl");
+            var constructor = controlType.GetConstructor(EmptyArray<Type>.Instance);
+            if (constructor == null)
+                throw new ArgumentException("Control type must have a default constructor.", "controlType");
 
-            var constructor = TControl.GetConstructor(new Type[]{});
-            var control = constructor.Invoke(new object[] {}) as Control;
-
+            var control = (Control) constructor.Invoke(EmptyArray<object>.Instance);
             control.Initialize(element);
             return control;
         }

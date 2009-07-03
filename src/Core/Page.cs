@@ -134,6 +134,12 @@ namespace WatiN.Core
     {
         private PageMetadata _metadata;
         private Document _document;
+
+        /// <summary>
+        /// Reports an error message.
+        /// </summary>
+        /// <param name="errorMessage">The error message to report.</param>
+        protected delegate void ErrorReporter(string errorMessage);
  
         /// <summary>
         /// Creates an uninitialized page instance.
@@ -173,8 +179,21 @@ namespace WatiN.Core
             {
                 if (_document == null)
                     throw new WatiNException("The Document is not available because the Page instance has not been fully initialized.");
-                VerifyDocumentProperties(_document);
+                VerifyDocumentProperties(_document, errorMessage => { throw new WatiNException(errorMessage); });
                 return _document;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the current document represents this page (has the correct Url, etc.).
+        /// </summary>
+        public bool IsCurrentDocument
+        {
+            get
+            {
+                bool result = true;
+                VerifyDocumentProperties(_document, errorMessage => result = false);
+                return result;
             }
         }
 
@@ -190,15 +209,15 @@ namespace WatiN.Core
         /// </para>
         /// </remarks>
         /// <param name="document">The document to verify, not null</param>
-        /// <exception cref="WatiNException">Thrown if the document's properties fail verification</exception>
-        protected virtual void VerifyDocumentProperties(Document document)
+        /// <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
+        protected virtual void VerifyDocumentProperties(Document document, ErrorReporter errorReporter)
         {
-            VerifyDocumentUrl(document.Url);
-            VerifyDocumentIsSecure(document.Url);
+            VerifyDocumentUrl(document.Url, errorReporter);
+            VerifyDocumentIsSecure(document.Url, errorReporter);
         }
 
         /// <summary>
-        /// Verifies that the document's represents the correct page.
+        /// Verifies that the document represents a Url that matches the page metadata.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -210,38 +229,78 @@ namespace WatiN.Core
         /// </para>
         /// </remarks>
         /// <param name="url">The document url to verify, not null</param>
-        /// <exception cref="WatiNException">Thrown if the url fails verification</exception>
-        protected virtual void VerifyDocumentUrl(string url)
+        /// <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
+        protected virtual void VerifyDocumentUrl(string url, ErrorReporter errorReporter)
         {
             if (Metadata.UrlRegex != null && !Metadata.UrlRegex.IsMatch(url))
             {
-                throw new WatiNException(String.Format(
-                    "Page '{0}' expected the Url to match the regular expression pattern '{1}'.", this, Metadata.UrlRegex));
+                errorReporter(String.Format("Page '{0}' expected the Url to match the regular expression pattern '{1}'.", this, Metadata.UrlRegex));
             }
         }
 
-        protected virtual void VerifyDocumentIsSecure(string url)
+        /// <summary>
+        /// Verifies that the document is secure if the page metadata says it should be.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The default implementation uses information from the associated <see cref="PageMetadata" />
+        /// to validate the <paramref name="url"/>.
+        /// </para>
+        /// <para>
+        /// Subclasses can override this method to customize how document Url verification takes place.
+        /// </para>
+        /// </remarks>
+        /// <param name="url">The document url to verify, not null</param>
+        /// <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
+        protected virtual void VerifyDocumentIsSecure(string url, ErrorReporter errorReporter)
         {
             if (Metadata.IsSecure && !url.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new WatiNException(String.Format("Page '{0}' expected the Url to begin with 'https:'.", this));
+                errorReporter(String.Format("Page '{0}' expected the Url to begin with 'https:'.", this));
             }
         }
 
         /// <summary>
         /// Creates an initialized page object from a document.
         /// </summary>
-        /// <typeparam name="T">The page type</typeparam>
+        /// <typeparam name="TPage">The page type</typeparam>
         /// <param name="document">The document or frame represented by the page</param>
         /// <returns>The page object</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="document"/> is null</exception>
-        public static T CreatePage<T>(Document document)
-            where T : Page, new()
+        public static TPage CreatePage<TPage>(Document document)
+            where TPage : Page, new()
         {
             if (document == null)
                 throw new ArgumentNullException("document");
 
-            var page = new T();
+            var page = new TPage();
+            page.Initialize(document);
+            return page;
+        }
+
+        /// <summary>
+        /// Creates an initialized page object from a document.
+        /// </summary>
+        /// <param name="pageType">The page type</param>
+        /// <param name="document">The document or frame represented by the page</param>
+        /// <returns>The page object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="pageType"/> or <paramref name="document"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="pageType"/> is not a subclass of <see cref="Page" />
+        /// or if it does not have a default constructor</exception>
+        public static Page CreatePage(Type pageType, Document document)
+        {
+            if (pageType == null)
+                throw new ArgumentNullException("pageType");
+            if (!pageType.IsSubclassOf(typeof(Page)))
+                throw new ArgumentException("Page type must be a subclass of Page.", "pageType");
+            if (document == null)
+                throw new ArgumentNullException("document");
+
+            var constructor = pageType.GetConstructor(EmptyArray<Type>.Instance);
+            if (constructor == null)
+                throw new ArgumentException("Page type must have a default constructor.", "pageType");
+
+            var page = (Page)constructor.Invoke(EmptyArray<object>.Instance);
             page.Initialize(document);
             return page;
         }
