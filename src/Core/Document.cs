@@ -124,7 +124,7 @@ namespace WatiN.Core
         /// Gets the Body element of the webpage, or null if none.
         /// </summary>
         /// <value>The body, or null if none.</value>
-        public Body Body
+        public virtual Body Body
         {
             get
             {

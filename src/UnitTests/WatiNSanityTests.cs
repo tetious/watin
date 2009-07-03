@@ -200,6 +200,8 @@ namespace WatiN.Core.UnitTests
                 "IE.ClearCookies",
                 "IE.ClearCache",
                 "IE.GetCookie",
+                "IE.GetCookieContainerForUrl",
+                "IE.GetCookiesForUrl",
                 "IE.SetCookie",
                 "IE.get_AutoClose",
                 "IE.set_AutoClose",

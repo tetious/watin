@@ -79,7 +79,7 @@ namespace WatiN.Core
             }
         }
 
-        public void SetAttributeValue(string attributeName, string value)
+        public virtual void SetAttributeValue(string attributeName, string value)
         {
             _frameElement.SetAttributeValue(attributeName, value);
         }

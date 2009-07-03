@@ -186,8 +186,9 @@ namespace WatiN.Core
 
         /// <summary>
         /// Returns true if the current document represents this page (has the correct Url, etc.).
+        /// The actual check(s) is done by the protected method <see cref="VerifyDocumentProperties"/>
         /// </summary>
-        public bool IsCurrentDocument
+        public virtual bool IsCurrentDocument
         {
             get
             {
