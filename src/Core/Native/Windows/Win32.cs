@@ -25,14 +25,8 @@ namespace WatiN.Core.Native.Windows
     /// <summary>
     /// Class that contains native win32 API support.
     /// </summary>
-    public class NativeMethods
+    public static class NativeMethods
     {
-        private static string enumChildWindowClassName;
-
-        public delegate bool EnumCallBackDelegate(IntPtr hwnd, ref IntPtr lParam);
-        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        public static extern bool EnumWindows(EnumCallBackDelegate lpEnumFunc, IntPtr lParam);
-
         #region Constants
 
         internal const int WM_SYSCOMMAND = 0x0112;
@@ -57,8 +51,8 @@ namespace WatiN.Core.Native.Windows
         #region Enum delegates
 
         public delegate bool EnumThreadProc(IntPtr hwnd, IntPtr lParam);
-        public delegate bool EnumWindowProc(IntPtr hwnd, ref IntPtr lParam);
-        public delegate bool EnumChildWindowProc(IntPtr hWnd, ref IntPtr lParam);
+        public delegate bool EnumWindowProc(IntPtr hwnd, IntPtr lParam);
+        public delegate bool EnumChildWindowProc(IntPtr hWnd, IntPtr lParam);
 
         #endregion
 
@@ -139,11 +133,6 @@ namespace WatiN.Core.Native.Windows
 
         #endregion Enums
 
-        /// <summary>
-        /// Prevent creating an instance of this class (contains only static members)
-        /// </summary>
-        private NativeMethods() { }
-
         #region DllImport User32
 
 //        [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -208,10 +197,10 @@ namespace WatiN.Core.Native.Windows
         internal static extern IntPtr SetFocus(IntPtr hWnd);
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        public static extern Int32 EnumWindows(EnumWindowProc lpEnumFunc, ref IntPtr lParam);
+        internal static extern Int32 EnumWindows(EnumWindowProc lpEnumFunc, IntPtr lParam);
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildWindowProc lpEnumFunc, ref IntPtr lParam);
+        internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildWindowProc lpEnumFunc, IntPtr lParam);
 
         [DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern Int32 RegisterWindowMessage(string lpString);
@@ -332,24 +321,18 @@ namespace WatiN.Core.Native.Windows
         public static IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string className)
         {
             var hWnd = IntPtr.Zero;
-            enumChildWindowClassName = className;
+            EnumChildWindows(parentHwnd, (childHwnd, lParam) =>
+                {
+                    if (CompareClassNames(childHwnd, className))
+                    {
+                        hWnd = childHwnd;
+                        return false;
+                    }
 
-            // Go throught the child windows of the dialog window
-            EnumChildWindowProc childWindowProc = EnumChildWindows;
-            EnumChildWindows(parentHwnd, childWindowProc, ref hWnd);
+                    return true;
+                }, IntPtr.Zero);
 
             return hWnd;
-        }
-
-        private static bool EnumChildWindows(IntPtr hWnd, ref IntPtr lParam)
-        {
-            if (CompareClassNames(hWnd, enumChildWindowClassName))
-            {
-                lParam = hWnd;
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>

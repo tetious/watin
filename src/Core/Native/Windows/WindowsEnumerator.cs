@@ -34,74 +34,64 @@ namespace WatiN.Core.Native.InternetExplorer
 	{
 	    public delegate bool WindowEnumConstraint(Window window);
 	
-	    private List<Window> _windows;
-	    private WindowEnumConstraint _constraint;
-	
 	    /// <summary> 
 	    /// Get all top-level window information 
 	    /// </summary> 
 	    /// <returns>List of window information objects</returns> 
-	    public List<Window> GetTopLevelWindows()
+	    public IList<Window> GetTopLevelWindows()
 	    {
 	        return GetTopLevelWindows(null);
 	    }
 	
-	    public List<Window> GetTopLevelWindows(string className)
+	    public IList<Window> GetTopLevelWindows(string className)
 	    {
-	        _constraint = window => !window.HasParentWindow && NativeMethods.CompareClassNames(window.Hwnd, className);
-	        return GetWindows(_constraint);
+	        return GetWindows(window => !window.HasParentWindow && NativeMethods.CompareClassNames(window.Hwnd, className));
 	    }
 	
-	    public List<Window> GetWindows(WindowEnumConstraint constraint)
+	    public IList<Window> GetWindows(WindowEnumConstraint constraint)
 	    {
-	        _constraint = constraint;
-	        _windows = new List<Window>();
+	        var windows = new List<Window>();
 	
-	        var hwnd = IntPtr.Zero;
-	        NativeMethods.EnumWindows(EnumWindowProc, hwnd);
-	        return _windows;
+            NativeMethods.EnumWindows((hwnd, lParam) =>
+                {
+                    Window window = new Window(hwnd);
+                    if (constraint == null || constraint(window))
+                        windows.Add(window);
+                    
+                    return true;
+                }, IntPtr.Zero);
+
+	        return windows;
 	    }
 	
 	    /// <summary> 
 	    /// Get all child windows for the specific windows handle (hwnd). 
 	    /// </summary> 
 	    /// <returns>List of child windows for parent window</returns> 
-	    public List<Window> GetChildWindows(IntPtr hwnd)
+	    public IList<Window> GetChildWindows(IntPtr hwnd)
 	    {
-	        return GetChildWindows(hwnd, null);
+	        return GetChildWindows(hwnd, (string) null);
 	    }
 	
-	    public List<Window> GetChildWindows(IntPtr hwnd, string childClass)
+	    public IList<Window> GetChildWindows(IntPtr hwnd, string childClass)
 	    {
-	        _constraint = window => NativeMethods.CompareClassNames(window.Hwnd, childClass);
-	
-	        _windows = new List<Window>();
-	
-	        var hWnd = IntPtr.Zero;
-	        NativeMethods.EnumChildWindows(hwnd, EnumWindowProc, ref hWnd);
-	
-	        return _windows;
+            return GetChildWindows(hwnd, window => NativeMethods.CompareClassNames(window.Hwnd, childClass));
 	    }
-	
-	    /// <summary> 
-	    /// Callback function that does the work of enumerating top-level windows. 
-	    /// </summary> 
-	    /// <param name="hwnd">Discovered Window handle</param> 
-	    /// <param name="lParam"></param>
-	    /// <returns>1=keep going, 0=stop</returns> 
-	    private bool EnumWindowProc(IntPtr hwnd, ref IntPtr lParam)
-	    {
-	        MatchWindow(new Window(hwnd));
-	        return true;
-	    }
-	
-	    private void MatchWindow(Window window)
-	    {
-	        // Match the class name if searching for a specific window class. 
-	        if (_constraint == null || _constraint.Invoke(window))
-	        {
-	            _windows.Add(window);
-	        }
-	    }
+
+        public IList<Window> GetChildWindows(IntPtr hwnd, WindowEnumConstraint constraint)
+        {
+            var childWindows = new List<Window>();
+
+            NativeMethods.EnumChildWindows(hwnd, (childHwnd, lParam) => 
+            {
+                Window childWindow = new Window(childHwnd);
+                if (constraint == null || constraint(childWindow))
+                    childWindows.Add(childWindow);
+
+                return true;
+            }, IntPtr.Zero);
+
+            return childWindows;
+        }
 	}
 }
