@@ -48,19 +48,48 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-		[Test]
+	    [Test]
+	    public void FileUploadOfFileWithSpecialCharactersInFilenameShouldBeHandledOK()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            const string fileName = @"~^+{}[]().txt";
+	                            
+                                browser.GoTo(TestPageUri);
+
+	                            var fileUpload = browser.FileUpload("upload");
+
+	                            Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
+	                            Assert.That(fileUpload.FileName,Text.DoesNotEndWith(fileName), "pre-Condition: Filename already set as default");
+
+	                            var file = new Uri(HtmlTestBaseURI, fileName).LocalPath;
+
+	                            // WHEN
+	                            fileUpload.Set(file);
+
+	                            // THEN
+	                            Assert.That(fileUpload.FileName, Text.EndsWith(fileName), "Unexpected filename");
+	                        });
+	    }
+
+	    [Test]
 		public void FileUploadTest()
 		{
 		    ExecuteTest(browser =>
 		                    {
+                                // GIVEN
+		                        const string fileName = "main.html";
 		                        var fileUpload = browser.FileUpload("upload");
 
 		                        Assert.That(fileUpload.Exists);
-		                        Assert.IsNull(fileUpload.FileName);
+                                Assert.That(fileUpload.FileName, Text.DoesNotEndWith(fileName), "pre-Condition: Filename already set as default");
 
+                                // WHEN
 		                        fileUpload.Set(MainURI.LocalPath);
 
-		                        Assert.AreEqual(MainURI.LocalPath, fileUpload.FileName);
+                                // THEN
+		                        Assert.That(fileUpload.FileName, Text.EndsWith(fileName));
 		                    });
 		}
 
@@ -106,31 +135,7 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
-		[Test]
-		public void FileUploadOfFileWithSpecialCharactersInFilenameShouldBeHandledOK()
-		{
-		    ExecuteTest(browser =>
-		                    {
-		                        // GIVEN
-                                browser.GoTo(TestPageUri);
-
-                                var fileUpload = browser.FileUpload("upload");
-
-		                        Assert.That(fileUpload.Exists, "Pre-Condition: Expected file upload element");
-		                        Assert.That(fileUpload.FileName, Is.Null, "pre-Condition: Expected empty filename");
-
-		                        const string fileName = @"~^+{}[]().txt";
-                                var file = new Uri(HtmlTestBaseURI, fileName).LocalPath;
-
-		                        // WHEN
-		                        fileUpload.Set(file);
-
-		                        // THEN
-                                Assert.That(fileUpload.FileName, Text.EndsWith(fileName), "Unexpected filename");
-		                    });
-		}
-
-		public override Uri TestPageUri
+	    public override Uri TestPageUri
 		{
 			get { return MainURI; }
 		}
