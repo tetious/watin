@@ -45,15 +45,11 @@ namespace TestProject
         [Page(UrlRegex = "www.google.*")]
         public class GoogleSearchPage : Page
         {
-            public TextField SearchCriteria
-            {
-                get { return Document.TextField(Find.ByName("q")); }
-            }
+            [FindBy(Name = "q")] 
+            public TextField SearchCriteria;
 
-            public Button SearchButton
-            {
-                get { return Document.Button(Find.ByName("btnG")); }
-            }
+            [FindBy(Name = "btnG")] 
+            public Button SearchButton;
 
             public void SearchFor(string searchCriteria)
             {
@@ -61,5 +57,25 @@ namespace TestProject
                 SearchButton.Click();
             }
         }
+
+//        [Page(UrlRegex = "www.google.*")]
+//        public class GoogleSearchPage : Page
+//        {
+//            public TextField SearchCriteria
+//            {
+//                get { return Document.TextField(Find.ByName("q")); }
+//            }
+//
+//            public Button SearchButton
+//            {
+//                get { return Document.Button(Find.ByName("btnG")); }
+//            }
+//
+//            public void SearchFor(string searchCriteria)
+//            {
+//                SearchCriteria.TypeText("WatiN");
+//                SearchButton.Click();
+//            }
+//        }
     }
 }

@@ -73,6 +73,16 @@
             <typeparam name="T">The adapter type</typeparam>
             <returns>The adapter, or null if the object cannot be adapted as requested</returns>
         </member>
+        <member name="T:WatiN.Core.IHasDescription">
+            <summary>
+            An interface for an object that supports user-specified descriptive text.
+            </summary>
+        </member>
+        <member name="P:WatiN.Core.IHasDescription.Description">
+            <summary>
+            Gets or sets the description of the object, or null if none.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Component.Matches(WatiN.Core.Constraints.Constraint)">
             <summary>
             Returns true if the component matches the specified constraint.
@@ -125,6 +135,11 @@
             <param name="attributeName">The name of the attribute, not null</param>
             <returns>The attribute's associated value or null if none</returns>
         </member>
+        <member name="P:WatiN.Core.Component.Description">
+            <summary>
+            Gets or sets the description of the component, or null if none.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Element.#ctor(WatiN.Core.DomContainer,WatiN.Core.Native.INativeElement)">
             <summary>
             This constructor is mainly used from within WatiN.
@@ -156,6 +171,11 @@
             <returns>
             A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             </returns>
+        </member>
+        <member name="M:WatiN.Core.Element.DefaultToString">
+            <summary>
+            Obtains a default description of the element to be used when <see cref="P:WatiN.Core.IHasDescription.Description"/> is null.
+            </summary>
         </member>
         <member name="M:WatiN.Core.Element.Click">
             <summary>
@@ -2208,6 +2228,9 @@
             support for common functionality.
             </summary>
         </member>
+        <member name="M:WatiN.Core.RadioCheck`1.DefaultToString">
+            <inheritdoc />
+        </member>
         <member name="T:WatiN.Core.NativeElementFinder">
             <summary>
             Finds elements within native element containers.
@@ -2700,13 +2723,8 @@
             <param name="domContainer">The <see cref="T:WatiN.Core.DomContainer"/> the element is in.</param>
             <param name="finder">The input button or button element.</param>
         </member>
-        <member name="M:WatiN.Core.Button.ToString">
-            <summary>
-            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </summary>
-            <returns>
-            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </returns>
+        <member name="M:WatiN.Core.Button.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Button.Value">
             <summary>
@@ -4383,13 +4401,8 @@
             to complete.
             </summary>
         </member>
-        <member name="M:WatiN.Core.Option.ToString">
-            <summary>
-            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </summary>
-            <returns>
-            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </returns>
+        <member name="M:WatiN.Core.Option.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Option.Value">
             <summary>
@@ -5470,6 +5483,9 @@
             This class provides specialized functionality for a HTML input element of type 
             text password textarea hidden and for a HTML textarea element.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.TextField.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.TextField.Text">
             <summary>
@@ -6759,6 +6775,182 @@
             Gets the singleton instance of the Any constraint.
             </summary>
         </member>
+        <member name="T:WatiN.Core.FindByAttribute">
+            <summary>
+            Finds a component based on its attributes.
+            </summary>
+            <remarks>
+            <para>
+            If multiple attributes are specified, then all of them must jointly match the component.
+            If no attributes are specified, then the first component of the required type will be used.
+            </para>
+            </remarks>
+            <example>
+            <code><![CDATA[
+            public class HomePage : Page
+            {
+                [FindBy(Name = "signIn")]
+                [Description("Sign in button.")]
+                public Button SignInButton;
+            }
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:WatiN.Core.ComponentFinderAttribute">
+            <summary>
+            Abstract base class for attributes that are used to find components based on a
+            declarative description.
+            </summary>
+            <seealso cref="T:WatiN.Core.FindByAttribute"/>
+        </member>
+        <member name="M:WatiN.Core.ComponentFinderAttribute.FindComponent(System.Type,WatiN.Core.IElementContainer)">
+            <summary>
+            Finds a component of the specified type within a container.
+            </summary>
+            <param name="componentType">The component type, not null.</param>
+            <param name="container">The container, not null.</param>
+            <returns>The component that was found, or null if not found.</returns>
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.#ctor">
+            <summary>
+            Finds a component based on its attributes.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.FindComponent(System.Type,WatiN.Core.IElementContainer)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.GetConstraint">
+            <summary>
+            Gets the constraint expressed by this attribute.
+            </summary>
+            <returns>The constraint</returns>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Alt">
+            <summary>
+            Gets or sets the alt text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByAlt(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.AltRegex">
+            <summary>
+            Gets or sets the regular expression for the alt text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByAlt(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Class">
+            <summary>
+            Gets or sets the (CSS) class name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByClass(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ClassRegex">
+            <summary>
+            Gets or sets the regular expression for the (CSS) class name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByClass(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.For">
+            <summary>
+            Gets or sets the id of the linked label element to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByFor(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ForRegex">
+            <summary>
+            Gets or sets the regular expression for the id of the linked label to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByFor(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Id">
+            <summary>
+            Gets or sets the element id to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ById(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.IdRegex">
+            <summary>
+            Gets or sets the regular expression for the element id to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ById(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Name">
+            <summary>
+            Gets or sets the element name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByName(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.NameRegex">
+            <summary>
+            Gets or sets the regular expression for the element name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByName(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Text">
+            <summary>
+            Gets or sets the (inner) text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByText(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.TextRegex">
+            <summary>
+            Gets or sets the regular expression for the (inner) text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByText(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Url">
+            <summary>
+            Gets or sets the Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByUrl(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.UrlRegex">
+            <summary>
+            Gets or sets the regular expression for the Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByUrl(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Title">
+            <summary>
+            Gets or sets the title to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByTitle(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.TitleRegex">
+            <summary>
+            Gets or sets the regular expression for the title to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByTitle(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Value">
+            <summary>
+            Gets or sets the value to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByValue(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ValueRegex">
+            <summary>
+            Gets or sets the regular expression for the value to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByValue(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Src">
+            <summary>
+            Gets or sets the source Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.BySrc(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.SrcRegex">
+            <summary>
+            Gets or sets the regular expression for the source Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.BySrc(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Index">
+            <summary>
+            Gets or sets the zero-based index of the element to find, or -1 if not constrained by index.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByIndex(System.Int32)"/>
+        </member>
         <member name="T:WatiN.Core.Logging.DebugLogWriter">
             <summary>
             This logger class writes it's output to the debug window.
@@ -7447,7 +7639,27 @@
             }
             </code>
             <para>
-            Within a test, we can use the calendar control like this:
+            Within the control class, you may also use the <see cref="T:WatiN.Core.FindByAttribute"/> and <see cref="T:WatiN.Core.DescriptionAttribute"/>
+            attributes to declaratively refer to elements of the control.  Here is part of the same example
+            above using attributes instead of properties.
+            </para>
+            <code>
+            public class CalendarControl : Control&lt;Div&gt;
+            {
+                [FindBy(Name = "month"), Description("Month drop down.")]
+                private SelectList MonthSelectList;
+                
+                [FindBy(Name = "year"), Description("Year drop down.")]
+                private SelectList YearSelectList;
+                
+                [FindBy(Name = "dateLabel"), Description("Date label.")]
+                private Div DateLabelDiv;
+                
+                // etc...
+            }
+            </code>
+            <para>
+            Finally, within the test we use the calendar control like this:
             </para>
             <code>
             browser.Control&lt;CalendarControl&gt;&gt;(Find.ById("fromDate")).Date = DateTime.Now;
@@ -7467,6 +7679,20 @@
             </remarks>
             <seealso cref="T:WatiN.Core.Control`1"/>
             <seealso cref="T:WatiN.Core.Page"/>
+        </member>
+        <member name="T:WatiN.Core.Composite">
+            <summary>
+            A composite component is container abstraction which has fields or properties
+            representing other components.  The most common composites are <see cref="T:WatiN.Core.Page"/>
+            and <see cref="T:WatiN.Core.Control`1"/>.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Composite.InitializeContents(WatiN.Core.IElementContainer)">
+            <summary>
+            Initializes the fields and properties of the composite using reflection to
+            find elements within the container.
+            </summary>
+            <param name="container">The element container within which to find elements, or null if not available</param>
         </member>
         <member name="M:WatiN.Core.Control.CreateControl``1(WatiN.Core.Element)">
             <summary>
@@ -7556,6 +7782,11 @@
             <param name="element">The element to verify, not null</param>
             <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the element's properties fail verification</exception>
         </member>
+        <member name="M:WatiN.Core.Control`1.InitializeContents">
+            <summary>
+            Initializes the contents of the control object.
+            </summary>
+        </member>
         <member name="P:WatiN.Core.Control`1.Element">
             <summary>
             Gets the element wrapped by the control.
@@ -7613,7 +7844,7 @@
         <member name="M:WatiN.Core.DialogHandlers.SecurityAlertDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window)">
             <summary>
             Determines whether the specified window is a security alert dialog by checking <see cref="P:WatiN.Core.Native.Windows.Window.StyleInHex"/>.
-            Valid value is "94C80AC4".
+            Valid value is "94C80AC4" or "94C808C4".
             </summary>
             <param name="window">The window.</param>
             <returns>
@@ -8480,6 +8711,9 @@
             <param name="inColumn">Index of the column to find the text in.</param>
             <returns>The searched for <see cref="T:WatiN.Core.TableRow"/>; otherwise <c>null</c>.</returns>
         </member>
+        <member name="M:WatiN.Core.Table.DefaultToString">
+            <inheritdoc />
+        </member>
         <member name="P:WatiN.Core.Table.OwnTableRows">
             <summary>
             Gets a collection of all table rows within the table itself (excluding content from any tables that
@@ -8507,6 +8741,9 @@
             <summary>
             This class provides specialized functionality for a HTML Form element.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.Form.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Exceptions.RunScriptException">
             <summary>
@@ -8765,7 +9002,7 @@
             property to a regular expression that is expected to match part of the page's Url.
             If the page is only accessible via HTTPS then also set the IsSecure property to true.</item>
             <item>Add properties to provide access to the sub-elements of the page.  When the page
-            is used, the <see cref="P:WatiN.Core.Page.Document"/> property will be set to the containing _document
+            is used, the <see cref="P:WatiN.Core.Page.Document"/> property will be set to the containing document
             (eg. the web browser or a frame).  Use this property to locate the sub-elements of the page.</item>
             <item>Define additional properties and methods as desired to model the state and
             behaviors of the page.</item>
@@ -8812,7 +9049,28 @@
             }
             </code>
             <para>
-            Within a test, we can use the functionality of the sign in page like this:
+            Within the page class, you may also use the <see cref="T:WatiN.Core.FindByAttribute"/> and <see cref="T:WatiN.Core.DescriptionAttribute"/>
+            attributes to declaratively refer to elements of the page.  Here is part of the same example
+            above using attributes instead of properties.
+            </para>
+            <code>
+            [Page(UrlRegex = "SignIn.aspx", IsSecure = true)]
+            public class SignInPage : Page
+            {
+                [FindBy(Name = "username"), Description("User name text field.")]
+                public TextField UserNameTextField;
+                
+                [FindBy(Name = "password"), Description("Password text field.")]
+                public TextField PasswordNameTextField;
+                
+                [FindBy(Name = "signIn"), Description("Sign in button.")]
+                public TextField SignInButton;
+                
+                // etc...
+            }
+            </code>
+            <para>
+            Finally, within the test we use the functionality of the sign in page like this:
             </para>
             <code>
             browser.Page&lt;SignInPage&gt;&gt;().SignIn("somebody", "letmein");
@@ -8827,22 +9085,22 @@
         </member>
         <member name="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document)">
             <summary>
-            Verifies that the _document represents the correct page (has the correct Url, etc.).
+            Verifies that the document represents the correct page (has the correct Url, etc.).
             </summary>
             <remarks>
             <para>
             The default implementation calls <see cref="M:WatiN.Core.Page.VerifyDocumentUrl(System.String)"/> to verify the <paramref name="document"/>'s Url.
             </para>
             <para>
-            Subclasses can override this method to customize how _document verification takes place.
+            Subclasses can override this method to customize how document verification takes place.
             </para>
             </remarks>
-            <param name="document">The _document to verify, not null</param>
-            <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the _document's properties fail verification</exception>
+            <param name="document">The document to verify, not null</param>
+            <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the document's properties fail verification</exception>
         </member>
         <member name="M:WatiN.Core.Page.VerifyDocumentUrl(System.String)">
             <summary>
-            Verifies that the _document's represents the correct page.
+            Verifies that the document's represents the correct page.
             </summary>
             <remarks>
             <para>
@@ -8850,18 +9108,18 @@
             to validate the <paramref name="url"/>.
             </para>
             <para>
-            Subclasses can override this method to customize how _document Url verification takes place.
+            Subclasses can override this method to customize how document Url verification takes place.
             </para>
             </remarks>
-            <param name="url">The _document url to verify, not null</param>
+            <param name="url">The document url to verify, not null</param>
             <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the url fails verification</exception>
         </member>
         <member name="M:WatiN.Core.Page.CreatePage``1(WatiN.Core.Document)">
             <summary>
-            Creates an initialized page object from a _document.
+            Creates an initialized page object from a document.
             </summary>
             <typeparam name="T">The page type</typeparam>
-            <param name="document">The _document or frame represented by the page</param>
+            <param name="document">The document or frame represented by the page</param>
             <returns>The page object</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="document"/> is null</exception>
         </member>
@@ -8874,24 +9132,29 @@
         <member name="M:WatiN.Core.Page.GetAttributeValueImpl(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:WatiN.Core.Page.InitializeContents">
+            <summary>
+            Initializes the contents of the page object.
+            </summary>
+        </member>
         <member name="P:WatiN.Core.Page.Metadata">
             <summary>
-            Gets declarative _metadata about the page.
+            Gets declarative metadata about the page.
             </summary>
         </member>
         <member name="P:WatiN.Core.Page.Document">
             <summary>
-            Gets the _document or frame that holds the page content.
+            Gets the document or frame that holds the page content.
             </summary>
             <remarks>
             <para>
             This method calls <see cref="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document)"/> to ensure that
-            the current _document represents the correct page (has the correct Url, etc.).
+            the current document represents the correct page (has the correct Url, etc.).
             If this verification fails then an exception is thrown.
             </para>
             </remarks>
             <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the page object does not have a reference
-            to a _document or if the _document's properties fail validation.</exception>
+            to a document or if the document's properties fail validation.</exception>
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEUtils.RunScript(System.String,mshtml.IHTMLWindow2)">
             <summary>
@@ -9053,6 +9316,11 @@
         <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.ChromePort">
             <summary>
             The port used to connect to chrome.
+            </summary>
+        </member>
+        <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.knownResponseErrors">
+            <summary>
+            List of known errors  that the Google remote port might return.
             </summary>
         </member>
         <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.disposed">
@@ -9278,6 +9546,53 @@
             Gets the current Chrome process.
             </summary>
             <value>The current Chrome process or null if none is found.</value>
+        </member>
+        <member name="T:WatiN.Core.DescriptionAttribute">
+            <summary>
+            Associates a description with a component.
+            </summary>
+            <example>
+            <code><![CDATA[
+            public class HomePage : Page
+            {
+                [FindBy(Name = "signIn")]
+                [Description("Sign in button.")]
+                public Button SignInButton;
+            }
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:WatiN.Core.ComponentDecoratorAttribute">
+            <summary>
+            Abstract base class for attributes that decorate components based on declarative metadata.
+            </summary>
+            <seealso cref="T:WatiN.Core.DescriptionAttribute"/>
+        </member>
+        <member name="M:WatiN.Core.ComponentDecoratorAttribute.Decorate(WatiN.Core.Component)">
+            <summary>
+            Decorates the component.
+            </summary>
+            <param name="component">The component, not null</param>
+        </member>
+        <member name="M:WatiN.Core.DescriptionAttribute.#ctor(System.String)">
+            <summary>
+            Associates a description with a component.
+            </summary>
+            <param name="description">The description.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="description"/> is null</exception>
+        </member>
+        <member name="M:WatiN.Core.DescriptionAttribute.Decorate(WatiN.Core.Component)">
+            <inheritdoc />
+        </member>
+        <member name="P:WatiN.Core.DescriptionAttribute.Description">
+            <summary>
+            Gets the description.
+            </summary>
+        </member>
+        <member name="T:WatiN.Core.ComponentFinder">
+            <summary>
+            Assists with finding components generically by type.
+            </summary>
         </member>
     </members>
 </doc>
