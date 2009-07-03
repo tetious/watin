@@ -33,6 +33,11 @@ namespace WatiN.Core.Logging
 	/// </example>
 	public class ConsoleLogWriter : ILogWriter
 	{
+	    public ConsoleLogWriter()
+	    {
+	        IgnoreLogDebug = false;
+	    }
+
 		public void LogAction(string message)
 		{
 			System.Console.WriteLine("[Action]: " + message);
@@ -40,7 +45,10 @@ namespace WatiN.Core.Logging
 
 	    public void LogDebug(string message)
 	    {
+            if (IgnoreLogDebug) return;
             System.Console.WriteLine("[Debug] : " + message);
         }
+
+	    public bool IgnoreLogDebug { get; set; }
 	}
 }

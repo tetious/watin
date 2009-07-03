@@ -76,7 +76,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
             var count = dialogHandlersList.Count;
 
             // THEN
-            Assert.That(count, Is.EqualTo(14), "Unexpected number of concreet dialog handlers");
+            Assert.That(count, Is.EqualTo(15), "Unexpected number of concreet dialog handlers");
         }
 
         [Test]

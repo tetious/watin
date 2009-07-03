@@ -25,8 +25,8 @@ namespace WatiN.Core.UnitTests
 {
 	public abstract class BaseWatiNTest
 	{
-		private static Uri htmlTestBaseURI;
-		private ISettings backupSettings;
+		private static Uri HtmlTestBaseUriInternal;
+		private ISettings _backupSettings;
 
 		public static Uri MainURI = new Uri(HtmlTestBaseURI, "main.html");
 		public static Uri IndexURI = new Uri(HtmlTestBaseURI, "Index.html");
@@ -46,32 +46,32 @@ namespace WatiN.Core.UnitTests
 		public static Uri TablesUri = new Uri(HtmlTestBaseURI, "Tables.html");
         public static Uri ProximityURI = new Uri(HtmlTestBaseURI, "ProximityTests.html");
 		public static Uri AboutBlank = new Uri("about:blank");
-        public static Uri ButtonTestsUri = new Uri(htmlTestBaseURI, "ButtonTests.html");
+        public static Uri ButtonTestsUri = new Uri(HtmlTestBaseUriInternal, "ButtonTests.html");
 		public static string GoogleUrl = "http://www.google.com";
 		public static string EbayUrl = "http://www.ebay.com";
 
 		[TestFixtureSetUp]
 		public virtual void FixtureSetup()
 		{
-			backupSettings = Settings.Clone();
+			_backupSettings = Settings.Clone();
 			Settings.Instance = new StealthSettings();
 		}
 
 		[TestFixtureTearDown]
 		public virtual void FixtureTearDown()
 		{
-			Settings.Instance = backupSettings;
+			Settings.Instance = _backupSettings;
 		}
 
 		public static Uri HtmlTestBaseURI
 		{
 			get
 			{
-				if (htmlTestBaseURI == null)
+				if (HtmlTestBaseUriInternal == null)
 				{
-					htmlTestBaseURI = new Uri(GetHtmlTestFilesLocation());
+					HtmlTestBaseUriInternal = new Uri(GetHtmlTestFilesLocation());
 				}
-				return htmlTestBaseURI;
+				return HtmlTestBaseUriInternal;
 			}
 		}
 

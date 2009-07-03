@@ -17,9 +17,7 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using WatiN.Core.Constraints;
 
 namespace WatiN.Core
