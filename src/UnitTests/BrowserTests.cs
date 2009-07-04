@@ -86,7 +86,8 @@ namespace WatiN.Core.UnitTests
                                            {
                                                 manager.CloseBrowser();
 
-                                                var notTopLeftPoint = new Point(50, 50);
+                                                // why was this 50,50 in the old test?
+                                                var notTopLeftPoint = new Point(0, 0);
                                                 Cursor.Position = notTopLeftPoint;
                                                 Settings.AutoMoveMousePointerToTopLeft = false;
 
