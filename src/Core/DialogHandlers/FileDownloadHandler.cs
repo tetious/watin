@@ -105,7 +105,7 @@ namespace WatiN.Core.DialogHandlers
 	    {
 	        if (IsFileSaveDialog(window))
 	        {
-	            Logger.LogAction("Saving Download file as " + saveAsFilename);
+	            Logger.LogAction("Saving Download file as {0}", saveAsFilename);
 
 	            DownloadProgressDialog = new Window(window.ParentHwnd);
 
@@ -156,8 +156,8 @@ namespace WatiN.Core.DialogHandlers
 
 	            if (HasHandledFileDownloadDialog)
 	            {
-	                Logger.LogAction("Download started at " + DateTime.Now.ToLongTimeString());
-	                Logger.LogAction("Clicked " + _optionEnum);
+	                Logger.LogAction("Download started at {0}", DateTime.Now.ToLongTimeString());
+	                Logger.LogAction("Clicked {0}", _optionEnum);
 	            }
 
 	            return true;
@@ -292,7 +292,7 @@ namespace WatiN.Core.DialogHandlers
 				throw new WatiNException(string.Format("Still downloading after {0} seconds.", waitDurationInSeconds));
 			}
 
-			Logger.LogAction("Download complete at " + DateTime.Now.ToLongTimeString());
+			Logger.LogAction("Download complete at {0}", DateTime.Now.ToLongTimeString());
 		}
 
 		private Window DownloadProgressDialog

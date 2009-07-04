@@ -344,8 +344,7 @@ namespace WatiN.Core.DialogHandlers
 		public void HandleWindow(Window window)
 		{
 			if (!window.IsDialog()) return;
-	        var processName = Process.GetProcessById(window.ProcessID).ProcessName;
-	        if (!(String.Compare(processName, "iexplore", true) == 0)) return;
+            if (Process.GetProcessById(window.ProcessID).ProcessName != "iexplore") return;
 
             // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
@@ -367,8 +366,7 @@ namespace WatiN.Core.DialogHandlers
 		            {
 		                LastException = e;
 
-		                Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog:");
-		                Logger.LogAction(e.ToString());
+		                Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog: {0}",e.ToString());
 		            }
 		        }
 
@@ -376,7 +374,7 @@ namespace WatiN.Core.DialogHandlers
 		        // should be closed automatically.
 		        if (!CloseUnhandledDialogs) return;
 		        
-                Logger.LogAction("Auto closing dialog with title '{0}'.", window.Title);
+                Logger.LogAction("Auto closing dialog with title '{0}', text: {1}", window.Title, window.Message);
 		        window.ForceClose();
 		    }
 		}

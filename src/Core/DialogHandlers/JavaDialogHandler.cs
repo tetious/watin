@@ -44,8 +44,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				ThrowExceptionIfDialogDoesNotExist();
 
-				var messagehWnd = NativeMethods.GetDlgItem(_window.Hwnd, 65535);
-				return NativeMethods.GetWindowText(messagehWnd);
+			    return _window.Message;
 			}
 		}
 
