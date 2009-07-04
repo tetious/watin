@@ -198,7 +198,7 @@ namespace WatiN.Core.UnitTests
         private class CaptureWebPageMock : CaptureWebPage
         {
             public bool CallBaseCaptureWebPageToFile { private get; set; }
-            public string ImageType { get; private set; }
+            public ImageCodecs ImageType { get; private set; }
             public ImageCodecInfo ImageCodecInfo { get; private set; }
             public System.Drawing.Image Image { get; private set; }
 
@@ -207,10 +207,10 @@ namespace WatiN.Core.UnitTests
                 CallBaseCaptureWebPageToFile = true;
             }
 
-            public override void CaptureWebPageToFile(Stream stream, string imagetype, bool writeUrl, bool showGuides, int scalePercentage, int quality)
+            public override void CaptureWebPageToFile(Stream stream, ImageCodecs imagetype, bool writeUrl, bool showGuides, int scalePercentage, int quality)
             {
                 ImageType = imagetype;
-                if (CallBaseCaptureWebPageToFile) base.CaptureWebPageToFile(stream, imagetype,writeUrl, showGuides,scalePercentage,quality);
+                if (CallBaseCaptureWebPageToFile) base.CaptureWebPageToFile(stream, imagetype, writeUrl, showGuides,scalePercentage,quality);
             }
 
             protected override void SaveImage(System.Drawing.Image finalImage, Stream stream, ImageCodecInfo ici, EncoderParameters eps)
