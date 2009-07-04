@@ -68,13 +68,32 @@ namespace WatiN.Core.UtilityClasses
             stream.Close();
         }
 
-        private static string GetImagetype(string filename)
+        public enum ImageCodecs { Jpeg, Tiff, Gif, Png, Bmp }
+
+        private static ImageCodecs GetImagetype(string filename)
         {
             var extension = Path.GetExtension(filename);
-            return string.IsNullOrEmpty(extension) ? string.Empty : extension.Substring(1);
+            ImageCodecs codec = ImageCodecs.Jpeg;
+            switch (extension.Substring(1).ToLowerInvariant())
+            {
+                case "tif":
+                case "tiff":
+                    codec = ImageCodecs.Tiff;
+                    break;
+                case "gif":
+                    codec = ImageCodecs.Gif;
+                    break;
+                case "png":
+                    codec = ImageCodecs.Png;
+                    break;
+                case "bmp":
+                    codec = ImageCodecs.Bmp;
+                    break;
+            }
+            return codec;
         }
 
-        public virtual void CaptureWebPageToFile(Stream stream, string imagetype, bool writeUrl, bool showGuides, int scalePercentage, int quality)
+        public virtual void CaptureWebPageToFile(Stream stream, ImageCodecs imagetype, bool writeUrl, bool showGuides, int scalePercentage, int quality)
         {
             var finalImage = CaptureWebPageImage(writeUrl, showGuides, scalePercentage);
             var eps = GetEncoderParams(quality);
@@ -333,32 +352,30 @@ namespace WatiN.Core.UtilityClasses
             return eps;
         }
 
-        private static ImageCodecInfo GetCodec(string imagetype)
+
+        private static ImageCodecInfo GetCodec(ImageCodecs imagetype)
         {
-            ImageCodecInfo ici;
-            switch (imagetype.ToLower(CultureInfo.InvariantCulture))
+            ImageCodecInfo ici = GetEncoderInfo("image/jpeg");
+
+            switch (imagetype)
             {
-                case "jpg":
-                case "jpeg":
+                case ImageCodecs.Jpeg:
                     ici = GetEncoderInfo("image/jpeg");
                     break;
-                case "tif":
+                case ImageCodecs.Tiff:
                     ici = GetEncoderInfo("image/tiff");
                     break;
-                case "gif":
+                case ImageCodecs.Gif:
                     ici = GetEncoderInfo("image/gif");
                     break;
-                case "png":
+                case ImageCodecs.Png:
                     ici = GetEncoderInfo("image/png");
                     break;
-                case "bmp":
+                case ImageCodecs.Bmp:
                     ici = GetEncoderInfo("image/bmp");
                     break;
-
-                default:
-                    ici = GetEncoderInfo("image/jpeg");
-                    break;
             }
+
             return ici;
         }
 
