@@ -97,5 +97,20 @@ namespace WatiN.Core.UnitTests
             // THEN
 			logWriterMock.Verify(writer => writer.LogAction(LogMessage));
 		}
+
+        [Test]
+        public void LogActionShouldWriteAFile()
+        {
+            const string filename = "logtest.txt";
+            using (var writer = new FileLogWriter(filename))
+            {
+                Logger.LogWriter = writer;
+                Logger.LogAction(LogMessage);
+            }
+            string filecontent = System.IO.File.ReadAllText(filename).Trim();
+            System.IO.File.Delete(filename);
+
+            Assert.AreEqual("[Action]: "+LogMessage, filecontent, "file did not contain expected string");
+        }
 	}
 }
