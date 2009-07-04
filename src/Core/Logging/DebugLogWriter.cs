@@ -42,5 +42,10 @@ namespace WatiN.Core.Logging
 	    {
             System.Diagnostics.Debug.WriteLine("[Debug] : " + message);
         }
+
+        public void LogInfo(string message)
+        {
+            System.Diagnostics.Debug.WriteLine("[Info] : " + message);
+        }
 	}
 }

@@ -69,8 +69,29 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogDebug(string message, params object[] args)
 		{
-            LogWriter.LogDebug(UtilityClass.StringFormat(message, args));
+            LogWriter.LogDebug(UtilityClass.StringFormat(message, args));            
 		}
+
+        /// <summary>
+        /// Logs the information message. These should be comments and information messages from within WatiN.
+        /// </summary>
+        /// <param name="message">A message containing zero or more format items.</param>
+        /// <param name="args">An object array containing zero or more objects to format</param>
+        /// <example>
+        /// Call this function from your code like this:
+        /// <code>
+        /// Logger.LogInfo("Some message");
+        /// </code>
+        /// or
+        /// <code>
+        /// Logger.LogInfo("Some message with an {0} to {1}, "item", "format");
+        /// </code>
+        /// 
+        /// </example>
+        public static void LogInfo(string message, params object[] args)
+        {
+            LogWriter.LogInfo(UtilityClass.StringFormat(message, args));
+        }
 
 		/// <summary>
 		/// Gets or sets the log writer.
@@ -79,16 +100,8 @@ namespace WatiN.Core.Logging
 		public static ILogWriter LogWriter
 		{
 			get { return mLogWriter; }
-			set
-			{
-                if (value == null)
-                {
-                    mLogWriter = DefaultLogWriter();
-                }
-                else
-                {
-                    mLogWriter = value;
-                }
+			set {
+			    mLogWriter = value ?? DefaultLogWriter();
 			}
 		}
 

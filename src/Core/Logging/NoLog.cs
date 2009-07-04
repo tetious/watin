@@ -24,5 +24,6 @@ namespace WatiN.Core.Logging
 	{
 	    public void LogAction(string message) {}
 	    public void LogDebug(string message) {}
+        public void LogInfo(string message) { }
 	}
 }

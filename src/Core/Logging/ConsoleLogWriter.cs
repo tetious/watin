@@ -49,6 +49,11 @@ namespace WatiN.Core.Logging
             System.Console.WriteLine("[Debug] : " + message);
         }
 
-	    public bool IgnoreLogDebug { get; set; }
+        public void LogInfo(string message)
+        {
+            System.Console.WriteLine("[Info] : " + message);
+        }
+
+        public bool IgnoreLogDebug { get; set; }
 	}
 }
