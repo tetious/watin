@@ -18,6 +18,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using WatiN.Core.Logging;
 
 namespace WatiN.Core.Exceptions
 {
@@ -28,8 +29,14 @@ namespace WatiN.Core.Exceptions
 	public class WatiNException : Exception
 	{
 		public WatiNException() : base() {}
-		public WatiNException(string message) : base(message) {}
-		public WatiNException(string message, Exception innerexception) : base(message, innerexception) {}
+		public WatiNException(string message) : base(message)
+		{
+		    Logger.LogDebug(string.Format("Exception: {0}, {1}\n{2}", GetType().Name, message, StackTrace!=null?StackTrace:""));
+		}
+        public WatiNException(string message, Exception innerexception) : base(message, innerexception)
+        {
+            Logger.LogDebug(string.Format("Exception: {0}, {1}\nInner: {2}\n{3}\n{4}", GetType().Name, message, innerexception.Message, innerexception.Source, StackTrace != null ? StackTrace : ""));
+        }
         public WatiNException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }
