@@ -457,7 +457,7 @@ namespace WatiN.Core.Native
                 }
 
                 Match:
-                Logger.LogAction(String.Format("Deleting '{0}'.", cacheEntryName));
+                Logger.LogAction(String.Format("Deleting '{0}'", cacheEntryName));
 
                 if (!DeleteUrlCacheEntry(entry.lpszSourceUrlName))
                     ThrowExceptionForLastWin32Error();

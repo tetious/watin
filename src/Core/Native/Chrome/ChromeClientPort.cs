@@ -230,7 +230,7 @@ namespace WatiN.Core.Native.Chrome
                         }
                         catch (IOException ex)
                         {
-                            Logger.LogDebug("Error communicating with chrome to innitiate shut down, message: " + ex.Message);
+                            Logger.LogDebug("Error communicating with chrome to innitiate shut down, message: {0}", ex.Message);
                         }
                     }
                 }
@@ -351,7 +351,7 @@ namespace WatiN.Core.Native.Chrome
                 var read = stream.Read(buffer, 0, bufferSize);
                 readData = Encoding.UTF8.GetString(buffer, 0, read);
 
-                Logger.LogDebug("chrome says: '" + readData.Replace("\n", "[newline]") + "'");
+                Logger.LogDebug("chrome says: '{0}'", readData.Replace("\n", "[newline]"));
                 this.LastResponseRaw += readData;
                 this.LastResponse += this.CleanTelnetResponse(readData);
             }

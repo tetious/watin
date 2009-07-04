@@ -191,7 +191,7 @@ namespace WatiN.Core.Native.InternetExplorer
             }
             catch
             {
-                Logger.LogDebug("Getting attribute: " + attributeName);
+                Logger.LogDebug("Getting attribute: {0}", attributeName);
                 throw;
             }
             if (DidReturnObjectReference(attributeValue))

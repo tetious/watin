@@ -287,7 +287,7 @@ namespace WatiN.Core.Native.Mozilla
                         }
                         catch (IOException ex)
                         {
-                            Logger.LogDebug("Error communicating with jssh server to innitiate shut down, message: " + ex.Message);
+                            Logger.LogDebug("Error communicating with jssh server to innitiate shut down, message: {0}", ex.Message);
                         }
                     }
                 }
@@ -458,7 +458,7 @@ namespace WatiN.Core.Native.Mozilla
                 var read = stream.Read(buffer, 0, bufferSize);
                 readData = Encoding.UTF8.GetString(buffer, 0, read);
 
-                Logger.LogDebug("jssh says: '" + readData.Replace("\n", "[newline]") + "'");
+                Logger.LogDebug("jssh says: '{0}'", readData.Replace("\n", "[newline]"));
                 LastResponseRaw += readData;
                 AddToLastResponse(CleanTelnetResponse(readData));
             }
