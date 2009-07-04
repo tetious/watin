@@ -664,14 +664,14 @@ namespace WatiN.Core
                     : null;
             });
 
-            if (ie != null) return ie._ieBrowser;
+            if (ie != null) return ie._ieBrowser; 
 
 			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToIETimeOut);
 		}
 
 	    private static Process CreateIExploreInNewProcess()
 	    {
-	        var m_Proc = Process.Start("IExplore.exe", "about:blank");
+	        var m_Proc = Process.Start("IExplore.exe", (Settings.MakeNewIe8InstanceNoMerge?"-nomerge ":"")+"about:blank");
 	        if (m_Proc == null)
 	        {
 	            throw new WatiNException("Could not start IExplore.exe process");
@@ -746,7 +746,7 @@ namespace WatiN.Core
 	        
             if (IsInternetExplorerStillAvailable())
 	        {
-	            Logger.LogAction("Closing browser '" + Title + "'");
+	            Logger.LogAction("Closing browser '{0}'", Title);
 	        }
 
 	        DisposeAndCloseIE(true);
@@ -1092,7 +1092,7 @@ namespace WatiN.Core
 
 		private HtmlDialog FindHtmlDialog(Constraint findBy, int timeout)
 		{
-			Logger.LogAction("Busy finding HTMLDialog matching criteria: " + findBy);
+			Logger.LogAction("Busy finding HTMLDialog matching criteria: {0}", findBy);
 
 		    var action = new TryFuncUntilTimeOut(timeout){SleepTime = 500};
             var result = action.Try(() => HtmlDialogs.First(findBy));

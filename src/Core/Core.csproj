@@ -188,6 +188,7 @@
     <Compile Include="DescriptionAttribute.cs" />
     <Compile Include="FindByAttribute.cs" />
     <Compile Include="IHasDescription.cs" />
+    <Compile Include="Logging\FileLogWriter.cs" />
     <Compile Include="Native\InternetExplorer\AttachToIeHelper.cs" />
     <Compile Include="Chrome.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />

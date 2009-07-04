@@ -36,8 +36,8 @@ namespace WatiN.Core
 			get { return bool.Parse(GetAttributeValue("checked")); }
 			set
 			{
-				Logger.LogAction("Selecting " + GetType().Name + " '" + ToString() + "'");
-
+                Logger.LogAction("Selecting {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+				
 				Highlight(true);
 				SetAttributeValue("checked", value.ToString().ToLowerInvariant());
 				FireEvent("onClick");

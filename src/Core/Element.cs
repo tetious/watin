@@ -162,6 +162,25 @@ namespace WatiN.Core
             set { SetAttributeValue("id", value); }
 		}
 
+        /// <summary>
+        /// Gets (or sets) the name of this element as specified in the HTML.
+        /// </summary>
+        /// <value>The name</value>
+        public virtual string Name
+        {
+            get { return GetAttributeValue("name"); }
+            set { SetAttributeValue("name", value); }
+        }
+
+        /// <summary>
+        /// Gets the id or name (id preferred) of this element as specified in the HTML.
+        /// </summary>
+        /// <value>The id.</value>
+        public virtual string IdOrName
+        {
+            get { return UtilityClass.IsNotNullOrEmpty(Id) ? Id : Name; }
+        }
+
 		/// <summary>
 		/// Gets the innertext of this element (and the innertext of all the elements contained
 		/// in this element).
@@ -343,6 +362,12 @@ namespace WatiN.Core
             return UtilityClass.IsNotNullOrEmpty(Description) ? Description : DefaultToString();
 		}
 
+        public Element SetDescription(string value)
+        {
+            Description = value;
+            return this;
+        }
+
         /// <summary>
         /// Obtains a default description of the element to be used when <see cref="IHasDescription.Description" /> is null.
         /// </summary>
@@ -362,7 +387,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(Id);
 			}
 
-			Logger.LogAction("Clicking " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 			Highlight(true);
 
 			NativeElement.ClickOnElement();
@@ -389,7 +414,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(Id);
 			}
 
-			Logger.LogAction("Clicking (no wait) " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Clicking (no wait) {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 
 			Highlight(true);
 
@@ -422,7 +447,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(Id);
 			}
 
-			Logger.LogAction("Double clicking " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Double clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 
 			FireEvent("onDblClick");
 		}

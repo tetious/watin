@@ -175,7 +175,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRow(string findText, int inColumn)
         {
-            Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            Logger.LogAction("Searching for '{0}' in column {1} of {2} '{3}', {4}", findText, inColumn, GetType().Name, IdOrName, Description);
             return FindInTableRows(Find.ByTextInColumn(findText, inColumn));
         }
 
@@ -189,7 +189,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRowInOwnTableRows(string findText, int inColumn)
         {
-            Logger.LogAction("Searching for '" + findText + "' in column " + inColumn + " of " + GetType().Name + " '" + Id + "'");
+            Logger.LogAction("Searching for '{0}' in column {1} of {2} '{3}', {4}", findText, inColumn, GetType().Name, IdOrName, Description);
             return FindInOwnTableRows(Find.ByTextInColumn(findText, inColumn));
         }
 
@@ -203,7 +203,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRow(Regex findTextRegex, int inColumn)
         {
-            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
+            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}', {4}", findTextRegex, inColumn, GetType().Name, Id, Description);
             return FindInTableRows(Find.ByTextInColumn(findTextRegex, inColumn));
         }
 
@@ -217,7 +217,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRowInOwnTableRows(Regex findTextRegex, int inColumn)
         {
-            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}'", findTextRegex, inColumn, GetType().Name, Id);
+            Logger.LogAction("Matching regular expression'{0}' with text in column {1} of {2} '{3}', {4}", findTextRegex, inColumn, GetType().Name, Id, Description);
             return FindInOwnTableRows(Find.ByTextInColumn(findTextRegex, inColumn));
         }
 
@@ -231,7 +231,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRow(Comparer<string> comparer, int inColumn)
         {
-            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
+            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}', {4}", comparer, inColumn, GetType().Name, IdOrName, Description);
             return FindInTableRows(Find.ByTextInColumn(comparer, inColumn));
         }
 
@@ -245,7 +245,7 @@ namespace WatiN.Core
         /// <returns>The searched for <see cref="TableRow"/>; otherwise <c>null</c>.</returns>
         public virtual TableRow FindRowInOwnTableRows(Comparer<string> comparer, int inColumn)
         {
-            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}'", comparer, inColumn, GetType().Name, Id);
+            Logger.LogAction("Matching comparer'{0}' with text in column {1} of {2} '{3}', {4}", comparer, inColumn, GetType().Name, IdOrName, Description);
             return FindInOwnTableRows(Find.ByTextInColumn(comparer, inColumn));
         }
 

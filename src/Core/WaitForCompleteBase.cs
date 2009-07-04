@@ -69,7 +69,7 @@ namespace WatiN.Core
 
         public virtual void Sleep(string logMessage)
         {
-            Logger.LogDebug(logMessage + ": Waiting " + MilliSecondsTimeOut);
+            Logger.LogDebug("{0}: Waiting {1}", logMessage, MilliSecondsTimeOut);
             Thread.Sleep(MilliSecondsTimeOut);
         }
 

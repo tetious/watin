@@ -134,7 +134,7 @@ namespace WatiN.Core
         /// </example>
         public virtual void GoTo(Uri url)
         {
-            Logger.LogAction("Navigating to '" + url.AbsoluteUri + "'");
+            Logger.LogAction("Navigating to '{0}'", url.AbsoluteUri);
 
             NativeBrowser.NavigateTo(url);
             WaitForComplete();
@@ -240,7 +240,7 @@ namespace WatiN.Core
             if (succeeded)
             {
                 WaitForComplete();
-                Logger.LogAction("Navigated Back to '" + Url + "'");
+                Logger.LogAction("Navigated Back to '{0}'",Url);
             }
             else
             {
@@ -262,7 +262,7 @@ namespace WatiN.Core
             if (succeeded)
             {
                 WaitForComplete();
-                Logger.LogAction("Navigated Forward to '" + Url + "'");
+                Logger.LogAction("Navigated Forward to '{0}",Url);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace WatiN.Core
         /// </summary>
         public virtual void Refresh()
         {
-            Logger.LogAction("Refreshing browser from '" + Url + "'");
+            Logger.LogAction("Refreshing browser from '{0}", Url);
             NativeBrowser.Refresh();
             WaitForComplete();
         }

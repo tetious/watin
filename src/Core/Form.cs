@@ -34,7 +34,7 @@ namespace WatiN.Core
 
 		public virtual void Submit()
 		{
-			Logger.LogAction("Submitting " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Submitting {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 
 		    NativeElement.SubmitForm();
 			WaitForComplete();
@@ -53,11 +53,6 @@ namespace WatiN.Core
 			}
 
             return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.DefaultToString();
-		}
-
-        public virtual string Name
-		{
-			get { return GetAttributeValue("name"); }
 		}
 	}
 }

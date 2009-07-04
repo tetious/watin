@@ -64,21 +64,21 @@ namespace WatiN.Core
 
 		public void TypeText(string value)
 		{
-			Logger.LogAction("Typing '" + value + "' into " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Typing '{0}' into {1} '{2}', {3}", value, GetType().Name, IdOrName, Description);
 
             TypeTextAction.TypeText(value);
 		}
 
 		public void AppendText(string value)
 		{
-			Logger.LogAction("Appending '" + value + "' to " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Appending '{0}' to {1} '{2}', {3}", value, GetType().Name, IdOrName, Description);
 
             TypeTextAction.AppendText(value);
 		}
 
 		public void Clear()
 		{
-			Logger.LogAction("Clearing " + GetType().Name + " '" + ToString() + "'");
+            Logger.LogAction("Clearing {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 
             TypeTextAction.Clear();
 		}
@@ -106,8 +106,7 @@ namespace WatiN.Core
 		    // Don't use this set property internally (in this class). 
 			set
 			{
-				Logger.LogAction("Setting " + GetType().Name + " '" + ToString() + "' to '" + value + "'");
-
+				Logger.LogAction("Setting {0} '{1}' ({2}) to '{3}'", GetType().Name, IdOrName,Description, value);
                 SetAttributeValue("value", value);
 			}
 		}
@@ -141,11 +140,6 @@ namespace WatiN.Core
 			}
 
 			return UtilityClass.IsNotNullOrEmpty(Name) ? Name : base.DefaultToString();
-		}
-
-        public virtual string Name
-		{
-            get { return GetAttributeValue("name"); }
 		}
 	}
 }

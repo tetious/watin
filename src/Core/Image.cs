@@ -46,10 +46,5 @@ namespace WatiN.Core
         { 
             get { return GetAttributeValue("alt"); }
 		}
-
-        public virtual string Name
-		{
-			get { return GetAttributeValue("name"); }
-		}
 	}
 }
