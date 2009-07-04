@@ -126,6 +126,13 @@ namespace WatiN.Core.Native.Windows
             }
         }
 
-
+        public string Message
+        {
+            get
+            {
+                var messagehWnd = NativeMethods.GetDlgItem(Hwnd, 65535);
+                return NativeMethods.GetWindowText(messagehWnd);
+            }
+        }
     }
 }
