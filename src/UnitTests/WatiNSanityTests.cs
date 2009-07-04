@@ -151,7 +151,9 @@ namespace WatiN.Core.UnitTests
                 "IE.get_HtmlDialogs",
                 "IE.get_HtmlDialogsNoWait",
                 "Page.get_Metadata",
-                "Page.get_Document"
+                "Page.get_Document",
+                "IE.get_Visible",
+                "IE.set_Visible"
             };
 
             string missedProperties = null;
@@ -210,7 +212,9 @@ namespace WatiN.Core.UnitTests
                 "IE.HtmlDialog",
                 "IE.HtmlDialog",
                 "Page.get_Metadata",
-                "Page.get_Document"
+                "Page.get_Document",
+                "IE.get_Visible",
+                "IE.set_Visible"
             };
 
             string missedMethods = null;

@@ -362,7 +362,7 @@ namespace WatiN.Core
             return UtilityClass.IsNotNullOrEmpty(Description) ? Description : DefaultToString();
 		}
 
-        public Element SetDescription(string value)
+        public virtual Element SetDescription(string value)
         {
             Description = value;
             return this;
