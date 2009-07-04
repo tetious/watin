@@ -788,6 +788,11 @@ namespace WatiN.Core
 			CreateNewIEAndGoToUri(uri, logonDialogHandler, createInNewProcess);
 		}
 
+        public override void Reopen()
+        {
+            Reopen(new Uri("about:blank"), null, true);
+        }
+
 		protected override void Recycle()
 		{
 			base.Recycle();
