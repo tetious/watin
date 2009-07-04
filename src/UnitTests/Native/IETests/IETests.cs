@@ -614,37 +614,5 @@ namespace WatiN.Core.UnitTests.IETests
                 Assert.That(process.ProcessName, Text.Contains("iexplore"));
             }
         }
-
-
-        [Test]
-        public void TrySettingSource()
-        {
-            using (var ie = new IE(@"C:\Work\WatiN\trunk\src\UnitTests\html\Frameset.html"))
-            {
-                ie.Frames[0].SetAttributeValue("src", "test1.html");
-                ie.Frames[1].SetAttributeValue("src", "test2.html");
-                
-                System.IO.File.WriteAllText(@"C:\Users\ddwyer\Desktop\test.html", ie.Html);
-            }
-        }
-
-        [Test]
-        public void SettingNoMerge()
-        {
-            Settings.MakeNewIe8InstanceNoMerge = true;
-
-            // url put up by MSDN blogger, may need to add this to our files
-            const string testUrl = "http://www.enhanceie.com/test/sessions/";
-            using (var ie1 = new IE(testUrl))
-            {
-                ie1.SelectList(Find.ById("selColor")).Select("Green");
-
-                using (var ie2 = new IE(testUrl))
-                {
-                    string actual = ie2.Div(Find.ById("divSessStore")).InnerHtml;
-                    StringAssert.Contains("undefined",actual,"session cookie used");
-                }
-            }
-        }
     }
 }
