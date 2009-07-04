@@ -26,5 +26,6 @@ namespace WatiN.Core.Interfaces
 	{
 		void LogAction(string message);
 		void LogDebug(string message);
+	    void LogInfo(string message);
 	}
 }
