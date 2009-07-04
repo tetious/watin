@@ -88,45 +88,33 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void SaveDefaultJpegImageToFile()
-        {
-            CaptureWebPageToFileAndAssert(@"C:\capture.default", "default");
-        }
-
-        [Test]
-        public void ShouldSaveJpgImageToFile()
-        {
-            CaptureWebPageToFileAndAssert(@"C:\capture.jpg", "jpg");
-        }
-
-        [Test]
         public void ShouldSaveJpegImageToFile()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.jpeg", "jpeg");
+            CaptureWebPageToFileAndAssert(@"C:\capture.jpeg", CaptureWebPage.ImageCodecs.Jpeg);
         }
 
         [Test]
         public void ShouldSaveTifImageToFile()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.tif", "tif");
+            CaptureWebPageToFileAndAssert(@"C:\capture.tif", CaptureWebPage.ImageCodecs.Tiff);
         }
 
         [Test]
         public void ShouldSaveGifImageToFile()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.gif", "gif");
+            CaptureWebPageToFileAndAssert(@"C:\capture.gif", CaptureWebPage.ImageCodecs.Gif);
         }
 
         [Test]
         public void ShouldSavePngImageToFile()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.png", "png");
+            CaptureWebPageToFileAndAssert(@"C:\capture.png", CaptureWebPage.ImageCodecs.Png);
         }
 
         [Test]
         public void ShouldSaveBmpImageToFile()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.bmp", "bmp");
+            CaptureWebPageToFileAndAssert(@"C:\capture.bmp", CaptureWebPage.ImageCodecs.Bmp);
         }
 
         [Test]
@@ -144,31 +132,31 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void ShouldUseJpegEncoderForJpeg()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.jpeg", "jpeg");
+            CaptureWebPageToFileAndAssert(@"C:\capture.jpeg", CaptureWebPage.ImageCodecs.Jpeg);
         }
 
         [Test]
         public void ShouldUseTiffEncoderForTif()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.tif", "tif");
+            CaptureWebPageToFileAndAssert(@"C:\capture.tif", CaptureWebPage.ImageCodecs.Tiff);
         }
 
         [Test]
         public void ShouldUseGifEncoderForGif()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.gif", "gif");
+            CaptureWebPageToFileAndAssert(@"C:\capture.gif", CaptureWebPage.ImageCodecs.Gif);
         }
 
         [Test]
         public void ShouldUsePngEncoderForPng()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.png", "png");
+            CaptureWebPageToFileAndAssert(@"C:\capture.png", CaptureWebPage.ImageCodecs.Png);
         }
 
         [Test]
         public void ShouldUseBmpEncoderForBmp()
         {
-            CaptureWebPageToFileAndAssert(@"C:\capture.bmp", "bmp");
+            CaptureWebPageToFileAndAssert(@"C:\capture.bmp", CaptureWebPage.ImageCodecs.Bmp);
         }
 
         private void AssertImageTypeVersusEncoderMimeType(string imageFileName, string expectedMimeType)
@@ -183,7 +171,7 @@ namespace WatiN.Core.UnitTests
             Assert.That(captureWebPage.ImageCodecInfo.MimeType, Is.EqualTo(expectedMimeType), "Unexpected mime type");
         }
 
-        private void CaptureWebPageToFileAndAssert(string imageFileName, string expectedImageType)
+        private void CaptureWebPageToFileAndAssert(string imageFileName, CaptureWebPage.ImageCodecs expectedImageType)
         {
             // GIVEN
             var captureWebPage = new CaptureWebPageMock(Ie.DomContainer) { CallBaseCaptureWebPageToFile = false };
