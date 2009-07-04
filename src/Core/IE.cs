@@ -671,7 +671,7 @@ namespace WatiN.Core
 
 	    private static Process CreateIExploreInNewProcess()
 	    {
-	        var m_Proc = Process.Start("IExplore.exe", (Settings.MakeNewIe8InstanceNoMerge?"-nomerge ":"")+"about:blank");
+	        var m_Proc = Process.Start("IExplore.exe", "about:blank");
 	        if (m_Proc == null)
 	        {
 	            throw new WatiNException("Could not start IExplore.exe process");
