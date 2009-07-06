@@ -73,7 +73,7 @@ namespace WatiN.Core.UtilityClasses
         private static ImageCodecs GetImagetype(string filename)
         {
             var extension = Path.GetExtension(filename);
-            ImageCodecs codec = ImageCodecs.Jpeg;
+            var codec = ImageCodecs.Jpeg;
             switch (extension.Substring(1).ToLowerInvariant())
             {
                 case "tif":

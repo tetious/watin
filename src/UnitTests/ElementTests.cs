@@ -163,11 +163,11 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void ElementWithTagReturnElementsContainer()
 		{
-			var parent = Ie.ElementWithTag("form", Find.ById("Form"));
-		    var container = parent as IElementContainer;
+			var elementWithTag = Ie.ElementWithTag("form", Find.ById("Form"));
+		    var container = elementWithTag as IElementContainer;
             
             Assert.That(container, Is.Not.Null, "Should implement IElementsContainer");
-            Assert.That(parent.GetType(), Is.EqualTo(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
+            Assert.That(elementWithTag.GetType(), Is.EqualTo(typeof(ElementContainer<Element>)), "Should be ElementsContainer<Element>");
         }
 
 		[Test]

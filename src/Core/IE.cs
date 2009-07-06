@@ -788,6 +788,7 @@ namespace WatiN.Core
 			CreateNewIEAndGoToUri(uri, logonDialogHandler, createInNewProcess);
 		}
 
+        // TODO: This should be dealt with in the IEBrowser as should ReOpen(uri, logon...)
         public override void Reopen()
         {
             Reopen(new Uri("about:blank"), null, true);

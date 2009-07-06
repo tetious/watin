@@ -84,21 +84,27 @@ namespace WatiN.Core.UnitTests
         {
             BrowsersToTestWith.ForEach(manager =>
                                            {
+                                               // GIVEN
                                                 manager.CloseBrowser();
 
-                                                // why was this 50,50 in the old test?
-                                                var notTopLeftPoint = new Point(0, 0);
+                                                var notTopLeftPoint = new Point(50, 50);
                                                 Cursor.Position = notTopLeftPoint;
-                                                Settings.AutoMoveMousePointerToTopLeft = false;
 
+                                                // WHEN not moving the mousepointer to top left
+                                                // when creating a new browser instance
+                                                Settings.AutoMoveMousePointerToTopLeft = false;
                                                 using (manager.CreateBrowser(TestPageUri))
                                                 {
+                                                    // THEN cursor should still be on 50,50
                                                     Assert.That(Cursor.Position, Is.EqualTo(notTopLeftPoint));
                                                 }
 
+                                                // WHEN we set to the mousepointer to top left
+                                                // when creating a new browser instance
                                                 Settings.AutoMoveMousePointerToTopLeft = true;
                                                 using (manager.CreateBrowser(TestPageUri))
                                                 {
+                                                    // THEN cursor should still be on 0,0
                                                     Assert.That(Cursor.Position, Is.EqualTo(new Point(0, 0)));
                                                 }
                                             });

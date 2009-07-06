@@ -88,6 +88,18 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
+        public void SaveDefaultJpegImageToFile()
+        {
+            CaptureWebPageToFileAndAssert(@"C:\capture.default", CaptureWebPage.ImageCodecs.Jpeg);
+        }
+
+        [Test]
+        public void ShouldSaveJpgImageToFile()
+        {
+            CaptureWebPageToFileAndAssert(@"C:\capture.jpg", CaptureWebPage.ImageCodecs.Jpeg);
+        }
+
+        [Test]
         public void ShouldSaveJpegImageToFile()
         {
             CaptureWebPageToFileAndAssert(@"C:\capture.jpeg", CaptureWebPage.ImageCodecs.Jpeg);
