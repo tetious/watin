@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using System.Diagnostics;
 
 namespace WatiN.Core.Native.Windows
 {
@@ -124,6 +125,11 @@ namespace WatiN.Core.Native.Windows
 
                 return iePid;
             }
+        }
+
+        public virtual string ProcessName
+        {
+            get { return Process.GetProcessById(ProcessID).ProcessName; }
         }
 
         public string Message
