@@ -84,7 +84,6 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void AutoMoveMousePointerToTopLeft()
         {
-            Thread.Sleep(5000);
             BrowsersToTestWith.ForEach(manager =>
                                            {
                                                 // GIVEN
