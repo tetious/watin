@@ -344,8 +344,8 @@ namespace WatiN.Core.DialogHandlers
 		public void HandleWindow(Window window)
 		{
 			if (!window.IsDialog()) return;
-            if (Process.GetProcessById(window.ProcessID).ProcessName != "iexplore") return;
-
+	        if (!IsWindowOfIexploreProcess(window)) return;
+            
             // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
 
@@ -379,7 +379,12 @@ namespace WatiN.Core.DialogHandlers
 		    }
 		}
 
-		private static void WaitUntilVisibleOrTimeOut(Window window)
+	    private bool IsWindowOfIexploreProcess(Window window)
+	    {
+	        return (String.Compare(window.ProcessName, "iexplore", true) == 0);
+	    }
+
+	    private static void WaitUntilVisibleOrTimeOut(Window window)
 		{
 			// Wait untill window is visible so all properties
 			// of the window class (like Style and StyleInHex)
