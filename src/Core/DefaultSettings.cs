@@ -36,6 +36,7 @@ namespace WatiN.Core
             public bool makeNewIEInstanceVisible;
             public int sleepTime;
             public IFindByDefaultFactory findByDefaultFactory;
+            public bool makeNewIe8InstanceNoMerge;
         }
 
         private settingsStruct settings;
@@ -81,7 +82,8 @@ namespace WatiN.Core
                                autoStartDialogWatcher = true,
                                autoMoveMousePointerToTopLeft = true,
                                makeNewIEInstanceVisible = true,
-                               findByDefaultFactory = new FindByDefaultFactory()
+                               findByDefaultFactory = new FindByDefaultFactory(),
+                               makeNewIe8InstanceNoMerge = true
                            };
         }
 
@@ -221,6 +223,19 @@ namespace WatiN.Core
         {
             get { return settings.findByDefaultFactory; }
             set { settings.findByDefaultFactory = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to make a new <see cref="IE"/> instance without session cookie merging.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if you want to make a new <see cref="IE"/> instance with cookie merging; otherwise, <c>false</c>.
+        /// </value>
+        /// <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
+        public bool MakeNewIe8InstanceNoMerge
+        {
+            get { return settings.makeNewIe8InstanceNoMerge; }
+            set { settings.makeNewIe8InstanceNoMerge = value; }
         }
 
         private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)

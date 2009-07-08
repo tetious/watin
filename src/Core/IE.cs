@@ -19,6 +19,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Win32;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Constraints;
@@ -671,14 +672,26 @@ namespace WatiN.Core
 
 	    private static Process CreateIExploreInNewProcess()
 	    {
-	        var m_Proc = Process.Start("IExplore.exe", "about:blank");
-	        if (m_Proc == null)
-	        {
-	            throw new WatiNException("Could not start IExplore.exe process");
-	        }
+            var arguments = "about:blank";
+
+            if (GetMajorIEVersion() == 8 && Settings.MakeNewIe8InstanceNoMerge)
+                arguments = "-nomerge " + arguments;
+
+	        var m_Proc = Process.Start("IExplore.exe", arguments);
+	        if (m_Proc == null) throw new WatiNException("Could not start IExplore.exe process");
 
 	        return m_Proc;
 	    }
+
+        internal static int GetMajorIEVersion()
+        {
+            var ieKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer");
+            if (ieKey == null) return 0;
+
+            var version = (string) ieKey.GetValue("Version");
+
+            return int.Parse(version.Substring(0, version.IndexOf('.')));
+        }
 
 	    private static void CheckThreadApartmentStateIsSTA()
 		{

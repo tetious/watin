@@ -110,5 +110,14 @@ namespace WatiN.Core.Interfaces
         bool MakeNewIeInstanceVisible { get; set; }
 
         IFindByDefaultFactory FindByDefaultFactory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to make a new <see cref="IE"/> instance without session cookie merging.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if you want to make a new <see cref="IE"/> instance with cookie merging; otherwise, <c>false</c>.
+        /// </value>
+        /// <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
+        bool MakeNewIe8InstanceNoMerge { get; set; }
     }
 }

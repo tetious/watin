@@ -613,5 +613,30 @@ namespace WatiN.Core.UnitTests.IETests
                 Assert.That(process.ProcessName, Text.Contains("iexplore"));
             }
         }
+        
+        [Test, Category("IE8 and later"), Category("InternetConnectionNeeded")]
+        public void SettingNoMerge()
+        {
+            if (IE.GetMajorIEVersion() != 8) return;
+
+            // GIVEN
+            Settings.MakeNewIe8InstanceNoMerge = true;
+
+            // url put up by MSDN blogger, may need to add this to our files
+            const string testUrl = "http://www.enhanceie.com/test/sessions/";
+            using (var ie1 = new IE(testUrl))
+            {
+                ie1.SelectList(Find.ById("selColor")).Select("Green");
+
+                // WHEN
+                using (var ie2 = new IE(testUrl))
+                {
+                    // THEN
+                    var actual = ie2.Div(Find.ById("divSessStore")).InnerHtml;
+                    StringAssert.Contains("undefined",actual,"session cookie used");
+                }
+            }
+        }
+
     }
 }

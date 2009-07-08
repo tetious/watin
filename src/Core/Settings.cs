@@ -255,5 +255,18 @@ namespace WatiN.Core
                 }
             }
 	    }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to make a new <see cref="IE"/> instance without session cookie merging.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if you want to make a new <see cref="IE"/> instance with cookie merging; otherwise, <c>false</c>.
+        /// </value>
+        /// <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
+        public static bool MakeNewIe8InstanceNoMerge
+        {
+            get { return Instance.MakeNewIe8InstanceNoMerge; }
+            set { Instance.MakeNewIe8InstanceNoMerge = value; }
+        }
 	}
 }
