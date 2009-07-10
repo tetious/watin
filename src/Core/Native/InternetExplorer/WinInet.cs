@@ -24,7 +24,7 @@ using System.Text;
 using WatiN.Core.Logging;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
-namespace WatiN.Core.Native
+namespace WatiN.Core.Native.InternetExplorer
 {
     /// <summary>
     /// Provides low-level support for manipulating cookies, clearing caches and
@@ -164,7 +164,11 @@ namespace WatiN.Core.Native
         private static void DeleteCacheGroup(long groupId)
         {
             if (!DeleteUrlCacheGroup(groupId, CACHEGROUP_FLAG_FLUSHURL_ONDELETE, IntPtr.Zero))
-                ThrowExceptionForLastWin32Error();
+            {
+                int err = Marshal.GetLastWin32Error();
+                if (err != ERROR_FILE_NOT_FOUND)
+                    ThrowExceptionForLastWin32Error();
+            }
         }
 
         private static void ForEachCacheGroup(CacheGroupAction action)
@@ -460,7 +464,11 @@ namespace WatiN.Core.Native
                 Logger.LogAction(String.Format("Deleting '{0}'", cacheEntryName));
 
                 if (!DeleteUrlCacheEntry(entry.lpszSourceUrlName))
-                    ThrowExceptionForLastWin32Error();
+                {
+                    int err = Marshal.GetLastWin32Error(); 
+                    if (err != ERROR_FILE_NOT_FOUND)
+                        ThrowExceptionForLastWin32Error();
+                }
             }
         }
     }

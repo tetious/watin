@@ -58,7 +58,7 @@ namespace WatiN.Core.Actions
             _textField.Focus();
             if (!append) _textField.Select();
             if (!append) _textField.SetAttributeValue("value", string.Empty);
-            if (!clear) doKeyPress(value);
+            if (!clear) SendKeyPresses(value);
             if (!append) _textField.Change();
             if (!append) UtilityClass.TryActionIgnoreException(_textField.Blur);
             
@@ -86,12 +86,8 @@ namespace WatiN.Core.Actions
             return value;
         }
 
-        protected virtual void doKeyPress(string value)
+        protected virtual void SendKeyPresses(string value)
         {
-            var doKeyDown = ShouldKeyDownEventByFired();
-            var doKeyUp = ShouldKeyUpEventByFired();
-
-
             var length = value != null ? value.Length : 0;
             if (_textField.MaxLength != 0 && length > _textField.MaxLength)
             {
@@ -103,17 +99,13 @@ namespace WatiN.Core.Actions
                 var subString = value.Substring(i, 1);
                 var character = char.Parse(subString);
 
-                if (doKeyDown)
-                {
-                    FireKeyDown(character);
-                }
-
+                // Always send key down, key press and key up events because we cannot reliably
+                // detect when event handlers may be listening for these events.  We used to try
+                // to skip key down and key up on IE sometimes but it produced strange bugs in
+                // test code for certain web pages.
+                FireKeyDown(character);
                 FireKeyPress(character);
-
-                if (doKeyUp)
-                {
-                    FireKeyUp(character);
-                }
+                FireKeyUp(character);
             }
         }
 
@@ -130,23 +122,6 @@ namespace WatiN.Core.Actions
         protected virtual void FireKeyDown(char character)
         {
             _textField.KeyDown(character);
-        }
-
-        protected virtual bool ShouldKeyDownEventByFired()
-        {
-            var ieElement = _textField.NativeElement as IEElement;
-            return ieElement == null || ShouldEventBeFired(ieElement.AsHtmlElement.onkeydown);
-        }
-
-        protected virtual bool ShouldKeyUpEventByFired()
-        {
-            var ieElement = _textField.NativeElement as IEElement;
-            return ieElement == null || ShouldEventBeFired(ieElement.AsHtmlElement.onkeyup);
-        }
-
-        private static bool ShouldEventBeFired(Object value)
-        {
-            return (value != DBNull.Value);
         }
     }
 }

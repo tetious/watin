@@ -555,7 +555,7 @@ namespace WatiN.Core
 		/// <param name="eventName">Name of the event.</param>
         public virtual void FireEvent(string eventName)
 		{
-			fireEvent(eventName, true, null);
+			FireEvent(eventName, true, null);
 		}
 
 		/// <summary>
@@ -567,7 +567,7 @@ namespace WatiN.Core
 		/// <param name="eventProperties">The event properties that need to be set.</param>
         public virtual void FireEvent(string eventName, NameValueCollection eventProperties)
 		{
-			fireEvent(eventName, true, eventProperties);
+			FireEvent(eventName, true, eventProperties);
 		}
 
 		/// <summary>
@@ -575,7 +575,7 @@ namespace WatiN.Core
 		/// </summary>
         public virtual void FireEventNoWait(string eventName)
 		{
-			fireEvent(eventName, false, null);
+			FireEvent(eventName, false, null);
 		}
 
         /// <summary>
@@ -588,10 +588,10 @@ namespace WatiN.Core
         /// <param name="eventProperties">The event properties that need to be set.</param>
         public virtual void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            fireEvent(eventName, false, eventProperties);
+            FireEvent(eventName, false, eventProperties);
         }
         
-        private void fireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
+        private void FireEvent(string eventName, bool waitForComplete, NameValueCollection eventProperties)
 		{
 			if (!Enabled)
 			{
