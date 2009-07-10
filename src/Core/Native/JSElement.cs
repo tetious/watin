@@ -121,7 +121,7 @@ namespace WatiN.Core.Native
                 return GetFromAttributeCache("Type", () =>
                                                      {
                                                          var value = GetAttribute("type");
-                                                         return value ?? "text";
+                                                         return value != null ? value.ToLower() : "text";
                                                      });
             }
         }
@@ -486,11 +486,11 @@ namespace WatiN.Core.Native
             }
 
             // remove all br tags and following space with \r\n
-            var br = new Regex("<br> *");
+            var br = new Regex(@"<br((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
             returnValue = br.Replace(returnValue, "\r\n");
 
             // remove all hr tags and following space with \r\n
-            var hr = new Regex("<hr> *");
+            var hr = new Regex(@"<hr((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?> *");
             returnValue = hr.Replace(returnValue, "\r\n");
 
             // remove tags (beginning and end tags)
@@ -504,6 +504,12 @@ namespace WatiN.Core.Native
             // replace multiple spaces by one space
             var moreThanOneSpace = new Regex(" +");
             returnValue = moreThanOneSpace.Replace(returnValue, " ");
+
+            //Decode HTML entities left in the string
+            returnValue = System.Web.HttpUtility.HtmlDecode(returnValue);
+
+            //Replace the nbsp character with regular spaces
+            returnValue = returnValue.Replace((char)0xa0, (char)0x20);
 
             // remove spaces at the beginning of the text
             return returnValue.TrimStart();
