@@ -21,6 +21,7 @@ using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

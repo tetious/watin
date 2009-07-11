@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
@@ -35,7 +36,7 @@ namespace WatiN.Core.DialogHandlers
 
         public bool WaitUntilHandled(int timeoutAfterSeconds)
         {
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeoutAfterSeconds);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeoutAfterSeconds));
             tryActionUntilTimeOut.Try(() => HasHandledDialog);
 
             return HasHandledDialog;

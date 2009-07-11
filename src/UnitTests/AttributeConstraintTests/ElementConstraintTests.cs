@@ -24,6 +24,7 @@ using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {

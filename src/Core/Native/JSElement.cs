@@ -342,9 +342,10 @@ namespace WatiN.Core.Native
 
         public bool IsElementReferenceStillValid()
         {
-            if (UtilityClass.IsNullOrEmpty(this.ElementReference)) return false;
+            if (UtilityClass.IsNullOrEmpty(this.ElementReference))
+                return false;
 
-            var command = string.Format("{0} != null && {0}.offsetParent != null; ", this.ElementReference);
+            var command = string.Format("{0} != null && {0}.parentNode != null; ", this.ElementReference);
 
             return this.ClientPort.WriteAndReadAsBool(command);
         }

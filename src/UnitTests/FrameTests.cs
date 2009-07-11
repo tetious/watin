@@ -22,6 +22,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Constraints;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

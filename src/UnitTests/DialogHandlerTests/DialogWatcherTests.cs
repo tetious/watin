@@ -19,6 +19,7 @@
 using NUnit.Framework;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

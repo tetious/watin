@@ -16,11 +16,11 @@
 
 #endregion Copyright
 
+using WatiN.Core.UnitTests.TestUtils;
+
 namespace WatiN.Core.UnitTests.Native.ChromeTests
 {
     using System;
-
-    using Interfaces;
 
     public class ChromeBrowserTestManager : IBrowserTestManager
     {

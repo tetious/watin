@@ -18,6 +18,7 @@
 
 using System;
 using NUnit.Framework;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

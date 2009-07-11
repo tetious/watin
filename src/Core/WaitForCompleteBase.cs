@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -43,7 +44,7 @@ namespace WatiN.Core
             {
                 if (_timer == null)
                 {
-                    _timer = new SimpleTimer(_waitForCompleteTimeOut);
+                    _timer = new SimpleTimer(TimeSpan.FromSeconds(_waitForCompleteTimeOut));
                 }
                 return _timer;
             }

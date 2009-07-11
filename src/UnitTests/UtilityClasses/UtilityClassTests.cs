@@ -19,6 +19,7 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using WatiN.Core.UnitTests.TestUtils;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.UtilityClasses
@@ -53,20 +54,20 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void SimpleTimerWithNegativeTimeoutNotAllowed()
         {
-            new SimpleTimer(-1);
+            new SimpleTimer(TimeSpan.FromSeconds(-1));
         }
 
         [Test]
         public void SimpleTimerWithZeroTimoutIsAllowed()
         {
-            var timer = new SimpleTimer(0);
+            var timer = new SimpleTimer(TimeSpan.FromSeconds(0));
             Assert.IsTrue(timer.Elapsed);
         }
 
         [Test]
         public void SimpleTimerOneSecond()
         {
-            var timer = new SimpleTimer(1);
+            var timer = new SimpleTimer(TimeSpan.FromSeconds(1));
             Thread.Sleep(1200);
             Assert.IsTrue(timer.Elapsed);
         }
@@ -74,7 +75,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
         [Test]
         public void SimpleTimerThreeSeconds()
         {
-            var timer = new SimpleTimer(3);
+            var timer = new SimpleTimer(TimeSpan.FromSeconds(3));
             Thread.Sleep(2500);
             Assert.IsFalse(timer.Elapsed);
             Thread.Sleep(1000);

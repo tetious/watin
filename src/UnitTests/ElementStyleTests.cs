@@ -21,6 +21,7 @@ using System;
 using Moq;
 using NUnit.Framework;
 using WatiN.Core.Native;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

@@ -118,22 +118,22 @@ namespace WatiN.Core.Native.InternetExplorer
             catch (RunScriptException)
             {
                 // In a cross domain automation scenario a System.UnauthorizedAccessException 
-                // is thrown. The following code doesn't seem to have any effect,
-                // but maybe someday MicroSoft fixes the issue... so I wrote the code anyway.
-                object dummyEvt = null;
-                object parentEvt = ((IHTMLDocument4)element.document).CreateEventObject(ref dummyEvt);
-
-                var eventObj = (IHTMLEventObj2)parentEvt;
+                // is thrown.  This code does cause the registered client event handlers to be fired
+                // but it does not deliver the event to the control itself.  Consequently the
+                // control state may need to be updated directly (eg. as with key press event).
+                
+                object prototypeEvent = null;
+                object eventObj = ((IHTMLDocument4)element.document).CreateEventObject(ref prototypeEvent);
 
                 for (var index = 0; index < eventObjectProperties.Count; index++)
                 {
                     var property = eventObjectProperties.GetKey(index);
                     var value = eventObjectProperties.GetValues(index)[0];
 
-                    eventObj.setAttribute(property, value, 0);
+                    ((IHTMLEventObj2)eventObj).setAttribute(property, value, 0);
                 }
 
-                element.FireEvent(eventName, ref parentEvt);
+                element.FireEvent(eventName, ref eventObj);
             }
         }
 

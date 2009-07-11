@@ -29,6 +29,7 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.UnitTests.TestUtils;
 using StringComparer=WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.UnitTests

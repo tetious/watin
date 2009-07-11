@@ -18,7 +18,7 @@
 
 using System;
 
-namespace WatiN.Core.UnitTests.Interfaces
+namespace WatiN.Core.UnitTests.TestUtils
 {
     public interface IBrowserTestManager
     {

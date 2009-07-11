@@ -1,4 +1,4 @@
-﻿#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
 
 //Copyright 2006-2009 Jeroen van Menen
 //
@@ -19,6 +19,7 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
 {

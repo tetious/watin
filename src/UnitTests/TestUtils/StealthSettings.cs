@@ -16,7 +16,7 @@
 
 #endregion Copyright
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.TestUtils
 {
     public class StealthSettings : DefaultSettings
     {

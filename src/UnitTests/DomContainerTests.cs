@@ -22,6 +22,7 @@ using NUnit.Framework;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
 {
@@ -140,7 +141,7 @@ namespace WatiN.Core.UnitTests
 
         protected override SimpleTimer InitTimeout()
         {
-            Timeout = base.InitTimeout().Timeout;
+            Timeout = (int) base.InitTimeout().Timeout.TotalSeconds;
             return null;
         }
 

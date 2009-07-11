@@ -21,6 +21,7 @@ using NUnit.Framework;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {

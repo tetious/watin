@@ -40,7 +40,7 @@ namespace WatiN.Core
 	/// This is the base class for all other element types in this project, like
 	/// Button, Checkbox etc.. It provides common functionality to all these elements
 	/// </summary>
-	public class Element<TElement> : Element
+	public class Element<TElement> : Element, IEquatable<Element>
         where TElement : Element
 	{
 	    public Element(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement)
@@ -78,7 +78,7 @@ namespace WatiN.Core
     [DebuggerDisplay("{DebuggerDisplayProxy()}")]
     public class Element : Component
 	{
-        private INativeElement _nativeElement;
+        private INativeElement _cachedNativeElement;
         private ElementFinder _elementFinder;
 
         private HighlightAction _highlightAction;
@@ -108,7 +108,7 @@ namespace WatiN.Core
             if (domContainer == null) throw new ArgumentNullException("domContainer");
 
 			DomContainer = domContainer;
-			_nativeElement = nativeElement;
+			_cachedNativeElement = nativeElement;
 			_elementFinder = elementFinder;
 		}
 
@@ -662,23 +662,22 @@ namespace WatiN.Core
 		{
 			get
 			{
-				if (!HasNativeElement)
+                INativeElement nativeElement = null;
+				try
 				{
-					try
-					{
-						WaitUntilExists();
-					}
-					catch (Exceptions.TimeoutException e)
-					{
-					    if(e.InnerException == null)
-						{
-							throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url);
-						}
+					WaitUntilExists();
+                    nativeElement = GetCachedNativeElement();
+                }
+				catch (Exceptions.TimeoutException e)
+				{
+				    if(e.InnerException != null)
                         throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url, e.InnerException);
-					}
 				}
 
-				return _nativeElement;
+                if (nativeElement == null)
+                    throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url);
+
+				return nativeElement;
 			}
 		}
 
@@ -689,9 +688,8 @@ namespace WatiN.Core
 		public virtual bool Exists
 		{
 			get
-			{
-				RefreshNativeElement();
-				return HasNativeElement;
+            {
+				return FindNativeElement() != null;
 			}
 		}
 
@@ -803,13 +801,13 @@ namespace WatiN.Core
 		/// Waits until the given <paramref name="constraint" /> matches.
 		/// </summary>
 		/// <param name="constraint">The Constraint.</param>
-		/// <param name="timeout">The timeout.</param>
+		/// <param name="timeout">The timeout in seconds.</param>
         public virtual void WaitUntil(Constraint constraint, int timeout)
 		{
 			// Calling Exists will refresh the reference to the html element
 			// so the compare is against the current html element (and not 
 			// against some cached reference.
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout))
             {
                 ExceptionMessage = () => string.Format("waiting {0} seconds for element matching constraint: {1}", timeout, constraint)
             };
@@ -819,39 +817,19 @@ namespace WatiN.Core
 
 	    private void WaitUntilExistsOrNot(int timeout, bool waitUntilExists)
 	    {
-	        // Does it make sense to go into the do loop?
-			if (waitUntilExists)
-			{
-			    if (HasNativeElement)
-				{
-					return;
-				}
-
-			    if (_elementFinder == null)
-			    {
-			        throw new WatiNException("It's not possible to find the element because no elementFinder is available.");
-			    }
-			}
-			else
-			{
-				if (!HasNativeElement)
-				{
-					return;
-				}
-			}
-
-	        LoopUntilExistsEqualsWaitUntilExistsArgument(waitUntilExists, timeout);
-	    }
-
-        private void LoopUntilExistsEqualsWaitUntilExistsArgument(bool waitUntilExists, int timeout)
-        {
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout))
                 {
                     ExceptionMessage = () => string.Format("waiting {0} seconds for element to {1}.", timeout,
                                                   waitUntilExists ? "show up" : "disappear")
                 };
 
-            tryActionUntilTimeOut.Try(() => Exists == waitUntilExists);
+            tryActionUntilTimeOut.Try(() =>
+                {
+                    return ! CanFindNativeElement() || Exists == waitUntilExists;
+                });
+
+            if (! CanFindNativeElement())
+                throw new WatiNException("It's not possible to find the element because no element finder is available.");
         }
 
         /// <summary>
@@ -898,51 +876,84 @@ namespace WatiN.Core
 		{
 			if (_elementFinder != null)
 			{
-				ClearNativeElement();
+				ClearCachedNativeElement();
 			}
 		}
 
-        private void ClearNativeElement()
+        /// <summary>
+        /// Finds the native element.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method caches the native element unless its reference becomes invalid
+        /// in which case it will search for the element again.
+        /// </para>
+        /// <para>
+        /// Unlike the <see cref="NativeElement" /> property, this method does not wait
+        /// for the native element to be found.  If the native element is not found then
+        /// this method returns null.
+        /// </para>
+        /// </remarks>
+        /// <returns>The native element, or null if not found.</returns>
+        protected INativeElement FindNativeElement()
         {
-            _nativeElement = null;
+            if (_cachedNativeElement != null)
+            {
+                if (_cachedNativeElement.IsElementReferenceStillValid())
+                    return _cachedNativeElement;
+
+                _cachedNativeElement = null;
+            }
+
+            if (_elementFinder != null)
+            {
+                Element foundElement = _elementFinder.FindFirst();
+                if (foundElement != null)
+                    _cachedNativeElement = foundElement._cachedNativeElement;
+            }
+
+            return _cachedNativeElement;
         }
 
         /// <summary>
-		/// Calls <see cref="Refresh"/> and returns the element.
+		/// Clears the cached native element and finds it again.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>The native element, or null if not found.</returns>
 		protected INativeElement RefreshNativeElement()
 		{
-			if (_elementFinder != null)
-			{
-                ClearNativeElement();
-
-                var foundElement = _elementFinder.FindFirst();
-                if (foundElement != null) _nativeElement = foundElement._nativeElement;
-			}
-			else
-			{
-				// This will set element to null if some specific properties are
-				// a certain value. These values indicate that the element is no longer
-				// on the/a valid web page.
-				// These checks are only necessary if element field
-				// is set during the construction of an ElementCollection
-				// or a more specialized element collection (like TextFieldCollection)
-				if (HasNativeElement)
-				{
-					if (_nativeElement.IsElementReferenceStillValid() == false)
-					{
-                        ClearNativeElement();
-					}
-				}
-			}
-
-			return _nativeElement;
+            ClearCachedNativeElement();
+            return FindNativeElement();
 		}
 
-        public virtual bool HasNativeElement
+        /// <summary>
+        /// Returns true if it is possible to find a native element.
+        /// </summary>
+        /// <remarks>
+        /// This method may return false if the element does not have an associated element finder
+        /// and no native element is currently cached.
+        /// </remarks>
+        /// <returns>True if an element can be found.</returns>
+        protected bool CanFindNativeElement()
         {
-            get { return _nativeElement != null; }
+            return _cachedNativeElement != null || _elementFinder != null;
+        }
+
+        /// <summary>
+        /// Clears the cached native element.
+        /// </summary>
+        protected void ClearCachedNativeElement()
+        {
+            if (_elementFinder != null)
+                _cachedNativeElement = null;
+        }
+
+        /// <summary>
+        /// Gets the cached native element immediately.
+        /// </summary>
+        /// <returns></returns>
+        protected INativeElement GetCachedNativeElement()
+        {
+            return _cachedNativeElement;
         }
 
         /// <summary>
@@ -1150,15 +1161,25 @@ namespace WatiN.Core
             NativeElement.SetAttributeValue(attributeName, value);
         }
 
-        public override bool Equals(object obj)
+        sealed public override bool Equals(object obj)
         {
-            var element = obj as Element;
-            return element != null && NativeElement.Equals(element.NativeElement);
+            return Equals(obj as Element);
+        }
+
+        public virtual bool Equals(Element element)
+        {
+            if (element == null)
+                return false;
+
+            if (! CanFindNativeElement() || ! element.CanFindNativeElement())
+                return ReferenceEquals(element, this);
+
+            return NativeElement.Equals(element.NativeElement);
         }
 
         public override int GetHashCode()
         {
-            return NativeElement.GetHashCode();
+            return CanFindNativeElement() ? NativeElement.GetHashCode() : 0;
         }
 
         /// <summary>
@@ -1180,11 +1201,7 @@ namespace WatiN.Core
 
         protected NativeElementFinder.NativeElementCollectionFactory CreateNativeElementCollectionFactory(NativeElementCollectionFactory factory)
         {
-            return () =>
-                       {
-                           RefreshNativeElement();
-                           return HasNativeElement ? factory.Invoke(NativeElement) : null;
-                       };
+            return () => CanFindNativeElement() ? factory.Invoke(NativeElement) : null;
         }
 
         protected virtual object DebuggerDisplayProxy()

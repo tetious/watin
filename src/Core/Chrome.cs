@@ -198,7 +198,11 @@ namespace WatiN.Core
 
             if (waitForMainWindow)
             {
-                var action = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut) { SleepTime = 200 };
+                var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut))
+                {
+                    SleepTime = TimeSpan.FromMilliseconds(200)
+                };
+
                 var result = action.Try(() =>
                                         {
                                             chromeProcess.Refresh();

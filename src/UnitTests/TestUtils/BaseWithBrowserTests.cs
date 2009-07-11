@@ -23,24 +23,22 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.UnitTests.FireFoxTests;
 using WatiN.Core.UnitTests.IETests;
-using WatiN.Core.UnitTests.Interfaces;
+using WatiN.Core.UnitTests.Native.ChromeTests;
 
-namespace WatiN.Core.UnitTests
+namespace WatiN.Core.UnitTests.TestUtils
 {
-    using Native.ChromeTests;
-
     public abstract class BaseWithBrowserTests : BaseWatiNTest
-	{
+    {
         /// <summary>
         /// The test method to execute.
         /// </summary>
         public delegate void BrowserTest(Browser browser);
 
-	    private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
-	    private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
-	    private readonly IBrowserTestManager chromeManager = new ChromeBrowserTestManager();
+        private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
+        private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
+        private readonly IBrowserTestManager chromeManager = new ChromeBrowserTestManager();
 
-	    public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
+        public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
 
         // TODO: remove this property in time
         public IE Ie
@@ -62,9 +60,9 @@ namespace WatiN.Core.UnitTests
             }
         }
 
-		[TestFixtureSetUp]
-		public override void FixtureSetup()
-		{
+        [TestFixtureSetUp]
+        public override void FixtureSetup()
+        {
             base.FixtureSetup();
 #if !IncludeChromeInUnitTesting
             BrowsersToTestWith.Add(ieManager);
@@ -73,48 +71,48 @@ namespace WatiN.Core.UnitTests
 		    BrowsersToTestWith.Add(chromeManager);
 #endif
             Logger.LogWriter = new ConsoleLogWriter {IgnoreLogDebug = true};
-		}
+        }
 
-	    [TestFixtureTearDown]
-		public override void FixtureTearDown()
-	    {
+        [TestFixtureTearDown]
+        public override void FixtureTearDown()
+        {
             var exceptions = new List<Exception>();
             BrowsersToTestWith.ForEach(browserTestManager =>
-                                           {
-                                               try
-                                               {
-                                                   browserTestManager.CloseBrowser();
-                                               }
-                                               catch (Exception e)
-                                               {
-                                                   exceptions.Add(e);
-                                               }
-                                           });
-	        base.FixtureTearDown();
+                {
+                    try
+                    {
+                        browserTestManager.CloseBrowser();
+                    }
+                    catch (Exception e)
+                    {
+                        exceptions.Add(e);
+                    }
+                });
+            base.FixtureTearDown();
 
-	        foreach (var exception in exceptions)
-	            Logger.LogAction( exception.Message + Environment.NewLine + exception.StackTrace);
+            foreach (var exception in exceptions)
+                Logger.LogAction( exception.Message + Environment.NewLine + exception.StackTrace);
 
             foreach (var exception in exceptions)
                 throw exception;
         }
 
-	    [SetUp]
-		public virtual void TestSetUp()
-	    {
-	        Settings.Reset();
+        [SetUp]
+        public virtual void TestSetUp()
+        {
+            Settings.Reset();
             BrowsersToTestWith.ForEach(browserTestManager => GoToTestPage(browserTestManager.GetBrowser(TestPageUri)));
-	    }
+        }
 
-	    private void GoToTestPage(Browser browser)
-	    {
-	        if ( browser != null && !browser.Uri.Equals(TestPageUri))
-	        {
-	            browser.GoTo(TestPageUri);
-	        }
-	    }
+        private void GoToTestPage(Browser browser)
+        {
+            if ( browser != null && !browser.Uri.Equals(TestPageUri))
+            {
+                browser.GoTo(TestPageUri);
+            }
+        }
 
-	    public abstract Uri TestPageUri { get; }
+        public abstract Uri TestPageUri { get; }
 
         /// <summary>
         /// Executes the test using both FireFox and Internet Explorer.
@@ -156,5 +154,5 @@ namespace WatiN.Core.UnitTests
         }
 
         private static bool InsideExecuteTest { get; set; }
-	}
+    }
 }

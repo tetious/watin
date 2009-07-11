@@ -654,7 +654,11 @@ namespace WatiN.Core
 			var m_Proc = CreateIExploreInNewProcess();
 		    var helper = new AttachToIeHelper();
 
-		    var action = new TryFuncUntilTimeOut(Settings.AttachToIETimeOut) { SleepTime = 500 };
+		    var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.AttachToIETimeOut))
+            {
+                SleepTime = TimeSpan.FromMilliseconds(500)
+            };
+
             var ie = action.Try(() =>
             {
                 m_Proc.Refresh();
@@ -1113,7 +1117,11 @@ namespace WatiN.Core
 		{
 			Logger.LogAction("Busy finding HTMLDialog matching criteria: {0}", findBy);
 
-		    var action = new TryFuncUntilTimeOut(timeout){SleepTime = 500};
+            var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout))
+            {
+                SleepTime = TimeSpan.FromMilliseconds(500)
+            };
+
             var result = action.Try(() => HtmlDialogs.First(findBy));
             
             if (result == null)

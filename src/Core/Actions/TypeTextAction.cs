@@ -89,6 +89,7 @@ namespace WatiN.Core.Actions
         protected virtual void SendKeyPresses(string value)
         {
             var length = value != null ? value.Length : 0;
+
             if (_textField.MaxLength != 0 && length > _textField.MaxLength)
             {
                 length = _textField.MaxLength;
@@ -96,8 +97,7 @@ namespace WatiN.Core.Actions
 
             for (var i = 0; i < length; i++)
             {
-                var subString = value.Substring(i, 1);
-                var character = char.Parse(subString);
+                var character = value[i];
 
                 // Always send key down, key press and key up events because we cannot reliably
                 // detect when event handlers may be listening for these events.  We used to try

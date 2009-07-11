@@ -405,7 +405,7 @@ namespace WatiN.Core.Native.InternetExplorer
                     return false;
                 }
 
-                return AsHtmlElement.offsetParent != null;
+                return AsHtmlElement.parentElement != null;
             }
             catch
             {
@@ -434,7 +434,7 @@ namespace WatiN.Core.Native.InternetExplorer
             // it's quite probable that it will never reach Complete.
             // Like for elements that could not load an image or icon
             // or some other bits not part of the HTML page.     
-            var tryFuncUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
+            var tryFuncUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut));
             var ihtmlElement2 = AsHtmlElement2;
             var success = tryFuncUntilTimeOut.Try(() =>
             {
@@ -449,7 +449,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private void WaitUntilElementAvailable()
         {
-            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut);
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut));
             var ihtmlElement = AsHtmlElement;
             var success = tryActionUntilTimeOut.Try(() =>
             {

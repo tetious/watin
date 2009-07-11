@@ -17,80 +17,65 @@
 #endregion Copyright
 
 using System;
-using System.Timers;
+using System.Diagnostics;
 
-namespace WatiN.Core
+namespace WatiN.Core.UtilityClasses
 {
-	/// <summary>
-	/// This class provides a simple way to handle loops that have to time out after 
-	/// a specified number of seconds.
-	/// </summary>
-	/// <example>
-	/// This is an example how you could use this class in your code.
-	/// <code>
-	/// // timer should elapse after 30 seconds
-	/// SimpleTimer timeoutTimer = new SimpleTimer(30);
-	///
-	/// do
-	/// {
-	///   // Your check logic goes here
-	///   
-	///   // wait 200 miliseconds
-	///   Thread.Sleep(200);
-	/// } while (!timeoutTimer.Elapsed);
-	/// </code>
-	/// </example>
-	public class SimpleTimer
-	{
-		private Timer clock;
-
-	    private readonly int _timeout;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SimpleTimer"/> class.
-		/// </summary>
-		/// <param name="timeout">The timeout in seconds.</param>
-		public SimpleTimer(int timeout)
-		{
-			if (timeout < 0)
-			{
-				throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
-			}
-
-		    _timeout = timeout;
-
-			if (timeout > 0)
-			{
-				clock = new Timer(timeout*1000);
-				clock.AutoReset = false;
-				clock.Elapsed += ElapsedEvent;
-				clock.Start();
-			}
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this <see cref="SimpleTimer"/> is elapsed.
-		/// </summary>
-		/// <value><c>true</c> if elapsed; otherwise, <c>false</c>.</value>
-		public bool Elapsed
-		{
-			get { return (clock == null); }
-		}
+    /// <summary>
+    /// This class provides a simple way to handle loops that have to time out after 
+    /// a specified number of seconds.
+    /// </summary>
+    /// <example>
+    /// This is an example how you could use this class in your code.
+    /// <code>
+    /// // timer should elapse after 30 seconds
+    /// SimpleTimer timeoutTimer = new SimpleTimer(30);
+    ///
+    /// do
+    /// {
+    ///   // Your check logic goes here
+    ///   
+    ///   // wait 200 miliseconds
+    ///   Thread.Sleep(200);
+    /// } while (!timeoutTimer.Elapsed);
+    /// </code>
+    /// </example>
+    public class SimpleTimer
+    {
+        private readonly TimeSpan timeout;
+        private Stopwatch stopwatch;
 
         /// <summary>
-        /// The number of seconds after which this timer times out. The time out can only be
+        /// Initializes a new instance of the <see cref="SimpleTimer"/> class.
+        /// </summary>
+        /// <param name="timeout">The timeout.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="timeout"/> is negative.</exception>
+        public SimpleTimer(TimeSpan timeout)
+        {
+            if (timeout.Ticks < 0)
+                throw new ArgumentOutOfRangeException("timeout", timeout, "Should be equal are greater then zero.");
+
+            this.timeout = timeout;
+
+            stopwatch = Stopwatch.StartNew();
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="SimpleTimer"/> is elapsed.
+        /// </summary>
+        /// <value><c>true</c> if elapsed; otherwise, <c>false</c>.</value>
+        public bool Elapsed
+        {
+            get { return stopwatch.Elapsed >= timeout; }
+        }
+
+        /// <summary>
+        /// The amount of time after which this timer times out. The time out can only be
         /// set through the constructor.
         /// </summary>
-        public int Timeout
+        public TimeSpan Timeout
         {
-            get { return _timeout; }
+            get { return timeout; }
         }
-        
-        private void ElapsedEvent(object source, ElapsedEventArgs e)
-		{
-			clock.Stop();
-			clock.Close();
-			clock = null;
-		}
-	}
+    }
 }

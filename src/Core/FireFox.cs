@@ -164,7 +164,11 @@ namespace WatiN.Core
 
             if (waitForMainWindow)
             {
-                var action = new TryFuncUntilTimeOut(Settings.WaitForCompleteTimeOut) { SleepTime = 200};
+                var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut))
+                {
+                    SleepTime = TimeSpan.FromMilliseconds(200)
+                };
+
                 var result = action.Try(() =>
                                             {
                                                 ffProcess.Refresh();
@@ -346,7 +350,7 @@ namespace WatiN.Core
 
         private void AttachToExisting(Constraint findBy, int timeout, bool waitForComplete)
         {
-            var action = new TryFuncUntilTimeOut(timeout) { SleepTime = 500 };
+            var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout)) { SleepTime = TimeSpan.FromMilliseconds(500) };
             bool found = action.Try(() => FindFireFox(findBy));
             if (found)
             {

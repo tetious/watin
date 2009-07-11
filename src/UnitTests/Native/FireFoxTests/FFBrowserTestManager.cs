@@ -17,7 +17,7 @@
 #endregion Copyright
 
 using System;
-using WatiN.Core.UnitTests.Interfaces;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.FireFoxTests
 {

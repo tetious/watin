@@ -38,18 +38,21 @@ namespace WatiN.Core.UtilityClasses
     public class TryFuncUntilTimeOut
     {
         private readonly SimpleTimer _timer;
+        private readonly TimeSpan _timeout;
 
         /// <summary>
-        /// Gets or sets the interval between retries of the action..
+        /// Gets or sets the maximum interval between retries of the action.
         /// </summary>
-        /// <value>The sleep time in milliseconds.</value>
-        public int SleepTime { get; set; }
+        public TimeSpan SleepTime { get; set; }
         
         /// <summary>
-        /// Returns the time out period in seconds.
+        /// Returns the time out period.
         /// </summary>
         /// <value>The timeout.</value>
-        public int Timeout { get; private set; }
+        public TimeSpan Timeout
+        {
+            get { return _timer != null ? _timer.Timeout : _timeout; }
+        }
         
         /// <summary>
         /// Returns the last exception (thrown by the action) before the time out occured.
@@ -74,22 +77,28 @@ namespace WatiN.Core.UtilityClasses
         /// Initializes a new instance of the <see cref="TryFuncUntilTimeOut"/> class.
         /// </summary>
         /// <param name="timeout">The timeout in seconds.</param>
-        public TryFuncUntilTimeOut(int timeout)
+        public TryFuncUntilTimeOut(TimeSpan timeout)
+            : this()
         {
-            Timeout = timeout;
-            SleepTime = Settings.SleepTime;
+            _timeout = timeout;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TryFuncUntilTimeOut"/> class.
         /// </summary>
         /// <param name="timer">The timer instance which will be used when executing <see cref="Try{T}(DoFunc{T})"/>.</param>
-        public TryFuncUntilTimeOut(SimpleTimer timer) : this (0)
+        public TryFuncUntilTimeOut(SimpleTimer timer)
+            : this()
         {
             _timer = timer;
         }
 
-        public static T Try<T>(int timeout, DoFunc<T> func)
+        private TryFuncUntilTimeOut()
+        {
+            SleepTime = TimeSpan.FromMilliseconds(Settings.SleepTime);
+        }
+
+        public static T Try<T>(TimeSpan timeout, DoFunc<T> func)
         {
             var tryFunc = new TryFuncUntilTimeOut(timeout);
             return tryFunc.Try(func);
@@ -106,9 +115,9 @@ namespace WatiN.Core.UtilityClasses
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            var defaultT = default(T);
             var timeoutTimer = GetTimer();
 
+            var currentSleepTime = TimeSpan.FromMilliseconds(1);
             do
             {
                 LastException = null;
@@ -116,19 +125,29 @@ namespace WatiN.Core.UtilityClasses
                 try
                 {
                     var result = func.Invoke();
-                    if (!result.Equals(defaultT)) return result;
+                    if (!result.Equals(default(T)))
+                        return result;
                 }
                 catch (Exception e)
                 {
                     LastException = e;
                 }
 
-                Sleep(SleepTime);
+                Sleep(currentSleepTime);
+
+                currentSleepTime += currentSleepTime;
+                if (currentSleepTime > SleepTime)
+                    currentSleepTime = SleepTime;
             } while (!timeoutTimer.Elapsed);
 
             HandleTimeOut();
 
-            return defaultT;
+            return default(T);
+        }
+
+        protected virtual void Sleep(TimeSpan sleepTime)
+        {
+            Thread.Sleep(sleepTime);
         }
 
         private SimpleTimer GetTimer()
@@ -144,11 +163,6 @@ namespace WatiN.Core.UtilityClasses
             {
                 ThrowTimeOutException(LastException, ExceptionMessage.Invoke());
             }
-        }
-
-        protected virtual void Sleep(int sleepTime)
-        {
-            Thread.Sleep(sleepTime);
         }
 
         private static void ThrowTimeOutException(Exception lastException, string message)

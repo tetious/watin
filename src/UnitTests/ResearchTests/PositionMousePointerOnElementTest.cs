@@ -21,6 +21,7 @@ using System.Threading;
 using mshtml;
 using NUnit.Framework;
 using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.ResearchTests
 {

@@ -29,6 +29,7 @@ using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.IETests
 {

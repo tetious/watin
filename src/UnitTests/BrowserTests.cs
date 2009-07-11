@@ -25,6 +25,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.UnitTests.TestUtils;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests
@@ -144,7 +145,7 @@ namespace WatiN.Core.UnitTests
 
                                 Assert.That(browser.Url, Is.EqualTo(AboutBlank));
 
-                                TryFuncUntilTimeOut.Try(3, () => browser.Uri == MainURI);
+                                TryFuncUntilTimeOut.Try(TimeSpan.FromSeconds(3), () => browser.Uri == MainURI);
                                 browser.WaitForComplete();
 
                                 Assert.AreEqual(MainURI, new Uri(browser.Url));

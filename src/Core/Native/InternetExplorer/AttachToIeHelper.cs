@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
@@ -51,7 +52,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             Logger.LogAction("Busy finding Internet Explorer matching constraint {0}", findBy);
 
-            var timer = new SimpleTimer(timeout);
+            var timer = new SimpleTimer(TimeSpan.FromSeconds(timeout));
 
             var ie = TryFindIe(findBy, timer);
             
@@ -78,7 +79,11 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private IE TryFindIe(Constraint findBy, SimpleTimer timer)
         {
-            var action = new TryFuncUntilTimeOut(timer) { SleepTime = 500 };
+            var action = new TryFuncUntilTimeOut(timer)
+            {
+                SleepTime = TimeSpan.FromMilliseconds(500)
+            };
+
             return action.Try(() => FindIEPartiallyInitialized(findBy));
         }
 

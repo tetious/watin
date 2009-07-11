@@ -21,6 +21,7 @@ using System;
 using NUnit.Framework;
 using System.Linq;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.DotNet35
 {
