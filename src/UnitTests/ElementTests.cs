@@ -102,14 +102,17 @@ namespace WatiN.Core.UnitTests
 
 			element = new Element(domContainerMock.Object, nativeElementMock.Object);
 
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             nativeElementMock.Expect(native => native.Parent).Returns(firstParentDivMock.Object);
-			
+
+            firstParentDivMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             firstParentDivMock.Expect(first => first.TagName).Returns("div");
             firstParentDivMock.Expect(first => first.GetAttributeValue("tagName")).Returns("div");
             firstParentDivMock.Expect(first => first.GetAttributeValue("innertext")).Returns("first ancestor");
 
-			firstParentDivMock.Expect(first => first.Parent).Returns(secondParentDivMock.Object);
-			
+            firstParentDivMock.Expect(first => first.Parent).Returns(secondParentDivMock.Object);
+
+            secondParentDivMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             secondParentDivMock.Expect(second => second.TagName).Returns("div");
             secondParentDivMock.Expect(second => second.GetAttributeValue("tagName")).Returns("div");
             secondParentDivMock.Expect(second => second.GetAttributeValue("innertext")).Returns("second ancestor");
@@ -132,7 +135,8 @@ namespace WatiN.Core.UnitTests
 			var nativeElementMock = new Mock<INativeElement>();
             var domContainer = new Mock<DomContainer> (new object[] { }).Object;
 
-			nativeElementMock.Expect(native => native.Parent).Returns((INativeElement) null);
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            nativeElementMock.Expect(native => native.Parent).Returns((INativeElement)null);
 			element = new Element(domContainer, nativeElementMock.Object); 
 
 			Assert.IsNull(element.Parent);
@@ -237,7 +241,8 @@ namespace WatiN.Core.UnitTests
             var domContainer = new Mock<DomContainer>( new object[] { });
 
 			finderMock.Expect(finder => finder.FindFirst()).Returns(new Element(domContainer.Object, nativeElementMock.Object)).AtMost(2);
-			nativeElementMock.Expect(native => native.TagName).Returns("mockedtag");
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            nativeElementMock.Expect(native => native.TagName).Returns("mockedtag");
 
             element = new Element(domContainer.Object, finderMock.Object);
 
@@ -254,7 +259,9 @@ namespace WatiN.Core.UnitTests
 		public void AncestorTypeShouldOnlyExceptTypesInheritingElement()
 		{
             // GIVEN
-		    var element1 = new Element(new Mock<DomContainer>().Object, new  Mock<INativeElement>().Object);
+            var nativeElementMock = new Mock<INativeElement>();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            var element1 = new Element(new Mock<DomContainer>().Object, nativeElementMock.Object);
 
             // WHEN
 			element1.Ancestor(typeof (String));
@@ -402,7 +409,9 @@ namespace WatiN.Core.UnitTests
 		public void GetAttributeValueOfNullThrowsArgumentNullException()
 		{
             // GIVEN
-			var helloButton = new Element(new Mock<DomContainer>().Object, new Mock<INativeElement>().Object);
+            var nativeElementMock = new Mock<INativeElement>();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            var helloButton = new Element(new Mock<DomContainer>().Object, nativeElementMock.Object);
 			
             // WHEN
             helloButton.GetAttributeValue(null);
@@ -414,7 +423,9 @@ namespace WatiN.Core.UnitTests
 		public void GetAttributeValueOfEmptyStringThrowsArgumentNullException()
 		{
             // GIVEN
-            var helloButton = new Element(new Mock<DomContainer>().Object, new Mock<INativeElement>().Object);
+            var nativeElementMock = new Mock<INativeElement>();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            var helloButton = new Element(new Mock<DomContainer>().Object, nativeElementMock.Object);
 
             // WHEN
             helloButton.GetAttributeValue(string.Empty);
@@ -535,7 +546,7 @@ namespace WatiN.Core.UnitTests
 			var nativeElementMock = new Mock<INativeElement>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
 
-            nativeElementMock.Expect(native => native.IsElementReferenceStillValid()).Returns(true).AtMost(2);
+            nativeElementMock.Expect(native => native.IsElementReferenceStillValid()).Returns(true);
             nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(true.ToString()).AtMostOnce();
             nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(false.ToString()).AtMostOnce();
 
@@ -553,7 +564,8 @@ namespace WatiN.Core.UnitTests
 			var nativeElementMock = new Mock<INativeElement>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
 
-			nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(false.ToString()); //.AtMostOnce();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            nativeElementMock.Expect(native => native.GetAttributeValue("disabled")).Returns(false.ToString()); //.AtMostOnce();
 
 			var elementMock = new Mock<Element>(domContainerMock.Object, nativeElementMock.Object);
 
@@ -571,10 +583,11 @@ namespace WatiN.Core.UnitTests
 			var nativeElementMock = new Mock<INativeElement>();
 			var elementFinderMock = new Mock<ElementFinder>();
             var domContainerMock = new Mock<DomContainer>( new object[] { });
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
 
 			element = new Element(domContainerMock.Object, elementFinderMock.Object);
 
-			elementFinderMock.Expect(finder => finder.FindFirst()).Returns((Element) null).AtMost(5);
+            elementFinderMock.Expect(finder => finder.FindFirst()).Returns((Element)null).AtMost(5);
             elementFinderMock.Expect(finder => finder.FindFirst()).Throws(new UnauthorizedAccessException("")).AtMost(4);
             elementFinderMock.Expect(finder => finder.FindFirst()).Returns(new Element(domContainerMock.Object, nativeElementMock.Object));
 
@@ -651,6 +664,7 @@ namespace WatiN.Core.UnitTests
 		{
 			var nativeElementMock = new Mock<INativeElement>();
             var domContainerMock = new Mock<DomContainer>(new object[] { });
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             var elementMock = new Mock<Element>(domContainerMock.Object, nativeElementMock.Object);
 
 			elementMock.Expect(elem => elem.Exists).Never();
@@ -980,6 +994,7 @@ namespace WatiN.Core.UnitTests
             var domContainerMock = new Mock<DomContainer>(new object[] { });
 
             element = new Element(domContainerMock.Object, nativeElementMock.Object);
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             nativeElementMock.Expect(native => native.Parent).Returns(firstParentDivMock.Object);
             
             firstParentDivMock.Expect(first => first.TagName).Returns("a");
@@ -1082,6 +1097,7 @@ namespace WatiN.Core.UnitTests
 
             var mockNativeElement = new Mock<INativeElement>();
             var mockDomContainer = new Mock<DomContainer>();
+            mockNativeElement.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             mockNativeElement.Expect(x => x.GetStyleAttributeValue("cssText")).Returns(cssText);
 
             var element = new Element(mockDomContainer.Object, mockNativeElement.Object);
@@ -1101,6 +1117,7 @@ namespace WatiN.Core.UnitTests
 
             var mockNativeElement = new Mock<INativeElement>();
             var mockDomContainer = new Mock<DomContainer>();
+            mockNativeElement.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             mockNativeElement.Expect(x => x.GetStyleAttributeValue("color")).Returns(styleAttributeValue);
 
             var element = new Element(mockDomContainer.Object, mockNativeElement.Object);

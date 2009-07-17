@@ -84,7 +84,9 @@ namespace WatiN.Core.UnitTests
 		public void GetAttributeValueOfNullThrowsArgumenNullException()
 		{
 		    // GIVEN
-		    var style = new Style(new Mock<INativeElement>().Object);
+            var nativeElementMock = new Mock<INativeElement>();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+		    var style = new Style(nativeElementMock.Object);
 
             // WHEN
 		    style.GetAttributeValue(null);
@@ -96,7 +98,9 @@ namespace WatiN.Core.UnitTests
 		public void GetAttributeValueOfEmptyStringThrowsArgumenNullException()
 		{
             // GIVEN
-            var style = new Style(new Mock<INativeElement>().Object);
+            var nativeElementMock = new Mock<INativeElement>();
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            var style = new Style(nativeElementMock.Object);
 
             // WHEN
             style.GetAttributeValue(string.Empty);

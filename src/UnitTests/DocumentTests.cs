@@ -120,7 +120,8 @@ namespace WatiN.Core.UnitTests
             // GIVEN
 		    var nativeDocumentMock = new Mock<INativeDocument>();
 		    var nativeElementMock = new Mock<INativeElement>();
-		    nativeElementMock.Expect(element => element.GetAttributeValue("innertext")).Returns("Something");
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            nativeElementMock.Expect(element => element.GetAttributeValue("innertext")).Returns("Something");
 		    nativeDocumentMock.Expect(native => native.Body).Returns(nativeElementMock.Object);
 
 		    var domContainer = new Mock<DomContainer>().Object;

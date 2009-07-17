@@ -45,11 +45,12 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
         private static void VerifyComparerIsUsed(string tagname, bool expectedResult)
         {
-            var INativeElementStub = new Mock<INativeElement>();
+            var nativeElementMock = new Mock<INativeElement>();
             var domContainerMock = new Mock<DomContainer>();
-            var element = new Element(domContainerMock.Object, INativeElementStub.Object);
+            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
+            var element = new Element(domContainerMock.Object, nativeElementMock.Object);
 
-            INativeElementStub.Expect(native => native.TagName).Returns("testtagname");
+            nativeElementMock.Expect(native => native.TagName).Returns("testtagname");
 			
             var elementComparerMock = new ElementComparerMock(tagname);
             var elementConstraint = new ElementConstraint(elementComparerMock);

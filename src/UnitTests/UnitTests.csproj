@@ -194,7 +194,7 @@
     <Compile Include="IdHinterTests.cs" />
     <Compile Include="Native\ChromeTests\ChromeBrowserTestManager.cs" />
     <Compile Include="Native\ChromeTests\ChromeTests.cs" />
-    <Compile Include="ActionTests\HighligtActionTests.cs" />
+    <Compile Include="ActionTests\HighlightActionTests.cs" />
     <Compile Include="NativeElementFinderTests.cs" />
     <Compile Include="Native\JSElementCollectionBaseTests.cs" />
     <Compile Include="Native\Windows\NativeMethodsTests.cs" />
