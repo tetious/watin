@@ -63,15 +63,14 @@ namespace WatiN.Core
             WaitForCompleteOrTimeout();
         }
 
+        /// <summary>
+        /// Waits an initial small sleep time (10ms default) to allow the browser some
+        /// time to perform any immediately pending asynchronous operations that might
+        /// cause it to enter a busy state.
+        /// </summary>
         protected virtual void InitialSleep()
         {
-            Thread.Sleep(100);
-        }
-
-        public virtual void Sleep(string logMessage)
-        {
-            Logger.LogDebug("{0}: Waiting {1}", logMessage, MilliSecondsTimeOut);
-            Thread.Sleep(MilliSecondsTimeOut);
+            Thread.Sleep(10);
         }
 
         /// <summary>

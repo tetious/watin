@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Collections;
+using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Actions
@@ -24,7 +25,8 @@ namespace WatiN.Core.Actions
     internal class HighlightAction
     {
         private readonly Element _element;
-        private readonly Stack _colorCallStack = new Stack();
+        private int _highlightDepth;
+        private string _originalColor;
 
         public HighlightAction(Element element)
         {
@@ -33,40 +35,60 @@ namespace WatiN.Core.Actions
 
         public void On()
         {
-            if (_colorCallStack.Count == 0)
+            _highlightDepth += 1;
+
+            if (_highlightDepth == 1)
             {
-                // store original
-                _colorCallStack.Push(_element.NativeElement.GetStyleAttributeValue("backgroundColor"));
-                SetBackgroundColor(Settings.HighLightColor);
-            }
-            else
-            {
-                // prevent unnecesary getting and setting of backgroundColor in cases where highlight is already applied
-                _colorCallStack.Push(Settings.HighLightColor);
+                UtilityClass.TryActionIgnoreException(() =>
+                    {
+                        var nativeElement = _element.FindNativeElement();
+                        if (nativeElement != null)
+                        {
+                            _originalColor = GetBackgroundColor(nativeElement);
+                            SetBackgroundColor(nativeElement, Settings.HighLightColor);
+                        }
+                    });
             }
         }
 
         public void Off()
         {
-            if (_colorCallStack.Count <= 0) return;
+            if (_highlightDepth <= 0)
+                return;
 
-            var color = _colorCallStack.Pop() as string;
-            if (_colorCallStack.Count == 0)
+            _highlightDepth -= 1;
+
+            if (_highlightDepth == 0 && _originalColor != null)
             {
-                SetBackgroundColor(color);
+                UtilityClass.TryActionIgnoreException(() =>
+                {
+                    var nativeElement = _element.FindNativeElement();
+                    if (nativeElement != null)
+                    {
+                        SetBackgroundColor(nativeElement, _originalColor);
+                    }
+                });
+
+                _originalColor = null;
             }
         }
 
         public void Highlight(bool highlight)
         {
-            if (highlight) On();
-            else Off();
+            if (highlight)
+                On();
+            else
+                Off();
         }
 
-        private void SetBackgroundColor(string color)
+        private static string GetBackgroundColor(INativeElement nativeElement)
         {
-            UtilityClass.TryActionIgnoreException(() => _element.NativeElement.SetStyleAttributeValue("backgroundColor", color ?? ""));
+            return nativeElement.GetStyleAttributeValue("backgroundColor");
         }
 
+        private static void SetBackgroundColor(INativeElement nativeElement, string color)
+        {
+            nativeElement.SetStyleAttributeValue("backgroundColor", color ?? "");
+        }
     }
 }

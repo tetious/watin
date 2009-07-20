@@ -460,6 +460,14 @@ namespace WatiN.Core
 			FireEvent("onKeyDown");
 		}
 
+        /// <summary>
+        /// Does a keydown on this element and does not wait for the page to finish loading.
+        /// </summary>
+        public virtual void KeyDownNoWait()
+        {
+            FireEventNoWait("onKeyDown");
+        }
+
 		/// <summary>
 		/// Does a keydown on this element.
 		/// </summary>
@@ -467,6 +475,14 @@ namespace WatiN.Core
 		{
 			FireEvent("onKeyDown", GetKeyCodeEventProperty(character));
 		}
+
+        /// <summary>
+        /// Does a keydown on this element and does not wait for the page to finish loading.
+        /// </summary>
+        public virtual void KeyDownNoWait(char character)
+        {
+            FireEventNoWait("onKeyDown", GetKeyCodeEventProperty(character));
+        }
 
 		/// <summary>
 		/// Does a keyspress on this element.
@@ -476,10 +492,64 @@ namespace WatiN.Core
 			FireEvent("onKeyPress");
 		}
 
+        /// <summary>
+        /// Does a keyspress on this element and does not wait for the page to finish loading.
+        /// </summary>
+        public virtual void KeyPressNoWait()
+        {
+            FireEventNoWait("onKeyPress");
+        }
+
+        /// <summary>
+        /// Does a keyspress on this element.
+        /// </summary>
         public virtual void KeyPress(char character)
 		{
 			FireEvent("onKeyPress", GetKeyCodeEventProperty(character));
 		}
+
+        /// <summary>
+        /// Does a keyspress on this element and does not wait for the page to finish loading.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        public virtual void KeyPressNoWait(char character)
+        {
+            FireEventNoWait("onKeyPress", GetKeyCodeEventProperty(character));
+        }
+
+        /// <summary>
+        /// Does a keyup on this element.
+        /// </summary>
+        public virtual void KeyUp()
+        {
+            FireEvent("onKeyUp");
+        }
+
+        /// <summary>
+        /// Does a keyup on this element and does not wait for the page to finish loading.
+        /// </summary>
+        public virtual void KeyUpNoWait()
+        {
+            FireEventNoWait("onKeyUp");
+        }
+
+        /// <summary>
+        /// Does a keyup on this element.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        public virtual void KeyUp(char character)
+        {
+            FireEvent("onKeyUp", GetKeyCodeEventProperty(character));
+        }
+
+        /// <summary>
+        /// Does a keyup on this element and does not wait for the page to finish loading.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        public virtual void KeyUpNoWait(char character)
+        {
+            FireEventNoWait("onKeyUp", GetKeyCodeEventProperty(character));
+        }
 
 		private static NameValueCollection GetKeyCodeEventProperty(char character)
 		{
@@ -489,24 +559,6 @@ namespace WatiN.Core
 		                   {"charCode", ((int) character).ToString()}
 		               };
 		}
-
-		/// <summary>
-		/// Does a keyup on this element.
-		/// </summary>
-        public virtual void KeyUp()
-		{
-			FireEvent("onKeyUp");
-		}
-
-		/// <summary>
-		/// Does a keyup on this element.
-		/// </summary>
-		/// <param name="character">The character.</param>
-        public virtual void KeyUp(char character)
-		{
-			FireEvent("onKeyUp", GetKeyCodeEventProperty(character));
-		}
-
 
 		/// <summary>
 		/// Fires the blur event on this element.
@@ -895,7 +947,7 @@ namespace WatiN.Core
         /// </para>
         /// </remarks>
         /// <returns>The native element, or null if not found.</returns>
-        protected INativeElement FindNativeElement()
+        public INativeElement FindNativeElement()
         {
             if (_cachedNativeElement != null)
             {
@@ -919,7 +971,7 @@ namespace WatiN.Core
 		/// Clears the cached native element and finds it again.
 		/// </summary>
 		/// <returns>The native element, or null if not found.</returns>
-		protected INativeElement RefreshNativeElement()
+		public INativeElement RefreshNativeElement()
 		{
             ClearCachedNativeElement();
             return FindNativeElement();
@@ -933,7 +985,7 @@ namespace WatiN.Core
         /// and no native element is currently cached.
         /// </remarks>
         /// <returns>True if an element can be found.</returns>
-        protected bool CanFindNativeElement()
+        public bool CanFindNativeElement()
         {
             return _cachedNativeElement != null || _elementFinder != null;
         }
