@@ -1253,7 +1253,11 @@ namespace WatiN.Core
 
         protected NativeElementFinder.NativeElementCollectionFactory CreateNativeElementCollectionFactory(NativeElementCollectionFactory factory)
         {
-            return () => CanFindNativeElement() ? factory.Invoke(NativeElement) : null;
+            return () =>
+                {
+                    INativeElement nativeElement = FindNativeElement();
+                    return nativeElement != null ? factory.Invoke(nativeElement) : null;
+                };
         }
 
         protected virtual object DebuggerDisplayProxy()
