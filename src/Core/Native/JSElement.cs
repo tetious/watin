@@ -345,7 +345,8 @@ namespace WatiN.Core.Native
             if (UtilityClass.IsNullOrEmpty(this.ElementReference))
                 return false;
 
-            var command = string.Format("{0} != null && {0}.parentNode != null; ", this.ElementReference);
+            // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
+            var command = string.Format("{0} != null && ({0}.parentNode != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", this.ElementReference);
 
             return this.ClientPort.WriteAndReadAsBool(command);
         }

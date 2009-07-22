@@ -405,7 +405,9 @@ namespace WatiN.Core.Native.InternetExplorer
                     return false;
                 }
 
-                return AsHtmlElement.parentElement != null;
+                // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
+                return AsHtmlElement.parentElement != null
+                    || TagName == "!" || TagName == "HTML";
             }
             catch
             {
