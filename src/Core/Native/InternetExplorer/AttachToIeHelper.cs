@@ -45,7 +45,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual IE CreateBrowserInstance(IEBrowser browser)
         {
-            return new IE(browser.AsIWebBrowser2, false);
+            return new IE(browser.WebBrowser, false);
         }
 
         public Browser Find(Constraint findBy, int timeout, bool waitForComplete)
@@ -70,7 +70,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             if (waitForComplete)
             {
-                var ieWaitForComplete = new IEWaitForComplete(ie) { Timer = timer };
+                var ieWaitForComplete = new IEWaitForComplete((IEBrowser) ie.NativeBrowser) { Timer = timer };
                 ie.WaitForComplete(ieWaitForComplete);
             }
 

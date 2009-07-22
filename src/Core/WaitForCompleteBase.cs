@@ -118,7 +118,8 @@ namespace WatiN.Core
 
         protected void WaitUntil(DoFunc<bool> waitWhile, BuildTimeOutExceptionMessage exceptionMessage)
         {
-            if (Timer == null) throw new WatiNException("_waitForCompleteTimer not initialized");
+            if (Timer == null)
+                throw new WatiNException("_waitForCompleteTimer not initialized");
             
             var timeOut = new TryFuncUntilTimeOut(Timer) {ExceptionMessage = exceptionMessage};
             timeOut.Try(waitWhile);

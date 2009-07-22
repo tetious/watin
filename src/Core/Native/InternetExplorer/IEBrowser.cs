@@ -26,16 +26,16 @@ namespace WatiN.Core.Native.InternetExplorer
 {
 	public class IEBrowser : INativeBrowser 
 	{
-	    private readonly IWebBrowser2 _webBrowser2;
+	    private readonly IWebBrowser2 webBrowser;
 
 	    public IEBrowser(IWebBrowser2 webBrowser2)
 	    {
-	        _webBrowser2 = webBrowser2;
+	        webBrowser = webBrowser2;
 	    }
 
-	    public object AsIWebBrowser2
+	    public IWebBrowser2 WebBrowser
 	    {
-            get { return _webBrowser2; }
+            get { return webBrowser; }
 	    }
 
 	    /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	    {
             object nil = null;
             object absoluteUri = url.AbsoluteUri;
-            _webBrowser2.Navigate2(ref absoluteUri, ref nil, ref nil, ref nil, ref nil);
+            webBrowser.Navigate2(ref absoluteUri, ref nil, ref nil, ref nil, ref nil);
         }
 
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	    {
             try
             {
-                _webBrowser2.GoBack();
+                webBrowser.GoBack();
                 return true;
             }
             catch (COMException)
@@ -81,7 +81,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	    {
             try
             {
-                _webBrowser2.GoForward();
+                webBrowser.GoForward();
                 return true;
             }
             catch (COMException)
@@ -100,29 +100,29 @@ namespace WatiN.Core.Native.InternetExplorer
         public void Refresh()
 	    {
             object REFRESH_COMPLETELY = 3;
-            _webBrowser2.Refresh2(ref REFRESH_COMPLETELY);
+            webBrowser.Refresh2(ref REFRESH_COMPLETELY);
         }
 
         /// <inheritdoc />
         public IntPtr hWnd
 	    {
-            get { return new IntPtr(_webBrowser2.HWND); }
+            get { return new IntPtr(webBrowser.HWND); }
 	    }
 
 	    public INativeDocument NativeDocument
 	    {
-            get { return new IEDocument((IHTMLDocument2) _webBrowser2.Document); }
+            get { return new IEDocument((IHTMLDocument2) webBrowser.Document); }
 	    }
 
 	    public bool Visible
 	    {
-            get { return _webBrowser2.Visible; }
-            set { _webBrowser2.Visible = value; }
+            get { return webBrowser.Visible; }
+            set { webBrowser.Visible = value; }
 	    }
 
         public void Quit()
         {
-            _webBrowser2.Quit();
+            webBrowser.Quit();
         }
 	}
 }

@@ -44,7 +44,7 @@ namespace WatiN.Core.UnitTests
 		}
 
         [Test]
-		public void WaitForCompletUsesGivenWaitClass()
+		public void WaitForCompleteUsesGivenWaitClass()
 		{
 			_waitMock.Expect(wait => wait.DoWait());
 
@@ -56,27 +56,11 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void WaitForCompleteShouldUseTimeOutProvidedThroughtTheConstructor()
 	    {
-	        var waitForCompleteMock = new WaitForCompleteMock(myTestDomContainer, 333);
-
-            Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
+	        var waitForCompleteMock = new WaitForCompleteStub(333);
 
             waitForCompleteMock.DoWait();
             
             Assert.That(waitForCompleteMock.Timeout, NUnit.Framework.SyntaxHelpers.Is.EqualTo(333), "Unexpected timeout");
-	    }
-
-	    [Test]
-	    public void WaitForCompleteShouldUseWaitForCompleteTimeOutSetting()
-	    {
-	        var expectedWaitForCompleteTimeOut = Settings.WaitForCompleteTimeOut;
-
-	        var waitForCompleteMock = new WaitForCompleteMock(myTestDomContainer);
-
-            Assert.That(waitForCompleteMock, NUnit.Framework.SyntaxHelpers.Is.InstanceOfType(typeof(WaitForComplete)),"Should inherit WaitForComplete");
-
-            waitForCompleteMock.DoWait();
-
-            Assert.That(waitForCompleteMock.Timeout, NUnit.Framework.SyntaxHelpers.Is.EqualTo(expectedWaitForCompleteTimeOut), "Unexpected timeout");
 	    }
 
 	    [Test]
@@ -133,11 +117,9 @@ namespace WatiN.Core.UnitTests
         }
 	}
 
-    internal class WaitForCompleteMock : WaitForComplete
+    internal class WaitForCompleteStub : WaitForCompleteBase
     {
-        public WaitForCompleteMock(DomContainer domContainer) : base(domContainer) {}
-
-        public WaitForCompleteMock(DomContainer domContainer, int waitForCompleteTimeOut) : base(domContainer, waitForCompleteTimeOut) {}
+        public WaitForCompleteStub(int waitForCompleteTimeOut) : base(waitForCompleteTimeOut) {}
 
         protected override SimpleTimer InitTimeout()
         {

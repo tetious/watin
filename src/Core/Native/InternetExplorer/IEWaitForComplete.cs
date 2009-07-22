@@ -16,35 +16,194 @@
 
 #endregion Copyright
 
+using System.Runtime.InteropServices;
+using mshtml;
 using SHDocVw;
+using WatiN.Core.Exceptions;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    public class IEWaitForComplete : WaitForComplete
+    public class IEWaitForComplete : WaitForCompleteBase
     {
-        protected IE _ie;
+        private readonly IEBrowser ieBrowser;
+        private readonly IEDocument ieDocument;
 
-        public IEWaitForComplete(IE ie) : base(ie)
+        public IEWaitForComplete(IEBrowser ieBrowser)
+            : this(ieBrowser, Settings.WaitForCompleteTimeOut)
         {
-            _ie = ie;
         }
 
-        public IEWaitForComplete(IE ie, int waitForCompleteTimeOut) : base(ie, waitForCompleteTimeOut)
+        public IEWaitForComplete(IEBrowser ieBrowser, int waitForCompleteTimeout)
+            : base(waitForCompleteTimeout)
         {
-            _ie = ie;
+            this.ieBrowser = ieBrowser;
+            ieDocument = (IEDocument) ieBrowser.NativeDocument;
         }
 
-        public override void DoWait()
+        public IEWaitForComplete(IEDocument ieDocument)
+            : this(ieDocument, Settings.WaitForCompleteTimeOut)
         {
-            InitialSleep();
-            InitTimeout();
-
-            WaitWhileIEBusy((IWebBrowser2) _ie.InternetExplorer);
-            WaitWhileIEReadyStateNotComplete((IWebBrowser2) _ie.InternetExplorer);
-
-            WaitForCompleteOrTimeout();
         }
 
+        public IEWaitForComplete(IEDocument ieDocument, int waitForCompleteTimeout)
+            : base (waitForCompleteTimeout)
+        {
+            this.ieDocument = ieDocument;
+        }
 
+        protected override void WaitForCompleteOrTimeout()
+        {
+            if (ieBrowser != null)
+            {
+                if (!WaitWhileIEBusy(ieBrowser.WebBrowser))
+                    return;
+                if (!WaitWhileIEReadyStateNotComplete(ieBrowser.WebBrowser))
+                    return;
+            }
+
+            if (ieDocument != null)
+            {
+                WaitWhileMainDocumentNotAvailable(ieDocument.HtmlDocument);
+                WaitWhileDocumentStateNotComplete(ieDocument.HtmlDocument);
+                WaitForFramesToComplete(ieDocument.HtmlDocument);
+            }
+        }
+
+        protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
+        {
+            var mainHtmlDocument = (HTMLDocument)maindocument;
+
+            var framesCount = FrameCountProcessor.GetFrameCountFromHTMLDocument(mainHtmlDocument);
+
+            for (var i = 0; i != framesCount; ++i)
+            {
+                var frame = FrameByIndexProcessor.GetFrameFromHTMLDocument(i, mainHtmlDocument);
+
+                if (frame == null) continue;
+
+                IHTMLDocument2 frameDocument;
+                try
+                {
+                    if (!WaitWhileIEBusy(frame))
+                        continue;
+
+                    if (!WaitWhileIEReadyStateNotComplete(frame))
+                        continue;
+
+                    WaitWhileFrameDocumentNotAvailable(frame);
+
+                    frameDocument = (IHTMLDocument2)frame.Document;
+                }
+                finally
+                {
+                    // free frame
+                    Marshal.ReleaseComObject(frame);
+                }
+
+                WaitWhileDocumentStateNotComplete(frameDocument);
+                WaitForFramesToComplete(frameDocument);
+            }
+        }
+
+        protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
+        {
+            WaitUntil(() => DocumentReadyStateIsAvailable(htmlDocument),
+                      () => "waiting for document ready state available.");
+
+            WaitUntil(() => htmlDocument.readyState == "complete",
+                      () => "waiting for document state complete. Last state was '" + htmlDocument.readyState + "'");
+        }
+
+        protected virtual void WaitWhileMainDocumentNotAvailable(IHTMLDocument2 htmlDocument)
+        {
+            WaitUntil(() => DocumentReadyStateIsAvailable(htmlDocument),
+                      () => "waiting for main document becoming available");
+        }
+
+        protected virtual void WaitWhileFrameDocumentNotAvailable(IWebBrowser2 frame)
+        {
+            WaitUntil(() => DocumentReadyStateIsAvailable(GetFrameDocument(frame)),
+                      () => "waiting for frame document becoming available");
+        }
+
+        protected virtual IHTMLDocument2 GetFrameDocument(IWebBrowser2 frame)
+        {
+            return UtilityClass.TryFuncIgnoreException(() => frame.Document as IHTMLDocument2);
+        }
+
+        protected virtual bool DocumentReadyStateIsAvailable(IHTMLDocument2 document)
+        {
+            // Sometimes an OutOfMemoryException or ComException occurs while accessing
+            // the readystate property of IHTMLDocument2. Giving MSHTML some time
+            // to do further processing seems to solve this problem.
+            return UtilityClass.TryFuncIgnoreException(() =>
+            {
+                var readyState = document.readyState;
+                return true;
+            });
+        }
+
+        protected virtual bool WaitWhileIEReadyStateNotComplete(IWebBrowser2 ie)
+        {
+            return WaitUntilNotNull(() =>
+                {
+                    try
+                    {
+                        return ie.ReadyState == tagREADYSTATE.READYSTATE_COMPLETE ? true : (bool?)null;
+                    }
+                    catch
+                    {
+                        // If an exception occurs, it's possible that IE has been closed
+                        // so we stop waiting.
+                        return false;
+                    }
+                },
+                () => "Internet Explorer state not complete");
+        }
+
+        protected virtual bool WaitWhileIEBusy(IWebBrowser2 ie)
+        {
+            return WaitUntilNotNull(() =>
+                {
+                    try
+                    {
+                        return ! ie.Busy ? true : (bool?)null;
+                    }
+                    catch
+                    {
+                        // If an exception occurs, it's possible that IE has been closed
+                        // so we stop waiting.
+                        return false;
+                    }
+                },
+                () => "Internet Explorer busy");
+        }
+
+        /// <summary>
+        /// Waits until the method returns true or false.
+        /// </summary>
+        /// <param name="func">The function to evaluate.</param>
+        /// <param name="exceptionMessage">A function to build an exception message.</param>
+        /// <returns>The last function result.</returns>
+        /// <exception cref="TimeoutException">Thrown if a timeout occurs.</exception>
+        private bool WaitUntilNotNull(DoFunc<bool?> func, BuildTimeOutExceptionMessage exceptionMessage)
+        {
+            bool result = false;
+            WaitUntil(() =>
+                {
+                    bool? currentResult = func();
+                    if (currentResult.HasValue)
+                    {
+                        result = currentResult.Value;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }, exceptionMessage);
+            return result;
+        }
     }
 }

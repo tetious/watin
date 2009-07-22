@@ -728,7 +728,7 @@ namespace WatiN.Core
 		/// </summary>
 		public object InternetExplorer
 		{
-			get { return _ieBrowser.AsIWebBrowser2; }
+			get { return _ieBrowser.WebBrowser; }
 		}
 
 	    /// <summary>
@@ -1029,7 +1029,7 @@ namespace WatiN.Core
         /// <param name="waitForCompleteTimeOut">The number of seconds to wait before timing out</param>
         public override void WaitForComplete(int waitForCompleteTimeOut)
 		{
-			WaitForComplete(new IEWaitForComplete(this, waitForCompleteTimeOut));
+			WaitForComplete(new IEWaitForComplete((IEBrowser) NativeBrowser, waitForCompleteTimeOut));
 		}
 
 		#region IDisposable Members

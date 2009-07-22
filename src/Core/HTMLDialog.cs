@@ -52,7 +52,7 @@ namespace WatiN.Core
 
 	    public override void WaitForComplete(int waitForCompleteTimeOut)
 	    {
-	        WaitForComplete(new WaitForComplete(this, waitForCompleteTimeOut));
+	        WaitForComplete(new IEWaitForComplete((IEDocument) NativeDocument, waitForCompleteTimeOut));
 	    }
 
 	    public virtual void Close()

@@ -255,7 +255,6 @@
     <Compile Include="Native\InternetExplorer\IWebBrowser2Processor.cs" />
     <Compile Include="Native\InternetExplorer\ShellWindows2.cs" />
     <Compile Include="Native\InternetExplorer\IEUtils.cs" />
-    <Compile Include="Native\InternetExplorer\WaitForComplete.cs" />
     <Compile Include="Native\Mozilla\FFBrowser.cs" />
     <Compile Include="Native\Mozilla\FFDocument.cs" />
     <Compile Include="Native\JSElement.cs" />
