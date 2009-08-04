@@ -58,13 +58,26 @@ namespace WatiN.Core
 
             protected override ControlCollection<TControl> CreateFilteredCollection(Constraint findBy)
             {
-                return new ElementCollectionWrapper<TElement>(elements.Filter(findBy));
+                var elementConstraint = GetControlElementConstraint();
+
+                return new ElementCollectionWrapper<TElement>(elements.Filter(findBy && elementConstraint));
             }
 
             protected override IEnumerable<TControl> GetElements()
             {
+                var elementConstraint = GetControlElementConstraint();
+
                 foreach (TElement element in elements)
-                    yield return Control.CreateControl<TControl>(element);
+                {
+                    if (element.Matches(elementConstraint)) 
+                        yield return Control.CreateControl<TControl>(element);
+                }
+            }
+
+            private static Constraint GetControlElementConstraint()
+            {
+                var dummyControl = new TControl();
+                return dummyControl.ElementConstraint;
             }
         }
     }
