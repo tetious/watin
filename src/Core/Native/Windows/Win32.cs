@@ -197,9 +197,11 @@ namespace WatiN.Core.Native.Windows
         internal static extern IntPtr SetFocus(IntPtr hWnd);
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern Int32 EnumWindows(EnumWindowProc lpEnumFunc, IntPtr lParam);
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern Int32 EnumChildWindows(IntPtr hWndParent, EnumChildWindowProc lpEnumFunc, IntPtr lParam);
 
         [DllImport("user32", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
