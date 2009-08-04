@@ -58,9 +58,7 @@ namespace WatiN.Core
 
             protected override ControlCollection<TControl> CreateFilteredCollection(Constraint findBy)
             {
-                var elementConstraint = GetControlElementConstraint();
-
-                return new ElementCollectionWrapper<TElement>(elements.Filter(findBy && elementConstraint));
+                return new ElementCollectionWrapper<TElement>(elements.Filter(findBy));
             }
 
             protected override IEnumerable<TControl> GetElements()
