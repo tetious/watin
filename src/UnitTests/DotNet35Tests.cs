@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-//#if SPEEDTEST
 using System;
 using NUnit.Framework;
 using System.Linq;
@@ -31,6 +30,7 @@ namespace WatiN.Core.UnitTests.DotNet35
     [TestFixture]
     public class LinqToWatiNTests
     {
+        #if SPEEDTEST
         [Test]
         public void UseLambasSpeedTest()
         {
@@ -38,10 +38,11 @@ namespace WatiN.Core.UnitTests.DotNet35
             {
                 var textFieldStart = ie.TextField(t => t.Name == "TextareaName");
 
+                const int numberOfLookUps = 500;
+
                 StopWatch stopWatch1 = new StopWatch();
                 stopWatch1.Start();
 
-                const int numberOfLookUps = 500;
                 for (var i = 0; i < numberOfLookUps; i++)
                 {
                     var textField = ie.TextField(t => t.Name == "TextareaName");
@@ -63,10 +64,7 @@ namespace WatiN.Core.UnitTests.DotNet35
                 Console.WriteLine("2: " + stopWatch1.TicksSpend / numberOfLookUps + " " + stopWatch2.TicksSpend + " " + stopWatch2.TicksSpend / 1000);
             }
         }
-
-
-
-
+        #endif
 
         [Test]
         public void UsingLambdaExpressionsWithWatiN_1_3()
@@ -254,4 +252,3 @@ namespace WatiN.Core.UnitTests.DotNet35
         }
     }
 }
-//#endif

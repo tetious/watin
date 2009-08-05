@@ -27,7 +27,7 @@ namespace WatiN.Core.Native.InternetExplorer
     public class IEWaitForComplete : WaitForCompleteBase
     {
         private readonly IEBrowser ieBrowser;
-        private readonly IEDocument ieDocument;
+        private IEDocument ieDocument;
 
         public IEWaitForComplete(IEBrowser ieBrowser)
             : this(ieBrowser, Settings.WaitForCompleteTimeOut)
@@ -38,7 +38,6 @@ namespace WatiN.Core.Native.InternetExplorer
             : base(waitForCompleteTimeout)
         {
             this.ieBrowser = ieBrowser;
-            ieDocument = (IEDocument) ieBrowser.NativeDocument;
         }
 
         public IEWaitForComplete(IEDocument ieDocument)
@@ -60,6 +59,8 @@ namespace WatiN.Core.Native.InternetExplorer
                     return;
                 if (!WaitWhileIEReadyStateNotComplete(ieBrowser.WebBrowser))
                     return;
+
+                ieDocument = (IEDocument)ieBrowser.NativeDocument;
             }
 
             if (ieDocument != null)
