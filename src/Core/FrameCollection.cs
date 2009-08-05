@@ -53,7 +53,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        protected override IEnumerable<Frame> GetElements()
+        protected override IEnumerable<Frame> GetComponents()
         {
             var context = new ConstraintContext();
             foreach (Frame frame in frames)

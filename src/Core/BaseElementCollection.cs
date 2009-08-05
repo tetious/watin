@@ -108,7 +108,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        protected sealed override IEnumerable<TElement> GetElements()
+        protected sealed override IEnumerable<TElement> GetComponents()
         {
             foreach (TElement element in elementFinder.FindAll())
                 yield return element;

@@ -58,19 +58,19 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets the element at the specified index in the collection.
+        /// Gets the component at the specified index in the collection.
         /// </summary>
         /// <param name="index">The zero-based index</param>
-        /// <returns>The element</returns>
+        /// <returns>The component</returns>
         public virtual TComponent this[int index]
         {
             get { return Cache[index]; }
         }
 
 	    /// <summary>
-		/// Gets the number of elements in the collection.
+		/// Gets the number of components in the collection.
 		/// </summary>
-		/// <value>The number of elements in the collection</value>
+		/// <value>The number of components in the collection</value>
         [Obsolete("Use Count property instead.")]
         public virtual int Length
 		{
@@ -133,11 +133,11 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Returned a filtered view of the collection consisting only of the elements that
+        /// Returned a filtered view of the collection consisting only of the components that
         /// match the given constraint.
         /// </summary>
         /// <param name="findBy">The constraint to match</param>
-        /// <returns>The filtered element collection</returns>
+        /// <returns>The filtered component collection</returns>
         public virtual TCollection Filter(Constraint findBy)
         {
             if (findBy == null)
@@ -147,11 +147,11 @@ namespace WatiN.Core
         }
 
 	    /// <summary>
-        /// Returned a filtered view of the collection consisting only of the elements that
+        /// Returned a filtered view of the collection consisting only of the components that
         /// match the given predicate.
         /// </summary>
         /// <param name="predicate">The predicate to match</param>
-        /// <returns>The filtered element collection</returns>
+        /// <returns>The filtered component collection</returns>
         public virtual TCollection Filter(Predicate<TComponent> predicate)
         {
             return Filter(CreateConstraintFromPredicate(predicate));
@@ -172,14 +172,14 @@ namespace WatiN.Core
         /// Creates a filtered instance of the collection.
         /// </summary>
         /// <param name="findBy">The constraint, not null</param>
-        /// <returns>The element collection</returns>
+        /// <returns>The component collection</returns>
         protected abstract TCollection CreateFilteredCollection(Constraint findBy);
 
         /// <summary>
-        /// Gets the elements of the collection.
+        /// Gets the components of the collection.
         /// </summary>
-        /// <returns>The collection elements</returns>
-        protected abstract IEnumerable<TComponent> GetElements();
+        /// <returns>The collection components</returns>
+        protected abstract IEnumerable<TComponent> GetComponents();
 
         /// <summary>
         /// Creates a new constraint from a given component-based predicate.
@@ -199,7 +199,7 @@ namespace WatiN.Core
             get
             {
                 if (cache == null)
-                    cache = new LazyList<TComponent>(GetElements());
+                    cache = new LazyList<TComponent>(GetComponents());
                 return cache;
             }
         }

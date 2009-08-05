@@ -75,7 +75,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        protected override IEnumerable<IE> GetElements()
+        protected override IEnumerable<IE> GetComponents()
         {
             var context = new ConstraintContext();
             foreach (IE ie in internetExplorers)

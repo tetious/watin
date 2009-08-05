@@ -84,14 +84,46 @@ namespace WatiN.Core.UnitTests
         {
             ExecuteTestWithAnyBrowser(browser =>
             {
+                // GIVEN a form which id doesn't start with 'Form'
+                Assert.That(browser.Form("ReadyOnlyDisabledInputs").Exists, Is.True, "Pre-condition: expected Form with Id not starting with text 'Form'");
+
+                // WHEN searching an collection of Forms who's Ids should start with 'Form' 
+                var formsWithId = browser.Forms.As<FormWithElemenConstriantControl>().Filter(Find.ById("ReadyOnlyDisabledInputs"));
+
+                // THEN the filter should return nothing
+                Assert.That(formsWithId.Count, Is.EqualTo(0), "Unexpected number of forms");
+            });
+        }
+
+        [Test]
+        public void ControlCollectionShouldAllowFilteringUsingPredicate()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
                 // GIVEN
                 Assert.That(browser.Forms.Count, Is.EqualTo(6), "Pre-condition: Unexpected number of forms");
 
                 // WHEN
-                var formsWithId = browser.Forms.As<FormWithElemenConstriantControl>().Filter(Find.ById("noneExistingId"));
+                var formsWithId = browser.Forms.As<FormWithElemenConstriantControl>().Filter(form => form.Id == "FormHiddens");
 
                 // THEN
-                Assert.That(formsWithId.Count, Is.EqualTo(0), "Unexpected number of forms");
+                Assert.That(formsWithId.Count, Is.EqualTo(1), "Unexpected number of forms");
+            });
+        }
+
+        [Test]
+        public void ControlCollectionShouldAllowFilteringUsingConstraint_AlthoughThisIsABitStrangeInSomeWay()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+                Assert.That(browser.Forms.Count, Is.EqualTo(6), "Pre-condition: Unexpected number of forms");
+
+                // WHEN
+                var formsWithId = browser.Forms.As<FormWithElemenConstriantControl>().Filter(Find.ById("FormHiddens"));
+
+                // THEN
+                Assert.That(formsWithId.Count, Is.EqualTo(1), "Unexpected number of forms");
             });
         }
 
@@ -100,6 +132,11 @@ namespace WatiN.Core.UnitTests
             public override Constraints.Constraint ElementConstraint
             {
                 get { return Find.ByElement(e => !string.IsNullOrEmpty(e.Id) && e.Id.StartsWith("Form")); }
+            }
+
+            public string Id
+            {
+                get { return Element.Id; }
             }
         }
 

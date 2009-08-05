@@ -74,7 +74,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        protected override IEnumerable<HtmlDialog> GetElements()
+        protected override IEnumerable<HtmlDialog> GetComponents()
         {
             var context = new ConstraintContext();
             foreach (var htmlDialog in htmlDialogs)
