@@ -132,4 +132,7 @@
   <data name="ReEntryException_MessageFormat" xml:space="preserve">
     <value>A match operation has been aborted because it appeared to be re-entrant.  The exception occurred in an instance of '{0}' with constraint: {1}.</value>
   </data>
+  <data name="IE_Dispose" xml:space="preserve">
+    <value>Closing IE instance</value>
+  </data>
 </root>
