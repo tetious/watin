@@ -29,6 +29,7 @@ using WatiN.Core.Interfaces;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
+using WatiN.Core.Properties;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -821,6 +822,8 @@ namespace WatiN.Core
 		{
 		    if (isDisposed) return;
 		    
+            Logger.LogDebug(Resources.IE_Dispose);
+
             if (closeIE && IsInternetExplorerStillAvailable())
 		    {
 		        // Close all open HTMLDialogs
