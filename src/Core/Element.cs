@@ -947,7 +947,7 @@ namespace WatiN.Core
         /// </para>
         /// </remarks>
         /// <returns>The native element, or null if not found.</returns>
-        public INativeElement FindNativeElement()
+        public virtual INativeElement FindNativeElement()
         {
             if (_cachedNativeElement != null)
             {
