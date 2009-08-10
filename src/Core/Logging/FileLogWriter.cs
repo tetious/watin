@@ -81,7 +81,5 @@ namespace WatiN.Core.Logging
         {
             WriteLogLine("[Info  ]: " + message);
         }
-
-        public Logger.LogDataEvent OnLogData { get; set; }
     }
 }

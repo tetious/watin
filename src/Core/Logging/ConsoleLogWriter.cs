@@ -55,7 +55,5 @@ namespace WatiN.Core.Logging
         }
 
         public bool IgnoreLogDebug { get; set; }
-
-        public Logger.LogDataEvent OnLogData { get; set; }
 	}
 }

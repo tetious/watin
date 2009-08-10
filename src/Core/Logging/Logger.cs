@@ -48,7 +48,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogAction(string message, params object[] args)
 		{
-			Log(LogTypes.Action, UtilityClass.StringFormat(message, args));
+            Log(LogMessageType.Action, UtilityClass.StringFormat(message, args));
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogDebug(string message, params object[] args)
 		{
-            Log(LogTypes.Debug, UtilityClass.StringFormat(message, args));            
+            Log(LogMessageType.Debug, UtilityClass.StringFormat(message, args));            
 		}
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace WatiN.Core.Logging
         /// </example>
         public static void LogInfo(string message, params object[] args)
         {
-            Log(LogTypes.Info, UtilityClass.StringFormat(message, args));
+            Log(LogMessageType.Info, UtilityClass.StringFormat(message, args));
         }
 
         /// <summary>
@@ -99,22 +99,22 @@ namespace WatiN.Core.Logging
         /// <param name="logType">LogTypes enumeration item</param>
         /// <param name="message">A message containing zero or more format items.</param>
         /// <param name="args">An object array containing zero or more objects to format</param>
-        public static void Log(LogTypes logType, string message, params object[] args)
+        public static void Log(LogMessageType logType, string message, params object[] args)
         {
-            if (mLogWriter.OnLogData != null)
+            if (LogMessage != null)
             {
-                mLogWriter.OnLogData(logType, message, args);
+                LogMessage(logType, message, args);
             }
 
             switch (logType)
             {
-                case LogTypes.Action:
+                case LogMessageType.Action:
                     LogWriter.LogAction(UtilityClass.StringFormat(message, args));
                     break;
-                case LogTypes.Debug:
+                case LogMessageType.Debug:
                     LogWriter.LogDebug(UtilityClass.StringFormat(message, args));
                     break;
-                case LogTypes.Info:
+                case LogMessageType.Info:
                     LogWriter.LogInfo(UtilityClass.StringFormat(message, args));
                     break;
             }
@@ -138,30 +138,13 @@ namespace WatiN.Core.Logging
         }
 
         /// <summary>
-        /// enumeration of the logging types
-        /// </summary>
-        public enum LogTypes
-        {
-            /// <summary>
-            /// action logging type
-            /// </summary>
-            Action, 
-            /// <summary>
-            /// debug logging type
-            /// </summary>
-            Debug, 
-            /// <summary>
-            /// info logging type
-            /// </summary>
-            Info
-        }
-
-        /// <summary>
         /// delegate supporting a logging event
         /// </summary>
         /// <param name="logType">LogTypes enumeration item</param>
         /// <param name="message">A message containing zero or more format items.</param>
         /// <param name="args">An object array containing zero or more objects to format</param>
-        public delegate void LogDataEvent(LogTypes logType, string message, params object[] args);
+        public delegate void LogMessageEventArgs(LogMessageType logType, string message, params object[] args);
+
+        public static event LogMessageEventArgs LogMessage;
     }
 }
