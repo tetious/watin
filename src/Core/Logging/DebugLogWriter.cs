@@ -47,5 +47,7 @@ namespace WatiN.Core.Logging
         {
             System.Diagnostics.Debug.WriteLine("[Info] : " + message);
         }
+
+        public Logger.LogDataEvent OnLogData { get; set; }
 	}
 }

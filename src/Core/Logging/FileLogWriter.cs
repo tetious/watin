@@ -33,10 +33,10 @@ namespace WatiN.Core.Logging
     /// Logger.LogAction("Attached FileLogWriter");
 	/// </code>
 	/// </example>
-	public class FileLogWriter : ILogWriter, IDisposable
-	{
-	    private readonly StreamWriter LogStream;
-        
+    public class FileLogWriter : ILogWriter, IDisposable
+    {
+        private readonly StreamWriter LogStream;
+
         /// <summary>
         /// Constructor method creating a text file for writing
         /// </summary>
@@ -46,12 +46,12 @@ namespace WatiN.Core.Logging
             LogStream = File.CreateText(filename);
         }
 
-	    public void Dispose()
-	    {
+        public void Dispose()
+        {
             LogStream.Close();
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// flag to indicate inclusion of a timestamp (in "yyyy-mm-ddThh:nn:ss" format)
         /// </summary>
         public bool IncludeTimestamp { get; set; }
@@ -62,18 +62,18 @@ namespace WatiN.Core.Logging
         /// <param name="message">message to write</param>
         private void WriteLogLine(string message)
         {
-            string line = IncludeTimestamp ? DateTime.Now.ToString("s") +" "+ message : message;
+            string line = IncludeTimestamp ? DateTime.Now.ToString("s") + " " + message : message;
             LogStream.WriteLine(line);
             LogStream.Flush();
         }
 
-		public void LogAction(string message)
-		{
+        public void LogAction(string message)
+        {
             WriteLogLine("[Action]: " + message);
-		}
+        }
 
-	    public void LogDebug(string message)
-	    {
+        public void LogDebug(string message)
+        {
             WriteLogLine("[Debug ]: " + message);
         }
 
@@ -81,5 +81,7 @@ namespace WatiN.Core.Logging
         {
             WriteLogLine("[Info  ]: " + message);
         }
-	}
+
+        public Logger.LogDataEvent OnLogData { get; set; }
+    }
 }

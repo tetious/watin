@@ -48,7 +48,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogAction(string message, params object[] args)
 		{
-			LogWriter.LogAction(UtilityClass.StringFormat(message, args));
+			Log(LogTypes.Action, UtilityClass.StringFormat(message, args));
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogDebug(string message, params object[] args)
 		{
-            LogWriter.LogDebug(UtilityClass.StringFormat(message, args));            
+            Log(LogTypes.Debug, UtilityClass.StringFormat(message, args));            
 		}
 
         /// <summary>
@@ -90,7 +90,34 @@ namespace WatiN.Core.Logging
         /// </example>
         public static void LogInfo(string message, params object[] args)
         {
-            LogWriter.LogInfo(UtilityClass.StringFormat(message, args));
+            Log(LogTypes.Info, UtilityClass.StringFormat(message, args));
+        }
+
+        /// <summary>
+        /// base logging method to send data
+        /// </summary>
+        /// <param name="logType">LogTypes enumeration item</param>
+        /// <param name="message">A message containing zero or more format items.</param>
+        /// <param name="args">An object array containing zero or more objects to format</param>
+        public static void Log(LogTypes logType, string message, params object[] args)
+        {
+            if (mLogWriter.OnLogData != null)
+            {
+                mLogWriter.OnLogData(logType, message, args);
+            }
+
+            switch (logType)
+            {
+                case LogTypes.Action:
+                    LogWriter.LogAction(UtilityClass.StringFormat(message, args));
+                    break;
+                case LogTypes.Debug:
+                    LogWriter.LogDebug(UtilityClass.StringFormat(message, args));
+                    break;
+                case LogTypes.Info:
+                    LogWriter.LogInfo(UtilityClass.StringFormat(message, args));
+                    break;
+            }
         }
 
 		/// <summary>
@@ -109,5 +136,32 @@ namespace WatiN.Core.Logging
         {
             return new NoLog();
         }
+
+        /// <summary>
+        /// enumeration of the logging types
+        /// </summary>
+        public enum LogTypes
+        {
+            /// <summary>
+            /// action logging type
+            /// </summary>
+            Action, 
+            /// <summary>
+            /// debug logging type
+            /// </summary>
+            Debug, 
+            /// <summary>
+            /// info logging type
+            /// </summary>
+            Info
+        }
+
+        /// <summary>
+        /// delegate supporting a logging event
+        /// </summary>
+        /// <param name="logType">LogTypes enumeration item</param>
+        /// <param name="message">A message containing zero or more format items.</param>
+        /// <param name="args">An object array containing zero or more objects to format</param>
+        public delegate void LogDataEvent(LogTypes logType, string message, params object[] args);
     }
 }

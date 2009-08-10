@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using WatiN.Core.Logging;
+
 namespace WatiN.Core.Interfaces
 {
 	/// <summary>
@@ -27,5 +29,6 @@ namespace WatiN.Core.Interfaces
 		void LogAction(string message);
 		void LogDebug(string message);
 	    void LogInfo(string message);
+        Logger.LogDataEvent OnLogData { get; set; }
 	}
 }
