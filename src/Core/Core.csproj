@@ -189,6 +189,7 @@
     <Compile Include="FindByAttribute.cs" />
     <Compile Include="IHasDescription.cs" />
     <Compile Include="Logging\FileLogWriter.cs" />
+    <Compile Include="Logging\LogMessageEventArgs.cs" />
     <Compile Include="Logging\LogMessageType.cs" />
     <Compile Include="Native\InternetExplorer\AttachToIeHelper.cs" />
     <Compile Include="Chrome.cs" />

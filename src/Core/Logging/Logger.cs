@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UtilityClasses;
 
@@ -101,9 +102,11 @@ namespace WatiN.Core.Logging
         /// <param name="args">An object array containing zero or more objects to format</param>
         public static void Log(LogMessageType logType, string message, params object[] args)
         {
+            string formattedMessage = UtilityClass.StringFormat(message, args);
+
             if (LogMessage != null)
             {
-                LogMessage(logType, message, args);
+                LogMessage(null, new LogMessageEventArgs(logType, formattedMessage));
             }
 
             switch (logType)
@@ -137,14 +140,8 @@ namespace WatiN.Core.Logging
             return new NoLog();
         }
 
-        /// <summary>
-        /// delegate supporting a logging event
-        /// </summary>
-        /// <param name="logType">LogTypes enumeration item</param>
-        /// <param name="message">A message containing zero or more format items.</param>
-        /// <param name="args">An object array containing zero or more objects to format</param>
-        public delegate void LogMessageEventArgs(LogMessageType logType, string message, params object[] args);
+        public delegate void LogMessageEventHandler(object sender, LogMessageEventArgs e);
 
-        public static event LogMessageEventArgs LogMessage;
+	    public static event LogMessageEventHandler LogMessage;
     }
 }
