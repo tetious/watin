@@ -140,8 +140,8 @@ namespace WatiN.Core.Logging
             return new NoLog();
         }
 
-        public delegate void LogMessageEventHandler(object sender, LogMessageEventArgs e);
+        public delegate void EventHandle<LogMessageEventArgs>(object sender, LogMessageEventArgs e);
 
-	    public static event LogMessageEventHandler LogMessage;
+        public static event EventHandle<LogMessageEventArgs> LogMessage;
     }
 }

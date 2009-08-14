@@ -186,6 +186,7 @@
     <Compile Include="Composite.cs" />
     <Compile Include="Body.cs" />
     <Compile Include="DescriptionAttribute.cs" />
+    <Compile Include="Exceptions\ElementExceptionBase.cs" />
     <Compile Include="FindByAttribute.cs" />
     <Compile Include="IHasDescription.cs" />
     <Compile Include="Logging\FileLogWriter.cs" />

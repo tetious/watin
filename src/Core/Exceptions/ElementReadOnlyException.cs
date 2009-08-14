@@ -26,10 +26,10 @@ namespace WatiN.Core.Exceptions
 	/// is not allowed.
 	/// </summary>
     [Serializable]
-	public class ElementReadOnlyException : WatiNException
+    public class ElementReadOnlyException : ElementExceptionBase
 	{
-		public ElementReadOnlyException(string elementId) :
-			base("Element with Id:" + elementId + " is readonly") {}
+		public ElementReadOnlyException(Element element) :
+            base("Element with Id:" + element.IdOrName + " is readonly") { Element = element; }
 
         public ElementReadOnlyException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}

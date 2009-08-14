@@ -293,7 +293,7 @@ namespace WatiN.Core
 	        }
 	        catch (ElementNotFoundException)
 	        {
-	            throw new SelectListItemNotFoundException(findBy.ToString());
+	            throw new SelectListItemNotFoundException(findBy.ToString(), this);
 	        }
 	    }
 
@@ -303,7 +303,7 @@ namespace WatiN.Core
 
 	        if (options.Count == 0)
 	        {
-	            throw new SelectListItemNotFoundException(findBy.ToString());
+	            throw new SelectListItemNotFoundException(findBy.ToString(), this);
 	        }
 
 	        // First select all options

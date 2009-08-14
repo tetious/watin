@@ -18,6 +18,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using System.Text;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Exceptions
@@ -26,37 +27,38 @@ namespace WatiN.Core.Exceptions
 	/// Thrown if the searched for element can't be found.
 	/// </summary>
     [Serializable]
-	public class ElementNotFoundException : WatiNException
+	public class ElementNotFoundException : ElementExceptionBase
 	{
-		public ElementNotFoundException(string tagName, string criteria, string url) :
-			base(CreateMessage(tagName, criteria, url, null)) {}
+        public ElementNotFoundException(string tagName, string criteria, string url, Element element) :
+            base(CreateMessage(tagName, criteria, url, null)) { Element = element; }
 
-		public ElementNotFoundException(string tagName, string criteria, string url, Exception innerexception) :
-			base(CreateMessage(tagName, criteria, url, innerexception.Message), innerexception) {}
+        public ElementNotFoundException(string tagName, string criteria, string url, Exception innerexception, Element element) :
+            base(CreateMessage(tagName, criteria, url, innerexception.Message), innerexception) { Element = element; }
 
         public ElementNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 
 		private static string CreateMessage(string tagName, string criteria, string url, string innerException)
 		{
-			var message = string.Format("Could not find {0} element tag", tagName ?? string.Empty);
+            var builder = new StringBuilder();
+            builder.AppendFormat("Could not find {0} element tag", tagName ?? string.Empty);
 
             if (UtilityClass.IsNotNullOrEmpty(criteria))
 			{
-				message += " matching criteria: " + criteria;
+				builder.Append(" matching criteria: " + criteria);
 			}
 
             if (UtilityClass.IsNotNullOrEmpty(url))
             {
-                message += " at " + url;
+                builder.Append(" at " + url);
             }
             
 			if (UtilityClass.IsNotNullOrEmpty(innerException))
 			{
-				message += " (inner exception: "+ innerException + ")";
+				builder.Append(" (inner exception: "+ innerException + ")");
 			}
 
 			
-			return message;
+			return builder.ToString();
 		}
 	}
 }

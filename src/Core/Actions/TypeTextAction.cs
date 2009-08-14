@@ -69,11 +69,11 @@ namespace WatiN.Core.Actions
         {
             if (!_textField.Enabled)
             {
-                throw new ElementDisabledException(_textField.ToString());
+                throw new ElementDisabledException(_textField.IdOrName, _textField);
             }
             if (_textField.ReadOnly)
             {
-                throw new ElementReadOnlyException(_textField.ToString());
+                throw new ElementReadOnlyException(_textField);
             }
         }
 

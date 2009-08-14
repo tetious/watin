@@ -384,7 +384,7 @@ namespace WatiN.Core
 		{
 			if (!Enabled)
 			{
-				throw new ElementDisabledException(Id);
+				throw new ElementDisabledException(IdOrName, this);
 			}
 
             Logger.LogAction("Clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
@@ -411,7 +411,7 @@ namespace WatiN.Core
 		{
 			if (!Enabled)
 			{
-				throw new ElementDisabledException(Id);
+				throw new ElementDisabledException(IdOrName, this);
 			}
 
             Logger.LogAction("Clicking (no wait) {0} '{1}', {2}", GetType().Name, IdOrName, Description);
@@ -430,7 +430,7 @@ namespace WatiN.Core
 		{
 			if (!Enabled)
 			{
-				throw new ElementDisabledException(Id);
+				throw new ElementDisabledException(IdOrName, this);
 			}
 
 			NativeElement.SetFocus();
@@ -444,7 +444,7 @@ namespace WatiN.Core
 		{
 			if (!Enabled)
 			{
-				throw new ElementDisabledException(Id);
+				throw new ElementDisabledException(IdOrName, this);
 			}
 
             Logger.LogAction("Double clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
@@ -647,7 +647,7 @@ namespace WatiN.Core
 		{
 			if (!Enabled)
 			{
-				throw new ElementDisabledException(Id);
+				throw new ElementDisabledException(IdOrName, this);
 			}
 
 			Highlight(true);
@@ -723,11 +723,11 @@ namespace WatiN.Core
 				catch (Exceptions.TimeoutException e)
 				{
 				    if(e.InnerException != null)
-                        throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url, e.InnerException);
+                        throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url, e.InnerException, this);
 				}
 
                 if (nativeElement == null)
-                    throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url);
+                    throw new ElementNotFoundException(_elementFinder.ElementTagsToString(), _elementFinder.ConstraintToString(), DomContainer.Url, this);
 
 				return nativeElement;
 			}

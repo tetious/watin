@@ -25,10 +25,10 @@ namespace WatiN.Core.Exceptions
 	/// Thrown if the searched for selectlist item (option) can't be found.
 	/// </summary>
     [Serializable]
-	public class SelectListItemNotFoundException : WatiNException
+	public class SelectListItemNotFoundException : ElementExceptionBase
 	{
-		public SelectListItemNotFoundException(string constraint) :
-			base("No item was found in the selectlist matching constraint: " + constraint) {}
+		public SelectListItemNotFoundException(string constraint, Element element) :
+            base("No item was found in the selectlist matching constraint: " + constraint) { Element = element; }
 
         public SelectListItemNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}

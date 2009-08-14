@@ -26,10 +26,10 @@ namespace WatiN.Core.Exceptions
 	/// disabled link) is not allowed.
 	/// </summary>
     [Serializable]
-	public class ElementDisabledException : WatiNException
+    public class ElementDisabledException : ElementExceptionBase
 	{
-		public ElementDisabledException(string elementId) :
-			base("Element with Id:" + elementId + " is disabled") {}
+		public ElementDisabledException(string elementId, Element element) :
+            base("Element with Id:" + elementId + " is disabled") { Element = element; }
         public ElementDisabledException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 	}
 }

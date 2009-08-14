@@ -28,7 +28,7 @@ namespace WatiN.Core.Exceptions
     [Serializable]
 	public class WatiNException : Exception
 	{
-		public WatiNException() : base() {}
+		public WatiNException(){}
 		public WatiNException(string message) : base(message)
 		{
 		    Logger.LogDebug(string.Format("Exception: {0}, {1}\n{2}", GetType().Name, message, StackTrace!=null?StackTrace:""));
