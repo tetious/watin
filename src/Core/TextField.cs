@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System;
 using WatiN.Core.Actions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
@@ -107,6 +108,11 @@ namespace WatiN.Core
 			set
 			{
 				Logger.LogAction("Setting {0} '{1}' ({2}) to '{3}'", GetType().Name, IdOrName,Description, value);
+
+                if (MaxLength>0)
+                {
+                    if (MaxLength < value.Length) value = value.Substring(0, MaxLength);
+                }
                 SetAttributeValue("value", value);
 			}
 		}
