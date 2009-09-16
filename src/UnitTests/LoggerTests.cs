@@ -112,5 +112,17 @@ namespace WatiN.Core.UnitTests
 
             Assert.AreEqual("[Action]: "+LogMessage, filecontent, "file did not contain expected string");
         }
+
+        [Test]
+        public void LogActionShouldAddText()
+        {
+            using (var writer = new StringLogWriter())
+            {
+                Logger.LogWriter = writer;
+                Logger.LogAction(LogMessage);
+                Assert.AreNotEqual(0,writer.LogString.Length, "string did not appear");
+                Assert.AreEqual("[Action]: " + LogMessage, writer.LogString.Trim(), "string did not match");
+            }
+        }
 	}
 }
