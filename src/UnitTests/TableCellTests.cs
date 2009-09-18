@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using System.Collections.Generic;
+using WatiN.Core.Native;
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
@@ -129,28 +130,5 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
-
-        [Test, Ignore("will be replaced with a new element TableHeader")]
-        public void TableCellShouldAlsoRecognizeTHElements()
-        {
-            ExecuteTest(browser =>
-                            {
-                                browser.GoTo(TablesUri);
-
-                                var table = browser.Table("tdandth");
-
-                                // Check row with TH elements
-                                var rowWithTHs = table.TableRows[0];
-                                Assert.That(rowWithTHs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
-                                Assert.That(rowWithTHs.TableCells[0].TagName, Is.EqualTo("TH"), "index 0");
-                                Assert.That(rowWithTHs.TableCells[1].TagName, Is.EqualTo("TH"), "index 1");
-
-                                // Check row with TD elements
-                                var rowWithTDs = table.TableRows[1];
-                                Assert.That(rowWithTDs.TableCells.Count, Is.EqualTo(2), "Should see 2 TableCells");
-                                Assert.That(rowWithTDs.TableCells[0].TagName, Is.EqualTo("TD"), "index 0");
-                                Assert.That(rowWithTDs.TableCells[1].TagName, Is.EqualTo("TD"), "index 1");
-                            });
-        }
-	}
+    }
 }
