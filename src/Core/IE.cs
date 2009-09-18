@@ -605,15 +605,17 @@ namespace WatiN.Core
                 throw new ArgumentException("iwebBrowser2 needs to implement shdocvw.IWebBrowser2");
             }
 
-            CreateIEBrowser(internetExplorer);
+            _ieBrowser = CreateIEBrowser(internetExplorer);
+
+            StartDialogWatcher();
 
             if (finishInitialization)
                 FinishInitialization(null);
         }
 
-	    private void CreateIEBrowser(IWebBrowser2 IWebBrowser2Instance)
+        private IEBrowser CreateIEBrowser(IWebBrowser2 IWebBrowser2Instance)
 	    {
-	        _ieBrowser = new IEBrowser(IWebBrowser2Instance);
+	        return new IEBrowser(IWebBrowser2Instance);
 	    }
 
 	    private void CreateNewIEAndGoToUri(Uri uri, IDialogHandler logonDialogHandler, bool createInNewProcess)
@@ -627,15 +629,15 @@ namespace WatiN.Core
 				Logger.LogAction("Creating IE instance in a new process");
 
                 _ieBrowser = CreateIEPartiallyInitializedInNewProcess();
-                FinishInitialization(uri);
 			}
 			else
 			{
 				Logger.LogAction("Creating IE instance");
 
-                CreateIEBrowser(new InternetExplorerClass());
-                FinishInitialization(uri);
+                _ieBrowser = CreateIEBrowser(new InternetExplorerClass());
 			}
+            
+            StartDialogWatcher();
 
 			if (logonDialogHandler != null)
 			{
@@ -647,7 +649,9 @@ namespace WatiN.Core
 				DialogWatcher.Add(logonDialogHandler);
 			}
 
-			WaitForComplete();
+            FinishInitialization(uri);
+            
+            WaitForComplete();
 		}
 
 		private static IEBrowser CreateIEPartiallyInitializedInNewProcess()
@@ -716,11 +720,7 @@ namespace WatiN.Core
                 GoTo(uri);
             }
             _ieBrowser.Visible = Settings.MakeNewIeInstanceVisible;
-
-            StartDialogWatcher();
         }
-
-
 
 		/// <summary>
         /// Use this method to gain access to the IWebBrowser2 interface of Internet Explorer.
