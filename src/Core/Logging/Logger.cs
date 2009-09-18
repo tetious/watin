@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UtilityClasses;
 
@@ -102,7 +101,7 @@ namespace WatiN.Core.Logging
         /// <param name="args">An object array containing zero or more objects to format</param>
         public static void Log(LogMessageType logType, string message, params object[] args)
         {
-            string formattedMessage = UtilityClass.StringFormat(message, args);
+            var formattedMessage = UtilityClass.StringFormat(message, args);
 
             if (LogMessage != null)
             {
@@ -130,9 +129,7 @@ namespace WatiN.Core.Logging
 		public static ILogWriter LogWriter
 		{
 			get { return mLogWriter; }
-			set {
-			    mLogWriter = value ?? DefaultLogWriter();
-			}
+			set { mLogWriter = value ?? DefaultLogWriter(); }
 		}
 
         private static NoLog DefaultLogWriter()

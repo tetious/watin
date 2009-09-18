@@ -50,10 +50,7 @@ namespace WatiN.Core.Logging
         /// </summary>
         public string LogString
         {
-            get
-            {
-                return Builder.ToString();
-            }
+            get { return Builder.ToString(); }
         }
 
         /// <summary>
@@ -62,7 +59,7 @@ namespace WatiN.Core.Logging
         /// <param name="message">message to write</param>
         private void WriteLogLine(string message)
         {
-            string line = IncludeTimestamp ? DateTime.Now.ToString("s") + " " + message : message;
+            var line = IncludeTimestamp ? DateTime.Now.ToString("s") + " " + message : message;
             Builder.AppendLine(line);
         }
 

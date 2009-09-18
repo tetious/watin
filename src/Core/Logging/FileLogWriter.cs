@@ -62,7 +62,7 @@ namespace WatiN.Core.Logging
         /// <param name="message">message to write</param>
         private void WriteLogLine(string message)
         {
-            string line = IncludeTimestamp ? DateTime.Now.ToString("s") + " " + message : message;
+            var line = IncludeTimestamp ? DateTime.Now.ToString("s") + " " + message : message;
             LogStream.WriteLine(line);
             LogStream.Flush();
         }
