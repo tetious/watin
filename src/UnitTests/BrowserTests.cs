@@ -18,12 +18,10 @@
 
 using System;
 using System.Drawing;
-using System.Threading;
 using System.Web;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UnitTests.TestUtils;
 using WatiN.Core.UtilityClasses;

@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;

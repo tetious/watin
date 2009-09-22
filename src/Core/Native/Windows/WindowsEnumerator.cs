@@ -17,13 +17,8 @@
 #endregion Copyright
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using mshtml;
-using SHDocVw;
 using WatiN.Core.Native.Windows;
-using WatiN.Core.UtilityClasses;
-using IServiceProvider = WatiN.Core.Native.Windows.IServiceProvider;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -54,7 +49,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	
             NativeMethods.EnumWindows((hwnd, lParam) =>
                 {
-                    Window window = new Window(hwnd);
+                    var window = new Window(hwnd);
                     if (constraint == null || constraint(window))
                         windows.Add(window);
                     
@@ -84,7 +79,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             NativeMethods.EnumChildWindows(hwnd, (childHwnd, lParam) => 
             {
-                Window childWindow = new Window(childHwnd);
+                var childWindow = new Window(childHwnd);
                 if (constraint == null || constraint(childWindow))
                     childWindows.Add(childWindow);
 

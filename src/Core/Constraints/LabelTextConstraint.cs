@@ -53,7 +53,7 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
-            Element element = attributeBag.GetAdapter<Element>();
+            var element = attributeBag.GetAdapter<Element>();
             if (element == null)
                 throw new WatiNException("This constraint class can only be used to compare against an element");
 
@@ -85,8 +85,7 @@ namespace WatiN.Core.Constraints
 
             public bool IsMatch(Element element)
             {
-                if (labelIdsWithMatchingText == null)
-                    InitLabelIdsWithMatchingText(element);
+                if (labelIdsWithMatchingText == null) InitLabelIdsWithMatchingText(element);
 
                 return labelIdsWithMatchingText.ContainsKey(element.Id ?? @"");
             }
@@ -95,19 +94,17 @@ namespace WatiN.Core.Constraints
             {
                 labelIdsWithMatchingText = new Dictionary<string, bool>();
 
-                DomContainer domContainer = element.DomContainer;
+                var domContainer = element.DomContainer;
 
-                LabelCollection labels = domContainer.Labels.Filter(e =>
+                var labels = domContainer.Labels.Filter(e =>
                 {
-                    string text = e.Text;
-                    if (string.IsNullOrEmpty(text)) return false;
-                    return StringComparer.AreEqual(text.Trim(),
-                        labelText);
+                    var text = e.Text;
+                    return !string.IsNullOrEmpty(text) && StringComparer.AreEqual(text.Trim(), labelText);
                 });
 
-                foreach (Label label in labels)
+                foreach (var label in labels)
                 {
-                    string forElementWithId = label.For;
+                    var forElementWithId = label.For;
                     labelIdsWithMatchingText.Add(forElementWithId, true);
                 }
             }

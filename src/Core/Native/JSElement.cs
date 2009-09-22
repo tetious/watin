@@ -47,7 +47,7 @@ namespace WatiN.Core.Native
 
         /// <summary>
         /// List of html attributes that should not be changed when SetAttributeValue is called
-        /// I.e. the Checked property is set be the click event on RadioButton.Checked and CheckBox.Checked
+        /// I.e. the Checked property is set by the click event on RadioButton.Checked and CheckBox.Checked
         /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
         /// </summary>
         public static readonly IList<string> IgnoreSettingOfValue = new[]
