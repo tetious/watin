@@ -61,6 +61,9 @@ namespace WatiN.Core.UnitTests
                                 Assert.AreEqual("Checkbox1", checkbox1.ToString(), "ToString didn't return Id");
                                 Assert.IsTrue(checkbox1.Checked, "Should initially be checked");
 
+                                checkbox1.Checked = true;
+                                Assert.That(checkbox1.Checked, Is.True, "Should still be checked");
+
                                 checkbox1.Checked = false;
                                 Assert.IsFalse(checkbox1.Checked, "Should not be checked");
 

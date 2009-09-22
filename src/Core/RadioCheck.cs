@@ -36,6 +36,8 @@ namespace WatiN.Core
 			get { return bool.Parse(GetAttributeValue("checked")); }
 			set
 			{
+                if (Checked == value) return;
+
                 Logger.LogAction("Selecting {0} '{1}', {2}", GetType().Name, IdOrName, Description);
 				
 				Highlight(true);
