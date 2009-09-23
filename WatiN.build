@@ -79,7 +79,7 @@ Copyright 2006-2009 Jeroen van Menen
         <include name="System.Windows.Forms.dll"/>
         <include name="System.Web.dll"/>
       </references>
-	  <resources>
+      <resources prefix="WatiN.Core.Properties">
         <include name="${core.source.dir}\Properties\*.resx"/>
       </resources>
 
