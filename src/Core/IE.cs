@@ -311,7 +311,7 @@ namespace WatiN.Core
 		/// instance is destroyed the created Internet Explorer window will also be closed.
 		/// </note>
 		/// </summary>
-		/// <param name="url">The URL te open</param>
+		/// <param name="url">The URL to open</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
 		/// </remarks>
@@ -345,7 +345,7 @@ namespace WatiN.Core
 		/// instance is destroyed the created Internet Explorer window will also be closed.
 		/// </note>
 		/// </summary>
-		/// <param name="url">The URL te open</param>
+		/// <param name="url">The URL to open</param>
 		/// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
@@ -380,7 +380,7 @@ namespace WatiN.Core
 		/// instance is destroyed the created Internet Explorer window will also be closed.
 		/// </note>
 		/// </summary>
-		/// <param name="uri">The Uri te open</param>
+		/// <param name="uri">The Uri to open</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
 		/// </remarks>
@@ -415,7 +415,7 @@ namespace WatiN.Core
 		/// instance is destroyed the created Internet Explorer window will also be closed.
 		/// </note>
 		/// </summary>
-		/// <param name="uri">The Uri te open</param>
+		/// <param name="uri">The Uri to open</param>
 		/// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
@@ -447,7 +447,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
 		/// </summary>
-		/// <param name="url">The Url te open</param>
+		/// <param name="url">The Url to open</param>
 		/// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
@@ -479,7 +479,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
 		/// </summary>
-		/// <param name="url">The Url te open</param>
+		/// <param name="url">The Url to open</param>
 		/// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
 		/// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
 		/// <remarks>
@@ -512,7 +512,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
 		/// </summary>
-		/// <param name="uri">The Uri te open</param>
+		/// <param name="uri">The Uri to open</param>
 		/// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
 		/// <remarks>
 		/// You could also use one of the overloaded constructors.
@@ -544,7 +544,7 @@ namespace WatiN.Core
 		/// <summary>
 		/// Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
 		/// </summary>
-		/// <param name="uri">The Uri te open</param>
+		/// <param name="uri">The Uri to open</param>
 		/// <param name="logonDialogHandler">A <see cref="LogonDialogHandler"/> class instanciated with the logon credentials.</param>
 		/// <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
 		/// <remarks>
