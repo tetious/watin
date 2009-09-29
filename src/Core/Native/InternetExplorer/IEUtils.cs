@@ -80,7 +80,15 @@ namespace WatiN.Core.Native.InternetExplorer
 
             CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
 
-            scriptCode.Append("document.getElementById('" + element.uniqueID + "').fireEvent('" + eventName + "', newEvt);");
+            var id = element.id;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+                element.setAttribute("id", id, 0);
+            }
+            scriptCode.Append("document.getElementById('" + id + "').fireEvent('" + eventName + "', newEvt);");
+
             return scriptCode;
         }
 

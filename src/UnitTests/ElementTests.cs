@@ -707,7 +707,27 @@ namespace WatiN.Core.UnitTests
 
         // Ie specific test to see if the way the element is referenced to fire an event on works.
 		[Test]
-		public void FireKeyDownEventOnElementWithNoId()
+        public void FireEvent_on_element_with_id_should_not_change_id_value()
+		{
+			Ie.GoTo(TestEventsURI);
+
+			var report = Ie.TextField("Report");
+            var button = Ie.Button("ButtonWithId");
+
+			Assert.That(button.Id, Is.Not.Null, "Button id null before click event");
+			Assert.IsNull(report.Text, "Report not empty");
+
+			button.KeyDown();
+
+			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
+			Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
+
+            Assert.That(button.Id, Is.EqualTo("ButtonWithId"), "Button id shouldn't be changed");
+		}
+
+        // Ie specific test
+		[Test]
+        public void Firing_an_event_on_element_with_no_id_should_assign_unique_id_to_element()
 		{
 			Ie.GoTo(TestEventsURI);
 
@@ -719,10 +739,10 @@ namespace WatiN.Core.UnitTests
 
 			button.KeyDown();
 
-			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty )");
-			Assert.AreEqual("button.id = ", report.Text, "Report should start with 'button.id = '");
+			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
+			Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
 
-			Assert.IsNull(button.Id, "Button id not null after click event");
+            Assert.That(button.Id, Is.Not.Null, "Button id not null after click event");
 		}
 
         // TODO: make this a multi browser test when HtmlDialogs are implemented for firefox
@@ -745,86 +765,6 @@ namespace WatiN.Core.UnitTests
 
 				Assert.AreEqual("1", htmlDialog.TextField("eventButtonValue").Value, "Event.button not left on modal dialog");
 			}
-		}
-
-		[Test, Ignore("Work in progress")] // Category("InternetConnectionNeeded")]
-		public void PositionMousePointerInMiddleOfElement()
-		{
-			Ie.GoTo(GoogleUrl);
-
-			var button = Ie.Button(Find.ByName("btnG"));
-			PositionMousePointerInMiddleOfElement(button, Ie);
-			button.Flash();
-			MouseMove(50, 50, true);
-			Thread.Sleep(2000);
-		}
-
-		[Test, Ignore("Doesn't work yet")]
-		public void PositionMousePointerInMiddleOfElementInFrame()
-		{
-			Settings.MakeNewIeInstanceVisible = true;
-			Settings.HighLightElement = true;
-
-			using (var ie = new IE(FramesetURI))
-			{
-				var button = ie.Frames[1].Links[0];
-				PositionMousePointerInMiddleOfElement(button, ie);
-				button.Flash();
-				MouseMove(50, 50, true);
-				Thread.Sleep(2000);
-			}
-		}
-
-		private static void PositionMousePointerInMiddleOfElement(Element button, Document ie) 
-		{
-			var left = position(button, "Left");
-			var width = int.Parse(button.GetAttributeValue("clientWidth"));
-			var top = position(button, "Top");
-			var height = int.Parse(button.GetAttributeValue("clientHeight"));
-			
-			var window = (IHTMLWindow3) ((IEDocument)ie.NativeDocument).HtmlDocument.parentWindow;
-			
-			left = left + window.screenLeft;
-			top = top + window.screenTop;
-
-			var currentPt = new System.Drawing.Point(left + (width / 2), top + (height / 2));
-			System.Windows.Forms.Cursor.Position = currentPt;
-		}
-
-		private static int position(Element element, string attributename)
-		{
-            IEElement ieElement = (IEElement)element.NativeElement;
-
-			var pos = 0;
-            var offsetParent = ieElement.AsHtmlElement.offsetParent;
-			if (offsetParent != null)
-			{
-			    var domContainer = element.DomContainer;
-			    pos = position(new Element(domContainer, new IEElement(offsetParent)), attributename);
-			}
-
-		    if (StringComparer.AreEqual(element.TagName, "table", true))
-			{
-				pos = pos + int.Parse(element.GetAttributeValue("client" + attributename));
-			}
-			return pos + int.Parse(element.GetAttributeValue("offset" + attributename));
-		}
-
-	    private void MouseMove(int X, int Y, bool Relative)
-		{
-			var currentPt = System.Windows.Forms.Cursor.Position;
-			if (Relative)
-			{
-				currentPt.X += X;
-				currentPt.Y += Y;
-			}
-			else
-			{
-				currentPt.X = X;
-				currentPt.Y = Y;
-			}
-
-			System.Windows.Forms.Cursor.Position = currentPt;
 		}
 
         // Ie specific test
