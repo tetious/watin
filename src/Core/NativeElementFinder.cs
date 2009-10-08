@@ -105,6 +105,8 @@ namespace WatiN.Core
             if (IsMatchByTag(nativeElement))
             {
                 var element = WrapElement(nativeElement);
+                if (element == null) return null;
+
                 if (IsMatchByConstraint(element, context))
                     return element;
             }

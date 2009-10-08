@@ -16,7 +16,6 @@
 
 #endregion Copyright
 
-using System.Collections;
 using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
@@ -42,35 +41,32 @@ namespace WatiN.Core.Actions
                 UtilityClass.TryActionIgnoreException(() =>
                     {
                         var nativeElement = _element.FindNativeElement();
-                        if (nativeElement != null)
-                        {
-                            _originalColor = GetBackgroundColor(nativeElement);
-                            SetBackgroundColor(nativeElement, Settings.HighLightColor);
-                        }
+                        if (nativeElement == null) return;
+                        
+                        _originalColor = GetBackgroundColor(nativeElement);
+                        SetBackgroundColor(nativeElement, Settings.HighLightColor);
                     });
             }
         }
 
         public void Off()
         {
-            if (_highlightDepth <= 0)
-                return;
+            if (_highlightDepth <= 0) return;
 
             _highlightDepth -= 1;
 
-            if (_highlightDepth == 0 && _originalColor != null)
-            {
-                UtilityClass.TryActionIgnoreException(() =>
+            if (_highlightDepth != 0) return;
+            
+            UtilityClass.TryActionIgnoreException(() =>
                 {
                     var nativeElement = _element.FindNativeElement();
                     if (nativeElement != null)
                     {
-                        SetBackgroundColor(nativeElement, _originalColor);
+                      SetBackgroundColor(nativeElement, _originalColor);
                     }
                 });
 
-                _originalColor = null;
-            }
+            _originalColor = null;
         }
 
         public void Highlight(bool highlight)

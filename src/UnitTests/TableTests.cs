@@ -301,5 +301,46 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(tableRow, Is.Not.Null);
                             });
         }
+
+        [Test]
+        public void Header_and_footer_rows_should_be_included()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(TablesUri);
+
+                                var table = browser.Table("thead_tbody_tfoot");
+
+                                // WHEN
+                                var tableRows = table.OwnTableRows;
+
+                                // THEN
+                                Assert.That(tableRows.Count, Is.EqualTo(3));
+                            });
+        }
+
+	    [Test]
+	    public void Should_return_all_own_table_rows_in_bodies()
+	    {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(TablesUri);
+
+                var table = browser.Table("Table1");
+
+                // WHEN
+                var tableRows = table.OwnTableRows;
+
+                // THEN
+                Assert.That(tableRows.Count, Is.EqualTo(3));
+                Assert.That(tableRows[0].Id, Is.EqualTo("1"), "Unexpected row 0");
+                Assert.That(tableRows[1].Id, Is.EqualTo("3"), "Unexpected row 1");
+                Assert.That(tableRows[2].Id, Is.EqualTo("4"), "Unexpected row 2");
+
+            });
+	    }
+
 	}
 }

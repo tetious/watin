@@ -42,7 +42,7 @@ namespace WatiN.Core.UnitTests
         }
 
 		[Test]
-		public void TableTableBodiesExcludesBodiesFromNestedTables()
+		public void OwnTableBodiesExcludesBodiesFromNestedTables()
 		{
 		    ExecuteTest(browser =>
 		                    {
@@ -54,7 +54,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void TableBodyExcludesRowsFromNestedTables()
+		public void OwnTableBodiesExcludesRowsFromNestedTables()
 		{
 		    ExecuteTest(browser =>
 		                    {

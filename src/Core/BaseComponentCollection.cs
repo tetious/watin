@@ -147,7 +147,7 @@ namespace WatiN.Core
         }
 
 	    /// <summary>
-        /// Returned a filtered view of the collection consisting only of the components that
+        /// Returns a filtered view of the collection consisting only of the components that
         /// match the given predicate.
         /// </summary>
         /// <param name="predicate">The predicate to match</param>

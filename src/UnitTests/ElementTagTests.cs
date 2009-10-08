@@ -59,7 +59,6 @@ namespace WatiN.Core.UnitTests
 				Thread.CurrentThread.CurrentCulture = turkish;
 
 				var elementMock = new Mock<INativeElement>();
-                elementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
 
 				AssertUpperCaseLowerCase(elementMock);
 				AssertUpperCaseUpperCase(elementMock);

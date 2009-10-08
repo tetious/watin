@@ -346,7 +346,7 @@ namespace WatiN.Core.Native
                 return false;
 
             // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-            var command = string.Format("{0} != null && ({0}.parentNode != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", this.ElementReference);
+            var command = string.Format("{0} != null && ({0}.offsetParent != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", this.ElementReference);
 
             return this.ClientPort.WriteAndReadAsBool(command);
         }

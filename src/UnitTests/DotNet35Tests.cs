@@ -66,7 +66,7 @@ namespace WatiN.Core.UnitTests.DotNet35
         }
         #endif
 
-        [Test]
+        [Test, Category("InternetConnectionNeeded")]
         public void UsingLambdaExpressionsWithWatiN_1_3()
         {
             using (var ie = new IE("www.google.com"))
@@ -77,7 +77,7 @@ namespace WatiN.Core.UnitTests.DotNet35
             }
         }
 
-        [Test]
+        [Test, Category("InternetConnectionNeeded")]
         public void UsingLinqExtensionMethodsWithWatiN_1_3()
         {
             using (var ie = new IE("www.google.com"))
@@ -88,7 +88,7 @@ namespace WatiN.Core.UnitTests.DotNet35
             }
         }
 
-        [Test]
+        [Test, Category("InternetConnectionNeeded")]
         public void UsingLinqQueryWithWatiN_1_3()
         {
             using (var ie = new IE("www.google.com"))

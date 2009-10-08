@@ -41,7 +41,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			ie.Close();
 		}
 
-		[Test] // Ignore("Because of timeout issues, run this test manually and not automated"), Category("InternetConnectionNeeded")]
+        [Test, Category("InternetConnectionNeeded")] // Ignore("Because of timeout issues, run this test manually and not automated"), Category("InternetConnectionNeeded")]
 		public void DownloadSave()
 		{
 			var file = new FileInfo(@"c:\temp\test.zip");

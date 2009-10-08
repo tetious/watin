@@ -68,7 +68,9 @@ namespace WatiN.Core.Native.InternetExplorer
             {
                 var htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
+                {
                     return new IEElementCollection(htmlTable.rows);
+                }
 
                 var htmlTableSection = AsHtmlElement as IHTMLTableSection;
                 if (htmlTableSection != null)
@@ -400,14 +402,12 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             try
             {
-                if (AsHtmlElement.sourceIndex < 0)
-                {
-                    return false;
-                }
+                if (AsHtmlElement.sourceIndex < 0) return false;
 
                 // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-                return AsHtmlElement.parentElement != null
-                    || TagName == "!" || TagName == "HTML";
+                if (TagName == "!" || TagName == "HTML") return true;
+
+                return AsHtmlElement.offsetParent != null;
             }
             catch
             {

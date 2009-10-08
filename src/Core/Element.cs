@@ -106,11 +106,12 @@ namespace WatiN.Core
         private void InitElement(DomContainer domContainer, INativeElement nativeElement, ElementFinder elementFinder) 
 		{
             if (domContainer == null) throw new ArgumentNullException("domContainer");
-
-			DomContainer = domContainer;
+            if (nativeElement == null && elementFinder == null) throw new ArgumentException("Either nativeElement or elementFinder needs to be set");
+			
+            DomContainer = domContainer;
 			_cachedNativeElement = nativeElement;
 			_elementFinder = elementFinder;
-		}
+        }
 
 		/// <summary>
 		/// Gets the name of the stylesheet class assigned to this ellement (if any).
@@ -714,6 +715,8 @@ namespace WatiN.Core
 		{
 			get
 			{
+                if (GetCachedNativeElement() != null) return GetCachedNativeElement();
+
                 INativeElement nativeElement = null;
 				try
 				{
@@ -875,10 +878,10 @@ namespace WatiN.Core
                                                   waitUntilExists ? "show up" : "disappear")
                 };
 
-            tryActionUntilTimeOut.Try(() =>
-                {
+            tryActionUntilTimeOut.Try(() => 
+            {
                     return ! CanFindNativeElement() || Exists == waitUntilExists;
-                });
+            });
 
             if (! CanFindNativeElement())
                 throw new WatiNException("It's not possible to find the element because no element finder is available.");
@@ -926,10 +929,7 @@ namespace WatiN.Core
 		/// </example>
         public virtual void Refresh()
 		{
-			if (_elementFinder != null)
-			{
-				ClearCachedNativeElement();
-			}
+			ClearCachedNativeElement();
 		}
 
         /// <summary>
@@ -959,7 +959,7 @@ namespace WatiN.Core
 
             if (_elementFinder != null)
             {
-                Element foundElement = _elementFinder.FindFirst();
+                var foundElement = _elementFinder.FindFirst();
                 if (foundElement != null)
                     _cachedNativeElement = foundElement._cachedNativeElement;
             }
@@ -971,7 +971,7 @@ namespace WatiN.Core
 		/// Clears the cached native element and finds it again.
 		/// </summary>
 		/// <returns>The native element, or null if not found.</returns>
-		public INativeElement RefreshNativeElement()
+		public virtual INativeElement RefreshNativeElement()
 		{
             ClearCachedNativeElement();
             return FindNativeElement();
@@ -985,7 +985,7 @@ namespace WatiN.Core
         /// and no native element is currently cached.
         /// </remarks>
         /// <returns>True if an element can be found.</returns>
-        public bool CanFindNativeElement()
+        public virtual bool CanFindNativeElement()
         {
             return _cachedNativeElement != null || _elementFinder != null;
         }

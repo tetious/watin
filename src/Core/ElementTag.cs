@@ -214,7 +214,7 @@ namespace WatiN.Core
             if (tags == null)
                 throw new ArgumentNullException("tags");
 
-            foreach (ElementTag tag in tags)
+            foreach (var tag in tags)
                 if (tag.IsMatch(elementTag))
                     return true;
 

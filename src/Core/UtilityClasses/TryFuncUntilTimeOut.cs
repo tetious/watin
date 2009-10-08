@@ -125,7 +125,7 @@ namespace WatiN.Core.UtilityClasses
                 try
                 {
                     var result = func.Invoke();
-                    if (!result.Equals(default(T)))
+                    if (!Equals(result, default(T)))
                         return result;
                 }
                 catch (Exception e)

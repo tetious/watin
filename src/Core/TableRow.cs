@@ -132,5 +132,59 @@ namespace WatiN.Core
         {
             get { return OwnTableCells; }
         }
-    }
+
+        /// <summary>
+        /// Returns a <see cref="Constraint"/> which can be applied on a <see cref="TableRowCollection"/>
+        /// to filter out <see cref="TableRow"/> elements contained in a thead section.
+        /// </summary>
+        /// <returns></returns>
+        /// <seealso cref="IsFooterRow"/>
+        /// <example>
+        /// Following example shows how to get only the rows inside a thead section:
+        /// <code>
+        /// var browser = new IE("www.watin.net/examples/tables.htm");
+        /// var tableRows = browser.Table("table_id").OwnTableRows;
+        /// 
+        /// var headerRows = tableRows.Filter(TableRow.IsHeaderRow());
+        /// </code>
+        /// If you don't want header rows in your tablerows collection apply to <see cref="NotConstraint"/>:
+        /// <code>
+        /// var browser = new IE("www.watin.net/examples/tables.htm");
+        /// var tableRows = browser.Table("table_id").OwnTableRows;
+        /// 
+        /// var noHeaderRows = tableRows.Filter(!TableRow.IsHeaderRow());
+        /// </code>
+        /// </example>
+	    public static Constraint IsHeaderRow()
+	    {
+	        return Find.ByElement(element => element.Parent.TagName.ToLowerInvariant() == "thead");
+	    }
+
+        /// <summary>
+        /// Returns a <see cref="Constraint"/> which can be applied on a <see cref="TableRowCollection"/>
+        /// to filter out <see cref="TableRow"/> elements contained in a tfoot section.
+        /// </summary>
+        /// <returns></returns>
+        /// <seealso cref="IsHeaderRow"/>
+        /// <example>
+        /// Following example shows how to get only the rows inside a tfoot section:
+        /// <code>
+        /// var browser = new IE("www.watin.net/examples/tables.htm");
+        /// var tableRows = browser.Table("table_id").OwnTableRows;
+        /// 
+        /// var footerRows = tableRows.Filter(TableRow.IsFooterRow());
+        /// </code>
+        /// If you don't want header rows in your tablerows collection apply to <see cref="NotConstraint"/>:
+        /// <code>
+        /// var browser = new IE("www.watin.net/examples/tables.htm");
+        /// var tableRows = browser.Table("table_id").OwnTableRows;
+        /// 
+        /// var noFooterRows = tableRows.Filter(!TableRow.IsFooterRow());
+        /// </code>
+        /// </example>
+        public static Constraint IsFooterRow()
+	    {
+            return Find.ByElement(element => element.Parent.TagName.ToLowerInvariant() == "tfoot");
+        }
+	}
 }

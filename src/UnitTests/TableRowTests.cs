@@ -112,5 +112,42 @@ namespace WatiN.Core.UnitTests
 	                        });
 	    }
 
+	    [Test]
+	    public void Should_filter_thead_rows()
+	    {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(TablesUri);
+
+                var tableRows = browser.Table("thead_tbody_tfoot").OwnTableRows;
+
+                // WHEN
+                var noHeaderRows = tableRows.Filter(TableRow.IsHeaderRow());
+
+                // THEN
+                Assert.That(noHeaderRows.Count, Is.EqualTo(1));
+                Assert.That(noHeaderRows[0].Id, Is.EqualTo("head_row"));
+            });
+        }
+
+	    [Test]
+	    public void Should_filter_tfoot_rows()
+	    {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(TablesUri);
+
+                var tableRows = browser.Table("thead_tbody_tfoot").OwnTableRows;
+
+                // WHEN
+                var noHeaderRows = tableRows.Filter(TableRow.IsFooterRow());
+
+                // THEN
+                Assert.That(noHeaderRows.Count, Is.EqualTo(1));
+                Assert.That(noHeaderRows[0].Id, Is.EqualTo("foot_row"));
+            });
+        }
 	}
 }
