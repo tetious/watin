@@ -43,4 +43,4 @@ using System.Reflection;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("2.0.12.0")]
-[assembly: AssemblyFileVersion("2.0.12.977")]
+[assembly: AssemblyFileVersion("2.0.12.1044")]

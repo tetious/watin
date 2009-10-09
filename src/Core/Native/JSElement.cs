@@ -308,10 +308,12 @@ namespace WatiN.Core.Native
 
         public string GetStyleAttributeValue(string attributeName)
         {
-            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
+            if (string.IsNullOrEmpty(attributeName))
+            {
+                throw new ArgumentNullException("attributeName");
+            }
 
-            var attributeValue = this.GetProperty("style." + attributeName);
-            return string.IsNullOrEmpty(attributeValue) ? null : attributeValue;
+            return ClientPort.WriteAndRead("window.getComputedStyle({0},null).getPropertyValue('{1}');", ElementReference, attributeName);
         }
 
         public void SetStyleAttributeValue(string attributeName, string value)

@@ -188,21 +188,18 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <param name="exceptionMessage">A function to build an exception message.</param>
         /// <returns>The last function result.</returns>
         /// <exception cref="TimeoutException">Thrown if a timeout occurs.</exception>
-        private bool WaitUntilNotNull(DoFunc<bool?> func, BuildTimeOutExceptionMessage exceptionMessage)
+        protected bool WaitUntilNotNull(DoFunc<bool?> func, BuildTimeOutExceptionMessage exceptionMessage)
         {
-            bool result = false;
+            var result = false;
             WaitUntil(() =>
                 {
-                    bool? currentResult = func();
+                    var currentResult = func();
                     if (currentResult.HasValue)
                     {
                         result = currentResult.Value;
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }, exceptionMessage);
             return result;
         }

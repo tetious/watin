@@ -1,0 +1,11 @@
+﻿/****************************************************************************/
+/* Matches for node: DIV id=logo */
+/****************************************************************************/ 
+#logo 
+{ 
+ BACKGROUND-POSITION: center 50%;
+ BACKGROUND-IMAGE: url(../images/watin.jpg);
+ WIDTH: 640px;
+ BACKGROUND-REPEAT: no-repeat;
+ HEIGHT: 130px
+}

@@ -231,6 +231,7 @@
     </Compile>
     <Compile Include="Native\IETests\ShellWindows2Tests.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
+    <Compile Include="StyleTests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -432,6 +433,8 @@
     <Content Include="html\OnBeforeUnloadJavaDialog.html" />
     <Content Include="html\popup.html" />
     <Content Include="html\ProximityTests.html" />
+    <Content Include="html\styletests\Style.html" />
+    <Content Include="html\styletests\style.css" />
     <Content Include="html\Tables.html" />
     <Content Include="html\TestEvents.html" />
     <Content Include="html\theApp.html" />

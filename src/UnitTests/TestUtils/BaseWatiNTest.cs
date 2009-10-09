@@ -47,6 +47,7 @@ namespace WatiN.Core.UnitTests.TestUtils
         public static Uri ProximityURI = new Uri(HtmlTestBaseURI, "ProximityTests.html");
         public static Uri AboutBlank = new Uri("about:blank");
         public static Uri ButtonTestsUri = new Uri(HtmlTestBaseUriInternal, "ButtonTests.html");
+        public static Uri StyleTestUri = new Uri(HtmlTestBaseUriInternal, "styletests\\Style.html");
         public static string GoogleUrl = "http://www.google.com";
         public static string EbayUrl = "http://www.ebay.com";
 

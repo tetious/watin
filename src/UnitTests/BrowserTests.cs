@@ -167,17 +167,17 @@ namespace WatiN.Core.UnitTests
             ExecuteTest(browser =>
                             {
                                 browser.GoTo(MainURI);
-                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected start Url");
 
                                 browser.Link(Find.ByUrl(IndexURI)).Click();
-                                Assert.AreEqual(IndexURI, new Uri(browser.Url));
+                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected url after clicking on link");
 
                                 var wentBack = browser.Back();
-                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Should be wentback to start Url");
                                 Assert.That(wentBack, "Expected went back");
 
                                 var wentFoward = browser.Forward();
-                                Assert.AreEqual(IndexURI, new Uri(browser.Url));
+                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Should gone forward to second page");
                                 Assert.That(wentFoward, "Expected went forward");
 
                             });

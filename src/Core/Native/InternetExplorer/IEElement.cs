@@ -346,7 +346,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
             }
 
-            var attributeValue = GetStyleAttributeValue(attributeName, AsHtmlElement.style);
+            var attributeValue = GetStyleAttributeValue(attributeName, AsHtmlElement2.currentStyle);
 
             if (attributeValue == DBNull.Value || attributeValue == null)
             {
@@ -363,7 +363,7 @@ namespace WatiN.Core.Native.InternetExplorer
             return stringAttributeValue;
         }
 
-	    private static object GetStyleAttributeValue(string attributeName, IHTMLStyle style)
+	    private static object GetStyleAttributeValue(string attributeName, IHTMLCurrentStyle style)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
