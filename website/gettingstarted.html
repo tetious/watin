@@ -210,12 +210,12 @@
             There is another way to get this same table, using the classname of
             this Table. Since no other table has the classname t assigned to
             it, this makes it unique to the table we are looking for. To find
-            this table by its classname we will use the Find.ByCustom factory
+            this table by its classname we will use the Find.By factory
             method like this:
           </p>
           <p>
 		  <code>
-            Table table = ie.Table(Find.ByCustom("classname","t"));
+            Table table = ie.Table(Find.By("classname","t"));
           </code>
           <p>
             At this point we have a reference to the table the results
@@ -261,7 +261,7 @@
                   ie.Button(Find.ByValue("Google Search")).Click();<br>
              <br>
                   // Find the table cell which shows the search result statistics.<br>
-                  Table table = ie.Table(Find.ByCustom("classname","t"));<br>
+                  Table table = ie.Table(Find.By("classname","t"));<br>
                   string resultStats = table.TableRows[0].TableCells[1].Text;<br>
              <br>
                   // Write these statistics to the console window.<br>
