@@ -22,6 +22,7 @@ using System.Web;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UnitTests.TestUtils;
 using WatiN.Core.UtilityClasses;
@@ -282,6 +283,26 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(element.Id,Is.EqualTo("popupid"), "Unexpected ActiveElement");
                             });
         }
+
+        [Test]
+        public void Should_handle_special_characters()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(TheAppUri);
+
+                                var divWithSpecialCharacter = browser.Div(div => div.Text != null && div.Text.Contains("ÅLAND ISLANDS"));
+
+                                // WHEN
+                                var exists = divWithSpecialCharacter.Exists;
+
+                                // THEN
+                                Assert.That(exists, Is.True);
+                            }
+                    );
+        }
+
 
         public override Uri TestPageUri
         {
