@@ -101,7 +101,7 @@ namespace WatiN.Core.UnitTests.TestUtils
         public virtual void TestSetUp()
         {
             Settings.Reset();
-            BrowsersToTestWith.ForEach(browserTestManager => GoToTestPage(browserTestManager.GetBrowser(TestPageUri)));
+//            BrowsersToTestWith.ForEach(browserTestManager => GoToTestPage(browserTestManager.GetBrowser(TestPageUri)));
         }
 
         private void GoToTestPage(Browser browser)
@@ -123,7 +123,12 @@ namespace WatiN.Core.UnitTests.TestUtils
             InsideExecuteTest = true;
             try
             {
-                BrowsersToTestWith.ForEach(browserTestManager => ExecuteTest(testMethod, browserTestManager.GetBrowser(TestPageUri)));
+                BrowsersToTestWith.ForEach(browserTestManager =>
+                                               {
+                                                   GoToTestPage(browserTestManager.GetBrowser(TestPageUri));
+                                                   ExecuteTest(testMethod, browserTestManager.GetBrowser(TestPageUri));
+                                               }
+                    );
             }
             finally
             {

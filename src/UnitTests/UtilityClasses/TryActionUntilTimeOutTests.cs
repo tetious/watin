@@ -27,7 +27,7 @@ namespace WatiN.Core.UnitTests.UtilityClasses
     ///This is a NUnit TestFixture class
     ///</summary>
     [TestFixture]
-    public class TryActionUntilTimeOutTests
+    public class TryFuncUntilTimeOutTests
     {
         [Test]
         public void ShouldNotAllowNullAsAction()

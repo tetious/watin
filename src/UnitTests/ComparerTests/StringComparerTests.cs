@@ -21,7 +21,6 @@ using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.Interfaces;
 using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.UnitTests

@@ -309,6 +309,36 @@ namespace WatiN.Core.UnitTests
 	    }
 
 
+	    [Test]
+        public void Should_not_throw_element_not_found_exception_when_referencing_a_collection_contained_in_a_non_existing_element()
+        {
+	        // GIVEN
+	        ExecuteTestWithAnyBrowser(browser =>
+              {
+                  // GIVEN
+                  Settings.WaitUntilExistsTimeOut = 3;
+
+                  Assert.That(browser.Div("I_dont_exist").Exists, Is.False, "Pre-condition failed. Div should not exist.");
+
+                  try
+                  {
+                      // WHEN
+                      var buttons = browser.Div("I_dont_exist").Buttons;
+                      
+                      // THEN success
+
+                  }
+                  catch (ElementNotFoundException)
+                  {
+                      Assert.Fail("Should not have thrown an ElementNotFoundException for the div");
+                  }
+                  catch(Exception e)
+                  {
+                      Assert.Fail("Unexpected exception: " + e.ToString());
+                  }
+              });
+	    }
+
 		public override Uri TestPageUri
 		{
 			get { return MainURI; }
