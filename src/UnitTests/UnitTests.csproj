@@ -189,6 +189,7 @@
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
+    <Compile Include="HtmlColorTests.cs" />
     <Compile Include="PageTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
@@ -231,7 +232,6 @@
     </Compile>
     <Compile Include="Native\IETests\ShellWindows2Tests.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
-    <Compile Include="StyleTests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>

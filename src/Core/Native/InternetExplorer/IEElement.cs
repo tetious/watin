@@ -32,6 +32,8 @@ namespace WatiN.Core.Native.InternetExplorer
 	/// </summary>
     public class IEElement : INativeElement
     {
+        private const string CSSTEXT = "cssText";
+
         private readonly object _element;
 
         public IEElement(object element)
@@ -346,7 +348,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 throw new ArgumentNullException("attributeName", "Null or Empty not allowed.");
             }
 
-            var attributeValue = GetStyleAttributeValue(attributeName, AsHtmlElement2.currentStyle);
+            var attributeValue = GetStyleAttributeValueInternal(attributeName);
 
             if (attributeValue == DBNull.Value || attributeValue == null)
             {
@@ -355,7 +357,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             var stringAttributeValue = attributeValue.ToString();
 
-            if (attributeName == "cssText" && !stringAttributeValue.TrimEnd(Char.Parse(" ")).EndsWith(";"))
+            if (attributeName == CSSTEXT && !stringAttributeValue.TrimEnd(Char.Parse(" ")).EndsWith(";"))
             {
                 stringAttributeValue = stringAttributeValue.ToLowerInvariant() + ";";
             }
@@ -363,11 +365,14 @@ namespace WatiN.Core.Native.InternetExplorer
             return stringAttributeValue;
         }
 
-	    private static object GetStyleAttributeValue(string attributeName, IHTMLCurrentStyle style)
+	    private object GetStyleAttributeValueInternal(string attributeName)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
 
-            return GetWithFailOver(() => style.getAttribute(attributeName, 0));
+            if (attributeName == CSSTEXT)
+                return GetWithFailOver(() => AsHtmlElement.style.getAttribute(attributeName, 0));
+
+            return GetWithFailOver(() => AsHtmlElement2.currentStyle.getAttribute(attributeName, 0));
         }
 
         /// <inheritdoc />

@@ -313,7 +313,19 @@ namespace WatiN.Core.Native
                 throw new ArgumentNullException("attributeName");
             }
 
-            return ClientPort.WriteAndRead("window.getComputedStyle({0},null).getPropertyValue('{1}');", ElementReference, attributeName);
+            attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
+
+            string attributeValue;
+            if (attributeName == "cssText")
+            {
+                attributeValue = GetProperty("style." + attributeName);
+            }
+            else
+            {
+                attributeValue = ClientPort.WriteAndRead("{2}.defaultView.getComputedStyle({0},null).{1};", ElementReference, attributeName, ClientPort.DocumentVariableName);
+            }
+            
+            return string.IsNullOrEmpty(attributeValue) ? null : attributeValue;
         }
 
         public void SetStyleAttributeValue(string attributeName, string value)
