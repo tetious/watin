@@ -154,9 +154,9 @@ namespace WatiN.Core.Native
         private bool Navigate(string action)
         {
             var ticks = DateTime.Now.Ticks;
-            this.ClientPort.Write("window.document.WatiNGoBackCheck={0};", ticks);
+            this.ClientPort.Write("{0}.WatiNGoBackCheck={1};",ClientPort.DocumentVariableName, ticks);
             this.ClientPort.Write("{0}.{1}();", this.BrowserVariableName, action);
-            return this.ClientPort.WriteAndReadAsBool("window.document.WatiNGoBackCheck!={0};", ticks);
+            return this.ClientPort.WriteAndReadAsBool("{0}.WatiNGoBackCheck!={1};",ClientPort.DocumentVariableName, ticks);
         }
     }
 }

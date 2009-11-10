@@ -173,7 +173,7 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected url after clicking on link");
 
                                 var wentBack = browser.Back();
-                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Should be wentback to start Url");
+                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Should went back to start Url");
                                 Assert.That(wentBack, "Expected went back");
 
                                 var wentFoward = browser.Forward();

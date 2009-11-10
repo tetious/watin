@@ -36,10 +36,10 @@ namespace WatiN.Core.DialogHandlers
 	public class DialogWatcher : IDisposable
 	{
 		private readonly IntPtr _mainWindowHwnd;
-		private bool keepRunning = true;
-		private readonly IList<IDialogHandler> handlers;
-		private readonly Thread watcherThread;
-		private bool closeUnhandledDialogs = Settings.AutoCloseDialogs;
+		private bool _keepRunning = true;
+		private readonly IList<IDialogHandler> _handlers;
+		private readonly Thread _watcherThread;
+		private bool _closeUnhandledDialogs = Settings.AutoCloseDialogs;
 
 	    private static IList<DialogWatcher> dialogWatchers = new List<DialogWatcher>();
 
@@ -115,12 +115,12 @@ namespace WatiN.Core.DialogHandlers
 		{
 			_mainWindowHwnd = mainWindowHwnd;
 
-			handlers = new List<IDialogHandler>();
+			_handlers = new List<IDialogHandler>();
 
 			// Create thread to watch windows
-			watcherThread = new Thread(Start);
+			_watcherThread = new Thread(Start);
 			// Start the thread.
-			watcherThread.Start();
+			_watcherThread.Start();
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			lock (this)
 			{
-				handlers.Add(handler);
+				_handlers.Add(handler);
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			lock (this)
 			{
-				handlers.Remove(handler);
+				_handlers.Remove(handler);
 			}
 		}
 
@@ -215,7 +215,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			lock (this)
 			{
-				handlers.Clear();
+				_handlers.Clear();
 			}
 		}
 
@@ -230,7 +230,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			lock (this)
 			{
-				return handlers.Contains(handler);
+				return _handlers.Contains(handler);
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace WatiN.Core.DialogHandlers
 			{
 				lock (this)
 				{
-					return handlers.Count;
+					return _handlers.Count;
 				}
 			}
 		}
@@ -262,14 +262,14 @@ namespace WatiN.Core.DialogHandlers
 			{
 				lock (this)
 				{
-					return closeUnhandledDialogs;
+					return _closeUnhandledDialogs;
 				}
 			}
 			set
 			{
 				lock (this)
 				{
-					closeUnhandledDialogs = value;
+					_closeUnhandledDialogs = value;
 				}
 			}
 		}
@@ -289,7 +289,7 @@ namespace WatiN.Core.DialogHandlers
 		/// </summary>
 		private void Start()
 		{
-			while (keepRunning)
+			while (_keepRunning)
 			{
                 if (new Window(MainWindowHwnd).Exists())
                 {
@@ -298,13 +298,13 @@ namespace WatiN.Core.DialogHandlers
 				
                     foreach (var window in windows)
                     {
-                        if (!keepRunning) return;
+                        if (!_keepRunning) return;
                         HandleWindow(new Window(window.Hwnd));
                     }
 
                     // Keep DialogWatcher responsive during 1 second sleep period
                     var count = 0;
-                    while (keepRunning && count < 5)
+                    while (_keepRunning && count < 5)
                     {
                         Thread.Sleep(200);
                         count++;
@@ -312,7 +312,7 @@ namespace WatiN.Core.DialogHandlers
                 }
                 else
                 {
-                    keepRunning = false;
+                    _keepRunning = false;
                 }
                 
 			}
@@ -320,7 +320,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public bool IsRunning
 		{
-			get { return watcherThread.IsAlive; }
+			get { return _watcherThread.IsAlive; }
 		}
 
 	    public int ReferenceCount { get; private set; }
@@ -352,7 +352,7 @@ namespace WatiN.Core.DialogHandlers
 		    // this dialog window
 		    lock (this)
 		    {
-		        foreach (var dialogHandler in handlers)
+		        foreach (var dialogHandler in _handlers)
 		        {
 		            try
 		            {
@@ -371,7 +371,7 @@ namespace WatiN.Core.DialogHandlers
 
 		        // If no handler handled the dialog, see if the dialog
 		        // should be closed automatically.
-		        if (!CloseUnhandledDialogs) return;
+		        if (!CloseUnhandledDialogs || MainWindowHwnd != window.ToplevelWindow.Hwnd) return;
 		        
                 Logger.LogAction("Auto closing dialog with title '{0}', text: {1}", window.Title, window.Message);
 		        window.ForceClose();
@@ -407,11 +407,11 @@ namespace WatiN.Core.DialogHandlers
 		{
 			lock (this)
 			{
-				keepRunning = false;
+				_keepRunning = false;
 			}
 			if (IsRunning)
 			{
-				watcherThread.Join();
+				_watcherThread.Join();
 			}
 			Clear();
 		}

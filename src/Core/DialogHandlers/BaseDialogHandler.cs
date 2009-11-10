@@ -45,7 +45,7 @@ namespace WatiN.Core.DialogHandlers
         public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
         {
             var topLevelHwnd = window.ToplevelWindow.Hwnd;
-            return topLevelHwnd == mainWindowHwnd && CanHandleDialog(window);
+            return (topLevelHwnd == mainWindowHwnd) && CanHandleDialog(window);
         }
 
 	    public abstract bool CanHandleDialog(Window window);

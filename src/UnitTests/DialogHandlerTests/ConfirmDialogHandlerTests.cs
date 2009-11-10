@@ -72,6 +72,57 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			}
 		}
 
+        [Test]
+        public void Should_also_handle_dialog_when_more_then_one_browser_is_open()
+        {
+            var not_used_ie = new IE();
+            var approveConfirmDialog = new ConfirmDialogHandler();
+
+            using (new UseDialogOnce(Ie.DialogWatcher, approveConfirmDialog))
+            {
+                Ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+                approveConfirmDialog.WaitUntilExists(5);
+                approveConfirmDialog.OKButton.Click();
+            }
+            Ie.WaitForComplete();
+        }
+
+        [Test]
+        public void TestMultipleIE()
+        {
+            using (var ie = new IE(TestEventsURI))
+            {
+                var handler = new ConfirmDialogHandler();
+                try
+                {
+                    ie.AddDialogHandler(handler);
+                    ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+                    handler.WaitUntilExists(5);
+                    handler.OKButton.Click();
+                }
+                finally
+                {
+                    ie.RemoveDialogHandler(handler);
+                }
+
+                using (var ie2 = new IE(TestEventsURI))
+                {
+                    var handler2 = new ConfirmDialogHandler();
+                    try
+                    {
+                        ie2.AddDialogHandler(handler2);
+                        ie2.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+                        handler2.WaitUntilExists(5);
+                        handler2.OKButton.Click();
+                    }
+                    finally
+                    {
+                        ie2.RemoveDialogHandler(handler2);
+                    }
+                }
+            }
+        }
+
 		public override Uri TestPageUri
 		{
 			get { return TestEventsURI; }

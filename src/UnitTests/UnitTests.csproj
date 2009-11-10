@@ -190,6 +190,9 @@
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
+    <Compile Include="ResearchTests\FluentFindSyntax.cs" />
+    <Compile Include="ResearchTests\MsHtmlBrowserTests.cs" />
+    <Compile Include="ResearchTests\MsHtmlNativeBrowser.cs" />
     <Compile Include="PageTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
