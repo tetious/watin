@@ -715,10 +715,15 @@ namespace WatiN.Core.UnitTests
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element matching constraint: Attribute 'disabled' equals 'True'")]
 		public void WaitUntilTimesOut()
 		{
-			element = Ie.Form("Form");
-			Assert.That(element.GetAttributeValue("disabled"), Is.EqualTo(false.ToString()), "Expected enabled form");
+		    ExecuteTestWithAnyBrowser(browser =>
+              {
+                  element = browser.Form("Form");
+                  Assert.That(element.GetAttributeValue("disabled"), Is.EqualTo(false.ToString()),
+                              "Expected enabled form");
 
-			element.WaitUntil(new AttributeConstraint("disabled", true.ToString()), 1);
+                  element.WaitUntil(new AttributeConstraint("disabled", true.ToString()), 1);
+
+              });
 		}
 
 		[Test]

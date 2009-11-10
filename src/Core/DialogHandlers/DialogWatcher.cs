@@ -373,7 +373,7 @@ namespace WatiN.Core.DialogHandlers
 		        // should be closed automatically.
 		        if (!CloseUnhandledDialogs || MainWindowHwnd != window.ToplevelWindow.Hwnd) return;
 		        
-                Logger.LogAction("Auto closing dialog with title '{0}', text: {1}", window.Title, window.Message);
+                Logger.LogAction("Auto closing dialog with title: '{0}', text: {1}, style: ", window.Title, window.Message, window.StyleInHex);
 		        window.ForceClose();
 		    }
 		}

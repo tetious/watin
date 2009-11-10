@@ -155,6 +155,7 @@ namespace WatiN.Core.UnitTests.TestUtils
 
         public void ExecuteTestWithAnyBrowser(BrowserTest testMethod)
         {
+            GoToTestPage(Ie);
             ExecuteTest(testMethod, Ie);
         }
 
