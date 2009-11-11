@@ -19,19 +19,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Moq;
-using mshtml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UnitTests.TestUtils;
-using StringComparer=WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.UnitTests
 {
@@ -69,17 +65,23 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void AncestorTagNameShouldReturnTypedElement()
 		{
-			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
-			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor("Div"));
+            ExecuteTestWithAnyBrowser(browser =>
+              {
+                  var tableCell = browser.TableCell(Find.ByText("Contains text in DIV"));
+                  Assert.IsInstanceOfType(typeof(Div), tableCell.Ancestor("Div"));
+              });
 		}
 
         // TODO: This should be mocked cause there is no browser logic involved
         [Test]
 		public void AncestorAttributeConstraintShouldReturnTypedElement()
 		{
-			var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
-			Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(Find.ById("divid")));
-		}
+            ExecuteTestWithAnyBrowser(browser =>
+              {
+                var tableCell = browser.TableCell(Find.ByText("Contains text in DIV"));
+                Assert.IsInstanceOfType(typeof (Div), tableCell.Ancestor(Find.ById("divid")));
+              });
+        }
 
         // TODO: This should be mocked cause there is no browser logic involved
         [Test]
