@@ -30,9 +30,9 @@ namespace WatiN.Core.Native
         /// Initializes a new instance of the <see cref="JSBrowserBase"/> class.
         /// </summary>
         /// <param name="clientPort">The client port.</param>
-        public JSBrowserBase(ClientPortBase clientPort)
+        protected JSBrowserBase(ClientPortBase clientPort)
         {
-            this.ClientPort = clientPort;
+            ClientPort = clientPort;
         }
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace WatiN.Core.Native
         /// <value>The name of the browser variable.</value>
         public string BrowserVariableName
         {
-            get { return this.ClientPort.BrowserVariableName;  }
+            get { return ClientPort.BrowserVariableName;  }
         }
 
         /// <inheritdoc />
         public IntPtr hWnd
         {
-            get { return this.ClientPort.Process.MainWindowHandle; }
+            get { return ClientPort.Process.MainWindowHandle; }
         }
 
         public abstract INativeDocument NativeDocument { get; }
@@ -61,32 +61,32 @@ namespace WatiN.Core.Native
         /// <inheritdoc />
         public bool GoBack()
         {
-            return this.Navigate("goBack");
+            return Navigate("goBack");
         }
 
         /// <inheritdoc />
         public bool GoForward()
         {
-            return this.Navigate("goForward");
+            return Navigate("goForward");
         }
 
         /// <inheritdoc />
         public void Reopen()
         {
-            this.Reopen(null);
+            Reopen(null);
         }
 
 
         /// <inheritdoc />
         public void NavigateTo(Uri url)
         {
-            this.LoadUri(url, true);
+            LoadUri(url, true);
         }
 
         /// <inheritdoc />
         public void NavigateToNoWait(Uri url)
         {
-            this.LoadUri(url, false);
+            LoadUri(url, false);
         }
 
         /// <summary>
@@ -94,15 +94,15 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <param name="forceGet">When it is <c>true</c>, causes the page to always be reloaded from the server. 
         /// If it is <c>false</c>, the browser may reload the page from its cache.</param>
-        public void Reload(bool forceGet)
+        private void Reload(bool forceGet)
         {
-            this.ClientPort.Write("{0}.location.reload({1});", FireFoxClientPort.WindowVariableName, forceGet.ToString().ToLower());
+            ClientPort.Write("{0}.location.reload({1});", FireFoxClientPort.WindowVariableName, forceGet.ToString().ToLower());
         }
 
         /// <inheritdoc />
         public void Refresh()
         {
-            this.Reload(false);
+            Reload(false);
         }
 
         /// <summary>
@@ -110,21 +110,21 @@ namespace WatiN.Core.Native
         /// </summary>
         public void Close()
         {
-            this.ClientPort.Write("{0}.close()", FireFoxClientPort.WindowVariableName);
+            ClientPort.Write("{0}.close()", FireFoxClientPort.WindowVariableName);
         }
 
         public bool IsLoading()
         {
             bool loading;
-            switch (this.ClientPort.JavaScriptEngine)
+            switch (ClientPort.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
-                    loading = this.ClientPort.WriteAndReadAsBool("{0}.readyState != 'complete';", this.ClientPort.DocumentVariableName);
-                    this.ClientPort.WriteAndRead("{0}.readyState;", this.ClientPort.DocumentVariableName);
-                    this.ClientPort.WriteAndRead("window.location.href");
+                    loading = ClientPort.WriteAndReadAsBool("{0}.readyState != 'complete';", ClientPort.DocumentVariableName);
+                    ClientPort.WriteAndRead("{0}.readyState;", ClientPort.DocumentVariableName);
+                    ClientPort.WriteAndRead("window.location.href");
                     break;
                 case JavaScriptEngineType.Mozilla:
-                    loading = this.ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", this.BrowserVariableName);
+                    loading = ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", BrowserVariableName);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -135,8 +135,8 @@ namespace WatiN.Core.Native
 
         protected void Reopen(Uri url)
         {
-            this.ClientPort.Dispose();
-            this.ClientPort.Connect(url == null ? string.Empty : url.ToString());
+            ClientPort.Dispose();
+            ClientPort.Connect(url == null ? string.Empty : url.ToString());
         }
 
         /// <summary>
@@ -148,15 +148,18 @@ namespace WatiN.Core.Native
 
         public int WindowCount
         {
-            get { return this.ClientPort.WriteAndReadAsInt("getWindows().length"); }
+            get { return ClientPort.WriteAndReadAsInt("getWindows().length"); }
         }
 
         private bool Navigate(string action)
         {
-            var ticks = DateTime.Now.Ticks;
-            this.ClientPort.Write("{0}.WatiNGoBackCheck={1};",ClientPort.DocumentVariableName, ticks);
-            this.ClientPort.Write("{0}.{1}();", this.BrowserVariableName, action);
-            return this.ClientPort.WriteAndReadAsBool("{0}.WatiNGoBackCheck!={1};",ClientPort.DocumentVariableName, ticks);
+            var ticks = Guid.NewGuid().ToString();
+            ClientPort.Write("{0}.WatiNGoBackCheck='{1}';",ClientPort.DocumentVariableName, ticks);
+            ClientPort.Write("{0}.{1}();", BrowserVariableName, action);
+
+            ClientPort.InitializeDocument();
+
+            return ClientPort.WriteAndReadAsBool("{0}.WatiNGoBackCheck!='{1}';",ClientPort.DocumentVariableName, ticks);
         }
     }
 }
