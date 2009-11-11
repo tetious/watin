@@ -87,12 +87,15 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void AncestorTypeAndAttributeConstraintShouldReturnTypedElement()
 		{
-		    var tableCell = Ie.TableCell(Find.ByText("Contains text in DIV"));
-            var ancestor = tableCell.Ancestor(typeof(Div), Find.ById("divid"));
+            ExecuteTestWithAnyBrowser(browser =>
+              {
+                  var tableCell = browser.TableCell(Find.ByText("Contains text in DIV"));
+                  var ancestor = tableCell.Ancestor(typeof(Div), Find.ById("divid"));
 
-            Assert.IsInstanceOfType(typeof(Div), ancestor);
-            Assert.That(ancestor.Id, Is.EqualTo("divid"));
-		}
+                  Assert.IsInstanceOfType(typeof(Div), ancestor);
+                  Assert.That(ancestor.Id, Is.EqualTo("divid"));
+              });
+        }
 
 	    [Test]
 		public void AncestorTagNameAndAttributeConstraintShouldReturnTypedElement()
@@ -476,11 +479,14 @@ namespace WatiN.Core.UnitTests
         [Test]
 		public void WaitUntilElementExistsTestElementAlreadyExists()
 		{
-			var button = Ie.Button("disabledid");
+            ExecuteTestWithAnyBrowser(browser =>
+              {
+                  var button = browser.Button("disabledid");
 
-			Assert.IsTrue(button.Exists);
-			button.WaitUntilExists();
-			Assert.IsTrue(button.Exists);
+                  Assert.IsTrue(button.Exists);
+                  button.WaitUntilExists();
+                  Assert.IsTrue(button.Exists);
+              });
 		}
 
 		[Test]
