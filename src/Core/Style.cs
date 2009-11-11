@@ -44,9 +44,9 @@ namespace WatiN.Core
 		/// for a full list of supported RGB colors and their names.
 		/// </summary>
 		/// <value>The color of the text.</value>
-		public string Color
+		public HtmlColor Color
 		{
-			get { return GetAttributeValue("color"); }
+			get { return new HtmlColor(GetAttributeValue("color")); }
 		}
 
 		/// <summary>
@@ -55,9 +55,9 @@ namespace WatiN.Core
 		/// for a full list of supported RGB colors and their names.
 		/// </summary>
 		/// <value>The color of the background.</value>
-		public string BackgroundColor
+		public HtmlColor BackgroundColor
 		{
-			get { return GetAttributeValue("backgroundColor"); }
+			get { return new HtmlColor(GetAttributeValue("backgroundColor")); }
 		}
 
 		/// <summary>

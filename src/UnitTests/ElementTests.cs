@@ -844,14 +844,12 @@ namespace WatiN.Core.UnitTests
 		                        var _originalcolor = textField.Style.BackgroundColor;
 
 		                        textField.Highlight(true);
-		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(HtmlColor.Red), "Unexpected background after Highlight(true)");
 
 		                        // Invoke highlighting done by WatiN when typing text
 		                        Settings.HighLightColor = "yellow";
 		                        textField.TypeText("abc");
 
-//		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after TypeText");
-		
 		                        textField.Highlight(false);
 		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");
 		                    });
@@ -869,7 +867,7 @@ namespace WatiN.Core.UnitTests
 		                        var _originalcolor = textField.Style.BackgroundColor;
 
 		                        textField.Highlight(true);
-		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo("red"), "Unexpected background after Highlight(true)");
+		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(HtmlColor.Red), "Unexpected background after Highlight(true)");
 		
 		                        textField.Highlight(false);
 		                        Assert.That(textField.Style.BackgroundColor, Is.EqualTo(_originalcolor), "Unexpected background Highlight(false)");

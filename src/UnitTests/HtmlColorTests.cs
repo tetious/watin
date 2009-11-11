@@ -35,9 +35,10 @@ namespace WatiN.Core.UnitTests
             var color = new HtmlColor(value);
 
             // THEN
-            Assert.That(color.ToName, Is.EqualTo("Yellow"));
-            Assert.That(color.ToHexString, Is.EqualTo("#ffff00"));
-            Assert.That(color.ToRgbString, Is.EqualTo("rgb(255,255,0)"));
+            Assert.That(color.ToName, Is.EqualTo("Yellow"), "ToName");
+            Assert.That(color.ToHexString, Is.EqualTo("#ffff00"), "ToHexString");
+            Assert.That(color.ToRgbString, Is.EqualTo("rgb(255,255,0)"), "ToRgbString");
+            Assert.That(color.OriginalValue, Is.EqualTo("yellow"), "OriginalValue");
         }
 
         [Test]
@@ -50,9 +51,10 @@ namespace WatiN.Core.UnitTests
             var color = new HtmlColor(value);
 
             // THEN
-            Assert.That(color.ToName, Is.EqualTo("Teal"));
-            Assert.That(color.ToHexString, Is.EqualTo("#008080"));
-            Assert.That(color.ToRgbString, Is.EqualTo("rgb(0,128,128)"));
+            Assert.That(color.ToName, Is.EqualTo("Teal"), "ToName");
+            Assert.That(color.ToHexString, Is.EqualTo("#008080"), "ToHexString");
+            Assert.That(color.ToRgbString, Is.EqualTo("rgb(0,128,128)"), "ToRgbString");
+            Assert.That(color.OriginalValue, Is.EqualTo("#008080"), "OriginalValue");
         }
 
         [Test]
@@ -65,9 +67,10 @@ namespace WatiN.Core.UnitTests
             var color = new HtmlColor(value);
 
             // THEN
-            Assert.That(color.ToName, Is.EqualTo("White"));
-            Assert.That(color.ToHexString, Is.EqualTo("#ffffff"));
-            Assert.That(color.ToRgbString, Is.EqualTo("rgb(255,255,255)"));
+            Assert.That(color.ToName, Is.EqualTo("White"), "ToName");
+            Assert.That(color.ToHexString, Is.EqualTo("#ffffff"), "ToHexString");
+            Assert.That(color.ToRgbString, Is.EqualTo("rgb(255,255,255)"), "ToRgbString");
+            Assert.That(color.OriginalValue, Is.EqualTo("#fff"), "OriginalValue");
         }
 
         [Test]
@@ -80,9 +83,10 @@ namespace WatiN.Core.UnitTests
             var color = new HtmlColor(value);
 
             // THEN
-            Assert.That(color.ToName, Is.EqualTo("Olive"));
-            Assert.That(color.ToHexString, Is.EqualTo("#808000"));
-            Assert.That(color.ToRgbString, Is.EqualTo("rgb(128,128,0)"));
+            Assert.That(color.ToName, Is.EqualTo("Olive"), "ToName");
+            Assert.That(color.ToHexString, Is.EqualTo("#808000"), "ToHexString");
+            Assert.That(color.ToRgbString, Is.EqualTo("rgb(128,128,0)"), "ToRgbString");
+            Assert.That(color.OriginalValue, Is.EqualTo("rgb(128,128,0)"), "OriginalValue");
         }
 
         [Test]
@@ -146,7 +150,7 @@ namespace WatiN.Core.UnitTests
             var htmlColor1 = new HtmlColor("black");
 
             // WHEN
-            var equals = htmlColor1.Equals(null);
+            var equals = htmlColor1.Equals((object)null);
 
             // THEN
             Assert.That(equals, Is.False);
@@ -163,6 +167,50 @@ namespace WatiN.Core.UnitTests
 
             // THEN
             Assert.That(equals, Is.False);
+        }
+
+        [Test]
+        public void Should_be_equal_to_color_name()
+        {
+            // GIVEN
+            // WHEN
+            var result = HtmlColor.Blue.Equals("blue");
+            
+            // THEN
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Should_be_equal_to_hexcode_representation_of_color()
+        {
+            // GIVEN
+            // WHEN
+            var result = HtmlColor.Yellow.Equals("#ffff00");
+            
+            // THEN
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Should_be_equal_to_rgb_representation_of_color()
+        {
+            // GIVEN
+            // WHEN
+            var result = HtmlColor.Yellow.Equals("rgb(255,255,0)");
+            
+            // THEN
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Should_not_be_equal_to_invalid_string_input()
+        {
+            // GIVEN
+            // WHEN
+            var result = HtmlColor.Yellow.Equals("$%@)*^");
+            
+            // THEN
+            Assert.That(result, Is.False);
         }
 
         [Test]

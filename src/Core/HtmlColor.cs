@@ -117,6 +117,8 @@ namespace WatiN.Core
         /// </example>
         public HtmlColor(string value)
         {
+            OriginalValue = value;
+
             var match = RgbValuePattern.Match(value);
 
             if (match.Success)
@@ -181,6 +183,8 @@ namespace WatiN.Core
             }
         }
 
+        public string OriginalValue { get; private set; }
+
         /// <summary>
         /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="HtmlColor"/>.
         /// </summary>
@@ -190,10 +194,31 @@ namespace WatiN.Core
         /// </returns>
         public override bool Equals(object obj)
         {
-            var that = obj as HtmlColor;
+            var thatAsHtmlColor = obj as HtmlColor;
+            if (thatAsHtmlColor != null) return Equals(thatAsHtmlColor);
+
+            var thatAsString = obj as string;
+            return thatAsString != null && Equals(thatAsString);
+        }
+
+        public bool Equals(HtmlColor that)
+        {
             if (that == null) return false;
 
             return ReferenceEquals(this, that) || ToArgb.Equals(that.ToArgb);
+        }
+
+        public bool Equals(string color)
+        {
+            try
+            {
+                var that = new HtmlColor(color);
+                return Equals(that);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>

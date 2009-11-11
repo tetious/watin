@@ -172,7 +172,7 @@ namespace WatiN.Core.UnitTests
                                 var backgroundColor = _element.Style.BackgroundColor;
                                 
                                 // THEN
-                                Assert.That(new HtmlColor(backgroundColor), Is.EqualTo(HtmlColor.Blue));
+                                Assert.That(backgroundColor, Is.EqualTo(HtmlColor.Blue));
                             });
         }
 
@@ -188,7 +188,7 @@ namespace WatiN.Core.UnitTests
                                 var color = _element.Style.Color;
                                 
                                 // THEN
-                                Assert.That(new HtmlColor(color), Is.EqualTo(HtmlColor.White));
+                                Assert.That(color, Is.EqualTo(HtmlColor.White));
                             });
         }
 
