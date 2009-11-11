@@ -18,15 +18,13 @@
 
 namespace WatiN.Core.Native
 {
-    using Mozilla;
-
     public class JSWaitForComplete : WaitForCompleteBase
     {
-        private readonly JSBrowserBase nativeBrowser;
+        private readonly JSBrowserBase _nativeBrowser;
 
         public JSWaitForComplete(JSBrowserBase nativeBrowser, int waitForCompleteTimeOut) : base(waitForCompleteTimeOut)
         {
-            this.nativeBrowser = nativeBrowser;
+            _nativeBrowser = nativeBrowser;
         }
 
         protected override void InitialSleep()
@@ -36,15 +34,15 @@ namespace WatiN.Core.Native
 
         protected override void WaitForCompleteOrTimeout()
         {
-            this.WaitWhileDocumentNotAvailable();
+            WaitWhileDocumentNotAvailable();
         }
 
         protected virtual void WaitWhileDocumentNotAvailable()
         {
-            this.WaitUntil(() => !this.nativeBrowser.IsLoading(),
+            WaitUntil(() => !_nativeBrowser.IsLoading(),
                       () => "waiting for main document becoming available");
 
-            this.nativeBrowser.ClientPort.InitializeDocument();
+            _nativeBrowser.ClientPort.InitializeDocument();
         }
     }
 }

@@ -124,7 +124,7 @@ namespace WatiN.Core.Native
                     ClientPort.WriteAndRead("window.location.href");
                     break;
                 case JavaScriptEngineType.Mozilla:
-                    loading = ClientPort.WriteAndReadAsBool("{0}.webProgress.isLoadingDocument;", BrowserVariableName);
+                    loading = ClientPort.WriteAndReadAsBool("{0}.webProgress.busyFlags!=0;", BrowserVariableName);
                     break;
                 default:
                     throw new NotImplementedException();
