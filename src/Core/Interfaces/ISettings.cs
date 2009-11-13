@@ -119,5 +119,13 @@ namespace WatiN.Core.Interfaces
         /// </value>
         /// <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
         bool MakeNewIe8InstanceNoMerge { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether existing firefox instances will be closed before creating a new instance.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if existing firefox instances need to be closed otherwise, <c>false</c>.
+        /// </value>
+        bool CloseExistingFireFoxInstances { get; set; }
     }
 }

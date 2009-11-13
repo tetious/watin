@@ -381,7 +381,7 @@ namespace WatiN.Core.Native.Chrome
                 throw new ChromeException("Already connected to chrome session.");
             }
 
-            if (Core.Chrome.CurrentProcessCount > 0 && !Settings.CloseExistingBrowserInstances)
+            if (Core.Chrome.CurrentProcessCount > 0 && !Settings.CloseExistingFireFoxInstances)
             {
                 throw new ChromeException("Existing instances of FireFox detected.");
             }

@@ -87,7 +87,6 @@ namespace WatiN.Core
 	public static class Settings
     {
         private static ISettings _instance = CreateDefaultSettings();
-        public static bool CloseExistingBrowserInstances = true;
 
         private static DefaultSettings CreateDefaultSettings()
         {
@@ -267,6 +266,18 @@ namespace WatiN.Core
         {
             get { return Instance.MakeNewIe8InstanceNoMerge; }
             set { Instance.MakeNewIe8InstanceNoMerge = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether existing FireFox instances will be closed before creating a new instance.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if existing FireFox instances need to be closed otherwise, <c>false</c>.
+        /// </value>
+        public static bool CloseExistingFireFoxInstances
+        {
+            get { return Instance.CloseExistingFireFoxInstances; }
+            set { Instance.CloseExistingFireFoxInstances = value; }            
         }
 	}
 }

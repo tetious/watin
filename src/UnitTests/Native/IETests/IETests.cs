@@ -344,7 +344,7 @@ namespace WatiN.Core.UnitTests.IETests
             }
         }
 
-        [Test, Ignore("Experiencing problems. Test fails and following tests also fail. Need to look into ti")]
+        [Test, Ignore("Experiencing problems. Test fails and following tests also fail. Need to look into it")]
         public void ClearCache()
         {
             using (var ie = new IE(GoogleUrl))

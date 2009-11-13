@@ -508,7 +508,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </exception>
         private void CloseExistingFireFoxInstances()
         {
-            if (FireFox.CurrentProcessCount > 0 && !Settings.CloseExistingBrowserInstances)
+            if (FireFox.CurrentProcessCount > 0 && !Settings.CloseExistingFireFoxInstances)
             {
                 throw new FireFoxException("Existing instances of FireFox detected.");
             }

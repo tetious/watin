@@ -463,7 +463,7 @@ namespace WatiN.Core
             return Core.Page.CreatePage<TPage>(this);
         }
 
-        private NativeElementCollectionAdapter All
+        internal virtual NativeElementCollectionAdapter All
         {
             get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.AllElements); }
         }

@@ -37,6 +37,7 @@ namespace WatiN.Core
             public int sleepTime;
             public IFindByDefaultFactory findByDefaultFactory;
             public bool makeNewIe8InstanceNoMerge;
+            public bool closeExistingFireFoxInstances;
         }
 
         private settingsStruct settings;
@@ -83,7 +84,8 @@ namespace WatiN.Core
                                autoMoveMousePointerToTopLeft = true,
                                makeNewIEInstanceVisible = true,
                                findByDefaultFactory = new FindByDefaultFactory(),
-                               makeNewIe8InstanceNoMerge = true
+                               makeNewIe8InstanceNoMerge = true,
+                               closeExistingFireFoxInstances = true
                            };
         }
 
@@ -236,6 +238,12 @@ namespace WatiN.Core
         {
             get { return settings.makeNewIe8InstanceNoMerge; }
             set { settings.makeNewIe8InstanceNoMerge = value; }
+        }
+
+        public bool CloseExistingFireFoxInstances
+        {
+            get { return settings.closeExistingFireFoxInstances; }
+            set { settings.closeExistingFireFoxInstances = value; }
         }
 
         private static void IfValueLessThenZeroThrowArgumentOutOfRangeException(int value)
