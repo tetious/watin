@@ -35,7 +35,7 @@ namespace WatiN.Core.UnitTests
 
             var result = component.Object.WithDescription("Description.");
 
-            Assert.That(result, Is.SameAs(component));
+            Assert.That(result, Is.SameAs(component.Object));
             component.VerifySet(x => x.Description, "Description.");
         }
 
@@ -46,7 +46,7 @@ namespace WatiN.Core.UnitTests
 
             var result = component.Object.WithDescription(null);
 
-            Assert.That(result, Is.SameAs(component));
+            Assert.That(result, Is.SameAs(component.Object));
             component.VerifySet(x => x.Description, null);
         }
 
