@@ -100,6 +100,28 @@ namespace WatiN.Core.UnitTests.FireFoxTests
             Assert.That(FireFox.CurrentProcessCount, Is.EqualTo(0), "Expected no running firefox instances");
         }
 
+        [Test]
+        public void FireFoxCanAttachByTitle()
+        {
+            using (var fireFox = new FireFox(NewWindowUri))
+            {
+                fireFox.Links[0].Click();
+                var newWindow = FireFox.AttachToFireFox(Find.ByTitle("New Window Target Page"));
+                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
+                newWindow.Close();
+            }
+        }
 
+        [Test]
+        public void FireFoxCanAttachByUri()
+        {
+            using (var fireFox = new FireFox(NewWindowUri))
+            {
+                fireFox.Links[0].Click();
+                var newWindow = FireFox.AttachToFireFox(Find.ByUrl(NewWindowTargetUri));
+                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
+                newWindow.Close();
+            }
+        }
     }
 }

@@ -369,6 +369,7 @@ namespace WatiN.Core
             for(int i = 0; i < windowCount; i++)
             {
                 ((FireFoxClientPort)ffBrowser.ClientPort).DefineDefaultJSVariablesForWindow(i);
+                ((FireFoxClientPort)ffBrowser.ClientPort).InitializeDocument();
                 if (Matches(findBy)) return true;
             }
 

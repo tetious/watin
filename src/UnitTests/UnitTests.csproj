@@ -434,6 +434,8 @@
     <Content Include="html\intro.html" />
     <Content Include="html\main.html" />
     <Content Include="html\OnBeforeUnloadJavaDialog.html" />
+    <Content Include="html\openNewWindow.html" />
+    <Content Include="html\openNewWindowTarget.html" />
     <Content Include="html\popup.html" />
     <Content Include="html\ProximityTests.html" />
     <Content Include="html\styletests\Style.html" />
