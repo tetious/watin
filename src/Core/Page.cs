@@ -179,7 +179,7 @@ namespace WatiN.Core
             {
                 if (_document == null)
                     throw new WatiNException("The Document is not available because the Page instance has not been fully initialized.");
-                VerifyDocumentProperties(_document, errorMessage => { throw new WatiNException(errorMessage); });
+                VerifyDocumentProperties(_document, errorMessage => { throw new PageVerificationException(errorMessage); });
                 return _document;
             }
         }
@@ -357,5 +357,14 @@ namespace WatiN.Core
             _document = document;
             InitializeContents();
         }
+    }
+
+    /// <summary>
+    /// Will be thrown when the set expectations using the <see cref="PageAttribute"/> don't match.
+    /// </summary>
+    public class PageVerificationException : WatiNException
+    {
+        public PageVerificationException(string message) : base(message)
+        {}
     }
 }

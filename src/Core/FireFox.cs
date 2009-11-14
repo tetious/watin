@@ -115,24 +115,22 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Gets the current FireFox process.
+        /// Gets the current FireFox process (all instances run under 1 process).
         /// </summary>
         /// <value>The current FireFox process or null if none is found.</value>
         internal static Process CurrentProcess
         {
             get
             {
-                Process ffProcess = null;
-
                 foreach (var process in Process.GetProcesses())
                 {
                     if (process.ProcessName.Equals("firefox", StringComparison.OrdinalIgnoreCase))
                     {
-                        ffProcess = process;
+                        return process;
                     }
                 }
 
-                return ffProcess;
+                return null;
             }
         }
 

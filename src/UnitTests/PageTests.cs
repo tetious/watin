@@ -27,6 +27,51 @@ namespace WatiN.Core.UnitTests
     [TestFixture]
     public class PageTests : BaseWithBrowserTests
     {
+        [Test, Ignore("SF Bug 2866821: TODO for WatiN 2.1")]
+        // https://sourceforge.net/tracker/?func=detail&aid=2866821&group_id=167632&atid=843727
+        public void Should_fail_element_lookup_by_attribute_cause_we_are_on_the_wrong_page()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+                browser.GoTo(AboutBlank);
+                var page = browser.Page<MainPage>();
+
+                // WHEN
+                try
+                {
+                    var member = page.NameTextFieldUsingFindbyAttribute.Text;
+                    Assert.Fail("Expected " + typeof(PageVerificationException).ToString());
+                }
+                catch (PageVerificationException)
+                {
+                    // OK
+                }
+                catch(Exception e)
+                {
+                    Assert.Fail("Unexpected exception: " + e.ToString());
+                }
+
+                // THEN expected exception
+            });
+        }
+
+        [Test, ExpectedException(ExceptionType = typeof(PageVerificationException))]
+        public void Should_fail_element_lookup_by_code_cause_we_are_on_the_wrong_page()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+                browser.GoTo(AboutBlank);
+                var page = browser.Page<MainPage>();
+
+                // WHEN
+                var member = page.NameTextFieldUsingCode;
+
+                // THEN expected exception
+            });
+        }
+
         [Test]
         public void ShouldInitializeElementField()
         {
@@ -36,7 +81,7 @@ namespace WatiN.Core.UnitTests
                     var page = browser.Page<MainPage>();
 
                     // WHEN
-                    var member = page.NameTextField;
+                    var member = page.NameTextFieldUsingFindbyAttribute;
 
                     // THEN
                     Assert.That(member, Is.Not.Null);
@@ -140,10 +185,16 @@ namespace WatiN.Core.UnitTests
             }
         }
 
+        [Page(UrlRegex = "main.html$")]
         public class MainPage : Page
         {
             [FindBy(Name = "textinput1")]
-            public TextField NameTextField;
+            public TextField NameTextFieldUsingFindbyAttribute;
+            
+            public TextField NameTextFieldUsingCode
+            {
+                get { return Document.TextField(Find.ByName("textinput1"));}
+            }
 
             [FindBy(Id = "popupid")]
             [Description("Popup button.")]
@@ -154,4 +205,46 @@ namespace WatiN.Core.UnitTests
             internal TextFieldControl NameTextFieldControl = null; // intentionally non-public
         }
     }
+
+    [TestFixture]
+    public class GoogleTests
+    {
+        [Test, Ignore("SF Bug 2897406: TODO for WatiN 2.1")]
+        // https://sourceforge.net/tracker/?func=detail&aid=2897406&group_id=167632&atid=843727
+        public void Search_for_watin_on_google_using_page_class()
+        {
+            using (var browser = new IE("http://www.google.com"))
+            {
+                var searchPage = browser.Page<GoogleSearchPage>();
+                searchPage.SearchCriteria.TypeText("WatiN");
+                searchPage.SearchButton.Click();
+
+                Assert.IsTrue(browser.ContainsText("WatiN"));
+                browser.Back();
+
+                //This line throws UnauthorizedAccessException.
+                searchPage.SearchCriteria.TypeText("Search Again");
+                searchPage.SearchButton.Click();
+                Assert.IsTrue(browser.ContainsText("Glenn"));
+
+            }
+        }
+
+        [Page(UrlRegex = "www.google.*")]
+        public class GoogleSearchPage : Page
+        {
+            [FindBy(Name = "q")]
+            public TextField SearchCriteria;
+
+            [FindBy(Name = "btnG")]
+            public Button SearchButton;
+
+            public void SearchFor(string searchCriteria)
+            {
+                SearchCriteria.TypeText("WatiN");
+                SearchButton.Click();
+            }
+        }
+    }
+
 }
