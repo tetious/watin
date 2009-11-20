@@ -1025,17 +1025,21 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void TableOfElementE()
         {
-            // Invoke with anonymous delegate
-            Element table = Ie.Table("table1");
-            table.WaitUntil((Table table1) => table1.Enabled);
+            ExecuteTestWithAnyBrowser(browser =>
+              {
+                  // Invoke with anonymous delegate
+                  Element table = browser.Table("table1");
+                  table.WaitUntil((Table table1) => table1.Enabled);
 
-            // Invoke with lambda
-            ElementContainer<Table> table2 = Ie.Table("table1");
-            table2.WaitUntil(t => t.Enabled);
+                  // Invoke with lambda
+                  ElementContainer<Table> table2 = browser.Table("table1");
+                  table2.WaitUntil(t => t.Enabled);
 
-            // Invoke with delegate method
-            var table3 = Ie.Table("table1");
-            table3.WaitUntil(IsEnabled);
+                  // Invoke with delegate method
+                  var table3 = browser.Table("table1");
+                  table3.WaitUntil(IsEnabled);
+                  
+              });
         }
 
         private static bool IsEnabled(Table table)
