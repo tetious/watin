@@ -23,7 +23,9 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.UnitTests.FireFoxTests;
 using WatiN.Core.UnitTests.IETests;
+# if INCLUDE_CHROME
 using WatiN.Core.UnitTests.Native.ChromeTests;
+#endif
 
 namespace WatiN.Core.UnitTests.TestUtils
 {
@@ -36,7 +38,9 @@ namespace WatiN.Core.UnitTests.TestUtils
 
         private readonly IBrowserTestManager ieManager = new IEBrowserTestManager();
         private readonly IBrowserTestManager ffManager = new FFBrowserTestManager();
+# if INCLUDE_CHROME
         private readonly IBrowserTestManager chromeManager = new ChromeBrowserTestManager();
+#endif
 
         public readonly List<IBrowserTestManager> BrowsersToTestWith = new List<IBrowserTestManager>();
 

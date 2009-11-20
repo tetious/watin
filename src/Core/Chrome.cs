@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+# if INCLUDE_CHROME
+
 namespace WatiN.Core
 {
     using System;
@@ -296,3 +298,4 @@ namespace WatiN.Core
         }
     }
 }
+#endif

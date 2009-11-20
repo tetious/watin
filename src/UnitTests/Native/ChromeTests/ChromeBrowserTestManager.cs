@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+# if INCLUDE_CHROME
+
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.Native.ChromeTests
@@ -53,3 +55,4 @@ namespace WatiN.Core.UnitTests.Native.ChromeTests
         }
     }
 }
+#endif
