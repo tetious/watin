@@ -24,6 +24,7 @@ using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.UtilityClasses;
 using IEnumUnknown=WatiN.Core.Native.Windows.IEnumUnknown;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -80,12 +81,12 @@ namespace WatiN.Core.Native.InternetExplorer
 
             CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
 
-            var id = element.id;
+            var id = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
 
             if (string.IsNullOrEmpty(id))
             {
                 id = Guid.NewGuid().ToString();
-                element.setAttribute("id", id, 0);
+                element.id = id;
             }
             scriptCode.Append("document.getElementById('" + id + "').fireEvent('" + eventName + "', newEvt);");
 
