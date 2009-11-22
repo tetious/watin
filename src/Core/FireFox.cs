@@ -33,32 +33,20 @@ namespace WatiN.Core
 {
     public class FireFox : Browser 
     {
-        private FFBrowser ffBrowser;
+        private FFBrowser _ffBrowser;
 
         #region Public constructors / destructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
-        public FireFox() : this(true) { }
-
-        public FireFox(bool createNew)
-        {
-            if (createNew)
-                CreateFireFoxInstance("about:blank");
-            else
-                PartialInitFireFox();
-        }
+        public FireFox() : this ("about:blank") {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
         /// <param name="url">The url to go to</param>
-        public FireFox(string url)
-        {
-            CreateFireFoxInstance(url);
-            WaitForComplete();
-        }
+        public FireFox(string url) : this(UtilityClass.CreateUri(url)) {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FireFox"/> class.
@@ -67,7 +55,11 @@ namespace WatiN.Core
         public FireFox(Uri uri)
         {
             CreateFireFoxInstance(uri.AbsoluteUri);
-            WaitForComplete();
+        }
+
+        public FireFox(FFBrowser ffBrowser)
+        {
+            _ffBrowser = ffBrowser;
         }
 
         /// <summary>
@@ -85,7 +77,7 @@ namespace WatiN.Core
 
         public override INativeBrowser NativeBrowser
         {
-            get { return ffBrowser; }
+            get { return _ffBrowser; }
         }
 
         #endregion Public instance properties
@@ -113,6 +105,7 @@ namespace WatiN.Core
         }
 
         private static string pathToExe;
+
         /// <summary>
         /// Gets the path to FireFox executable.
         /// </summary>
@@ -232,7 +225,7 @@ namespace WatiN.Core
         /// </summary>
         public override void WaitForComplete(int waitForCompleteTimeOut)
         {
-            WaitForComplete(new JSWaitForComplete(ffBrowser, waitForCompleteTimeOut));
+            WaitForComplete(new JSWaitForComplete(_ffBrowser, waitForCompleteTimeOut));
         }
 
         /// <summary>
@@ -240,12 +233,7 @@ namespace WatiN.Core
         /// </summary>
         public override void Close()
         {
-            ffBrowser.Close();
-        }
-
-        public static bool Exists(Constraint findBy)
-        {
-            return new FireFox(false).FindFireFox(findBy);
+            _ffBrowser.Close();
         }
 
         #endregion Public instance methods
@@ -265,7 +253,7 @@ namespace WatiN.Core
             if (disposing)
             {
                 // Dispose managed resources.
-                ffBrowser.ClientPort.Dispose();
+                _ffBrowser.ClientPort.Dispose();
             }
 
             // Call the appropriate methods to clean up 
@@ -275,8 +263,6 @@ namespace WatiN.Core
 
         #endregion Protected instance methods
 
-        #region Private static methods
-
         private void CreateFireFoxInstance(string url)
         {
             Logger.LogAction("Creating FireFox instance");
@@ -285,69 +271,28 @@ namespace WatiN.Core
 
             var clientPort = new FireFoxClientPort();
             clientPort.Connect(url);
-            ffBrowser = new FFBrowser(clientPort);
+            _ffBrowser = new FFBrowser(clientPort);
             WaitForComplete();
         }
 
         public static FireFox AttachToFireFox(Constraint findBy)
         {
-            return AttachToFireFox(findBy, Settings.AttachToIETimeOut);
+            return AttachTo<FireFox>(findBy);
         }
 
         public static FireFox AttachToFireFox(Constraint findBy, int timeout)
         {
-            FireFox result = new FireFox(false);
-            result.AttachToExisting(findBy, timeout, true);
-            return result;
+            return AttachTo<FireFox>(findBy, timeout);
         }
 
         public static FireFox AttachToFireFoxNoWait(Constraint findBy)
         {
-            return AttachToFireFoxNoWait(findBy, Settings.AttachToIETimeOut);
+            return AttachToNoWait<FireFox>(findBy);
         }
 
         public static FireFox AttachToFireFoxNoWait(Constraint findBy, int timeout)
         {
-            FireFox result = new FireFox(false);
-            result.AttachToExisting(findBy, timeout, false);
-            return result;
+            return AttachToNoWait<FireFox>(findBy, timeout);
         }
-
-        private void PartialInitFireFox()
-        {
-            var clientPort = new FireFoxClientPort();
-            clientPort.ConnectToExisting();
-            ffBrowser = new FFBrowser(clientPort);
-        }
-
-        private void AttachToExisting(Constraint findBy, int timeout, bool waitForComplete)
-        {
-            var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout)) { SleepTime = TimeSpan.FromMilliseconds(500) };
-            bool found = action.Try(() => FindFireFox(findBy));
-            if (found)
-            {
-                if (waitForComplete)
-                    WaitForComplete();
-                return;
-            }
-
-            throw new FireFoxNotFoundException(findBy.ToString(), timeout);
-        }
-
-        private bool FindFireFox(Constraint findBy)
-        {
-            int windowCount = ffBrowser.WindowCount;
-
-            for(int i = 0; i < windowCount; i++)
-            {
-                ((FireFoxClientPort)ffBrowser.ClientPort).DefineDefaultJSVariablesForWindow(i);
-                ((FireFoxClientPort)ffBrowser.ClientPort).InitializeDocument();
-                if (Matches(findBy)) return true;
-            }
-
-            return false;
-        }
-
-        #endregion
     }
 }

@@ -26,6 +26,7 @@ using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native.Mozilla;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 
@@ -39,6 +40,7 @@ namespace WatiN.Core
         static Browser()
         {
             RegisterAttachToHelper(typeof (IE), new AttachToIeHelper());
+            RegisterAttachToHelper(typeof (FireFox), new AttachToFireFoxHelper());
         }
 
         public abstract INativeBrowser NativeBrowser { get; }
@@ -357,7 +359,7 @@ namespace WatiN.Core
 
         public static T AttachTo<T>(Constraint constraint) where T : Browser
         {
-            return AttachTo<T>(constraint, Settings.AttachToIETimeOut);
+            return AttachTo<T>(constraint, Settings.AttachToBrowserTimeOut);
         }
 
         public static T AttachTo<T>(Constraint constraint, int timeout) where T : Browser
@@ -368,7 +370,7 @@ namespace WatiN.Core
 
         public static T AttachToNoWait<T>(Constraint constraint) where T : Browser
         {
-            return AttachToNoWait<T>(constraint, Settings.AttachToIETimeOut);
+            return AttachToNoWait<T>(constraint, Settings.AttachToBrowserTimeOut);
         }
 
         public static T AttachToNoWait<T>(Constraint constraint, int timeout) where T : Browser

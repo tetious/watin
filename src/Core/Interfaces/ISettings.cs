@@ -38,7 +38,7 @@ namespace WatiN.Core.Interfaces
         /// The default value is 30 seconds. Setting the time out to a negative value will
         /// throw a <see cref="ArgumentOutOfRangeException"/>.
         /// </summary>
-        int AttachToIETimeOut { get; set; }
+        int AttachToBrowserTimeOut { get; set; }
 
         /// <summary>
         /// Get or set the default time out used when calling Element.WaitUntilExists().

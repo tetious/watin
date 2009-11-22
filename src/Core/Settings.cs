@@ -34,7 +34,7 @@ namespace WatiN.Core
 	/// public void AttachToIEExample()
 	/// {
 	///   // Change de default time out from 30 to 60 seconds.
-	///   Settings.AttachToIETimeOut = 60;
+	///   Settings.AttachToBrowserTimeOut = 60;
 	/// 
 	///   // Start Internet Explorer manually and type 
 	///   // http://watin.sourceforge.net in the navigation bar.
@@ -65,7 +65,7 @@ namespace WatiN.Core
 	/// {
 	///   Settings settings = new Settings();
 	/// 
-	///   settings.AttachToIETimeOut = 60;
+	///   settings.AttachToBrowserTimeOut = 60;
 	///   settings.WaitUntilExistsTimeOut = 60;
 	///   settings.WaitForCompleteTimeOut = 60;
 	/// 
@@ -76,7 +76,7 @@ namespace WatiN.Core
 	/// {
 	///   Settings settings = new Settings();
 	/// 
-	///   settings.AttachToIETimeOut = 5;
+	///   settings.AttachToBrowserTimeOut = 5;
 	///   settings.WaitUntilExistsTimeOut = 5;
 	///   settings.WaitForCompleteTimeOut = 5;
 	/// 
@@ -124,10 +124,10 @@ namespace WatiN.Core
 		/// The default value is 30 seconds. Setting the time out to a negative value will
 		/// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
-        public static int AttachToIETimeOut
+        public static int AttachToBrowserTimeOut
 		{
-			get { return Instance.AttachToIETimeOut; }
-			set { Instance.AttachToIETimeOut = value; }
+			get { return Instance.AttachToBrowserTimeOut; }
+			set { Instance.AttachToBrowserTimeOut = value; }
 		}
 
 		/// <summary>

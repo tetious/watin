@@ -25,7 +25,7 @@ namespace WatiN.Core
     {
         private struct settingsStruct
         {
-            public int attachToIETimeOut;
+            public int attachToBrowserTimeOut;
             public int waitUntilExistsTimeOut;
             public int waitForCompleteTimeOut;
             public bool highLightElement;
@@ -73,7 +73,7 @@ namespace WatiN.Core
         {
             settings = new settingsStruct
                            {
-                               attachToIETimeOut = 30,
+                               attachToBrowserTimeOut = 30,
                                waitUntilExistsTimeOut = 30,
                                waitForCompleteTimeOut = 30,
                                sleepTime = 100,
@@ -94,13 +94,13 @@ namespace WatiN.Core
         /// The default value is 30 seconds. Setting the time out to a negative value will
         /// throw a <see cref="ArgumentOutOfRangeException"/>.
         /// </summary>
-        public int AttachToIETimeOut
+        public int AttachToBrowserTimeOut
         {
-            get { return settings.attachToIETimeOut; }
+            get { return settings.attachToBrowserTimeOut; }
             set
             {
                 IfValueLessThenZeroThrowArgumentOutOfRangeException(value);
-                settings.attachToIETimeOut = value;
+                settings.attachToBrowserTimeOut = value;
             }
         }
 

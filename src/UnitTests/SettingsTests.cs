@@ -35,7 +35,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Properties()
 		{
-			Settings.AttachToIETimeOut = 111;
+			Settings.AttachToBrowserTimeOut = 111;
 			var autoCloseDialogs = !Settings.AutoCloseDialogs;
 			Settings.AutoCloseDialogs = autoCloseDialogs;
 			Settings.HighLightColor = "strange color";
@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests
 			Settings.WaitUntilExistsTimeOut = 333;
 		    Settings.SleepTime = 444;
 
-			Assert.AreEqual(111, Settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+			Assert.AreEqual(111, Settings.AttachToBrowserTimeOut, "Unexpected AttachToBrowserTimeOut");
 			Assert.AreEqual(autoCloseDialogs, Settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
 			Assert.AreEqual("strange color", Settings.HighLightColor, "Unexpected HighLightColor");
 			Assert.AreEqual(highLightElement, Settings.HighLightElement, "Unexpected HighLightElement");
@@ -105,15 +105,15 @@ namespace WatiN.Core.UnitTests
 		public void SetIESettings()
 		{
             // GIVEN
-			Assert.AreNotEqual(111, Settings.AttachToIETimeOut, "Pre condition failed");
+			Assert.AreNotEqual(111, Settings.AttachToBrowserTimeOut, "Pre condition failed");
 
-            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+            ISettings settings = new DefaultSettings {AttachToBrowserTimeOut = 111};
 
             // WHEN
 		    Settings.Instance = settings;
 			
             // THEN
-            Assert.AreEqual(111, Settings.AttachToIETimeOut);
+            Assert.AreEqual(111, Settings.AttachToBrowserTimeOut);
 		}
 	}
 }

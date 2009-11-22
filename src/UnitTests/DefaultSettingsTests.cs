@@ -27,7 +27,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Properties()
         {
-            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+            ISettings settings = new DefaultSettings {AttachToBrowserTimeOut = 111};
 
             var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
@@ -38,7 +38,7 @@ namespace WatiN.Core.UnitTests
             settings.WaitUntilExistsTimeOut = 333;
             settings.SleepTime = 444;
 
-            Assert.AreEqual(111, settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+            Assert.AreEqual(111, settings.AttachToBrowserTimeOut, "Unexpected AttachToBrowserTimeOut");
             Assert.AreEqual(autoCloseDialogs, settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("strange color", settings.HighLightColor, "Unexpected HighLightColor");
             Assert.AreEqual(highLightElement, settings.HighLightElement, "Unexpected HighLightElement");
@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Clone()
         {
-            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+            ISettings settings = new DefaultSettings {AttachToBrowserTimeOut = 111};
 
             var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
@@ -62,7 +62,7 @@ namespace WatiN.Core.UnitTests
             settings.SleepTime = 444;
 
             var settingsClone = settings.Clone();
-            Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+            Assert.AreEqual(111, settingsClone.AttachToBrowserTimeOut, "Unexpected AttachToBrowserTimeOut");
             Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
             Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
@@ -82,7 +82,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Reset()
         {
-            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+            ISettings settings = new DefaultSettings {AttachToBrowserTimeOut = 111};
 
             var autoCloseDialogs = !settings.AutoCloseDialogs;
             settings.AutoCloseDialogs = autoCloseDialogs;
@@ -94,7 +94,7 @@ namespace WatiN.Core.UnitTests
             settings.SleepTime = 444;
 
             var settingsClone = settings.Clone();
-            Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+            Assert.AreEqual(111, settingsClone.AttachToBrowserTimeOut, "Unexpected AttachToBrowserTimeOut");
             Assert.AreEqual(autoCloseDialogs, settingsClone.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("strange color", settingsClone.HighLightColor, "Unexpected HighLightColor");
             Assert.AreEqual(highLightElement, settingsClone.HighLightElement, "Unexpected HighLightElement");
@@ -109,20 +109,20 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void ChangeSettingInCloneShouldNotChangeOriginalSetting()
         {
-            ISettings settings = new DefaultSettings {AttachToIETimeOut = 111};
+            ISettings settings = new DefaultSettings {AttachToBrowserTimeOut = 111};
 
             var settingsClone = settings.Clone();
-            Assert.AreEqual(111, settingsClone.AttachToIETimeOut, "Unexpected clone 1");
+            Assert.AreEqual(111, settingsClone.AttachToBrowserTimeOut, "Unexpected clone 1");
 
-            settingsClone.AttachToIETimeOut = 222;
+            settingsClone.AttachToBrowserTimeOut = 222;
 
-            Assert.AreEqual(111, settings.AttachToIETimeOut, "Unexpected original");
-            Assert.AreEqual(222, settingsClone.AttachToIETimeOut, "Unexpected clone 2");
+            Assert.AreEqual(111, settings.AttachToBrowserTimeOut, "Unexpected original");
+            Assert.AreEqual(222, settingsClone.AttachToBrowserTimeOut, "Unexpected clone 2");
         }
 
         private static void AssertDefaults(ISettings settings)
         {
-            Assert.AreEqual(30, settings.AttachToIETimeOut, "Unexpected AttachToIETimeOut");
+            Assert.AreEqual(30, settings.AttachToBrowserTimeOut, "Unexpected AttachToBrowserTimeOut");
             Assert.AreEqual(true, settings.AutoCloseDialogs, "Unexpected AutoCloseDialogs");
             Assert.AreEqual("yellow", settings.HighLightColor, "Unexpected HighLightColor");
             Assert.AreEqual(true, settings.HighLightElement, "Unexpected HighLightElement");

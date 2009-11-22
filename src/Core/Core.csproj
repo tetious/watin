@@ -243,6 +243,7 @@
     <Compile Include="Native\JSElementCollectionBase.cs" />
     <Compile Include="Native\JSElementArray.cs" />
     <Compile Include="Native\JSBrowserBase.cs" />
+    <Compile Include="Native\Mozilla\AttachToFireFoxHelper.cs" />
     <Compile Include="Native\Windows\Hwnd.cs" />
     <Compile Include="Native\IHwnd.cs" />
     <Compile Include="Native\INativeBrowser.cs" />

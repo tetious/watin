@@ -75,7 +75,7 @@ namespace WatiN.Core
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
 		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
+		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
 		/// </exception>
 		/// <example>
 		/// The following example searches for an Internet Exlorer instance with "Example"
@@ -105,7 +105,7 @@ namespace WatiN.Core
 		/// <returns>An <see cref="IE"/> instance.</returns>
 		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
 		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
+		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
 		/// </exception>
 		/// <example>
 		/// The following example searches for an Internet Exlorer instance with "Example"
@@ -659,7 +659,7 @@ namespace WatiN.Core
 			var m_Proc = CreateIExploreInNewProcess();
 		    var helper = new AttachToIeHelper();
 
-		    var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.AttachToIETimeOut))
+		    var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.AttachToBrowserTimeOut))
             {
                 SleepTime = TimeSpan.FromMilliseconds(500)
             };
@@ -676,7 +676,7 @@ namespace WatiN.Core
 
             if (ie != null) return ie._ieBrowser; 
 
-			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToIETimeOut);
+			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToBrowserTimeOut);
 		}
 
 	    private static Process CreateIExploreInNewProcess()
@@ -1096,7 +1096,7 @@ namespace WatiN.Core
 		/// <param name="findBy">The url of the html page shown in the dialog</param>
 		public HtmlDialog HtmlDialog(Constraint findBy)
 		{
-			return FindHtmlDialog(findBy, Settings.AttachToIETimeOut);
+			return FindHtmlDialog(findBy, Settings.AttachToBrowserTimeOut);
 		}
 
 		/// <summary>
