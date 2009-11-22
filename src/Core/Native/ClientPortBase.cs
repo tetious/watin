@@ -75,7 +75,7 @@ namespace WatiN.Core.Native
         /// Gets or sets the browser process.
         /// </summary>
         /// <value>The browser process.</value>
-        internal Process Process { get; set; }
+        internal virtual Process Process { get; set; }
 
         /// <summary>
         /// Gets or sets the last response without any cleaning applied to it.

@@ -93,28 +93,6 @@ namespace WatiN.Core
         #region Public instance methods
 
         /// <summary>
-        /// Gets the number of running FireFox processes.
-        /// </summary>
-        /// <value>The number of running FireFox processes.</value>
-        public static int CurrentProcessCount
-        {
-            get
-            {
-                var ffCount = 0;
-
-                foreach (var process in Process.GetProcesses())
-                {
-                    if (process.ProcessName.Equals("firefox", StringComparison.OrdinalIgnoreCase))
-                    {
-                        ffCount++;
-                    }
-                }
-
-                return ffCount;
-            }
-        }
-
-        /// <summary>
         /// Gets the current FireFox process (all instances run under 1 process).
         /// </summary>
         /// <value>The current FireFox process or null if none is found.</value>
@@ -152,7 +130,7 @@ namespace WatiN.Core
             }
         }
 
-        internal static Process CreateProcess(string arguments, bool waitForMainWindow)
+        internal static void CreateProcess(string arguments, bool waitForMainWindow)
         {
             var ffProcess = new Process {StartInfo = {FileName = PathToExe, Arguments = arguments}};
             
@@ -160,33 +138,29 @@ namespace WatiN.Core
             ffProcess.WaitForInputIdle(5000);
             ffProcess.Refresh();
 
-            if (waitForMainWindow)
+            if (!waitForMainWindow) return;
+            
+            var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut))
+                             {
+                                 SleepTime = TimeSpan.FromMilliseconds(200)
+                             };
+
+            var result = action.Try(() =>
+                            {
+                                ffProcess.Refresh();
+                                if (!ffProcess.HasExited && ffProcess.MainWindowHandle != IntPtr.Zero)
+                                {
+                                    Logger.LogAction("Waited for FireFox, main window handle found.");
+                                    return true;
+                                }
+                                return false;
+                            });
+
+            if (!result)
             {
-                var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut))
-                {
-                    SleepTime = TimeSpan.FromMilliseconds(200)
-                };
-
-                var result = action.Try(() =>
-                                            {
-                                                ffProcess.Refresh();
-                                                if (!ffProcess.HasExited && ffProcess.MainWindowHandle != IntPtr.Zero)
-                                                {
-                                                    Logger.LogAction("Waited for FireFox, main window handle found.");
-                                                    return true;
-                                                }
-                                                return false;
-                                            });
-
-                if (!result)
-                {
-                    Debug.WriteLine("Timer elapsed waiting for FireFox to start.");
-                }
+                Debug.WriteLine("Timer elapsed waiting for FireFox to start.");
             }
-
-            return ffProcess;
         }
-
 
         /// <summary>
         /// Initalizes the executable path.

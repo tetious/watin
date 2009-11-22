@@ -6,6 +6,7 @@
 		<title>New Window Test Page</title>
 	</head>
 <body>
-  <a href="openNewWindowTarget.html" target="_blank">Click me.</a>
+  <a href="openNewWindowTarget.html" target="_blank">Click me.</a><p/>
+  <input type="button" id="usejavascriptid" value="Click me to use JavaScript." onclick="javascript:window.open('openNewWindowTarget.html', 'New Target Window', 'top=50,left=75,scrollbars=yes,toolbar=yes,status=yes,navigation=no,height=' + (screen.availHeight * 0.25) + ',width=' + (screen.availWidth * 0.25) + ',resizable=yes');"/>
 <body>
 </html>

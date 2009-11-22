@@ -16,6 +16,7 @@
 
 #endregion Copyright
 
+using System.Threading;
 using System.Web;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -94,10 +95,10 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         [Test]
         public void NewFireFoxWithUriShouldAutoClose()
         {
-            Assert.That(FireFox.CurrentProcessCount, Is.EqualTo(0), "pre-condition: Expected no running firefox instances");
+            Assert.That(FireFox.CurrentProcess, Is.Null, "pre-condition: Expected no running firefox instances");
             using (new FireFox(MainURI)) { }
 
-            Assert.That(FireFox.CurrentProcessCount, Is.EqualTo(0), "Expected no running firefox instances");
+            Assert.That(FireFox.CurrentProcess, Is.Null, "Expected no running firefox instances");
         }
 
         [Test]
@@ -121,6 +122,20 @@ namespace WatiN.Core.UnitTests.FireFoxTests
                 var newWindow = FireFox.AttachToFireFox(Find.ByUrl(NewWindowTargetUri));
                 Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
                 newWindow.Close();
+            }
+        }
+
+        [Test]
+        public void FireFoxCanDisposeAttachedBrowser()
+        {
+            using (var fireFox = new FireFox(NewWindowUri))
+            {
+                fireFox.Buttons[0].Click();
+                using (var newWindow = FireFox.AttachToFireFox(Find.ByUrl(NewWindowTargetUri)))
+                {
+                    Assert.That(newWindow.ContainsText("Welcome"), Is.True, "Expected 'Welcome'");
+                }
+                Assert.That(fireFox.Buttons[0].Exists);
             }
         }
     }

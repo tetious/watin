@@ -184,6 +184,18 @@ namespace WatiN.Core.Native.Mozilla
             }
         }
 
+        internal override System.Diagnostics.Process Process
+        {
+            get
+            {
+                return FireFox.CurrentProcess;
+            }
+            set
+            {
+                // not possible;
+            }
+        }
+
         private void CreateNewFireFoxInstance(string url)
         {
             Logger.LogDebug("Starting a new Firefox instance.");
@@ -191,7 +203,7 @@ namespace WatiN.Core.Native.Mozilla
             CloseExistingFireFoxInstances();
 
             if (string.IsNullOrEmpty(url)) url = "about:blank";
-            Process = FireFox.CreateProcess(url + " -jssh", true);
+            FireFox.CreateProcess(url + " -jssh", true);
 
             if (IsMainWindowVisible) return;
             if (!IsRestoreSessionDialogVisible) return;
@@ -276,36 +288,43 @@ namespace WatiN.Core.Native.Mozilla
                 if (disposing)
                 {
                     // Dispose managed resources.
-                    if (_telnetSocket != null && _telnetSocket.Connected && !Process.HasExited)
+                    if (_telnetSocket != null && _telnetSocket.Connected && (Process == null || !Process.HasExited))
                     {
                         try
                         {
-                            Logger.LogDebug("Closing connection to jssh");
+                            var windowCount = WriteAndReadAsInt("getWindows().length", null);
+                            Logger.LogDebug(string.Format("Closing window. {0} total windows found", windowCount));
                             SendCommand(string.Format("{0}.close();", WindowVariableName));
-                            _telnetSocket.Close();
-                            Process.WaitForExit(5000);
+                            if (windowCount == 1)
+                            {
+                                CloseConnectionAndFireFoxProcess();
+                            }
                         }
                         catch (IOException ex)
                         {
-                            Logger.LogDebug("Error communicating with jssh server to innitiate shut down, message: {0}", ex.Message);
+                            Logger.LogDebug("Error communicating with jssh server to initiate shut down, message: {0}", ex.Message);
                         }
-                    }
-                }
-
-                // Call the appropriate methods to clean up 
-                // unmanaged resources here.
-                if (Process != null)
-                {
-                    if (!Process.HasExited)
-                    {
-                        Logger.LogDebug("Closing FireFox");
-                        Process.Kill();
                     }
                 }
             }
 
             _disposed = true;
             Connected = false;
+        }
+
+        private void CloseConnectionAndFireFoxProcess()
+        {
+            Logger.LogDebug("No further windows remain open. Closing connection to jssh.");
+            _telnetSocket.Close();
+
+            if (Process == null) return;
+            
+            Process.WaitForExit(5000);
+            
+            if (Process == null || Process.HasExited) return;
+            
+            Logger.LogDebug("Killing FireFox process");
+            UtilityClass.TryActionIgnoreException(() => Process.Kill());
         }
 
         /// <summary>
@@ -508,12 +527,12 @@ namespace WatiN.Core.Native.Mozilla
         /// </exception>
         private void CloseExistingFireFoxInstances()
         {
-            if (FireFox.CurrentProcessCount > 0 && !Settings.CloseExistingFireFoxInstances)
+            if (FireFox.CurrentProcess != null && !Settings.CloseExistingFireFoxInstances)
             {
                 throw new FireFoxException("Existing instances of FireFox detected.");
             }
             
-            if (FireFox.CurrentProcessCount > 0)
+            if (FireFox.CurrentProcess != null)
             {
                 FireFox.CurrentProcess.Kill();
             }
