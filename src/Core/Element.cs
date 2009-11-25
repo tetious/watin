@@ -486,7 +486,7 @@ namespace WatiN.Core
         }
 
 		/// <summary>
-		/// Does a keyspress on this element.
+		/// Does a keypress on this element.
 		/// </summary>
         public virtual void KeyPress()
 		{
@@ -494,7 +494,7 @@ namespace WatiN.Core
 		}
 
         /// <summary>
-        /// Does a keyspress on this element and does not wait for the page to finish loading.
+        /// Does a keypress on this element and does not wait for the page to finish loading.
         /// </summary>
         public virtual void KeyPressNoWait()
         {
@@ -502,7 +502,7 @@ namespace WatiN.Core
         }
 
         /// <summary>
-        /// Does a keyspress on this element.
+        /// Does a keypress on this element.
         /// </summary>
         public virtual void KeyPress(char character)
 		{
@@ -510,7 +510,7 @@ namespace WatiN.Core
 		}
 
         /// <summary>
-        /// Does a keyspress on this element and does not wait for the page to finish loading.
+        /// Does a keypress on this element and does not wait for the page to finish loading.
         /// </summary>
         /// <param name="character">The character.</param>
         public virtual void KeyPressNoWait(char character)
