@@ -31,6 +31,8 @@ namespace WatiN.Core.Native.InternetExplorer
 {
     public static class IEUtils
     {
+        private static VariableNameHelper VariableNameHelper = new VariableNameHelper();
+
         [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
 
@@ -81,14 +83,15 @@ namespace WatiN.Core.Native.InternetExplorer
 
             CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
 
-            var id = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
+            var originalId = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
 
-            if (string.IsNullOrEmpty(id))
-            {
-                id = Guid.NewGuid().ToString();
-                element.id = id;
-            }
-            scriptCode.Append("document.getElementById('" + id + "').fireEvent('" + eventName + "', newEvt);");
+            var tempId = Guid.NewGuid().ToString();
+            element.id = tempId;
+
+            var variableName = VariableNameHelper.CreateVariableName();
+            scriptCode.Append(string.Format("var {0} = document.getElementById('{1}');", variableName, tempId));
+            scriptCode.Append(string.Format("{0}.id = '{1}';", variableName, originalId));
+            scriptCode.Append(string.Format("{0}.fireEvent('{1}', newEvt);", variableName, eventName));
 
             return scriptCode;
         }
