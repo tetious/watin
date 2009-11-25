@@ -493,6 +493,7 @@
     </Compile>
     <Compile Include="UtilityClasses\EmptyArray.cs" />
     <Compile Include="UtilityClasses\LazyList.cs" />
+    <Compile Include="UtilityClasses\VariableNameHelper.cs" />
     <Compile Include="WaitForCompleteBase.cs" />
     <Compile Include="FireFox.cs" />
     <Compile Include="Browser.cs" />

@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using WatiN.Core.UtilityClasses;
+
 namespace WatiN.Core.Native
 {
     using System;
@@ -30,7 +32,7 @@ namespace WatiN.Core.Native
         /// <summary>
         /// Used by CreateElementVariableName
         /// </summary>
-        private static long elementCounter;
+        private static VariableNameHelper VariableNameHelper = new VariableNameHelper();
 
         /// <summary>
         /// Gets the last response recieved from the jssh server
@@ -221,13 +223,7 @@ namespace WatiN.Core.Native
         /// <returns>A unique variable.</returns>
         public string CreateVariableName()
         {
-            if (elementCounter == long.MaxValue)
-            {
-                elementCounter = 0;
-            }
-
-            elementCounter++;
-            return string.Format("{0}.watin{1}", this.DocumentVariableName, elementCounter);
+            return string.Format("{0}.{1}", DocumentVariableName, VariableNameHelper.CreateVariableName());
         }
 
         /// <summary>
