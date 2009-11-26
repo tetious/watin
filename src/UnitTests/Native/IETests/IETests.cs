@@ -306,7 +306,7 @@ namespace WatiN.Core.UnitTests.IETests
         }
 
         [Test]
-        public void Cookies()
+        public void Should_set_and_get_cookies()
         {
             using (var ie = new IE())
             {
@@ -328,19 +328,37 @@ namespace WatiN.Core.UnitTests.IETests
                 Assert.AreEqual(1, collection.Count);
                 Assert.AreEqual(collection[0].Name, "test-cookie");
                 Assert.AreEqual(collection[0].Value, "def");
+            }
+        }
+
+        [Test]
+        public void Should_clear_cookies()
+        {
+            using (var ie = new IE())
+            {
+                // Clear all cookies.
+                ie.ClearCookies();
+
+                // Ensure our test cookies don't exist from a previous run.
+                Assert.IsNull(ie.GetCookie("http://1.watin.com/", "test-cookie"), "Expected no cookies for 1.watin.com");
+                Assert.IsNull(ie.GetCookie("http://2.watin.com/", "test-cookie"), "Expected no cookies for 2.watin.com");
+
+                // Create cookies for a pair of domains.
+                ie.SetCookie("http://1.watin.com/", "test-cookie=abc; expires=Wed, 01-Jan-2020 00:00:00 GMT");
+                ie.SetCookie("http://2.watin.com/", "test-cookie=def; expires=Wed, 01-Jan-2020 00:00:00 GMT");
 
                 // Clear cookies under one subdomain.
                 ie.ClearCookies("http://1.watin.com/");
 
                 // Ensure just the cookie of the first subdomain was deleted.
-                Assert.IsNull(ie.GetCookie("http://1.watin.com/", "test-cookie"));
-                Assert.AreEqual("test-cookie=def", ie.GetCookie("http://2.watin.com/", "test-cookie"));
+                Assert.IsNull(ie.GetCookie("http://1.watin.com/", "test-cookie"), "Expected no cookies for 1.watin.com after clear");
+                Assert.AreEqual("test-cookie=def", ie.GetCookie("http://2.watin.com/", "test-cookie"), "Expected cookie for 2.watin.com");
 
                 // Clear cookies under master domain.
                 ie.ClearCookies("http://watin.com/");
 
                 // Ensure the second subdomain's cookie was deleted this time.
-                Assert.IsNull(ie.GetCookie("http://2.watin.com/", "test-cookie"));
+                Assert.IsNull(ie.GetCookie("http://2.watin.com/", "test-cookie"), "Expected no cookies for 2.watin.com after ClearCookies");
             }
         }
 

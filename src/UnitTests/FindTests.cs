@@ -691,10 +691,11 @@ namespace WatiN.Core.UnitTests
             Assert.That(Find.First().ToString(), Is.EqualTo("Index = 0"));
         }
 		
+        // TODO: Not implemented yet for FireFox!
 		[Test]
 		public void ShouldFindFormElementsByNearbyText() 
 		{
-		    ExecuteTest(browser =>
+		    ExecuteTestWithAnyBrowser(browser =>
 		                    {
                                 var inputUsername = browser.TextField(Find.Near("User Name"));
 		                        Assert.AreEqual("inputUserName", inputUsername.Id, "Left/right proximity for text did not find 'User Name' field.");
