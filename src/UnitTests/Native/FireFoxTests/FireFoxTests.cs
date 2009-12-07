@@ -106,7 +106,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Links[0].Click();
-                var newWindow = FireFox.AttachToFireFox(Find.ByTitle("New Window Target Page"));
+                var newWindow = FireFox.AttachTo<FireFox>(Find.ByTitle("New Window Target Page"));
                 Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
                 newWindow.Close();
             }
@@ -118,7 +118,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Links[0].Click();
-                var newWindow = FireFox.AttachToFireFox(Find.ByUrl(NewWindowTargetUri));
+                var newWindow = FireFox.AttachTo<FireFox>(Find.ByUrl(NewWindowTargetUri));
                 Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
                 newWindow.Close();
             }
@@ -130,7 +130,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Buttons[0].Click();
-                using (var newWindow = FireFox.AttachToFireFox(Find.ByUrl(NewWindowTargetUri)))
+                using (var newWindow = FireFox.AttachTo<FireFox>(Find.ByUrl(NewWindowTargetUri)))
                 {
                     Assert.That(newWindow.ContainsText("Welcome"), Is.True, "Expected 'Welcome'");
                 }

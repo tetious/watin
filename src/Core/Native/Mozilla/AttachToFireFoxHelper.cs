@@ -49,7 +49,7 @@ namespace WatiN.Core.Native.Mozilla
                 return fireFox;
             }
 
-            throw new FireFoxNotFoundException(findBy.ToString(), timeout);
+            throw new BrowserNotFoundException("FireFox", findBy.ToString(), timeout);
         }
 
         public bool Exists(Constraint constraint)
