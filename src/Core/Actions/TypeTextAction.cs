@@ -18,7 +18,6 @@
 
 using System;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Actions

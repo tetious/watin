@@ -85,11 +85,10 @@ namespace WatiN.Core.Native.InternetExplorer
 
             var originalId = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
 
-            var tempId = Guid.NewGuid().ToString();
-            element.id = tempId;
-
             var variableName = VariableNameHelper.CreateVariableName();
-            scriptCode.Append(string.Format("var {0} = document.getElementById('{1}');", variableName, tempId));
+            element.id = variableName;
+
+            scriptCode.Append(string.Format("var {0} = document.getElementById('{0}');", variableName));
             scriptCode.Append(string.Format("{0}.id = '{1}';", variableName, originalId));
             scriptCode.Append(string.Format("{0}.fireEvent('{1}', newEvt);", variableName, eventName));
 

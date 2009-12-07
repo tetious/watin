@@ -25,6 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UnitTests.TestUtils;
@@ -1037,14 +1038,9 @@ namespace WatiN.Core.UnitTests
 
                   // Invoke with delegate method
                   var table3 = browser.Table("table1");
-                  table3.WaitUntil(IsEnabled);
+                  table3.WaitUntil(table4 => table4.Enabled);
                   
               });
-        }
-
-        private static bool IsEnabled(Table table)
-        {
-            return table.Enabled;
         }
 
 	    [Test]
@@ -1236,6 +1232,25 @@ namespace WatiN.Core.UnitTests
                 Assert.That(link.Text, Is.EqualTo("Escaped url test"));
             });
         }
+
+	    [Test]
+	    public void Should_be_disabled()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+	                            var button = browser.Button("disabledid");
+
+	                            // WHEN
+	                            Logger.LogWriter = new ConsoleLogWriter();
+	                            var enabled = button.Enabled;
+
+	                            // THEN
+	                            Assert.That(enabled, Is.False);
+	                        });
+
+	    }
+
 
 	}
 }
