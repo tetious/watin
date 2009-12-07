@@ -65,141 +65,6 @@ namespace WatiN.Core
 		private bool isDisposed;
 	    private IEBrowser _ieBrowser;
 
-	    /// <summary>
-		/// Attach to an existing Internet Explorer. 
-		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
-		/// The attached Internet Explorer will be closed after destroying the IE instance.
-		/// </summary>
-		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
-		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <returns>An <see cref="IE"/> instance.</returns>
-		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
-		/// </exception>
-		/// <example>
-		/// The following example searches for an Internet Exlorer instance with "Example"
-		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
-		/// can be used to test the Example page.
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-		/// </code>
-		/// A partial match should also work
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-		/// </code>
-		/// </example>
-		public static IE AttachToIENoWait(Constraint findBy)
-		{
-	        return Browser.AttachToNoWait<IE>(findBy);
-		}
-		
-		/// <summary>
-		/// Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
-		/// The attached Internet Explorer will be closed after destroying the IE instance.
-		/// </summary>
-		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
-		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <returns>An <see cref="IE"/> instance.</returns>
-		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-		/// IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-		/// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
-		/// </exception>
-		/// <example>
-		/// The following example searches for an Internet Exlorer instance with "Example"
-		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
-		/// can be used to test the Example page.
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-		/// </code>
-		/// A partial match should also work
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-		/// </code>
-		/// </example>
-		public static IE AttachToIE(Constraint findBy)
-		{
-		    return AttachTo<IE>(findBy);
-		}
-
-		/// <summary>
-		/// Attach to an existing Internet Explorer. 
-		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
-		/// The attached Internet Explorer will be closed after destroying the IE instance.
-		/// </summary>
-		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
-		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <param name="timeout">The number of seconds to wait before timing out</param>
-		/// <returns>An <see cref="IE"/> instance.</returns>
-		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-		/// IENotFoundException will be thrown if an Internet Explorer window with the given 
-		/// <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-		/// </exception>
-		/// <example>
-		/// The following example searches for an Internet Exlorer instance with "Example"
-		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-		/// It will try to find an Internet Exlorer instance for 60 seconds maxs.
-		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
-		/// can be used to test the Example page.
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Example"), 60);
-		/// </code>
-		/// A partial match should also work
-		/// <code>
-		/// IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
-		/// </code>
-		/// </example>
-		public static IE AttachToIE(Constraint findBy, int timeout)
-		{
-		    return AttachTo<IE>(findBy, timeout);
-		}
-
-	    /// <summary>
-		/// Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-		/// The first instance that matches the given <paramref name="findBy"/> will be returned.
-		/// The attached Internet Explorer will be closed after destroying the IE instance.
-		/// </summary>
-		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
-		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <param name="timeout">The number of seconds to wait before timing out</param>
-		/// <returns>An <see cref="IE"/> instance.</returns>
-		/// <exception cref="WatiN.Core.Exceptions.IENotFoundException" >
-		/// IENotFoundException will be thrown if an Internet Explorer window with the given 
-		/// <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-		/// </exception>
-		/// <example>
-		/// The following example searches for an Internet Exlorer instance with "Example"
-		/// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-		/// It will try to find an Internet Exlorer instance for 60 seconds maxs.
-		/// When found, ieExample will hold a pointer to this Internet Explorer instance and
-		/// can be used to test the Example page.
-		/// <code>
-		/// IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Example"), 60);
-		/// </code>
-		/// A partial match should also work
-		/// <code>
-		/// IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Exa"), 60);
-		/// </code>
-		/// </example>
-		public static IE AttachToIENoWait(Constraint findBy, int timeout)
-		{
-			return AttachToNoWait<IE>(findBy, timeout);
-		}
-
-		/// <summary>
-		/// Does the specified Internet Explorer exist.
-		/// </summary>
-		/// <param name="findBy">The <see cref="Constraint"/> of the IE window to find. 
-		/// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-		/// <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
-		public static bool Exists(Constraint findBy)
-		{
-		    return Exists<IE>(findBy);
-		}
-
 		/// <summary>
 		/// Creates a collection of new IE instances associated with open Internet Explorer windows.
 		/// </summary>
@@ -651,7 +516,7 @@ namespace WatiN.Core
 
             FinishInitialization(uri);
             
-            WaitForComplete();
+//            WaitForComplete();
 		}
 
 		private static IEBrowser CreateIEPartiallyInitializedInNewProcess()
@@ -676,7 +541,7 @@ namespace WatiN.Core
 
             if (ie != null) return ie._ieBrowser; 
 
-			throw new IENotFoundException("Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToBrowserTimeOut);
+			throw new BrowserNotFoundException("IE", "Timeout while waiting to attach to newly created instance of IE.", Settings.AttachToBrowserTimeOut);
 		}
 
 	    private static Process CreateIExploreInNewProcess()

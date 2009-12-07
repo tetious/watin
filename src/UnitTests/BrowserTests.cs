@@ -303,6 +303,26 @@ namespace WatiN.Core.UnitTests
                     );
         }
 
+        [Test]
+        public void Should_attach_to_browser()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(NewWindowUri);
+                                browser.Link(Find.First()).Click();
+
+                                // WHEN
+                                var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page"));
+                                
+                                // THEN
+                                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
+                                
+                                newWindow.Close();
+                            });
+        }
+
+
 
         public override Uri TestPageUri
         {

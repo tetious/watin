@@ -274,25 +274,5 @@ namespace WatiN.Core
             _ffBrowser = new FFBrowser(clientPort);
             WaitForComplete();
         }
-
-        public static FireFox AttachToFireFox(Constraint findBy)
-        {
-            return AttachTo<FireFox>(findBy);
-        }
-
-        public static FireFox AttachToFireFox(Constraint findBy, int timeout)
-        {
-            return AttachTo<FireFox>(findBy, timeout);
-        }
-
-        public static FireFox AttachToFireFoxNoWait(Constraint findBy)
-        {
-            return AttachToNoWait<FireFox>(findBy);
-        }
-
-        public static FireFox AttachToFireFoxNoWait(Constraint findBy, int timeout)
-        {
-            return AttachToNoWait<FireFox>(findBy, timeout);
-        }
     }
 }

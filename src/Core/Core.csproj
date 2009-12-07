@@ -216,7 +216,6 @@
     <Compile Include="DialogHandlers\RefreshWarningDialogHandler.cs" />
     <Compile Include="DialogHandlers\WaitUntilHandledDialogHandler.cs" />
     <Compile Include="Interfaces\IAttachTo.cs" />
-    <Compile Include="Exceptions\FireFoxNotFoundException.cs" />
     <Compile Include="IdHinter.cs" />
     <Compile Include="Native\Chrome\ChromeElementCollection.cs" />
     <Compile Include="Native\EmptyElementCollection.cs" />
@@ -449,7 +448,7 @@
     <Compile Include="Exceptions\HtmlDialogNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\IENotFoundException.cs">
+    <Compile Include="Exceptions\BrowserNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\InvalidAttributeException.cs">

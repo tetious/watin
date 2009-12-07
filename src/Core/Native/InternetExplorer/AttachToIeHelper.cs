@@ -61,7 +61,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 return FinishInitializationAndWaitForComplete(ie, timer, waitForComplete);
             }
 
-            throw new IENotFoundException(findBy.ToString(), timeout);
+            throw new BrowserNotFoundException("IE", findBy.ToString(), timeout);
         }
 
         private Browser FinishInitializationAndWaitForComplete(IE ie, SimpleTimer timer, bool waitForComplete)

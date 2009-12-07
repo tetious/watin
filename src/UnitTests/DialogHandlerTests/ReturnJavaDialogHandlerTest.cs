@@ -46,7 +46,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 returnDialogHandler.OKButton.Click();
 
                 Thread.Sleep(2000);
-                Assert.IsFalse(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
+                Assert.IsFalse(Browser.Exists<IE>(new AttributeConstraint("hwnd", hWnd.ToString())));
             }
         }
 
@@ -69,7 +69,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 returnDialogHandler.CancelButton.Click();
 
                 Thread.Sleep(2000);
-                Assert.IsTrue(IE.Exists(new AttributeConstraint("hwnd", hWnd.ToString())));
+                Assert.IsTrue(Browser.Exists<IE>(new AttributeConstraint("hwnd", hWnd.ToString())));
 
                 // finally close the ie instance
                 internetExplorer.Quit();

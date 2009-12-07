@@ -21,15 +21,15 @@ using System.Runtime.Serialization;
 
 namespace WatiN.Core.Exceptions
 {
-    /// <summary>
-    /// Thrown if the searched for Firefox can't be found.
-    /// </summary>
+	/// <summary>
+	/// Thrown if the searched for Browser type can't be found.
+	/// </summary>
     [Serializable]
-    public class FireFoxNotFoundException : WatiNException
-    {
-        public FireFoxNotFoundException(string constraint, int waitTimeInSeconds) :
-            base("Could not find a Firefox window matching constraint: " + constraint + ". Search expired after '" + waitTimeInSeconds.ToString() + "' seconds.") { }
+	public class BrowserNotFoundException : WatiNException
+	{
+		public BrowserNotFoundException(string browserType, string constraintDescription, int waitTimeInSeconds) :
+			base("Could not find an " + browserType + " window matching constraint: " + constraintDescription + ". Search expired after '" + waitTimeInSeconds + "' seconds.") {}
 
-        public FireFoxNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-    }
+        public BrowserNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+	}
 }

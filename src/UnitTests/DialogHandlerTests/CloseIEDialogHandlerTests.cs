@@ -44,7 +44,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 }
 
                 // THEN
-                Assert.That(IE.Exists(Find.By("hwnd", hwnd)), Is.False, "Expected no IE");
+                Assert.That(Browser.Exists<IE>(Find.By("hwnd", hwnd)), Is.False, "Expected no IE");
             }
         }
 
@@ -64,7 +64,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 }
 
                 // THEN
-                Assert.That(IE.Exists(Find.By("hwnd", hwnd)), Is.True, "Expected IE");
+                Assert.That(Browser.Exists<IE>(Find.By("hwnd", hwnd)), Is.True, "Expected IE");
             }
         }
     }

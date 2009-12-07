@@ -254,7 +254,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             Assert.IsTrue(IsIEWindowOpen("main"), "Internet Explorer should NOT be closed by IE.Dispose");
 
-            IE.AttachToIE(Find.ByTitle("main"), 3).Close();
+            Browser.AttachTo<IE>(Find.ByTitle("main"), 3).Close();
         }
 
         [Test]
@@ -397,15 +397,15 @@ namespace WatiN.Core.UnitTests.IETests
         public void IEExistsByHWND()
         {
             var hwnd = "0";
-            Assert.IsFalse(IE.Exists(Find.By("hwnd", hwnd)), "hwnd = 0 should not be found");
+            Assert.IsFalse(Browser.Exists<IE>(Find.By("hwnd", hwnd)), "hwnd = 0 should not be found");
 
             using (var ie = new IE(MainURI))
             {
                 hwnd = ie.hWnd.ToString();
-                Assert.IsTrue(IE.Exists(Find.By("hwnd", hwnd)), "hwnd of ie instance should be found");
+                Assert.IsTrue(Browser.Exists<IE>(Find.By("hwnd", hwnd)), "hwnd of ie instance should be found");
             }
 
-            Assert.IsFalse(IE.Exists(Find.By("hwnd", hwnd)), "hwnd of closed ie instance should not be found");
+            Assert.IsFalse(Browser.Exists<IE>(Find.By("hwnd", hwnd)), "hwnd of closed ie instance should not be found");
         }
 
         [Test]
@@ -422,14 +422,14 @@ namespace WatiN.Core.UnitTests.IETests
 
         private static void IEExistsAsserts(Constraint findByUrl)
         {
-            Assert.IsFalse(IE.Exists(findByUrl));
+            Assert.IsFalse(Browser.Exists<IE>(findByUrl));
 
             using (new IE(MainURI))
             {
-                Assert.IsTrue(IE.Exists(findByUrl));
+                Assert.IsTrue(Browser.Exists<IE>(findByUrl));
             }
 
-            Assert.IsFalse(IE.Exists(findByUrl));
+            Assert.IsFalse(Browser.Exists<IE>(findByUrl));
         }
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace WatiN.Core.UnitTests.IETests
             using (new IE(MainURI))
             {
                 var startTime = DateTime.Now;
-                using (IE.AttachToIE(Find.ByUrl(MainURI), 0))
+                using (Browser.AttachTo<IE>(Find.ByUrl(MainURI), 0))
                 {
                     // Should return (within 1 second).
                     Assert.Greater(1, DateTime.Now.Subtract(startTime).TotalSeconds);
@@ -454,7 +454,7 @@ namespace WatiN.Core.UnitTests.IETests
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void AttachToIEWithNegativeTimeoutNotAllowed()
         {
-            IE.AttachToIE(Find.ByTitle("Bogus title"), -1);
+            Browser.AttachTo<IE>(Find.ByTitle("Bogus title"), -1);
         }
 
         [Test]
@@ -464,7 +464,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (new IE(MainURI))
             {
-                using (var ieMainByTitle = IE.AttachToIE(Find.ByTitle("Ai")))
+                using (var ieMainByTitle = IE.AttachTo<IE>(Find.ByTitle("Ai")))
                 {
                     Assert.AreEqual(MainURI, ieMainByTitle.Uri);
                 }
@@ -478,7 +478,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (new IE(MainURI))
             {
-                using (var ieMainByUri = IE.AttachToIE(Find.ByUrl(MainURI)))
+                using (var ieMainByUri = Browser.AttachTo<IE>(Find.ByUrl(MainURI)))
                 {
                     Assert.AreEqual(MainURI, ieMainByUri.Uri);
                 }
@@ -492,7 +492,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             using (new IE(MainURI))
             {
-                using (var ie = IE.AttachToIE(Find.ByTitle("main")))
+                using (var ie = Browser.AttachTo<IE>(Find.ByTitle("main")))
                 {
                     Assert.AreEqual(MainURI, new Uri(ie.Url));
                 }
@@ -513,13 +513,13 @@ namespace WatiN.Core.UnitTests.IETests
             {
                 // Time out after timeoutTime seconds
                 startTime = DateTime.Now;
-                using (IE.AttachToIE(Find.ByTitle(ieTitle), timeoutTime)) {}
+                using (Browser.AttachTo<IE>(Find.ByTitle(ieTitle), timeoutTime)) {}
 
                 Assert.Fail(string.Format("Internet Explorer with title '{0}' should not be found", ieTitle));
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof (IENotFoundException), e);
+                Assert.IsInstanceOfType(typeof (BrowserNotFoundException), e);
                 // add 1 second to give it some slack.
                 Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
                 Console.WriteLine(e.Message);
@@ -600,7 +600,7 @@ namespace WatiN.Core.UnitTests.IETests
             // Give windows some time to do work before checking
             Thread.Sleep(1000);
 
-            return IE.Exists(Find.ByTitle(partialTitle));
+            return Browser.Exists<IE>(Find.ByTitle(partialTitle));
         }
 
         [Test]
@@ -655,6 +655,23 @@ namespace WatiN.Core.UnitTests.IETests
                     StringAssert.Contains("undefined",actual,"session cookie used");
                 }
             }
+        }
+
+        [Test, Ignore("Currently attaching to IE which shows PDF in Acrobat Reader is not supported")]
+        public void Should_find_browser_with_opened_pdf_document()
+        {
+            // GIVEN
+            using (var ie = new IE(@"C:\Development\watin\trunk\src\UnitTests\html\WatiN.pdf"))
+            {
+//                var ie1 = IE.AttachToIENoWait(Find.ByTitle("watin.pdf"));
+                Assert.That(Browser.Exists<IE>(Find.Any));
+            }
+
+            // WHEN
+
+
+            // THEN
+
         }
 
     }

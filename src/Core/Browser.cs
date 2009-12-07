@@ -357,45 +357,292 @@ namespace WatiN.Core
             return value;
         }
 
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns>An <see cref="Browser"/> instance of the specified type T.</returns>
+        /// <exception cref="WatiN.Core.Exceptions.BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+        /// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+        /// </code>
+        /// </example>
         public static T AttachTo<T>(Constraint constraint) where T : Browser
         {
-            return AttachTo<T>(constraint, Settings.AttachToBrowserTimeOut);
+            return (T)AttachTo(typeof(T), constraint);
         }
 
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="browserType">The WatiN browser type to attach to.</param>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns>An <see cref="Browser"/> instance of the specified type T.</returns>
+        /// <exception cref="WatiN.Core.Exceptions.BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+        /// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// When found, browser will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+        /// </code>
+        /// </example>
+        public static Browser AttachTo(Type browserType, Constraint constraint)
+        {
+            return AttachTo(browserType, constraint, Settings.AttachToBrowserTimeOut);
+        }
+
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <param name="timeout">The number of seconds to wait before timing out</param>
+        /// <returns>A <see cref="Browser"/> instance of the specified type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given 
+        /// <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+        /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"), 60);
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+        /// </code>
+        /// </example>
         public static T AttachTo<T>(Constraint constraint, int timeout) where T : Browser
         {
-            var helper = CreateHelper<T>();
-            return (T) helper.Find(constraint, timeout, true);
+            return (T)AttachTo(typeof(T), constraint, timeout);
         }
 
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <param name="timeout">The number of seconds to wait before timing out</param>
+        /// <param name="browserType">The WatiN browser type to attach to.</param>
+        /// <returns>A <see cref="Browser"/> instance of the specified type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given 
+        /// <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+        /// When found, browser will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"), 60);
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"), 60);
+        /// </code>
+        /// </example>
+        public static Browser AttachTo(Type browserType, Constraint constraint, int timeout)
+        {
+            var helper = GetAttachToHelper(browserType);
+            return helper.Find(constraint, timeout, true);
+        }
+
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns>An <see cref="Browser"/> instance of the given type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+        /// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+        /// </code>
+        /// </example>
         public static T AttachToNoWait<T>(Constraint constraint) where T : Browser
         {
-            return AttachToNoWait<T>(constraint, Settings.AttachToBrowserTimeOut);
+            return (T)AttachToNoWait(typeof(T), constraint);
         }
 
+        /// <summary>
+        /// Attach to an existing browser instance. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="browserType">The WatiN browser type to attach to.</param>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns>An <see cref="Browser"/> instance of the given type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+        /// To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// When found, browser will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+        /// </code>
+        /// </example>
+        public static Browser AttachToNoWait(Type browserType, Constraint constraint)
+        {
+            return AttachToNoWait(browserType, constraint, Settings.AttachToBrowserTimeOut);
+        }
+
+        /// <summary>
+        /// Attach to an existing browser but don't wait until the whole page is loaded. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <param name="timeout">The number of seconds to wait before timing out</param>
+        /// <returns>An <see cref="Browser"/> instance of the specified type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given 
+        /// <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+        /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Example"), 60);
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+        /// </code>
+        /// </example>
         public static T AttachToNoWait<T>(Constraint constraint, int timeout) where T : Browser
         {
-            var helper = CreateHelper<T>();
-            return (T) helper.Find(constraint, timeout, false);
+            return (T)AttachToNoWait(typeof(T), constraint, timeout);
         }
 
+        /// <summary>
+        /// Attach to an existing browser but don't wait until the whole page is loaded. 
+        /// The first instance that matches the given <paramref name="constraint"/> will be returned.
+        /// </summary>
+        /// <param name="browserType">The WatiN browser type to attach to.</param>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <param name="timeout">The number of seconds to wait before timing out</param>
+        /// <returns>An <see cref="Browser"/> instance of the specified type.</returns>
+        /// <exception cref="BrowserNotFoundException" >
+        /// BrowserNotFoundException will be thrown if a browser window with the given 
+        /// <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+        /// </exception>
+        /// <example>
+        /// The following example searches for an Internet Exlorer instance with "Example"
+        /// in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+        /// It will try to find an Internet Exlorer instance for 60 seconds maxs.
+        /// When found, ieExample will hold a pointer to this Internet Explorer instance and
+        /// can be used to test the Example page.
+        /// <code>
+        /// var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Example"), 60);
+        /// </code>
+        /// A partial match should also work
+        /// <code>
+        /// var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Exa"), 60);
+        /// </code>
+        /// </example>
+        public static Browser AttachToNoWait(Type browserType, Constraint constraint, int timeout)
+        {
+            var helper = GetAttachToHelper(browserType);
+            return helper.Find(constraint, timeout, false);
+        }
+
+        /// <summary>
+        /// Does the specified browser type exist.
+        /// </summary>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
         public static bool Exists<T>(Constraint constraint) where T : Browser
         {
-            var helper = CreateHelper<T>();
+            return Exists(typeof(T), constraint);
+        }
+
+        /// <summary>
+        /// Does the specified browser type exist.
+        /// </summary>
+        /// <param name="browserType">The WatiN browser type to attach to.</param>
+        /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
+        /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+        /// <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        public static bool Exists(Type browserType, Constraint constraint)
+        {
+            var helper = GetAttachToHelper(browserType);
             return helper.Exists(constraint);
         }
 
-        private static IAttachTo CreateHelper<T>() where T : Browser
+        private static IAttachTo GetAttachToHelper(Type browserType)
         {
-            if (!AttachToHelpers.ContainsKey(typeof(T))) throw new WatiNException("No AttachToHelper registered for type " + typeof(T));
-            return AttachToHelpers[typeof (T)];
+            if (!AttachToHelpers.ContainsKey(browserType)) throw new WatiNException("No AttachToHelper registered for type " + browserType);
+            return AttachToHelpers[browserType];
         }
 
+        /// <summary>
+        /// Register a specific helper to attacht to .
+        /// </summary>
+        /// <param name="browserType">Type of the browser.</param>
+        /// <param name="attachToHelper">The attach to helper.</param>
         public static void RegisterAttachToHelper(Type browserType, IAttachTo attachToHelper)
         {
+            if (!browserType.IsSubclassOf(typeof(Browser))) throw new ArgumentException("Not a subclass of Browser", "browserType"); 
+            
             AttachToHelpers.Add(browserType, attachToHelper);
         }
-
-
     }
 }
