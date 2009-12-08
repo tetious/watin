@@ -33,6 +33,9 @@ namespace WatiN.Core
 {
     public class FireFox : Browser 
     {
+        public static string IpAdress = FireFoxClientPort.LOCAL_IP_ADRESS;
+        public static int Port = FireFoxClientPort.DEFAULT_PORT;
+
         private FFBrowser _ffBrowser;
 
         #region Public constructors / destructor
@@ -52,7 +55,7 @@ namespace WatiN.Core
         /// Initializes a new instance of the <see cref="FireFox"/> class.
         /// </summary>
         /// <param name="uri">The url to go to</param>
-        public FireFox(Uri uri)
+        public FireFox(Uri uri) 
         {
             CreateFireFoxInstance(uri.AbsoluteUri);
         }
@@ -269,10 +272,15 @@ namespace WatiN.Core
 
             UtilityClass.MoveMousePoinerToTopLeft(Settings.AutoMoveMousePointerToTopLeft);
 
-            var clientPort = new FireFoxClientPort();
+            var clientPort = GetClientPort();
             clientPort.Connect(url);
             _ffBrowser = new FFBrowser(clientPort);
             WaitForComplete();
+        }
+
+        internal static FireFoxClientPort GetClientPort()
+        {
+            return new FireFoxClientPort(IpAdress, Port);
         }
     }
 }

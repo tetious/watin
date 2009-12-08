@@ -34,6 +34,12 @@ namespace WatiN.Core.Native.Mozilla
     /// </summary>
     public class FireFoxClientPort : ClientPortBase
     {
+        public const string LOCAL_IP_ADRESS = "127.0.0.1";
+        public static int DEFAULT_PORT = 9997;
+
+        public string IpAdress { get; set; }
+        public int Port { get; set; }
+
         /// <summary>
         /// Name of the javascript variable that references the DOM:window object.
         /// </summary>
@@ -51,6 +57,12 @@ namespace WatiN.Core.Native.Mozilla
 
         private bool _emulateActiveElement;
         private bool _emulateActiveElementChecked;
+
+        public FireFoxClientPort(string ipAdress, int port)
+        {
+            IpAdress = ipAdress;
+            Port = port;
+        }
 
         /// <summary>
         /// Finalizes an instance of the <see cref="FireFoxClientPort"/> class. 
@@ -174,7 +186,7 @@ namespace WatiN.Core.Native.Mozilla
 
             try
             {
-                _telnetSocket.Connect(IPAddress.Parse("127.0.0.1"), 9997);
+                _telnetSocket.Connect(IpAdress, Port);
                 Connected = true;
             }
             catch (SocketException sockException)

@@ -11,7 +11,7 @@ namespace WatiN.Core.Native.Mozilla
     {
         private FireFox FindFireFox(Constraint findBy)
         {
-            var clientPort = new FireFoxClientPort();
+            var clientPort = FireFox.GetClientPort();
             clientPort.ConnectToExisting();
             
             var ffBrowser = new FFBrowser(clientPort);
