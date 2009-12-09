@@ -68,20 +68,6 @@ namespace WatiN.Core.UtilityClasses
             clickButton.Join(500);
         }
 
-        public static string StringArrayToString(string[] inputtypes, string seperator)
-        {
-            var inputtypesString = "";
-            if (inputtypes.Length > 0)
-            {
-                foreach (var inputtype in inputtypes)
-                {
-                    inputtypesString += inputtype + seperator;
-                }
-                inputtypesString.Remove(inputtypesString.Length - seperator.Length, 1);
-            }
-            return inputtypesString;
-        }
-
         public static string EscapeSendKeysCharacters(string value) 
         {
             const string sendKeysCharactersToBeEscaped = "~%^+{}[]()";
@@ -161,7 +147,7 @@ namespace WatiN.Core.UtilityClasses
 
         public static T TryFuncFailOver<T>(DoFunc<T> func, int numberOfRetries, int sleepTime)
         {
-            Exception LastException;
+            Exception lastException;
             do
             {
                 try
@@ -171,14 +157,14 @@ namespace WatiN.Core.UtilityClasses
                 }
                 catch (Exception e)
                 {
-                    LastException = e;
+                    lastException = e;
                 }
 
                 numberOfRetries -= 1;
                 Thread.Sleep(sleepTime);
             } while (numberOfRetries!=0);
 
-            throw LastException;
+            throw lastException;
         }
 
         /// <summary>

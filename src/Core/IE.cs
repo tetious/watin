@@ -20,7 +20,6 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Win32;
-using mshtml;
 using SHDocVw;
 using WatiN.Core.Constraints;
 using WatiN.Core.DialogHandlers;

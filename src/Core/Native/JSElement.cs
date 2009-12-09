@@ -463,6 +463,12 @@ namespace WatiN.Core.Native
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
+        public string GetJavaScriptElementReference()
+        {
+            return ElementReference;
+        }
+
         public override bool Equals(object obj)
         {
             var jsElement = obj as JSElement;

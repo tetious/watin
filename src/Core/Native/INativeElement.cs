@@ -158,5 +158,11 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <returns>The element bounds in screen coordinates</returns>
         Rectangle GetElementBounds();
+
+        /// <summary>
+        /// Gets the java script element reference to this element.
+        /// </summary>
+        /// <returns></returns>
+        string GetJavaScriptElementReference();
     }
 }

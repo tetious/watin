@@ -31,10 +31,20 @@ namespace WatiN.Core.Native.InternetExplorer
 {
     public static class IEUtils
     {
-        private static VariableNameHelper VariableNameHelper = new VariableNameHelper();
+        public static readonly VariableNameHelper IEVariableNameHelper = new VariableNameHelper();
 
         [DllImport("oleacc", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         public static extern Int32 ObjectFromLresult(Int32 lResult, ref Guid riid, Int32 wParam, ref IHTMLDocument2 ppvObject);
+
+        /// <summary>
+        /// Runs the javascript code in IE.
+        /// </summary>
+        /// <param name="scriptCode">The javascript code.</param>
+        /// <param name="window">The parent window of the document.</param>
+        public static void RunScript(StringBuilder scriptCode, IHTMLWindow2 window)
+        {
+            RunScript(scriptCode.ToString(), window);
+        }
 
         /// <summary>
         /// Runs the javascript code in IE.
@@ -85,7 +95,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             var originalId = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
 
-            var variableName = VariableNameHelper.CreateVariableName();
+            var variableName = IEVariableNameHelper.CreateVariableName();
             element.id = variableName;
 
             scriptCode.Append(string.Format("var {0} = document.getElementById('{0}');", variableName));
@@ -124,7 +134,7 @@ namespace WatiN.Core.Native.InternetExplorer
             try
             {
                 var window = ((IHTMLDocument2)element.document).parentWindow;
-                RunScript(scriptCode.ToString(), window);
+                RunScript(scriptCode, window);
             }
             catch (RunScriptException)
             {

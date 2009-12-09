@@ -163,6 +163,16 @@ namespace WatiN.Core
             set { SetAttributeValue("id", value); }
 		}
 
+
+        /// <summary>
+        /// Gets the javascript element reference for this <see cref="Element"/>.
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetJavascriptElementReference()
+        {
+            return NativeElement.GetJavaScriptElementReference();
+        }
+
         /// <summary>
         /// Gets (or sets) the name of this element as specified in the HTML.
         /// </summary>

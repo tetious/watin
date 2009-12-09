@@ -14,7 +14,7 @@ namespace WatiN.Controls.JQuery.UI
         public void Should_set_date_in_date_field()
         {
             // GIVEN
-            using (var browser = new FireFox("http://jqueryui.com/demos/datepicker/"))
+            using (var browser = new IE("http://jqueryui.com/demos/datepicker/"))
             {
                 var datePicker = browser.Control<DatePicker>("datepicker");
                 
@@ -84,7 +84,10 @@ namespace WatiN.Controls.JQuery.UI
 
         private string ElementReference
         {
-            get { return string.Format("window.$('#{0}')", Element.Id) ;}
+            get
+            {
+                return string.Format("window.jQuery({0})", Element.GetJavascriptElementReference()) ;
+            }
         }
 
         private string Eval(string script)

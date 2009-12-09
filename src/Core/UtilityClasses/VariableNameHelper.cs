@@ -1,6 +1,6 @@
 ﻿namespace WatiN.Core.UtilityClasses
 {
-    class VariableNameHelper
+    public class VariableNameHelper
     {
         /// <summary>
         /// Used by CreateElementVariableName

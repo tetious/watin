@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Text;
 using mshtml;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
@@ -35,8 +36,9 @@ namespace WatiN.Core.Native.InternetExplorer
         private const string CSSTEXT = "cssText";
 
         private readonly object _element;
+	    private string _javascriptElementReference;
 
-        public IEElement(object element)
+	    public IEElement(object element)
         {
             if (element == null) throw new ArgumentNullException("element");
             if (element is INativeElement) throw new Exception("INativeElement not allowed");
@@ -283,9 +285,8 @@ namespace WatiN.Core.Native.InternetExplorer
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
             var scriptCode = IEUtils.CreateJavaScriptFireEventCode(eventProperties, AsDispHTMLBaseElement, eventName);
-            var window = ((IHTMLDocument2)AsDispHTMLBaseElement.document).parentWindow;
 
-            var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), window);
+            var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), ParentWindow);
 
             UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
         }
@@ -475,7 +476,32 @@ namespace WatiN.Core.Native.InternetExplorer
             return GetHtmlElementBounds(AsHtmlElement);
 	    }
 
-        internal static Rectangle GetHtmlElementBounds(IHTMLElement element)
+        /// <inheritdoc />
+        public string GetJavaScriptElementReference()
+	    {
+            if (string.IsNullOrEmpty(_javascriptElementReference))
+            {
+                _javascriptElementReference = IEUtils.IEVariableNameHelper.CreateVariableName();
+            }
+
+            var originalId = GetWithFailOver(() => AsHtmlElement.id);
+            AsHtmlElement.id = _javascriptElementReference;
+
+            var scriptCode = new StringBuilder();
+            scriptCode.Append(string.Format("var {0} = document.getElementById('{0}');", _javascriptElementReference));
+            scriptCode.Append(string.Format("{0}.id = '{1}';", _javascriptElementReference, originalId));
+
+            IEUtils.RunScript(scriptCode, ParentWindow);
+
+	        return _javascriptElementReference;
+	    }
+
+	    private IHTMLWindow2 ParentWindow
+	    {
+            get { return ((IHTMLDocument2)AsHtmlElement.document).parentWindow; }
+	    }
+
+	    internal static Rectangle GetHtmlElementBounds(IHTMLElement element)
         {
             var left = element.offsetLeft;
             var top = element.offsetTop;
