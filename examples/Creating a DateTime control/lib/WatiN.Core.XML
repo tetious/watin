@@ -300,6 +300,12 @@
             </summary>
             <returns>The element bounds in screen coordinates</returns>
         </member>
+        <member name="M:WatiN.Core.Native.INativeElement.GetJavaScriptElementReference">
+            <summary>
+            Gets the java script element reference to this element.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:WatiN.Core.Native.INativeElement.Children">
             <summary>
             Gets a collection consisting of the immediate children of this element.
@@ -437,6 +443,9 @@
             <returns>Returns the element that is returned by the specified property</returns>
         </member>
         <member name="M:WatiN.Core.Native.JSElement.GetElementBounds">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Native.JSElement.GetJavaScriptElementReference">
             <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.JSElement.InnerHtmlToInnerText(System.String)">
@@ -606,6 +615,12 @@
             </summary>
             <param name="domContainer"><see cref="P:WatiN.Core.Element.DomContainer"/> this element is located in</param>
             <param name="elementFinder">The element finder.</param>
+        </member>
+        <member name="M:WatiN.Core.Element.GetJavascriptElementReference">
+            <summary>
+            Gets the javascript element reference for this <see cref="T:WatiN.Core.Element"/>.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:WatiN.Core.Element.As``1">
             <summary>
@@ -3023,6 +3038,250 @@
         <member name="M:WatiN.Core.Browser.GetAttributeValueImpl(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:WatiN.Core.Browser.AttachTo``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type T.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type T.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo``1(WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>A <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo(System.Type,WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <returns>A <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the given type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the given type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait``1(WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser but don't wait until the whole page is loaded. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait(System.Type,WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser but don't wait until the whole page is loaded. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.Exists``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Does the specified browser type exist.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        </member>
+        <member name="M:WatiN.Core.Browser.Exists(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Does the specified browser type exist.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        </member>
+        <member name="M:WatiN.Core.Browser.RegisterAttachToHelper(System.Type,WatiN.Core.Interfaces.IAttachTo)">
+            <summary>
+            Register a specific helper to attacht to .
+            </summary>
+            <param name="browserType">Type of the browser.</param>
+            <param name="attachToHelper">The attach to helper.</param>
+        </member>
         <member name="M:WatiN.Core.FireFox.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:WatiN.Core.FireFox"/> class.
@@ -4702,6 +4961,13 @@
             	<c>true</c> if the specified window is a logon dialog; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:WatiN.Core.Native.InternetExplorer.IEUtils.RunScript(System.Text.StringBuilder,mshtml.IHTMLWindow2)">
+            <summary>
+            Runs the javascript code in IE.
+            </summary>
+            <param name="scriptCode">The javascript code.</param>
+            <param name="window">The parent window of the document.</param>
+        </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEUtils.RunScript(System.String,mshtml.IHTMLWindow2)">
             <summary>
             Runs the javascript code in IE.
@@ -4820,126 +5086,6 @@
              }
             </code>
             </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIENoWait(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Attach to an existing Internet Explorer. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIE(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIE(WatiN.Core.Constraints.Constraint,System.Int32)">
-            <summary>
-            Attach to an existing Internet Explorer. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <param name="timeout">The number of seconds to wait before timing out</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given 
-            <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            It will try to find an Internet Exlorer instance for 60 seconds maxs.
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"), 60);
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIENoWait(WatiN.Core.Constraints.Constraint,System.Int32)">
-            <summary>
-            Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <param name="timeout">The number of seconds to wait before timing out</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given 
-            <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            It will try to find an Internet Exlorer instance for 60 seconds maxs.
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Example"), 60);
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Exa"), 60);
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.Exists(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Does the specified Internet Explorer exist.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
         </member>
         <member name="M:WatiN.Core.IE.InternetExplorers">
             <summary>
@@ -8022,6 +8168,11 @@
             </code>
             </example>
         </member>
+        <member name="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            <summary>
+            Thrown if the searched for Browser type can't be found.
+            </summary>
+        </member>
         <member name="T:WatiN.Core.Exceptions.HtmlDialogNotFoundException">
             <summary>
             Thrown if the searched for HtmlDialog can't be found.
@@ -9059,6 +9210,21 @@
             <param name="domContainer">The <see cref="T:WatiN.Core.DomContainer"/> the element is in.</param>
             <param name="finder">The input button or button element.</param>
         </member>
+        <member name="T:WatiN.Core.ComponentExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:WatiN.Core.Component"/>.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.ComponentExtensions.WithDescription``1(``0,System.String)">
+            <summary>
+            Assigns a description to a component and returns it.
+            </summary>
+            <typeparam name="T">The component type.</typeparam>
+            <param name="component">The component.</param>
+            <param name="description">The description, or null if none.</param>
+            <returns>The component.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="component"/> is null.</exception>
+        </member>
         <member name="T:WatiN.Core.TableRow">
             <summary>
             This class provides specialized functionality for a HTML tr element.
@@ -9271,11 +9437,6 @@
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="domContainer"/> or
             <paramref name="factory"/> is null</exception>
         </member>
-        <member name="T:WatiN.Core.Exceptions.FireFoxNotFoundException">
-            <summary>
-            Thrown if the searched for Firefox can't be found.
-            </summary>
-        </member>
         <member name="T:WatiN.Core.Logging.LogMessageType">
             <summary>
             enumeration of the logging types
@@ -9480,11 +9641,6 @@
             Thrown if a (java) script failed to run. The innerexception returns the actual exception.
             </summary>
         </member>
-        <member name="T:WatiN.Core.Exceptions.IENotFoundException">
-            <summary>
-            Thrown if the searched for internet explorer (IE) can't be found.
-            </summary>
-        </member>
         <member name="T:WatiN.Core.Comparers.RegexComparer">
             <summary>
             This class supports matching a regular expression with a string value.
@@ -9586,6 +9742,9 @@
             <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEElement.GetElementBounds">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Native.InternetExplorer.IEElement.GetJavaScriptElementReference">
             <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Native.InternetExplorer.IEElement.AsHtmlElement">
