@@ -22,7 +22,7 @@ using System.Web;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using WatiN.Core.Logging;
+using WatiN.Core.Exceptions;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UnitTests.TestUtils;
 using WatiN.Core.UtilityClasses;
@@ -32,6 +32,110 @@ namespace WatiN.Core.UnitTests
     [TestFixture]
     public class BrowserTests : BaseWithBrowserTests
     {
+        [Test]
+        public void ActiveElementShouldBeCorrectWhenFocusIsSetOnElement()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+
+                                var element = browser.ActiveElement;
+                                Assert.That(element.Id, Is.Not.EqualTo("popupid"), "pre-condition: expected popupid hasn't the focus");
+
+                                browser.Button("popupid").Focus();
+
+                                element = browser.ActiveElement;
+                                Assert.That(element.Id,Is.EqualTo("popupid"), "Unexpected ActiveElement");
+                            });
+        }
+
+        [Test]
+        public void AutoMoveMousePointerToTopLeft()
+        {
+            BrowsersToTestWith.ForEach(manager =>
+                                           {
+                                               // GIVEN
+                                               manager.CloseBrowser();
+                                                
+                                               var notTopLeftPoint = new Point(50, 50);
+                                               Cursor.Position = notTopLeftPoint;
+                                               
+                                               // This test won't work if mousepointer isn't moved
+                                               // Happens if system is locked or remote desktop with no UI
+                                               if (Cursor.Position != notTopLeftPoint)
+                                                   return;
+
+
+                                               // WHEN not moving the mousepointer to top left
+                                               // when creating a new browser instance
+                                               Settings.AutoMoveMousePointerToTopLeft = false;
+                                               using (manager.CreateBrowser(TestPageUri))
+                                               {
+                                                   // THEN cursor should still be on 50,50
+                                                   Assert.That(Cursor.Position, Is.EqualTo(notTopLeftPoint));
+                                               }
+
+                                               // WHEN we set to the mousepointer to top left
+                                               // when creating a new browser instance
+                                               Settings.AutoMoveMousePointerToTopLeft = true;
+                                               using (manager.CreateBrowser(TestPageUri))
+                                               {
+                                                   // THEN cursor should be on 0,0
+                                                   Assert.That(Cursor.Position, Is.EqualTo(new Point(0, 0)));
+                                               }
+                                           });
+        }
+
+        [Test]
+        public void BackAndForward()
+        {
+            ExecuteTest(browser =>
+                            {
+                                browser.GoTo(MainURI);
+                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected start Url");
+
+                                browser.Link(Find.ByUrl(IndexURI)).Click();
+                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected url after clicking on link");
+
+                                var wentBack = browser.Back();
+                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Should went back to start Url");
+                                Assert.That(wentBack, "Expected went back");
+
+                                var wentFoward = browser.Forward();
+                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Should gone forward to second page");
+                                Assert.That(wentFoward, "Expected went forward");
+
+                            });
+        }
+
+        [Test]
+        public void BackShouldNotBePossibleOnBrowserWithNoHistory()
+        {
+            BrowsersToTestWith.ForEach(manager =>
+                                           {
+                                               manager.CloseBrowser();
+
+                                               var browser = manager.GetBrowser(AboutBlank);
+
+                                               var wentBack = browser.Back();
+                                               Assert.That(wentBack, Is.False, "Expected no navigation back");
+                                           });
+        }
+
+        [Test]
+        public void ForwardShouldNotBePossibleOnBrowserWithNoHistory()
+        {
+            BrowsersToTestWith.ForEach(manager =>
+                                           {
+                                               manager.CloseBrowser();
+
+                                               var browser = manager.GetBrowser(AboutBlank);
+
+                                               var wentForward = browser.Forward();
+                                               Assert.That(wentForward, Is.False, "Expected no navigation back");
+                                           });
+        }
+
         [Test, Category("InternetConnectionNeeded")]
         public void GoogleFindSearchButtonAndClick()
         {
@@ -61,61 +165,14 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void WindowStyle()
+        public void GoToUri()
         {
             ExecuteTest(browser =>
                             {
-                                var currentStyle = browser.GetWindowStyle();
-
-                                browser.ShowWindow(NativeMethods.WindowShowStyle.Maximize);
-                                Assert.AreEqual(NativeMethods.WindowShowStyle.Maximize.ToString(), browser.GetWindowStyle().ToString(), "Not maximized");
-
-                                browser.ShowWindow(NativeMethods.WindowShowStyle.Restore);
-                                Assert.AreEqual(currentStyle.ToString(), browser.GetWindowStyle().ToString(), "Not Restored");
-
-                                browser.ShowWindow(NativeMethods.WindowShowStyle.Minimize);
-                                Assert.AreEqual(NativeMethods.WindowShowStyle.ShowMinimized.ToString(), browser.GetWindowStyle().ToString(), "Not Minimize");
-
-                                browser.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
-                                Assert.AreEqual(NativeMethods.WindowShowStyle.ShowNormal.ToString(), browser.GetWindowStyle().ToString(), "Not ShowNormal");
+                                browser.GoTo(MainURI);
+                                Assert.AreEqual(MainURI, browser.Uri);
                             });
-        }
 
-        [Test]
-        public void AutoMoveMousePointerToTopLeft()
-        {
-            BrowsersToTestWith.ForEach(manager =>
-                                           {
-                                                // GIVEN
-                                                manager.CloseBrowser();
-                                                
-                                                var notTopLeftPoint = new Point(50, 50);
-                                                Cursor.Position = notTopLeftPoint;
-                                               
-                                                // This test won't work if mousepointer isn't moved
-                                                // Happens if system is locked or remote desktop with no UI
-                                                if (Cursor.Position != notTopLeftPoint)
-                                                    return;
-
-
-                                                // WHEN not moving the mousepointer to top left
-                                                // when creating a new browser instance
-                                                Settings.AutoMoveMousePointerToTopLeft = false;
-                                                using (manager.CreateBrowser(TestPageUri))
-                                                {
-                                                    // THEN cursor should still be on 50,50
-                                                    Assert.That(Cursor.Position, Is.EqualTo(notTopLeftPoint));
-                                                }
-
-                                                // WHEN we set to the mousepointer to top left
-                                                // when creating a new browser instance
-                                                Settings.AutoMoveMousePointerToTopLeft = true;
-                                                using (manager.CreateBrowser(TestPageUri))
-                                                {
-                                                    // THEN cursor should be on 0,0
-                                                    Assert.That(Cursor.Position, Is.EqualTo(new Point(0, 0)));
-                                                }
-                                            });
         }
 
         [Test]
@@ -151,66 +208,37 @@ namespace WatiN.Core.UnitTests
                             });
         }
 
+        [Test, Category("InternetConnectionNeeded")]
+        public void RefreshWithImmediatelyExpiredPage()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(GoogleUrl);
+                                browser.TextField(Find.ByName("q")).TypeText("refresh test");
+
+                                // WHEN
+                                browser.Refresh();
+
+                                // THEN
+                                Assert.AreEqual(null, browser.TextField(Find.ByName("q")).Text);
+                            });
+
+        }
+
         [Test]
-        public void GoToUri()
+        public void RefreshWithNeverExpiredPage()
         {
             ExecuteTest(browser =>
                             {
                                 browser.GoTo(MainURI);
-                                Assert.AreEqual(MainURI, browser.Uri);
+                                browser.TextField("name").TypeText("refresh test");
+
+                                browser.Refresh();
+
+                                Assert.AreEqual("refresh test", browser.TextField("name").Text);
                             });
 
-        }
-
-        [Test]
-        public void BackAndForward()
-        {
-            ExecuteTest(browser =>
-                            {
-                                browser.GoTo(MainURI);
-                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected start Url");
-
-                                browser.Link(Find.ByUrl(IndexURI)).Click();
-                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Unexpected url after clicking on link");
-
-                                var wentBack = browser.Back();
-                                Assert.That(MainURI, Is.EqualTo(new Uri(browser.Url)), "Should went back to start Url");
-                                Assert.That(wentBack, "Expected went back");
-
-                                var wentFoward = browser.Forward();
-                                Assert.That(IndexURI, Is.EqualTo(new Uri(browser.Url)), "Should gone forward to second page");
-                                Assert.That(wentFoward, "Expected went forward");
-
-                            });
-        }
-
-
-        [Test]
-        public void BackShouldNotBePossibleOnBrowserWithNoHistory()
-        {
-            BrowsersToTestWith.ForEach(manager =>
-                            {
-                                manager.CloseBrowser();
-
-                                var browser = manager.GetBrowser(AboutBlank);
-
-                                var wentBack = browser.Back();
-                                Assert.That(wentBack, Is.False, "Expected no navigation back");
-                            });
-        }
-
-        [Test]
-        public void ForwardShouldNotBePossibleOnBrowserWithNoHistory()
-        {
-            BrowsersToTestWith.ForEach(manager =>
-                            {
-                                manager.CloseBrowser();
-
-                                var browser = manager.GetBrowser(AboutBlank);
-
-                                var wentForward = browser.Forward();
-                                Assert.That(wentForward, Is.False, "Expected no navigation back");
-                            });
         }
 
         [Test]
@@ -235,52 +263,47 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void RefreshWithNeverExpiredPage()
-        {
-            ExecuteTest(browser =>
-                            {
-                                browser.GoTo(MainURI);
-                                browser.TextField("name").TypeText("refresh test");
-
-                                browser.Refresh();
-
-                                Assert.AreEqual("refresh test", browser.TextField("name").Text);
-                            });
-
-        }
-
-        [Test, Category("InternetConnectionNeeded")]
-        public void RefreshWithImmediatelyExpiredPage()
+        public void Should_attach_to_browser()
         {
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.GoTo(GoogleUrl);
-                                browser.TextField(Find.ByName("q")).TypeText("refresh test");
+                                browser.GoTo(NewWindowUri);
+                                browser.Link(Find.First()).Click();
 
                                 // WHEN
-                                browser.Refresh();
-
+                                var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page"));
+                                
                                 // THEN
-                                Assert.AreEqual(null, browser.TextField(Find.ByName("q")).Text);
+                                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
+                                
+                                newWindow.Close();
                             });
-
         }
 
         [Test]
-        public void ActiveElementShouldBeCorrectWhenFocusIsSetOnElement()
+        public void Should_not_close_already_open_browser_if_attach_to_doesnt_succeed()
         {
             ExecuteTest(browser =>
                             {
-                                browser.GoTo(MainURI);
+                                // GIVEN
+                                Assert.That(browser.hWnd, Is.Not.Null, "pre-condition: browser should exist");
 
-                                var element = browser.ActiveElement;
-                                Assert.That(element.Id, Is.Not.EqualTo("popupid"), "pre-condition: expected popupid hasn't the focus");
-
-                                browser.Button("popupid").Focus();
-
-                                element = browser.ActiveElement;
-                                Assert.That(element.Id,Is.EqualTo("popupid"), "Unexpected ActiveElement");
+                                try
+                                {
+                                    // WHEN
+                                    Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page"), 3);
+                                    Assert.Fail("Should throw BrowserNotFoundException");
+                                }
+                                catch(BrowserNotFoundException)
+                                {
+                                    // THEN browser should still exist
+                                    Assert.That(browser.hWnd, Is.Not.Null, "browser should still exist");
+                                }
+                                catch(Exception e)
+                                {
+                                    Assert.Fail("Unexpected exception: " + e);
+                                }
                             });
         }
 
@@ -300,28 +323,29 @@ namespace WatiN.Core.UnitTests
                                 // THEN
                                 Assert.That(exists, Is.True);
                             }
-                    );
+                );
         }
 
         [Test]
-        public void Should_attach_to_browser()
+        public void WindowStyle()
         {
             ExecuteTest(browser =>
                             {
-                                // GIVEN
-                                browser.GoTo(NewWindowUri);
-                                browser.Link(Find.First()).Click();
+                                var currentStyle = browser.GetWindowStyle();
 
-                                // WHEN
-                                var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page"));
-                                
-                                // THEN
-                                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
-                                
-                                newWindow.Close();
+                                browser.ShowWindow(NativeMethods.WindowShowStyle.Maximize);
+                                Assert.AreEqual(NativeMethods.WindowShowStyle.Maximize.ToString(), browser.GetWindowStyle().ToString(), "Not maximized");
+
+                                browser.ShowWindow(NativeMethods.WindowShowStyle.Restore);
+                                Assert.AreEqual(currentStyle.ToString(), browser.GetWindowStyle().ToString(), "Not Restored");
+
+                                browser.ShowWindow(NativeMethods.WindowShowStyle.Minimize);
+                                Assert.AreEqual(NativeMethods.WindowShowStyle.ShowMinimized.ToString(), browser.GetWindowStyle().ToString(), "Not Minimize");
+
+                                browser.ShowWindow(NativeMethods.WindowShowStyle.ShowNormal);
+                                Assert.AreEqual(NativeMethods.WindowShowStyle.ShowNormal.ToString(), browser.GetWindowStyle().ToString(), "Not ShowNormal");
                             });
         }
-
 
 
         public override Uri TestPageUri

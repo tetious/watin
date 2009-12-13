@@ -309,7 +309,9 @@ namespace WatiN.Core.Native.Mozilla
                             SendCommand(string.Format("{0}.close();", WindowVariableName));
                             if (windowCount == 1)
                             {
-                                CloseConnectionAndFireFoxProcess();
+                                Logger.LogDebug("No further windows remain open.");
+                                CloseConnection();
+                                CloseFireFoxProcess();
                             }
                         }
                         catch (IOException ex)
@@ -324,11 +326,8 @@ namespace WatiN.Core.Native.Mozilla
             Connected = false;
         }
 
-        private void CloseConnectionAndFireFoxProcess()
+        private void CloseFireFoxProcess()
         {
-            Logger.LogDebug("No further windows remain open. Closing connection to jssh.");
-            _telnetSocket.Close();
-
             if (Process == null) return;
             
             Process.WaitForExit(5000);
@@ -337,6 +336,13 @@ namespace WatiN.Core.Native.Mozilla
             
             Logger.LogDebug("Killing FireFox process");
             UtilityClass.TryActionIgnoreException(() => Process.Kill());
+        }
+
+        public void CloseConnection()
+        {
+            Logger.LogDebug("Closing connection to jssh.");
+            _telnetSocket.Close();
+            Connected = false;
         }
 
         /// <summary>

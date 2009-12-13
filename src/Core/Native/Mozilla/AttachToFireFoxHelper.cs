@@ -26,7 +26,7 @@ namespace WatiN.Core.Native.Mozilla
                     return firefox;
             }
 
-            clientPort.Dispose();
+            clientPort.CloseConnection();
 
             return null;
         }
