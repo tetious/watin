@@ -63,12 +63,11 @@ namespace WatiN.Core.Native.InternetExplorer
                 ieDocument = (IEDocument)ieBrowser.NativeDocument;
             }
 
-            if (ieDocument != null)
-            {
-                WaitWhileMainDocumentNotAvailable(ieDocument.HtmlDocument);
-                WaitWhileDocumentStateNotComplete(ieDocument.HtmlDocument);
-                WaitForFramesToComplete(ieDocument.HtmlDocument);
-            }
+            if (ieDocument == null) return;
+            
+            WaitWhileMainDocumentNotAvailable(ieDocument.HtmlDocument);
+            WaitWhileDocumentStateNotComplete(ieDocument.HtmlDocument);
+            WaitForFramesToComplete(ieDocument.HtmlDocument);
         }
 
         protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
