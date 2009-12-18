@@ -1248,9 +1248,46 @@ namespace WatiN.Core.UnitTests
 	                            // THEN
 	                            Assert.That(enabled, Is.False);
 	                        });
-
 	    }
 
+        [Test]
+	    public void Should_reference_correct_element_in_javascript_world()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+                                var textfield = browser.TextField("name");
+	                            textfield.Value = Guid.NewGuid().ToString();
 
+	                            var script = textfield.GetJavascriptElementReference() + ".value;";
+
+	                            // WHEN
+	                            var value = browser.Eval(script);
+
+	                            // THEN
+	                            Assert.That(value, Is.EqualTo(textfield.Value));
+	                            Assert.That(textfield.Id, Is.EqualTo("name"));
+	                        });
+	    }
+
+        [Test]
+	    public void Should_still_reference_correct_element_if_return_GetJavaScriptElementReference_isnt_used()
+	    {
+	        ExecuteTest(browser =>
+	                        {
+	                            // GIVEN
+                                var textfield = browser.TextField("name");
+	                            textfield.Value = Guid.NewGuid().ToString();
+
+	                            var script = textfield.GetJavascriptElementReference();
+
+	                            // WHEN
+                                textfield.Refresh();
+
+	                            // THEN
+	                            Assert.That(textfield.Id, Is.EqualTo("name"));
+	                            Assert.That(textfield.Exists, Is.True);
+	                        });
+	    }
 	}
 }

@@ -50,13 +50,6 @@ DONE JVM - Multiple issues
 ** TextField
 DONE JVM - remove dependencies in wrappers around TextArea or input text 
 
-** Check for and replace 
--  new IEElement by DomContainer.NativeBrowser.CreateElement
--  new FFElement by DomContainer.NativeBrowser.CreateElement
-
-** Element (not multi browser related)
-- Create eventproperty classes for all event types (mouse, keyboard, click etc..)
-
 ** FFElement
 DONE JVM - Implement propper handling of firing events
 
@@ -67,8 +60,8 @@ DONE JVM - move RunScript to FFBrowser
 - Creating a new FireFox instance in a new process (constructor param)? Is this applicable to FireFox?
 - Is ClearCookies possible? If yes, move to Browser
 - Is ClearCache possible? If yes, move to Browser
-- Implement FireFox.AttachTo
-- Implement FireFox.Exists
+DONE JVM - Implement FireFox.AttachTo
+DONE JVM - Implement FireFox.Exists
 
 ** Changes to test suite
 DONE JVM- Make sure none browser specific tests are executed for IE and FireFox
@@ -79,11 +72,11 @@ Almost DONE: SelectListTests (Bug_1958882_SelectNoWait_is_waiting_somewhere can 
   
 DONE JVM - Cleanup tests who make use of IEHtmlInjector (use javascript with timer instead).
 
-
 ** Misc.
 - Move IE.AutoClose functionality used in Dispose, move to Browser? Or make it a Setting instead? Not implemented in FireFox yet.
 - DomContainer.DialogWatcher applicable for Browser/FireFox or IE only?
 - DomContainer.CaptureWebPageToFile applicable for Browser/FireFox or IE only?
 - Move IE.Reopen(url, logonDialogHandler, inNewProcess) to Browser (no logonDialogHandler support for FireFox yet)?
+- Create eventproperty classes for all event types (mouse, keyboard, click etc..)
 
 
