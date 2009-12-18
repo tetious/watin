@@ -14,6 +14,12 @@
             Thrown if the searched for element can't be found.
             </summary>
         </member>
+        <member name="P:WatiN.Core.Exceptions.ElementExceptionBase.Element">
+            <summary>
+            Element around which the exception is being thrown.
+            Be advised that this property may be null.
+            </summary>
+        </member>
         <member name="T:WatiN.Core.Constraints.ProximityTextConstraint">
             <summary>
             Use this class to find a form field by text on the page that is 'nearby' the field.
@@ -294,6 +300,12 @@
             </summary>
             <returns>The element bounds in screen coordinates</returns>
         </member>
+        <member name="M:WatiN.Core.Native.INativeElement.GetJavaScriptElementReference">
+            <summary>
+            Gets the java script element reference to this element.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:WatiN.Core.Native.INativeElement.Children">
             <summary>
             Gets a collection consisting of the immediate children of this element.
@@ -379,7 +391,7 @@
             </code>
             </example>
         </member>
-        <member name="F:WatiN.Core.Native.JSElement.ReadPropertyInsteadOfAttribute">
+        <member name="F:WatiN.Core.Native.JSElement.UsePropertyInsteadOfAttribute">
             <summary>
             List of html attributes that have to be retrieved as properties in order to get the correct value.
             I.e. for options myOption.getAttribute("selected"); returns nothing if it's selected. 
@@ -389,7 +401,7 @@
         <member name="F:WatiN.Core.Native.JSElement.IgnoreSettingOfValue">
             <summary>
             List of html attributes that should not be changed when SetAttributeValue is called
-            I.e. the Checked property is set be the click event on RadioButton.Checked and CheckBox.Checked
+            I.e. the Checked property is set by the click event on RadioButton.Checked and CheckBox.Checked
             and doesn't need to be set (again) in code (which is necesary for for instance IE).
             </summary>
         </member>
@@ -431,6 +443,9 @@
             <returns>Returns the element that is returned by the specified property</returns>
         </member>
         <member name="M:WatiN.Core.Native.JSElement.GetElementBounds">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Native.JSElement.GetJavaScriptElementReference">
             <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.JSElement.InnerHtmlToInnerText(System.String)">
@@ -520,6 +535,16 @@
             <typeparam name="T">The adapter type</typeparam>
             <returns>The adapter, or null if the object cannot be adapted as requested</returns>
         </member>
+        <member name="T:WatiN.Core.IHasDescription">
+            <summary>
+            An interface for an object that supports user-specified descriptive text.
+            </summary>
+        </member>
+        <member name="P:WatiN.Core.IHasDescription.Description">
+            <summary>
+            Gets or sets the description of the object, or null if none.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Component.Matches(WatiN.Core.Constraints.Constraint)">
             <summary>
             Returns true if the component matches the specified constraint.
@@ -572,6 +597,11 @@
             <param name="attributeName">The name of the attribute, not null</param>
             <returns>The attribute's associated value or null if none</returns>
         </member>
+        <member name="P:WatiN.Core.Component.Description">
+            <summary>
+            Gets or sets the description of the component, or null if none.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Element.#ctor(WatiN.Core.DomContainer,WatiN.Core.Native.INativeElement)">
             <summary>
             This constructor is mainly used from within WatiN.
@@ -585,6 +615,12 @@
             </summary>
             <param name="domContainer"><see cref="P:WatiN.Core.Element.DomContainer"/> this element is located in</param>
             <param name="elementFinder">The element finder.</param>
+        </member>
+        <member name="M:WatiN.Core.Element.GetJavascriptElementReference">
+            <summary>
+            Gets the javascript element reference for this <see cref="T:WatiN.Core.Element"/>.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:WatiN.Core.Element.As``1">
             <summary>
@@ -603,6 +639,11 @@
             <returns>
             A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             </returns>
+        </member>
+        <member name="M:WatiN.Core.Element.DefaultToString">
+            <summary>
+            Obtains a default description of the element to be used when <see cref="P:WatiN.Core.IHasDescription.Description"/> is null.
+            </summary>
         </member>
         <member name="M:WatiN.Core.Element.Click">
             <summary>
@@ -632,24 +673,61 @@
             Does a keydown on this element.
             </summary>
         </member>
+        <member name="M:WatiN.Core.Element.KeyDownNoWait">
+            <summary>
+            Does a keydown on this element and does not wait for the page to finish loading.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Element.KeyDown(System.Char)">
             <summary>
             Does a keydown on this element.
             </summary>
         </member>
+        <member name="M:WatiN.Core.Element.KeyDownNoWait(System.Char)">
+            <summary>
+            Does a keydown on this element and does not wait for the page to finish loading.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Element.KeyPress">
             <summary>
-            Does a keyspress on this element.
+            Does a keypress on this element.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.Element.KeyPressNoWait">
+            <summary>
+            Does a keypress on this element and does not wait for the page to finish loading.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Element.KeyPress(System.Char)">
+            <summary>
+            Does a keypress on this element.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Element.KeyPressNoWait(System.Char)">
+            <summary>
+            Does a keypress on this element and does not wait for the page to finish loading.
+            </summary>
+            <param name="character">The character.</param>
         </member>
         <member name="M:WatiN.Core.Element.KeyUp">
             <summary>
             Does a keyup on this element.
             </summary>
         </member>
+        <member name="M:WatiN.Core.Element.KeyUpNoWait">
+            <summary>
+            Does a keyup on this element and does not wait for the page to finish loading.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Element.KeyUp(System.Char)">
             <summary>
             Does a keyup on this element.
+            </summary>
+            <param name="character">The character.</param>
+        </member>
+        <member name="M:WatiN.Core.Element.KeyUpNoWait(System.Char)">
+            <summary>
+            Does a keyup on this element and does not wait for the page to finish loading.
             </summary>
             <param name="character">The character.</param>
         </member>
@@ -803,7 +881,7 @@
             Waits until the given <paramref name="constraint" /> matches.
             </summary>
             <param name="constraint">The Constraint.</param>
-            <param name="timeout">The timeout.</param>
+            <param name="timeout">The timeout in seconds.</param>
         </member>
         <member name="M:WatiN.Core.Element.Refresh">
             <summary>
@@ -847,9 +925,47 @@
             </code>
             </example>
         </member>
+        <member name="M:WatiN.Core.Element.FindNativeElement">
+            <summary>
+            Finds the native element.
+            </summary>
+            <remarks>
+            <para>
+            This method caches the native element unless its reference becomes invalid
+            in which case it will search for the element again.
+            </para>
+            <para>
+            Unlike the <see cref="P:WatiN.Core.Element.NativeElement"/> property, this method does not wait
+            for the native element to be found.  If the native element is not found then
+            this method returns null.
+            </para>
+            </remarks>
+            <returns>The native element, or null if not found.</returns>
+        </member>
         <member name="M:WatiN.Core.Element.RefreshNativeElement">
             <summary>
-            Calls <see cref="M:WatiN.Core.Element.Refresh"/> and returns the element.
+            Clears the cached native element and finds it again.
+            </summary>
+            <returns>The native element, or null if not found.</returns>
+        </member>
+        <member name="M:WatiN.Core.Element.CanFindNativeElement">
+            <summary>
+            Returns true if it is possible to find a native element.
+            </summary>
+            <remarks>
+            This method may return false if the element does not have an associated element finder
+            and no native element is currently cached.
+            </remarks>
+            <returns>True if an element can be found.</returns>
+        </member>
+        <member name="M:WatiN.Core.Element.ClearCachedNativeElement">
+            <summary>
+            Clears the cached native element.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Element.GetCachedNativeElement">
+            <summary>
+            Gets the cached native element immediately.
             </summary>
             <returns></returns>
         </member>
@@ -1038,6 +1154,18 @@
             </summary>
             <value>The id.</value>
         </member>
+        <member name="P:WatiN.Core.Element.Name">
+            <summary>
+            Gets (or sets) the name of this element as specified in the HTML.
+            </summary>
+            <value>The name</value>
+        </member>
+        <member name="P:WatiN.Core.Element.IdOrName">
+            <summary>
+            Gets the id or name (id preferred) of this element as specified in the HTML.
+            </summary>
+            <value>The id.</value>
+        </member>
         <member name="P:WatiN.Core.Element.Text">
             <summary>
             Gets the innertext of this element (and the innertext of all the elements contained
@@ -1193,6 +1321,52 @@
             Gets the shape of the area element.
             </summary>
         </member>
+        <member name="T:WatiN.Core.DialogHandlers.RefreshWarningDialogHandler">
+            <summary>
+            This class handles the Refresh Warning dialog and does press
+            the retry or cancel button when the dialog shows up.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Interfaces.IDialogHandler.HandleDialog(WatiN.Core.Native.Windows.Window)">
+            <summary>
+            Handles the dialog and returns true when handled with succes
+            </summary>
+            <param name="window"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WatiN.Core.Interfaces.IDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window,System.IntPtr)">
+            <summary>
+            Indicates wheter the dialoghandler can handle the given dialog window
+            </summary>
+            <param name="window"></param>
+            <param name="mainWindowHwnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.BaseDialogHandler.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.BaseDialogHandler.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.BaseDialogHandler.HandleDialog(WatiN.Core.Native.Windows.Window)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.BaseDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.RefreshWarningDialogHandler.HandleDialog(WatiN.Core.Native.Windows.Window)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.DialogHandlers.RefreshWarningDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window)">
+            <summary>
+            Determines whether this instance can handle the specified window by checking <see cref="P:WatiN.Core.Native.Windows.Window.StyleInHex"/>
+            equals "94C801C5".
+            </summary>
+            <param name="window">The window.</param>
+            <returns>
+            	<c>true</c> if this instance [can handle dialog] the specified window; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="T:WatiN.Core.Constraints.NoneConstraint">
             <summary>
             A constraint that matches nothing.
@@ -1227,11 +1401,232 @@
         <member name="M:WatiN.Core.Constraints.PredicateConstraint`1.WriteDescriptionTo(System.IO.TextWriter)">
             <inheritdoc />
         </member>
+        <member name="T:WatiN.Core.FindByAttribute">
+            <summary>
+            Finds a component based on its attributes.
+            </summary>
+            <remarks>
+            <para>
+            If multiple attributes are specified, then all of them must jointly match the component.
+            If no attributes are specified, then the first component of the required type will be used.
+            </para>
+            </remarks>
+            <example>
+            <code><![CDATA[
+            public class HomePage : Page
+            {
+                [FindBy(Name = "signIn")]
+                [Description("Sign in button.")]
+                public Button SignInButton;
+            }
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:WatiN.Core.ComponentFinderAttribute">
+            <summary>
+            Abstract base class for attributes that are used to find components based on a
+            declarative description.
+            </summary>
+            <seealso cref="T:WatiN.Core.FindByAttribute"/>
+        </member>
+        <member name="M:WatiN.Core.ComponentFinderAttribute.FindComponent(System.Type,WatiN.Core.IElementContainer)">
+            <summary>
+            Finds a component of the specified type within a container.
+            </summary>
+            <param name="componentType">The component type, not null.</param>
+            <param name="container">The container, not null.</param>
+            <returns>The component that was found, or null if not found.</returns>
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.#ctor">
+            <summary>
+            Finds a component based on its attributes.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.FindComponent(System.Type,WatiN.Core.IElementContainer)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.FindByAttribute.GetConstraint">
+            <summary>
+            Gets the constraint expressed by this attribute.
+            </summary>
+            <returns>The constraint</returns>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Alt">
+            <summary>
+            Gets or sets the alt text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByAlt(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.AltRegex">
+            <summary>
+            Gets or sets the regular expression for the alt text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByAlt(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Class">
+            <summary>
+            Gets or sets the (CSS) class name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByClass(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ClassRegex">
+            <summary>
+            Gets or sets the regular expression for the (CSS) class name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByClass(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.For">
+            <summary>
+            Gets or sets the id of the linked label element to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByFor(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ForRegex">
+            <summary>
+            Gets or sets the regular expression for the id of the linked label to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByFor(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Id">
+            <summary>
+            Gets or sets the element id to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ById(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.IdRegex">
+            <summary>
+            Gets or sets the regular expression for the element id to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ById(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Name">
+            <summary>
+            Gets or sets the element name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByName(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.NameRegex">
+            <summary>
+            Gets or sets the regular expression for the element name to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByName(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Text">
+            <summary>
+            Gets or sets the (inner) text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByText(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.TextRegex">
+            <summary>
+            Gets or sets the regular expression for the (inner) text to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByText(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Url">
+            <summary>
+            Gets or sets the Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByUrl(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.UrlRegex">
+            <summary>
+            Gets or sets the regular expression for the Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByUrl(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Title">
+            <summary>
+            Gets or sets the title to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByTitle(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.TitleRegex">
+            <summary>
+            Gets or sets the regular expression for the title to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByTitle(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Value">
+            <summary>
+            Gets or sets the value to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByValue(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.ValueRegex">
+            <summary>
+            Gets or sets the regular expression for the value to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByValue(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Src">
+            <summary>
+            Gets or sets the source Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.BySrc(System.String)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.SrcRegex">
+            <summary>
+            Gets or sets the regular expression for the source Url to find.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.BySrc(System.Text.RegularExpressions.Regex)"/>
+        </member>
+        <member name="P:WatiN.Core.FindByAttribute.Index">
+            <summary>
+            Gets or sets the zero-based index of the element to find, or -1 if not constrained by index.
+            </summary>
+            <seealso cref="M:WatiN.Core.Find.ByIndex(System.Int32)"/>
+        </member>
+        <member name="T:WatiN.Core.DescriptionAttribute">
+            <summary>
+            Associates a description with a component.
+            </summary>
+            <example>
+            <code><![CDATA[
+            public class HomePage : Page
+            {
+                [FindBy(Name = "signIn")]
+                [Description("Sign in button.")]
+                public Button SignInButton;
+            }
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:WatiN.Core.ComponentDecoratorAttribute">
+            <summary>
+            Abstract base class for attributes that decorate components based on declarative metadata.
+            </summary>
+            <seealso cref="T:WatiN.Core.DescriptionAttribute"/>
+        </member>
+        <member name="M:WatiN.Core.ComponentDecoratorAttribute.Decorate(WatiN.Core.Component)">
+            <summary>
+            Decorates the component.
+            </summary>
+            <param name="component">The component, not null</param>
+        </member>
+        <member name="M:WatiN.Core.DescriptionAttribute.#ctor(System.String)">
+            <summary>
+            Associates a description with a component.
+            </summary>
+            <param name="description">The description.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="description"/> is null</exception>
+        </member>
+        <member name="M:WatiN.Core.DescriptionAttribute.Decorate(WatiN.Core.Component)">
+            <inheritdoc />
+        </member>
+        <member name="P:WatiN.Core.DescriptionAttribute.Description">
+            <summary>
+            Gets the description.
+            </summary>
+        </member>
         <member name="T:WatiN.Core.TextField">
             <summary>
             This class provides specialized functionality for a HTML input element of type 
             text password textarea hidden and for a HTML textarea element.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.TextField.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.TextField.Text">
             <summary>
@@ -1341,19 +1736,19 @@
         </member>
         <member name="M:WatiN.Core.BaseComponentCollection`2.Filter(WatiN.Core.Constraints.Constraint)">
             <summary>
-            Returned a filtered view of the collection consisting only of the elements that
+            Returned a filtered view of the collection consisting only of the components that
             match the given constraint.
             </summary>
             <param name="findBy">The constraint to match</param>
-            <returns>The filtered element collection</returns>
+            <returns>The filtered component collection</returns>
         </member>
         <member name="M:WatiN.Core.BaseComponentCollection`2.Filter(System.Predicate{`0})">
             <summary>
-            Returned a filtered view of the collection consisting only of the elements that
+            Returns a filtered view of the collection consisting only of the components that
             match the given predicate.
             </summary>
             <param name="predicate">The predicate to match</param>
-            <returns>The filtered element collection</returns>
+            <returns>The filtered component collection</returns>
         </member>
         <member name="M:WatiN.Core.BaseComponentCollection`2.GetEnumerator">
             <inheritdoc />
@@ -1363,13 +1758,13 @@
             Creates a filtered instance of the collection.
             </summary>
             <param name="findBy">The constraint, not null</param>
-            <returns>The element collection</returns>
+            <returns>The component collection</returns>
         </member>
-        <member name="M:WatiN.Core.BaseComponentCollection`2.GetElements">
+        <member name="M:WatiN.Core.BaseComponentCollection`2.GetComponents">
             <summary>
-            Gets the elements of the collection.
+            Gets the components of the collection.
             </summary>
-            <returns>The collection elements</returns>
+            <returns>The collection components</returns>
         </member>
         <member name="M:WatiN.Core.BaseComponentCollection`2.CreateConstraintFromPredicate(System.Predicate{`0})">
             <summary>
@@ -1383,16 +1778,16 @@
         </member>
         <member name="P:WatiN.Core.BaseComponentCollection`2.Item(System.Int32)">
             <summary>
-            Gets the element at the specified index in the collection.
+            Gets the component at the specified index in the collection.
             </summary>
             <param name="index">The zero-based index</param>
-            <returns>The element</returns>
+            <returns>The component</returns>
         </member>
         <member name="P:WatiN.Core.BaseComponentCollection`2.Length">
             <summary>
-            Gets the number of elements in the collection.
+            Gets the number of components in the collection.
             </summary>
-            <value>The number of elements in the collection</value>
+            <value>The number of components in the collection</value>
         </member>
         <member name="P:WatiN.Core.BaseComponentCollection`2.Cache">
             <summary>
@@ -1476,7 +1871,7 @@
         <member name="M:WatiN.Core.BaseElementCollection`2.CreateFilteredCollection(WatiN.Core.Constraints.Constraint)">
             <inheritdoc />
         </member>
-        <member name="M:WatiN.Core.BaseElementCollection`2.GetElements">
+        <member name="M:WatiN.Core.BaseElementCollection`2.GetComponents">
             <inheritdoc />
         </member>
         <member name="P:WatiN.Core.BaseElementCollection`2.DomContainer">
@@ -1997,6 +2392,12 @@
             </summary>
             <value>The HTML.</value>
         </member>
+        <member name="P:WatiN.Core.Document.Body">
+            <summary>
+            Gets the Body element of the webpage, or null if none.
+            </summary>
+            <value>The body, or null if none.</value>
+        </member>
         <member name="P:WatiN.Core.Document.Text">
             <summary>
             Gets the inner text of the Body part of the webpage.
@@ -2162,21 +2563,6 @@
             </summary>
             <value>The dialog watcher.</value>
         </member>
-        <member name="M:WatiN.Core.Interfaces.IDialogHandler.HandleDialog(WatiN.Core.Native.Windows.Window)">
-            <summary>
-            Handles the dialog and returns true when handled with succes
-            </summary>
-            <param name="window"></param>
-            <returns></returns>
-        </member>
-        <member name="M:WatiN.Core.Interfaces.IDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window,System.IntPtr)">
-            <summary>
-            Indicates wheter the dialoghandler can handle the given dialog window
-            </summary>
-            <param name="window"></param>
-            <param name="mainWindowHwnd"></param>
-            <returns></returns>
-        </member>
         <member name="M:WatiN.Core.Interfaces.ISettings.Reset">
             <summary>
             Resets this instance to the initial defaults.
@@ -2188,7 +2574,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:WatiN.Core.Interfaces.ISettings.AttachToIETimeOut">
+        <member name="P:WatiN.Core.Interfaces.ISettings.AttachToBrowserTimeOut">
             <summary>
             Get or set the default time out used when calling IE ie = IE.AttachToIE(findBy).
             The default value is 30 seconds. Setting the time out to a negative value will
@@ -2264,6 +2650,23 @@
             	<c>true</c> if you want to make a new <see cref="T:WatiN.Core.IE"/> instance visible; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:WatiN.Core.Interfaces.ISettings.MakeNewIe8InstanceNoMerge">
+            <summary>
+            Gets or sets a value indicating whether to make a new <see cref="T:WatiN.Core.IE"/> instance without session cookie merging.
+            </summary>
+            <value>
+            	<c>true</c> if you want to make a new <see cref="T:WatiN.Core.IE"/> instance with cookie merging; otherwise, <c>false</c>.
+            </value>
+            <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
+        </member>
+        <member name="P:WatiN.Core.Interfaces.ISettings.CloseExistingFireFoxInstances">
+            <summary>
+            Gets or sets a value indicating whether existing firefox instances will be closed before creating a new instance.
+            </summary>
+            <value>
+            	<c>true</c> if existing firefox instances need to be closed otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="M:WatiN.Core.DefaultSettings.Reset">
             <summary>
             Resets this instance to the initial defaults.
@@ -2275,7 +2678,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:WatiN.Core.DefaultSettings.AttachToIETimeOut">
+        <member name="P:WatiN.Core.DefaultSettings.AttachToBrowserTimeOut">
             <summary>
             Get or set the default time out used when calling IE ie = IE.AttachToIE(findBy).
             The default value is 30 seconds. Setting the time out to a negative value will
@@ -2350,6 +2753,15 @@
             <value>
             	<c>true</c> if you want to make a new <see cref="T:WatiN.Core.IE"/> instance visible; otherwise, <c>false</c>.
             </value>
+        </member>
+        <member name="P:WatiN.Core.DefaultSettings.MakeNewIe8InstanceNoMerge">
+            <summary>
+            Gets or sets a value indicating whether to make a new <see cref="T:WatiN.Core.IE"/> instance without session cookie merging.
+            </summary>
+            <value>
+            	<c>true</c> if you want to make a new <see cref="T:WatiN.Core.IE"/> instance with cookie merging; otherwise, <c>false</c>.
+            </value>
+            <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
         </member>
         <member name="T:WatiN.Core.Constraints.ElementConstraint">
             <summary>
@@ -2615,6 +3027,261 @@
             a browser).
             </summary>
         </member>
+        <member name="M:WatiN.Core.Browser.Close">
+            <summary>
+            Closes the browser.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Browser.OnGetNativeDocument">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Browser.GetAttributeValueImpl(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type T.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type T.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo``1(WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>A <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachTo(System.Type,WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <returns>A <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the given type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachTo&lt;IE&gt;(Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Attach to an existing browser instance. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the given type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given <paramref name="constraint"/> isn't found within 30 seconds.
+            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToBrowserTimeOut"/>
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            When found, browser will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Example"));
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachTo(typeof(IE), Find.ByTitle("Exa"));
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait``1(WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser but don't wait until the whole page is loaded. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            IE ieExample = IE.AttachToNoWait&lt;IE&gt;(Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.AttachToNoWait(System.Type,WatiN.Core.Constraints.Constraint,System.Int32)">
+            <summary>
+            Attach to an existing browser but don't wait until the whole page is loaded. 
+            The first instance that matches the given <paramref name="constraint"/> will be returned.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <param name="timeout">The number of seconds to wait before timing out</param>
+            <returns>An <see cref="T:WatiN.Core.Browser"/> instance of the specified type.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            BrowserNotFoundException will be thrown if a browser window with the given 
+            <paramref name="constraint"/> isn't found within <paramref name="timeout"/> seconds.
+            </exception>
+            <example>
+            The following example searches for an Internet Exlorer instance with "Example"
+            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
+            It will try to find an Internet Exlorer instance for 60 seconds maxs.
+            When found, ieExample will hold a pointer to this Internet Explorer instance and
+            can be used to test the Example page.
+            <code>
+            var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Example"), 60);
+            </code>
+            A partial match should also work
+            <code>
+            var browser = Browser.AttachToNoWait(typeof(IE), Find.ByTitle("Exa"), 60);
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Browser.Exists``1(WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Does the specified browser type exist.
+            </summary>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        </member>
+        <member name="M:WatiN.Core.Browser.Exists(System.Type,WatiN.Core.Constraints.Constraint)">
+            <summary>
+            Does the specified browser type exist.
+            </summary>
+            <param name="browserType">The WatiN browser type to attach to.</param>
+            <param name="constraint">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the browser window to find. 
+            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
+            <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        </member>
+        <member name="M:WatiN.Core.Browser.RegisterAttachToHelper(System.Type,WatiN.Core.Interfaces.IAttachTo)">
+            <summary>
+            Register a specific helper to attacht to .
+            </summary>
+            <param name="browserType">Type of the browser.</param>
+            <param name="attachToHelper">The attach to helper.</param>
+        </member>
         <member name="M:WatiN.Core.FireFox.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:WatiN.Core.FireFox"/> class.
@@ -2654,21 +3321,20 @@
             Waits until the page is completely loaded
             </summary>
         </member>
+        <member name="M:WatiN.Core.FireFox.Close">
+            <summary>
+            Closes the browser.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.FireFox.Dispose(System.Boolean)">
             <summary>
             Releases unmanaged and - optionally - managed resources
             </summary>
             <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         </member>
-        <member name="P:WatiN.Core.FireFox.CurrentProcessCount">
-            <summary>
-            Gets the number of running FireFox processes.
-            </summary>
-            <value>The number of running FireFox processes.</value>
-        </member>
         <member name="P:WatiN.Core.FireFox.CurrentProcess">
             <summary>
-            Gets the current FireFox process.
+            Gets the current FireFox process (all instances run under 1 process).
             </summary>
             <value>The current FireFox process or null if none is found.</value>
         </member>
@@ -2677,6 +3343,28 @@
             Gets the path to FireFox executable.
             </summary>
             <value>The path to exe.</value>
+        </member>
+        <member name="F:WatiN.Core.UtilityClasses.VariableNameHelper._elementCounter">
+            <summary>
+            Used by CreateElementVariableName
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.UtilityClasses.VariableNameHelper.CreateVariableName">
+            <summary>
+            Creates a unique variable name, i.e. doc.watin23
+            </summary>
+            <returns>A unique variable.</returns>
+        </member>
+        <member name="T:WatiN.Core.UtilityClasses.EmptyArray`1">
+            <summary>
+            Provides a singleton empty array instance.
+            </summary>
+            <typeparam name="T">The type of array to provide.</typeparam>
+        </member>
+        <member name="F:WatiN.Core.UtilityClasses.EmptyArray`1.Instance">
+            <summary>
+            An empty array of type <typeparamref name="T"/>.
+            </summary>
         </member>
         <member name="T:WatiN.Core.Find">
             <summary>
@@ -3445,7 +4133,7 @@
         <member name="M:WatiN.Core.DialogHandlers.SecurityAlertDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window)">
             <summary>
             Determines whether the specified window is a security alert dialog by checking <see cref="P:WatiN.Core.Native.Windows.Window.StyleInHex"/>.
-            Valid value is "94C80AC4".
+            Valid value is "94C80AC4" or "94C808C4".
             </summary>
             <param name="window">The window.</param>
             <returns>
@@ -3479,11 +4167,6 @@
         <member name="T:WatiN.Core.Native.Windows.NativeMethods">
             <summary>
             Class that contains native win32 API support.
-            </summary>
-        </member>
-        <member name="M:WatiN.Core.Native.Windows.NativeMethods.#ctor">
-            <summary>
-            Prevent creating an instance of this class (contains only static members)
             </summary>
         </member>
         <member name="M:WatiN.Core.Native.Windows.NativeMethods.GetForegroundWindow">
@@ -3754,6 +4437,9 @@
             Base class for <see cref="T:WatiN.Core.CheckBox"/> and <see cref="T:WatiN.Core.RadioButton"/> provides
             support for common functionality.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.RadioCheck`1.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Constraints.IndexConstraint">
             <summary>
@@ -4040,7 +4726,27 @@
             }
             </code>
             <para>
-            Within a test, we can use the calendar control like this:
+            Within the control class, you may also use the <see cref="T:WatiN.Core.FindByAttribute"/> and <see cref="T:WatiN.Core.DescriptionAttribute"/>
+            attributes to declaratively refer to elements of the control.  Here is part of the same example
+            above using attributes instead of properties.
+            </para>
+            <code>
+            public class CalendarControl : Control&lt;Div&gt;
+            {
+                [FindBy(Name = "month"), Description("Month drop down.")]
+                private SelectList MonthSelectList;
+                
+                [FindBy(Name = "year"), Description("Year drop down.")]
+                private SelectList YearSelectList;
+                
+                [FindBy(Name = "dateLabel"), Description("Date label.")]
+                private Div DateLabelDiv;
+                
+                // etc...
+            }
+            </code>
+            <para>
+            Finally, within the test we use the calendar control like this:
             </para>
             <code>
             browser.Control&lt;CalendarControl&gt;&gt;(Find.ById("fromDate")).Date = DateTime.Now;
@@ -4061,6 +4767,20 @@
             <seealso cref="T:WatiN.Core.Control`1"/>
             <seealso cref="T:WatiN.Core.Page"/>
         </member>
+        <member name="T:WatiN.Core.Composite">
+            <summary>
+            A composite component is container abstraction which has fields or properties
+            representing other components.  The most common composites are <see cref="T:WatiN.Core.Page"/>
+            and <see cref="T:WatiN.Core.Control`1"/>.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Composite.InitializeContents(WatiN.Core.IElementContainer)">
+            <summary>
+            Initializes the fields and properties of the composite using reflection to
+            find elements within the container.
+            </summary>
+            <param name="container">The element container within which to find elements, or null if not available</param>
+        </member>
         <member name="M:WatiN.Core.Control.CreateControl``1(WatiN.Core.Element)">
             <summary>
             Creates a control object of the desired type that wraps the specified <see cref="P:WatiN.Core.Control.Element"/>.
@@ -4069,6 +4789,17 @@
             <typeparam name="TControl">The <see cref="T:WatiN.Core.Control`1"/> subclass</typeparam>
             <returns>The control object</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="element"/> is null</exception>
+        </member>
+        <member name="M:WatiN.Core.Control.CreateControl(System.Type,WatiN.Core.Element)">
+            <summary>
+            Creates a control object of the desired type that wraps the specified <see cref="P:WatiN.Core.Control.Element"/>.
+            </summary>
+            <param name="controlType">The control type</param>
+            <param name="element">The <see cref="P:WatiN.Core.Control.Element"/> that the control should wrap</param>
+            <returns>The control object</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="controlType"/> or <paramref name="element"/> is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="controlType"/> is not a subclass of <see cref="T:WatiN.Core.Control"/>
+            or if it does not have a default constructor</exception>
         </member>
         <member name="M:WatiN.Core.Control.FindControl``1(WatiN.Core.IElementContainer,WatiN.Core.Constraints.Constraint)">
             <summary>
@@ -4139,6 +4870,11 @@
             </remarks>
             <param name="element">The element to verify, not null</param>
             <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the element's properties fail verification</exception>
+        </member>
+        <member name="M:WatiN.Core.Control`1.InitializeContents">
+            <summary>
+            Initializes the contents of the control object.
+            </summary>
         </member>
         <member name="P:WatiN.Core.Control`1.Element">
             <summary>
@@ -4225,6 +4961,13 @@
             	<c>true</c> if the specified window is a logon dialog; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:WatiN.Core.Native.InternetExplorer.IEUtils.RunScript(System.Text.StringBuilder,mshtml.IHTMLWindow2)">
+            <summary>
+            Runs the javascript code in IE.
+            </summary>
+            <param name="scriptCode">The javascript code.</param>
+            <param name="window">The parent window of the document.</param>
+        </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEUtils.RunScript(System.String,mshtml.IHTMLWindow2)">
             <summary>
             Runs the javascript code in IE.
@@ -4271,10 +5014,10 @@
             The container reference.
             </param>
         </member>
-        <member name="T:WatiN.Core.UnitTests.DialogHandlerTests.DialogHandlerHelper">
+        <member name="T:WatiN.Core.DialogHandlers.DialogHandlerHelper">
              <summary>
              This dialoghandler can be used when it isn't clear which DialogHandler should be used to handle a dialog. 
-             The property <see cref="P:WatiN.Core.UnitTests.DialogHandlerTests.DialogHandlerHelper.CandidateDialogHandlers"/> will contain a list of dialoghandlers which can handle this dialog,
+             The property <see cref="P:WatiN.Core.DialogHandlers.DialogHandlerHelper.CandidateDialogHandlers"/> will contain a list of dialoghandlers which can handle this dialog,
              bases on calling their <see cref="M:WatiN.Core.Interfaces.IDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window,System.IntPtr)"/> method.
              </summary>
              <example>
@@ -4288,7 +5031,7 @@
             </code>
              </example>
         </member>
-        <member name="P:WatiN.Core.UnitTests.DialogHandlerTests.DialogHandlerHelper.CandidateDialogHandlers">
+        <member name="P:WatiN.Core.DialogHandlers.DialogHandlerHelper.CandidateDialogHandlers">
             <summary>
             Returns a list of type names of dialoghandlers which can handle this dialog, 
             bases on calling their <see cref="M:WatiN.Core.Interfaces.IDialogHandler.CanHandleDialog(WatiN.Core.Native.Windows.Window,System.IntPtr)"/> method.
@@ -4343,126 +5086,6 @@
              }
             </code>
             </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIENoWait(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Attach to an existing Internet Explorer. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIE(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given <paramref name="findBy"/> isn't found within 30 seconds.
-            To change this default, set <see cref="P:WatiN.Core.Settings.AttachToIETimeOut"/>
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"));
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"));
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIE(WatiN.Core.Constraints.Constraint,System.Int32)">
-            <summary>
-            Attach to an existing Internet Explorer. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <param name="timeout">The number of seconds to wait before timing out</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given 
-            <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            It will try to find an Internet Exlorer instance for 60 seconds maxs.
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Example"), 60);
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIE(Find.ByTitle("Exa"), 60);
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.AttachToIENoWait(WatiN.Core.Constraints.Constraint,System.Int32)">
-            <summary>
-            Attach to an existing Internet Explorer but don't wait until the whole page is loaded. 
-            The first instance that matches the given <paramref name="findBy"/> will be returned.
-            The attached Internet Explorer will be closed after destroying the IE instance.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <param name="timeout">The number of seconds to wait before timing out</param>
-            <returns>An <see cref="T:WatiN.Core.IE"/> instance.</returns>
-            <exception cref="T:WatiN.Core.Exceptions.IENotFoundException">
-            IENotFoundException will be thrown if an Internet Explorer window with the given 
-            <paramref name="findBy"/> isn't found within <paramref name="timeout"/> seconds.
-            </exception>
-            <example>
-            The following example searches for an Internet Exlorer instance with "Example"
-            in it's titlebar (showing up as "Example - Microsoft Internet Explorer").
-            It will try to find an Internet Exlorer instance for 60 seconds maxs.
-            When found, ieExample will hold a pointer to this Internet Explorer instance and
-            can be used to test the Example page.
-            <code>
-            IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Example"), 60);
-            </code>
-            A partial match should also work
-            <code>
-            IE ieExample = IE.AttachToIENoWait(Find.ByTitle("Exa"), 60);
-            </code>
-            </example>
-        </member>
-        <member name="M:WatiN.Core.IE.Exists(WatiN.Core.Constraints.Constraint)">
-            <summary>
-            Does the specified Internet Explorer exist.
-            </summary>
-            <param name="findBy">The <see cref="T:WatiN.Core.Constraints.Constraint"/> of the IE window to find. 
-            <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-            <returns><c>true</c> if an Internet Explorer instance matches the given <paramref name="findBy"/> <see cref="T:WatiN.Core.Constraints.Constraint"/>. Otherwise it returns <c>false</c>. </returns>
         </member>
         <member name="M:WatiN.Core.IE.InternetExplorers">
             <summary>
@@ -4564,7 +5187,7 @@
             instance is destroyed the created Internet Explorer window will also be closed.
             </note>
             </summary>
-            <param name="url">The URL te open</param>
+            <param name="url">The URL to open</param>
             <remarks>
             You could also use one of the overloaded constructors.
             </remarks>
@@ -4595,7 +5218,7 @@
             instance is destroyed the created Internet Explorer window will also be closed.
             </note>
             </summary>
-            <param name="url">The URL te open</param>
+            <param name="url">The URL to open</param>
             <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
             <remarks>
             You could also use one of the overloaded constructors.
@@ -4627,7 +5250,7 @@
             instance is destroyed the created Internet Explorer window will also be closed.
             </note>
             </summary>
-            <param name="uri">The Uri te open</param>
+            <param name="uri">The Uri to open</param>
             <remarks>
             You could also use one of the overloaded constructors.
             </remarks>
@@ -4659,7 +5282,7 @@
             instance is destroyed the created Internet Explorer window will also be closed.
             </note>
             </summary>
-            <param name="uri">The Uri te open</param>
+            <param name="uri">The Uri to open</param>
             <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
             <remarks>
             You could also use one of the overloaded constructors.
@@ -4688,7 +5311,7 @@
             <summary>
             Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
             </summary>
-            <param name="url">The Url te open</param>
+            <param name="url">The Url to open</param>
             <param name="logonDialogHandler">A <see cref="T:WatiN.Core.DialogHandlers.LogonDialogHandler"/> class instanciated with the logon credentials.</param>
             <remarks>
             You could also use one of the overloaded constructors.
@@ -4717,7 +5340,7 @@
             <summary>
             Opens a new Internet Explorer and navigates to the given <paramref name="url"/>.
             </summary>
-            <param name="url">The Url te open</param>
+            <param name="url">The Url to open</param>
             <param name="logonDialogHandler">A <see cref="T:WatiN.Core.DialogHandlers.LogonDialogHandler"/> class instanciated with the logon credentials.</param>
             <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
             <remarks>
@@ -4747,7 +5370,7 @@
             <summary>
             Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
             </summary>
-            <param name="uri">The Uri te open</param>
+            <param name="uri">The Uri to open</param>
             <param name="logonDialogHandler">A <see cref="T:WatiN.Core.DialogHandlers.LogonDialogHandler"/> class instanciated with the logon credentials.</param>
             <remarks>
             You could also use one of the overloaded constructors.
@@ -4776,7 +5399,7 @@
             <summary>
             Opens a new Internet Explorer and navigates to the given <paramref name="uri"/>.
             </summary>
-            <param name="uri">The Uri te open</param>
+            <param name="uri">The Uri to open</param>
             <param name="logonDialogHandler">A <see cref="T:WatiN.Core.DialogHandlers.LogonDialogHandler"/> class instanciated with the logon credentials.</param>
             <param name="createInNewProcess">if set to <c>true</c> the IE instance is created in a new process.</param>
             <remarks>
@@ -4801,6 +5424,12 @@
              }
             </code>
             </example>
+        </member>
+        <member name="M:WatiN.Core.IE.#ctor(WatiN.Core.Native.InternetExplorer.IEBrowser)">
+            <summary>
+            (Re)Use existing <see cref="T:WatiN.Core.Native.InternetExplorer.IEBrowser"/> object. 
+            </summary>
+            <param name="ieBrowser">An object implementing <see cref="T:WatiN.Core.Native.InternetExplorer.IEBrowser"/>.</param>
         </member>
         <member name="M:WatiN.Core.IE.#ctor(System.Object)">
             <summary>
@@ -5007,9 +5636,6 @@
             <param name="findBy">The url of the html page shown in the dialog</param>
             <param name="timeout">Number of seconds before the search times out.</param>
         </member>
-        <member name="M:WatiN.Core.IE.GetAttributeValueImpl(System.String)">
-            <inheritdoc />
-        </member>
         <member name="P:WatiN.Core.IE.InternetExplorer">
             <summary>
             Use this method to gain access to the IWebBrowser2 interface of Internet Explorer.
@@ -5212,6 +5838,13 @@
             processing or the timeout period has expired.
             </summary>
         </member>
+        <member name="M:WatiN.Core.WaitForCompleteBase.InitialSleep">
+            <summary>
+            Waits an initial small sleep time (10ms default) to allow the browser some
+            time to perform any immediately pending asynchronous operations that might
+            cause it to enter a busy state.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.WaitForCompleteBase.WaitForCompleteOrTimeout">
             <summary>
             This method waits till IE is ready processing 
@@ -5242,18 +5875,14 @@
             </summary>
             <param name="timeoutMessage">The message to present when the TimeoutException is thrown</param>
         </member>
-        <member name="M:WatiN.Core.Native.InternetExplorer.WaitForComplete.#ctor(WatiN.Core.DomContainer)">
+        <member name="M:WatiN.Core.Native.InternetExplorer.IEWaitForComplete.WaitUntilNotNull(WatiN.Core.UtilityClasses.DoFunc{System.Nullable{System.Boolean}},WatiN.Core.UtilityClasses.BuildTimeOutExceptionMessage)">
             <summary>
-            Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
-            <seealso cref="P:WatiN.Core.Settings.WaitForCompleteTimeOut"/> seconds.
+            Waits until the method returns true or false.
             </summary>
-            <param name="domContainer">The page to wait for in this domcontainer</param>
-        </member>
-        <member name="M:WatiN.Core.Native.InternetExplorer.WaitForComplete.#ctor(WatiN.Core.DomContainer,System.Int32)">
-            Waits until the given <paramref name="domContainer"/> is ready loading the webpage. It will timeout after
-            <paramref name="waitForCompleteTimeOut"> seconds.</paramref>
-            <param name="domContainer">The page to wait for in this domcontainer</param>
-            <param name="waitForCompleteTimeOut">Time to wait in seconds</param>
+            <param name="func">The function to evaluate.</param>
+            <param name="exceptionMessage">A function to build an exception message.</param>
+            <returns>The last function result.</returns>
+            <exception cref="T:WatiN.Core.Exceptions.TimeoutException">Thrown if a timeout occurs.</exception>
         </member>
         <member name="T:WatiN.Core.Native.Chrome.ChromeBrowser">
             <summary>
@@ -5307,6 +5936,12 @@
             a browser).
             </summary>
         </member>
+        <member name="P:WatiN.Core.Native.INativeBrowser.hWnd">
+            <summary>
+            Gets the window handle of the current browser.
+            </summary>
+            <value>Window handle of the current browser.</value>
+        </member>
         <member name="M:WatiN.Core.Native.JSBrowserBase.#ctor(WatiN.Core.Native.ClientPortBase)">
             <summary>
             Initializes a new instance of the <see cref="T:WatiN.Core.Native.JSBrowserBase"/> class.
@@ -5338,6 +5973,11 @@
         <member name="M:WatiN.Core.Native.JSBrowserBase.Refresh">
             <inheritdoc />
         </member>
+        <member name="M:WatiN.Core.Native.JSBrowserBase.Close">
+            <summary>
+            Closes the browser.
+            </summary>
+        </member>
         <member name="M:WatiN.Core.Native.JSBrowserBase.LoadUri(System.Uri,System.Boolean)">
             <summary>
             Load a URL into the document. see: http://developer.mozilla.org/en/docs/XUL:browser#m-loadURI
@@ -5358,10 +5998,7 @@
             <value>The name of the browser variable.</value>
         </member>
         <member name="P:WatiN.Core.Native.JSBrowserBase.hWnd">
-            <summary>
-            Gets the window handle of the current browser.
-            </summary>
-            <value>Window handle of the current browser.</value>
+            <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.Chrome.ChromeBrowser.#ctor(WatiN.Core.Native.ClientPortBase)">
             <summary>
@@ -5381,109 +6018,105 @@
             Reattaches to the first tab. This is required every time the document
             </summary>
         </member>
-        <member name="T:WatiN.Core.Chrome">
+        <member name="T:WatiN.Core.HtmlColor">
             <summary>
-            Main class used to access web pages in Google Chrome.
+            This class helps converting all kinds of html color formats
+            to one uniform <see cref="T:WatiN.Core.HtmlColor"/> object. IE and FireFox return
+            differently formatted results when retrieving a color, for instance backgroundColor. This class
+            provides a way to keep your tests browser agnostic when it comes to checking color values.
             </summary>
+            <example>
+            Following some examples of valid use of this class. These all create the same
+            <see cref="T:WatiN.Core.HtmlColor"/> object:
+            <code>
+            var blue = new HtmlCode("blue");
+            var blue = new HtmlCode("#0000FF");
+            var blue = new HtmlCode("#00F");
+            var blue = new HtmlCode("rgb(0,0,255)");
+            </code>
+            The class provides factory properties for creating the 16 color names defined
+            by the W3C.
+            <code>
+            var blue = HtmlCode.Blue;
+            </code>
+            The power of this class lies in the fact that you can use it in your test
+            expectations no matter what color format the browser returns.
+            <code>
+            var backgroundColor = browser.Div("with_background_color").Style.BackgroundColor;
+            Assert.That(new HtmlColor(backgroundColor), Is.EqualTo(HtmlColor.Yellow));
+            </code>
+            </example>
         </member>
-        <member name="F:WatiN.Core.Chrome.pathToExe">
+        <member name="M:WatiN.Core.HtmlColor.#ctor(System.String)">
             <summary>
-            Path to the chrome executable.
+            Initializes a new instance of the <see cref="T:WatiN.Core.HtmlColor"/> class.
             </summary>
+            <param name="value">The value.</param>
+            <exception cref="T:System.FormatException">Will be thrown if the value can't be converted
+            to a color.</exception>
+            <example>
+            Following some examples of valid use of this class. These all create the same
+            <see cref="T:WatiN.Core.HtmlColor"/> object:
+            <code>
+            var blue = new HtmlCode("blue");
+            var blue = new HtmlCode("#0000FF");
+            var blue = new HtmlCode("#00F");
+            var blue = new HtmlCode("rgb(0,0,255)");
+            </code>
+            </example>
         </member>
-        <member name="M:WatiN.Core.Chrome.#ctor">
+        <member name="M:WatiN.Core.HtmlColor.Equals(System.Object)">
             <summary>
-            Initializes a new instance of the <see cref="T:WatiN.Core.Chrome"/> class.
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:WatiN.Core.HtmlColor"/>.
             </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:WatiN.Core.HtmlColor"/>.</param>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:WatiN.Core.HtmlColor"/>; otherwise, false.
+            </returns>
         </member>
-        <member name="M:WatiN.Core.Chrome.#ctor(System.String)">
+        <member name="M:WatiN.Core.HtmlColor.GetHashCode">
             <summary>
-            Initializes a new instance of the <see cref="T:WatiN.Core.Chrome"/> class.
+            Serves as a hash function for a particular type.
             </summary>
-            <param name="url">The initail URL to load.</param>
+            <returns>
+            A hash code for the current <see cref="T:WatiN.Core.HtmlColor"/>.
+            </returns>
         </member>
-        <member name="M:WatiN.Core.Chrome.#ctor(System.Uri)">
+        <member name="M:WatiN.Core.HtmlColor.ToString">
             <summary>
-            Initializes a new instance of the <see cref="T:WatiN.Core.Chrome"/> class.
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:WatiN.Core.HtmlColor"/>.
             </summary>
-            <param name="url">The initial URL to load.</param>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:WatiN.Core.HtmlColor"/>.
+            </returns>
         </member>
-        <member name="M:WatiN.Core.Chrome.ContainsText(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:WatiN.Core.Chrome.OnGetNativeDocument">
+        <member name="P:WatiN.Core.HtmlColor.Color">
             <summary>
-            This method must be overriden by all sub classes
+            Returns the <see cref="T:System.Drawing.Color"/> wrapped by this class.
             </summary>
-            <returns>The native document.</returns>
+            <value>The color.</value>
         </member>
-        <member name="M:WatiN.Core.Chrome.WaitForComplete(System.Int32)">
+        <member name="P:WatiN.Core.HtmlColor.ToName">
             <summary>
-            Waits for the page to be completely loaded.
+            Returns a descriptive W3C color name (Aqua, Black, Blue, Fuchsia, Gray, Green, Lime, 
+            Maroon, Navy, Olive, Purple, Red, Silver, Teal, White or Yellow). If it's none
+            of these colors, it will return "unknown". 
             </summary>
-            <param name="waitForCompleteTimeOut">
-            The number of seconds to wait before timing out
-            </param>
+            <value>To name.</value>
         </member>
-        <member name="M:WatiN.Core.Chrome.CreateProcess(System.String,System.Boolean)">
+        <member name="P:WatiN.Core.HtmlColor.ToHexString">
             <summary>
-            Creates the Chrome process.
+            Returns the color in a html hex code formatted string
             </summary>
-            <param name="arguments">The arguments.</param>
-            <param name="waitForMainWindow">if set to <c>true</c> [wait for main window].</param>
-            <returns>Chrome process.</returns>
+            <value>To hex string.</value>
         </member>
-        <member name="M:WatiN.Core.Chrome.Dispose(System.Boolean)">
+        <member name="P:WatiN.Core.HtmlColor.ToRgbString">
             <summary>
-            Releases unmanaged and - optionally - managed resources
+            Returns the color in a rgb formatted string.
             </summary>
-            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <value>To RGB string.</value>
         </member>
-        <member name="M:WatiN.Core.Chrome.GetExecutablePath">
-            <summary>
-            Initalizes the chrome executable path.
-            </summary>
-            <returns>The chrome executable path</returns>
-        </member>
-        <member name="M:WatiN.Core.Chrome.CreateChromeInstance(System.String)">
-            <summary>
-            Creates the chrome instance.
-            </summary>
-            <param name="url">The URL to navigate to.</param>
-        </member>
-        <member name="P:WatiN.Core.Chrome.CurrentProcessCount">
-            <summary>
-            Gets the number of running FireFox processes.
-            </summary>
-            <value>The number of running FireFox processes.</value>
-        </member>
-        <member name="P:WatiN.Core.Chrome.PathToExe">
-            <summary>
-            Gets the path to FireFox executable.
-            </summary>
-            <value>The path to exe.</value>
-        </member>
-        <member name="P:WatiN.Core.Chrome.hWnd">
-            <summary>
-            Gets window pointer to the current browser.
-            </summary>
-            <value>
-            The windows pointer to the current browser.
-            </value>
-        </member>
-        <member name="P:WatiN.Core.Chrome.NativeBrowser">
-            <summary>
-            Gets the native browser.
-            </summary>
-            <value>The native browser.</value>
-        </member>
-        <member name="P:WatiN.Core.Chrome.CurrentProcess">
-            <summary>
-            Gets the current Chrome process.
-            </summary>
-            <value>The current Chrome process or null if none is found.</value>
-        </member>
-        <member name="T:WatiN.Core.SimpleTimer">
+        <member name="T:WatiN.Core.UtilityClasses.SimpleTimer">
              <summary>
              This class provides a simple way to handle loops that have to time out after 
              a specified number of seconds.
@@ -5504,21 +6137,22 @@
              </code>
              </example>
         </member>
-        <member name="M:WatiN.Core.SimpleTimer.#ctor(System.Int32)">
+        <member name="M:WatiN.Core.UtilityClasses.SimpleTimer.#ctor(System.TimeSpan)">
             <summary>
-            Initializes a new instance of the <see cref="T:WatiN.Core.SimpleTimer"/> class.
+            Initializes a new instance of the <see cref="T:WatiN.Core.UtilityClasses.SimpleTimer"/> class.
             </summary>
-            <param name="timeout">The timeout in seconds.</param>
+            <param name="timeout">The timeout.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if <paramref name="timeout"/> is negative.</exception>
         </member>
-        <member name="P:WatiN.Core.SimpleTimer.Elapsed">
+        <member name="P:WatiN.Core.UtilityClasses.SimpleTimer.Elapsed">
             <summary>
-            Gets a value indicating whether this <see cref="T:WatiN.Core.SimpleTimer"/> is elapsed.
+            Gets a value indicating whether this <see cref="T:WatiN.Core.UtilityClasses.SimpleTimer"/> is elapsed.
             </summary>
             <value><c>true</c> if elapsed; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:WatiN.Core.SimpleTimer.Timeout">
+        <member name="P:WatiN.Core.UtilityClasses.SimpleTimer.Timeout">
             <summary>
-            The number of seconds after which this timer times out. The time out can only be
+            The amount of time after which this timer times out. The time out can only be
             set through the constructor.
             </summary>
         </member>
@@ -5902,6 +6536,46 @@
             <returns>The control collection</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="elements"/> is null</exception>
         </member>
+        <member name="T:WatiN.Core.Logging.StringLogWriter">
+            <summary>
+            This logger class writes it's output to a string
+            </summary>
+            <example>
+            The following code attaches the StringLogWriter to WatiN and writes a
+            LogAction.
+            <code>
+            Logger.LogWriter = new StringLogWriter();
+            Logger.LogAction("Attached StringLogWriter");
+            </code>
+            </example>
+        </member>
+        <member name="F:WatiN.Core.Logging.StringLogWriter.Builder">
+            <summary>
+            private StringBuilder keeping the log
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Logging.StringLogWriter.WriteLogLine(System.String)">
+            <summary>
+            private method to write the log line
+            </summary>
+            <param name="message">message to write</param>
+        </member>
+        <member name="M:WatiN.Core.Logging.StringLogWriter.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:WatiN.Core.Logging.StringLogWriter.IncludeTimestamp">
+            <summary>
+            flag to indicate inclusion of a timestamp (in "yyyy-mm-ddThh:nn:ss" format)
+            </summary>
+        </member>
+        <member name="P:WatiN.Core.Logging.StringLogWriter.LogString">
+            <summary>
+            data string containing the log
+            </summary>
+        </member>
         <member name="T:WatiN.Core.TableCollection">
             <summary>
             A typed collection of <see cref="T:WatiN.Core.Table"/> instances within a <see cref="T:WatiN.Core.Document"/> or <see cref="T:WatiN.Core.Element"/>.
@@ -6099,7 +6773,7 @@
             Initializes the document.
             </summary>
         </member>
-        <member name="F:WatiN.Core.Native.ClientPortBase.elementCounter">
+        <member name="F:WatiN.Core.Native.ClientPortBase.VariableNameHelper">
             <summary>
             Used by CreateElementVariableName
             </summary>
@@ -6175,6 +6849,11 @@
             Connects to the Chrome browser and navigates to the specified URL.
             </summary>
             <param name="url">The URL to connect to.</param>
+        </member>
+        <member name="M:WatiN.Core.Native.ClientPortBase.ConnectToExisting">
+            <summary>
+            Connects to an existing browser
+            </summary>
         </member>
         <member name="M:WatiN.Core.Native.ClientPortBase.SendAndRead(System.String,System.Boolean,System.Boolean,System.Object[])">
             <summary>
@@ -6282,6 +6961,11 @@
             <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
             <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
         </member>
+        <member name="T:WatiN.Core.ComponentFinder">
+            <summary>
+            Assists with finding components generically by type.
+            </summary>
+        </member>
         <member name="T:WatiN.Core.UtilityClasses.CaptureWebPage">
             <summary>
             This class contains functionality to capture an image from a web page and save it to a file.
@@ -6308,6 +6992,9 @@
             <summary>
             This class provides specialized functionality for a HTML Form element.
             </summary>
+        </member>
+        <member name="M:WatiN.Core.Form.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Exceptions.TimeoutException">
             <summary>
@@ -6364,6 +7051,11 @@
         <member name="P:WatiN.Core.Properties.Resources.Control_HasAlreadyBeenInitialized">
             <summary>
               Looks up a localized string similar to The control has already been initialized..
+            </summary>
+        </member>
+        <member name="P:WatiN.Core.Properties.Resources.IE_Dispose">
+            <summary>
+              Looks up a localized string similar to Closing IE instance.
             </summary>
         </member>
         <member name="P:WatiN.Core.Properties.Resources.PageMetadata_PageTypeIsExpectedToBeASubclassOfPage">
@@ -6453,7 +7145,7 @@
         <member name="M:WatiN.Core.FrameCollection.CreateFilteredCollection(WatiN.Core.Constraints.Constraint)">
             <inheritdoc />
         </member>
-        <member name="M:WatiN.Core.FrameCollection.GetElements">
+        <member name="M:WatiN.Core.FrameCollection.GetComponents">
             <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Button">
@@ -6478,13 +7170,8 @@
             <param name="domContainer">The <see cref="T:WatiN.Core.DomContainer"/> the element is in.</param>
             <param name="finder">The input button or button element.</param>
         </member>
-        <member name="M:WatiN.Core.Button.ToString">
-            <summary>
-            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </summary>
-            <returns>
-            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </returns>
+        <member name="M:WatiN.Core.Button.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Button.Value">
             <summary>
@@ -6578,7 +7265,28 @@
             }
             </code>
             <para>
-            Within a test, we can use the functionality of the sign in page like this:
+            Within the page class, you may also use the <see cref="T:WatiN.Core.FindByAttribute"/> and <see cref="T:WatiN.Core.DescriptionAttribute"/>
+            attributes to declaratively refer to elements of the page.  Here is part of the same example
+            above using attributes instead of properties.
+            </para>
+            <code>
+            [Page(UrlRegex = "SignIn.aspx", IsSecure = true)]
+            public class SignInPage : Page
+            {
+                [FindBy(Name = "username"), Description("User name text field.")]
+                public TextField UserNameTextField;
+                
+                [FindBy(Name = "password"), Description("Password text field.")]
+                public TextField PasswordNameTextField;
+                
+                [FindBy(Name = "signIn"), Description("Sign in button.")]
+                public TextField SignInButton;
+                
+                // etc...
+            }
+            </code>
+            <para>
+            Finally, within the test we use the functionality of the sign in page like this:
             </para>
             <code>
             browser.Page&lt;SignInPage&gt;&gt;().SignIn("somebody", "letmein");
@@ -6591,24 +7299,24 @@
             Creates an uninitialized page instance.
             </summary>
         </member>
-        <member name="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document)">
+        <member name="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document,WatiN.Core.Page.ErrorReporter)">
             <summary>
             Verifies that the document represents the correct page (has the correct Url, etc.).
             </summary>
             <remarks>
             <para>
-            The default implementation calls <see cref="M:WatiN.Core.Page.VerifyDocumentUrl(System.String)"/> to verify the <paramref name="document"/>'s Url.
+            The default implementation calls <see cref="M:WatiN.Core.Page.VerifyDocumentUrl(System.String,WatiN.Core.Page.ErrorReporter)"/> to verify the <paramref name="document"/>'s Url.
             </para>
             <para>
             Subclasses can override this method to customize how document verification takes place.
             </para>
             </remarks>
             <param name="document">The document to verify, not null</param>
-            <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the document's properties fail verification</exception>
+            <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
         </member>
-        <member name="M:WatiN.Core.Page.VerifyDocumentUrl(System.String)">
+        <member name="M:WatiN.Core.Page.VerifyDocumentUrl(System.String,WatiN.Core.Page.ErrorReporter)">
             <summary>
-            Verifies that the document's represents the correct page.
+            Verifies that the document represents a Url that matches the page metadata.
             </summary>
             <remarks>
             <para>
@@ -6620,16 +7328,43 @@
             </para>
             </remarks>
             <param name="url">The document url to verify, not null</param>
-            <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the url fails verification</exception>
+            <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
+        </member>
+        <member name="M:WatiN.Core.Page.VerifyDocumentIsSecure(System.String,WatiN.Core.Page.ErrorReporter)">
+            <summary>
+            Verifies that the document is secure if the page metadata says it should be.
+            </summary>
+            <remarks>
+            <para>
+            The default implementation uses information from the associated <see cref="T:WatiN.Core.PageMetadata"/>
+            to validate the <paramref name="url"/>.
+            </para>
+            <para>
+            Subclasses can override this method to customize how document Url verification takes place.
+            </para>
+            </remarks>
+            <param name="url">The document url to verify, not null</param>
+            <param name="errorReporter">The error reporter to invoke is the document's properties fail verification</param>
         </member>
         <member name="M:WatiN.Core.Page.CreatePage``1(WatiN.Core.Document)">
             <summary>
             Creates an initialized page object from a document.
             </summary>
-            <typeparam name="T">The page type</typeparam>
+            <typeparam name="TPage">The page type</typeparam>
             <param name="document">The document or frame represented by the page</param>
             <returns>The page object</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="document"/> is null</exception>
+        </member>
+        <member name="M:WatiN.Core.Page.CreatePage(System.Type,WatiN.Core.Document)">
+            <summary>
+            Creates an initialized page object from a document.
+            </summary>
+            <param name="pageType">The page type</param>
+            <param name="document">The document or frame represented by the page</param>
+            <returns>The page object</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="pageType"/> or <paramref name="document"/> is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="pageType"/> is not a subclass of <see cref="T:WatiN.Core.Page"/>
+            or if it does not have a default constructor</exception>
         </member>
         <member name="M:WatiN.Core.Page.ToString">
             <inheritdoc />
@@ -6639,6 +7374,11 @@
         </member>
         <member name="M:WatiN.Core.Page.GetAttributeValueImpl(System.String)">
             <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Page.InitializeContents">
+            <summary>
+            Initializes the contents of the page object.
+            </summary>
         </member>
         <member name="P:WatiN.Core.Page.Metadata">
             <summary>
@@ -6651,13 +7391,30 @@
             </summary>
             <remarks>
             <para>
-            This method calls <see cref="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document)"/> to ensure that
+            This method calls <see cref="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document,WatiN.Core.Page.ErrorReporter)"/> to ensure that
             the current document represents the correct page (has the correct Url, etc.).
             If this verification fails then an exception is thrown.
             </para>
             </remarks>
             <exception cref="T:WatiN.Core.Exceptions.WatiNException">Thrown if the page object does not have a reference
             to a document or if the document's properties fail validation.</exception>
+        </member>
+        <member name="P:WatiN.Core.Page.IsCurrentDocument">
+            <summary>
+            Returns true if the current document represents this page (has the correct Url, etc.).
+            The actual check(s) is done by the protected method <see cref="M:WatiN.Core.Page.VerifyDocumentProperties(WatiN.Core.Document,WatiN.Core.Page.ErrorReporter)"/>
+            </summary>
+        </member>
+        <member name="T:WatiN.Core.Page.ErrorReporter">
+            <summary>
+            Reports an error message.
+            </summary>
+            <param name="errorMessage">The error message to report.</param>
+        </member>
+        <member name="T:WatiN.Core.PageVerificationException">
+            <summary>
+            Will be thrown when the set expectations using the <see cref="T:WatiN.Core.PageAttribute"/> don't match.
+            </summary>
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEBrowser.NavigateTo(System.Uri)">
             <inheritdoc />
@@ -6675,6 +7432,9 @@
             <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEBrowser.Refresh">
+            <inheritdoc />
+        </member>
+        <member name="P:WatiN.Core.Native.InternetExplorer.IEBrowser.hWnd">
             <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Constraints.OrConstraint">
@@ -6695,6 +7455,36 @@
         </member>
         <member name="M:WatiN.Core.Constraints.OrConstraint.MatchesImpl(WatiN.Core.Interfaces.IAttributeBag,WatiN.Core.Constraints.ConstraintContext)">
             <inheritdoc />
+        </member>
+        <member name="T:WatiN.Core.Logging.FileLogWriter">
+            <summary>
+            This logger class writes it's output to a file
+            </summary>
+            <example>
+            The following code attaches the FileLogWriter to WatiN and writes a
+            LogAction.
+            <code>
+            Logger.LogWriter = new FileLogWriter("LogFile.txt");
+            Logger.LogAction("Attached FileLogWriter");
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Logging.FileLogWriter.#ctor(System.String)">
+            <summary>
+            Constructor method creating a text file for writing
+            </summary>
+            <param name="filename">full filepath to write the new log</param>
+        </member>
+        <member name="M:WatiN.Core.Logging.FileLogWriter.WriteLogLine(System.String)">
+            <summary>
+            private method to write the log line
+            </summary>
+            <param name="message">message to write</param>
+        </member>
+        <member name="P:WatiN.Core.Logging.FileLogWriter.IncludeTimestamp">
+            <summary>
+            flag to indicate inclusion of a timestamp (in "yyyy-mm-ddThh:nn:ss" format)
+            </summary>
         </member>
         <member name="T:WatiN.Core.UtilityClasses.UtilityClass">
             <summary>
@@ -7141,6 +7931,9 @@
             <param name="inColumn">Index of the column to find the text in.</param>
             <returns>The searched for <see cref="T:WatiN.Core.TableRow"/>; otherwise <c>null</c>.</returns>
         </member>
+        <member name="M:WatiN.Core.Table.DefaultToString">
+            <inheritdoc />
+        </member>
         <member name="P:WatiN.Core.Table.OwnTableRows">
             <summary>
             Gets a collection of all table rows within the table itself (excluding content from any tables that
@@ -7163,7 +7956,7 @@
         <member name="M:WatiN.Core.HtmlDialogCollection.CreateFilteredCollection(WatiN.Core.Constraints.Constraint)">
             <inheritdoc />
         </member>
-        <member name="M:WatiN.Core.HtmlDialogCollection.GetElements">
+        <member name="M:WatiN.Core.HtmlDialogCollection.GetComponents">
             <inheritdoc />
         </member>
         <member name="T:WatiN.Core.Exceptions.InvalidAttributeException">
@@ -7375,6 +8168,11 @@
             </code>
             </example>
         </member>
+        <member name="T:WatiN.Core.Exceptions.BrowserNotFoundException">
+            <summary>
+            Thrown if the searched for Browser type can't be found.
+            </summary>
+        </member>
         <member name="T:WatiN.Core.Exceptions.HtmlDialogNotFoundException">
             <summary>
             Thrown if the searched for HtmlDialog can't be found.
@@ -7438,14 +8236,6 @@
             </summary> 
             <returns>List of child windows for parent window</returns> 
         </member>
-        <member name="M:WatiN.Core.Native.InternetExplorer.WindowsEnumerator.EnumWindowProc(System.IntPtr,System.IntPtr@)">
-            <summary> 
-            Callback function that does the work of enumerating top-level windows. 
-            </summary> 
-            <param name="hwnd">Discovered Window handle</param> 
-            <param name="lParam"></param>
-            <returns>1=keep going, 0=stop</returns> 
-        </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEElementCollection.GetElements">
             <inheritdoc />
         </member>
@@ -7454,139 +8244,6 @@
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEElementCollection.GetElementsById(System.String)">
             <inheritdoc />
-        </member>
-        <member name="T:WatiN.Core.Native.Chrome.ChromeClientPort">
-            <summary>
-            Handles telnet communication to the Chrome browser shell.
-            </summary>
-        </member>
-        <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.ChromePort">
-            <summary>
-            The port used to connect to chrome.
-            </summary>
-        </member>
-        <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.disposed">
-            <summary>
-            <c>true</c> if the <see cref="M:WatiN.Core.Native.Chrome.ChromeClientPort.Dispose"/> method has been called to release resources.
-            </summary>
-        </member>
-        <member name="F:WatiN.Core.Native.Chrome.ChromeClientPort.telnetSocket">
-            <summary>
-            Underlying socket used to create a <see cref="T:System.Net.Sockets.NetworkStream"/>.
-            </summary>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.Finalize">
-            <summary>
-            Finalizes an instance of the <see cref="T:WatiN.Core.Native.Chrome.ChromeClientPort"/> class. 
-            Releases unmanaged resources and performs other cleanup operations before the
-            <see cref="T:WatiN.Core.FireFox"/> is reclaimed by garbage collection.
-            </summary>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-            <filterpriority>2</filterpriority>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.Connect(System.String)">
-            <summary>
-            Connects to the Chrome browser and navigates to the specified URL.
-            </summary>
-            <param name="url">The URL to connect to.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.InitializeDocument">
-            <summary>
-            Initializes the document.
-            </summary>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.SendAndRead(System.String,System.Boolean,System.Boolean,System.Object[])">
-            <summary>
-            Writes the specified data to the remote server.
-            </summary>
-            <param name="data">The data to write.</param>
-            <param name="resultExpected"><c>true</c> if a result is expected.</param>
-            <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
-            <param name="args">Arguments to format with the data.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.Dispose(System.Boolean)">
-            <summary>
-            Releases unmanaged and - optionally - managed resources
-            </summary>
-            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.SendRawAndRead(System.String,System.Boolean,System.Boolean,System.Object[])">
-            <summary>
-            Writes the specified data to the remote server.
-            </summary>
-            <param name="data">The data to write.</param>
-            <param name="resultExpected"><c>true</c> if a result is expected.</param>
-            <param name="checkForErrors"><c>true</c> if error checking should be applied.</param>
-            <param name="args">Arguments to format with the data.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.CheckForError(System.String)">
-            <summary>
-            Checks the response for an error.
-            </summary>
-            <param name="response">The response.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.CleanTelnetResponse(System.String)">
-            <summary>
-            Cleans the telnet response.
-            </summary>
-            <param name="data">The data to clean.</param>
-            <returns>Cleaned response data</returns>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.SendCommand(System.String)">
-            <summary>
-            Sends the command.
-            </summary>
-            <param name="data">The data to send.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.ReadResponse(System.Boolean,System.Boolean)">
-            <summary>
-            Reads the response from the Chrome telnet server.
-            </summary>
-            <param name="resultExpected">if set to <c>true</c> a result is expected.</param>
-            <param name="checkForErrors">if set to <c>true</c> check for errors.</param>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.ValidateCanConnect">
-            <summary>
-            Validates the we can connect to chrome.
-            </summary>
-        </member>
-        <member name="M:WatiN.Core.Native.Chrome.ChromeClientPort.WaitForConnectionEstablished">
-            <summary>
-            Waits for connection established.
-            </summary>
-        </member>
-        <member name="P:WatiN.Core.Native.Chrome.ChromeClientPort.Connected">
-            <summary>
-            Gets a value indicating whether this <see cref="T:WatiN.Core.Native.Chrome.ChromeClientPort"/> is connected.
-            </summary>
-            <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:WatiN.Core.Native.Chrome.ChromeClientPort.DocumentVariableName">
-            <summary>
-            Gets the name of the javascript variable that references the DOM:document object.
-            </summary>
-        </member>
-        <member name="P:WatiN.Core.Native.Chrome.ChromeClientPort.JavaScriptEngine">
-            <summary>
-            Gets the type of java script engine.
-            </summary>
-            <value>The type of java script engine.</value>
-        </member>
-        <member name="P:WatiN.Core.Native.Chrome.ChromeClientPort.BrowserVariableName">
-            <summary>
-            Gets the name of the browser variable.
-            </summary>
-            <value>The name of the browser variable.</value>
-        </member>
-        <member name="P:WatiN.Core.Native.Chrome.ChromeClientPort.LastCommandSend">
-            <summary>
-            Gets or sets the last command send to the chrome client.
-            </summary>
-            <value>The last command send.</value>
         </member>
         <member name="T:WatiN.Core.Constraints.ComponentConstraint">
             <summary>
@@ -7641,7 +8298,7 @@
             public void AttachToIEExample()
             {
               // Change de default time out from 30 to 60 seconds.
-              Settings.AttachToIETimeOut = 60;
+              Settings.AttachToBrowserTimeOut = 60;
             
               // Start Internet Explorer manually and type 
               // http://watin.sourceforge.net in the navigation bar.
@@ -7672,7 +8329,7 @@
             {
               Settings settings = new Settings();
             
-              settings.AttachToIETimeOut = 60;
+              settings.AttachToBrowserTimeOut = 60;
               settings.WaitUntilExistsTimeOut = 60;
               settings.WaitForCompleteTimeOut = 60;
             
@@ -7683,7 +8340,7 @@
             {
               Settings settings = new Settings();
             
-              settings.AttachToIETimeOut = 5;
+              settings.AttachToBrowserTimeOut = 5;
               settings.WaitUntilExistsTimeOut = 5;
               settings.WaitForCompleteTimeOut = 5;
             
@@ -7703,7 +8360,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:WatiN.Core.Settings.AttachToIETimeOut">
+        <member name="P:WatiN.Core.Settings.AttachToBrowserTimeOut">
             <summary>
             Get or set the default time out used when calling IE ie = IE.AttachToIE(findBy).
             The default value is 30 seconds. Setting the time out to a negative value will
@@ -7787,6 +8444,23 @@
             The default value is a <see cref="P:WatiN.Core.Settings.FindByDefaultFactory"/> which finds elements
             by id.
             </remarks>
+        </member>
+        <member name="P:WatiN.Core.Settings.MakeNewIe8InstanceNoMerge">
+            <summary>
+            Gets or sets a value indicating whether to make a new <see cref="T:WatiN.Core.IE"/> instance without session cookie merging.
+            </summary>
+            <value>
+            	<c>true</c> if you want to make a new <see cref="T:WatiN.Core.IE"/> instance with cookie merging; otherwise, <c>false</c>.
+            </value>
+            <remarks>read the section on NoMerge at http://blogs.msdn.com/ie/archive/2008/07/28/ie8-and-reliability.aspx</remarks>
+        </member>
+        <member name="P:WatiN.Core.Settings.CloseExistingFireFoxInstances">
+            <summary>
+            Gets or sets a value indicating whether existing FireFox instances will be closed before creating a new instance.
+            </summary>
+            <value>
+            	<c>true</c> if existing FireFox instances need to be closed otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="T:WatiN.Core.NativeElementFinder">
             <summary>
@@ -8138,13 +8812,13 @@
             </example>
             </summary>
         </member>
-        <member name="M:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.#ctor(System.Int32)">
+        <member name="M:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.#ctor(System.TimeSpan)">
             <summary>
             Initializes a new instance of the <see cref="T:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut"/> class.
             </summary>
             <param name="timeout">The timeout in seconds.</param>
         </member>
-        <member name="M:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.#ctor(WatiN.Core.SimpleTimer)">
+        <member name="M:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.#ctor(WatiN.Core.UtilityClasses.SimpleTimer)">
             <summary>
             Initializes a new instance of the <see cref="T:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut"/> class.
             </summary>
@@ -8161,13 +8835,12 @@
         </member>
         <member name="P:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.SleepTime">
             <summary>
-            Gets or sets the interval between retries of the action..
+            Gets or sets the maximum interval between retries of the action.
             </summary>
-            <value>The sleep time in milliseconds.</value>
         </member>
         <member name="P:WatiN.Core.UtilityClasses.TryFuncUntilTimeOut.Timeout">
             <summary>
-            Returns the time out period in seconds.
+            Returns the time out period.
             </summary>
             <value>The timeout.</value>
         </member>
@@ -8237,13 +8910,8 @@
             to complete.
             </summary>
         </member>
-        <member name="M:WatiN.Core.Option.ToString">
-            <summary>
-            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </summary>
-            <returns>
-            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-            </returns>
+        <member name="M:WatiN.Core.Option.DefaultToString">
+            <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Option.Value">
             <summary>
@@ -8353,12 +9021,12 @@
             Name of the javascript variable that references the DOM:window object.
             </summary>
         </member>
-        <member name="F:WatiN.Core.Native.Mozilla.FireFoxClientPort.disposed">
+        <member name="F:WatiN.Core.Native.Mozilla.FireFoxClientPort._disposed">
             <summary>
             <c>true</c> if the <see cref="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.Dispose"/> method has been called to release resources.
             </summary>
         </member>
-        <member name="F:WatiN.Core.Native.Mozilla.FireFoxClientPort.telnetSocket">
+        <member name="F:WatiN.Core.Native.Mozilla.FireFoxClientPort._telnetSocket">
             <summary>
             Underlying socket used to create a <see cref="T:System.Net.Sockets.NetworkStream"/>.
             </summary>
@@ -8376,6 +9044,12 @@
             <param name="url">
             The url.
             </param>
+            <exception cref="T:WatiN.Core.Native.Mozilla.FireFoxException">
+            </exception>
+        </member>
+        <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.ConnectToExisting">
+            <summary>
+            </summary>
             <exception cref="T:WatiN.Core.Native.Mozilla.FireFoxException">
             </exception>
         </member>
@@ -8432,10 +9106,11 @@
             Response from FireFox with out any of the telnet UI characters
             </returns>
         </member>
-        <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.DefineDefaultJSVariables">
+        <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.DefineDefaultJSVariablesForWindow(System.Int32)">
             <summary>
-            Defines the default JS variables used to automate FireFox.
+            Defines the default JS variables used to automate this FireFox window.
             </summary>
+            <param name="windowIndex">Index of the window.</param>
         </member>
         <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.ReadResponse(System.Boolean,System.Boolean)">
             <summary>
@@ -8457,7 +9132,7 @@
             </param>
             <exception cref="T:WatiN.Core.Native.Mozilla.FireFoxException">When not connected.</exception>
         </member>
-        <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.ValidateCanConnect">
+        <member name="M:WatiN.Core.Native.Mozilla.FireFoxClientPort.CloseExistingFireFoxInstances">
             <summary>
             </summary>
             <exception cref="T:WatiN.Core.Native.Mozilla.FireFoxException">
@@ -8514,6 +9189,27 @@
             <param name="referenceElement">The reference element from which the search begins</param>
             <returns>The selected element, possibly a descendant or ancestor of the reference element</returns>
         </member>
+        <member name="T:WatiN.Core.Body">
+            <summary>
+            This class represents an HTML "body" element.
+            </summary>
+        </member>
+        <member name="M:WatiN.Core.Body.#ctor(WatiN.Core.DomContainer,WatiN.Core.Native.INativeElement)">
+            <summary>
+            Initialises a new instance of the <see cref="T:WatiN.Core.Body"/> class.
+            Mainly used by WatiN internally.
+            </summary>
+            <param name="domContainer">The <see cref="T:WatiN.Core.DomContainer"/> the element is in.</param>
+            <param name="element">The input button or button element.</param>
+        </member>
+        <member name="M:WatiN.Core.Body.#ctor(WatiN.Core.DomContainer,WatiN.Core.ElementFinder)">
+            <summary>
+            Initialises a new instance of the <see cref="T:WatiN.Core.Body"/> class.
+            Mainly used by WatiN internally.
+            </summary>
+            <param name="domContainer">The <see cref="T:WatiN.Core.DomContainer"/> the element is in.</param>
+            <param name="finder">The input button or button element.</param>
+        </member>
         <member name="T:WatiN.Core.TableRow">
             <summary>
             This class provides specialized functionality for a HTML tr element.
@@ -8550,6 +9246,54 @@
             </summary>
             <param name="predicate">The predicate</param>
             <returns>The table cell</returns>
+        </member>
+        <member name="M:WatiN.Core.TableRow.IsHeaderRow">
+            <summary>
+            Returns a <see cref="T:WatiN.Core.Constraints.Constraint"/> which can be applied on a <see cref="T:WatiN.Core.TableRowCollection"/>
+            to filter out <see cref="T:WatiN.Core.TableRow"/> elements contained in a thead section.
+            </summary>
+            <returns></returns>
+            <seealso cref="M:WatiN.Core.TableRow.IsFooterRow"/>
+            <example>
+            Following example shows how to get only the rows inside a thead section:
+            <code>
+            var browser = new IE("www.watin.net/examples/tables.htm");
+            var tableRows = browser.Table("table_id").OwnTableRows;
+            
+            var headerRows = tableRows.Filter(TableRow.IsHeaderRow());
+            </code>
+            If you don't want header rows in your tablerows collection apply to <see cref="T:WatiN.Core.Constraints.NotConstraint"/>:
+            <code>
+            var browser = new IE("www.watin.net/examples/tables.htm");
+            var tableRows = browser.Table("table_id").OwnTableRows;
+            
+            var noHeaderRows = tableRows.Filter(!TableRow.IsHeaderRow());
+            </code>
+            </example>
+        </member>
+        <member name="M:WatiN.Core.TableRow.IsFooterRow">
+            <summary>
+            Returns a <see cref="T:WatiN.Core.Constraints.Constraint"/> which can be applied on a <see cref="T:WatiN.Core.TableRowCollection"/>
+            to filter out <see cref="T:WatiN.Core.TableRow"/> elements contained in a tfoot section.
+            </summary>
+            <returns></returns>
+            <seealso cref="M:WatiN.Core.TableRow.IsHeaderRow"/>
+            <example>
+            Following example shows how to get only the rows inside a tfoot section:
+            <code>
+            var browser = new IE("www.watin.net/examples/tables.htm");
+            var tableRows = browser.Table("table_id").OwnTableRows;
+            
+            var footerRows = tableRows.Filter(TableRow.IsFooterRow());
+            </code>
+            If you don't want header rows in your tablerows collection apply to <see cref="T:WatiN.Core.Constraints.NotConstraint"/>:
+            <code>
+            var browser = new IE("www.watin.net/examples/tables.htm");
+            var tableRows = browser.Table("table_id").OwnTableRows;
+            
+            var noFooterRows = tableRows.Filter(!TableRow.IsFooterRow());
+            </code>
+            </example>
         </member>
         <member name="P:WatiN.Core.TableRow.ContainingTable">
             <summary>
@@ -8610,7 +9354,7 @@
         <member name="M:WatiN.Core.IECollection.CreateFilteredCollection(WatiN.Core.Constraints.Constraint)">
             <inheritdoc />
         </member>
-        <member name="M:WatiN.Core.IECollection.GetElements">
+        <member name="M:WatiN.Core.IECollection.GetComponents">
             <inheritdoc />
         </member>
         <member name="T:WatiN.Core.DivCollection">
@@ -8645,7 +9389,7 @@
         <member name="M:WatiN.Core.CheckBoxCollection.CreateFilteredCollection(WatiN.Core.ElementFinder)">
             <inheritdoc />
         </member>
-        <member name="T:WatiN.Core.Native.WinInet">
+        <member name="T:WatiN.Core.Native.InternetExplorer.WinInet">
             <summary>
             Provides low-level support for manipulating cookies, clearing caches and
             setting internet options.
@@ -8657,7 +9401,7 @@
             completely rewritten here.
             </remarks>
         </member>
-        <member name="T:WatiN.Core.Native.WinInet.ClearCookiesCommand">
+        <member name="T:WatiN.Core.Native.InternetExplorer.WinInet.ClearCookiesCommand">
             <summary>
             Holds state for the duration of the clear cookies operation because we
             don't have anonymous delegates in .Net 1.1.
@@ -8677,6 +9421,26 @@
             <param name="factory">The native element collection</param>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="domContainer"/> or
             <paramref name="factory"/> is null</exception>
+        </member>
+        <member name="T:WatiN.Core.Logging.LogMessageType">
+            <summary>
+            enumeration of the logging types
+            </summary>
+        </member>
+        <member name="F:WatiN.Core.Logging.LogMessageType.Action">
+            <summary>
+            action logging type
+            </summary>
+        </member>
+        <member name="F:WatiN.Core.Logging.LogMessageType.Debug">
+            <summary>
+            debug logging type
+            </summary>
+        </member>
+        <member name="F:WatiN.Core.Logging.LogMessageType.Info">
+            <summary>
+            info logging type
+            </summary>
         </member>
         <member name="T:WatiN.Core.Span">
             <summary>
@@ -8862,11 +9626,6 @@
             Thrown if a (java) script failed to run. The innerexception returns the actual exception.
             </summary>
         </member>
-        <member name="T:WatiN.Core.Exceptions.IENotFoundException">
-            <summary>
-            Thrown if the searched for internet explorer (IE) can't be found.
-            </summary>
-        </member>
         <member name="T:WatiN.Core.Comparers.RegexComparer">
             <summary>
             This class supports matching a regular expression with a string value.
@@ -8968,6 +9727,9 @@
             <inheritdoc />
         </member>
         <member name="M:WatiN.Core.Native.InternetExplorer.IEElement.GetElementBounds">
+            <inheritdoc />
+        </member>
+        <member name="M:WatiN.Core.Native.InternetExplorer.IEElement.GetJavaScriptElementReference">
             <inheritdoc />
         </member>
         <member name="P:WatiN.Core.Native.InternetExplorer.IEElement.AsHtmlElement">
@@ -9107,6 +9869,32 @@
             </code>
             
             </example>
+        </member>
+        <member name="M:WatiN.Core.Logging.Logger.LogInfo(System.String,System.Object[])">
+            <summary>
+            Logs the information message. These should be comments and information messages from within WatiN.
+            </summary>
+            <param name="message">A message containing zero or more format items.</param>
+            <param name="args">An object array containing zero or more objects to format</param>
+            <example>
+            Call this function from your code like this:
+            <code>
+            Logger.LogInfo("Some message");
+            </code>
+            or
+            <code>
+            Logger.LogInfo("Some message with an {0} to {1}, "item", "format");
+            </code>
+            
+            </example>
+        </member>
+        <member name="M:WatiN.Core.Logging.Logger.Log(WatiN.Core.Logging.LogMessageType,System.String,System.Object[])">
+            <summary>
+            base logging method to send data
+            </summary>
+            <param name="logType">LogTypes enumeration item</param>
+            <param name="message">A message containing zero or more format items.</param>
+            <param name="args">An object array containing zero or more objects to format</param>
         </member>
         <member name="P:WatiN.Core.Logging.Logger.LogWriter">
             <summary>

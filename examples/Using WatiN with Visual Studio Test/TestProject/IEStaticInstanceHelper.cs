@@ -16,7 +16,7 @@ namespace TestProject
                 var currentThreadId = GetCurrentThreadId();
                 if (currentThreadId != _ieThread)
                 {
-                    _ie = IE.AttachToIE(Find.By("hwnd", _ieHwnd));
+                    _ie = IE.AttachTo<IE>(Find.By("hwnd", _ieHwnd));
                     _ieThread = currentThreadId;
                 }
                 return _ie;

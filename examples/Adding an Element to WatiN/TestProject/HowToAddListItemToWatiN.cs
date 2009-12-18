@@ -8,7 +8,7 @@ namespace TestProject
     /// <seealso cref="http://watinandmore.blogspot.com/2009/03/custom-elements-and-controls-in-watin.html"/>
     /// </summary>
     [TestClass]
-    public class HowToAddLinkedListToWatiN
+    public class HowToAddListItemToWatiN
     {
         [TestMethod]
         public void ShouldBePossibleToEnumerateListItems()
@@ -49,7 +49,7 @@ namespace TestProject
                 // get its first child (assuming it has a child)
                 var firstChild = ((IElementContainer)firstListItem).Elements[0];
 
-                // WHEN getting the parent of the child we should get a the listitem again
+                // WHEN getting the parent of the child we should get the listitem again
                 var parentListItem = firstChild.Parent;
 
                 // THEN the returned item should be typed cause ElementFactory knows about ListItem
