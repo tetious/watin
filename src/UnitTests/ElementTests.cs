@@ -554,6 +554,37 @@ namespace WatiN.Core.UnitTests
 		                    });
 		}
 
+		[Test]
+		public void WaitUntilElementRemovedAfter3Seconds_should_work_on_collection_item_as_well()
+		{
+			const int indexTextFieldToRemove = 9;
+
+		    ExecuteTestWithAnyBrowser(browser =>
+		                    {
+                                // GIVEN
+		                        Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3,
+		                                      "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+
+		                        browser.GoTo(TestEventsURI);
+
+		                        var textfields = browser.TextFields;
+
+		                        Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
+		                        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
+
+		                        browser.Button("removeElement").ClickNoWait();
+
+		                        Assert.IsTrue(textfields[indexTextFieldToRemove].Exists);
+
+                                // WHEN
+                                textfields[indexTextFieldToRemove].WaitUntilRemoved();
+
+                                // THEN
+                                Assert.AreEqual("textFieldToRemove", textfields[indexTextFieldToRemove].Id);
+                                Assert.IsFalse(textfields[indexTextFieldToRemove].Exists);
+		                    });
+		}
+
 		[Test, ExpectedException(typeof (Exceptions.TimeoutException), ExpectedMessage = "Timeout while waiting 1 seconds for element to show up.")]
 		public void WaitUntilElementExistsTimeOutException()
 		{

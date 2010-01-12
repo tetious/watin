@@ -888,10 +888,14 @@ namespace WatiN.Core
                                                   waitUntilExists ? "show up" : "disappear")
                 };
 
-            tryActionUntilTimeOut.Try(() => 
-            {
-                    return ! CanFindNativeElement() || Exists == waitUntilExists;
-            });
+            tryActionUntilTimeOut.Try(() =>
+                                          {
+                                              var tempCache = GetCachedNativeElement();
+                                              var exists = !CanFindNativeElement() || Exists == waitUntilExists;
+                                              if (_cachedNativeElement == null && tempCache != null) _cachedNativeElement = tempCache;
+
+                                              return exists;
+                                          });
 
             if (! CanFindNativeElement())
                 throw new WatiNException("It's not possible to find the element because no element finder is available.");
