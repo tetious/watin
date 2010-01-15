@@ -23,6 +23,7 @@ using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.UnitTests.TestUtils;
+using TimeoutException=WatiN.Core.Exceptions.TimeoutException;
 
 namespace WatiN.Core.UnitTests
 {
@@ -35,7 +36,7 @@ namespace WatiN.Core.UnitTests
 			Ie.HtmlDialogs.CloseAll();
 		}
 
-		[Test]
+        [Test]
 		public void HTMLDialogModalByTitle()
 		{			
             Ie.Button("modalid").ClickNoWait();
@@ -126,12 +127,90 @@ namespace WatiN.Core.UnitTests
 		public void HTMLDialogModeless()
 		{
 			Ie.Button("popupid").Click();
+            Thread.Sleep(100);
 			using (Document dialog = Ie.HtmlDialogs[0])
 			{
 				var value = dialog.TextField("dims").Value;
 				Assert.AreEqual("47", value);
 			}
 		}
+
+	    [Test]
+        public void HtmlDialog_should_exist()
+	    {
+	        // GIVEN
+	        bool exists;
+
+            Ie.Button("popupid").Click();
+            Thread.Sleep(100);
+
+            using (var dialog = Ie.HtmlDialogs[0])
+            {
+                // WHEN
+                exists = dialog.Exists;
+            }
+
+            // THEN
+            Assert.That(exists, Is.True, "Expect HtmlDialog would exist");
+	    }
+
+	    [Test]
+        public void HtmlDialog_should_not_exist()
+	    {
+	        // GIVEN
+	        bool exists;
+
+            Ie.Button("popupid").Click();
+            Thread.Sleep(100);
+
+	        var dialog = Ie.HtmlDialogs[0];
+            dialog.Close();
+
+            // WHEN
+            exists = dialog.Exists;
+
+            // THEN
+            Assert.That(exists, Is.False, "Expect HtmlDialog should no longer exist");
+	    }
+
+        [Test]
+        public void Should_wait_until_html_dialog_is_closed()
+        {
+            // GIVEN
+            Ie.Button("popupid").Click();
+            Thread.Sleep(100);
+
+            var dialog = Ie.HtmlDialogs[0];
+            dialog.Button("closebutton").ClickNoWait();
+
+            // WHEN
+            dialog.WaitUntilClosed();
+
+            // THEN
+            Assert.That(dialog.Exists, Is.False, "Expect HtmlDialog was closed");
+        }
+
+        [Test]
+        public void WaitUntilClosed_should_throw_trimeout_exception_when_timed_out()
+        {
+            // GIVEN
+            Ie.Button("popupid").Click();
+            Thread.Sleep(100);
+
+            var dialog = Ie.HtmlDialogs[0];
+
+            try
+            {
+                // WHEN
+                dialog.WaitUntilClosed(1);
+
+                Assert.Fail("Should have thrown TimeoutException");
+            }
+            catch (TimeoutException)
+            {
+                // THEN: this is OK
+            }
+        }
 
 		public override Uri TestPageUri
 		{

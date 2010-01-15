@@ -10,9 +10,21 @@
 function fnOpen()
 {
    window.showModalDialog("popup.html", "", "") 
-} 
+}
 
-        </script>
+function closeWindowDelayed() {
+    pause(2000);
+    window.close();
+}
+
+function pause(millis) {
+    var date = new Date();
+    var curDate = null;
+
+    do { curDate = new Date(); }
+    while (curDate - date < millis)
+}
+    </script>
 	</head>
 	<body>
 		Popup
@@ -20,6 +32,7 @@ function fnOpen()
 			<input id="name" type="text"/>
 			<input id="hello" value="hello" type="button" onclick="javascript:alert('hello')"/>
 			<input id="modalid" onclick="fnOpen()" type="button" value="Show modal dialog" name="popupmodalname" />
+			<input id="closebutton" onclick="closeWindowDelayed()" type="button" value="Close dialog delayed" name="popupmodalname" />
 			<input id="dims" value="47" type="hidden"/>
 		</form>
 	</body>

@@ -65,6 +65,15 @@ namespace WatiN.Core
 			base.Dispose(true);
 		}
 
+	    public bool Exists
+	    {
+	        get
+	        {
+	            var window = new Window(hWnd);
+	            return window.Exists();
+	        }
+	    }
+
 		public override INativeDocument OnGetNativeDocument()
 		{
 			return new IEDocument(IEUtils.IEDOMFromhWnd(hwnd));
@@ -90,5 +99,20 @@ namespace WatiN.Core
 
 			return value;
 		}
-    }
+
+        public virtual void WaitUntilClosed()
+        {
+            WaitUntilClosed(Settings.WaitUntilExistsTimeOut);
+        }
+
+        public virtual void WaitUntilClosed(int timeout)
+	    {
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout))
+            {
+                ExceptionMessage = () => string.Format("waiting {0} seconds for HtmlDialog to close.", timeout)
+            };
+
+            tryActionUntilTimeOut.Try(() => !Exists);
+        }
+	}
 }
