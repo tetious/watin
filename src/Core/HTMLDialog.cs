@@ -65,7 +65,7 @@ namespace WatiN.Core
 			base.Dispose(true);
 		}
 
-	    public bool Exists
+	    public virtual bool Exists
 	    {
 	        get
 	        {
