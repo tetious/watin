@@ -150,6 +150,8 @@ namespace WatiN.Core.UnitTests.IETests
                 ReferenceCount = ie.DialogWatcher.ReferenceCount;
 
                 ie.Button("popupid").Click();
+                Thread.Sleep(100);
+
 
                 using (Document document = ie.HtmlDialog(Find.ByIndex(0)))
                 {

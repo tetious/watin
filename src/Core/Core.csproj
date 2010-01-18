@@ -490,6 +490,7 @@
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StaticElementFinder.cs" />
     <Compile Include="UtilityClasses\EmptyArray.cs" />
     <Compile Include="UtilityClasses\LazyList.cs" />
     <Compile Include="UtilityClasses\VariableNameHelper.cs" />

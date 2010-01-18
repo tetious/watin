@@ -136,7 +136,6 @@ namespace WatiN.Core.UnitTests.ActionTests
             // GIVEN
             var domContainer = new Mock<DomContainer>().Object;
             var nativeElementMock = new Mock<INativeElement>();
-            nativeElementMock.Expect(x => x.IsElementReferenceStillValid()).Returns(true);
             var element = new Element(domContainer, nativeElementMock.Object);
 
             Settings.HighLightColor = "myTestColor";

@@ -33,7 +33,6 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
-
     public delegate INativeElementCollection NativeElementCollectionFactory(INativeElement nativeElement);
 
 	/// <summary>
@@ -89,28 +88,28 @@ namespace WatiN.Core
 		/// <param name="domContainer"><see cref="DomContainer" /> this element is located in</param>
 		/// <param name="nativeElement">The element</param>
 		public Element(DomContainer domContainer, INativeElement nativeElement)
-		{
-			InitElement(domContainer,nativeElement, null);
-		}
+        {
+            InitElement(domContainer, nativeElement, null);
+        }
 
-		/// <summary>
+        /// <summary>
 		/// This constructor is mainly used from within WatiN.
 		/// </summary>
 		/// <param name="domContainer"><see cref="DomContainer"/> this element is located in</param>
 		/// <param name="elementFinder">The element finder.</param>
         public Element(DomContainer domContainer, ElementFinder elementFinder)
 		{
-			InitElement(domContainer, null, elementFinder);
-		}
+            InitElement(domContainer, null, elementFinder);
+        }
 
-        private void InitElement(DomContainer domContainer, INativeElement nativeElement, ElementFinder elementFinder) 
-		{
+        private void InitElement(DomContainer domContainer, INativeElement nativeElement, ElementFinder elementFinder)
+        {
             if (domContainer == null) throw new ArgumentNullException("domContainer");
             if (nativeElement == null && elementFinder == null) throw new ArgumentException("Either nativeElement or elementFinder needs to be set");
-			
+
             DomContainer = domContainer;
-			_cachedNativeElement = nativeElement;
-			_elementFinder = elementFinder;
+            _cachedNativeElement = nativeElement;
+            _elementFinder = elementFinder ?? new StaticElementFinder(domContainer, nativeElement);
         }
 
 		/// <summary>
@@ -754,9 +753,18 @@ namespace WatiN.Core
 		{
 			get
             {
-				return FindNativeElement() != null;
+                return FindNativeElementInternal() != null;
 			}
 		}
+
+        private INativeElement FindNativeElementInternal()
+        {
+            var foundElement = _elementFinder.FindFirst();
+
+            _cachedNativeElement = foundElement != null ? foundElement.GetCachedNativeElement() : null;
+
+            return _cachedNativeElement;
+        }
 
 		/// <summary>
 		/// Waits until the element exists or will time out after 30 seconds.
@@ -888,17 +896,7 @@ namespace WatiN.Core
                                                   waitUntilExists ? "show up" : "disappear")
                 };
 
-            tryActionUntilTimeOut.Try(() =>
-                                          {
-                                              var tempCache = GetCachedNativeElement();
-                                              var exists = !CanFindNativeElement() || Exists == waitUntilExists;
-                                              if (_cachedNativeElement == null && tempCache != null) _cachedNativeElement = tempCache;
-
-                                              return exists;
-                                          });
-
-            if (! CanFindNativeElement())
-                throw new WatiNException("It's not possible to find the element because no element finder is available.");
+            tryActionUntilTimeOut.Try(() => Exists == waitUntilExists);
         }
 
         /// <summary>
@@ -963,22 +961,7 @@ namespace WatiN.Core
         /// <returns>The native element, or null if not found.</returns>
         public virtual INativeElement FindNativeElement()
         {
-            if (_cachedNativeElement != null)
-            {
-                if (_cachedNativeElement.IsElementReferenceStillValid())
-                    return _cachedNativeElement;
-
-                _cachedNativeElement = null;
-            }
-
-            if (_elementFinder != null)
-            {
-                var foundElement = _elementFinder.FindFirst();
-                if (foundElement != null)
-                    _cachedNativeElement = foundElement._cachedNativeElement;
-            }
-
-            return _cachedNativeElement;
+            return _cachedNativeElement ?? FindNativeElementInternal();
         }
 
         /// <summary>
@@ -987,37 +970,23 @@ namespace WatiN.Core
 		/// <returns>The native element, or null if not found.</returns>
 		public virtual INativeElement RefreshNativeElement()
 		{
-            ClearCachedNativeElement();
-            return FindNativeElement();
+            Refresh();
+            return NativeElement;
 		}
-
-        /// <summary>
-        /// Returns true if it is possible to find a native element.
-        /// </summary>
-        /// <remarks>
-        /// This method may return false if the element does not have an associated element finder
-        /// and no native element is currently cached.
-        /// </remarks>
-        /// <returns>True if an element can be found.</returns>
-        public virtual bool CanFindNativeElement()
-        {
-            return _cachedNativeElement != null || _elementFinder != null;
-        }
 
         /// <summary>
         /// Clears the cached native element.
         /// </summary>
         protected void ClearCachedNativeElement()
         {
-            if (_elementFinder != null)
-                _cachedNativeElement = null;
+            _cachedNativeElement = null;
         }
 
         /// <summary>
         /// Gets the cached native element immediately.
         /// </summary>
         /// <returns></returns>
-        protected INativeElement GetCachedNativeElement()
+        internal INativeElement GetCachedNativeElement()
         {
             return _cachedNativeElement;
         }
@@ -1237,15 +1206,12 @@ namespace WatiN.Core
             if (element == null)
                 return false;
 
-            if (! CanFindNativeElement() || ! element.CanFindNativeElement())
-                return ReferenceEquals(element, this);
-
             return NativeElement.Equals(element.NativeElement);
         }
 
         public override int GetHashCode()
         {
-            return CanFindNativeElement() ? NativeElement.GetHashCode() : 0;
+            return NativeElement.GetHashCode();
         }
 
         /// <summary>
@@ -1269,7 +1235,7 @@ namespace WatiN.Core
         {
             return () =>
                 {
-                    INativeElement nativeElement = FindNativeElement();
+                    var nativeElement = FindNativeElement();
                     return nativeElement != null ? factory.Invoke(nativeElement) : null;
                 };
         }
@@ -1279,7 +1245,7 @@ namespace WatiN.Core
             // Don't display our value if it doesn't exist... it causes the debugger to time out.
             return String.Format(CultureInfo.InvariantCulture, "{0}@{1:X}[Constraint = \"{2}\", Exists = {3}]", 
                                  GetType().FullName, RuntimeHelpers.GetHashCode(this),
-                                 _elementFinder != null ? _elementFinder.ConstraintToString() : "",
+                                 _elementFinder.ConstraintToString(),
                                  Exists);
         }
 	}
