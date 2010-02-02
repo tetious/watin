@@ -61,11 +61,11 @@ namespace WatiN.Core.UtilityClasses
 
         public static void AsyncActionOnBrowser(ThreadStart action)
         {
-            var clickButton = new Thread(action);
-            clickButton.SetApartmentState(ApartmentState.STA);
+            var thread = new Thread(action);
+            thread.SetApartmentState(ApartmentState.STA);
             
-            clickButton.Start();
-            clickButton.Join(500);
+            thread.Start();
+            thread.Join(500);
         }
 
         public static string EscapeSendKeysCharacters(string value) 

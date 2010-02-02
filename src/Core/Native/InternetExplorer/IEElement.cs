@@ -37,6 +37,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private readonly object _element;
 	    private string _javascriptElementReference;
+	    private IEFireEventHandler _fireEventHandler;
 
 	    public IEElement(object element)
         {
@@ -266,29 +267,29 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (eventProperties == null)
             {
-                IEUtils.FireEvent(AsDispHTMLBaseElement, eventName);
+                FireEventHandler.FireEvent(eventName);
             }
             else
             {
-                if (eventName == "onKeyPress")
-                {
-                    var addChar = eventProperties.GetValues("keyCode")[0];
-                    var newValue = GetAttributeValue("value") + ((char)int.Parse(addChar));
-                    SetAttributeValue("value", newValue);
-                }
-
-                IEUtils.FireEvent(AsDispHTMLBaseElement, eventName, eventProperties);
+                FireEventHandler.FireEvent(eventName, eventProperties);
             }
         }
 
-        /// <inheritdoc />
+	    /// <inheritdoc />
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            var scriptCode = IEUtils.CreateJavaScriptFireEventCode(eventProperties, AsDispHTMLBaseElement, eventName);
+            FireEventHandler.FireEventNoWait(eventName, eventProperties);
+        }
 
-            var asyncScriptRunner = new AsyncScriptRunner(scriptCode.ToString(), ParentWindow);
+        private IEFireEventHandler FireEventHandler
+        {
+            get
+            {
+                if (_fireEventHandler == null)
+                    _fireEventHandler = new IEFireEventHandler(this);
 
-            UtilityClass.AsyncActionOnBrowser(asyncScriptRunner.FireEvent);
+                return _fireEventHandler;
+            }
         }
 
         /// <inheritdoc />
@@ -398,7 +399,7 @@ namespace WatiN.Core.Native.InternetExplorer
         /// Gets the DispHtmlBaseElement />.
         /// </summary>
         /// <value>The DispHtmlBaseElement.</value>
-        private DispHTMLBaseElement AsDispHTMLBaseElement
+        public DispHTMLBaseElement AsDispHTMLBaseElement
         {
             get { return (DispHTMLBaseElement)_element; }
         }
@@ -496,7 +497,7 @@ namespace WatiN.Core.Native.InternetExplorer
 	        return _javascriptElementReference;
 	    }
 
-	    private IHTMLWindow2 ParentWindow
+	    public IHTMLWindow2 ParentWindow
 	    {
             get { return ((IHTMLDocument2)AsHtmlElement.document).parentWindow; }
 	    }

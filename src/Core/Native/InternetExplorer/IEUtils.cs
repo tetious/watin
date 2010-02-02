@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Text;
 using mshtml;
@@ -74,89 +73,6 @@ namespace WatiN.Core.Native.InternetExplorer
             }
         }
 
-        /// <summary>
-        /// Fires the given event on the given element.
-        /// </summary>
-        /// <param name="element">Element to fire the event on</param>
-        /// <param name="eventName">Name of the event to fire</param>
-        public static void FireEvent(DispHTMLBaseElement element, string eventName)
-        {
-            var collection = new NameValueCollection { { "button", "1" } };
-
-            FireEvent(element, eventName, collection);
-        }
-
-        public static StringBuilder CreateJavaScriptFireEventCode(NameValueCollection eventObjectProperties, DispHTMLBaseElement element, string eventName)
-        {
-            var scriptCode = new StringBuilder();
-            scriptCode.Append("var newEvt = document.createEventObject();");
-
-            CreateJavaScriptEventObject(scriptCode, eventObjectProperties);
-
-            var originalId = UtilityClass.TryFuncFailOver(() => element.id, 25, 10);
-
-            var variableName = IEVariableNameHelper.CreateVariableName();
-            element.id = variableName;
-
-            scriptCode.Append(string.Format("var {0} = document.getElementById('{0}');", variableName));
-            scriptCode.Append(string.Format("{0}.id = '{1}';", variableName, originalId));
-            scriptCode.Append(string.Format("{0}.fireEvent('{1}', newEvt);", variableName, eventName));
-
-            return scriptCode;
-        }
-
-        private static void CreateJavaScriptEventObject(StringBuilder scriptCode, NameValueCollection eventObjectProperties)
-        {
-            if (eventObjectProperties == null) return;
-
-            for (var index = 0; index < eventObjectProperties.Count; index++)
-            {
-                if (eventObjectProperties.GetKey(index) == "charCode") continue;
-
-                scriptCode.Append("newEvt.");
-                scriptCode.Append(eventObjectProperties.GetKey(index));
-                scriptCode.Append(" = ");
-                scriptCode.Append(eventObjectProperties.GetValues(index)[0]);
-                scriptCode.Append(";");
-            }
-        }
-
-        /// <summary>
-        /// Fires the given event on the given element.
-        /// </summary>
-        /// <param name="element">Element to fire the event on</param>
-        /// <param name="eventName">Name of the event to fire</param>
-        /// <param name="eventObjectProperties">The event object properties.</param>
-        public static void FireEvent(DispHTMLBaseElement element, string eventName, NameValueCollection eventObjectProperties)
-        {
-            var scriptCode = CreateJavaScriptFireEventCode(eventObjectProperties, element, eventName);
-
-            try
-            {
-                var window = ((IHTMLDocument2)element.document).parentWindow;
-                RunScript(scriptCode, window);
-            }
-            catch (RunScriptException)
-            {
-                // In a cross domain automation scenario a System.UnauthorizedAccessException 
-                // is thrown.  This code does cause the registered client event handlers to be fired
-                // but it does not deliver the event to the control itself.  Consequently the
-                // control state may need to be updated directly (eg. as with key press event).
-                
-                object prototypeEvent = null;
-                object eventObj = ((IHTMLDocument4)element.document).CreateEventObject(ref prototypeEvent);
-
-                for (var index = 0; index < eventObjectProperties.Count; index++)
-                {
-                    var property = eventObjectProperties.GetKey(index);
-                    var value = eventObjectProperties.GetValues(index)[0];
-
-                    ((IHTMLEventObj2)eventObj).setAttribute(property, value, 0);
-                }
-
-                element.FireEvent(eventName, ref eventObj);
-            }
-        }
 
         public static IHTMLDocument2 IEDOMFromhWnd(IntPtr hWnd)
         {

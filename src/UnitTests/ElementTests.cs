@@ -804,7 +804,7 @@ namespace WatiN.Core.UnitTests
 			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
 			Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
 
-            Assert.That(button.Id, Is.EqualTo("ButtonWithId"), "Button id shouldn't be changed");
+            Assert.That(Ie.Button("ButtonWithId").Exists, Is.True, "Button id shouldn't be changed");
 		}
 
         // Ie specific test
