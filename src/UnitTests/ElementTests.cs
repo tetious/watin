@@ -787,44 +787,48 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser => Assert.AreEqual("1", browser.Form("Form").GetAttributeValue("nodeType")));
 		}
 
-        // Ie specific test to see if the way the element is referenced to fire an event on works.
 		[Test]
         public void FireEvent_on_element_with_id_should_not_change_id_value()
 		{
-			Ie.GoTo(TestEventsURI);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TestEventsURI);
 
-			var report = Ie.TextField("Report");
-            var button = Ie.Button("ButtonWithId");
+                                var report = browser.TextField("Report");
+                                var button = browser.Button("ButtonWithId");
 
-			Assert.That(button.Id, Is.Not.Null, "Button id null before click event");
-			Assert.IsNull(report.Text, "Report not empty");
+		                        Assert.That(button.Id, Is.Not.Null, "Button id null before click event");
+		                        Assert.IsNull(report.Text, "Report not empty");
 
-			button.KeyDown();
+		                        button.KeyDown();
 
-			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
-			Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
+		                        Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
+		                        Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
 
-            Assert.That(Ie.Button("ButtonWithId").Exists, Is.True, "Button id shouldn't be changed");
+                                Assert.That(browser.Button("ButtonWithId").Exists, Is.True, "Button id shouldn't be changed");
+		                    });
 		}
 
-        // Ie specific test
 		[Test]
-        public void Firing_an_event_on_element_with_no_id_should_assign_unique_id_to_element()
+        public void Firing_an_event_on_element_with_no_id_should_work()
 		{
-			Ie.GoTo(TestEventsURI);
+		    ExecuteTest(browser =>
+		                    {
+                                browser.GoTo(TestEventsURI);
 
-			var report = Ie.TextField("Report");
-			var button = Ie.Button(Find.ByValue("Button without id"));
+                                var report = browser.TextField("Report");
+                                var button = browser.Button(Find.ByValue("Button without id"));
 
-			Assert.IsNull(button.Id, "Button id not null before click event");
-			Assert.IsNull(report.Text, "Report not empty");
+		                        Assert.IsNull(button.Id, "Button id not null before click event");
+		                        Assert.IsNull(report.Text, "Report not empty");
 
-			button.KeyDown();
+		                        button.KeyDown();
 
-			Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
-			Assert.That(report.Text, Text.StartsWith("button.id = "), "Report should start with 'button.id = '");
+		                        Assert.IsNotNull(report.Text, "No keydown event fired (report is empty)");
+		                        Assert.That(report.Text, Is.EqualTo("button.id = "), "Report should start with 'button.id = '");
 
-            Assert.That(button.Id, Is.Not.Null, "Button id not null after click event");
+		                        Assert.That(button.Id, Is.Null, "Button id not null after click event");
+		                    });
 		}
 
         // TODO: make this a multi browser test when HtmlDialogs are implemented for firefox

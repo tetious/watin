@@ -488,11 +488,10 @@ namespace WatiN.Core.Native.InternetExplorer
             var originalId = GetWithFailOver(() => AsHtmlElement.id);
             AsHtmlElement.id = _javascriptElementReference;
 
-            var scriptCode = new StringBuilder();
-            scriptCode.Append(string.Format("var {0} = document.getElementById('{0}');", _javascriptElementReference));
-            scriptCode.Append(string.Format("{0}.id = '{1}';", _javascriptElementReference, originalId));
-
+            var scriptCode = string.Format("var {0} = document.getElementById('{0}');", _javascriptElementReference);
             IEUtils.RunScript(scriptCode, ParentWindow);
+
+            AsHtmlElement.id = originalId;
 
 	        return _javascriptElementReference;
 	    }
