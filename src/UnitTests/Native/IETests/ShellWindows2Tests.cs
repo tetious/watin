@@ -88,8 +88,8 @@ namespace WatiN.Core.UnitTests.IETests
             }
             finally
             {
-                if (process1 != null) process1.Kill();
-                if (process2 != null) process2.Kill();
+                if (process1 != null && !process1.HasExited) process1.Kill();
+                if (process2 != null && !process2.HasExited) process2.Kill();
             }
         }
 
