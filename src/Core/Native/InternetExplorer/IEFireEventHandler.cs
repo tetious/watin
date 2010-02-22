@@ -89,11 +89,16 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <param name="eventProperties">The event object properties.</param>
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
+            
             if (eventName == "onKeyPress" && eventProperties != null)
             {
-                var addChar = eventProperties.GetValues("keyCode")[0];
-                var newValue = _ieElement.GetAttributeValue("value") + ((char)int.Parse(addChar));
-                _ieElement.SetAttributeValue("value", newValue);
+                string[] keys = eventProperties.GetValues("keyCode");
+                if (keys!=null && keys.Length > 0)
+                {
+                    var addChar = keys[0];
+                    var newValue = _ieElement.GetAttributeValue("value") + ((char) int.Parse(addChar));
+                    _ieElement.SetAttributeValue("value", newValue);
+                }
             }
 
             var scriptCode = CreateJavaScriptFireEventCode(eventProperties, eventName);
