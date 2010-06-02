@@ -92,7 +92,7 @@ namespace WatiN.Core.Native.InternetExplorer
             
             if (eventName == "onKeyPress" && eventProperties != null)
             {
-                string[] keys = eventProperties.GetValues("keyCode");
+                var keys = eventProperties.GetValues("keyCode");
                 if (keys!=null && keys.Length > 0)
                 {
                     var addChar = keys[0];

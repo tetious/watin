@@ -110,7 +110,10 @@ namespace WatiN.Core
         private static string pathToExe;
 
         /// <summary>
-        /// Gets the path to FireFox executable.
+        /// Gets or sets the path to FireFox executable. By default the registry and common
+        /// file locations will be used to find the the firefox executable.
+        /// When manually setting this property make sure to also include the path and name
+        /// of the executable (c:\somedirectory\firefox.exe)
         /// </summary>
         /// <value>The path to exe.</value>
         public static string PathToExe
@@ -124,6 +127,8 @@ namespace WatiN.Core
 
                 return pathToExe;
             }
+
+            set { pathToExe = value; }
         }
 
         internal static void CreateProcess(string arguments, bool waitForMainWindow)

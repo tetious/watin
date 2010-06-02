@@ -137,5 +137,31 @@ namespace WatiN.Core.UnitTests.FireFoxTests
                 Assert.That(fireFox.Buttons[0].Exists);
             }
         }
+
+        [Test]
+        public void Should_be_possible_to_set_the_path_to_a_firefox_exe()
+        {
+            // GIVEN
+            FireFox.PathToExe = @"c:\FireFox.exe";
+
+            // WHEN
+            var pathToExe = FireFox.PathToExe;
+
+            // THEN
+            Assert.That(pathToExe, Is.EqualTo(@"c:\FireFox.exe"));
+        }
+
+        [Test]
+        public void Should_determine_FireFox_PathToExe_from_the_registry_and_common_places_on_disk()
+        {
+            // GIVEN
+            FireFox.PathToExe = null;
+
+            // WHEN
+            var pathToExe = FireFox.PathToExe;
+
+            // THEN
+            Assert.That(pathToExe, Is.Not.Null);
+        }
     }
 }
