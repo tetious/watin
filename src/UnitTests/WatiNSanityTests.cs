@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
 
-//Copyright 2006-2009 Jeroen van Menen
+//Copyright 2006-2010 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -90,9 +90,9 @@ namespace WatiN.Core.UnitTests
         public void ShouldEnsureThatEachCodeFileHasACopyRightHeader()
         {
             var copyRightHeader =
-                "#region WatiN Copyright (C) 2006-2009 Jeroen van Menen" + Environment.NewLine +
+                "#region WatiN Copyright (C) 2006-2010 Jeroen van Menen" + Environment.NewLine +
                 "" + Environment.NewLine +
-                "//Copyright 2006-2009 Jeroen van Menen" + Environment.NewLine +
+                "//Copyright 2006-2010 Jeroen van Menen" + Environment.NewLine +
                 "//" + Environment.NewLine +
                 "//   Licensed under the Apache License, Version 2.0 (the \"License\");" + Environment.NewLine +
                 "//   you may not use this file except in compliance with the License." + Environment.NewLine +

@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2009 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
 
-//Copyright 2006-2009 Jeroen van Menen
+//Copyright 2006-2010 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -290,6 +290,7 @@ namespace WatiN.Core.UnitTests
         [Test]
         public void Bug_1958882_SelectNoWait_is_waiting_somewhere()
         {
+        	Logging.Logger.LogWriter = new Logging.ConsoleLogWriter();
             Ie.GoTo(TestEventsURI);
 
             var confirm = new ConfirmDialogHandler();

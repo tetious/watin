@@ -155,9 +155,7 @@
       <HintPath>..\..\lib\Net\3.5\Interop.SHDocVw.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.mshtml">
-      <Name>Microsoft.mshtml</Name>
-      <HintPath>..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-      <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
+      <HintPath>..\..\lib\Net\3.5\Microsoft.mshtml.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
