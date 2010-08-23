@@ -44,7 +44,7 @@ namespace WatiN.Core
             nativeElementBasedFactoriesByType = new Dictionary<Type, NativeElementBasedFactory>();
             elementFinderBasedFactoriesByType = new Dictionary<Type, ElementFinderBasedFactory>();
 
-			var assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetAssembly(typeof(Element));
             RegisterElementTypes(assembly);
 
             // Map the Element type to the special Any tag value.
@@ -139,16 +139,22 @@ namespace WatiN.Core
             return type.IsSubclassOf(typeof(Element)) && ! type.IsAbstract;
         }
 
-        private static bool RegisterElementTags(Type elementType)
+        private static IList<ElementTag> CreateElementTagsFromElementTagAttributes(Type elementType)
         {
-            var tagAttributes = (ElementTagAttribute[])elementType.GetCustomAttributes(typeof(ElementTagAttribute), false);
-            if (tagAttributes.Length == 0)
-                return false;
+        	if (elementType.Equals(typeof(Element))) return new[] { ElementTag.Any };
+        	    
+        	var tagAttributes = (ElementTagAttribute[])elementType.GetCustomAttributes(typeof(ElementTagAttribute), false);
 
             var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
             elementTagAttributes.Sort();
 
-            var tags = elementTagAttributes.ConvertAll(x => x.ToElementTag());
+            return elementTagAttributes.ConvertAll(x => x.ToElementTag());
+        }
+        
+        private static bool RegisterElementTags(Type elementType)
+        {
+        	var tags = CreateElementTagsFromElementTagAttributes(elementType);
+        	if (tags.Count == 0) return false;
             return RegisterElementTags(elementType, tags);
         }
 
@@ -173,26 +179,34 @@ namespace WatiN.Core
 
         private static void RegisterNativeElementBasedFactories(Type elementType)
         {
-            var nativeElementBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
-            if (nativeElementBasedConstructor == null)
+        	var nativeElementBasedFactory = CreateNativeElementBasedFactory(elementType);
+            if (nativeElementBasedFactory == null)
                 throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, INativeElement).", elementType));
-
-            NativeElementBasedFactory nativeElementBasedFactory = (container, nativeElement) =>
-                (Element)nativeElementBasedConstructor.Invoke(new object[] { container, nativeElement });
-
             nativeElementBasedFactoriesByType.Add(elementType, nativeElementBasedFactory);
+        }
+
+        private static NativeElementBasedFactory CreateNativeElementBasedFactory(Type elementType)
+        {
+        	var nativeElementBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(INativeElement) });
+            if (nativeElementBasedConstructor == null) return null;
+
+            return (container, nativeElement) => (Element)nativeElementBasedConstructor.Invoke(new object[] { container, nativeElement });
         }
 
         private static void RegisterElementFinderBasedFactories(Type elementType)
         {
-            var elementFinderBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(ElementFinder) });
-            if (elementFinderBasedConstructor == null)
+        	ElementFinderBasedFactory elementFinderBasedFactory = CreateElementFinderBasedFactory(elementType);
+            if (elementFinderBasedFactory == null)
                 throw new InvalidOperationException(String.Format("The element type '{0}' must have a constructor with signature .ctor(DomContainer, ElementFinder).", elementType));
-
-            ElementFinderBasedFactory elementFinderBasedFactory = (container, elementFinder) =>
-                (Element)elementFinderBasedConstructor.Invoke(new object[] { container, elementFinder });
-
             elementFinderBasedFactoriesByType.Add(elementType, elementFinderBasedFactory);
+        }
+        
+        private static ElementFinderBasedFactory CreateElementFinderBasedFactory(Type elementType)
+        {
+        	var elementFinderBasedConstructor = elementType.GetConstructor(new[] { typeof(DomContainer), typeof(ElementFinder) });
+            if (elementFinderBasedConstructor == null) return null;
+            
+            return (container, elementFinder) => (Element)elementFinderBasedConstructor.Invoke(new object[] { container, elementFinder });
         }
 
         /// <summary>
@@ -234,7 +248,8 @@ namespace WatiN.Core
         public static TElement CreateElement<TElement>(DomContainer domContainer, INativeElement nativeElement)
             where TElement : Element
         {
-            return (TElement)CreateElement(domContainer, nativeElement);
+        	var factory = GetNativeElementBasedfactory(typeof(TElement));
+            return (TElement)factory(domContainer, nativeElement);
         }
 
         /// <summary>
@@ -308,11 +323,9 @@ namespace WatiN.Core
         {
             if (elementType == null)
                 throw new ArgumentNullException("elementType");
-
-            if (! RegisterElementType(elementType, true))
-                throw new ArgumentException("Not a valid element type.", "elementType");
-
-            return new ReadOnlyCollection<ElementTag>(elementTagsByType[elementType]);
+            
+            var tags = CreateElementTagsFromElementTagAttributes(elementType);
+            return new ReadOnlyCollection<ElementTag>(tags);
         }
 
         /// <summary>
@@ -337,10 +350,20 @@ namespace WatiN.Core
             return CreateUntypedElement;
         }
 
+        private static NativeElementBasedFactory GetNativeElementBasedfactory(Type elementType)
+        {
+        	NativeElementBasedFactory factory;
+            if (nativeElementBasedFactoriesByType.TryGetValue(elementType, out factory)) return factory;
+            factory = CreateNativeElementBasedFactory(elementType);
+            return factory != null ? factory : CreateUntypedElement;
+        }
+
         private static ElementFinderBasedFactory GetElementFinderBasedFactory(Type elementType)
         {
             ElementFinderBasedFactory factory;
-            return elementFinderBasedFactoriesByType.TryGetValue(elementType, out factory) ? factory : CreateUntypedElement;
+            if (elementFinderBasedFactoriesByType.TryGetValue(elementType, out factory)) return factory;
+            factory = CreateElementFinderBasedFactory(elementType);
+            return factory != null ? factory : CreateUntypedElement;
         }
     }
 }

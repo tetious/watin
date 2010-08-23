@@ -43,7 +43,7 @@ namespace WatiN.Core
             var toplevelWindow = new Window(hWnd).ToplevelWindow;
 
 	        var windows = new WindowsEnumerator();
-            var popups = windows.GetWindows(window => window.ParentHwnd == toplevelWindow.Hwnd && NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));
+            var popups = windows.GetWindows(window => NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));
             foreach (var window in popups)
             {
                 var htmlDialog = new HtmlDialog(window.Hwnd);

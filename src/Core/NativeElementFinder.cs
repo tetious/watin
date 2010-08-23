@@ -28,7 +28,10 @@ namespace WatiN.Core
     /// </summary>
     public class NativeElementFinder : ElementFinder
     {
-        public delegate INativeElementCollection NativeElementCollectionFactory();
+        public delegate Element NativeElementBasedFactory(DomContainer domContainer, INativeElement nativeElement);
+  		public NativeElementBasedFactory WrapNativeElementFactory = (domContainer, nativeElement) => { return ElementFactory.CreateElement(domContainer, nativeElement); };
+
+  		public delegate INativeElementCollection NativeElementCollectionFactory();
 
         private readonly DomContainer domContainer;
         private readonly NativeElementCollectionFactory factory;
@@ -116,7 +119,7 @@ namespace WatiN.Core
 
         private Element WrapElement(INativeElement nativeElement)
         {
-            return ElementFactory.CreateElement(domContainer, nativeElement);
+        	return WrapNativeElementFactory(domContainer, nativeElement);
         }
 
         private bool IsMatchByTag(INativeElement nativeElement)

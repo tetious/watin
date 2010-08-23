@@ -299,7 +299,7 @@ namespace WatiN.Core.DialogHandlers
                     foreach (var window in windows)
                     {
                         if (!_keepRunning) return;
-                        HandleWindow(new Window(window.Hwnd));
+                        HandleWindow(window);
                     }
 
                     // Keep DialogWatcher responsive during 1 second sleep period
@@ -344,7 +344,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			if (!window.IsDialog()) return;
 	        if (!IsWindowOfIexploreProcess(window)) return;
-            
+			
             // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
 
