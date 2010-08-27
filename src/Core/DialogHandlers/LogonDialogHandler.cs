@@ -68,10 +68,10 @@ namespace WatiN.Core.DialogHandlers
 				// Find Handle of the "Frame" and then the combo username entry box inside the frame
 				var systemCredentialsHwnd = GetSystemCredentialsHwnd(window);
 				
-				NativeMethods.SetActiveWindow(systemCredentialsHwnd);
+				NativeMethods.SetActiveWindow(window.Hwnd);
 				Thread.Sleep(50);
 
-				NativeMethods.SetForegroundWindow(systemCredentialsHwnd);
+				NativeMethods.SetForegroundWindow(window.Hwnd);
 				Thread.Sleep(50);
 
                 var windowEnumarator = new WindowsEnumerator();
@@ -113,7 +113,13 @@ namespace WatiN.Core.DialogHandlers
 
 		private IntPtr GetSystemCredentialsHwnd(Window window)
 		{
-			return NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
+			var hwnd = NativeMethods.GetChildWindowHwnd(window.Hwnd, "SysCredential");
+			
+			// IE8 doesn't have the SysCredentails frame any more.
+			if (hwnd == IntPtr.Zero)
+				hwnd = NativeMethods.GetChildWindowHwnd(window.Hwnd, "DirectUIHWND");
+			
+			return hwnd;
 		}
 		
 		private static void checkArgument(string message, string parameter, string parameterName)

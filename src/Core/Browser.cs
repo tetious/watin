@@ -56,7 +56,7 @@ namespace WatiN.Core
 
             if (!result)
             {
-                Logger.LogAction("Failed to set Firefox as the foreground window.");
+            	Logger.LogAction("Failed to set {0} as the foreground window.", this.GetType());
             }
         }
 
