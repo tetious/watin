@@ -146,8 +146,10 @@ namespace WatiN.Core
         /// <inheritdoc />
 		public override int GetHashCode()
 		{
-			return (tagName != null ? tagName.GetHashCode() : 0)
-                + 29 * (inputType != null ? inputType.GetHashCode() : 0);
+			var tagNameHashCode = tagName != null ? tagName.GetHashCode() : 0;
+			var inputTypeHasCode = inputType != null ? inputType.GetHashCode() : 0;
+			
+			return tagNameHashCode ^ inputTypeHasCode;
 		}
 
         /// <inheritdoc />
