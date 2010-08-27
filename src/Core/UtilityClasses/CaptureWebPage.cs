@@ -59,7 +59,7 @@ namespace WatiN.Core.UtilityClasses
         {
             if (string.IsNullOrEmpty(filename)) throw new ArgumentNullException(filename);
 
-            var stream = new FileStream(filename, FileMode.Create);
+            var stream = CreateFileStream(filename);
             var imagetype = GetImagetype(filename);
 
             CaptureWebPageToFile(stream, imagetype, writeUrl, showGuides, scalePercentage, quality);
@@ -68,6 +68,11 @@ namespace WatiN.Core.UtilityClasses
             stream.Close();
         }
 
+        internal virtual Stream CreateFileStream(string filename)
+        {
+        	return new FileStream(filename, FileMode.Create);
+        }
+        
         public enum ImageCodecs { Jpeg, Tiff, Gif, Png, Bmp }
 
         private static ImageCodecs GetImagetype(string filename)

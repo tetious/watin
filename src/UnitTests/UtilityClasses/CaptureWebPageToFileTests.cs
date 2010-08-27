@@ -36,13 +36,32 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
+        public void Should_create_a_filestream()
+        {
+        	var captureWebPage = new CaptureWebPage(Ie);
+        	try
+        	{
+        		var stream = captureWebPage.CreateFileStream(@"c:\capture_image_test.jpg");
+        		Assert.That(stream, Is.Not.Null, "Expected a return value");
+        		Assert.That(stream as FileStream, Is.Not.Null, "Expected a FileStream instance");
+        		Assert.That(((FileStream)stream).Name, Is.EqualTo(@"c:\capture_image_test.jpg"));
+        		
+        	}
+        	catch(UnauthorizedAccessException ex)
+        	{
+        		Assert.That(ex.Message, Text.Contains(@"c:\capture_image_test.jpg"));
+        	}
+        	
+        }
+        
+        [Test]
         public void ScreenShotOfIeShouldNotBeBlack()
         {
             // GIVEN
             Ie.Visible = true;
             try
             {
-                var captureWebPage = new CaptureWebPageMock(Ie.DomContainer);
+                var captureWebPage = new CaptureWebPageMock(Ie);
 
                 // WHEN
                 captureWebPage.CaptureWebPageToFile(@"C:\capture.jpg", true, true, 100, 100);
@@ -219,6 +238,11 @@ namespace WatiN.Core.UnitTests
                 ImageCodecInfo = ici;
                 Image = finalImage;
             }
+            
+			internal override Stream CreateFileStream(string filename)
+			{
+				return new MemoryStream();
+			}
         }
     }
 }
