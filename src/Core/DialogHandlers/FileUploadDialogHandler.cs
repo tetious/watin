@@ -60,7 +60,7 @@ namespace WatiN.Core.DialogHandlers
         /// <summary>
         /// Determines whether this instance can handle the specified window.
         /// It check <see cref="Window.StyleInHex"/> for the value "96CC20C4"
-        /// or "96CC02C4".
+        /// , "96CC02C4" or "97CC02C4".
         /// </summary>
         /// <param name="window">The window to validate.</param>
         /// <returns>
@@ -68,7 +68,9 @@ namespace WatiN.Core.DialogHandlers
         /// </returns>
 		public override bool CanHandleDialog(Window window)
 		{
-			return (window.StyleInHex == "96CC20C4") || (window.StyleInHex == "96CC02C4");
+			return (window.StyleInHex == "96CC20C4") || 
+				   (window.StyleInHex == "96CC02C4") ||
+				   (window.StyleInHex == "97CC02C4");   // might be windows 7 specific
 		}
 	}
 }
