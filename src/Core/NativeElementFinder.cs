@@ -58,7 +58,10 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override ElementFinder FilterImpl(Constraint findBy)
         {
-            return new NativeElementFinder(factory, domContainer, ElementTags, Constraint & findBy);
+            var finder = new NativeElementFinder(factory, domContainer, ElementTags, Constraint & findBy);
+            finder.WrapNativeElementFactory = WrapNativeElementFactory;
+            
+            return finder;
         }
 
         /// <inheritdoc />
@@ -146,6 +149,19 @@ namespace WatiN.Core
         protected virtual string GetElementIdHint(Constraint constraint)
         {
             return IdHinter.GetIdHint(constraint);
+        }
+        
+        public static NativeElementFinder CreateNativeElementFinder<TElement>(NativeElementCollectionFactory factory, DomContainer domContainer, Constraint constraint)
+        	where TElement : Element
+        {
+        	var finder = new NativeElementFinder(factory, domContainer, ElementFactory.GetElementTags<TElement>(), constraint);
+            
+        	if (!typeof(TElement).Equals(typeof(Element)))
+            {
+            	finder.WrapNativeElementFactory = (dom_container, native_element) => { return ElementFactory.CreateElement<TElement>(dom_container, native_element); };
+            }
+        	
+        	return finder;
         }
     }
 }

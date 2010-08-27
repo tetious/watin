@@ -56,9 +56,48 @@ namespace WatiN.Core.UnitTests
 			});
 		}
 		
+		[Test]
+		public void Should_be_able_to_filter_on_customized_elements()
+		{
+			ExecuteTestWithAnyBrowser(browser =>
+			{
+			    // GIVEN
+			    var myButtons = browser.ElementsOfType<MyButton>();
+			    	
+			    // WHEN
+			    var myButtonsFiltered = myButtons.Filter(Find.ByIndex(2));
+			    
+			    // THEN
+				Assert.That(myButtonsFiltered[0].Exists, "MyButton doesn't exist");
+			});
+		}
+
+		[Test]
+		public void Should_be_able_to_use_custom_element_as_base_element_for_a_control()
+		{
+			ExecuteTestWithAnyBrowser(browser =>
+			{
+				var myControls = browser.Controls<MyControl>();
+				Assert.That(myControls.Count, Is.EqualTo(5));
+			});
+		}
+		
 		public override Uri TestPageUri {
 			get { return MainURI; }
 		}
+	}
+	
+	public class MyControl : Control<FieldSet>
+	{
+		
+	}
+	
+	//[ElementTag("fieldset")]
+	[ElementTag("input", InputType = "button")]
+	public class FieldSet : ElementContainer<Element>
+	{
+		public FieldSet(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
+        public FieldSet(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
 	}
 	
 	[ElementTag("input", InputType = "button")]

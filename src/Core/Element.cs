@@ -1228,7 +1228,8 @@ namespace WatiN.Core
             if (nativeElementCollection == null)
                 throw new ArgumentNullException("nativeElementCollection");
 
-            return new NativeElementFinder(CreateNativeElementCollectionFactory(nativeElementCollection), DomContainer, ElementFactory.GetElementTags<TElement>(), findBy);
+            var factory = CreateNativeElementCollectionFactory(nativeElementCollection);
+            return NativeElementFinder.CreateNativeElementFinder<TElement>(factory, DomContainer, findBy);
         }
 
         protected NativeElementFinder.NativeElementCollectionFactory CreateNativeElementCollectionFactory(NativeElementCollectionFactory factory)

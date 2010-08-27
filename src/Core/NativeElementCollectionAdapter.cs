@@ -604,15 +604,7 @@ namespace WatiN.Core
         private NativeElementFinder CreateElementFinder<TElement>(Constraint findBy)
             where TElement : Element
         {
-        	var finder = new NativeElementFinder(nativeElementCollectionFactory, domContainer, ElementFactory.GetElementTags<TElement>(), findBy);
-            
-        	var typeTElement = typeof(TElement);
-        	if (!typeTElement.Equals(typeof(Element)))
-            {
-            	finder.WrapNativeElementFactory = (dom_container, native_element) => { return ElementFactory.CreateElement<TElement>(dom_container, native_element); };
-            }
-        	
-        	return finder;
+        	return NativeElementFinder.CreateNativeElementFinder<TElement>(nativeElementCollectionFactory, domContainer, findBy);
         }
 
         private NativeElementFinder CreateElementFinder(Constraint findBy, string tagName, params string[] inputTypes)
