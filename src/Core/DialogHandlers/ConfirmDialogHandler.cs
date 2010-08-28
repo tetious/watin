@@ -34,7 +34,7 @@ namespace WatiN.Core.DialogHandlers
 
 		public override bool CanHandleDialog(Window window)
 		{
-			return (window.StyleInHex == "94C801C5" && ButtonWithId1Exists(window.Hwnd));
+			return ((window.StyleInHex == "94C801C5" || window.StyleInHex == "94C803C5") && ButtonWithId1Exists(window.Hwnd));
 		}
 
 		protected override int getOKButtonID()

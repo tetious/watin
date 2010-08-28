@@ -48,6 +48,23 @@ namespace WatiN.Core.UnitTests
 			Settings.Reset();
 		}
 
+		[Test, Ignore("This goes wrong but need to think about how to solve this. SF Bug 3000395.")]
+		public void Should_not_fail_on_pages_with_an_object_tag()
+		{
+			Ie.GoTo(new Uri(HtmlTestBaseURI, "html_with_object_tag.html"));
+			Assert.That(Ie.Elements.Count, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void Should_find_div_by_id_when_there_is_a_span_with_same_id_on_the_page()
+		{
+			ExecuteTest(browser =>
+	                      {
+	                      	browser.GoTo(MainURI);
+	                      	var element = browser.Div("myfabId");
+	                      	Assert.That(element.Exists, Is.True);			                          	                 
+	                      });
+		}
         // TODO: This should be mocked cause there is no browser logic involved
 		[Test]
 		public void AncestorTypeShouldReturnTypedElement()

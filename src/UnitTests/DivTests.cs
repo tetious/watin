@@ -61,7 +61,7 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-		                        Assert.AreEqual(4, browser.Divs.Count, "Unexpected number of Divs");
+		                        Assert.AreEqual(5, browser.Divs.Count, "Unexpected number of Divs");
 
 		                        var divs = browser.Divs;
 
@@ -84,7 +84,7 @@ namespace WatiN.Core.UnitTests
 		                        }
 
 		                        Assert.IsFalse(divEnumerator.MoveNext(), "Expected last item");
-		                        Assert.AreEqual(4, count);
+		                        Assert.AreEqual(5, count);
 		                    });
 		}
 

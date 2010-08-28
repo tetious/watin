@@ -64,7 +64,7 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void Spans()
 		{
-			const int expectedSpansCount = 3;
+			const int expectedSpansCount = 4;
 
 		    ExecuteTest(browser =>
 		                    {
