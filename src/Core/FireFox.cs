@@ -245,6 +245,15 @@ namespace WatiN.Core
         }
 
         #endregion Public instance methods
+        
+        /// <summary>
+        /// This feature is not available for fireFox
+        /// </summary>
+        /// <param name="filename"></param>
+		public override void CaptureWebPageToFile(string filename)
+		{
+			throw new NotImplementedException("This feature is not available for FireFox");
+		}
 
         #region Protected instance methods
         /// <summary>
