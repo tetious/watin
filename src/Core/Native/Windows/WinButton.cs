@@ -45,7 +45,7 @@ namespace WatiN.Core.Native.Windows
         {
             if (!Exists()) return;
 
-            Logger.LogAction("Clicking on '{0}'", Title);
+            Logger.LogAction((LogFunction log) => { log("Clicking on '{0}'", Title); });
 
             _hWnd.SendMessage(NativeMethods.WM_ACTIVATE, NativeMethods.MA_ACTIVATE, 0);
             _hWnd.SendMessage(NativeMethods.BM_CLICK, 0, 0);

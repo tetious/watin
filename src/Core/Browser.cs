@@ -242,7 +242,7 @@ namespace WatiN.Core
             if (succeeded)
             {
                 WaitForComplete();
-                Logger.LogAction("Navigated Back to '{0}'",Url);
+                Logger.LogAction((LogFunction log) => { log("Navigated Back to '{0}'",Url); });
             }
             else
             {
@@ -264,7 +264,7 @@ namespace WatiN.Core
             if (succeeded)
             {
                 WaitForComplete();
-                Logger.LogAction("Navigated Forward to '{0}",Url);
+                Logger.LogAction((LogFunction log) => { log("Navigated Forward to '{0}",Url); });
             }
             else
             {
@@ -310,7 +310,7 @@ namespace WatiN.Core
         /// </summary>
         public virtual void Refresh()
         {
-            Logger.LogAction("Refreshing browser from '{0}", Url);
+        	Logger.LogAction((LogFunction log) => { log("Refreshing browser from '{0}", Url); });
             NativeBrowser.Refresh();
             WaitForComplete();
         }

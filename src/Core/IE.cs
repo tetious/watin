@@ -628,7 +628,7 @@ namespace WatiN.Core
 	        
             if (IsInternetExplorerStillAvailable())
 	        {
-	            Logger.LogAction("Closing browser '{0}'", Title);
+            	Logger.LogAction((LogFunction log) => { log("Closing browser '{0}'", Title); });
 	        }
 
 	        DisposeAndCloseIE(true);
@@ -804,7 +804,7 @@ namespace WatiN.Core
 			if (url == null)
 				throw new ArgumentNullException("url");
 
-			Logger.LogAction(String.Format("Clearing cookies for site '{0}'.", url));
+			Logger.LogAction("Clearing cookies for site '{0}'.", url);
 
 			WinInet.ClearCookies(url);
 		}
@@ -982,7 +982,7 @@ namespace WatiN.Core
 
 		private HtmlDialog FindHtmlDialog(Constraint findBy, int timeout)
 		{
-			Logger.LogAction("Busy finding HTMLDialog matching criteria: {0}", findBy);
+			Logger.LogAction((LogFunction log) => { log("Busy finding HTMLDialog matching criteria: {0}", findBy); });
 
             var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout))
             {

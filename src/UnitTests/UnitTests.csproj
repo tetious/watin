@@ -192,6 +192,10 @@
     <Compile Include="ComponentExtensionsTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
+    <Compile Include="Logging\BaseLogWriterTests.cs" />
+    <Compile Include="Logging\LoggerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PageTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
@@ -372,9 +376,6 @@
     <Compile Include="LinkTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LoggerTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestUtils\MockAttributeBag.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -470,6 +471,7 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <Folder Include="Logging" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

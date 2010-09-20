@@ -18,8 +18,10 @@
 
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using System;
 
 namespace WatiN.Core.UnitTests
 {
@@ -123,6 +125,88 @@ namespace WatiN.Core.UnitTests
                 Assert.AreNotEqual(0,writer.LogString.Length, "string did not appear");
                 Assert.AreEqual("[Action]: " + LogMessage, writer.LogString.Trim(), "string did not match");
             }
+        }
+
+        [Test]
+        public void Should_log_action()
+        {
+        	// GIVEN
+        	var myLogWriter = new MyLogWriter();
+        	myLogWriter.HandlesLogAction = true;
+        	
+        	Logger.LogWriter = myLogWriter;
+        	
+        	// WHEN
+        	Logger.Log(LogMessageType.Action , (LogFunction log) => {log("My test {0}","message");});
+
+        	// THEN
+        	Assert.That(myLogWriter.Message, Is.EqualTo("My test message"));
+        }
+
+        [Test]
+        public void Should_not_log_action()
+        {
+        	// GIVEN
+        	var myLogWriter = new MyLogWriter();
+        	myLogWriter.HandlesLogAction = false;
+        	
+        	Logger.LogWriter = myLogWriter;
+        	
+        	// WHEN
+        	Logger.Log(LogMessageType.Action , (LogFunction log) => {log("My test {0}","message");});
+
+        	// THEN
+        	Assert.That(myLogWriter.Message, Is.Null);
+        }
+
+        [Test]
+        public void Should_log_debug()
+        {
+        	// GIVEN
+        	var myLogWriter = new MyLogWriter();
+        	myLogWriter.HandlesLogDebug = true;
+        	
+        	Logger.LogWriter = myLogWriter;
+        	
+        	// WHEN
+        	Logger.Log(LogMessageType.Debug , (LogFunction log) => {log("My test {0}","message");});
+
+        	// THEN
+        	Assert.That(myLogWriter.Message, Is.EqualTo("My test message"));
+        }
+
+        [Test]
+        public void Should_not_log_debug()
+        {
+        	// GIVEN
+        	var myLogWriter = new MyLogWriter();
+        	myLogWriter.HandlesLogDebug = false;
+        	
+        	Logger.LogWriter = myLogWriter;
+        	
+        	// WHEN
+        	Logger.Log(LogMessageType.Debug , (LogFunction log) => {log("My test {0}","message");});
+
+        	// THEN
+        	Assert.That(myLogWriter.Message, Is.Null);
+        }
+
+        private class MyLogWriter : ILogWriter
+        {
+        	public bool HandlesLogAction { get; set; }		
+	    	public bool HandlesLogDebug { get; set; }
+
+        	public string Message;
+        	
+			public void LogAction(string message)
+			{
+				Message = message;
+			}
+        	
+			public void LogDebug(string message)
+			{
+				Message = message;
+			}
         }
 	}
 }

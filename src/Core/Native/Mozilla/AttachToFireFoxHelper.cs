@@ -56,7 +56,7 @@ namespace WatiN.Core.Native.Mozilla
 
         public Browser Find(Constraint findBy, int timeout, bool waitForComplete)
         {
-            Logger.LogAction("Busy finding FireFox matching constraint {0}", findBy);
+        	Logger.LogAction((LogFunction log) => { log("Busy finding FireFox matching constraint {0}", findBy); });
 
             var action = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeout)) { SleepTime = TimeSpan.FromMilliseconds(500) };
             var fireFox = action.Try(() => FindFireFox(findBy));

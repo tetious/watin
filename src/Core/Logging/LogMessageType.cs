@@ -31,10 +31,6 @@ namespace WatiN.Core.Logging
         /// <summary>
         /// debug logging type
         /// </summary>
-        Debug,
-        /// <summary>
-        /// info logging type
-        /// </summary>
-        Info
+        Debug        
     }
 }

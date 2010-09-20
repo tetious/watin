@@ -55,7 +55,7 @@ namespace WatiN.Core
             if (IsAnInputElement(tagName))
             {
                 if (inputType == null)
-                    throw new ArgumentNullException("inputType", String.Format("inputType must be set when tagName is '{0}'", tagName));
+                	this.inputType = "button";
             }
             else
             {

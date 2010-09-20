@@ -24,8 +24,10 @@ namespace WatiN.Core.Interfaces
 	/// </summary>
 	public interface ILogWriter
 	{
+		bool HandlesLogAction { get; set; }
+		bool HandlesLogDebug { get; set; }
+		
 		void LogAction(string message);
 		void LogDebug(string message);
-	    void LogInfo(string message);
 	}
 }

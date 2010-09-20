@@ -31,29 +31,17 @@ namespace WatiN.Core.Logging
 	/// Logger.LogAction("Attached ConsoleLogWriter");
 	/// </code>
 	/// </example>
-	public class ConsoleLogWriter : ILogWriter
+	public class ConsoleLogWriter : BaseLogWriter
 	{
-	    public ConsoleLogWriter()
-	    {
-	        IgnoreLogDebug = false;
-	    }
-
-		public void LogAction(string message)
+		protected override void LogActionImpl(string message)
 		{
 			System.Console.WriteLine("[Action]: " + message);
 		}
 
-	    public void LogDebug(string message)
+	    protected override void LogDebugImpl(string message)
 	    {
-            if (IgnoreLogDebug) return;
             System.Console.WriteLine("[Debug] : " + message);
         }
 
-        public void LogInfo(string message)
-        {
-            System.Console.WriteLine("[Info] : " + message);
-        }
-
-        public bool IgnoreLogDebug { get; set; }
 	}
 }

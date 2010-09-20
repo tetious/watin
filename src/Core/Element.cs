@@ -397,7 +397,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(IdOrName, this);
 			}
 
-            Logger.LogAction("Clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 			Highlight(true);
 
 			NativeElement.ClickOnElement();
@@ -424,7 +424,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(IdOrName, this);
 			}
 
-            Logger.LogAction("Clicking (no wait) {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Clicking (no wait) {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 
 			Highlight(true);
 
@@ -457,7 +457,7 @@ namespace WatiN.Core
 				throw new ElementDisabledException(IdOrName, this);
 			}
 
-            Logger.LogAction("Double clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Double clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 
 			FireEvent("onDblClick");
 		}

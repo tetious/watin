@@ -21,6 +21,9 @@ using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Logging
 {
+	public delegate void LogMessageCallback(LogFunction logFunction);
+    public delegate void LogFunction(string message, params object[] args);
+
 	/// <summary>
 	/// This class provides some basic means to write actions to a logger class.
 	/// WatiN uses this class to log which actions are done while driving Internet
@@ -50,6 +53,11 @@ namespace WatiN.Core.Logging
 		{
             Log(LogMessageType.Action, UtilityClass.StringFormat(message, args));
 		}
+		
+		public static void LogAction(LogMessageCallback callback)
+		{
+			if (LogWriter.HandlesLogAction) callback(Logger.LogAction);
+		}
 
 		/// <summary>
 		/// Logs the debug message. These should be technical messages from within WatiN.
@@ -72,26 +80,10 @@ namespace WatiN.Core.Logging
             Log(LogMessageType.Debug, UtilityClass.StringFormat(message, args));            
 		}
 
-        /// <summary>
-        /// Logs the information message. These should be comments and information messages from within WatiN.
-        /// </summary>
-        /// <param name="message">A message containing zero or more format items.</param>
-        /// <param name="args">An object array containing zero or more objects to format</param>
-        /// <example>
-        /// Call this function from your code like this:
-        /// <code>
-        /// Logger.LogInfo("Some message");
-        /// </code>
-        /// or
-        /// <code>
-        /// Logger.LogInfo("Some message with an {0} to {1}, "item", "format");
-        /// </code>
-        /// 
-        /// </example>
-        public static void LogInfo(string message, params object[] args)
-        {
-            Log(LogMessageType.Info, UtilityClass.StringFormat(message, args));
-        }
+		public static void LogDebug(LogMessageCallback callback)
+		{
+			if (LogWriter.HandlesLogDebug) callback(Logger.LogDebug);
+		}
 
         /// <summary>
         /// base logging method to send data
@@ -111,13 +103,29 @@ namespace WatiN.Core.Logging
             switch (logType)
             {
                 case LogMessageType.Action:
-                    LogWriter.LogAction(UtilityClass.StringFormat(message, args));
+                    LogWriter.LogAction(formattedMessage);
                     break;
                 case LogMessageType.Debug:
-                    LogWriter.LogDebug(UtilityClass.StringFormat(message, args));
+                    LogWriter.LogDebug(formattedMessage);
                     break;
-                case LogMessageType.Info:
-                    LogWriter.LogInfo(UtilityClass.StringFormat(message, args));
+            }
+        }
+
+        /// <summary>
+        /// Base logging method to send data and create the message only when a logWriter is attached
+        /// </summary>
+        /// <param name="logType">LogTypes enumeration item</param>
+        /// <param name="callback">A delegate to create the log message.</param>
+        public static void Log(LogMessageType logType, LogMessageCallback callback)
+        {
+        	if (callback == null) return;
+        	switch (logType)
+            {
+                case LogMessageType.Action:
+        			Logger.LogAction(callback);
+                    break;
+                case LogMessageType.Debug:
+                    Logger.LogDebug(callback);
                     break;
             }
         }
@@ -136,7 +144,7 @@ namespace WatiN.Core.Logging
         {
             return new NoLog();
         }
-
+        
         public delegate void EventHandle<LogMessageEventArgs>(object sender, LogMessageEventArgs e);
 
         public static event EventHandle<LogMessageEventArgs> LogMessage;

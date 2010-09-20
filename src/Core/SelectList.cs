@@ -56,7 +56,7 @@ namespace WatiN.Core
 		/// </summary>
         public virtual void ClearList()
 		{
-            Logger.LogAction("Clearing selection(s) in {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+        	Logger.LogAction((LogFunction log) => { log("Clearing selection(s) in {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 
 			var options = Options.Filter(IsSelectedConstraint());
 
@@ -87,7 +87,7 @@ namespace WatiN.Core
 		/// <param name="text">The text.</param>
         public virtual void Select(string text)
 		{
-            Logger.LogAction("Selecting '{0}' in {1} '{2}', {3}", text, GetType().Name, IdOrName, Description);
+        	Logger.LogAction((LogFunction log) => { log("Selecting '{0}' in {1} '{2}', {3}", text, GetType().Name, IdOrName, Description); });
 			SelectByTextOrValue(TextCaseInsensitiveConstraint(text));
 		}
 
@@ -98,7 +98,7 @@ namespace WatiN.Core
 		/// <param name="regex">The regex.</param>
         public virtual void Select(Regex regex)
 		{
-            Logger.LogAction("Selecting text using regular expresson '{0}' in {1} '{2}', {3}", regex, GetType().Name, IdOrName, Description);
+        	Logger.LogAction((LogFunction log) => { log("Selecting text using regular expresson '{0}' in {1} '{2}', {3}", regex, GetType().Name, IdOrName, Description); });
 
 			SelectByTextOrValue(Find.ByText(regex));
 		}
@@ -110,7 +110,7 @@ namespace WatiN.Core
 		/// <param name="value">The value.</param>
         public virtual void SelectByValue(string value)
 		{
-            Logger.LogAction("Selecting item with value '{0}' in {1} '{2}', {3}", value, GetType().Name, IdOrName, Description);
+        	Logger.LogAction((LogFunction log) => { log("Selecting item with value '{0}' in {1} '{2}', {3}", value, GetType().Name, IdOrName, Description); });
 			SelectByTextOrValue(Find.ByValue(new StringEqualsAndCaseInsensitiveComparer(value)));
 		}
 
@@ -121,7 +121,7 @@ namespace WatiN.Core
 		/// <param name="regex">The regex.</param>
         public virtual void SelectByValue(Regex regex)
 		{
-            Logger.LogAction("Selecting text using regular expresson '{0}' in {1} '{2}', {3}", regex, GetType().Name, IdOrName, Description);
+        	Logger.LogAction((LogFunction log) => { log("Selecting text using regular expresson '{0}' in {1} '{2}', {3}", regex, GetType().Name, IdOrName, Description); });
 			SelectByTextOrValue(Find.ByValue(regex));
 		}
 

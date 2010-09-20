@@ -365,7 +365,7 @@ namespace WatiN.Core.DialogHandlers
 		            {
 		                LastException = e;
 
-		                Logger.LogAction("Exception was thrown while DialogWatcher called HandleDialog: {0}",e.ToString());
+		                Logger.LogAction((LogFunction log) => { log("Exception was thrown while DialogWatcher called HandleDialog: {0}",e.ToString()); });
 		            }
 		        }
 
@@ -373,7 +373,7 @@ namespace WatiN.Core.DialogHandlers
 		        // should be closed automatically.
 		        if (!CloseUnhandledDialogs || MainWindowHwnd != window.ToplevelWindow.Hwnd) return;
 		        
-                Logger.LogAction("Auto closing dialog with title: '{0}', text: {1}, style: ", window.Title, window.Message, window.StyleInHex);
+		        Logger.LogAction((LogFunction log) => { log("Auto closing dialog with title: '{0}', text: {1}, style: ", window.Title, window.Message, window.StyleInHex); });
 		        window.ForceClose();
 		    }
 		}
@@ -393,7 +393,7 @@ namespace WatiN.Core.DialogHandlers
 
             if (!success)
             {
-                Logger.LogAction("Dialog with title '{0}' not visible after {1} seconds.", window.Title, Settings.WaitForCompleteTimeOut);
+            	Logger.LogAction((LogFunction log) => { log("Dialog with title '{0}' not visible after {1} seconds.", window.Title, Settings.WaitForCompleteTimeOut); });
             }
 		}
 

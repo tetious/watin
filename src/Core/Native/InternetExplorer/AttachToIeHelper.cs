@@ -50,7 +50,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public Browser Find(Constraint findBy, int timeout, bool waitForComplete)
         {
-            Logger.LogAction("Busy finding Internet Explorer matching constraint {0}", findBy);
+        	Logger.LogAction((LogFunction log) => { log("Busy finding Internet Explorer matching constraint {0}", findBy); });
 
             var timer = new SimpleTimer(TimeSpan.FromSeconds(timeout));
 

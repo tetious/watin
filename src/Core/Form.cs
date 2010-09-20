@@ -34,7 +34,7 @@ namespace WatiN.Core
 
 		public virtual void Submit()
 		{
-            Logger.LogAction("Submitting {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Submitting {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 
 		    NativeElement.SubmitForm();
 			WaitForComplete();

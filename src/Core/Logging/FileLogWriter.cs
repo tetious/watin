@@ -33,7 +33,7 @@ namespace WatiN.Core.Logging
     /// Logger.LogAction("Attached FileLogWriter");
 	/// </code>
 	/// </example>
-    public class FileLogWriter : ILogWriter, IDisposable
+    public class FileLogWriter : BaseLogWriter, IDisposable
     {
         private readonly StreamWriter LogStream;
 
@@ -67,19 +67,14 @@ namespace WatiN.Core.Logging
             LogStream.Flush();
         }
 
-        public void LogAction(string message)
+        protected override void LogActionImpl(string message)
         {
             WriteLogLine("[Action]: " + message);
         }
 
-        public void LogDebug(string message)
+        protected override void LogDebugImpl(string message)
         {
             WriteLogLine("[Debug ]: " + message);
-        }
-
-        public void LogInfo(string message)
-        {
-            WriteLogLine("[Info  ]: " + message);
         }
     }
 }

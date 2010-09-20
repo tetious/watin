@@ -1,4 +1,4 @@
-#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
+﻿#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
 
 //Copyright 2006-2010 Jeroen van Menen
 //
@@ -21,26 +21,31 @@ using WatiN.Core.Interfaces;
 namespace WatiN.Core.Logging
 {
 	/// <summary>
-	/// This logger class writes it's output to the debug window.
+	/// This logger class can be used as a base class for your specific log class.
 	/// </summary>
-	/// <example>
-	/// The following code attaches the DebugLogWriter to WatiN and writes a
-	/// LogAction. Open de output window in your debugger to see the result.
-	/// <code>
-	/// Logger.LogWriter = new DebugLogWriter;
-	/// Logger.LogAction("Attached DebugLogWriter");
-	/// </code>
-	/// </example>
-	public class DebugLogWriter : BaseLogWriter
+	public abstract class BaseLogWriter : ILogWriter
 	{
-		protected override void LogActionImpl(string message)
+		public BaseLogWriter()
 		{
-			System.Diagnostics.Debug.WriteLine("[Action]: " + message);
+			HandlesLogAction = true;
+			HandlesLogDebug = true;
+		}
+		
+	    public bool HandlesLogAction { get; set; }		
+	    public bool HandlesLogDebug { get; set; }
+
+	    
+	    public void LogAction(string message)
+		{
+	    	if (HandlesLogAction) LogActionImpl(message);
 		}
 
-	    protected override void LogDebugImpl(string message)
+	    public void LogDebug(string message)
 	    {
-            System.Diagnostics.Debug.WriteLine("[Debug] : " + message);
+	    	if (HandlesLogDebug) LogDebugImpl(message);
         }
+	    
+	    protected abstract void LogActionImpl(string message);
+	    protected abstract void LogDebugImpl(string message);
 	}
 }

@@ -33,7 +33,7 @@ namespace WatiN.Core.Logging
     /// Logger.LogAction("Attached StringLogWriter");
     /// </code>
     /// </example>
-    public class StringLogWriter : ILogWriter, IDisposable
+    public class StringLogWriter : BaseLogWriter, IDisposable
     {
         /// <summary>
         /// private StringBuilder keeping the log
@@ -63,19 +63,14 @@ namespace WatiN.Core.Logging
             Builder.AppendLine(line);
         }
 
-        public void LogAction(string message)
+        protected override void LogActionImpl(string message)
         {
             WriteLogLine("[Action]: " + message);
         }
 
-        public void LogDebug(string message)
+        protected override void LogDebugImpl(string message)
         {
             WriteLogLine("[Debug ]: " + message);
-        }
-
-        public void LogInfo(string message)
-        {
-            WriteLogLine("[Info  ]: " + message);
         }
 
         /// <summary>

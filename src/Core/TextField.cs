@@ -65,21 +65,21 @@ namespace WatiN.Core
 
 		public void TypeText(string value)
 		{
-            Logger.LogAction("Typing '{0}' into {1} '{2}', {3}", value, GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Typing '{0}' into {1} '{2}', {3}", value, GetType().Name, IdOrName, Description); });
 
             TypeTextAction.TypeText(value);
 		}
 
 		public void AppendText(string value)
 		{
-            Logger.LogAction("Appending '{0}' to {1} '{2}', {3}", value, GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Appending '{0}' to {1} '{2}', {3}", value, GetType().Name, IdOrName, Description); });
 
             TypeTextAction.AppendText(value);
 		}
 
 		public void Clear()
 		{
-            Logger.LogAction("Clearing {0} '{1}', {2}", GetType().Name, IdOrName, Description);
+			Logger.LogAction((LogFunction log) => { log("Clearing {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
 
             TypeTextAction.Clear();
 		}
@@ -107,9 +107,9 @@ namespace WatiN.Core
 		    // Don't use this set property internally (in this class). 
 			set
 			{
-				Logger.LogAction("Setting {0} '{1}' ({2}) to '{3}'", GetType().Name, IdOrName,Description, value);
+				Logger.LogAction((LogFunction log) => { log("Setting {0} '{1}' ({2}) to '{3}'", GetType().Name, IdOrName,Description, value); });
 
-                if (MaxLength>0)
+				if (MaxLength>0)
                 {
                     if (MaxLength < value.Length) value = value.Substring(0, MaxLength);
                 }

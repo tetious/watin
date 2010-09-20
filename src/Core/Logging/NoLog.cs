@@ -22,8 +22,14 @@ namespace WatiN.Core.Logging
 {
 	public class NoLog : ILogWriter
 	{
+		public bool HandlesLogAction 
+		{
+			get { return false; }
+			set {} 
+		}
+	    public bool HandlesLogDebug { get; set; }
+
 	    public void LogAction(string message) {}
 	    public void LogDebug(string message) {}
-        public void LogInfo(string message) { }
 	}
 }
