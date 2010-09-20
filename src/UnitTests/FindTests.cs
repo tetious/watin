@@ -361,6 +361,12 @@ namespace WatiN.Core.UnitTests
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "PredicateComparer not used");
 		}
 
+		[Test]
+		public void Should_accept_a_url_from_which_http_part_is_missing()
+		{
+			var findBy = Find.ByUrl("example.watin.net");
+		}
+		
 	    [Test]
 	    public void ShouldFindEscapedUrl()
 	    {

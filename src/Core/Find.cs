@@ -20,6 +20,7 @@ using System;
 using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Constraints;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
 {
@@ -422,7 +423,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByUrl(string url)
 		{
-			return ByUrl(new Uri(url));
+			return ByUrl(url, false);
 		}
 
         /// <summary>
@@ -436,7 +437,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByUrl(string url, bool ignoreQuery)
 		{
-			return ByUrl(new Uri(url), ignoreQuery);
+			return ByUrl(UtilityClass.CreateUri(url), ignoreQuery);
 		}
 
         /// <summary>
