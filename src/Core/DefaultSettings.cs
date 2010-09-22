@@ -76,7 +76,7 @@ namespace WatiN.Core
                                attachToBrowserTimeOut = 30,
                                waitUntilExistsTimeOut = 30,
                                waitForCompleteTimeOut = 30,
-                               sleepTime = 100,
+                               sleepTime = 30,
                                highLightElement = true,
                                highLightColor = "yellow",
                                autoCloseDialogs = true,

@@ -54,7 +54,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected override void InitialSleep()
         {
-            Thread.Sleep(10);
+            Thread.Sleep(Settings.SleepTime);
         }
 
         protected override void WaitForCompleteOrTimeout()

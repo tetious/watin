@@ -31,10 +31,7 @@ namespace WatiN.Core
         protected WaitForCompleteBase(int waitForCompleteTimeOut)
         {
             _waitForCompleteTimeOut = waitForCompleteTimeOut;
-            MilliSecondsTimeOut = Settings.SleepTime;
         }
-
-        public int MilliSecondsTimeOut { get; set; }
 
         public SimpleTimer Timer
         {

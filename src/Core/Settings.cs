@@ -153,9 +153,10 @@ namespace WatiN.Core
 		}
 
         /// <summary>
-		/// Get or set the default sleep time used when WatiN is waiting for something in a (retry) loop.
-		/// The default value is 100 milliseconds. Setting the time out to a negative value will
-		/// throw a <see cref="ArgumentOutOfRangeException"/>.
+		/// Get or set the default sleep time before WatiN starts checking if a page is loaded
+		/// in IE. This setting is not applicable to FireFox.
+		/// The default value is 30 milliseconds. Setting this to a negative value will
+        /// throw a <see cref="ArgumentOutOfRangeException"/>.
 		/// </summary>
         public static int SleepTime
 		{
