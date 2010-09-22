@@ -267,12 +267,9 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             if (eventProperties == null)
             {
-                FireEventHandler.FireEvent(eventName);
+                eventProperties = new NameValueCollection { { "button", "1" } };
             }
-            else
-            {
-                FireEventHandler.FireEvent(eventName, eventProperties);
-            }
+            FireEventHandler.FireEvent(eventName, eventProperties);
         }
 
 	    /// <inheritdoc />
