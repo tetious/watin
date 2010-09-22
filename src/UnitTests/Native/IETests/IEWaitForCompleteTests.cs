@@ -11,7 +11,7 @@ namespace WatiN.Core.UnitTests.Native.IETests
     public class IEWaitForCompleteTests
     {
         [Test]
-        public void Should_us_settings_sleeptime_for_initialsleep()
+        public void Should_use_settings_sleeptime_for_initialsleep()
         {
             //GIVEN
             var settings = new Mock<ISettings>();
