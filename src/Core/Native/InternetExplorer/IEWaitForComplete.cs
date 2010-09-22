@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System.Runtime.InteropServices;
+using System.Threading;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
@@ -49,6 +50,11 @@ namespace WatiN.Core.Native.InternetExplorer
             : base (waitForCompleteTimeout)
         {
             this.ieDocument = ieDocument;
+        }
+
+        protected override void InitialSleep()
+        {
+            Thread.Sleep(10);
         }
 
         protected override void WaitForCompleteOrTimeout()
@@ -150,7 +156,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 {
                     try
                     {
-                        return ie.ReadyState == tagREADYSTATE.READYSTATE_COMPLETE ? true : (bool?)null;
+                        return IsStateInteractiveOrComplete(ie.ReadyState) ? true : (bool?)null;
                     }
                     catch
                     {
@@ -160,6 +166,11 @@ namespace WatiN.Core.Native.InternetExplorer
                     }
                 },
                 () => "Internet Explorer state not complete");
+        }
+
+        protected virtual bool IsStateInteractiveOrComplete(tagREADYSTATE readystate)
+        {
+            return readystate == tagREADYSTATE.READYSTATE_INTERACTIVE || readystate == tagREADYSTATE.READYSTATE_COMPLETE;
         }
 
         protected virtual bool WaitWhileIEBusy(IWebBrowser2 ie)
@@ -202,5 +213,6 @@ namespace WatiN.Core.Native.InternetExplorer
                 }, exceptionMessage);
             return result;
         }
+
     }
 }

@@ -196,6 +196,7 @@
     <Compile Include="Logging\LoggerTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Native\IETests\IEWaitForCompleteTests.cs" />
     <Compile Include="PageTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
@@ -471,7 +472,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-    <Folder Include="Logging" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

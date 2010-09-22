@@ -49,14 +49,14 @@ namespace WatiN.Core.Native
             }
         }
 
-        private static void DeleteElementArray(string elementName, ClientPortBase clientPort)
+        private static void DeleteElementArray(string elementName, IClientPort clientPort)
         {
             var command = string.Format("delete {0};", elementName);
 
             clientPort.Write(command);
         }
 
-        private static int GetNumberOfElements(string getElementsCommand, ClientPortBase clientPort, string elementArrayName)
+        private static int GetNumberOfElements(string getElementsCommand, IClientPort clientPort, string elementArrayName)
         {
             var command = string.Format("{0}={1}; {0}.length;", elementArrayName, getElementsCommand);
 

@@ -127,6 +127,11 @@ namespace WatiN.Core.UnitTests
             return null;
         }
 
+        protected override void InitialSleep()
+        {
+            // Not needed
+        }
+
         protected override void WaitForCompleteOrTimeout()
         {
             // Finished;

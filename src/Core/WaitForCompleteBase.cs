@@ -17,7 +17,6 @@
 #endregion Copyright
 
 using System;
-using System.Threading;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
 using WatiN.Core.UtilityClasses;
@@ -67,10 +66,7 @@ namespace WatiN.Core
         /// time to perform any immediately pending asynchronous operations that might
         /// cause it to enter a busy state.
         /// </summary>
-        protected virtual void InitialSleep()
-        {
-            Thread.Sleep(10);
-        }
+        protected abstract void InitialSleep();
 
         /// <summary>
         /// This method waits till IE is ready processing 
