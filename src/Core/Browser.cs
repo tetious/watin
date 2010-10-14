@@ -608,7 +608,7 @@ namespace WatiN.Core
         /// </summary>
         /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
         /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-        /// <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        /// <returns><c>true</c> if a browser instance matches the given <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
         public static bool Exists<T>(Constraint constraint) where T : Browser
         {
             return Exists(typeof(T), constraint);
@@ -620,7 +620,7 @@ namespace WatiN.Core
         /// <param name="browserType">The WatiN browser type to attach to.</param>
         /// <param name="constraint">The <see cref="Constraint"/> of the browser window to find. 
         /// <c>Find.ByUrl()</c>, <c>Find.ByUri()</c>, <c>Find.ByTitle()</c> and <c>Find.By("hwnd", windowHandle)</c> are supported.</param>
-        /// <returns><c>true</c> if a browser instance matches the given <paramref name="findBy"/> <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
+        /// <returns><c>true</c> if a browser instance matches the given <see cref="Constraint"/>. Otherwise it returns <c>false</c>. </returns>
         public static bool Exists(Type browserType, Constraint constraint)
         {
             var helper = GetAttachToHelper(browserType);
