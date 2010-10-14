@@ -49,6 +49,47 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		}
 
 		[Test]
+		public void CloseSpecificBrowserAlert()
+		{
+			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
+
+			var ie1 = new IE(TestPageUri);
+
+			// set up a second browser with an open dialog
+			var alertDialogHandler1 = new AlertDialogHandler();
+			using (new UseDialogOnce(ie1.DialogWatcher, alertDialogHandler1))
+			{
+				ie1.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+
+				alertDialogHandler1.WaitUntilExists();
+
+                // close the original message
+				var alertDialogHandler2 = new AlertDialogHandler();
+				using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler2))
+				{
+					Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+
+					alertDialogHandler2.WaitUntilExists();
+
+					var message = alertDialogHandler2.Message;
+					alertDialogHandler2.OKButton.Click();
+
+					Ie.WaitForComplete();
+
+					Assert.IsTrue(alertDialogHandler1.Exists(), "Original Alert Dialog should be open.");
+
+					Assert.AreEqual("This is an alert!", message, "Unexpected message");
+					Assert.IsFalse(alertDialogHandler2.Exists(), "Alert Dialog should be closed.");
+				}
+
+                // close the second message
+				alertDialogHandler1.OKButton.Click();
+
+				Assert.IsFalse(alertDialogHandler1.Exists(), "Alert Dialog should be closed.");
+			}
+		}
+
+		[Test]
 		public void AlertDialogHandlerWithoutAutoCloseDialogs()
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");

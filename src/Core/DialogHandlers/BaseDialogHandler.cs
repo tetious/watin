@@ -24,31 +24,38 @@ namespace WatiN.Core.DialogHandlers
 {
 	public abstract class BaseDialogHandler : IDialogHandler
 	{
-        /// <inheritdoc />
-        public override bool Equals(object obj)
+	    internal DialogWatcher ParentWatcher;
+
+		/// <inheritdoc />
+		public override bool Equals(object obj)
 		{
-		    return obj != null && (GetType().Equals(obj.GetType()));
+			return obj != null && (GetType().Equals(obj.GetType()));
 		}
 
-        /// <inheritdoc />
-	    public override int GetHashCode()
+		/// <inheritdoc />
+		public override int GetHashCode()
 		{
 			return GetType().ToString().GetHashCode();
 		}
 
 		#region IDialogHandler Members
 
-        /// <inheritdoc />
+	    public void SetParentWatcher(DialogWatcher watcher)
+	    {
+	        ParentWatcher = watcher;
+	    }
+
+	    /// <inheritdoc />
 		public abstract bool HandleDialog(Window window);
 
-        /// <inheritdoc />
-        public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
-        {
-            return CanHandleDialog(window);
-        }
+		/// <inheritdoc />
+		public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
+		{
+			return CanHandleDialog(window) && mainWindowHwnd == window.ParentHwnd;
+		}
 
-	    public abstract bool CanHandleDialog(Window window);
+		public abstract bool CanHandleDialog(Window window);
 
-	    #endregion
+		#endregion
 	}
 }
