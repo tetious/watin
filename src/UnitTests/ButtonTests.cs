@@ -239,22 +239,20 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
-                                var Value = "Button Element";
-                                if (browser.GetType().Equals(typeof(FireFox)))
-                                {
-                                    Value = "ButtonElementValue";
-                                }
+                                var isFirefoxOrAtleastIE8 = IsBrowserFirefoxOrAtleastIE8(browser);
+
+		                        var value = isFirefoxOrAtleastIE8 ? "ButtonElementValue":"Button Element";
 
 		                        var button = browser.Button(Find.ById("buttonelementid"));
 
 		                        Assert.IsInstanceOfType(typeof (Element), button);
 		                        Assert.IsInstanceOfType(typeof (Button), button);
 
-		                        Assert.AreEqual(Value, browser.Button("buttonelementid").Value);
-		                        Assert.AreEqual(Value, browser.Button("buttonelementid").ToString());
-		                        Assert.AreEqual(Value, browser.Button(Find.ByName("buttonelementname")).Value);
+		                        Assert.AreEqual(value, browser.Button("buttonelementid").Value);
+		                        Assert.AreEqual(value, browser.Button("buttonelementid").ToString());
+		                        Assert.AreEqual(value, browser.Button(Find.ByName("buttonelementname")).Value);
 
-		                        Assert.AreEqual(Value, browser.Button(Find.ByText("Button Element")).Value);
+		                        Assert.AreEqual(value, browser.Button(Find.ByText("Button Element")).Value);
 		                        
 		                        Assert.IsTrue(browser.Button(new Regex("buttonelementid")).Exists);
 		                    });
@@ -264,31 +262,33 @@ namespace WatiN.Core.UnitTests
 	    [Test]
 	    public void FindByValueBehavesDifferentlyForIEThenFireFox()
 	    {
-            // OK, this one is weird. The HTML says value="ButtonElementValue"
-            // but the value attribute returns the innertext(!) in IE6, IE7 and IE8
-            // But FireFox does return the value attribute.....
-            // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
+	        ExecuteTest(browser =>
+	                        {
+	                            // Value attribute returns the innertext(!) in IE6 and IE7.
+	                            // But FireFox and IE8 and higher return the value attribute (confrom the W3C specs)
+	                            // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
 
-            const string ieValue = "Button Element";
-            const string actualValue = "ButtonElementValue";
+	                            var isFirefoxOrAtleastIE8 = IsBrowserFirefoxOrAtleastIE8(browser);
+	                            var expectedValue = isFirefoxOrAtleastIE8 ? "ButtonElementValue" : "Button Element";
 
-        	Assert.That(Ie.Button(Find.ByValue(ieValue)).Exists, Is.True, "IE issue");
-            Assert.That(Firefox.Button(Find.ByValue(actualValue)).Exists, Is.True, "Firefox issue");
+	                            Assert.That(browser.Button(Find.ByValue(expectedValue)).Exists, Is.True, "Unexpected value for " + browser.GetType() + " (FF or Atleast IE8 = " + isFirefoxOrAtleastIE8 + ")");
+	                        });
 	    }
 
 	    [Test]
 	    public void ValueReturnsDifferentValueForIEThenFireFoxAndIE8()
 	    {
-            // OK, this one is weird. The HTML says value="ButtonElementValue"
-            // but the value attribute returns the innertext(!) in IE6, IE7 and IE8.
-            // But FireFox does return the value attribute.....
-            // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
+            ExecuteTest(browser =>
+            {
+                // Value attribute returns the innertext(!) in IE6 and IE7.
+                // But FireFox and IE8 and higher return the value attribute (confrom the W3C specs)
+                // <button id="buttonelementid" name="buttonelementname" value="ButtonElementValue">Button Element</button>
 
-            const string ieValue = "Button Element";
-            const string actualValue = "ButtonElementValue";
+                var isFirefoxOrAtleastIE8 = IsBrowserFirefoxOrAtleastIE8(browser);
+                var expectedValue = isFirefoxOrAtleastIE8 ? "ButtonElementValue" : "Button Element";
 
-            Assert.AreEqual(ieValue, Ie.Button("buttonelementid").Value, "IE issue");
-            Assert.AreEqual(actualValue, Firefox.Button("buttonelementid").Value, "FireFox issue");
+                Assert.That(browser.Button("buttonelementid").Value, Is.EqualTo(expectedValue), "Unexpected value for " + browser.GetType() + " (FF or Atleast IE8 = " + isFirefoxOrAtleastIE8 + ")");
+            });
 	    }
 
         [Test]
@@ -343,5 +343,19 @@ namespace WatiN.Core.UnitTests
 		{
 			get { return MainURI; }
 		}
+
+        private static bool IsBrowserFirefoxOrAtleastIE8(Document browser)
+        {
+            var browserVersion = 7;
+            var ieUserAgent = browser.Eval("window.navigator.userAgent");
+            if (!string.IsNullOrEmpty(ieUserAgent) && new Regex(@"MSIE 8(\.\d+);").IsMatch(ieUserAgent))
+            {
+                browserVersion = 8;
+            }
+
+            var browserType = browser.GetType();
+            return browserType.Equals(typeof(FireFox)) ||
+                   (browserType.Equals(typeof(IE)) && browserVersion > 7);
+        }
 	}
 }
