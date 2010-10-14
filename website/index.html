@@ -51,12 +51,12 @@
                             <br>
                             public void SearchForWatiNOnGoogle()<br>
                             {<br>
-                            &nbsp;using (IE ie = new IE("http://www.google.com"))<br>
+                            &nbsp;using (var browser = new IE("http://www.google.com"))<br>
                             &nbsp;{<br>
-                            &nbsp;&nbsp;ie.TextField(Find.ByName("q")).TypeText("WatiN");<br>
-                            &nbsp;&nbsp;ie.Button(Find.ByName("btnG")).Click();<br>
+                            &nbsp;&nbsp;browser.TextField(Find.ByName("q")).TypeText("WatiN");<br>
+                            &nbsp;&nbsp;browser.Button(Find.ByName("btnG")).Click();<br>
                             &nbsp;&nbsp;<br>
-                            &nbsp;&nbsp;Assert.IsTrue(ie.ContainsText("WatiN"));<br>
+                            &nbsp;&nbsp;Assert.IsTrue(browser.ContainsText("WatiN"));<br>
                             &nbsp;}<br>
                             } </code>
                     </p>
@@ -75,6 +75,8 @@
                             <span>Supports popup dialogs like alert, confirm, login etc..</span>
                         <li>
                             <span>Supports HTML dialogs (modal and modeless)</span>
+                        <li>
+                            <span>Provides a Page and Control model.</span>
                         <li>
                             <span>Supports creating screenshots of webpages</span>
                         <li>
@@ -152,12 +154,18 @@
                     </div>
                     <h1>Sponsor</h1>
                     <p> 
-						<a target="_blank" href="http://translate.google.com/translate?u=http%3A%2F%2Fwww.linkit.nl%2Fsoftware_ontwikkeling&langpair=nl%7Cen&hl=en&ie=UTF-8"><image style="border: none" src="images/linkit.jpg" alt="LinkiT Projects" /></a>
+						<a target="_blank" href="http://linkit-projects.nl/en/"><image style="border: none" src="images/linkit.jpg" alt="LinkiT Projects" /></a>
 					</p>
 					<p>
 					<a href="http://sourceforge.net/donate/index.php?group_id=167632"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>
 					</p>
                     <h1>News</h1>
+					<p><strong>December 20, 2009</strong></p>
+                    <p>Released Watin 2.0 RC 1!</p>
+                    <p>Many bugfixes and new features since the beta 1 release. Read the <a href="releasenotes-2-0-20-1089.html">release notes</a> for more details.
+					</p >
+                    <p><a href="http://sourceforge.net/projects/watin/files/WatiN%202.x/2.0%20Release%20candidates/WatiN-2.0.20.1089-net-2.0.zip/download">Download</a> the release here.
+					</p>
 					<p><strong>March 30, 2009</strong></p>
                     <p>Released Watin 2.0 beta 1!</p>
                     <p>Many improvements over the previous CTP releases and some great new features. Read the <a href="releasenotes-2-0-10-x.html">release notes</a> for more details.
