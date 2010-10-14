@@ -54,7 +54,8 @@ namespace WatiN.Core.UnitTests.IETests
             }
             finally
             {
-                if (process != null) process.Kill();
+                IE.AttachTo<IE>(Find.ByUrl("about:blank")).Close();
+                if (process != null && !process.HasExited) process.Kill();
             }
         }
 
@@ -88,6 +89,8 @@ namespace WatiN.Core.UnitTests.IETests
             }
             finally
             {
+                IE.AttachTo<IE>(Find.ByUrl("about:blank")).Close();
+                IE.AttachTo<IE>(Find.ByUrl(BaseWatiNTest.FramesetURI.AbsolutePath)).Close();
                 if (process1 != null && !process1.HasExited) process1.Kill();
                 if (process2 != null && !process2.HasExited) process2.Kill();
             }

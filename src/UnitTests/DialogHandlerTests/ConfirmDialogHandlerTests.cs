@@ -75,16 +75,18 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
         [Test]
         public void Should_also_handle_dialog_when_more_then_one_browser_is_open()
         {
-            var not_used_ie = new IE();
-            var approveConfirmDialog = new ConfirmDialogHandler();
-
-            using (new UseDialogOnce(Ie.DialogWatcher, approveConfirmDialog))
+            using (var not_used_ie = new IE())
             {
-                Ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
-                approveConfirmDialog.WaitUntilExists(5);
-                approveConfirmDialog.OKButton.Click();
+                var approveConfirmDialog = new ConfirmDialogHandler();
+
+                using (new UseDialogOnce(Ie.DialogWatcher, approveConfirmDialog))
+                {
+                    Ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
+                    approveConfirmDialog.WaitUntilExists(5);
+                    approveConfirmDialog.OKButton.Click();
+                }
+                Ie.WaitForComplete();
             }
-            Ie.WaitForComplete();
         }
 
         [Test]
