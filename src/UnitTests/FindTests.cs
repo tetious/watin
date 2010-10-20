@@ -669,11 +669,11 @@ namespace WatiN.Core.UnitTests
 			var value = Find.ByClass("highlighted");
 
 			Assert.IsInstanceOfType(typeof (Constraint), value, "Find.ByClass should return an AttributeConstraint");
-			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(RegexComparer)), "Unexpected comparer");
 
 			const string classname = "className";
 			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
-            Assert.That(value.Comparer.ToString(), Text.Contains("'highlighted'"), "Wrong value");
+            Assert.That(value.Comparer.ToString(), Text.Contains("highlighted"), "Wrong value");
 
 			var regex = new Regex("ghted$");
 			value = Find.ByClass(regex);
@@ -689,6 +689,75 @@ namespace WatiN.Core.UnitTests
             value = Find.ByClass(text => text == "highlighted");
 			Assert.That(value.Matches(mockAttributeBag, context), Is.True, "PredicateComparer not used");
 		}
+
+        [Test]
+        public void Should_match_class_at_the_beginning_of_string()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(ClassConstraintTestUri);
+
+                                // WHEN
+                                var exists = browser.Element(Find.ById("first") && Find.ByClass("marker")).Exists;
+                                
+                                // THEN
+                                Assert.That(exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_match_class_in_the_middle_of_string()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(ClassConstraintTestUri);
+
+                                // WHEN
+                                var exists = browser.Element(Find.ById("second") && Find.ByClass("marker")).Exists;
+                                
+                                // THEN
+                                Assert.That(exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_match_class_at_the_end_of_string()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(ClassConstraintTestUri);
+
+                                // WHEN
+                                var exists = browser.Element(Find.ById("third") && Find.ByClass("marker")).Exists;
+                                
+                                // THEN
+                                Assert.That(exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_not_match_any_other_classes()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(ClassConstraintTestUri);
+
+                                // WHEN
+                                var exists1 = browser.Element(Find.ById("notmatch_1") && Find.ByClass("marker")).Exists;
+                                var exists2 = browser.Element(Find.ById("notmatch_2") && Find.ByClass("marker")).Exists;
+                                var exists3 = browser.Element(Find.ById("notmatch_3") && Find.ByClass("marker")).Exists;
+                                
+                                // THEN
+                                Assert.That(exists1, Is.False);
+                                Assert.That(exists2, Is.False);
+                                Assert.That(exists3, Is.False);
+                            });
+        }
+
 
         [Test]
         public void FindFirst()

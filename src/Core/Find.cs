@@ -121,7 +121,7 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByClass(string classname)
 		{
-			return new AttributeConstraint(classNameAttribute, classname);
+		    return ByClass(new Regex(@"(^|\s)" + Regex.Escape(classname) + @"(\s|$)"));
 		}
 
 		/// <summary>
