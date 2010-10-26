@@ -29,7 +29,7 @@ namespace WatiN.Core
     public class NativeElementFinder : ElementFinder
     {
         public delegate Element NativeElementBasedFactory(DomContainer domContainer, INativeElement nativeElement);
-  		public NativeElementBasedFactory WrapNativeElementFactory = (domContainer, nativeElement) => { return ElementFactory.CreateElement(domContainer, nativeElement); };
+  		public NativeElementBasedFactory WrapNativeElementFactory = (domContainer, nativeElement) => ElementFactory.CreateElement(domContainer, nativeElement);
 
   		public delegate INativeElementCollection NativeElementCollectionFactory();
 

@@ -1341,5 +1341,43 @@ namespace WatiN.Core.UnitTests
 	                            Assert.That(textfield.Exists, Is.True);
 	                        });
 	    }
+
+        [Test]
+        public void Should_refind_nested_element_after_page_and_element_refresh_when_all_elements_are_found_with_NativeElementFinder()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var childElement = browser.Form("Form").Button("popupid");
+                Assert.That(childElement.Exists, "Pre-Condition");
+
+                browser.Refresh(); // Simulate postback => all new DOM objects so references in WatiN Elements become invalid
+
+                // WHEN
+                childElement.Refresh();
+
+                // THEN
+                Assert.That(childElement.Exists);
+            });
+        }
+
+        [Test]
+        public void Should_not_refind_nested_element_after_page_and_element_refresh_when_an_element_is_found_with_StaticElementFinder()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var childElement = browser.Forms[0].Button("popupid");
+                Assert.That(childElement.Exists, "Pre-Condition");
+
+                browser.Refresh(); // Simulate postback => all new DOM objects so references in WatiN Elements become invalid
+                // WHEN
+                childElement.Refresh();
+
+                // THEN
+                Assert.That(childElement.Exists, Is.False);
+            });
+        }
+
 	}
 }

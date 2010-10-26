@@ -961,7 +961,10 @@ namespace WatiN.Core
         /// <returns>The native element, or null if not found.</returns>
         public virtual INativeElement FindNativeElement()
         {
-            return _cachedNativeElement ?? FindNativeElementInternal();
+            if (_cachedNativeElement != null && _cachedNativeElement.IsElementReferenceStillValid())
+                return _cachedNativeElement;
+
+            return FindNativeElementInternal();
         }
 
         /// <summary>
