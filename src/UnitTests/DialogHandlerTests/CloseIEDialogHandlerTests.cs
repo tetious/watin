@@ -19,6 +19,7 @@
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
@@ -26,12 +27,12 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
     ///This is a NUnit TestFixture class
     ///</summary>
     [TestFixture]
-    public class CloseIEDialogHandlerTests
+    public class CloseIEDialogHandlerTests : BaseWatiNTest
     {
         [Test]
         public void ShouldCloseBrowser()
         {
-            using (var ie = new IE())
+            using (var ie = new IE(AboutBlank))
             {
                 var hwnd = ie.hWnd.ToString();
 
@@ -51,7 +52,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
         [Test]
         public void ShouldCancelCloseBrowser()
         {
-            using (var ie = new IE())
+            using (var ie = new IE(AboutBlank))
             {
                 var hwnd = ie.hWnd.ToString();
 
