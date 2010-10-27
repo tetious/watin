@@ -24,8 +24,6 @@ namespace WatiN.Core.DialogHandlers
 {
 	public abstract class BaseDialogHandler : IDialogHandler
 	{
-	    internal DialogWatcher ParentWatcher;
-
 		/// <inheritdoc />
 		public override bool Equals(object obj)
 		{
@@ -40,18 +38,13 @@ namespace WatiN.Core.DialogHandlers
 
 		#region IDialogHandler Members
 
-	    public void SetParentWatcher(DialogWatcher watcher)
-	    {
-	        ParentWatcher = watcher;
-	    }
-
 	    /// <inheritdoc />
 		public abstract bool HandleDialog(Window window);
 
 		/// <inheritdoc />
 		public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
 		{
-			return CanHandleDialog(window) && mainWindowHwnd == window.ParentHwnd;
+            return CanHandleDialog(window);
 		}
 
 		public abstract bool CanHandleDialog(Window window);
