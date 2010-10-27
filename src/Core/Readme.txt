@@ -3,7 +3,7 @@ Thanks for dowloading WatiN. WatiN (pronounced "what-in") stands for Web Applica
 in dotNet. Inspired by Watir, WatiN enables web application testing, through Internet Explorer 
 on a Windows platform, expressed in any .Net language.
  
-Visit http://watin.sourcefoge.net for more information and to download the latest version. 
+Visit http://www.watin.net for more information and to download the latest version. 
 
 * License
 WatiN is Apache License 2.0 licensed so before using WatiN please read the license.txt so you know
@@ -35,8 +35,8 @@ http://sourceforge.net/projects/watin for the intended purposes.
 
 * RSS
 Stay informed about new releases by subscribing to the project news RSS feed on 
-http://watin.sourcefoge.net
+http://watin.sourceforge.net
 
 Enjoy testing with WatiN!
 
-Copyright Jeroen van Menen 2009
+Copyright Jeroen van Menen 2010

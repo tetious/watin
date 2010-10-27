@@ -124,12 +124,11 @@ namespace WatiN.Core.Native
         string GetStyleAttributeValue(string attributeName);
         void SetStyleAttributeValue(string attributeName, string value);
         
-        void ClickOnElement();
         void SetFocus();
         void FireEvent(string eventName, NameValueCollection eventProperties);
+        void FireEventNoWait(string eventName, NameValueCollection eventProperties);
         bool IsElementReferenceStillValid();
         string TagName { get; }
-        void FireEventNoWait(string eventName, NameValueCollection eventProperties);
         
         /// <summary>
         /// Should fire the (on)Select event on the element.

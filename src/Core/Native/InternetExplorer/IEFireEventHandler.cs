@@ -16,10 +16,12 @@
 
 #endregion Copyright
 
+using System;
 using System.Collections.Specialized;
 using System.Text;
 using mshtml;
 using WatiN.Core.Exceptions;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -54,6 +56,8 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private void FireEvent(string eventName, NameValueCollection eventProperties, bool noWait)
         {
+            if (HandledOnClick(eventName, noWait)) return;
+
             SetValueWhenOnKeyPress(eventName, eventProperties);
 
             var scriptCode = CreateJavaScriptFireEventCode(eventProperties, eventName);
@@ -71,12 +75,26 @@ namespace WatiN.Core.Native.InternetExplorer
                 // but it does not deliver the event to the control itself.  Consequently the
                 // control state may need to be updated directly (eg. as with key press event).
 
-                var eventObj = CreatetCOMEventObject(eventProperties);
+                var eventObj = CreateCOMEventObject(eventProperties);
                 _ieElement.AsDispHTMLBaseElement.FireEvent(eventName, ref eventObj);
             }
         }
 
-        private object CreatetCOMEventObject(NameValueCollection eventProperties)
+        private bool HandledOnClick(string eventname, bool noWait)
+        {
+            if (eventname.ToLower() == "onclick")
+            {
+                if (!noWait) 
+                    _ieElement.ClickOnElement();
+                else
+                    UtilityClass.AsyncActionOnBrowser(_ieElement.ClickOnElement);
+
+                return true;
+            }
+            return false;
+        }
+
+        private object CreateCOMEventObject(NameValueCollection eventProperties)
         {
             object prototypeEvent = null;
             object eventObj = ((IHTMLDocument4)_ieElement.AsHtmlElement.document).CreateEventObject(ref prototypeEvent);

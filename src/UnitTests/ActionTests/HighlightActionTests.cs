@@ -141,6 +141,7 @@ namespace WatiN.Core.UnitTests.ActionTests
             Settings.HighLightColor = "myTestColor";
             var highLight = new HighlightAction(element);
 
+            nativeElementMock.Expect(nativeElement => nativeElement.IsElementReferenceStillValid()).Returns(true);
             nativeElementMock.Expect(nativeElement => nativeElement.GetStyleAttributeValue("backgroundColor")).Returns("initialColor").AtMostOnce();
             nativeElementMock.Expect(nativeElement => nativeElement.SetStyleAttributeValue("backgroundColor", "myTestColor")).AtMostOnce();
             nativeElementMock.Expect(nativeElement => nativeElement.SetStyleAttributeValue("backgroundColor", "initialColor")).AtMostOnce();

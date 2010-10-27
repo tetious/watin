@@ -251,12 +251,6 @@ namespace WatiN.Core.Native.InternetExplorer
         }
 
         /// <inheritdoc />
-        public void ClickOnElement()
-        {
-            AsDispHTMLBaseElement.click();
-        }
-
-        /// <inheritdoc />
         public void SetFocus()
         {
             AsDispHTMLBaseElement.focus();
@@ -328,7 +322,12 @@ namespace WatiN.Core.Native.InternetExplorer
             }
         }
 
-        private IHTMLFormElement AsHtmlFormElement
+	    public void ClickOnElement()
+	    {
+	        AsDispHTMLBaseElement.click();
+	    }
+
+	    private IHTMLFormElement AsHtmlFormElement
         {
             get { return (IHTMLFormElement)_element; }
         }

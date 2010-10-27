@@ -46,16 +46,6 @@ namespace WatiN.Core.Native
                                                                                   };
 
         /// <summary>
-        /// List of html attributes that should not be changed when SetAttributeValue is called
-        /// I.e. the Checked property is set by the click event on RadioButton.Checked and CheckBox.Checked
-        /// and doesn't need to be set (again) in code (which is necesary for for instance IE).
-        /// </summary>
-        public static readonly IList<string> IgnoreSettingOfValue = new[]
-                                                                        {
-                                                                                "checked"
-                                                                        };
-
-        /// <summary>
         /// Mappings from attributnames used by WatiN to attribute/property names used by FireFox
         /// </summary>
         public static readonly Dictionary<string, string> WatiNAttributeMap = new Dictionary<string, string>
@@ -155,9 +145,9 @@ namespace WatiN.Core.Native
         {
             get
             {
-                return this.GetFromAttributeCache("IsTextNodeType", () =>
+                return GetFromAttributeCache("IsTextNodeType", () =>
                                                                {
-                                                                   var nodeTypeValue = this.GetProperty("nodeType");
+                                                                   var nodeTypeValue = GetProperty("nodeType");
                                                                    return Convert.ToInt32(nodeTypeValue) == NodeType_Text;
                                                                });
             }
@@ -167,32 +157,32 @@ namespace WatiN.Core.Native
 
         public INativeElementCollection Children
         {
-            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".childNodes"); }
+            get { return new JSElementArray(ClientPort, ElementReference + ".childNodes"); }
         }
 
         public INativeElementCollection AllDescendants
         {
-            get { return new FFElementCollection(this.ClientPort, this.ElementReference); }
+            get { return new FFElementCollection(ClientPort, ElementReference); }
         }
 
         public INativeElementCollection TableRows
         {
-            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".rows"); }
+            get { return new JSElementArray(ClientPort, ElementReference + ".rows"); }
         }
 
         public INativeElementCollection TableBodies
         {
-            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".tBodies"); }
+            get { return new JSElementArray(ClientPort, ElementReference + ".tBodies"); }
         }
 
         public INativeElementCollection TableCells
         {
-            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".cells"); }
+            get { return new JSElementArray(ClientPort, ElementReference + ".cells"); }
         }
 
         public INativeElementCollection Options
         {
-            get { return new JSElementArray(this.ClientPort, this.ElementReference + ".options"); }
+            get { return new JSElementArray(ClientPort, ElementReference + ".options"); }
         }
 
         /// <summary>
@@ -202,7 +192,7 @@ namespace WatiN.Core.Native
         {
             get
             {
-                var element = this.GetElementByProperty("nextSibling");
+                var element = GetElementByProperty("nextSibling");
 
                 if (element == null || !element.IsTextNodeType) return string.Empty;
 
@@ -217,7 +207,7 @@ namespace WatiN.Core.Native
         {
             get
             {
-                var element = this.GetElementByProperty("previousSibling");
+                var element = GetElementByProperty("previousSibling");
 
                 if (element == null || !element.IsTextNodeType) return string.Empty;
 
@@ -229,7 +219,7 @@ namespace WatiN.Core.Native
         {
             get
             {
-                var element = this.GetElementByProperty("nextSibling");
+                var element = GetElementByProperty("nextSibling");
 
                 while (true)
                 {
@@ -247,7 +237,7 @@ namespace WatiN.Core.Native
         {
             get
             {
-                var element = this.GetElementByProperty("previousSibling");
+                var element = GetElementByProperty("previousSibling");
 
                 while (true)
                 {
@@ -263,7 +253,7 @@ namespace WatiN.Core.Native
 
         public INativeElement Parent
         {
-            get { return this.GetElementByProperty("parentNode"); }
+            get { return GetElementByProperty("parentNode"); }
         }
 
         public string GetAttributeValue(string attributeName)
@@ -276,13 +266,13 @@ namespace WatiN.Core.Native
 
             // Special cases
             var attribName = attributeName.ToLowerInvariant();
-            if (attribName == "tagname") return this.TagName;
-            if (attribName == "type") return this.InputType;
-            if (attribName == "outerhtml") return this.OuterHtml;
-            if (attributeName == "textContent") return this.TextContent;
+            if (attribName == "tagname") return TagName;
+            if (attribName == "type") return InputType;
+            if (attribName == "outerhtml") return OuterHtml;
+            if (attributeName == "textContent") return TextContent;
 
             // Return value
-            return UsePropertyInsteadOfAttribute.Contains(attributeName) ? this.GetProperty(attributeName) : this.GetAttribute(attributeName);
+            return UsePropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
         }
 
         public void SetAttributeValue(string attributeName, string value)
@@ -293,17 +283,14 @@ namespace WatiN.Core.Native
                 attributeName = WatiNAttributeMap[attributeName];
             }
 
-            // Ignores
-            if (IgnoreSettingOfValue.Contains(attributeName)) return;
-
             // Handle properties different from attributes
             if (UsePropertyInsteadOfAttribute.Contains(attributeName))
             {
-                this.SetProperty(attributeName, value);
+                SetProperty(attributeName, value);
                 return;
             }
 
-            this.SetAttribute(attributeName, value);
+            SetAttribute(attributeName, value);
         }
 
         public string GetStyleAttributeValue(string attributeName)
@@ -331,38 +318,33 @@ namespace WatiN.Core.Native
         public void SetStyleAttributeValue(string attributeName, string value)
         {
             attributeName = UtilityClass.TurnStyleAttributeIntoProperty(attributeName);
-            this.SetProperty("style." + attributeName, "'" + value + "'");
-        }
-
-        public void ClickOnElement()
-        {
-            this.FireEvent("click", null);
+            SetProperty("style." + attributeName, "'" + value + "'");
         }
 
         public void SetFocus()
         {
-            this.ExecuteMethod("focus");
+            ExecuteMethod("focus");
         }
 
         public void FireEvent(string eventName, NameValueCollection eventProperties)
         {
-            this.ExecuteEvent(eventName, eventProperties, true);
+            ExecuteEvent(eventName, eventProperties, true);
         }
 
         public void FireEventNoWait(string eventName, NameValueCollection eventProperties)
         {
-            this.ExecuteEvent(eventName, eventProperties, false);
+            ExecuteEvent(eventName, eventProperties, false);
         }
 
         public bool IsElementReferenceStillValid()
         {
-            if (UtilityClass.IsNullOrEmpty(this.ElementReference))
+            if (UtilityClass.IsNullOrEmpty(ElementReference))
                 return false;
 
             // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
             var command = string.Format("{0} != null && ({0}.offsetParent != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", this.ElementReference);
 
-            return this.ClientPort.WriteAndReadAsBool(command);
+            return ClientPort.WriteAndReadAsBool(command);
         }
 
         public string TagName
@@ -373,31 +355,31 @@ namespace WatiN.Core.Native
 
         public void Select()
         {
-            this.FireEvent("select", null);
+            FireEvent("select", null);
         }
 
         public void SubmitForm()
         {
-            this.FireEvent("submit", null);
+            FireEvent("submit", null);
         }
 
         public void SetFileUploadFile(DialogWatcher dialogWatcher, string fileName)
         {
             fileName = fileName.Replace(@"\", @"\\");
-            this.SetAttributeValue("value", fileName);
+            SetAttributeValue("value", fileName);
         }
 
         #endregion
 
         public string GetAttribute(string attributeName)
         {
-            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", this.ElementReference, attributeName);
-            return this.ClientPort.WriteAndRead(getAttributeWrite);
+            var getAttributeWrite = string.Format("{0}.getAttribute(\"{1}\");", ElementReference, attributeName);
+            return ClientPort.WriteAndRead(getAttributeWrite);
         }
 
         public void SetAttribute(string attributeName, string value)
         {
-            this.ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", this.ElementReference, attributeName, value);
+            ClientPort.Write("{0}.setAttribute(\"{1}\", \"{2}\");", ElementReference, attributeName, value);
         }
 
         /// <summary>
@@ -407,8 +389,8 @@ namespace WatiN.Core.Native
         /// <returns></returns>
         public string GetProperty(string propertyName)
         {
-            var command = string.Format("{0}.{1};", this.ElementReference, propertyName);
-            return this.ClientPort.WriteAndRead(command);
+            var command = string.Format("{0}.{1};", ElementReference, propertyName);
+            return ClientPort.WriteAndRead(command);
         }
 
         /// <summary>
@@ -420,8 +402,8 @@ namespace WatiN.Core.Native
         {
             if (SetPropertyTransformations.ContainsKey(propertyName)) value = SetPropertyTransformations[propertyName].Invoke(value);
             
-            var command = string.Format("{0}.{1} = {2};", this.ElementReference, propertyName, value);
-            this.ClientPort.Write(command);
+            var command = string.Format("{0}.{1} = {2};", ElementReference, propertyName, value);
+            ClientPort.Write(command);
         }
 
         /// <summary>
@@ -430,7 +412,7 @@ namespace WatiN.Core.Native
         /// <param name="methodName">Name of the method to execute.</param>
         public void ExecuteMethod(string methodName)
         {
-            this.ClientPort.Write("{0}.{1}();", this.ElementReference, methodName);
+            ClientPort.Write("{0}.{1}();", ElementReference, methodName);
         }
 
         /// <summary>
@@ -445,11 +427,11 @@ namespace WatiN.Core.Native
                 throw new ArgumentNullException("propertyName");
             }
 
-            var elementvar = this.ClientPort.CreateVariableName();
-            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, this.ElementReference, propertyName);
-            var exists = this.ClientPort.WriteAndReadAsBool(command);
+            var elementvar = ClientPort.CreateVariableName();
+            var command = string.Format("{0}={1}.{2}; {0}!=null;", elementvar, ElementReference, propertyName);
+            var exists = ClientPort.WriteAndReadAsBool(command);
 
-            return exists ? new JSElement(this.ClientPort, elementvar) : null;
+            return exists ? new JSElement(ClientPort, elementvar) : null;
         }
 
         public void WaitUntilReady()
@@ -495,7 +477,7 @@ namespace WatiN.Core.Native
         {
             if (string.IsNullOrEmpty(innerHtml)) return string.Empty;
 
-            if (this.TagName.ToLowerInvariant() == "pre") return innerHtml;
+            if (TagName.ToLowerInvariant() == "pre") return innerHtml;
 
             var returnValue = NewLineCleanup(innerHtml);
 
@@ -597,26 +579,26 @@ namespace WatiN.Core.Native
 
             if (eventname.Contains("mouse") || eventname == "click")
             {
-                command = this.CreateMouseEventCommand(eventname);
+                command = CreateMouseEventCommand(eventname);
             }
             else if (eventname.Contains("key"))
             {
-                command = this.CreateKeyEventCommand(eventname, eventProperties);
+                command = CreateKeyEventCommand(eventname, eventProperties);
             }
             else
             {
-                command = this.CreateHTMLEventCommand(eventname);
+                command = CreateHTMLEventCommand(eventname);
             }
 
 
-            command += "var res = " + this.ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
+            command += "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
 
             if (WaitForEventToComplete == false)
             {
                 command = JSUtils.WrapCommandInTimer(command);
             }
             
-            this.ClientPort.WriteAndReadAsBool(command);
+            ClientPort.WriteAndReadAsBool(command);
 
         }
 
@@ -633,7 +615,7 @@ namespace WatiN.Core.Native
 
         private string CreateHTMLEventCommand(string eventname)
         {
-            return "var event = " +  this.ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
+            return "var event = " +  ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
                    "event.initEvent(\"" + eventname + "\",true,true);";
         }
 
@@ -642,7 +624,7 @@ namespace WatiN.Core.Native
             // Params for the initMouseEvent:
             // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
 
-            return "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
+            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
                    "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
         }
 
@@ -651,9 +633,9 @@ namespace WatiN.Core.Native
             var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
             var charCode = GetEventPropertyValue(eventProperties, "charCode", "0");
                         
-            string eventCommand = string.Empty;
+            var eventCommand = string.Empty;
 
-            switch (this.ClientPort.JavaScriptEngine)
+            switch (ClientPort.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
                     // HACK: Webkit doesn't seem to support manually firing keyboard events, 
@@ -661,11 +643,11 @@ namespace WatiN.Core.Native
                     // We get around this by manually appending the value to the element between keydown and keypress.
                     if (eventname == "keypress")
                     {
-                        eventCommand = "if(" + this.ElementReference + ".type==\"text\"){" + this.ElementReference
+                        eventCommand = "if(" + ElementReference + ".type==\"text\"){" + ElementReference
                                        + ".value+=\"" + Convert.ToChar(Convert.ToInt32(keyCode)) + "\";};";
                     }
 
-                    eventCommand += "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"Events\");" +
+                    eventCommand += "var event = " + ElementReference + ".ownerDocument.createEvent(\"Events\");" +
                         "event.initEvent('" + eventname + "', true, true);event.keyCode=" + keyCode + ";";
                     break;
                 case JavaScriptEngineType.Mozilla:
@@ -678,7 +660,7 @@ namespace WatiN.Core.Native
 
                     // Params for the initKeyEvent:
                     // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
-                    eventCommand = "var event = " + this.ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                    eventCommand = "var event = " + ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
                         "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
                     break;
                 default:
@@ -708,10 +690,10 @@ namespace WatiN.Core.Native
         /// </summary>
         internal void Pin()
         {
-            var elementVariableName = this.ClientPort.CreateVariableName();
-            this.ClientPort.Write("{0}={1};", elementVariableName, this.ElementReference);
+            var elementVariableName = ClientPort.CreateVariableName();
+            ClientPort.Write("{0}={1};", elementVariableName, ElementReference);
 
-            this.ElementReference = elementVariableName;
+            ElementReference = elementVariableName;
         }
     }
 }

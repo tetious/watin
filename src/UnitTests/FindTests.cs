@@ -436,8 +436,8 @@ namespace WatiN.Core.UnitTests
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ^http://watin should match");
 		}
 
-		[Test, ExpectedException(typeof (UriFormatException))]
-		public void FindByUrlInvalidParam()
+		[Test]
+		public void Should_not_throw_exception_when_protocol_is_missing()
 		{
 			Find.ByUrl("www.xyz.nl");
 		}
@@ -669,17 +669,23 @@ namespace WatiN.Core.UnitTests
 			var value = Find.ByClass("highlighted");
 
 			Assert.IsInstanceOfType(typeof (Constraint), value, "Find.ByClass should return an AttributeConstraint");
-			Assert.That(value.Comparer,  Is.TypeOf(typeof(RegexComparer)), "Unexpected comparer");
+			Assert.That(value.Comparer,  Is.TypeOf(typeof(StringComparer)), "Unexpected comparer");
 
 			const string classname = "className";
 			Assert.AreEqual(classname, value.AttributeName, "Wrong attributename");
             Assert.That(value.Comparer.ToString(), Text.Contains("highlighted"), "Wrong value");
 
+            var mockAttributeBag = new MockAttributeBag(classname, "highlighted");
+            var context = new ConstraintContext();
+
+            Assert.IsTrue(value.Matches(mockAttributeBag, context), "Should match");
+
+
 			var regex = new Regex("ghted$");
 			value = Find.ByClass(regex);
 
-			var mockAttributeBag = new MockAttributeBag(classname, "highlighted");
-            var context = new ConstraintContext();
+			mockAttributeBag = new MockAttributeBag(classname, "highlighted");
+            context = new ConstraintContext();
 
 			Assert.IsTrue(value.Matches(mockAttributeBag, context), "Regex ghted$ should match");
 
@@ -699,7 +705,7 @@ namespace WatiN.Core.UnitTests
                                 browser.GoTo(ClassConstraintTestUri);
 
                                 // WHEN
-                                var exists = browser.Element(Find.ById("first") && Find.ByClass("marker")).Exists;
+                                var exists = browser.Element(Find.ById("first") && Find.ByClass("marker", false)).Exists;
                                 
                                 // THEN
                                 Assert.That(exists, Is.True);
@@ -715,7 +721,7 @@ namespace WatiN.Core.UnitTests
                                 browser.GoTo(ClassConstraintTestUri);
 
                                 // WHEN
-                                var exists = browser.Element(Find.ById("second") && Find.ByClass("marker")).Exists;
+                                var exists = browser.Element(Find.ById("second") && Find.ByClass("marker", false)).Exists;
                                 
                                 // THEN
                                 Assert.That(exists, Is.True);
@@ -731,7 +737,7 @@ namespace WatiN.Core.UnitTests
                                 browser.GoTo(ClassConstraintTestUri);
 
                                 // WHEN
-                                var exists = browser.Element(Find.ById("third") && Find.ByClass("marker")).Exists;
+                                var exists = browser.Element(Find.ById("third") && Find.ByClass("marker", false)).Exists;
                                 
                                 // THEN
                                 Assert.That(exists, Is.True);
@@ -747,9 +753,9 @@ namespace WatiN.Core.UnitTests
                                 browser.GoTo(ClassConstraintTestUri);
 
                                 // WHEN
-                                var exists1 = browser.Element(Find.ById("notmatch_1") && Find.ByClass("marker")).Exists;
-                                var exists2 = browser.Element(Find.ById("notmatch_2") && Find.ByClass("marker")).Exists;
-                                var exists3 = browser.Element(Find.ById("notmatch_3") && Find.ByClass("marker")).Exists;
+                                var exists1 = browser.Element(Find.ById("notmatch_1") && Find.ByClass("marker", false)).Exists;
+                                var exists2 = browser.Element(Find.ById("notmatch_2") && Find.ByClass("marker", false)).Exists;
+                                var exists3 = browser.Element(Find.ById("notmatch_3") && Find.ByClass("marker", false)).Exists;
                                 
                                 // THEN
                                 Assert.That(exists1, Is.False);

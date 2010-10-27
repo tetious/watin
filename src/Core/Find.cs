@@ -112,7 +112,7 @@ namespace WatiN.Core
 		}
 
 		/// <summary>
-		/// Finds an element by its (CSS) class name text.
+		/// Finds an element having an exact match with the (CSS) class name of the element.
 		/// </summary>
 		/// <param name="classname">The class name to find.</param>
 		/// <returns>The AttributeConstraint</returns>
@@ -121,10 +121,31 @@ namespace WatiN.Core
 		/// </example>
 		public static AttributeConstraint ByClass(string classname)
 		{
-		    return ByClass(new Regex(@"(^|\s)" + Regex.Escape(classname) + @"(\s|$)"));
+		    return ByClass(classname, true);
 		}
 
 		/// <summary>
+		/// Finds an element with the (CSS) class name containing <paramref name="classname"/> when
+		/// <paramref name="exactMatch"/> is set to <code>false</code>.
+		/// </summary>
+		/// <param name="classname">The class name to find.</param>
+		/// <param name="exactMatch">When false, class name should contain given <paramref name="classname"/> otherwise it should match exactly.</param>
+		/// <returns>The AttributeConstraint</returns>
+		/// <example>
+        /// To find the first div with a class attribute containing 'HighlightedHeader'
+		/// <code>ie.Div(Find.ByClass("HighlightedHeader", false)).Name</code>
+        /// To find the first div with a class attribute having an exact match with 'HighlightedHeader'
+        /// <code>ie.Div(Find.ByClass("HighlightedHeader", true)).Name</code>
+        /// or just call
+        /// <code>ie.Div(Find.ByClass("HighlightedHeader")).Name</code>
+        /// </example>
+		public static AttributeConstraint ByClass(string classname, bool exactMatch)
+		{
+		    return exactMatch ? new AttributeConstraint(classNameAttribute, classname) 
+                              : ByClass(new Regex(@"(^|\s)" + Regex.Escape(classname) + @"(\s|$)"));
+		}
+
+	    /// <summary>
 		/// Finds an element by its (CSS) class name text.
 		/// </summary>
 		/// <param name="regex">The regular expression for the class name to find.</param>

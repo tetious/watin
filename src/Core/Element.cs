@@ -392,32 +392,23 @@ namespace WatiN.Core
 		/// </summary>
         public virtual void Click()
 		{
-			if (!Enabled)
-			{
-				throw new ElementDisabledException(IdOrName, this);
-			}
-
-			Logger.LogAction((LogFunction log) => { log("Clicking {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
-			Highlight(true);
-
-			NativeElement.ClickOnElement();
-
-			try
-			{
-				WaitForComplete();
-			}
-			finally
-			{
-				Highlight(false);
-			}
-		}
+            ClickImpl(true);
+        }
 
 		/// <summary>
 		/// Clicks this instance and returns immediately. Use this method when you want to continue without waiting
 		/// for the click event to be finished. Mostly used when a 
-		/// HTMLDialog is displayed after clicking the element.
+		/// HTMLDialog or javascript popup is displayed after clicking the element.
 		/// </summary>
         public virtual void ClickNoWait()
+		{
+            ClickImpl(false);
+        }
+
+		/// <summary>
+		/// Handles the implementation of Click and ClickNoWait
+		/// </summary>
+        protected virtual void ClickImpl(bool waitforComplete)
 		{
 			if (!Enabled)
 			{
@@ -428,10 +419,24 @@ namespace WatiN.Core
 
 			Highlight(true);
 
-			UtilityClass.AsyncActionOnBrowser(NativeElement.ClickOnElement);
+            if (waitforComplete)
+            {
+                FireEvent("onclick");
+            }
+            else
+            {
+                FireEventNoWait("onclick");
+            }
 
-		    Highlight(false);
-		}
+            try
+            {
+                if (waitforComplete) WaitForComplete();
+            }
+            finally
+            {
+                Highlight(false);
+            }
+        }
 
         /// <summary>
 		/// Gives the (input) focus to this element.

@@ -128,7 +128,7 @@ namespace WatiN.Core.UnitTests
             Assert.AreEqual(true, settings.HighLightElement, "Unexpected HighLightElement");
             Assert.AreEqual(30, settings.WaitForCompleteTimeOut, "Unexpected WaitForCompleteTimeOut");
             Assert.AreEqual(30, settings.WaitUntilExistsTimeOut, "Unexpected WaitUntilExistsTimeOut");
-            Assert.AreEqual(100, settings.SleepTime, "Unexpected SleepTime");
+            Assert.AreEqual(30, settings.SleepTime, "Unexpected SleepTime");
         }
     }
 }

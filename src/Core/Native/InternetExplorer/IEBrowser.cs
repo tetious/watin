@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using mshtml;
 using SHDocVw;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -111,7 +112,17 @@ namespace WatiN.Core.Native.InternetExplorer
 
 	    public INativeDocument NativeDocument
 	    {
-            get { return new IEDocument((IHTMLDocument2) webBrowser.Document); }
+            get 
+            {
+                var timeout = TimeSpan.FromSeconds(Settings.WaitForCompleteTimeOut);
+                var tryActionUntilTimeOut = new TryFuncUntilTimeOut(timeout)
+                {
+                    ExceptionMessage = () => string.Format("waiting {0} seconds for document to become available.", Settings.WaitUntilExistsTimeOut)
+                };
+
+                var doc = tryActionUntilTimeOut.Try(() => new IEDocument((IHTMLDocument2)webBrowser.Document));
+                return doc;
+            }
 	    }
 
 	    public bool Visible
