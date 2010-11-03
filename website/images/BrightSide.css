@@ -25,7 +25,6 @@ body {
 /* links */
 a { 
 	color: #4284B0;
-	background-color: inherit;
 	text-decoration: none;
 }
 a:hover {
