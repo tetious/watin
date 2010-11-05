@@ -52,6 +52,7 @@ namespace WatiN.Core.UnitTests.TestUtils
         public static Uri NewWindowUri = new Uri(HtmlTestBaseURI, "openNewWindow.html");
         public static Uri NewWindowTargetUri = new Uri(HtmlTestBaseURI, "openNewWindowTarget.html");
         public static Uri ClassConstraintTestUri = new Uri(HtmlTestBaseURI, "ClassConstraintTests.html");
+        public static Uri ListTestsUri = new Uri(HtmlTestBaseURI, "ListTests.html");
         public static string GoogleUrl = "http://www.google.com";
         public static string EbayUrl = "http://www.ebay.com";
 

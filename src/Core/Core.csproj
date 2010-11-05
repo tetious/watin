@@ -188,6 +188,8 @@
     <Compile Include="FindByAttribute.cs" />
     <Compile Include="HtmlColor.cs" />
     <Compile Include="IHasDescription.cs" />
+    <Compile Include="List.cs" />
+    <Compile Include="ListCollection.cs" />
     <Compile Include="Logging\BaseLogWriter.cs" />
     <Compile Include="Logging\FileLogWriter.cs" />
     <Compile Include="Logging\LogMessageEventArgs.cs" />

@@ -31,8 +31,8 @@ namespace WatiN.Core
 		/// Mainly used by WatiN internally.
 		/// </summary>
 		/// <param name="domContainer">The DOM container.</param>
-		/// <param name="htmlDivElement">The HTML div element.</param>
-		public Div(DomContainer domContainer, INativeElement htmlDivElement) : base(domContainer, htmlDivElement) {}
+		/// <param name="nativeElement">The HTML div element.</param>
+		public Div(DomContainer domContainer, INativeElement nativeElement) : base(domContainer, nativeElement) {}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Div"/> class.

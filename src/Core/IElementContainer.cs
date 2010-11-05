@@ -191,6 +191,12 @@ namespace WatiN.Core
         Link Link(Predicate<Link> predicate);
         LinkCollection Links { get; }
 
+        List List(string elementId);
+        List List(Regex elementId);
+        List List(Constraint findBy);
+        List List(Predicate<List> predicate);
+        ListCollection Lists { get; }
+
         Para Para(string elementId);
         Para Para(Regex elementId);
         Para Para(Constraint findBy);

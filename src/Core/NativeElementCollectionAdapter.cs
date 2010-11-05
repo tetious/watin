@@ -269,6 +269,31 @@ namespace WatiN.Core
             get { return new LinkCollection(domContainer, CreateElementFinder<Link>(null)); }
         }
 
+        public List List(string elementId)
+        {
+            return List(Find.ByDefault(elementId));
+        }
+
+        public List List(Regex elementId)
+        {
+            return List(Find.ByDefault(elementId));
+        }
+
+        public List List(Constraint findBy)
+        {
+            return new List(domContainer, CreateElementFinder<List>(findBy));
+        }
+
+        public List List(Predicate<List> predicate)
+        {
+            return List(Find.ByElement(predicate));
+        }
+
+        public ListCollection Lists
+        {
+            get { return new ListCollection(domContainer, CreateElementFinder<List>(null)); }
+        }
+
         public Para Para(string elementId)
         {
             return Para(Find.ByDefault(elementId));

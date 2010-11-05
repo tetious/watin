@@ -710,7 +710,32 @@ namespace WatiN.Core
             get { return All.Links; }
         }
 
-        public virtual Para Para(string elementId)
+	    public List List(string elementId)
+	    {
+            return All.List(elementId);
+        }
+
+	    public List List(Regex elementId)
+	    {
+            return All.List(elementId);
+        }
+
+	    public List List(Constraint findBy)
+	    {
+            return All.List(findBy);
+        }
+
+	    public List List(Predicate<List> predicate)
+	    {
+            return All.List(predicate);
+        }
+
+	    public ListCollection Lists
+	    {
+            get { return All.Lists; }
+        }
+
+	    public virtual Para Para(string elementId)
         {
             return All.Para(elementId);
         }

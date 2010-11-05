@@ -192,6 +192,7 @@
     <Compile Include="ComponentExtensionsTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
+    <Compile Include="ListTests.cs" />
     <Compile Include="Logging\BaseLogWriterTests.cs" />
     <Compile Include="Logging\LoggerTests.cs">
       <SubType>Code</SubType>
@@ -421,6 +422,7 @@
     <Compile Include="WatiNSanityTests.cs" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />
+    <Content Include="html\ListTests.html" />
     <Content Include="html\CrossDomainFrameset.html" />
     <Content Include="html\formsubmit.html" />
     <Content Include="html\Frameset.html" />
