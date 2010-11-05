@@ -70,6 +70,14 @@ namespace WatiN.Core.Native.Windows
             return (ClassName == "#32770");
         }
 
+        public virtual void SizeTo(int width, int height)
+        {
+            if (width <= 0) throw new ArgumentException("should be greater than zero", "width");
+            if (height <= 0) throw new ArgumentException("should be greater than zero", "height");
+
+            NativeMethods.SetWindowPos(Hwnd, width, height);
+        }
+
         public virtual void ForceClose()
         {
             NativeMethods.SendMessage(Hwnd, NativeMethods.WM_CLOSE, 0, 0);

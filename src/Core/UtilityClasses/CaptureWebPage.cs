@@ -19,9 +19,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
-using System.Text;
 using mshtml;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
@@ -44,11 +42,10 @@ namespace WatiN.Core.UtilityClasses
         /// <summary>
         /// Captures an image of the current page on the current browser via _domContainer to disk
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="writeUrl"></param>
-        /// <param name="showGuides"></param>
-        /// <param name="scalePercentage">
-        /// </param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="writeUrl">Place the url text as an overlay on the screenshot.</param>
+        /// <param name="showGuides">Draws guides on the image to show which part of the page is visible for different resolutions. Off by default</param>
+        /// <param name="scalePercentage">Percentage for scaling, default is 100.</param>
         /// <param name="quality">
         /// 0-100 - The Quality category specifies the level of compression for an image. When used to construct an 
         /// EncoderParameter, the range of useful values for the quality category is from 0 to 100. The lower the number specified, 

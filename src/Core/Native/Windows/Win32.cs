@@ -196,6 +196,9 @@ namespace WatiN.Core.Native.Windows
         [DllImport("user32.dll")]
         internal static extern IntPtr SetFocus(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        internal static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
+        
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool EnumWindows(EnumWindowProc lpEnumFunc, IntPtr lParam);
@@ -353,5 +356,10 @@ namespace WatiN.Core.Native.Windows
         }
 
         #endregion Methods
+
+        public static void SetWindowPos(IntPtr hWnd, int width, int height)
+        {
+            SetWindowPos(hWnd, 0, 0, 0, width, height, 0);
+        }
     }
 }

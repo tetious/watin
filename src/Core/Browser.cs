@@ -74,6 +74,11 @@ namespace WatiN.Core
             return (NativeMethods.WindowShowStyle)placement.showCmd;
         }
 
+        public virtual void SizeWindow(int width, int height)
+        {
+            new Window(hWnd).SizeTo(width, height);
+        }
+
         /// <summary>
         /// Make the referenced Internet Explorer full screen, minimized, maximized and more.
         /// </summary>

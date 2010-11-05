@@ -347,6 +347,12 @@ namespace WatiN.Core.UnitTests
                             });
         }
 
+        [Test]
+        public void Should_resize_browser_window()
+        {
+            ExecuteTest(browser => browser.SizeWindow(800, 600));
+        }
+
 
         public override Uri TestPageUri
         {
