@@ -27,7 +27,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <inheritdoc />
 		public override bool Equals(object obj)
 		{
-			return obj != null && (GetType().Equals(obj.GetType()));
+			return ReferenceEquals(this, obj);
 		}
 
 		/// <inheritdoc />

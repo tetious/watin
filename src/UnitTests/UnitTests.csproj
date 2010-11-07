@@ -187,6 +187,7 @@
     </None>
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
+    <Compile Include="BaseDialogHandlerTests.cs" />
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
