@@ -502,16 +502,21 @@ namespace WatiN.Core.Native.InternetExplorer
             var left = element.offsetLeft;
             var top = element.offsetTop;
 
-            var parentElement = element.parentElement;
+            //var parentElement = element.parentElement; <- We need the "offsetParent"-Property
+            var parentElement = element.offsetParent;
             while (parentElement != null)
             {
                 left += parentElement.offsetLeft;
                 top += parentElement.offsetTop;
-                parentElement = parentElement.parentElement;
+                //parentElement = parentElement.parentElement; // as before
+                parentElement = parentElement.offsetParent;
             }
 
-            var width = element.offsetWidth / 2; // n.b. not sure why we are dividing by 2 -- JB
+            //var width = element.offsetWidth / 2; // n.b. not sure why we are dividing by 2 -- JB
+            //var height = element.offsetHeight / 2; //div by 2 is nonsense -- astelix2
+            var width = element.offsetWidth / 2;
             var height = element.offsetHeight / 2;
+
 
             return new Rectangle(left, top, width, height);
         }

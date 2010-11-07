@@ -53,7 +53,7 @@ namespace WatiN.Core
         {
         }
 
-        public bool IsOrdered
+        public virtual bool IsOrdered
         {
             get { return TagName.ToLowerInvariant().Equals("ol"); }
         }
@@ -107,7 +107,7 @@ namespace WatiN.Core
         /// might be nested within it).
         /// </summary>
         /// <returns>The table row collection</returns>
-        public ListItemCollection OwnListItems
+        public virtual ListItemCollection OwnListItems
         {
             get { return new ListItemCollection(DomContainer, CreateElementFinder<ListItem>(nativeElement => nativeElement.Children, null)); }
         }

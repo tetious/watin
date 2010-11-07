@@ -193,18 +193,21 @@ namespace WatiN.Core.UnitTests
         {
             ExecuteTest(browser =>
                             {
-                                Assert.That(browser.Url, Is.EqualTo(AboutBlank));
+                                // GIVEN
+                                Assert.That(browser.Url, Is.EqualTo(AboutBlank), "Pre-condition");
 
                                 var url = MainURI.AbsoluteUri;
 
+                                // WHEN
                                 browser.GoToNoWait(url);
 
-                                Assert.That(browser.Url, Is.EqualTo(AboutBlank));
+                                // THEN
+                                Assert.That(browser.Url, Is.EqualTo(AboutBlank), "Right after GoToNoWait");
 
                                 TryFuncUntilTimeOut.Try(TimeSpan.FromSeconds(3), () => browser.Uri == MainURI);
                                 browser.WaitForComplete();
 
-                                Assert.AreEqual(MainURI, new Uri(browser.Url));
+                                Assert.AreEqual(MainURI, new Uri(browser.Url), "Final check");
                             });
         }
 

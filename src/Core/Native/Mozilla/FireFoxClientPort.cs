@@ -48,7 +48,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <summary>
         /// Name of the javascript function to retrieve only child elements (skip text nodes).
         /// </summary>
-        public const string GetChildElementsFunctionName = "getChildElements";
+        public const string GetChildElementsFunctionName = "WATINgetChildElements";
 
         /// <summary>
         /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
