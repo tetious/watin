@@ -157,7 +157,7 @@ namespace WatiN.Core.Native
 
         public INativeElementCollection Children
         {
-            get { return new JSElementArray(ClientPort, ElementReference + ".childNodes"); }
+            get { return new JSElementArray(ClientPort, FireFoxClientPort.GetChildElementsFunctionName + "(" + ElementReference +")"); }
         }
 
         public INativeElementCollection AllDescendants

@@ -46,6 +46,11 @@ namespace WatiN.Core.Native.Mozilla
         public const string WindowVariableName = "window";
 
         /// <summary>
+        /// Name of the javascript function to retrieve only child elements (skip text nodes).
+        /// </summary>
+        public const string GetChildElementsFunctionName = "getChildElements";
+
+        /// <summary>
         /// <c>true</c> if the <see cref="Dispose()"/> method has been called to release resources.
         /// </summary>
         private bool _disposed;
@@ -313,6 +318,11 @@ namespace WatiN.Core.Native.Mozilla
                                 CloseConnection();
                                 CloseFireFoxProcess();
                             }
+                            else
+                            {
+                                TryFuncUntilTimeOut waiter = new TryFuncUntilTimeOut(TimeSpan.FromMilliseconds(2000));
+                                bool windowClosed = waiter.Try<bool>(() => { return WriteAndReadAsInt("getWindows().length", null) == windowCount - 1; });
+                            }
                         }
                         catch (IOException ex)
                         {
@@ -328,12 +338,38 @@ namespace WatiN.Core.Native.Mozilla
 
         private void CloseFireFoxProcess()
         {
-            if (Process == null) return;
+            //if (Process == null) return;
             
-            Process.WaitForExit(5000);
+            //Process.WaitForExit(5000);
             
-            if (Process == null || Process.HasExited) return;
-            
+            //if (Process == null || Process.HasExited) return;
+
+            System.Diagnostics.Process firefoxProcess = FireFox.CurrentProcess;
+            if (firefoxProcess == null)
+            {
+                return;
+            }
+
+            firefoxProcess.WaitForExit(5000);
+
+            firefoxProcess = FireFox.CurrentProcess;
+            if (firefoxProcess == null)
+            {
+                return;
+            }
+            else if (firefoxProcess.HasExited)
+            {
+                TryFuncUntilTimeOut waiter = new TryFuncUntilTimeOut(TimeSpan.FromMilliseconds(5000));
+                bool procIsNull = waiter.Try<bool>(() => { firefoxProcess = FireFox.CurrentProcess; return firefoxProcess == null; });
+                if (procIsNull)
+                {
+                    if (!waiter.DidTimeOut && firefoxProcess == null)
+                    {
+                        return;
+                    }
+                }
+            }
+
             Logger.LogDebug("Killing FireFox process");
             UtilityClass.TryActionIgnoreException(() => Process.Kill());
         }
@@ -459,9 +495,15 @@ namespace WatiN.Core.Native.Mozilla
         internal void DefineDefaultJSVariablesForWindow(int windowIndex)
         {
             Write("var w0 = getWindows()[{0}];", windowIndex.ToString());
+            Write("var {0} = {1}", GetChildElementsFunctionName, GetChildElementsFunction());
             Write("var {0} = w0.content;", WindowVariableName);
             Write("var {0} = w0.document;", DocumentVariableName);
             Write("var {0} = w0.getBrowser();", BrowserVariableName);
+        }
+
+        private static string GetChildElementsFunction()
+        {
+            return "function(node){var a=[];var tags=node.childNodes;for (var i=0;i<tags.length;++i){if (tags[i].nodeType!=3) a.push(tags[i]);} return a;}";
         }
 
         /// <summary>
@@ -545,14 +587,15 @@ namespace WatiN.Core.Native.Mozilla
         /// </exception>
         private void CloseExistingFireFoxInstances()
         {
-            if (FireFox.CurrentProcess != null && !Settings.CloseExistingFireFoxInstances)
+            System.Diagnostics.Process firefoxProcess = FireFox.CurrentProcess;
+            if (firefoxProcess != null && !Settings.CloseExistingFireFoxInstances)
             {
                 throw new FireFoxException("Existing instances of FireFox detected.");
             }
-            
-            if (FireFox.CurrentProcess != null)
+
+            if (firefoxProcess != null && !firefoxProcess.HasExited)
             {
-                FireFox.CurrentProcess.Kill();
+                firefoxProcess.Kill();
             }
         }
 

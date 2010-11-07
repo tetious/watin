@@ -183,6 +183,8 @@
     <Compile Include="ComponentFinderAttribute.cs" />
     <Compile Include="Composite.cs" />
     <Compile Include="Body.cs" />
+    <Compile Include="ListItem.cs" />
+    <Compile Include="ListItemCollection.cs" />
     <Compile Include="DescriptionAttribute.cs" />
     <Compile Include="Exceptions\ElementExceptionBase.cs" />
     <Compile Include="FindByAttribute.cs" />

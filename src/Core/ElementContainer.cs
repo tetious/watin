@@ -286,6 +286,31 @@ namespace WatiN.Core
             get { return All.Lists; }
         }
 
+        public ListItem ListItem(string elementId)
+        {
+            return All.ListItem(elementId);
+        }
+
+        public ListItem ListItem(Regex elementId)
+        {
+            return All.ListItem(elementId);
+        }
+
+        public ListItem ListItem(Constraint findBy)
+        {
+            return All.ListItem(findBy);
+        }
+
+        public ListItem ListItem(Predicate<ListItem> predicate)
+        {
+            return All.ListItem(predicate);
+        }
+
+        public ListItemCollection ListItems
+        {
+            get { return All.ListItems; }
+        }
+
         public Para Para(string elementId)
         {
             return All.Para(elementId);

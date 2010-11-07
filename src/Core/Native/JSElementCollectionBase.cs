@@ -85,7 +85,7 @@ namespace WatiN.Core.Native
         /// <summary>
         /// Gets a collection of elements by id.
         /// </summary>
-        /// <param name="id">Name of the tag.</param>
+        /// <param name="id">The id of the element.</param>
         /// <returns>Collection of elements for the given <paramref name="id"/>.</returns>
         protected IEnumerable<INativeElement> GetElementsByIdImpl(string id)
         {

@@ -192,6 +192,7 @@
     <Compile Include="ComponentExtensionsTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
+    <Compile Include="ListItemTests.cs" />
     <Compile Include="ListTests.cs" />
     <Compile Include="Logging\BaseLogWriterTests.cs" />
     <Compile Include="Logging\LoggerTests.cs">

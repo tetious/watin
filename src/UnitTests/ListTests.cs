@@ -87,6 +87,53 @@ namespace WatiN.Core.UnitTests
             });
         }
 
+        [Test]
+        public void Should_return_own_listitem()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var list = browser.List("Ul1");
+
+                // WHEN
+                var listItem = list.OwnListItem("ul1_second");
+
+                // THEN
+                Assert.That(listItem.Exists);
+            });
+        }
+        [Test]
+        public void Should_not_return_listitem_from_contained_list_as_own_list_item()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var list = browser.List("Ul1");
+
+                // WHEN
+                var listItem = list.OwnListItem("ol1_first");
+
+                // THEN
+                Assert.That(listItem.Exists, Is.False);
+            });
+        }
+
+        [Test]
+        public void Should_return_own_listitems_only_and_none_from_contained_list()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var list = browser.List("Ul1");
+
+                // WHEN
+                var listItems = list.OwnListItems;
+
+                // THEN
+                Assert.That(listItems.Count, Is.EqualTo(2));
+            });
+        }
+
         #region Overrides of BaseWithBrowserTests
 
         public override Uri TestPageUri

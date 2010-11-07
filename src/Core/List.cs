@@ -16,6 +16,9 @@
 
 #endregion Copyright
 
+using System;
+using System.Text.RegularExpressions;
+using WatiN.Core.Constraints;
 using WatiN.Core.Native;
 
 namespace WatiN.Core
@@ -53,6 +56,60 @@ namespace WatiN.Core
         public bool IsOrdered
         {
             get { return TagName.ToLowerInvariant().Equals("ol"); }
+        }
+
+        /// <summary>
+        /// Finds a list item within the list itself (excluding content from any lists that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id</param>
+        /// <returns>The list item</returns>
+        public virtual ListItem OwnListItem(string elementId)
+        {
+            return OwnListItem(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a list item within the list itself (excluding content from any lists that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="elementId">The element id regular expression</param>
+        /// <returns>The list item</returns>
+        public virtual ListItem OwnListItem(Regex elementId)
+        {
+            return OwnListItem(Find.ById(elementId));
+        }
+
+        /// <summary>
+        /// Finds a list item within the list itself (excluding content from any lists that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="findBy">The constraint</param>
+        /// <returns>The list item</returns>
+        public virtual ListItem OwnListItem(Constraint findBy)
+        {
+            return new ListItem(DomContainer, CreateElementFinder<ListItem>(nativeElement => nativeElement.Children, findBy));
+        }
+
+        /// <summary>
+        /// Finds a list item within the list itself (excluding content from any lists that
+        /// might be nested within it).
+        /// </summary>
+        /// <param name="predicate">The predicate</param>
+        /// <returns>The list item</returns>
+        public virtual ListItem OwnListItem(Predicate<ListItem> predicate)
+        {
+            return OwnListItem(Find.ByElement(predicate));
+        }
+
+        /// <summary>
+        /// Gets a collection of all table rows within the table itself (excluding content from any tables that
+        /// might be nested within it).
+        /// </summary>
+        /// <returns>The table row collection</returns>
+        public ListItemCollection OwnListItems
+        {
+            get { return new ListItemCollection(DomContainer, CreateElementFinder<ListItem>(nativeElement => nativeElement.Children, null)); }
         }
     }
 }

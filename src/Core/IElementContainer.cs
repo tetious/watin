@@ -197,6 +197,12 @@ namespace WatiN.Core
         List List(Predicate<List> predicate);
         ListCollection Lists { get; }
 
+        ListItem ListItem(string elementId);
+        ListItem ListItem(Regex elementId);
+        ListItem ListItem(Constraint findBy);
+        ListItem ListItem(Predicate<ListItem> predicate);
+        ListItemCollection ListItems { get; }
+
         Para Para(string elementId);
         Para Para(Regex elementId);
         Para Para(Constraint findBy);
