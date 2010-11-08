@@ -524,7 +524,7 @@ namespace WatiN.Core.UnitTests.IETests
                 Assert.IsInstanceOfType(typeof (BrowserNotFoundException), e);
                 // add 1 second to give it some slack.
                 Assert.Greater(timeoutTime + 1, DateTime.Now.Subtract(startTime).TotalSeconds);
-                Console.WriteLine(e.Message);
+                Logger.LogDebug(e.Message);
                 Assert.AreEqual(expectedMessage, e.Message, "Unexpected exception message");
             }
         }

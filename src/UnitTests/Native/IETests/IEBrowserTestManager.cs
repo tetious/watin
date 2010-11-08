@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using System;
+using WatiN.Core.Logging;
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.IETests
@@ -49,7 +50,7 @@ namespace WatiN.Core.UnitTests.IETests
 
             foreach (var explorer in IE.InternetExplorersNoWait())
             {
-                Console.WriteLine(explorer.Title + " (" + explorer.Url + ")");
+                Logger.LogDebug(explorer.Title + " (" + explorer.Url + ")");
                 explorer.Close();
             }
             throw new Exception("Expected no open IE instances.");

@@ -173,7 +173,7 @@ namespace WatiN.Core
         /// </remarks>
         /// <exception cref="WatiNException">Thrown if the page object does not have a reference
         /// to a document or if the document's properties fail validation.</exception>
-        public Document Document
+        public virtual Document Document
         {
             get
             {

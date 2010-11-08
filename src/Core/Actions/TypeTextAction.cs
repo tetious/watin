@@ -24,6 +24,9 @@ namespace WatiN.Core.Actions
 {
     public class TypeTextAction : ITypeTextAction
     {
+        /// <summary>
+        /// The <see cref="TextField"/> wrapped by this <see cref="TypeTextAction"/> instance.
+        /// </summary>
         protected TextField TextField { get; private set; }
 
         public TypeTextAction(TextField textField)

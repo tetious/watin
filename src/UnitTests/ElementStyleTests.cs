@@ -53,7 +53,6 @@ namespace WatiN.Core.UnitTests
             ExecuteTest(browser =>
                             {
                                 _element = browser.TextField("Textarea1");
-                                Console.WriteLine(_element.Style.ToString().ToLowerInvariant());
                                 AssertStyleText(_element.Style.ToString().ToLowerInvariant());
                             });
         }

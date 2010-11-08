@@ -218,7 +218,6 @@ namespace WatiN.Core.UnitTests
         {
             // GIVEN & WHEN & THEN
             Assert.That(HtmlColor.Aqua, Is.EqualTo(new HtmlColor("Aqua")), "Aqua");
-            Console.WriteLine(HtmlColor.Blue.ToRgbString);
             Assert.That(HtmlColor.Black, Is.EqualTo(new HtmlColor("Black")), "Black");
             Assert.That(HtmlColor.Blue, Is.EqualTo(new HtmlColor("Blue")), "Blue");
             Assert.That(HtmlColor.Fuchsia, Is.EqualTo(new HtmlColor("Fuchsia")), "Fuchsia");
