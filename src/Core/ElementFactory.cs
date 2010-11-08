@@ -37,6 +37,8 @@ namespace WatiN.Core
         private static readonly Dictionary<Type, NativeElementBasedFactory> nativeElementBasedFactoriesByType;
         private static readonly Dictionary<Type, ElementFinderBasedFactory> elementFinderBasedFactoriesByType;
 
+        internal static readonly string ElementNameSpace;
+
         static ElementFactory()
         {
             elementTagsByType = new Dictionary<Type, IList<ElementTag>>();
@@ -44,13 +46,16 @@ namespace WatiN.Core
             nativeElementBasedFactoriesByType = new Dictionary<Type, NativeElementBasedFactory>();
             elementFinderBasedFactoriesByType = new Dictionary<Type, ElementFinderBasedFactory>();
 
-            var assembly = Assembly.GetAssembly(typeof(Element));
+            var elementType = typeof(Element);
+            ElementNameSpace = elementType.Namespace;
+
+            var assembly = Assembly.GetAssembly(elementType);
             RegisterElementTypes(assembly);
 
             // Map the Element type to the special Any tag value.
-            RegisterElementTags(typeof(Element), new[] { ElementTag.Any });
-            RegisterNativeElementBasedFactories(typeof(Element));
-            RegisterElementFinderBasedFactories(typeof(Element));
+            RegisterElementTags(elementType, new[] { ElementTag.Any });
+            RegisterNativeElementBasedFactories(elementType);
+            RegisterElementFinderBasedFactories(elementType);
         }
 
         /// <summary>
@@ -142,8 +147,13 @@ namespace WatiN.Core
         private static IList<ElementTag> CreateElementTagsFromElementTagAttributes(Type elementType)
         {
         	if (elementType.Equals(typeof(Element))) return new[] { ElementTag.Any };
-        	    
         	var tagAttributes = (ElementTagAttribute[])elementType.GetCustomAttributes(typeof(ElementTagAttribute), false);
+
+            if (tagAttributes.Length == 0 && !elementType.Namespace.Equals(ElementNameSpace))
+            {
+                var type = elementType.BaseType;
+                return CreateElementTagsFromElementTagAttributes(type);
+            }
 
             var elementTagAttributes = new List<ElementTagAttribute>(tagAttributes);
             elementTagAttributes.Sort();

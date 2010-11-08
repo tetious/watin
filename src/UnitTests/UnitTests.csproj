@@ -191,6 +191,7 @@
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
+    <Compile Include="ElementFactoryTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
     <Compile Include="ListItemTests.cs" />

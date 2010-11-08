@@ -43,7 +43,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 		[Test]
-		public void Should_be_able_to_use_customized_element_with_ElemenstOfType()
+		public void Should_be_able_to_use_customized_element_with_ElementsOfType()
 		{
 			ExecuteTestWithAnyBrowser(browser =>
 			{
@@ -81,25 +81,32 @@ namespace WatiN.Core.UnitTests
 				Assert.That(myControls.Count, Is.EqualTo(5));
 			});
 		}
-		
+
+        [Test]
+        public void Should_implicitly_inherit_attribute_tags_when_none_are_specified_on_custom_element()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+            {
+                // GIVEN
+                var buttonCount = browser.Buttons.Count;
+                Assert.That(buttonCount, Is.GreaterThan(0), "Pre-condition: Page should have buttons");
+
+                // WHEN
+                var myButtons = browser.ElementsOfType<MyButtonWithNoElementTag>();
+
+                // THEN
+                Assert.That(myButtons, Is.Not.Null, "Expected a collection");
+                Assert.That(myButtons.Count, Is.EqualTo(buttonCount), "Expected buttons");
+            });
+        }
+
 		public override Uri TestPageUri {
 			get { return MainURI; }
 		}
 	}
-	
-	public class MyControl : Control<FieldSet>
-	{
+
+    public class MyControl : Control<MyButton> { }
 		
-	}
-	
-	//[ElementTag("fieldset")]
-	[ElementTag("input", InputType = "button")]
-	public class FieldSet : ElementContainer<Element>
-	{
-		public FieldSet(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
-        public FieldSet(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
-	}
-	
 	[ElementTag("input", InputType = "button")]
 	public class MyButton : Button
 	{
@@ -113,4 +120,18 @@ namespace WatiN.Core.UnitTests
 			ClickWasCalled = true;	
 		}
 	}
+
+    public class MyButtonWithNoElementTag : Button
+    {
+        public bool ClickWasCalled { get; set; }
+
+        public MyButtonWithNoElementTag(DomContainer domContainer, INativeElement element) : base(domContainer, element) { }
+        public MyButtonWithNoElementTag(DomContainer domContainer, ElementFinder finder) : base(domContainer, finder) { }
+
+        public override void Click()
+        {
+            ClickWasCalled = true;
+        }
+
+    }
 }

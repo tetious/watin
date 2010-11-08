@@ -84,20 +84,25 @@ namespace WatiN.Core
             TypeTextAction.Clear();
 		}
 
-	    public ITypeTextAction TypeTextAction
+	    public  ITypeTextAction TypeTextAction
 	    {
 	        get
 	        {
 	            if (_typeTextAction == null)
 	            {
-	                _typeTextAction = new TypeTextAction(this);
+	                _typeTextAction = CreateTypeTextAction();
 	            }
 	            return _typeTextAction;
 	        }
             set { _typeTextAction = value;}
 	    }
 
-        public virtual string Value
+        protected virtual ITypeTextAction CreateTypeTextAction()
+	    {
+	        return new TypeTextAction(this);
+	    }
+
+	    public virtual string Value
 		{
 			get
 			{

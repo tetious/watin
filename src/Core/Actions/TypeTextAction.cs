@@ -24,11 +24,11 @@ namespace WatiN.Core.Actions
 {
     public class TypeTextAction : ITypeTextAction
     {
-        private readonly TextField _textField;
+        protected TextField TextField { get; private set; }
 
         public TypeTextAction(TextField textField)
         {
-            _textField = textField;
+            TextField = textField;
         }
 
         public virtual void TypeText(string value)
@@ -52,27 +52,27 @@ namespace WatiN.Core.Actions
 
             value = ReplaceNewLineWithCorrectCharacters(value);
 
-            _textField.Highlight(true);
+            TextField.Highlight(true);
             
-            _textField.Focus();
-            if (!append) _textField.Select();
-            if (!append) _textField.SetAttributeValue("value", string.Empty);
+            TextField.Focus();
+            if (!append) TextField.Select();
+            if (!append) TextField.SetAttributeValue("value", string.Empty);
             if (!clear) SendKeyPresses(value);
-            if (!append) _textField.Change();
-            if (!append) UtilityClass.TryActionIgnoreException(_textField.Blur);
+            if (!append) TextField.Change();
+            if (!append) UtilityClass.TryActionIgnoreException(TextField.Blur);
             
-            _textField.Highlight(false);
+            TextField.Highlight(false);
         }
 
         private void CheckIfTypingIsPossibleInThisTextField()
         {
-            if (!_textField.Enabled)
+            if (!TextField.Enabled)
             {
-                throw new ElementDisabledException(_textField.IdOrName, _textField);
+                throw new ElementDisabledException(TextField.IdOrName, TextField);
             }
-            if (_textField.ReadOnly)
+            if (TextField.ReadOnly)
             {
-                throw new ElementReadOnlyException(_textField);
+                throw new ElementReadOnlyException(TextField);
             }
         }
 
@@ -89,9 +89,9 @@ namespace WatiN.Core.Actions
         {
             var length = value != null ? value.Length : 0;
 
-            if (_textField.MaxLength != 0 && length > _textField.MaxLength)
+            if (TextField.MaxLength != 0 && length > TextField.MaxLength)
             {
-                length = _textField.MaxLength;
+                length = TextField.MaxLength;
             }
 
             for (var i = 0; i < length; i++)
@@ -110,17 +110,17 @@ namespace WatiN.Core.Actions
 
         protected virtual void FireKeyUp(char character)
         {
-            _textField.KeyUp(character);
+            TextField.KeyUp(character);
         }
 
         protected virtual void FireKeyPress(char character)
         {
-            _textField.KeyPress(character);
+            TextField.KeyPress(character);
         }
 
         protected virtual void FireKeyDown(char character)
         {
-            _textField.KeyDown(character);
+            TextField.KeyDown(character);
         }
     }
 }
