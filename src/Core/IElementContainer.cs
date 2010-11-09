@@ -448,5 +448,17 @@ namespace WatiN.Core
         /// </code>
         /// </example>
         ControlCollection<TControl> Controls<TControl>() where TControl : Control, new();
+
+        /// <summary>
+        /// Will limit the search scope to the children of the Element or Document.Body
+        /// </summary>
+        /// <returns>A <see cref="IElementContainer"/></returns>
+        /// <example>
+        /// This will return the second child-element of the &lt;body&gt; element.
+        /// <code>
+        /// browser.Children.Elements[1];
+        /// </code>
+        /// </example>
+        IElementContainer Children { get; }
     }
 }

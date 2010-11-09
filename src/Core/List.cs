@@ -88,7 +88,7 @@ namespace WatiN.Core
         /// <returns>The list item</returns>
         public virtual ListItem OwnListItem(Constraint findBy)
         {
-            return new ListItem(DomContainer, CreateElementFinder<ListItem>(nativeElement => nativeElement.Children, findBy));
+            return Children.ListItem(findBy);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace WatiN.Core
         /// <returns>The table row collection</returns>
         public virtual ListItemCollection OwnListItems
         {
-            get { return new ListItemCollection(DomContainer, CreateElementFinder<ListItem>(nativeElement => nativeElement.Children, null)); }
+            get { return Children.ListItems ; }
         }
     }
 }

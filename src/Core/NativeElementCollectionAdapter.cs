@@ -649,6 +649,11 @@ namespace WatiN.Core
             return Core.Control.FindControls<TControl>(this);
         }
 
+        public IElementContainer Children
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         #endregion
 
         private NativeElementFinder CreateElementFinder<TElement>(Constraint findBy)

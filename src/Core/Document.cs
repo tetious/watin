@@ -585,26 +585,31 @@ namespace WatiN.Core
 	        return All.ElementsWithTag(elementTags);
 	    }
 
-	    public virtual TElement ElementOfType<TElement>(string elementId) where TElement : Element
+        /// <inheritdoc />
+        public virtual TElement ElementOfType<TElement>(string elementId) where TElement : Element
         {
             return All.ElementOfType<TElement>(elementId);
         }
 
+        /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Regex elementId) where TElement : Element
         {
             return All.ElementOfType<TElement>(elementId);
         }
 
+        /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Constraint findBy) where TElement : Element
         {
             return All.ElementOfType<TElement>(findBy);
         }
 
+        /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Predicate<TElement> predicate) where TElement : Element
         {
             return All.ElementOfType(predicate);
         }
 
+        /// <inheritdoc />
         public virtual ElementCollection<TElement> ElementsOfType<TElement>() where TElement : Element
         {
             return All.ElementsOfType<TElement>();
@@ -1047,35 +1052,47 @@ namespace WatiN.Core
             get { return All.Images; }
         }
 
+        /// <inheritdoc />
         public virtual TControl Control<TControl>() where TControl : Control, new()
 	    {
             return All.Control<TControl>();
 	    }
 
+        /// <inheritdoc />
         public virtual TControl Control<TControl>(string elementId) where TControl : Control, new()
 	    {
             return All.Control<TControl>(elementId);
 	    }
 
+        /// <inheritdoc />
         public virtual TControl Control<TControl>(Regex elementId) where TControl : Control, new()
 	    {
             return All.Control<TControl>(elementId);
         }
 
+        /// <inheritdoc />
         public virtual TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
 	    {
             return All.Control<TControl>(findBy);
 	    }
 
+        /// <inheritdoc />
         public virtual TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
 	    {
             return All.Control(predicate);
 	    }
 
+        /// <inheritdoc />
         public virtual ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
 	    {
             return All.Controls<TControl>();
 	    }
+
+        /// <inheritdoc />
+	    public IElementContainer Children
+	    {
+            get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.Body.Children); }
+        }
 
 	    #endregion
     }

@@ -44,6 +44,17 @@ namespace WatiN.Core
             }
         }
 
+        /// <inheritdoc />
+        public IElementContainer Children
+        {
+            get
+            {
+                return new NativeElementCollectionAdapter(DomContainer,
+                                                        CreateNativeElementCollectionFactory(
+                                                            nativeElement => nativeElement.Children));
+            }
+        }
+        
         #region IElementsContainer
 
         public Area Area(string elementId)
@@ -598,56 +609,67 @@ namespace WatiN.Core
             get { return All.Images; }
         }
 
+        /// <inheritdoc />
         public TChildElement ElementOfType<TChildElement>(string elementId) where TChildElement : Element
         {
             return All.ElementOfType<TChildElement>(elementId);
         }
 
+        /// <inheritdoc />
         public TChildElement ElementOfType<TChildElement>(Regex elementId) where TChildElement : Element
         {
             return All.ElementOfType<TChildElement>(elementId);
         }
 
+        /// <inheritdoc />
         public TChildElement ElementOfType<TChildElement>(Constraint findBy) where TChildElement : Element
         {
             return All.ElementOfType<TChildElement>(findBy);
         }
 
+        /// <inheritdoc />
         public TChildElement ElementOfType<TChildElement>(Predicate<TChildElement> predicate) where TChildElement : Element
         {
             return All.ElementOfType(predicate);
         }
 
+        /// <inheritdoc />
         public ElementCollection<TChildElement> ElementsOfType<TChildElement>() where TChildElement : Element
         {
             return All.ElementsOfType<TChildElement>();
         }
 
+        /// <inheritdoc />
         public TControl Control<TControl>() where TControl : Control, new()
         {
             return All.Control<TControl>();
         }
 
+        /// <inheritdoc />
         public TControl Control<TControl>(string elementId) where TControl : Control, new()
         {
             return All.Control<TControl>(elementId);
         }
 
+        /// <inheritdoc />
         public TControl Control<TControl>(Regex elementId) where TControl : Control, new()
         {
             return All.Control<TControl>(elementId);
         }
 
+        /// <inheritdoc />
         public TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
         {
             return All.Control<TControl>(findBy);
         }
 
+        /// <inheritdoc />
         public TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
         {
             return All.Control(predicate);
         }
 
+        /// <inheritdoc />
         public ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
         {
             return All.Controls<TControl>();

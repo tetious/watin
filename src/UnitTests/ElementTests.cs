@@ -1357,7 +1357,7 @@ namespace WatiN.Core.UnitTests
                 childElement.Refresh();
 
                 // THEN
-                Assert.That(childElement.Exists);
+                Assert.That(childElement.Id, Is.EqualTo("popupid"));
             });
         }
 
@@ -1377,6 +1377,68 @@ namespace WatiN.Core.UnitTests
                 // THEN
                 Assert.That(childElement.Exists, Is.False);
             });
+        }
+
+        [Test]
+        public void Should_be_able_to_find_child_element_of_element_container()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Form("Form");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var button = containerElement.Children.Button("popupid");
+
+                                // THEN
+                                Assert.That(button.Exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_not_be_able_to_find_non_child_elements_of_element_container()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Div("divid");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var checkBox = containerElement.Children.CheckBox("Checkbox21");
+
+                                // THEN
+                                Assert.That(checkBox.Exists, Is.False);
+                            });
+        }
+
+        [Test]
+        public void Should_be_able_to_find_child_element_of_document()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                // WHEN
+                                var button = browser.Children.Form("Form");
+
+                                // THEN
+                                Assert.That(button.Exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_not_be_able_to_find_non_child_elements_of_document()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                // WHEN
+                                var checkBox = browser.Children.CheckBox("Checkbox21");
+
+                                // THEN
+                                Assert.That(checkBox.Exists, Is.False);
+                            });
         }
 
 	}
