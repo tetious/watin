@@ -53,41 +53,43 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
-            using (var ie1 = new IE(TestPageUri))
+		    var firstIE = Ie;
+            
+            using (var secondIe = new IE(TestPageUri,true))
             {
                 // set up a second browser with an open dialog
-                var alertDialogHandler1 = new AlertDialogHandler();
-                using (new UseDialogOnce(ie1.DialogWatcher, alertDialogHandler1))
+                var secondAlertDialogHandler = new AlertDialogHandler();
+                using (new UseDialogOnce(secondIe.DialogWatcher, secondAlertDialogHandler))
                 {
-                    ie1.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+                    secondIe.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
-                    alertDialogHandler1.WaitUntilExists();
+                    secondAlertDialogHandler.WaitUntilExists();
 
                     // close the original message
-                    var alertDialogHandler2 = new AlertDialogHandler();
-                    using (new UseDialogOnce(Ie.DialogWatcher, alertDialogHandler2))
+                    var firstAlertDialogHandler = new AlertDialogHandler();
+                    using (new UseDialogOnce(firstIE.DialogWatcher, firstAlertDialogHandler))
                     {
-                        Ie.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
+                        firstIE.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
-                        alertDialogHandler2.WaitUntilExists();
+                        firstAlertDialogHandler.WaitUntilExists();
 
-                        var message = alertDialogHandler2.Message;
-                        alertDialogHandler2.OKButton.Click();
+                        var message = firstAlertDialogHandler.Message;
+                        firstAlertDialogHandler.OKButton.Click();
 
-                        Ie.WaitForComplete();
+                        firstIE.WaitForComplete();
 
-                        Assert.IsTrue(alertDialogHandler1.Exists(), "Original Alert Dialog should be open.");
+                        Assert.IsTrue(secondAlertDialogHandler.Exists(), "Original Alert Dialog should be open.");
 
                         Assert.AreEqual("This is an alert!", message, "Unexpected message");
-                        Assert.IsFalse(alertDialogHandler2.Exists(), "Alert Dialog should be closed.");
+                        Assert.IsFalse(firstAlertDialogHandler.Exists(), "Alert Dialog should be closed.");
                     }
 
                     // close the second message
-                    alertDialogHandler1.OKButton.Click();
+                    secondAlertDialogHandler.OKButton.Click();
 
-                    ie1.WaitForComplete();
+                    secondIe.WaitForComplete();
 
-                    Assert.IsFalse(alertDialogHandler1.Exists(), "Alert Dialog should be closed.");
+                    Assert.IsFalse(secondAlertDialogHandler.Exists(), "Alert Dialog should be closed.");
                 }
             }
 		}
