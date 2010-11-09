@@ -186,6 +186,13 @@ namespace WatiN.Core
             }
         }
 
+        public override void Refresh()
+        {
+            if (element == null)
+                throw new WatiNException("The Element is not available because the Control instance has not been fully initialized.");
+            element.Refresh();
+        }
+
         /// <summary>
         /// Verifies that the element represents the correct kind of element for the control.
         /// </summary>
@@ -287,6 +294,21 @@ namespace WatiN.Core
                     return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if the element wrapped by the control exists.
+        /// </summary>
+        public virtual void Refresh()
+        {
+                try
+                {
+                    Element.Refresh();
+                }
+                catch(Exception ex)
+                {
+                    throw new WatiNException("The Element is not available because the Control instance has not been fully initialized.", ex);
+                }
         }
 
         /// <summary>

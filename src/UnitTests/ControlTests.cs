@@ -221,5 +221,46 @@ namespace WatiN.Core.UnitTests
             [Description("Text field control.")]
             internal TextFieldControl NameTextFieldControl = null; // intentionally non-public
         }
+
+        [Test]
+        public void Should_refind_nested_element_after_page_and_control_refresh()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var containerControl = browser.Control<ContainerControl>("Form");
+                var childElement = containerControl.Button;
+                Assert.That(childElement.Exists, "Pre-Condition");
+
+                childElement.DoSomethingPostbackish();
+
+                // WHEN
+                childElement.Refresh();
+
+                // THEN it should re-find it again
+                Assert.That(childElement.WrappedElement.Id, Is.EqualTo("popupid"));
+            });
+        }
+
+        public class ContainerControl : Control<Form>
+        {
+            public ChildControl Button
+            {
+                get { return Element.Control<ChildControl>("popupid"); }
+            }
+        }
+
+        public class ChildControl: Control<Button>
+        {
+            public Button WrappedElement
+            {
+                get { return Element; }
+            }
+
+            public void DoSomethingPostbackish()
+            {
+                ((Browser)Element.DomContainer).Refresh();
+            }
+        }
     }
 }
