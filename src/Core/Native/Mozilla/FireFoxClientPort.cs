@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using System.Diagnostics;
+
 namespace WatiN.Core.Native.Mozilla
 {
     using System;
@@ -593,7 +595,8 @@ namespace WatiN.Core.Native.Mozilla
                 throw new FireFoxException("Existing instances of FireFox detected.");
             }
 
-            if (firefoxProcess != null && !firefoxProcess.HasExited)
+            var currentProcess = FireFox.CurrentProcess;
+            if (currentProcess != null && !currentProcess.HasExited)
             {
                 firefoxProcess.Kill();
             }
