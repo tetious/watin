@@ -35,6 +35,13 @@ namespace WatiN.Core.UnitTests
             get { return MainURI; }
         }
 
+//        [Test]
+//        public void Should_vertically_stitch_correctly()
+//        {
+//            Ie.SizeWindow(150, 300);
+//            Ie.CaptureWebPageToFile(@"c:\temp\capture_of_main.jpg");
+//        }
+
         [Test]
         public void Should_create_a_filestream()
         {

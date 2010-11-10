@@ -148,7 +148,7 @@ namespace WatiN.Core.UtilityClasses
             var bm = new Bitmap(screenWidth, screenHeight, PixelFormat.Format48bppRgb);
 
             //Create a target bitmap to draw into.
-            var bm2 = new Bitmap(widthsize + URLExtraLeft, heightsize + URLExtraHeight - trimHeight, PixelFormat.Format16bppRgb555);
+            var bm2 = new Bitmap(widthsize + URLExtraLeft - trimLeft, heightsize + URLExtraHeight - trimHeight, PixelFormat.Format16bppRgb555);
             var g2 = Graphics.FromImage(bm2);
 
             //Get inner browser window.
@@ -194,7 +194,9 @@ namespace WatiN.Core.UtilityClasses
 
                     NativeMethods.DeleteObject(hBitmap);
 
-                    g2.DrawImage(screenfrag, brwLeft + URLExtraLeft, brwTop + URLExtraHeight);
+                    var realArea = new Rectangle(3, 0, screenfrag.Width - 3, screenfrag.Height);
+                    g2.DrawImage(screenfrag, brwLeft + URLExtraLeft, brwTop + URLExtraHeight, realArea, GraphicsUnit.Pixel);
+//                    g2.DrawImage(screenfrag, brwLeft + URLExtraLeft, brwTop + URLExtraHeight);
                 }
                 ++myPageWidth;
             }
