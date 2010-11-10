@@ -649,9 +649,13 @@ namespace WatiN.Core
             return Core.Control.FindControls<TControl>(this);
         }
 
+        /// <summary>
+        /// Calling this method will return a NotImplementedException because 
+        /// getting the children if the children is not supported.
+        /// </summary>
         public IElementContainer Children
         {
-            get { throw new NotImplementedException(); }
+            get { throw new NotImplementedException("Getting the children if the children is not supported"); }
         }
 
         #endregion
