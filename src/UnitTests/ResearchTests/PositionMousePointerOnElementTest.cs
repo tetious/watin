@@ -56,6 +56,37 @@ namespace WatiN.Core.UnitTests.ResearchTests
             }
         }
 
+        [Test, Ignore]
+        public void Should_get_dimension()
+        {
+            var nativeElement = Ie.Button("popupid").NativeElement;
+
+            Console.WriteLine(getElementDimensions((IEElement)nativeElement));
+        }
+
+        public string getElementDimensions(IEElement element)
+        {
+            var htmlElement = element.AsHtmlElement;
+
+            if (htmlElement.offsetParent == null) return string.Empty;
+
+            var left = htmlElement.offsetLeft;
+            var top = htmlElement.offsetTop;
+            var width = htmlElement.offsetWidth;
+            var height = htmlElement.offsetHeight;
+
+            do
+            {
+                htmlElement = htmlElement.offsetParent;
+                left += htmlElement.offsetLeft;
+                top += htmlElement.offsetTop;
+            }
+            while (htmlElement.offsetParent != null);
+
+            return "left:" + left + " right:" + (left + width) + " top:" + top + " bottom: " + (top + height) + " width: " + width + " height:" + height;
+        }
+
+
         private static void PositionMousePointerInMiddleOfElement(Element button, Document ie)
         {
             var left = position(button, "Left");
