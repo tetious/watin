@@ -22,6 +22,7 @@ using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SHDocVw;
+using WatiN.Core.Logging;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UnitTests.TestUtils;
 
@@ -47,7 +48,7 @@ namespace WatiN.Core.UnitTests.IETests
 
                 foreach (IWebBrowser2 browser in browsers)
                 {
-                    Console.WriteLine(browser.LocationURL);
+                    Logger.LogDebug(browser.LocationURL);
                 }
                 // THEN
                 Assert.That(count, Is.EqualTo(1), "unexpected count");
@@ -81,7 +82,7 @@ namespace WatiN.Core.UnitTests.IETests
 
                 foreach (IWebBrowser2 browser in browsers)
                 {
-                    Console.WriteLine(browser.LocationURL);
+                    Logger.LogDebug(browser.LocationURL);
                 }
 
                 // THEN
