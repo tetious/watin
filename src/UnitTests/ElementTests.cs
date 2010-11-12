@@ -1380,6 +1380,23 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
+        public void Should_be_able_to_find_child_element_of_element_container_ChildOfType()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Form("Form");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var button = containerElement.ChildOfType<Button>("popupid");
+
+                                // THEN
+                                Assert.That(button.Exists, Is.True);
+                            });
+        }
+
+        [Test]
         public void Should_be_able_to_find_child_element_of_element_container()
         {
             ExecuteTest(browser =>
@@ -1389,10 +1406,44 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(containerElement.Exists, "Pre-Condition");
 
                                 // WHEN
-                                var button = containerElement.Children.Button("popupid");
+                                var button = containerElement.Child("popupid");
 
                                 // THEN
                                 Assert.That(button.Exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_be_able_to_find_child_element_of_element_container_ChildWithTag()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Form("Form");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var button = containerElement.ChildWithTag("input",Find.ById("popupid"), new[] {"button"});
+
+                                // THEN
+                                Assert.That(button.Exists, Is.True);
+                            });
+        }
+
+        [Test]
+        public void Should_not_be_able_to_find_non_child_elements_of_element_container_ChildOfType()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Div("divid");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var checkBox = containerElement.ChildOfType<CheckBox>("Checkbox21");
+
+                                // THEN
+                                Assert.That(checkBox.Exists, Is.False);
                             });
         }
 
@@ -1406,7 +1457,24 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(containerElement.Exists, "Pre-Condition");
 
                                 // WHEN
-                                var checkBox = containerElement.Children.CheckBox("Checkbox21");
+                                var checkBox = containerElement.Child("Checkbox21");
+
+                                // THEN
+                                Assert.That(checkBox.Exists, Is.False);
+                            });
+        }
+
+        [Test]
+        public void Should_not_be_able_to_find_non_child_elements_of_element_container_ChildWithTag()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var containerElement = browser.Div("divid");
+                                Assert.That(containerElement.Exists, "Pre-Condition");
+
+                                // WHEN
+                                var checkBox = containerElement.ChildWithTag("input", Find.ById("Checkbox21"), new[] { "check" });
 
                                 // THEN
                                 Assert.That(checkBox.Exists, Is.False);
@@ -1420,7 +1488,7 @@ namespace WatiN.Core.UnitTests
                             {
                                 // GIVEN
                                 // WHEN
-                                var button = browser.Children.Form("Form");
+                                var button = browser.ChildOfType<Form>("Form");
 
                                 // THEN
                                 Assert.That(button.Exists, Is.True);
@@ -1434,12 +1502,11 @@ namespace WatiN.Core.UnitTests
                             {
                                 // GIVEN
                                 // WHEN
-                                var checkBox = browser.Children.CheckBox("Checkbox21");
+                                var checkBox = browser.ChildOfType<CheckBox>("Checkbox21");
 
                                 // THEN
                                 Assert.That(checkBox.Exists, Is.False);
                             });
         }
-
 	}
 }

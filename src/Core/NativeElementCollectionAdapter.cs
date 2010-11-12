@@ -649,13 +649,82 @@ namespace WatiN.Core
             return Core.Control.FindControls<TControl>(this);
         }
 
-        /// <summary>
-        /// Calling this method will return a NotImplementedException because 
-        /// getting the children if the children is not supported.
-        /// </summary>
-        public IElementContainer Children
+        /// <inheritdoc />
+        public Element Child(string elementId)
         {
-            get { throw new NotImplementedException("Getting the children if the children is not supported"); }
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use Element instead.");
+        }
+
+        /// <inheritdoc />
+        public Element Child(Regex elementId)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use Element instead.");
+        }
+
+        /// <inheritdoc />
+        public Element Child(Constraint findBy)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use Element instead.");
+        }
+
+        /// <inheritdoc />
+        public Element Child(Predicate<Element> predicate)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use Element instead.");
+        }
+
+        /// <inheritdoc />
+        public ElementCollection Children()
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use Element instead.");
+        }
+        
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(string elementId) where TChildElement : Element
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementOfType instead.");
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Regex elementId) where TChildElement : Element
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementOfType instead.");
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Constraint findBy) where TChildElement : Element
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementOfType instead.");
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Predicate<TChildElement> predicate) where TChildElement : Element
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementOfType instead.");
+        }
+
+        /// <inheritdoc />
+        public ElementCollection<TChildElement> ChildrenOfType<TChildElement>() where TChildElement : Element
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementOfType instead.");
+        }
+
+        /// <inheritdoc />
+        public Element ChildWithTag(string tagName, Constraint findBy, params string[] inputTypes)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementWithTag instead.");
+        }
+
+        /// <inheritdoc />
+        public ElementCollection ChildrenWithTag(string tagName, params string[] inputTypes)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementWithTag instead.");
+        }
+
+        /// <inheritdoc />
+        public ElementCollection ChildrenWithTag(IList<ElementTag> elementTags)
+        {
+            throw new NotImplementedException("Initialize NativeElementCollectionAdapter with a collection of child elements. Then use ElementWithTag instead.");
         }
 
         #endregion

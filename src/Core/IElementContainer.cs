@@ -157,6 +157,173 @@ namespace WatiN.Core
         CheckBox CheckBox(Predicate<CheckBox> predicate);
         CheckBoxCollection CheckBoxes { get; }
 
+        /// <summary>
+        /// Child returns a child element with the specified id.
+        /// </summary>
+        /// <param name="elementId">The element id to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.Child("id");
+        /// </code>
+        /// </example>
+        Element Child(string elementId);
+
+        /// <summary>
+        /// Child returns a child element with an id that matches the specified regular expression.
+        /// </summary>
+        /// <param name="elementId">The element id regular expression to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.Child(new Regex("id"));
+        /// </code>
+        /// </example>
+        Element Child(Regex elementId);
+
+        /// <summary>
+        /// Child returns a child element that matches the specified <see cref="Constraint" />.
+        /// </summary>
+        /// <param name="findBy">The constraint to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.Child(Find.ById("id"));
+        /// </code>
+        /// </example>
+        Element Child(Constraint findBy);
+
+        /// <summary>
+        /// Child returns a child element that matches the specified <see cref="Predicate{T}" />.
+        /// </summary>
+        /// <param name="predicate">The predicate to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.Child(div => div.Id == "id");
+        /// </code>
+        /// </example>
+        Element Child(Predicate<Element> predicate);
+
+        /// <summary>
+        /// Gets a collection of all child elements.
+        /// </summary>
+        /// <returns>The child element collection</returns>
+        /// <example>
+        /// <code>
+        /// ie.Children();
+        /// </code>
+        /// </example>
+        ElementCollection Children();
+
+        /// <summary>
+        /// ChildOfType returns a child element of the desired type with the specified id.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(string)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="elementId">The element id to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ChildOfType&lt;Div&gt;("id");
+        /// </code>
+        /// </example>
+        TElement ChildOfType<TElement>(string elementId)
+            where TElement : Element;
+
+        /// <summary>
+        /// ChildOfType returns a child element of the desired type with an id that matches the specified regular expression.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Regex)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="elementId">The element id regular expression to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ChildOfType&lt;Div&gt;(new Regex("id"));
+        /// </code>
+        /// </example>
+        TElement ChildOfType<TElement>(Regex elementId)
+            where TElement : Element;
+
+        /// <summary>
+        /// ChildOfType returns a child element of the desired type that matches the specified <see cref="Constraint" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Constraint)"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="findBy">The constraint to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ChildOfType&lt;Div&gt;(Find.ById("id"));
+        /// </code>
+        /// </example>
+        TElement ChildOfType<TElement>(Constraint findBy)
+            where TElement : Element;
+
+        /// <summary>
+        /// ChildOfType returns a child element of the desired type that matches the specified <see cref="Predicate{T}" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Div(Predicate{Div})"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <param name="predicate">The predicate to match</param>
+        /// <returns>The element</returns>
+        /// <example>
+        /// <code>
+        /// ie.ChildOfType&lt;Div&gt;(div => div.Id == "id");
+        /// </code>
+        /// </example>
+        TElement ChildOfType<TElement>(Predicate<TElement> predicate)
+            where TElement : Element;
+
+        /// <summary>
+        /// Gets a collection of all child elements of the specified type.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Ordinarily you should call the element-type specific method such as <see cref="Divs"/>.
+        /// This generic method is intended to be used in situations where the type of the element
+        /// may vary and is specified by a type parameter in the calling code.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TElement">The element type</typeparam>
+        /// <returns>The child element collection</returns>
+        /// <example>
+        /// <code>
+        /// ie.ChildrenOfType&lt;Div&gt;();
+        /// </code>
+        /// </example>
+        ElementCollection<TElement> ChildrenOfType<TElement>()
+            where TElement : Element;
+
+        Element ChildWithTag(string tagName, Constraint findBy, params string[] inputTypes);
+        ElementCollection ChildrenWithTag(string tagName, params string[] inputTypes);
+        ElementCollection ChildrenWithTag(IList<ElementTag> elementTags);
+
         Element Element(string elementId);
         Element Element(Regex elementId);
         Element Element(Constraint findBy);
@@ -448,17 +615,5 @@ namespace WatiN.Core
         /// </code>
         /// </example>
         ControlCollection<TControl> Controls<TControl>() where TControl : Control, new();
-
-        /// <summary>
-        /// Will limit the search scope to the children of the Element or Document.Body
-        /// </summary>
-        /// <returns>A <see cref="IElementContainer"/></returns>
-        /// <example>
-        /// This will return the second child-element of the &lt;body&gt; element.
-        /// <code>
-        /// browser.Children.Elements[1];
-        /// </code>
-        /// </example>
-        IElementContainer Children { get; }
     }
 }

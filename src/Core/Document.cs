@@ -463,436 +463,441 @@ namespace WatiN.Core
             return Core.Page.CreatePage<TPage>(this);
         }
 
-        internal virtual NativeElementCollectionAdapter All
+        private NativeElementCollectionAdapter AllElements
         {
             get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.AllElements); }
+        }
+
+        private IElementContainer ChildElements
+        {
+            get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.Body.Children); }
         }
 
         #region IElementsContainer
 
         public virtual Area Area(string elementId)
         {
-            return All.Area(elementId);
+            return AllElements.Area(elementId);
         }
 
         public virtual Area Area(Regex elementId)
         {
-            return All.Area(elementId);
+            return AllElements.Area(elementId);
         }
 
         public virtual Area Area(Constraint findBy)
         {
-            return All.Area(findBy);
+            return AllElements.Area(findBy);
         }
 
         public virtual Area Area(Predicate<Area> predicate)
         {
-            return All.Area(predicate);
+            return AllElements.Area(predicate);
         }
 
         public virtual AreaCollection Areas
         {
-            get { return All.Areas; }
+            get { return AllElements.Areas; }
         }
 
         public virtual Button Button(string elementId)
         {
-            return All.Button(elementId);
+            return AllElements.Button(elementId);
         }
 
         public virtual Button Button(Regex elementId)
         {
-            return All.Button(elementId);
+            return AllElements.Button(elementId);
         }
 
         public virtual Button Button(Predicate<Button> predicate)
         {
-            return All.Button(predicate);
+            return AllElements.Button(predicate);
         }
 
         public virtual Button Button(Constraint findBy)
         {
-            return All.Button(findBy);
+            return AllElements.Button(findBy);
         }
 
         public virtual ButtonCollection Buttons
         {
-            get { return All.Buttons; }
+            get { return AllElements.Buttons; }
         }
 
         public virtual CheckBox CheckBox(string elementId)
         {
-            return All.CheckBox(elementId);
+            return AllElements.CheckBox(elementId);
         }
 
         public virtual CheckBox CheckBox(Regex elementId)
         {
-            return All.CheckBox(elementId);
+            return AllElements.CheckBox(elementId);
         }
 
         public virtual CheckBox CheckBox(Predicate<CheckBox> predicate)
         {
-            return All.CheckBox(predicate);
+            return AllElements.CheckBox(predicate);
         }
 
         public virtual CheckBox CheckBox(Constraint findBy)
         {
-            return All.CheckBox(findBy);
+            return AllElements.CheckBox(findBy);
         }
 
         public virtual CheckBoxCollection CheckBoxes
         {
-            get { return All.CheckBoxes; }
+            get { return AllElements.CheckBoxes; }
         }
 
         public virtual Element Element(string elementId)
         {
-            return All.Element(elementId);
+            return AllElements.Element(elementId);
         }
 
         public virtual Element Element(Regex elementId)
         {
-            return All.Element(elementId);
+            return AllElements.Element(elementId);
         }
 
         public virtual Element Element(Constraint findBy)
         {
-            return All.Element(findBy);
+            return AllElements.Element(findBy);
         }
 
         public virtual Element Element(Predicate<Element> predicate)
         {
-            return All.Element(predicate);
+            return AllElements.Element(predicate);
         }
 
         public virtual ElementCollection Elements
         {
-            get { return All.Elements; }
+            get { return AllElements.Elements; }
         }
 
         public virtual Element ElementWithTag(string tagName, Constraint findBy, params string[] inputTypes)
         {
-            return All.ElementWithTag(tagName, findBy, inputTypes);
+            return AllElements.ElementWithTag(tagName, findBy, inputTypes);
         }
 
         public virtual ElementCollection ElementsWithTag(string tagName, params string[] inputTypes)
         {
-            return All.ElementsWithTag(tagName, inputTypes);
+            return AllElements.ElementsWithTag(tagName, inputTypes);
         }
 
 	    public ElementCollection ElementsWithTag(IList<ElementTag> elementTags)
 	    {
-	        return All.ElementsWithTag(elementTags);
+	        return AllElements.ElementsWithTag(elementTags);
 	    }
 
         /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(string elementId) where TElement : Element
         {
-            return All.ElementOfType<TElement>(elementId);
+            return AllElements.ElementOfType<TElement>(elementId);
         }
 
         /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Regex elementId) where TElement : Element
         {
-            return All.ElementOfType<TElement>(elementId);
+            return AllElements.ElementOfType<TElement>(elementId);
         }
 
         /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Constraint findBy) where TElement : Element
         {
-            return All.ElementOfType<TElement>(findBy);
+            return AllElements.ElementOfType<TElement>(findBy);
         }
 
         /// <inheritdoc />
         public virtual TElement ElementOfType<TElement>(Predicate<TElement> predicate) where TElement : Element
         {
-            return All.ElementOfType(predicate);
+            return AllElements.ElementOfType(predicate);
         }
 
         /// <inheritdoc />
         public virtual ElementCollection<TElement> ElementsOfType<TElement>() where TElement : Element
         {
-            return All.ElementsOfType<TElement>();
+            return AllElements.ElementsOfType<TElement>();
         }
 
         public virtual FileUpload FileUpload(string elementId)
         {
-            return All.FileUpload(elementId);
+            return AllElements.FileUpload(elementId);
         }
 
         public virtual FileUpload FileUpload(Regex elementId)
         {
-            return All.FileUpload(elementId);
+            return AllElements.FileUpload(elementId);
         }
 
         public virtual FileUpload FileUpload(Constraint findBy)
         {
-            return All.FileUpload(findBy);
+            return AllElements.FileUpload(findBy);
         }
 
         public virtual FileUpload FileUpload(Predicate<FileUpload> predicate)
         {
-            return All.FileUpload(predicate);
+            return AllElements.FileUpload(predicate);
         }
 
         public virtual FileUploadCollection FileUploads
         {
-            get { return All.FileUploads; }
+            get { return AllElements.FileUploads; }
         }
 
         public virtual Form Form(string elementId)
         {
-            return All.Form(elementId);
+            return AllElements.Form(elementId);
         }
 
         public virtual Form Form(Regex elementId)
         {
-            return All.Form(elementId);
+            return AllElements.Form(elementId);
         }
 
         public virtual Form Form(Constraint findBy)
         {
-            return All.Form(findBy);
+            return AllElements.Form(findBy);
         }
 
         public virtual Form Form(Predicate<Form> predicate)
         {
-            return All.Form(predicate);
+            return AllElements.Form(predicate);
         }
 
         public virtual FormCollection Forms
         {
-            get { return All.Forms; }
+            get { return AllElements.Forms; }
         }
 
         public virtual Label Label(string elementId)
         {
-            return All.Label(elementId);
+            return AllElements.Label(elementId);
         }
 
         public virtual Label Label(Regex elementId)
         {
-            return All.Label(elementId);
+            return AllElements.Label(elementId);
         }
 
         public virtual Label Label(Constraint findBy)
         {
-            return All.Label(findBy);
+            return AllElements.Label(findBy);
         }
 
         public virtual Label Label(Predicate<Label> predicate)
         {
-            return All.Label(predicate);
+            return AllElements.Label(predicate);
         }
 
         public virtual LabelCollection Labels
         {
-            get { return All.Labels; }
+            get { return AllElements.Labels; }
         }
 
         public virtual Link Link(string elementId)
         {
-            return All.Link(elementId);
+            return AllElements.Link(elementId);
         }
 
         public virtual Link Link(Regex elementId)
         {
-            return All.Link(elementId);
+            return AllElements.Link(elementId);
         }
 
         public virtual Link Link(Constraint findBy)
         {
-            return All.Link(findBy);
+            return AllElements.Link(findBy);
         }
 
         public virtual Link Link(Predicate<Link> predicate)
         {
-            return All.Link(predicate);
+            return AllElements.Link(predicate);
         }
 
         public virtual LinkCollection Links
         {
-            get { return All.Links; }
+            get { return AllElements.Links; }
         }
 
 	    public List List(string elementId)
 	    {
-            return All.List(elementId);
+            return AllElements.List(elementId);
         }
 
 	    public List List(Regex elementId)
 	    {
-            return All.List(elementId);
+            return AllElements.List(elementId);
         }
 
 	    public List List(Constraint findBy)
 	    {
-            return All.List(findBy);
+            return AllElements.List(findBy);
         }
 
 	    public List List(Predicate<List> predicate)
 	    {
-            return All.List(predicate);
+            return AllElements.List(predicate);
         }
 
 	    public ListCollection Lists
 	    {
-            get { return All.Lists; }
+            get { return AllElements.Lists; }
         }
 
         public ListItem ListItem(string elementId)
 	    {
-            return All.ListItem(elementId);
+            return AllElements.ListItem(elementId);
         }
 
         public ListItem ListItem(Regex elementId)
 	    {
-            return All.ListItem(elementId);
+            return AllElements.ListItem(elementId);
         }
 
         public ListItem ListItem(Constraint findBy)
 	    {
-            return All.ListItem(findBy);
+            return AllElements.ListItem(findBy);
         }
 
         public ListItem ListItem(Predicate<ListItem> predicate)
 	    {
-            return All.ListItem(predicate);
+            return AllElements.ListItem(predicate);
         }
 
         public ListItemCollection ListItems
 	    {
-            get { return All.ListItems; }
+            get { return AllElements.ListItems; }
         }
 
 	    public virtual Para Para(string elementId)
         {
-            return All.Para(elementId);
+            return AllElements.Para(elementId);
         }
 
         public virtual Para Para(Regex elementId)
         {
-            return All.Para(elementId);
+            return AllElements.Para(elementId);
         }
 
         public virtual Para Para(Constraint findBy)
         {
-            return All.Para(findBy);
+            return AllElements.Para(findBy);
         }
 
         public virtual Para Para(Predicate<Para> predicate)
         {
-            return All.Para(predicate);
+            return AllElements.Para(predicate);
         }
 
         public virtual ParaCollection Paras
         {
-            get { return All.Paras; }
+            get { return AllElements.Paras; }
         }
 
         public virtual RadioButton RadioButton(string elementId)
         {
-            return All.RadioButton(elementId);
+            return AllElements.RadioButton(elementId);
         }
 
         public virtual RadioButton RadioButton(Regex elementId)
         {
-            return All.RadioButton(elementId);
+            return AllElements.RadioButton(elementId);
         }
 
         public virtual RadioButton RadioButton(Constraint findBy)
         {
-            return All.RadioButton(findBy);
+            return AllElements.RadioButton(findBy);
         }
 
         public virtual RadioButton RadioButton(Predicate<RadioButton> predicate)
         {
-            return All.RadioButton(predicate);
+            return AllElements.RadioButton(predicate);
         }
 
         public virtual RadioButtonCollection RadioButtons
         {
-            get { return All.RadioButtons; }
+            get { return AllElements.RadioButtons; }
         }
 
         public virtual SelectList SelectList(string elementId)
         {
-            return All.SelectList(elementId);
+            return AllElements.SelectList(elementId);
         }
 
         public virtual SelectList SelectList(Regex elementId)
         {
-            return All.SelectList(elementId);
+            return AllElements.SelectList(elementId);
         }
 
         public virtual SelectList SelectList(Constraint findBy)
         {
-            return All.SelectList(findBy);
+            return AllElements.SelectList(findBy);
         }
 
         public virtual SelectList SelectList(Predicate<SelectList> predicate)
         {
-            return All.SelectList(predicate);
+            return AllElements.SelectList(predicate);
         }
 
         public virtual SelectListCollection SelectLists
         {
-            get { return All.SelectLists; }
+            get { return AllElements.SelectLists; }
         }
 
         public virtual Table Table(string elementId)
         {
-            return All.Table(elementId);
+            return AllElements.Table(elementId);
         }
 
         public virtual Table Table(Regex elementId)
         {
-            return All.Table(elementId);
+            return AllElements.Table(elementId);
         }
 
         public virtual Table Table(Constraint findBy)
         {
-            return All.Table(findBy);
+            return AllElements.Table(findBy);
         }
 
         public virtual Table Table(Predicate<Table> predicate)
         {
-            return All.Table(predicate);
+            return AllElements.Table(predicate);
         }
 
         public virtual TableCollection Tables
         {
-            get { return All.Tables; }
+            get { return AllElements.Tables; }
         }
 
         public virtual TableBody TableBody(string elementId)
         {
-            return All.TableBody(elementId);
+            return AllElements.TableBody(elementId);
         }
 
         public virtual TableBody TableBody(Regex elementId)
         {
-            return All.TableBody(elementId);
+            return AllElements.TableBody(elementId);
         }
 
         public virtual TableBody TableBody(Constraint findBy)
         {
-            return All.TableBody(findBy);
+            return AllElements.TableBody(findBy);
         }
 
         public virtual TableBody TableBody(Predicate<TableBody> predicate)
         {
-            return All.TableBody(predicate);
+            return AllElements.TableBody(predicate);
         }
 
         public virtual TableBodyCollection TableBodies
         {
-            get { return All.TableBodies; }
+            get { return AllElements.TableBodies; }
         }
 
         public virtual TableCell TableCell(string elementId)
         {
-            return All.TableCell(elementId);
+            return AllElements.TableCell(elementId);
         }
 
         [Obsolete("Use TableCell(Find.By(elementId) & Find.ByIndex(index)) instead, or possibly OwnTableCell(...).")]
@@ -909,189 +914,261 @@ namespace WatiN.Core
 
         public virtual TableCell TableCell(Regex elementId)
         {
-            return All.TableCell(elementId);
+            return AllElements.TableCell(elementId);
         }
 
         public virtual TableCell TableCell(Constraint findBy)
         {
-            return All.TableCell(findBy);
+            return AllElements.TableCell(findBy);
         }
 
         public virtual TableCell TableCell(Predicate<TableCell> predicate)
         {
-            return All.TableCell(predicate);
+            return AllElements.TableCell(predicate);
         }
 
         public virtual TableCellCollection TableCells
         {
-            get { return All.TableCells; }
+            get { return AllElements.TableCells; }
         }
 
         public virtual TableRow TableRow(string elementId)
         {
-            return All.TableRow(elementId);
+            return AllElements.TableRow(elementId);
         }
 
         public virtual TableRow TableRow(Regex elementId)
         {
-            return All.TableRow(elementId);
+            return AllElements.TableRow(elementId);
         }
 
         public virtual TableRow TableRow(Constraint findBy)
         {
-            return All.TableRow(findBy);
+            return AllElements.TableRow(findBy);
         }
 
         public virtual TableRow TableRow(Predicate<TableRow> predicate)
         {
-            return All.TableRow(predicate);
+            return AllElements.TableRow(predicate);
         }
 
         public virtual TableRowCollection TableRows
         {
-            get { return All.TableRows; }
+            get { return AllElements.TableRows; }
         }
 
         public virtual TextField TextField(string elementId)
         {
-            return All.TextField(elementId);
+            return AllElements.TextField(elementId);
         }
 
         public virtual TextField TextField(Regex elementId)
         {
-            return All.TextField(elementId);
+            return AllElements.TextField(elementId);
         }
 
         public virtual TextField TextField(Constraint findBy)
         {
-            return All.TextField(findBy);
+            return AllElements.TextField(findBy);
         }
 
         public virtual TextField TextField(Predicate<TextField> predicate)
         {
-            return All.TextField(predicate);
+            return AllElements.TextField(predicate);
         }
 
         public virtual TextFieldCollection TextFields
         {
-            get { return All.TextFields; }
+            get { return AllElements.TextFields; }
         }
 
         public virtual Span Span(string elementId)
         {
-            return All.Span(elementId);
+            return AllElements.Span(elementId);
         }
 
         public virtual Span Span(Regex elementId)
         {
-            return All.Span(elementId);
+            return AllElements.Span(elementId);
         }
 
         public virtual Span Span(Constraint findBy)
         {
-            return All.Span(findBy);
+            return AllElements.Span(findBy);
         }
 
         public virtual Span Span(Predicate<Span> predicate)
         {
-            return All.Span(predicate);
+            return AllElements.Span(predicate);
         }
 
         public virtual SpanCollection Spans
         {
-            get { return All.Spans; }
+            get { return AllElements.Spans; }
         }
 
         public virtual Div Div(string elementId)
         {
-            return All.Div(elementId);
+            return AllElements.Div(elementId);
         }
 
         public virtual Div Div(Regex elementId)
         {
-            return All.Div(elementId);
+            return AllElements.Div(elementId);
         }
 
         public virtual Div Div(Constraint findBy)
         {
-            return All.Div(findBy);
+            return AllElements.Div(findBy);
         }
 
         public virtual Div Div(Predicate<Div> predicate)
         {
-            return All.Div(predicate);
+            return AllElements.Div(predicate);
         }
 
         public virtual DivCollection Divs
         {
-            get { return All.Divs; }
+            get { return AllElements.Divs; }
         }
 
         public virtual Image Image(string elementId)
         {
-            return All.Image(elementId);
+            return AllElements.Image(elementId);
         }
 
         public virtual Image Image(Regex elementId)
         {
-            return All.Image(elementId);
+            return AllElements.Image(elementId);
         }
 
         public virtual Image Image(Constraint findBy)
         {
-            return All.Image(findBy);
+            return AllElements.Image(findBy);
         }
 
         public virtual Image Image(Predicate<Image> predicate)
         {
-            return All.Image(predicate);
+            return AllElements.Image(predicate);
         }
 
         public virtual ImageCollection Images
         {
-            get { return All.Images; }
+            get { return AllElements.Images; }
         }
 
         /// <inheritdoc />
         public virtual TControl Control<TControl>() where TControl : Control, new()
 	    {
-            return All.Control<TControl>();
+            return AllElements.Control<TControl>();
 	    }
 
         /// <inheritdoc />
         public virtual TControl Control<TControl>(string elementId) where TControl : Control, new()
 	    {
-            return All.Control<TControl>(elementId);
+            return AllElements.Control<TControl>(elementId);
 	    }
 
         /// <inheritdoc />
         public virtual TControl Control<TControl>(Regex elementId) where TControl : Control, new()
 	    {
-            return All.Control<TControl>(elementId);
+            return AllElements.Control<TControl>(elementId);
         }
 
         /// <inheritdoc />
         public virtual TControl Control<TControl>(Constraint findBy) where TControl : Control, new()
 	    {
-            return All.Control<TControl>(findBy);
+            return AllElements.Control<TControl>(findBy);
 	    }
 
         /// <inheritdoc />
         public virtual TControl Control<TControl>(Predicate<TControl> predicate) where TControl : Control, new()
 	    {
-            return All.Control(predicate);
+            return AllElements.Control(predicate);
 	    }
 
         /// <inheritdoc />
         public virtual ControlCollection<TControl> Controls<TControl>() where TControl : Control, new()
 	    {
-            return All.Controls<TControl>();
+            return AllElements.Controls<TControl>();
 	    }
 
         /// <inheritdoc />
-	    public IElementContainer Children
-	    {
-            get { return new NativeElementCollectionAdapter(DomContainer, () => NativeDocument.Body.Children); }
+        public Element Child(string elementId)
+        {
+            return ChildElements.Element(elementId);
+        }
+
+        /// <inheritdoc />
+        public Element Child(Regex elementId)
+        {
+            return ChildElements.Element(elementId);
+        }
+
+        /// <inheritdoc />
+        public Element Child(Constraint findBy)
+        {
+            return ChildElements.Element(findBy);
+        }
+
+        /// <inheritdoc />
+        public Element Child(Predicate<Element> predicate)
+        {
+            return ChildElements.Element(predicate);
+        }
+
+        /// <inheritdoc />
+        public ElementCollection Children()
+        {
+            return ChildElements.Elements;
+        }
+        
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(string elementId) where TChildElement : Element
+        {
+            return ChildElements.ElementOfType<TChildElement>(elementId);
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Regex elementId) where TChildElement : Element
+        {
+            return ChildElements.ElementOfType<TChildElement>(elementId);
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Constraint findBy) where TChildElement : Element
+        {
+            return ChildElements.ElementOfType<TChildElement>(findBy);
+        }
+
+        /// <inheritdoc />
+        public TChildElement ChildOfType<TChildElement>(Predicate<TChildElement> predicate) where TChildElement : Element
+        {
+            return ChildElements.ElementOfType(predicate);
+        }
+
+        /// <inheritdoc />
+        public ElementCollection<TChildElement> ChildrenOfType<TChildElement>() where TChildElement : Element
+        {
+            return ChildElements.ElementsOfType<TChildElement>();
+        }
+
+        /// <inheritdoc />
+        public Element ChildWithTag(string tagName, Constraint findBy, params string[] inputTypes)
+        {
+            return ChildElements.ElementWithTag(tagName, findBy, inputTypes);
+        }
+
+        /// <inheritdoc />
+        public ElementCollection ChildrenWithTag(string tagName, params string[] inputTypes)
+        {
+            return ChildElements.ElementsWithTag(tagName, inputTypes);
+        }
+
+        /// <inheritdoc />
+        public ElementCollection ChildrenWithTag(IList<ElementTag> elementTags)
+        {
+            return ChildElements.ElementsWithTag(elementTags);
         }
 
 	    #endregion
