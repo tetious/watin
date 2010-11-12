@@ -533,7 +533,7 @@ namespace WatiN.Core.UnitTests
                                 var outerHtml = browser.Html.ToLowerInvariant();
 
                                 // THEN
-                                Assert.That(outerHtml, NUnit.Framework.SyntaxHelpers.Text.StartsWith("\r\n<body>"));
+                                Assert.That(outerHtml, NUnit.Framework.SyntaxHelpers.Text.StartsWith("\r\n<body style="));
                             });
         }
     }
