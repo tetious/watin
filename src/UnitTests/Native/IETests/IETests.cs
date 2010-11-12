@@ -557,7 +557,7 @@ namespace WatiN.Core.UnitTests.IETests
         /// windows may get included in the list of shell windows which is a bit
         /// problematic for methods like ForceClose since the test will timeout.
         /// </summary>
-        [Test]
+        [Test, Ignore("Explorer window not killed, resulting in a lot of open windows on build machine")]
         public void IECollectionExcludesWindowsExplorerWindows()
         {
             // Bring up an Explorer window and wait for it to become visible.
