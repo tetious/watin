@@ -39,16 +39,6 @@ namespace WatiN.Core.UnitTests.ResearchTests
             }
         }
 
-//        [Test]
-//        public void Fluent_google_example_2()
-//        {
-//            using(var browser = new IE("www.google.com"))
-//            {
-//                browser.Find<TextField>().Having.Name.EqualTo("q").Then.TypeText("WatiN");
-//                browser.Button(Having.Name.EqualTo("btnG")).Click();
-//            }
-//        }
-
         [Test]
         public void Should_end_with()
         {
@@ -89,19 +79,6 @@ namespace WatiN.Core.UnitTests.ResearchTests
         }
 
     }
-
-//    public static class BrowserExtensions
-//    {
-//        public static T Find<T>(this Browser browser, AttributeConstraint constraint) where T:Element
-//        {
-//            return browser.ElementOfType<T>(constraint);
-//        }
-//
-//        public static T Having<T>(this T element, AttributeConstraint constraint) where T:Element
-//        {
-//            return element.ElementOfType<T>(constraint);
-//        }
-//    }
 
     public class AttributeBag : IAttributeBag
     {

@@ -242,6 +242,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native\IETests\ShellWindows2Tests.cs" />
+    <Compile Include="ResearchTests\FluentFindSyntax.cs" />
+    <Compile Include="ResearchTests\FluentWatiNSyntax.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
