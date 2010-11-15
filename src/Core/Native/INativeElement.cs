@@ -163,5 +163,7 @@ namespace WatiN.Core.Native
         /// </summary>
         /// <returns></returns>
         string GetJavaScriptElementReference();
+
+        void Pin();
     }
 }

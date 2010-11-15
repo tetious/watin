@@ -33,44 +33,42 @@ namespace WatiN.Core.Native
             if (clientPort == null) throw new ArgumentNullException("clientPort");
             if (getCommand == null) throw new ArgumentNullException("getCommand");
 
-            this.ClientPort = clientPort;
-            this.GetCommand = getCommand;
+            ClientPort = clientPort;
+            GetCommand = getCommand;
         }
 
         public IEnumerable<INativeElement> GetElements()
         {
-            return this.GetArrayElements(ffElement => true);
+            return GetArrayElements(ffElement => true);
         }
 
         public IEnumerable<INativeElement> GetElementsByTag(string tagName)
         {
-            return this.GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.TagName, tagName, true));
+            return GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.TagName, tagName, true));
         }
 
         public IEnumerable<INativeElement> GetElementsById(string id)
         {
-            return this.GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.GetAttributeValue("id"), id, true));
+            return GetArrayElements(ffElement => Comparers.StringComparer.AreEqual(ffElement.GetAttributeValue("id"), id, true));
         }
 
         private IEnumerable<INativeElement> GetArrayElements(IsMatch constraint)
         {
-            this.Initialize();
+            Initialize();
 
-            var ffElements = JSUtils.ElementArrayEnumerator(this.GetCommand, this.ClientPort);
+            var ffElements = JSUtils.ElementArrayEnumerator(GetCommand, ClientPort);
 
             foreach (var ffElement in ffElements)
             {
-                if (!constraint.Invoke(ffElement)) continue;
-
-                ffElement.Pin();
-                yield return ffElement;
+                if (constraint.Invoke(ffElement)) 
+                    yield return ffElement;
             }
         }
 
         private void Initialize()
         {
             // In case of a redirect this call makes sure the doc variable is pointing to the "active" page.
-            this.ClientPort.InitializeDocument();
+            ClientPort.InitializeDocument();
         }
     }
 }

@@ -71,8 +71,6 @@ namespace WatiN.Core.Native
             foreach (var ffElement in ffElements)
             {
                 if (tagName != "*") ffElement.TagName = tagName;
-                // TODO (prevent chatter): Delay reassigning until after this ffElement is known to be a match
-                ffElement.Pin();
                 yield return ffElement;
             }
         }
@@ -108,11 +106,10 @@ namespace WatiN.Core.Native
             }            
             else
             {
-                var command = string.Format("{0}.querySelectorAll('#{1}')", containerReference, id);
+                var command = string.Format("{0}.querySelectorAll(\"[Id='{1}']\")", containerReference, id);
                 var ffElements = GetElementArrayEnumerator(command);
                 foreach (var ffElement in ffElements)
                 {
-                    ffElement.Pin();
                     yield return ffElement;
                 }
             }

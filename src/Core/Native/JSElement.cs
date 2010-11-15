@@ -688,7 +688,7 @@ namespace WatiN.Core.Native
         /// This changes/pins the java script variable name <see cref="ElementReference"/> which is used to 
         /// execute commands on FireFox. 
         /// </summary>
-        internal void Pin()
+        public void Pin()
         {
             var elementVariableName = ClientPort.CreateVariableName();
             ClientPort.Write("{0}={1};", elementVariableName, ElementReference);

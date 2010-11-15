@@ -98,7 +98,7 @@ namespace WatiN.Core.UnitTests
 		}
 
 	    [Test]
-	    public void TableRowDirectChildren()
+	    public void TableRowOwnTableCells()
 	    {
 	        ExecuteTest(browser =>
 	                        {
@@ -106,9 +106,9 @@ namespace WatiN.Core.UnitTests
 
                                 var tableRow = browser.TableRow("1");
 
-	                            Assert.That(tableRow.TableCellsDirectChildren.Count, Is.EqualTo(2));
-	                            Assert.That(tableRow.TableCellsDirectChildren[0].Id, Is.EqualTo("td1"));
-	                            Assert.That(tableRow.TableCellsDirectChildren[1].Id, Is.EqualTo("td12"));
+	                            Assert.That(tableRow.OwnTableCells.Count, Is.EqualTo(2));
+                                Assert.That(tableRow.OwnTableCells[0].Id, Is.EqualTo("td1"));
+                                Assert.That(tableRow.OwnTableCells[1].Id, Is.EqualTo("td12"));
 	                        });
 	    }
 

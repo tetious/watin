@@ -492,6 +492,11 @@ namespace WatiN.Core.Native.InternetExplorer
 	        return _javascriptElementReference;
 	    }
 
+	    public void Pin()
+	    {
+	        // IGNORE
+	    }
+
 	    public IHTMLWindow2 ParentWindow
 	    {
             get { return ((IHTMLDocument2)AsHtmlElement.document).parentWindow; }

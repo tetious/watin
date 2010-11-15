@@ -24,7 +24,7 @@ namespace WatiN.Core.Native.Mozilla
 {
     public class FFDocument : INativeDocument
     {
-        private readonly JSElement containingFrameElement;
+        private readonly JSElement _containingFrameElement;
 
         public FFDocument(ClientPortBase clientPort)
             : this(clientPort, clientPort.DocumentVariableName)
@@ -41,7 +41,7 @@ namespace WatiN.Core.Native.Mozilla
             DocumentReference = documentReference;
             ClientPort = clientPort;
 
-            this.containingFrameElement = containingFrameElement;
+            _containingFrameElement = containingFrameElement;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace WatiN.Core.Native.Mozilla
         /// <inheritdoc />
         public INativeElement ContainingFrameElement
         {
-            get { return containingFrameElement; }
+            get { return _containingFrameElement; }
         }
 
         /// <inheritdoc />
@@ -137,6 +137,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             foreach (JSElement frameElement in AllElements.GetElementsByTag(tagName))
             {
+                frameElement.Pin();
                 var frameDocumentReference = frameElement.ElementReference + ".contentDocument";
                 frames.Add(new FFDocument(ClientPort, frameDocumentReference, frameElement));
             }

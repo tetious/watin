@@ -74,7 +74,7 @@ namespace WatiN.Core.UnitTests.TestUtils
 #else
 		    BrowsersToTestWith.Add(chromeManager);
 #endif
-            Logger.LogWriter = new ConsoleLogWriter {HandlesLogDebug = false};
+            Logger.LogWriter = new ConsoleLogWriter {HandlesLogDebug = true};
         }
 
         [TestFixtureTearDown]

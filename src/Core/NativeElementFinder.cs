@@ -114,7 +114,10 @@ namespace WatiN.Core
                 if (element == null) return null;
 
                 if (IsMatchByConstraint(element, context))
+                {
+                    nativeElement.Pin(); 
                     return element;
+                }
             }
 
             return null;
