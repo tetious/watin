@@ -94,16 +94,27 @@ namespace WatiN.Core.Native
                 throw new ArgumentNullException("id");
             }
 
-            this.Initialize();
-
-            var documentReference = GetDocumentReference(containerReference);
-
-            var elementReference = this.clientPort.CreateVariableName();
-            var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
-
-            if (this.clientPort.WriteAndReadAsBool(command))
+            Initialize();
+            
+            if (!clientPort.HasJavaScriptSupportForQuerySelector)
             {
-                yield return new JSElement(this.clientPort, elementReference);
+                var elementReference = clientPort.CreateVariableName();
+                var documentReference = GetDocumentReference(containerReference);
+                var command = string.Format("{0} = {1}.getElementById(\"{2}\"); {0} != null", elementReference, documentReference, id);
+                if (clientPort.WriteAndReadAsBool(command))
+                {
+                    yield return new JSElement(clientPort, elementReference);
+                }
+            }            
+            else
+            {
+                var command = string.Format("{0}.querySelectorAll('#{1}')", containerReference, id);
+                var ffElements = GetElementArrayEnumerator(command);
+                foreach (var ffElement in ffElements)
+                {
+                    ffElement.Pin();
+                    yield return ffElement;
+                }
             }
         }
 

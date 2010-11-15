@@ -32,19 +32,20 @@ namespace WatiN.Core.Native
         /// <summary>
         /// Used by CreateElementVariableName
         /// </summary>
-        private static VariableNameHelper VariableNameHelper = new VariableNameHelper();
+        private static readonly VariableNameHelper VariableNameHelper = new VariableNameHelper();
+        private bool? _javaSriptSupportsQuerySelector = null;
 
         /// <summary>
         /// Gets the last response recieved from the jssh server
         /// </summary>
-        private string lastResponse;
+        private string _lastResponse;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientPortBase"/> class.
         /// </summary>
         protected ClientPortBase()
         {
-            this.Response = new StringBuilder();
+            Response = new StringBuilder();
         }
 
         /// <summary>
@@ -83,23 +84,13 @@ namespace WatiN.Core.Native
         /// Gets or sets the last response without any cleaning applied to it.
         /// </summary>
         /// <value>The last response raw.</value>
-        internal string LastResponseRaw
-        {
-            get;
-
-            set;
-        }
+        internal string LastResponseRaw { get; set; }
 
         /// <summary>
         /// Gets or sets the entire response from the remote server so far.
         /// </summary>
         /// <value>The response from the remote server so far.</value>
-        protected StringBuilder Response
-        {
-            get;
-
-            set;
-        }
+        protected StringBuilder Response { get; set; }
 
         /// <summary>
         /// Gets or sets the last reponse recieved from the jssh server
@@ -108,12 +99,12 @@ namespace WatiN.Core.Native
         {
             get
             {
-                return this.LastResponseIsNull ? null : this.lastResponse;
+                return LastResponseIsNull ? null : _lastResponse;
             }
 
             set
             {
-                this.lastResponse = value;
+                _lastResponse = value;
             }
         }
 
@@ -125,7 +116,7 @@ namespace WatiN.Core.Native
             get
             {
                 bool lastBoolResponse;
-                Boolean.TryParse(this.LastResponse, out lastBoolResponse);
+                Boolean.TryParse(LastResponse, out lastBoolResponse);
                 return lastBoolResponse;
             }
         }
@@ -138,7 +129,7 @@ namespace WatiN.Core.Native
         {
             get
             {
-                return this.lastResponse.Equals("null", StringComparison.OrdinalIgnoreCase);
+                return _lastResponse.Equals("null", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -150,7 +141,18 @@ namespace WatiN.Core.Native
         /// </value>
         private int LastResponseAsInt
         {
-            get { return string.IsNullOrEmpty(this.LastResponse) ? 0 : int.Parse(this.lastResponse.Trim()); }
+            get { return string.IsNullOrEmpty(LastResponse) ? 0 : int.Parse(_lastResponse.Trim()); }
+        }
+
+        public bool HasJavaScriptSupportForQuerySelector
+        {
+            get
+            {
+                if (_javaSriptSupportsQuerySelector == null)
+                    _javaSriptSupportsQuerySelector = WriteAndReadAsBool("{0}.querySelector != undefined", DocumentVariableName);
+
+                return _javaSriptSupportsQuerySelector.Value;
+            } 
         }
 
         /// <summary>
@@ -161,7 +163,7 @@ namespace WatiN.Core.Native
         public virtual void Write(string data, params object[] args)
         {
             var command = data.EndsWith(";") == false ? data + ";" : data;
-            this.SendAndRead(command + " true;", true, true, args);
+            SendAndRead(command + " true;", true, true, args);
         }
 
         /// <summary>
@@ -172,8 +174,8 @@ namespace WatiN.Core.Native
         /// <returns>The response to the data written.</returns>
         public virtual string WriteAndReadIgnoreError(string data, params object[] args)
         {
-            this.SendAndRead(data, false, false, args);
-            return this.LastResponse;
+            SendAndRead(data, false, false, args);
+            return LastResponse;
         }
 
         /// <summary>
@@ -184,8 +186,8 @@ namespace WatiN.Core.Native
         /// <returns>The response to the data written.</returns>
         public virtual string WriteAndRead(string data, params object[] args)
         {
-            this.SendAndRead(data, false, true, args);
-            return this.LastResponse;
+            SendAndRead(data, false, true, args);
+            return LastResponse;
         }
 
         /// <summary>
@@ -196,8 +198,8 @@ namespace WatiN.Core.Native
         /// <returns>A boolean value from the response to the data written.</returns>
         public virtual bool WriteAndReadAsBool(string data, params object[] args)
         {
-            this.SendAndRead(data, true, true, args);
-            return this.LastResponseAsBool;
+            SendAndRead(data, true, true, args);
+            return LastResponseAsBool;
         }
 
         /// <summary>
@@ -208,8 +210,8 @@ namespace WatiN.Core.Native
         /// <returns>An integer value parsed from the response.</returns>
         public virtual int WriteAndReadAsInt(string data, params object[] args)
         {
-            this.SendAndRead(data, true, true, args);
-            return this.LastResponseAsInt;
+            SendAndRead(data, true, true, args);
+            return LastResponseAsInt;
         }
 
         /// <summary>
@@ -238,11 +240,6 @@ namespace WatiN.Core.Native
         /// <param name="url">The URL to connect to.</param>
         public abstract void Connect(string url);
 
-        /// <summary>
-        /// Connects to an existing browser
-        /// </summary>
-        public abstract void ConnectToExisting();
-
 
         /// <summary>
         /// Writes the specified data to the jssh server.
@@ -259,7 +256,7 @@ namespace WatiN.Core.Native
         /// <param name="response">The response to add.</param>
         protected void AddToLastResponse(string response)
         {
-            this.lastResponse += response;
+            _lastResponse += response;
         }
     }
 }

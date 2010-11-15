@@ -161,7 +161,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         /// <exception cref="FireFoxException">
         /// </exception>
-        public override void ConnectToExisting()
+        public virtual void ConnectToExisting()
         {
             Connect(null, false);
         }

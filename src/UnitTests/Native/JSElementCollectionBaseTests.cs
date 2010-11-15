@@ -112,11 +112,6 @@ namespace WatiN.Core.UnitTests.Native
             return;
         }
 
-        public override void ConnectToExisting()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void SendAndRead(string data, bool resultExpected, bool checkForErrors, params object[] args)
         {
             return;
@@ -132,7 +127,7 @@ namespace WatiN.Core.UnitTests.Native
         protected override IEnumerable<JSElement> GetElementArrayEnumerator(string command)
         {
             return new List<JSElement> {new wrappedJSElement(clientPort, "elementRef1")};
-        }        
+        }
     }
 
     public class wrappedJSElement : JSElement

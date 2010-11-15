@@ -170,11 +170,6 @@ namespace WatiN.Core.Native.Chrome
             //DefineDefaultJSVariables();
         }
 
-        public override void ConnectToExisting()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Initializes the document.
         /// </summary>
