@@ -20,6 +20,7 @@ using System;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.UnitTests.TestUtils;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.DialogHandlerTests
 {
@@ -48,7 +49,27 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			}
 		}
 
-		[Test]
+	    [Test]
+	    public void Should_handle_alert_dialog_browser_agnostic()
+	    {
+            ExecuteTest(browser =>
+              {
+                  // GIVEN
+                  var dialogHandler = new JSAlertDialogHandler(browser);
+                  dialogHandler.InjectStub();
+
+                  // WHEN
+                  browser.Button(Find.ByValue("Show alert dialog")).Click();
+
+                  dialogHandler.RevertStub();
+
+                  // THEN
+                  Assert.That(true);
+              });
+	    }
+
+
+	    [Test]
 		public void CloseSpecificBrowserAlert()
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
@@ -124,4 +145,30 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			get { return TestEventsURI; }
 		}
 	}
+
+    public class JSAlertDialogHandler
+    {
+        private static VariableNameHelper VariableNameHelper= new VariableNameHelper("watinalertdialog");
+
+        private readonly Document _document;
+        private string _orgAlertFunction;
+
+        public JSAlertDialogHandler(Document document)
+        {
+            _document = document;
+            _orgAlertFunction = VariableNameHelper.CreateVariableName();
+        }
+
+        public void InjectStub()
+        {
+            var code = _orgAlertFunction + " = window.alert; window.alert = function(){ return true; }";
+            _document.RunScript(code);
+        }
+
+        public void RevertStub()
+        {
+            var code = "window.alert = " + _orgAlertFunction +"; delete " + _orgAlertFunction + ";";
+            _document.RunScript(code);
+        }
+    }
 }

@@ -25,6 +25,15 @@ namespace WatiN.Core.UtilityClasses
         /// </summary>
         private long _elementCounter;
 
+        private readonly string _prefix;
+
+        public VariableNameHelper() :this("watin") { }
+
+        public VariableNameHelper(string prefix)
+        {
+            _prefix = prefix;
+        }
+
         /// <summary>
         /// Creates a unique variable name, i.e. doc.watin23
         /// </summary>
@@ -37,7 +46,7 @@ namespace WatiN.Core.UtilityClasses
             }
 
             _elementCounter++;
-            return string.Format("watin{0}", _elementCounter);
+            return string.Format("{0}{1}", _prefix, _elementCounter);
         }
 
     }
