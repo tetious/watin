@@ -21,7 +21,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using mshtml;
+using WatiN.Core.Native;
 using WatiN.Core.Native.InternetExplorer;
+using WatiN.Core.Native.Mozilla;
 using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.UtilityClasses
@@ -111,7 +113,8 @@ namespace WatiN.Core.UtilityClasses
 
         public System.Drawing.Image CaptureWebPageImage(bool writeUrl, bool showGuides, int scalePercentage)
         {
-            return CaptureWebPageImage(_domContainer.hWnd, ((IEDocument) _domContainer.NativeDocument).HtmlDocument, writeUrl, showGuides, scalePercentage);
+            return CaptureWebPageImage2(_domContainer.hWnd, _domContainer, writeUrl, showGuides, scalePercentage);
+//            return CaptureWebPageImage(_domContainer.hWnd, ((IEDocument) _domContainer.NativeDocument).HtmlDocument, writeUrl, showGuides, scalePercentage);
         }
 
         private static System.Drawing.Image CaptureWebPageImage(IntPtr browserHWND, IHTMLDocument2 myDoc, bool writeUrl, bool showGuides, int scalePercentage)
@@ -134,7 +137,7 @@ namespace WatiN.Core.UtilityClasses
             URLExtraHeight = URLExtraHeight - trimHeight;
             URLExtraLeft = URLExtraLeft - trimLeft;
 
-            setDocumentAttribute(myDoc, "scroll", "yes");
+            setDocumentAttribute(myDoc, "scrolling", "yes");
 
             //Get Browser Window Height
             var heightsize = (int) getDocumentAttribute(myDoc, "scrollHeight");
@@ -211,6 +214,147 @@ namespace WatiN.Core.UtilityClasses
             if (writeUrl)
             {
                 WriteUrlOnImage(g2, myDoc.url, URLExtraHeight, widthsize);
+            }
+
+            //scale image
+            var myResolution = Convert.ToDouble(scalePercentage)*0.01;
+            var finalWidth = (int) ((widthsize + URLExtraLeft)*myResolution);
+            var finalHeight = (int) ((heightsize + URLExtraHeight)*myResolution);
+
+            var finalImage = new Bitmap(finalWidth, finalHeight, PixelFormat.Format16bppRgb555);
+            var gFinal = Graphics.FromImage(finalImage);
+            gFinal.DrawImage(bm2, 0, 0, finalWidth, finalHeight);
+
+            //Clean Up.
+            g2.Dispose();
+            gFinal.Dispose();
+            bm.Dispose();
+            bm2.Dispose();
+
+            return finalImage;
+        }
+        private static System.Drawing.Image CaptureWebPageImage2(IntPtr browserHWND, Document myDoc, bool writeUrl, bool showGuides, int scalePercentage)
+        {
+            var isIE = myDoc.NativeDocument as IEDocument != null;
+
+            //URL Location
+            var URLExtraHeight = 0;
+            var URLExtraLeft = 0;
+
+            //Adjustment variable for capture size.
+            if (writeUrl)
+            {
+                URLExtraHeight = 25;
+            }
+
+            //TrimHeight and TrimLeft trims off some captured IE graphics.
+            var trimHeight = isIE ? 3: 0;
+            var trimLeft = isIE ? 3: 0;
+
+            //Use UrlExtra height to carry trimHeight.
+            URLExtraHeight = URLExtraHeight - trimHeight;
+            URLExtraLeft = URLExtraLeft - trimLeft;
+
+            setDocumentAttribute(myDoc, "scroll", "yes");
+
+            //Get Browser Window Height
+            var heightsize = (int) getDocumentAttribute(myDoc, "scrollHeight");
+            var widthsize = (int) getDocumentAttribute(myDoc, "scrollWidth");
+
+            //Get Screen Height
+            var screenHeight = (int) getDocumentAttribute(myDoc, "clientHeight");
+            var screenWidth = (int) getDocumentAttribute(myDoc, "clientWidth");
+
+            //Get bitmap to hold screen fragment.
+            var bm = new Bitmap(screenWidth, screenHeight, PixelFormat.Format48bppRgb);
+
+            //Create a target bitmap to draw into.
+            var bm2 = new Bitmap(widthsize + URLExtraLeft - trimLeft, heightsize + URLExtraHeight - trimHeight, PixelFormat.Format16bppRgb555);
+            var g2 = Graphics.FromImage(bm2);
+
+            //Get inner browser window.
+            var hwnd = browserHWND;
+            if (isIE)
+            {
+                hwnd = GetHwndContainingAShellDocObjectView(browserHWND);
+                hwnd = GetHwndForInternetExplorerServer(hwnd);
+            }
+            else
+            {
+                hwnd = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "MozillaWindowClass", IntPtr.Zero);
+                hwnd = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "MozillaContentWindowClass", IntPtr.Zero);
+            }
+
+            var myPage = 0;
+
+            //Get Screen Height (for bottom up screen drawing)
+            while ((myPage*screenHeight) < heightsize)
+            {
+                setDocumentAttribute(myDoc, "scrollTop", (screenHeight)*myPage);
+//                setDocumentAttribute(myDoc, "scrollTop", (screenHeight - 5)*myPage);
+                myPage++;
+            }
+            //Rollback the page count by one
+            myPage--;
+
+            var myPageWidth = 0;
+
+            while ((myPageWidth*screenWidth) < widthsize)
+            {
+                if (isIE)
+                    setDocumentAttribute(myDoc, "scrollLeft", (screenWidth - 5)*myPageWidth);
+                else
+                    setDocumentAttribute(myDoc, "scrollLeft", (screenWidth)*myPageWidth);
+                
+                var brwLeft = (int) getDocumentAttribute(myDoc, "scrollLeft");
+
+                for (var i = myPage; i >= 0; --i)
+                {
+                    //Shoot visible window
+                    var g = Graphics.FromImage(bm);
+                    var hdc = g.GetHdc();
+
+                    if (isIE)
+                        setDocumentAttribute(myDoc, "scrollTop", (screenHeight -2)*i);
+                    else
+                        setDocumentAttribute(myDoc, "scrollTop", (screenHeight) * i);
+                    var brwTop = (int) getDocumentAttribute(myDoc, "scrollTop");
+
+                    NativeMethods.PrintWindow(hwnd, hdc, 0);
+
+                    // Original code
+                    g.ReleaseHdc(hdc);
+                    g.Flush();
+                    g.Dispose();
+
+                    var hBitmap = bm.GetHbitmap();
+                    System.Drawing.Image screenfrag = System.Drawing.Image.FromHbitmap(hBitmap);
+
+                    NativeMethods.DeleteObject(hBitmap);
+
+                    if (isIE)
+                    {
+                        var realArea = new Rectangle(3, 0, screenfrag.Width - 3, screenfrag.Height);
+                        g2.DrawImage(screenfrag, brwLeft + URLExtraLeft, brwTop + URLExtraHeight, realArea, GraphicsUnit.Pixel);
+                    }
+                    else
+                    {
+                        g2.DrawImage(screenfrag, brwLeft + URLExtraLeft, brwTop + URLExtraHeight);
+                    }
+                }
+                ++myPageWidth;
+            }
+
+            //Draw Standard Resolution Guides
+            if (showGuides)
+            {
+                DrawResolutionGuidesOnImage(g2, URLExtraHeight, URLExtraLeft);
+            }
+
+            //Write URL
+            if (writeUrl)
+            {
+                WriteUrlOnImage(g2, myDoc.Url, URLExtraHeight, widthsize);
             }
 
             //scale image
@@ -383,34 +527,61 @@ namespace WatiN.Core.UtilityClasses
             return ici;
         }
 
+        private static object getDocumentAttribute(Document document, string theAttributeName)
+        {
+            if (document.NativeDocument as IEDocument != null)
+            {
+                var doc = getDocumentElement(((IEDocument)document.NativeDocument).HtmlDocument);
+                return doc.getAttribute(theAttributeName, 0);
+            }
+            
+            var ffDocument = (FFDocument) document.NativeDocument;
+            var code = ffDocument.JavaScriptVariableName + ".body." + theAttributeName;
+
+            var results = document.Eval(code);
+            return int.Parse(results);
+        }
+
         private static object getDocumentAttribute(IHTMLDocument2 theHTMLDocument, string theAttributeName)
         {
-            var doc5 = (IHTMLDocument5) theHTMLDocument;
-            var doc3 = (IHTMLDocument3) theHTMLDocument;
-			
-            //compatibility mode affects how height is computed
-            if ((doc3.documentElement != null) && (!doc5.compatMode.Equals("BackCompat")))
+            var doc = getDocumentElement(theHTMLDocument);
+            return doc.getAttribute(theAttributeName, 0);
+        }
+
+        private static void setDocumentAttribute(Document document, string theAttributeName,
+                                                 object theAttributeValue)
+        {
+            if (document.NativeDocument as IEDocument != null)
             {
-                return doc3.documentElement.getAttribute(theAttributeName, 0);
+                var doc = getDocumentElement(((IEDocument) document.NativeDocument).HtmlDocument);
+                doc.setAttribute(theAttributeName, theAttributeValue, 0);
             }
-            return theHTMLDocument.body.getAttribute(theAttributeName, 0);
+            else
+            {
+                var ffDocument = (FFDocument)document.NativeDocument;
+                var code = ffDocument.JavaScriptVariableName + ".body." + theAttributeName + "='" + theAttributeValue +"'";
+
+                document.RunScript(code);
+            }
         }
 
         private static void setDocumentAttribute(IHTMLDocument2 theHTMLDocument, string theAttributeName,
                                                  object theAttributeValue)
         {
+            var doc = getDocumentElement(theHTMLDocument);
+            doc.setAttribute(theAttributeName, theAttributeValue, 0);
+        }
+
+        private static IHTMLElement getDocumentElement(IHTMLDocument2 theHTMLDocument)
+        {
             var doc5 = (IHTMLDocument5) theHTMLDocument;
             var doc3 = (IHTMLDocument3) theHTMLDocument;
 			
             //compatibility mode affects how height is computed
             if ((doc3.documentElement != null) && (!doc5.compatMode.Equals("BackCompat")))
-            {
-                doc3.documentElement.setAttribute(theAttributeName, theAttributeValue, 0);
-            }
-            else
-            {
-                theHTMLDocument.body.setAttribute(theAttributeName, theAttributeValue, 0);
-            }
+                return doc3.documentElement;
+
+            return theHTMLDocument.body;
         }
 
         private static ImageCodecInfo GetEncoderInfo(String mimeType)

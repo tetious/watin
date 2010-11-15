@@ -38,8 +38,23 @@ namespace WatiN.Core.UnitTests
         [Test, Ignore("Run by hand to inspect the result")]
         public void Should_vertically_stitch_correctly()
         {
-            Ie.SizeWindow(300, 300);
-            Ie.CaptureWebPageToFile(@"c:\temp\capture_of_main.jpg");
+            ExecuteTest(browser => 
+            {
+                browser.TextField("name").Value = browser.GetType() + " screenshot";
+                browser.SizeWindow(300, 300);
+                browser.CaptureWebPageToFile(@"c:\temp\capture_of_main_" + browser.GetType() + ".jpg");
+            });
+        }
+
+        [Test, Ignore("Run by hand to inspect the result")]
+        public void Should_vertically_stitch_correctly_ie()
+        {
+            ExecuteTestWithAnyBrowser(browser => 
+            {
+                browser.TextField("name").Value = browser.GetType() + " screenshot";
+                browser.SizeWindow(300, 300);
+                browser.CaptureWebPageToFile(@"c:\temp\capture_of_main_" + browser.GetType() + ".jpg");
+            });
         }
 
         [Test]
