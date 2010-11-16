@@ -41,7 +41,7 @@ namespace WatiN.Core.Native
         /// </summary>
         public static readonly IList<string> UsePropertyInsteadOfAttribute = new[]
                                                                                   {
-                                                                                          "selected", "textContent", "className", "disabled", "checked", "readOnly", "multiple", "value",
+                                                                                          "selected", "textContent", "className", "checked", "readOnly", "multiple", "value",
                                                                                           "nodeType", "innerHTML", "baseURI", "src", "href", "rowIndex", "cellIndex"
                                                                                   };
 

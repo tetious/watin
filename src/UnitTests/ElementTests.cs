@@ -1508,5 +1508,19 @@ namespace WatiN.Core.UnitTests
                                 Assert.That(checkBox.Exists, Is.False);
                             });
         }
+
+	    [Test]
+	    public void Should_recognise_enabled_and_disabled_elements()
+	    {
+            ExecuteTest(browser =>
+                            {
+                                Assert.That(browser.TableCell("td1").Enabled, Is.False, "TableCell TD1 should be disabled");
+                                Assert.That(browser.TableCell("td2").Enabled, Is.True, "TableCell TD2 should be enabled");
+                                Assert.That(browser.Button("disabledid").Enabled, Is.False, "Button disabledid should be disabled");
+                                Assert.That(browser.Button("popupid").Enabled, Is.True, "Button popupid should be enabled");
+                            }
+                );
+	    }
+
 	}
 }

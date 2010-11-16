@@ -148,7 +148,9 @@ namespace WatiN.Core
 			{
 			    var value = GetAttributeValue("disabled");
                 if (string.IsNullOrEmpty(value)) return true;
-			    return !bool.Parse(value);
+                if (value.ToLowerInvariant() == "disabled") return false;
+
+                return !bool.Parse(value);
 			}
 		}
 
