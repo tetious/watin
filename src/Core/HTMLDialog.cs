@@ -74,7 +74,7 @@ namespace WatiN.Core
 	        }
 	    }
 
-		public override INativeDocument OnGetNativeDocument()
+	    protected override INativeDocument OnGetNativeDocument()
 		{
 			return new IEDocument(IEUtils.IEDOMFromhWnd(hwnd));
 		}

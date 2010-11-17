@@ -331,7 +331,7 @@ namespace WatiN.Core
         }
 
         /// <inheritdoc />
-        public override INativeDocument OnGetNativeDocument()
+        protected override INativeDocument OnGetNativeDocument()
         {
             return NativeBrowser.NativeDocument;
         }

@@ -100,7 +100,7 @@ namespace WatiN.Core.Native
 
                 propertyValue = (propertyName == "innerHTML" ? InnerHtmlToInnerText(propertyValue) : NewLineCleanup(propertyValue));
 
-                return propertyValue;
+                return string.IsNullOrEmpty(propertyValue) ? null : propertyValue;
             }
         }
 
@@ -342,7 +342,7 @@ namespace WatiN.Core.Native
                 return false;
 
             // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-            var command = string.Format("{0} != null && ({0}.offsetParent != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", this.ElementReference);
+            var command = string.Format("({0} != undefined && {0} != null) && ({0}.offsetParent != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", ElementReference);
 
             return ClientPort.WriteAndReadAsBool(command);
         }

@@ -100,7 +100,7 @@ namespace WatiN.Core.UnitTests
                 get { throw new NotImplementedException(); }
             }
 
-            public override INativeDocument OnGetNativeDocument()
+            protected override INativeDocument OnGetNativeDocument()
             {
                 return ReturnNativeDocument;
             }

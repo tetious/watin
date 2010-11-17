@@ -61,7 +61,7 @@ namespace WatiN.Core
         /// Gets the native document.
         /// </summary>
         /// <returns>The native document.</returns>
-		public abstract INativeDocument OnGetNativeDocument();
+        protected abstract INativeDocument OnGetNativeDocument();
 
 		/// <summary>
 		/// Returns a browser specific <see cref="INativeDocument"/> instance.

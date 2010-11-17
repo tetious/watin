@@ -16,13 +16,10 @@
 
 #endregion Copyright
 
-using System.Diagnostics;
-
 namespace WatiN.Core.Native.Mozilla
 {
     using System;
     using System.IO;
-    using System.Net;
     using System.Net.Sockets;
     using System.Text;
     using System.Windows.Forms;

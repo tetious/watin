@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
@@ -214,11 +215,19 @@ namespace WatiN.Core
 		/// </returns>
         public virtual bool ContainsText(string text)
 		{
-			var innertext = Text;
+            var documentName = NativeDocument.JavaScriptVariableName;
+            try
+            {
+                var exists = Eval(string.Format("{0}.body.innerHTML.indexOf('{1}')>-1;", documentName, text));
 
-			if (innertext == null) return false;
+                return bool.Parse(exists ?? "false");
 
-			return (innertext.IndexOf(text) >= 0);
+            }
+            catch (JavaScriptException e)
+            {
+                Logger.LogDebug("ContainsText: " + e);
+                return false;
+            }
 		}
 
 		/// <summary>
