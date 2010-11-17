@@ -20,8 +20,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
-using WatiN.Core.Constraints;
-using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.Native.Mozilla;
 using WatiN.Core.Native;
@@ -280,6 +278,8 @@ namespace WatiN.Core
             var clientPort = GetClientPort();
             clientPort.Connect(url);
             _ffBrowser = new FFBrowser(clientPort);
+
+            StartDialogWatcher();
             WaitForComplete();
         }
 

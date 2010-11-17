@@ -35,13 +35,15 @@ namespace WatiN.Core.DialogHandlers
 	/// </summary>
 	public class DialogWatcher : IDisposable
 	{
-		private readonly IntPtr _mainWindowHwnd;
-		private bool _keepRunning = true;
+        private static IList<DialogWatcher> dialogWatchers = new List<DialogWatcher>();
+        
+        private bool _keepRunning = true;
 		private readonly IList<IDialogHandler> _handlers;
 		private readonly Thread _watcherThread;
 		private bool _closeUnhandledDialogs = Settings.AutoCloseDialogs;
 
-	    private static IList<DialogWatcher> dialogWatchers = new List<DialogWatcher>();
+        public Window MainWindow { get; private set; }
+
 
 	    /// <summary>
 		/// Gets the dialog watcher for the specified (main) internet explorer window. 
@@ -51,17 +53,17 @@ namespace WatiN.Core.DialogHandlers
 		/// <returns></returns>
         public static DialogWatcher GetDialogWatcher(IntPtr mainWindowHwnd)
 		{
-            var mainHwnd = new Window(mainWindowHwnd).ToplevelWindow.Hwnd;
+	        var window = new Window(mainWindowHwnd).ToplevelWindow;
 
 			CleanupDialogWatcherCache();
 
-            var dialogWatcher = GetDialogWatcherFromCache(mainHwnd);
+            var dialogWatcher = GetDialogWatcherFromCache(window);
 
 			// If no dialogwatcher exists for the ieprocessid then 
 			// create a new one, store it and return it.
 			if (dialogWatcher == null)
 			{
-                dialogWatcher = new DialogWatcher(mainHwnd);
+                dialogWatcher = new DialogWatcher(window);
 
 				dialogWatchers.Add(dialogWatcher);
 			}
@@ -69,15 +71,13 @@ namespace WatiN.Core.DialogHandlers
 			return dialogWatcher;
 		}
 
-		public static DialogWatcher GetDialogWatcherFromCache(IntPtr mainWindowHwnd)
+		public static DialogWatcher GetDialogWatcherFromCache(Window mainWindow)
 		{
-		    var mainHwnd = new Window(mainWindowHwnd).ToplevelWindow.Hwnd;
-
 			// Loop through already created dialogwatchers and
 			// return a dialogWatcher if one exists for the given processid
 			foreach (var dialogWatcher in dialogWatchers)
 			{
-                if (dialogWatcher.MainWindowHwnd == mainHwnd)
+                if (dialogWatcher.MainWindow.Equals(mainWindow))
 				{
 					return dialogWatcher;
 				}
@@ -110,10 +110,10 @@ namespace WatiN.Core.DialogHandlers
         /// You are encouraged to use the Factory method <see cref="DialogWatcher.GetDialogWatcherFromCache"/>
 		/// instead.
 		/// </summary>
-		/// <param name="mainWindowHwnd">The main window handle of internet explorer.</param>
-		public DialogWatcher(IntPtr mainWindowHwnd)
+		/// <param name="mainWindow">The main window handle of internet explorer.</param>
+		public DialogWatcher(Window mainWindow)
 		{
-			_mainWindowHwnd = mainWindowHwnd;
+			MainWindow = mainWindow;
 
 			_handlers = new List<IDialogHandler>();
 
@@ -280,7 +280,7 @@ namespace WatiN.Core.DialogHandlers
 		/// <value>The process id.</value>
 		public IntPtr MainWindowHwnd
 		{
-			get { return _mainWindowHwnd; }
+			get { return MainWindow.Hwnd; }
 		}
 
 		/// <summary>
@@ -291,7 +291,7 @@ namespace WatiN.Core.DialogHandlers
 		{
 			while (_keepRunning)
 			{
-                if (new Window(MainWindowHwnd).Exists())
+                if (MainWindow.Exists())
                 {
                     var winEnumerator = new WindowsEnumerator();
                     var windows = winEnumerator.GetWindows(win => true);
@@ -356,7 +356,7 @@ namespace WatiN.Core.DialogHandlers
 		        {
 		            try
 		            {
-                        if (dialogHandler.CanHandleDialog(window, MainWindowHwnd))
+                        if (dialogHandler.CanHandleDialog(window, MainWindow.Hwnd))
                         {
                             if (dialogHandler.HandleDialog(window)) return;
                         }
@@ -371,7 +371,7 @@ namespace WatiN.Core.DialogHandlers
 
 		        // If no handler handled the dialog, see if the dialog
 		        // should be closed automatically.
-		        if (!CloseUnhandledDialogs || MainWindowHwnd != window.ToplevelWindow.Hwnd) return;
+		        if (!CloseUnhandledDialogs || MainWindow.Equals(window.ToplevelWindow)) return;
 		        
 		        Logger.LogAction((LogFunction log) => { log("Auto closing dialog with title: '{0}', text: {1}, style: ", window.Title, window.Message, window.StyleInHex); });
 		        window.ForceClose();
@@ -380,7 +380,8 @@ namespace WatiN.Core.DialogHandlers
 
 	    private bool IsWindowOfIexploreProcess(Window window)
 	    {
-	        return (String.Compare(window.ProcessName, "iexplore", true) == 0);
+            var comparer = new Comparers.StringComparer(window.ProcessName, true);
+	        return comparer.Compare(MainWindow.ProcessName);
 	    }
 
 	    private static void WaitUntilVisibleOrTimeOut(Window window)

@@ -148,5 +148,17 @@ namespace WatiN.Core.Native.Windows
                 return NativeMethods.GetWindowText(messagehWnd);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            var that = obj as Window;
+            return that != null && (Equals(Hwnd, that.Hwnd));
+        }
+
+        public override int GetHashCode()
+        {
+            return Hwnd.ToInt32();
+        }
+
     }
 }
