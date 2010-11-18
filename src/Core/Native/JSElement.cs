@@ -270,9 +270,23 @@ namespace WatiN.Core.Native
             if (attribName == "type") return InputType;
             if (attribName == "outerhtml") return OuterHtml;
             if (attributeName == "textContent") return TextContent;
+            if (attributeName == "disabled") return IsDisabled;
 
             // Return value
             return UsePropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
+        }
+
+        public string IsDisabled
+        {
+            get 
+            { 
+                var result = GetAttribute("disabled");
+                if (string.IsNullOrEmpty(result))
+                {
+                    result = GetProperty("disabled");
+                }
+                return result;
+            }
         }
 
         public void SetAttributeValue(string attributeName, string value)
