@@ -47,19 +47,7 @@
                     <br>
                     <h1>WatiN&nbsp; <span class="green">Example</span></h1>
                     <p>Following is the Hello world example of web test automation; searching Google.</p>
-                    <p><code>[Test]
-                            <br>
-                            public void SearchForWatiNOnGoogle()<br>
-                            {<br>
-                            &nbsp;using (var browser = new IE("http://www.google.com"))<br>
-                            &nbsp;{<br>
-                            &nbsp;&nbsp;browser.TextField(Find.ByName("q")).TypeText("WatiN");<br>
-                            &nbsp;&nbsp;browser.Button(Find.ByName("btnG")).Click();<br>
-                            &nbsp;&nbsp;<br>
-                            &nbsp;&nbsp;Assert.IsTrue(browser.ContainsText("WatiN"));<br>
-                            &nbsp;}<br>
-                            } </code>
-                    </p>
+					<p><script src="https://gist.github.com/705894.js?file=SearchForWatiNOnGoogle.cs"></script></p>
                     <br>
                     <h1>WatiN&nbsp; <span class="green">Feature</span>&nbsp; <span class="gray">List</span></h1>
                     <ul>
@@ -163,6 +151,8 @@
 						<a target="_blank" href="http://www.jetbrains.com/resharper/features/index.html?linklogos" style="border:none; position: relative;display:block; width:127px; height:37px; border:0; margin:0;padding:0;text-decoration:none;text-indent:0;"><span style="margin: 0;padding: 0;position: absolute;top: 0;left: 41px;font-size: 10px;cursor:pointer;  background-image:none;border:0;color: #7d255b; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;">Passionate about</span><img src="http://www.jetbrains.com/resharper/features/rs/rs1/rs125x37_white.gif" alt="The Most Intelligent Add-In To Visual Studio" border="0" style="border:none"/></a>					</p>
 					</p>
                     <h1>News</h1>
+					<p><strong>November 19, 2010</strong></p>
+                    <p>Changes to the website and added a page about <a href="setting-up-firefox-for-testing.html">setting up FireFox for testing</a>.</p >
 					<p><strong>November 03, 2010</strong></p>
                     <p>A BIG thank you to JetBrains for sponsoring the project with a license for <a target="_blank" href="http://www.jetbrains.com/resharper/features/index.html?linklogos">ReSharper 5.1!</a></p >
 					<p><strong>October 25, 2010</strong></p>
