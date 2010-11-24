@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Threading;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.UtilityClasses;
 
@@ -613,7 +614,7 @@ namespace WatiN.Core.Native
             }
             
             ClientPort.WriteAndReadAsBool(command);
-
+            Thread.Sleep(30);
         }
 
         private static string CleanupEventName(string eventName)

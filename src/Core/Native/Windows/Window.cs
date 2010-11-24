@@ -67,7 +67,7 @@ namespace WatiN.Core.Native.Windows
 
         public virtual bool IsDialog()
         {
-            return (ClassName == "#32770");
+            return (ClassName == "#32770" || ClassName == "MozillaDialogClass");
         }
 
         public virtual void SizeTo(int width, int height)

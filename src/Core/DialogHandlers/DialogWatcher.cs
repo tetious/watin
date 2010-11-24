@@ -343,7 +343,7 @@ namespace WatiN.Core.DialogHandlers
 		public void HandleWindow(Window window)
 		{
 			if (!window.IsDialog()) return;
-	        if (!IsWindowOfIexploreProcess(window)) return;
+	        if (!HasDialogSameProcessNameAsBrowserWindow(window)) return;
 			
             // This is needed otherwise the window Style will return a "wrong" result.
             WaitUntilVisibleOrTimeOut(window);
@@ -378,7 +378,7 @@ namespace WatiN.Core.DialogHandlers
 		    }
 		}
 
-	    private bool IsWindowOfIexploreProcess(Window window)
+	    private bool HasDialogSameProcessNameAsBrowserWindow(Window window)
 	    {
             var comparer = new Comparers.StringComparer(window.ProcessName, true);
 	        return comparer.Compare(MainWindow.ProcessName);
