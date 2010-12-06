@@ -371,7 +371,7 @@ namespace WatiN.Core.DialogHandlers
 
 		        // If no handler handled the dialog, see if the dialog
 		        // should be closed automatically.
-		        if (!CloseUnhandledDialogs || MainWindow.Equals(window.ToplevelWindow)) return;
+		        if (!CloseUnhandledDialogs || !MainWindow.Equals(window.ToplevelWindow)) return;
 		        
 		        Logger.LogAction((LogFunction log) => { log("Auto closing dialog with title: '{0}', text: {1}, style: ", window.Title, window.Message, window.StyleInHex); });
 		        window.ForceClose();

@@ -69,7 +69,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 	    }
 
 
-	    [Test]
+	    [Test, Ignore("This feature can't be supported on IE8 because there is no way to detect the parent ie/window for a dialog.")]
 		public void CloseSpecificBrowserAlert()
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
@@ -84,7 +84,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 {
                     secondIe.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
-                    secondAlertDialogHandler.WaitUntilExists();
+                    secondAlertDialogHandler.WaitUntilExists(5);
 
                     // close the original message
                     var firstAlertDialogHandler = new AlertDialogHandler();
@@ -92,12 +92,12 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                     {
                         firstIE.Button(Find.ByValue("Show alert dialog")).ClickNoWait();
 
-                        firstAlertDialogHandler.WaitUntilExists();
+                        firstAlertDialogHandler.WaitUntilExists(5);
 
                         var message = firstAlertDialogHandler.Message;
                         firstAlertDialogHandler.OKButton.Click();
 
-                        firstIE.WaitForComplete();
+                        firstIE.WaitForComplete(5);
 
                         Assert.IsTrue(secondAlertDialogHandler.Exists(), "Original Alert Dialog should be open.");
 
@@ -108,7 +108,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                     // close the second message
                     secondAlertDialogHandler.OKButton.Click();
 
-                    secondIe.WaitForComplete();
+                    secondIe.WaitForComplete(5);
 
                     Assert.IsFalse(secondAlertDialogHandler.Exists(), "Alert Dialog should be closed.");
                 }
