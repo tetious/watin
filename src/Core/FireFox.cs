@@ -279,9 +279,14 @@ namespace WatiN.Core
             clientPort.Connect(url);
             _ffBrowser = new FFBrowser(clientPort);
 
-            StartDialogWatcher();
+            FinishInitialization();
             WaitForComplete();
         }
+
+	    internal void FinishInitialization()
+	    {
+            StartDialogWatcher();
+	    }
 
         internal static FireFoxClientPort GetClientPort()
         {

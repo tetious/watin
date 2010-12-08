@@ -63,7 +63,9 @@ namespace WatiN.Core.Native.Mozilla
 
             if (fireFox != null)
             {
+                fireFox.FinishInitialization();
                 if (waitForComplete) fireFox.WaitForComplete();
+                
                 return fireFox;
             }
 

@@ -471,8 +471,6 @@ namespace WatiN.Core
 
             _ieBrowser = CreateIEBrowser(internetExplorer);
 
-            StartDialogWatcher();
-
             if (finishInitialization)
                 FinishInitialization(null);
         }
@@ -514,8 +512,6 @@ namespace WatiN.Core
 			}
 
             FinishInitialization(uri);
-            
-//            WaitForComplete();
 		}
 
 		private static IEBrowser CreateIEPartiallyInitializedInNewProcess()
@@ -584,6 +580,8 @@ namespace WatiN.Core
                 GoTo(uri);
             }
             _ieBrowser.Visible = Settings.MakeNewIeInstanceVisible;
+
+            StartDialogWatcher();
         }
 
 		/// <summary>

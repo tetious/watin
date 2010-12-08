@@ -37,7 +37,7 @@ namespace WatiN.Core.UnitTests
 		}
 
         [Test]
-		public void HTMLDialogModalByTitle()
+		public void Should_find_modal_HTMLDialog_by_title_then_typetext_and_handle_alert_popup()
 		{			
             Ie.Button("modalid").ClickNoWait();
 

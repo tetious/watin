@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Web;
@@ -676,5 +677,19 @@ namespace WatiN.Core.UnitTests.IETests
 
         }
 
+        [Test]
+        public void Should_have_dialogwatcher_set_when_instantiated_by_calling_IntenetExplorers()
+        {
+            // GIVEN
+            using(var ie1 = new IE())
+            using(var ie2 = new IE())
+            {
+                // WHEN
+                var internetExplorers = IE.InternetExplorers();
+
+                // THEN
+                Assert.That(internetExplorers.All(browser => browser.DialogWatcher != null));
+            }
+        }
     }
 }

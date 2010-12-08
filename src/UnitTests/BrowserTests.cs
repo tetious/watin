@@ -275,12 +275,30 @@ namespace WatiN.Core.UnitTests
                                 browser.Link(Find.First()).Click();
 
                                 // WHEN
-                                var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page"));
-                                
-                                // THEN
-                                Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
-                                
-                                newWindow.Close();
+                                using (var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page")))
+                                {
+                                    // THEN
+                                    Assert.That(newWindow.Text.Trim() == "Welcome to the new window.");
+                                }
+                            });
+        }
+
+        [Test]
+        public void Should_have_dialogwatcher_set_when_instantiated_by_calling_AttachTo()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                browser.GoTo(NewWindowUri);
+                                browser.Link(Find.First()).Click();
+
+                                // WHEN
+                                using (var newWindow = Browser.AttachTo(browser.GetType(), Find.ByTitle("New Window Target Page")))
+                                {
+                                    // THEN
+                                    Assert.That(newWindow.DialogWatcher, Is.Not.Null, "Should have a dialogwatcher");
+                                    Assert.That(newWindow.DialogWatcher.ReferenceCount, Is.EqualTo(1), "Unexpected dialogwatcher referencecount");
+                                }
                             });
         }
 
