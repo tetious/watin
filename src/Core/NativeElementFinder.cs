@@ -67,8 +67,21 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
+            if (Constraint.GetType() == typeof(QuerySelector))
+                return FindElementsUsingQuerySelector();
+
             var id = GetElementIdHint(Constraint);
-            return id != null ? FindElementsById(id) : FindElementByTags();
+            if (id != null)
+                return FindElementsById(id);
+
+            return FindElementByTags();
+        }
+
+        private IEnumerable<Element> FindElementsUsingQuerySelector()
+        {
+            var selector = (QuerySelector)Constraint;
+            var nativeElementCollection2 = (INativeElementCollection2)GetNativeElementCollection();
+            return WrapMatchingElements(nativeElementCollection2.GetElementsWithQuerySelector(selector.Selector, domContainer));
         }
 
         private IEnumerable<Element> FindElementByTags()
@@ -167,4 +180,5 @@ namespace WatiN.Core
         	return finder;
         }
     }
+
 }

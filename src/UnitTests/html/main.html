@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=8" />
         <title>Main</title>
-        <script language="javascript">
+        <script language="javascript" type="text/javascript">
 
 var popupWindow;
 function GetPopupWindow()
@@ -112,4 +112,13 @@ function fnOpen()
         </div>
         <span id="myFabId"><div id="myfabId"></div></span>
     </body>
+    <script type="text/javascript">
+        function toArray() {
+            var elements = new Array();
+            elements.push(document.getElementById('popupid'));
+            elements.push(document.getElementById('Select1'));
+
+            return elements;
+        }
+    </script>
 </html>

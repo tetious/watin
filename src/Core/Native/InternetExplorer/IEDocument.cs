@@ -57,7 +57,7 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public INativeElementCollection AllElements
         {
-            get { return new IEElementCollection(htmlDocument.all); }
+            get { return new IEElementCollection(htmlDocument.all, null); }
         }
 
         /// <inheritdoc />

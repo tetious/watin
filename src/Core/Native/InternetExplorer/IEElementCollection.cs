@@ -23,22 +23,24 @@ using mshtml;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
-    internal class IEElementCollection : INativeElementCollection
+    internal class IEElementCollection : INativeElementCollection2
     {
-        private readonly IEnumerable htmlElementCollection;
+        private readonly IEnumerable _htmlElementCollection;
+        private readonly IEElement _element;
 
-        public IEElementCollection(IEnumerable htmlElementCollection)
+        public IEElementCollection(IEnumerable htmlElementCollection, IEElement element)
         {
             if (htmlElementCollection == null)
                 throw new ArgumentNullException("htmlElementCollection");
 
-            this.htmlElementCollection = htmlElementCollection;
+            _htmlElementCollection = htmlElementCollection;
+            _element = element;
         }
 
         /// <inheritdoc />
         public IEnumerable<INativeElement> GetElements()
         {
-            return AsNative(htmlElementCollection);
+            return AsNative(_htmlElementCollection);
         }
 
         /// <inheritdoc />
@@ -47,8 +49,8 @@ namespace WatiN.Core.Native.InternetExplorer
             if (tagName == null)
                 throw new ArgumentNullException("tagName");
 
-            var elementCollection = htmlElementCollection as IHTMLElementCollection;
-            if (elementCollection == null) return AsNative(htmlElementCollection);
+            var elementCollection = _htmlElementCollection as IHTMLElementCollection;
+            if (elementCollection == null) return AsNative(_htmlElementCollection);
             
             return AsNative((IHTMLElementCollection)elementCollection.tags(tagName));
         }
@@ -59,7 +61,7 @@ namespace WatiN.Core.Native.InternetExplorer
             if (id == null)
                 throw new ArgumentNullException("id");
 
-            var htmlElementCollection3 = htmlElementCollection as IHTMLElementCollection3;
+            var htmlElementCollection3 = _htmlElementCollection as IHTMLElementCollection3;
             if (htmlElementCollection3 != null)
             {
                 var htmlItem = htmlElementCollection3.namedItem(id);
@@ -76,6 +78,18 @@ namespace WatiN.Core.Native.InternetExplorer
                 			yield return new IEElement(element);
                 	}
             }
+        }
+
+        public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
+        {
+            var container = "document";
+            if (_element != null)
+                container = _element.GetJavaScriptElementReference();
+
+            var code = string.Format("document.___WATINRESULT = Sizzle('{0}', {1});", selector, container);
+            domContainer.RunScript(code);
+
+            return new JScriptElementArrayEnumerator((IEDocument) domContainer.NativeDocument, "___WATINRESULT");
         }
 
         private static IEnumerable<INativeElement> AsNative(IEnumerable htmlElementCollection)

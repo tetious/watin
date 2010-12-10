@@ -53,4 +53,9 @@ namespace WatiN.Core.Native
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         IEnumerable<INativeElement> GetElementsById(string id);
     }
+
+    internal interface INativeElementCollection2 : INativeElementCollection
+    {
+        IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer);
+    }
 }

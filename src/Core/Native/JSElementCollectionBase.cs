@@ -24,7 +24,7 @@ namespace WatiN.Core.Native
     /// <summary>
     /// Base element collection common to all browsers that communicate with WatiN using javascript.
     /// </summary>
-    public abstract class JSElementCollectionBase : INativeElementCollection
+    public abstract class JSElementCollectionBase : INativeElementCollection2
     {
         protected ClientPortBase clientPort;
 
@@ -139,6 +139,17 @@ namespace WatiN.Core.Native
         public virtual IEnumerable<INativeElement> GetElementsById(string id)
         {
             return GetElementsByIdImpl(id);
+        }
+
+        public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
+        {
+            var command = string.Format("window.Sizzle('{0}', {1})", selector, containerReference);
+
+            var ffElements = GetElementArrayEnumerator(command);
+            foreach (var ffElement in ffElements)
+            {
+                yield return ffElement;
+            }
         }
 
         /// <inheritdoc />

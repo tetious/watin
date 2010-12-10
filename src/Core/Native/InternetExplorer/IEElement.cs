@@ -57,13 +57,13 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public INativeElementCollection Children
         {
-            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.children); }
+            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.children, this); }
         }
 
         /// <inheritdoc />
         public INativeElementCollection AllDescendants
         {
-            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.all); }
+            get { return new IEElementCollection((IHTMLElementCollection)AsHtmlElement.all, this); }
         }
 
         /// <inheritdoc />
@@ -74,12 +74,12 @@ namespace WatiN.Core.Native.InternetExplorer
                 var htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
                 {
-                    return new IEElementCollection(htmlTable.rows);
+                    return new IEElementCollection(htmlTable.rows, this);
                 }
 
                 var htmlTableSection = AsHtmlElement as IHTMLTableSection;
                 if (htmlTableSection != null)
-                    return new IEElementCollection(htmlTableSection.rows);
+                    return new IEElementCollection(htmlTableSection.rows, this);
 
                 throw new InvalidOperationException("The element must be a TABLE or TBODY.");
             }
@@ -92,7 +92,7 @@ namespace WatiN.Core.Native.InternetExplorer
             {
                 var htmlTable = AsHtmlElement as IHTMLTable;
                 if (htmlTable != null)
-                    return new IEElementCollection(htmlTable.tBodies);
+                    return new IEElementCollection(htmlTable.tBodies, this);
 
                 throw new InvalidOperationException("The element must be a TABLE.");
             }
@@ -105,7 +105,7 @@ namespace WatiN.Core.Native.InternetExplorer
             {
                 var htmlTableRow = AsHtmlElement as IHTMLTableRow;
                 if (htmlTableRow != null)
-                    return new IEElementCollection(htmlTableRow.cells);
+                    return new IEElementCollection(htmlTableRow.cells, this);
 
                 throw new InvalidOperationException("The element must be a TR.");
             }
@@ -118,7 +118,7 @@ namespace WatiN.Core.Native.InternetExplorer
             {
                 var htmlSelectElement = AsHtmlElement as IHTMLSelectElement;
                 if (htmlSelectElement != null)
-                    return new IEElementCollection(htmlSelectElement);
+                    return new IEElementCollection(htmlSelectElement, this);
 
                 throw new InvalidOperationException("The element must be a SELECT.");
             }
