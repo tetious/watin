@@ -183,6 +183,7 @@
     <Compile Include="ComponentFinderAttribute.cs" />
     <Compile Include="Composite.cs" />
     <Compile Include="Body.cs" />
+    <Compile Include="Constraints\QuerySelectorConstraint.cs" />
     <Compile Include="ListItem.cs" />
     <Compile Include="ListItemCollection.cs" />
     <Compile Include="DescriptionAttribute.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Native\IClientPort.cs" />
     <Compile Include="Native\ClientPortBase.cs" />
     <Compile Include="Native\InternetExplorer\IEFireEventHandler.cs" />
+    <Compile Include="Native\InternetExplorer\JScriptElementArrayEnumerator.cs" />
     <Compile Include="Native\JavaScriptEngineType.cs" />
     <Compile Include="Native\JSElementCollectionBase.cs" />
     <Compile Include="Native\JSElementArray.cs" />

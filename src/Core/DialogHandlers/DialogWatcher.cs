@@ -275,7 +275,7 @@ namespace WatiN.Core.DialogHandlers
 		}
 
 		/// <summary>
-		/// Gets the (main) internet explorer window hanlde this dialog watcher watches.
+		/// Gets the (main) internet explorer window handle this dialog watcher watches.
 		/// </summary>
 		/// <value>The process id.</value>
 		public IntPtr MainWindowHwnd
