@@ -357,7 +357,8 @@ namespace WatiN.Core.Native
                 return false;
 
             // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-            var command = string.Format("({0} != undefined && {0} != null) && ({0}.offsetParent != null || {0}.tagName == '!' || {0}.tagName.toLowerCase() == 'html'); ", ElementReference);
+            const string excludedTags = "! HTML HEAD BODY TITLE LINK META SCRIPT STYLE BASE";
+            var command = string.Format("({0} != undefined && {0} != null) && ({0}.offsetParent != null || '{1}'.indexOf({0}.tagName.toUpperCase())> -1); ", ElementReference, excludedTags);
 
             return ClientPort.WriteAndReadAsBool(command);
         }

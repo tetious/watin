@@ -17,9 +17,9 @@
 #endregion Copyright
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
-using System.Text;
 using mshtml;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
@@ -405,10 +405,12 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             try
             {
+                
                 if (AsHtmlElement.sourceIndex < 0) return false;
 
                 // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-                if (TagName == "!" || TagName == "HTML") return true;
+                const string excludedTags = "! HTML HEAD BODY TITLE BASE LINK META SCRIPT STYLE";
+                if (excludedTags.Contains(TagName)) return true;
 
                 return AsHtmlElement.offsetParent != null;
             }

@@ -1523,6 +1523,40 @@ namespace WatiN.Core.UnitTests
 	    }
 
         [Test]
+        public void Should_find_element_containing_text()
+        {
+            ExecuteTest(browser =>
+            {
+//                browser.GoTo(FramesetURI);
+                browser.GoTo(new Uri(HtmlTestBaseURI, "BodyNotExistsBug.htm"));
+                var element = browser.Element(e =>
+                {
+                    Logger.LogDebug(">> " + e.TagName);
+
+                    var container = e as IElementContainer;
+                    if (container == null)
+                    {
+                        Logger.LogDebug("-- " + e.TagName);
+                        return false;
+                    }
+                    
+                    var collection = container.Elements;
+                    Logger.LogDebug("= " + collection.Count);
+                    if (collection.Count == 0)
+                    {
+                        Logger.LogDebug(">>> " + e.GetType() );
+                        return false;
+                    }
+                    
+                    Logger.LogDebug("<< " + e.TagName);
+                    return false;
+                });
+
+                Assert.That(element.Exists, Is.False);
+            });
+        }
+
+        [Test]
         public void Should_not_wait_for_element_if_to_string_is_called_and_element_does_not_exists()
         {
             ExecuteTestWithAnyBrowser(browser =>
@@ -1535,6 +1569,39 @@ namespace WatiN.Core.UnitTests
 
                                               // THEN
                                               Assert.That(tostring, Is.EqualTo(string.Empty));
+                                          });
+        }
+
+        [Test]
+        public void Should_find_body()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+                                          {
+                                              // GIVEN
+                                              var elem = browser.ElementOfType<Body>(Find.First());
+
+                                              // WHEN
+                                              var exists = elem.Exists;
+
+                                              // THEN
+                                              Assert.That(exists, Is.True);
+                                          });
+        }
+
+        [Test]
+        public void Should_find_elements_inside_body()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+                                          {
+                                              // GIVEN
+                                              browser.GoTo(new Uri(HtmlTestBaseURI, "BodyNotExistsBug.htm"));
+                                              var elem = browser.ElementOfType<Body>(Find.First());
+
+                                              // WHEN
+                                              var elements = elem.Elements;
+
+                                              // THEN
+                                              Assert.That(elements.Count, Is.GreaterThan(50000));
                                           });
         }
 	}
