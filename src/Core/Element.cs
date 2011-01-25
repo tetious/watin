@@ -385,6 +385,7 @@ namespace WatiN.Core
         /// </summary>
         protected virtual string DefaultToString()
         {
+            if (!Exists) return string.Empty;
             return UtilityClass.IsNotNullOrEmpty(Title) ? Title : Text;
         }
 

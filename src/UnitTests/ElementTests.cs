@@ -1522,5 +1522,20 @@ namespace WatiN.Core.UnitTests
                 );
 	    }
 
+        [Test]
+        public void Should_not_wait_for_element_if_to_string_is_called_and_element_does_not_exists()
+        {
+            ExecuteTestWithAnyBrowser(browser =>
+                                          {
+                                              // GIVEN
+                                              var elem = browser.Element("I_dont_exist");
+
+                                              // WHEN
+                                              var tostring = elem.ToString();
+
+                                              // THEN
+                                              Assert.That(tostring, Is.EqualTo(string.Empty));
+                                          });
+        }
 	}
 }
