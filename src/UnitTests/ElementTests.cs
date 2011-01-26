@@ -1074,7 +1074,6 @@ namespace WatiN.Core.UnitTests
             Assert.That(ancestor.Id, Is.EqualTo("Table1"));
         }
 
-        // TODO: This should be mocked cause there is no browser logic involved
         [Test]
         public void TableOfElementE()
         {

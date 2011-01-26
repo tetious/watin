@@ -1,4 +1,22 @@
-﻿using System;
+﻿#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
+
+//Copyright 2006-2010 Jeroen van Menen
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+#endregion Copyright
+
+using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
@@ -35,7 +53,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                                 browser.RunScript(new ScriptLoader().GetInstallScript());
 
                                 // WHEN
-                                var element = browser.Element(new QuerySelector("#popupid"));
+                                var element = browser.Element(new QuerySelectorConstraint("#popupid"));
 
                                 // THEN
                                 Assert.That(element.Exists, Is.True);
@@ -52,7 +70,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                                 browser.RunScript(new ScriptLoader().GetInstallScript());
 
                                 // WHEN
-                                var div = browser.Div(new QuerySelector("#popupid"));
+                                var div = browser.Div(new QuerySelectorConstraint("input"));
 
                                 // THEN
                                 Assert.That(div.Exists, Is.False);
@@ -68,7 +86,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                 browser.RunScript(new ScriptLoader().GetInstallScript());
                 var containerElement = browser.Form("Form");
                 // WHEN
-                var element = containerElement.Element(new QuerySelector("#popupid"));
+                var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));
 
                 // THEN
                 Assert.That(element.Exists, Is.True);
@@ -85,7 +103,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                 browser.RunScript(new ScriptLoader().GetInstallScript());
                 var containerElement = browser.Form("FormInputElement");
                 // WHEN
-                var element = containerElement.Element(new QuerySelector("#popupid"));
+                var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));
 
                 // THEN
                 Assert.That(element.Exists, Is.False);

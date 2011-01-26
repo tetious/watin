@@ -283,11 +283,6 @@ namespace WatiN.Core
             WaitForComplete();
         }
 
-	    internal void FinishInitialization()
-	    {
-            StartDialogWatcher();
-	    }
-
         internal static FireFoxClientPort GetClientPort()
         {
             return new FireFoxClientPort(IpAdress, Port);

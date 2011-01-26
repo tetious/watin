@@ -980,5 +980,10 @@ namespace WatiN.Core
         {
             return ByExistenceOfRelatedElement<TableRow>(row => row.OwnTableCell(ByIndex(columnIndex) && ByText(predicate)));
         }
-    }
+
+        public static QuerySelectorConstraint BySelector(string selector)
+	    {
+	        return new QuerySelectorConstraint(selector);
+	    }
+	}
 }

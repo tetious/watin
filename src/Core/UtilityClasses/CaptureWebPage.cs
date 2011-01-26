@@ -30,7 +30,7 @@ namespace WatiN.Core.UtilityClasses
 {
     /// <summary>
     /// This class contains functionality to capture an image from a web page and save it to a file.
-    /// The code was written by Doug Weems at http://www.codeproject.com/cs/media/IECapture.asp/
+    /// The code was written by Doug Weems at http://www.codeproject.com/KB/graphics/IECapture.aspx
     /// </summary>
     public class CaptureWebPage
     {

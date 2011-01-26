@@ -36,8 +36,8 @@ namespace WatiN.Core.UnitTests.ResearchTests
         {
             using(var browser = new IE("www.google.com"))
             {
-                browser.TextField(Having.Name.EqualTo("q")).TypeText("WatiN");
-                browser.Button(Having.Name.EqualTo("btnG")).Click();
+                browser.TextField(Where.Name.Equals("q")).TypeText("WatiN");
+                browser.Button(Where.Name.Equals("btnG")).Click();
             }
         }
 
@@ -45,7 +45,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
         public void Should_end_with()
         {
             // GIVEN
-            var constraint = Having.Class.EndingWith("end");
+            var constraint = Where.Class.EndsWith("end");
 
             // WHEN
             var matches = constraint.Matches(new AttributeBag(), new ConstraintContext());
@@ -58,7 +58,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
         public void Should_not_end_with()
         {
             // GIVEN
-            var constraint = Having.Class.EndingWith("the");
+            var constraint = Where.Class.EndsWith("the");
 
             // WHEN
             var matches = constraint.Matches(new AttributeBag(), new ConstraintContext());
@@ -71,7 +71,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
         public void Should_ignore_case()
         {
             // GIVEN
-            var constraint = Having.Class.EndingWith("END").IgnoreCase();
+            var constraint = Where.Class.EndsWith("END").IgnoreCase();
 
             // WHEN
             var matches = constraint.Matches(new AttributeBag(), new ConstraintContext());
@@ -96,7 +96,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
         }
     }
 
-    public static class Having
+    public static class Where
     {
         public static FluentAttributeConstraint Class
         {
@@ -123,12 +123,12 @@ namespace WatiN.Core.UnitTests.ResearchTests
             _constraintFactory = createAttributeConstraint;
         }
 
-        public FuentEndContraint EndingWith(string value)
+        public FuentEndContraint EndsWith(string value)
         {
             return new FuentEndContraint(value + "$", _constraintFactory);
         }
 
-        public FuentEndContraint EqualTo(string value)
+        public FuentEndContraint Equals(string value)
         {
             return new FuentEndContraint("^" + value + "$", _constraintFactory);
         }

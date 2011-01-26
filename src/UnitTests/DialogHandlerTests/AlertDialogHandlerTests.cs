@@ -75,9 +75,11 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 
 		    var firstIE = Ie;
-            
+            firstIE.RunScript("document.title = 'firstIe'; ");
+
             using (var secondIe = new IE(TestPageUri,true))
             {
+                secondIe.RunScript("document.title = 'secondIe'; ");
                 // set up a second browser with an open dialog
                 var secondAlertDialogHandler = new AlertDialogHandler();
                 using (new UseDialogOnce(secondIe.DialogWatcher, secondAlertDialogHandler))

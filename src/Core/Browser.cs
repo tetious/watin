@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
@@ -28,6 +29,7 @@ using WatiN.Core.Native;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Mozilla;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.Properties;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core
@@ -44,6 +46,11 @@ namespace WatiN.Core
         }
 
         public abstract INativeBrowser NativeBrowser { get; }
+
+        protected internal virtual void FinishInitialization()
+        {
+            StartDialogWatcher();
+        }
 
         /// <summary>
         /// Brings the referenced Internet Explorer to the front (makes it the top window)
@@ -92,6 +99,7 @@ namespace WatiN.Core
         /// Sends a Tab key to the IE window to simulate tabbing through
         /// the elements (and adres bar).
         /// </summary>
+        [Obsolete("This method will be no longer supported")]
         public virtual void PressTab()
         {
             if (Debugger.IsAttached) return;

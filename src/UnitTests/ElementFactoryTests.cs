@@ -16,8 +16,11 @@
 
 #endregion Copyright
 
+using System;
+using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.UnitTests
 {
@@ -93,7 +96,7 @@ namespace WatiN.Core.UnitTests
             // GIVEN
             var nativeWatinElementWithNoAttributes = typeof(Element);
             Assert.That(nativeWatinElementWithNoAttributes.GetCustomAttributes(typeof(ElementTagAttribute), dont_inherit).Length, Is.EqualTo(0), "Pre-condition: Expected no attributes");
-
+            
             // WHEN
             var elementTags = ElementFactory.GetElementTags(nativeWatinElementWithNoAttributes);
 
@@ -102,7 +105,82 @@ namespace WatiN.Core.UnitTests
             Assert.That(elementTags[0].IsAny, Is.True, "Unexpected number of element tagnames");
         }
 
+        [Test]
+        public void Test_register_same_tag_but_inherited()
+        {
+            // GIVEN
+            var typeToRegister = typeof(TestElementSameTagButInherited);
+            var existingTags = ElementFactory.GetElementTags(typeof(Link));
+
+            // WHEN
+            ElementFactory.RegisterElementType(typeToRegister);
+
+            // THEN
+            var tags = ElementFactory.GetElementTags(typeToRegister);
+            Assert.AreEqual(existingTags.Count, tags.Count);
+            foreach (var tag in existingTags)
+            {
+                Assert.Contains(tag, (ICollection)tags);
+            }
+        }
+
+        [Test]
+        public void Test_register_same_tag_but_not_inherited()
+        {
+            // GIVEN
+            var typeToRegister = typeof(TestElementSameTagButNotInherited);
+
+            // WHEN
+            try
+            {
+                ElementFactory.RegisterElementType(typeToRegister);
+                Assert.Fail(
+                    "This should has been throw exception {0}",
+                    typeof(InvalidOperationException).Name);
+            }
+
+            // THEN
+            catch (InvalidOperationException e)
+            {
+                // don't get the first part of the message becasue we don't
+                // know the existing registered element.
+                string message = e.Message.Substring(e.Message.IndexOf(" and "));
+                Assert.AreEqual(" and WatiN.Core.UnitTests.TestElementSameTagButNotInherited "
+                    + "have both registered element tag 'A'.",
+                    message);
+            }
+        }
+
     }
+
+    [ElementTag("a")]
+    public class TestElementSameTagButNotInherited : Element
+    {
+        public TestElementSameTagButNotInherited(DomContainer domContainer, INativeElement element)
+            : base(domContainer, element)
+        {
+        }
+
+        public TestElementSameTagButNotInherited(DomContainer domContainer, ElementFinder finder)
+            : base(domContainer, finder)
+        {
+        }
+    }
+
+    [ElementTag("a")]
+    public class TestElementSameTagButInherited : Link
+    {
+        public TestElementSameTagButInherited(DomContainer domContainer, INativeElement element)
+            : base(domContainer, element)
+        {
+        }
+
+        public TestElementSameTagButInherited(DomContainer domContainer, ElementFinder finder)
+            : base(domContainer, finder)
+        {
+        }
+    }
+
 
     public class TestElementWithNoElementTags : TestElement
     {

@@ -839,6 +839,23 @@ namespace WatiN.Core.UnitTests
             Assert.That(byDefault.AttributeName, Is.EqualTo(MyTestDefaultFindFactory.TEST_ATTRIBUTE));
         }
 
+        [Test]
+        public void FindBySelector()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                var constraint = Find.BySelector("#popupid");
+
+                // WHEN
+                var button = browser.Element(constraint);
+
+                // THEN
+                Assert.That(button.Exists);
+            });
+        }
+
 	    public class MyTestDefaultFindFactory : IFindByDefaultFactory
 	    {
 	        public const string TEST_ATTRIBUTE = "testAttribute";

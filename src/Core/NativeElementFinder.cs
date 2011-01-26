@@ -67,7 +67,7 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
-            if (Constraint.GetType() == typeof(QuerySelector))
+            if (Constraint.GetType() == typeof(QuerySelectorConstraint))
                 return FindElementsUsingQuerySelector();
 
             var id = GetElementIdHint(Constraint);
@@ -79,7 +79,7 @@ namespace WatiN.Core
 
         private IEnumerable<Element> FindElementsUsingQuerySelector()
         {
-            var selector = (QuerySelector)Constraint;
+            var selector = (QuerySelectorConstraint)Constraint;
             var nativeElementCollection2 = (INativeElementCollection2)GetNativeElementCollection();
             return WrapMatchingElements(nativeElementCollection2.GetElementsWithQuerySelector(selector.Selector, domContainer));
         }

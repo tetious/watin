@@ -581,7 +581,7 @@ namespace WatiN.Core
             }
             _ieBrowser.Visible = Settings.MakeNewIeInstanceVisible;
 
-            StartDialogWatcher();
+            base.FinishInitialization();
         }
 
 		/// <summary>

@@ -49,6 +49,18 @@ namespace WatiN.Core
             var elementType = typeof(Element);
             ElementNameSpace = elementType.Namespace;
 
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
+            elementTagsByType.Clear();
+            elementTypeByTag.Clear();
+            nativeElementBasedFactoriesByType.Clear();
+            elementFinderBasedFactoriesByType.Clear();
+
+            var elementType = typeof(Element);
+
             var assembly = Assembly.GetAssembly(elementType);
             RegisterElementTypes(assembly);
 
@@ -107,19 +119,17 @@ namespace WatiN.Core
             RegisterElementType(elementType, false);
         }
 
-        private static bool RegisterElementType(Type elementType, bool ignoreInvalidTypes)
+        private static void RegisterElementType(Type elementType, bool ignoreInvalidTypes)
         {
             if (elementType == null)
                 throw new ArgumentNullException("elementType");
 
             // Skip if already registered.
-            if (nativeElementBasedFactoriesByType.ContainsKey(elementType))
-                return true;
+            if (nativeElementBasedFactoriesByType.ContainsKey(elementType)) return;
 
             if (!IsValidElementSubClass(elementType))
             {
-                if (ignoreInvalidTypes)
-                    return false;
+                if (ignoreInvalidTypes) return;
 
                 throw new ArgumentException("The type must be a subclass of Element and it must not be abstract.",
                     "elementType");
@@ -127,8 +137,7 @@ namespace WatiN.Core
 
             if (!RegisterElementTags(elementType))
             {
-                if (ignoreInvalidTypes)
-                    return false;
+                if (ignoreInvalidTypes) return;
 
                 throw new ArgumentException("The type must have at least one [ElementTag] attribute.",
                     "elementType");
@@ -136,7 +145,6 @@ namespace WatiN.Core
 
             RegisterNativeElementBasedFactories(elementType);
             RegisterElementFinderBasedFactories(elementType);
-            return true;
         }
 
         private static bool IsValidElementSubClass(Type type)
@@ -149,7 +157,7 @@ namespace WatiN.Core
         	if (elementType.Equals(typeof(Element))) return new[] { ElementTag.Any };
         	var tagAttributes = (ElementTagAttribute[])elementType.GetCustomAttributes(typeof(ElementTagAttribute), false);
 
-            if (tagAttributes.Length == 0 && !elementType.Namespace.Equals(ElementNameSpace))
+            if (tagAttributes.Length == 0 && !ElementNameSpace.Equals(elementType.Namespace))
             {
                 var type = elementType.BaseType;
                 return CreateElementTagsFromElementTagAttributes(type);
@@ -176,12 +184,23 @@ namespace WatiN.Core
             {
                 if (elementTypeByTag.ContainsKey(tag))
                 {
-                    throw new InvalidOperationException(
-                        string.Format("Types {0} and {1} have both registered element tag '{2}'.",
-                            elementTypeByTag[tag], elementType, tag));
-                }
 
-                elementTypeByTag.Add(tag, elementType);
+                    var existingElement = elementTypeByTag[tag];
+                    if (elementType.IsSubclassOf(existingElement))
+                    {
+                        elementTypeByTag[tag] = elementType;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            string.Format("Types {0} and {1} have both registered element tag '{2}'.",
+                                existingElement, elementType, tag));
+                    }
+                }
+                else
+                {
+                    elementTypeByTag.Add(tag, elementType);
+                }
             }
 
             return true;
