@@ -72,7 +72,7 @@ namespace WatiN.Core.Native.InternetExplorer
             if (ieDocument == null) return;
             
             WaitWhileMainDocumentNotAvailable(ieDocument.HtmlDocument);
-            WaitWhileDocumentStateNotComplete(ieDocument.HtmlDocument);
+            WaitWhileDocumentStateNotCompleteOrInteractive(ieDocument.HtmlDocument);
             WaitForFramesToComplete(ieDocument.HtmlDocument);
         }
 
@@ -107,17 +107,17 @@ namespace WatiN.Core.Native.InternetExplorer
                     Marshal.ReleaseComObject(frame);
                 }
 
-                WaitWhileDocumentStateNotComplete(frameDocument);
+                WaitWhileDocumentStateNotCompleteOrInteractive(frameDocument);
                 WaitForFramesToComplete(frameDocument);
             }
         }
 
-        protected virtual void WaitWhileDocumentStateNotComplete(IHTMLDocument2 htmlDocument)
+        protected virtual void WaitWhileDocumentStateNotCompleteOrInteractive(IHTMLDocument2 htmlDocument)
         {
             WaitUntil(() => DocumentReadyStateIsAvailable(htmlDocument),
                       () => "waiting for document ready state available.");
 
-            WaitUntil(() => htmlDocument.readyState == "complete",
+            WaitUntil(() => htmlDocument.readyState == "complete" || htmlDocument.readyState == "interactive",
                       () => "waiting for document state complete. Last state was '" + htmlDocument.readyState + "'");
         }
 

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using mshtml;
 using WatiN.Core.Properties;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -84,7 +85,8 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
         {
-            domContainer.RunScript(GetSizzleInstallScript());
+            domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
+            
             var container = "document";
             if (_element != null)
                 container = _element.GetJavaScriptElementReference();
@@ -100,18 +102,5 @@ namespace WatiN.Core.Native.InternetExplorer
             foreach (IHTMLElement htmlElement in htmlElementCollection)
                 yield return new IEElement(htmlElement);
         }
-
-        private string GetSizzleInstallScript()
-        {
-            var result = new StringBuilder();
-
-            result.Append("with(window) { if (typeof Sizzle == 'undefined') {");
-            result.Append(Resources.sizzle);
-            result.Append("};};");
-
-            return result.ToString();
-        } 
-
-
     }
 }

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Properties;
 using WatiN.Core.UnitTests.TestUtils;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.ResearchTests
 {
@@ -17,7 +18,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
             var scriptLoader = new ScriptLoader();
 
             // WHEN
-            var script = scriptLoader.GetInstallScript();
+            var script = scriptLoader.GetSizzleInstallScript();
 
             // THEN
             Console.WriteLine(script);
@@ -34,7 +35,7 @@ namespace WatiN.Core.UnitTests.ResearchTests
                                 var scriptLoader = new ScriptLoader();
 
                                 // THEN
-                                browser.RunScript(scriptLoader.GetInstallScript());
+                                browser.RunScript(scriptLoader.GetSizzleInstallScript());
 
                                 // WHEN
                                 var eval = browser.Eval("window.Sizzle('#popupid').length;");
@@ -46,19 +47,5 @@ namespace WatiN.Core.UnitTests.ResearchTests
         {
             get { return MainURI; }
         }
-    }
-
-    public class ScriptLoader
-    {
-        public string GetInstallScript()
-        {
-            var result = new StringBuilder();
-
-            result.Append("with(window) { if (typeof Sizzle == 'undefined') {");
-            result.Append(Resources.sizzle); 
-            result.Append("};};"); 
-            
-            return result.ToString();
-        } 
     }
 }

@@ -16,6 +16,8 @@
 
 #endregion Copyright
 
+using WatiN.Core.UtilityClasses;
+
 namespace WatiN.Core.Native
 {
     using System;
@@ -143,6 +145,8 @@ namespace WatiN.Core.Native
 
         public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
         {
+            domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
+
             var command = string.Format("window.Sizzle('{0}', {1})", selector, containerReference);
 
             var ffElements = GetElementArrayEnumerator(command);

@@ -20,8 +20,8 @@ using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
-using WatiN.Core.UnitTests.ResearchTests;
 using WatiN.Core.UnitTests.TestUtils;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
@@ -34,10 +34,10 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetInstallScript());
+                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
                                 // WHEN
-                                var elements = browser.Elements.Filter(new QuerySelector(".input"));
+                                var elements = browser.Elements.Filter(new QuerySelectorConstraint(".input"));
 
                                 // THEN
                                 Assert.That(elements.Count, Is.EqualTo(19));
@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetInstallScript());
+                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
                                 // WHEN
                                 var element = browser.Element(new QuerySelectorConstraint("#popupid"));
@@ -67,7 +67,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetInstallScript());
+                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
                                 // WHEN
                                 var div = browser.Div(new QuerySelectorConstraint("input"));
@@ -83,7 +83,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
             {
                 // GIVEN
-                browser.RunScript(new ScriptLoader().GetInstallScript());
+                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
                 var containerElement = browser.Form("Form");
                 // WHEN
                 var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));
@@ -100,7 +100,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
             {
                 // GIVEN
-                browser.RunScript(new ScriptLoader().GetInstallScript());
+                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
                 var containerElement = browser.Form("FormInputElement");
                 // WHEN
                 var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));

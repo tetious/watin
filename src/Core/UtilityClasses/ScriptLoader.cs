@@ -16,17 +16,22 @@
 
 #endregion Copyright
 
+using System.Text;
+using WatiN.Core.Properties;
+
 namespace WatiN.Core.UtilityClasses
 {
-    /// <summary>
-    /// Provides a singleton empty array instance.
-    /// </summary>
-    /// <typeparam name="T">The type of array to provide.</typeparam>
-    public static class EmptyArray<T>
+    public class ScriptLoader
     {
-        /// <summary>
-        /// An empty array of type <typeparamref name="T"/>.
-        /// </summary>
-        public static readonly T[] Instance = new T[0];
+        public string GetSizzleInstallScript()
+        {
+            var result = new StringBuilder();
+
+            result.Append("with(window) { if (typeof Sizzle == 'undefined') {");
+            result.Append(Resources.sizzle);
+            result.Append("};};");
+
+            return result.ToString();
+        }
     }
 }
