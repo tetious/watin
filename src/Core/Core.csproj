@@ -160,9 +160,6 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Core" Condition="'$(TargetFrameworkVersion)'!='v2.0'">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
@@ -498,6 +495,7 @@
     <Compile Include="StaticElementFinder.cs" />
     <Compile Include="UtilityClasses\EmptyArray.cs" />
     <Compile Include="UtilityClasses\LazyList.cs" />
+    <Compile Include="UtilityClasses\ScriptLoader.cs" />
     <Compile Include="UtilityClasses\VariableNameHelper.cs" />
     <Compile Include="WaitForCompleteBase.cs" />
     <Compile Include="FireFox.cs" />

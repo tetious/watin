@@ -187,6 +187,7 @@
     </None>
     <None Include="WatiN.Core.UnitTests.dll.config" />
     <Compile Include="AreaTests.cs" />
+    <Compile Include="AttributeConstraintTests\FindBySelectorTests.cs" />
     <Compile Include="BaseDialogHandlerTests.cs" />
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
@@ -201,6 +202,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native\IETests\IEWaitForCompleteTests.cs" />
+    <Compile Include="Native\IETests\JScriptElementArrayEnumaratorTests.cs" />
     <Compile Include="PageTests.cs" />
     <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
     <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="ResearchTests\FluentWatiNSyntax.cs" />
     <Compile Include="ResearchTests\JavascriptErrorDetection.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
+    <Compile Include="ResearchTests\ScriptLoaderTests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -426,6 +429,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WatiNSanityTests.cs" />
+    <Content Include="html\BodyNotExistsBug.htm" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />
     <Content Include="html\ListTests.html" />
