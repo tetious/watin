@@ -345,7 +345,9 @@ namespace WatiN.Core.UnitTests
 
 		                        var label = checkBox.Parent;
 		                        Assert.That(label, Is.InstanceOfType(typeof(Label)), "Expected a label");
-                                Assert.That(label.TextAfter.Trim(), Is.Empty, "Unexpected label.TextAfter");
+
+		                        var after = label.TextAfter ?? string.Empty; // difference between IE and FF
+		                        Assert.That(after.Trim(), Is.Empty, "Unexpected label.TextAfter");
 		                    });
 		}
 
