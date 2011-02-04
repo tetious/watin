@@ -25,7 +25,7 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 	[TestFixture]
 	public class LogonDialogHandlerTests
 	{
-		[Test, Category("InternetConnectionNeeded")]
+		[Test, Category("InternetConnectionNeeded"), Ignore("link to exmple page is broken. need to find other online example site")]
 		public void LogonDialogTest()
 		{
 			using (var ie = new IE())
