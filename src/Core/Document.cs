@@ -215,19 +215,7 @@ namespace WatiN.Core
 		/// </returns>
         public virtual bool ContainsText(string text)
 		{
-            var documentName = NativeDocument.JavaScriptVariableName;
-            try
-            {
-                var exists = Eval(string.Format("{0}.body.innerHTML.indexOf('{1}')>-1;", documentName, text));
-
-                return bool.Parse(exists ?? "false");
-
-            }
-            catch (JavaScriptException e)
-            {
-                Logger.LogDebug("ContainsText: " + e);
-                return false;
-            }
+            return NativeDocument.ContainsText(text);
 		}
 
 		/// <summary>

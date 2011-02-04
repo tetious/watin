@@ -50,7 +50,7 @@ namespace WatiN.Core.UnitTests.IETests
         }
 
         [Test]
-        public void BodyShouldReturnAnIENativeElement()
+        public void Body_should_return_an_ie_native_element()
         {
             // GIVEN
             var htmlElementMock = new Mock<IHTMLElement>();

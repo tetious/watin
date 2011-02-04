@@ -16,6 +16,10 @@
 
 #endregion Copyright
 
+using System;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
+
 namespace WatiN.Core.Native.Chrome
 {
     using System.Collections.Generic;
@@ -187,6 +191,22 @@ namespace WatiN.Core.Native.Chrome
         public IEnumerable<Rectangle> GetTextBounds(string text)
         {
             throw new System.NotImplementedException();
+        }
+
+        public bool ContainsText(string text)
+        {
+            try
+            {
+                var script = string.Format("{0}.body.innerHTML.indexOf('{1}')>-1;", JavaScriptVariableName, text);
+
+                return ClientPort.WriteAndReadAsBool(script);
+            }
+            catch (JavaScriptException e)
+            {
+                Logger.LogDebug("ContainsText: " + e);
+                return false;
+            }
+
         }
     }
 }

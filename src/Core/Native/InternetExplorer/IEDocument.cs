@@ -161,6 +161,15 @@ namespace WatiN.Core.Native.InternetExplorer
 
         }
 
+        public bool ContainsText(string text)
+        {
+            var innertext = htmlDocument.body.innerText;
+
+            if (innertext == null) return false;
+
+            return innertext.IndexOf(text) >= 0 ;
+        }
+
         private static Rectangle GetTextBoundsByInsertingElement(IHTMLTxtRange textRange, IHTMLDocument2 document)
         {
             // A bit of a hack: create an HTML element around the selected

@@ -104,5 +104,14 @@ namespace WatiN.Core.Native
         /// The text bounds in screen coordinates
         /// </returns>
         IEnumerable<Rectangle> GetTextBounds(string text);
+
+        /// <summary>
+        /// Determines whether the text inside the HTML Body element contains the given <paramref name="text" />.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified text is contained in Html; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsText(string text);
     }
 }
