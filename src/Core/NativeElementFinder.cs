@@ -67,21 +67,19 @@ namespace WatiN.Core
         /// <inheritdoc />
         protected override IEnumerable<Element> FindAllImpl()
         {
-            if (Constraint.GetType() == typeof(QuerySelectorConstraint))
-                return FindElementsUsingQuerySelector();
+            var selector = GetSelector(Constraint);
+            if (selector != null) return FindElementsUsingQuerySelector(selector);
 
             var id = GetElementIdHint(Constraint);
-            if (id != null)
-                return FindElementsById(id);
+            if (id != null) return FindElementsById(id);
 
             return FindElementByTags();
         }
 
-        private IEnumerable<Element> FindElementsUsingQuerySelector()
+        private IEnumerable<Element> FindElementsUsingQuerySelector(string selector)
         {
-            var selector = (QuerySelectorConstraint)Constraint;
             var nativeElementCollection2 = (INativeElementCollection2)GetNativeElementCollection();
-            return WrapMatchingElements(nativeElementCollection2.GetElementsWithQuerySelector(selector.Selector, domContainer));
+            return WrapMatchingElements(nativeElementCollection2.GetElementsWithQuerySelector(selector, domContainer));
         }
 
         private IEnumerable<Element> FindElementByTags()
@@ -166,7 +164,12 @@ namespace WatiN.Core
         {
             return IdHinter.GetIdHint(constraint);
         }
-        
+
+        protected virtual string GetSelector(Constraint constraint)
+        {
+            return new QuerySelectorHinter(constraint).GetSelector();
+        }
+
         public static NativeElementFinder CreateNativeElementFinder<TElement>(NativeElementCollectionFactory factory, DomContainer domContainer, Constraint constraint)
         	where TElement : Element
         {

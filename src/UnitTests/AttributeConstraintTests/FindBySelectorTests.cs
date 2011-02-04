@@ -28,16 +28,16 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     [TestFixture]
     public class FindBySelectorTests :BaseWithBrowserTests
     {
-        [Test, Ignore("Work in progress")]
+        [Test]
         public void Does_this_work()
         {
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
+                                var querySelectorConstraint = new QuerySelectorConstraint("input");
 
                                 // WHEN
-                                var elements = browser.Elements.Filter(new QuerySelectorConstraint(".input"));
+                                var elements = browser.Elements.Filter(querySelectorConstraint);
 
                                 // THEN
                                 Assert.That(elements.Count, Is.EqualTo(19));
@@ -50,10 +50,10 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
+                                var querySelectorConstraint = new QuerySelectorConstraint("#popupid");
 
                                 // WHEN
-                                var element = browser.Element(new QuerySelectorConstraint("#popupid"));
+                                var element = browser.Element(querySelectorConstraint);
 
                                 // THEN
                                 Assert.That(element.Exists, Is.True);
@@ -67,10 +67,10 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
                             {
                                 // GIVEN
-                                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
+                                var querySelectorConstraint = new QuerySelectorConstraint("input");
 
                                 // WHEN
-                                var div = browser.Div(new QuerySelectorConstraint("input"));
+                                var div = browser.Div(querySelectorConstraint);
 
                                 // THEN
                                 Assert.That(div.Exists, Is.False);
@@ -83,10 +83,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
             {
                 // GIVEN
-                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
+                var querySelectorConstraint = new QuerySelectorConstraint("#popupid");
                 var containerElement = browser.Form("Form");
+
                 // WHEN
-                var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));
+                var element = containerElement.Element(querySelectorConstraint);
 
                 // THEN
                 Assert.That(element.Exists, Is.True);
@@ -100,16 +101,16 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             ExecuteTest(browser =>
             {
                 // GIVEN
-                browser.RunScript(new ScriptLoader().GetSizzleInstallScript());
+                var querySelectorConstraint = new QuerySelectorConstraint("#popupid");
                 var containerElement = browser.Form("FormInputElement");
+
                 // WHEN
-                var element = containerElement.Element(new QuerySelectorConstraint("#popupid"));
+                var element = containerElement.Element(querySelectorConstraint);
 
                 // THEN
                 Assert.That(element.Exists, Is.False);
             });
         }
-
 
         public override Uri TestPageUri
         {

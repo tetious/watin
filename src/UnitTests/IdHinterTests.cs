@@ -16,8 +16,10 @@
 
 #endregion Copyright
 
+using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using WatiN.Core.Constraints;
 
 namespace WatiN.Core.UnitTests
 {
@@ -60,6 +62,50 @@ namespace WatiN.Core.UnitTests
             {
                 return value.EndsWith(ComparisonValue);
             }
+        }
+    }
+
+    [TestFixture]
+    public class QuerySelectorHinterTests
+    {
+        [Test]
+        public void Should_return_selector_string_for_query_selector_constraint()
+        {
+            // GIVEN
+            var hinter = new QuerySelectorHinter(new QuerySelectorConstraint("#ID"));
+            
+            // WHEN
+            var selector = hinter.GetSelector();
+
+            // THEN
+            Assert.That(selector, Is.EqualTo("#ID"));
+        }
+
+        [Test]
+        public void Should_return_null_when_constraint_is_not_a_query_selector_constraint()
+        {
+            // GIVEN
+            var hinter = new QuerySelectorHinter(Find.ById("ID"));
+            
+            // WHEN
+            var selector = hinter.GetSelector();
+
+            // THEN
+            Assert.That(selector, Is.Null);
+        }
+
+        [Test]
+        public void Should_return_selector_when_constraint_is_an_and_constraint_with_a_query_selector_constraint()
+        {
+            // GIVEN
+            var constraint = Find.Any.And(new QuerySelectorConstraint("#ID"));
+            var hinter = new QuerySelectorHinter(constraint);
+            
+            // WHEN
+            var selector = hinter.GetSelector();
+
+            // THEN
+            Assert.That(selector, Is.EqualTo("#ID"));
         }
     }
 }

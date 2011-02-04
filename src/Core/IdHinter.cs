@@ -116,4 +116,35 @@ namespace WatiN.Core
             return of.HasId && (constraint.IsAllowedConstraint & !constraint.HasId);
         }
     }
+
+    public class QuerySelectorHinter
+    {
+        private readonly Constraint _constraint;
+
+        public QuerySelectorHinter(Constraint constraint)
+        {
+            _constraint = constraint;
+        }
+
+        public string GetSelector()
+        {
+            var selector = GetSelector(_constraint);
+            if (selector != null) return selector;
+
+            var andConstraing = _constraint as AndConstraint;
+            if (andConstraing != null)
+            {
+                selector = GetSelector(andConstraing.Second);
+                if (selector != null) return selector;
+            }
+
+            return null;
+        }
+
+        private static string GetSelector(Constraint constraint)
+        {
+            var qsConstraint = constraint as QuerySelectorConstraint;
+            return qsConstraint != null ? qsConstraint.Selector : null;
+        }
+    }
 }
