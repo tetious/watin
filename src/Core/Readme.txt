@@ -39,4 +39,4 @@ http://watin.sourceforge.net
 
 Enjoy testing with WatiN!
 
-Copyright Jeroen van Menen 2010
+Copyright Jeroen van Menen 2011

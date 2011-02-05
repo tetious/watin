@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2011 Jeroen van Menen
 
-//Copyright 2006-2010 Jeroen van Menen
+//Copyright 2006-2011 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -53,17 +53,21 @@ namespace WatiN.Core.DialogHandlers
 		/// <returns></returns>
         public static DialogWatcher GetDialogWatcher(IntPtr mainWindowHwnd)
 		{
-	        var window = new Window(mainWindowHwnd).ToplevelWindow;
+            var window = new Window(mainWindowHwnd);
+            Logger.LogDebug("GetDialogWatcher mainhwnd: " + window.Hwnd + ", " + window.Title);
+
+            var toplevelWindow = window.ToplevelWindow;
+            Logger.LogDebug("GetDialogWatcher mainhwnd: " + toplevelWindow.Hwnd + ", " + toplevelWindow.Title);
 
 			CleanupDialogWatcherCache();
 
-            var dialogWatcher = GetDialogWatcherFromCache(window);
+            var dialogWatcher = GetDialogWatcherFromCache(toplevelWindow);
 
 			// If no dialogwatcher exists for the ieprocessid then 
 			// create a new one, store it and return it.
 			if (dialogWatcher == null)
 			{
-                dialogWatcher = new DialogWatcher(window);
+                dialogWatcher = new DialogWatcher(toplevelWindow);
 
 				dialogWatchers.Add(dialogWatcher);
 			}

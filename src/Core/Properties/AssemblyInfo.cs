@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2011 Jeroen van Menen
 
-//Copyright 2006-2010 Jeroen van Menen
+//Copyright 2006-2011 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ using System.Runtime.CompilerServices;
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("")]
 [assembly : AssemblyProduct("WatiN")]
-[assembly : AssemblyCopyright("2006 - 2010 Jeroen van Menen")]
+[assembly : AssemblyCopyright("2006 - 2011 Jeroen van Menen")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 

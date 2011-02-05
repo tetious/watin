@@ -1,6 +1,6 @@
-#region WatiN Copyright (C) 2006-2010 Jeroen van Menen
+#region WatiN Copyright (C) 2006-2011 Jeroen van Menen
 
-//Copyright 2006-2010 Jeroen van Menen
+//Copyright 2006-2011 Jeroen van Menen
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 using System;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.DialogHandlers
@@ -44,6 +45,12 @@ namespace WatiN.Core.DialogHandlers
 		/// <inheritdoc />
 		public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
 		{
+//		    var mainWindow = new Window(mainWindowHwnd);
+//		    Logger.LogDebug("Main: " + mainWindow.Hwnd + ", " + mainWindow.Title);
+//		    Logger.LogDebug("window.TopLevelWindow: " + window.ToplevelWindow.Hwnd + ", " + window.ToplevelWindow.Title);
+//
+//            if (!window.ToplevelWindow.Equals(mainWindow)) return false;
+            
             return CanHandleDialog(window);
 		}
 
