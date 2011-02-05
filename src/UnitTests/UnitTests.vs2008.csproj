@@ -1,0 +1,496 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D6E231B3-28D9-4F73-9586-738FB528B4DB}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>WatiN.Core.UnitTests</AssemblyName>
+    <AssemblyOriginatorKeyFile>..\WatiN.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WatiN.Core.UnitTests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>0.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/WatiN.Core.UnitTests/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug %28.Net 2.0%29|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591,618</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release %28.Net 2.0%29|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NET20</DefineConstants>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591,618</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ChromeTesting|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET35;IncludeChromeInUnitTesting</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <NoWarn>1591,618</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug %28.Net 3.5%29|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <NoWarn>1591,618</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release %28.Net 3.5%29|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;NET35</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DocumentationFile>bin\WatiN.Core.UnitTests.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <NoWarn>1591,618</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Net\3.5\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml">
+      <HintPath>..\..\lib\Net\3.5\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=2.6.1014.1, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Net\3.5\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Net\3.5\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Name>Core</Name>
+      <Project>{217E2D34-F6DF-431B-AC5A-B368F481A530}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="html\html_with_object_tag.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="WatiN.Core.UnitTests.dll.config" />
+    <Compile Include="AreaTests.cs" />
+    <Compile Include="AttributeConstraintTests\FindBySelectorTests.cs" />
+    <Compile Include="BaseDialogHandlerTests.cs" />
+    <Compile Include="ControlCollectionTests.cs" />
+    <Compile Include="ControlTests.cs" />
+    <Compile Include="ComponentExtensionsTests.cs" />
+    <Compile Include="ElementFactoryTests.cs" />
+    <Compile Include="ElementOfTypeTests.cs" />
+    <Compile Include="HtmlColorTests.cs" />
+    <Compile Include="ListItemTests.cs" />
+    <Compile Include="ListTests.cs" />
+    <Compile Include="Logging\BaseLogWriterTests.cs" />
+    <Compile Include="Logging\LoggerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\IETests\IEWaitForCompleteTests.cs" />
+    <Compile Include="Native\IETests\JScriptElementArrayEnumaratorTests.cs" />
+    <Compile Include="PageTests.cs" />
+    <Compile Include="DialogHandlerTests\CloseIEDialogHandlerTests.cs" />
+    <Compile Include="DialogHandlerTests\DialogHandlerHelperTests.cs" />
+    <Compile Include="IdHinterTests.cs" />
+    <Compile Include="Native\ChromeTests\ChromeBrowserTestManager.cs" />
+    <Compile Include="Native\ChromeTests\ChromeTests.cs" />
+    <Compile Include="ActionTests\HighlightActionTests.cs" />
+    <Compile Include="NativeElementFinderTests.cs" />
+    <Compile Include="Native\JSElementCollectionBaseTests.cs" />
+    <Compile Include="Native\Windows\NativeMethodsTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\BaseConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ComplexMultipleAttributeConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ElementConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\EvenMoreComplexMultipleAttributeConstraintsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\FindByMultipleAttributeConstraintsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\IndexConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\NotConstraintTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AttributeConstraintTests\ProximityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseElementCollectionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\IETests\ShellWindows2Tests.cs" />
+    <Compile Include="ResearchTests\FluentFindSyntax.cs" />
+    <Compile Include="ResearchTests\FluentWatiNSyntax.cs" />
+    <Compile Include="ResearchTests\JavascriptErrorDetection.cs" />
+    <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
+    <Compile Include="ResearchTests\ScriptLoaderTests.cs" />
+    <Compile Include="TestUtils\BaseWatiNTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestUtils\BaseWithBrowserTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BrowserTests.cs" />
+    <Compile Include="ButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CheckBoxTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\BoolComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\PredicateComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\RegexComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringContainsAndCaseInsensitiveComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\StringEqualsAndCaseInsensitiveComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparerTests\UriComparerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultSettingsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\AlertAndConfirmDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\AlertDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ConfirmDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\DialogWatcherTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\FileDownloadHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\LogonDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ModalPopupExtenderTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\PromptDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\ReturnJavaDialogHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\SecurityDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\SimpleJavaDialogHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\VbScriptMsgBoxHandlerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DialogHandlerTests\WinButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DivTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DomContainerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DotNet35Tests.cs" />
+    <Compile Include="ElementStyleTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElementTagTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElementTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\FireFoxTests\FFBrowserTestManager.cs" />
+    <Compile Include="FileUploadTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FindTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\FireFoxTests\FireFoxTests.cs" />
+    <Compile Include="FormTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FrameCrossDomainTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FramesetWithinFrameSetTests.cs" />
+    <Compile Include="FrameTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HTMLDialogFindByTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HTMLDialogTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestUtils\IBrowserTestManager.cs" />
+    <Compile Include="Native\IETests\IEBrowserTestManager.cs" />
+    <Compile Include="TestUtils\HtmlInjector.cs" />
+    <Compile Include="Native\IETests\IETests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\IETests\IEDocumentTests.cs" />
+    <Compile Include="IFramesTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LabelTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestUtils\MockAttributeBag.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NoFramesTest.cs" />
+    <Compile Include="ParaTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RadioButtonTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SelectListTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SettingsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SpanTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestUtils\StealthSettings.cs" />
+    <Compile Include="TableBodyTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableCellTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableRowTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextFieldTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UtilityClasses\CaptureWebPageToFileTests.cs" />
+    <Compile Include="UtilityClasses\LazyListTests.cs" />
+    <Compile Include="UtilityClasses\TryActionUntilTimeOutTests.cs" />
+    <Compile Include="UtilityClasses\UtilityClassTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WatiNSanityTests.cs" />
+    <Content Include="html\BodyNotExistsBug.htm" />
+    <Content Include="html\ButtonTests.html" />
+    <Content Include="html\ClassConstraintTests.html" />
+    <Content Include="html\ListTests.html" />
+    <Content Include="html\CrossDomainFrameset.html" />
+    <Content Include="html\formsubmit.html" />
+    <Content Include="html\Frameset.html" />
+    <Content Include="html\FramesetWithinFrameset.html" />
+    <Content Include="html\iframes\leftpage.html" />
+    <Content Include="html\iframes\main.html" />
+    <Content Include="html\iframes\middlepage.html" />
+    <Content Include="html\iframes\rightpage.html" />
+    <Content Include="html\images.html" />
+    <Content Include="html\images\watin.jpg" />
+    <Content Include="html\images\watinwebsite.jpg" />
+    <Content Include="html\Index.html" />
+    <Content Include="html\intro.html" />
+    <Content Include="html\main.html" />
+    <Content Include="html\OnBeforeUnloadJavaDialog.html" />
+    <Content Include="html\openNewWindow.html" />
+    <Content Include="html\openNewWindowTarget.html" />
+    <Content Include="html\popup.html" />
+    <Content Include="html\ProximityTests.html" />
+    <Content Include="html\styletests\Style.html" />
+    <Content Include="html\styletests\style.css" />
+    <Content Include="html\Tables.html" />
+    <Content Include="html\TestEvents.html" />
+    <Content Include="html\theApp.html" />
+    <Content Include="html\~^+{}[]%28%29.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
