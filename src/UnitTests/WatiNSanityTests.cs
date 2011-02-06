@@ -80,7 +80,7 @@ namespace WatiN.Core.UnitTests
                 
                 fail = true;
                 Console.WriteLine(htmlFile);
-                Console.WriteLine(@"Not properly terminated with \r\n (cr\lf) but was " + crlf);
+                Console.WriteLine(@"Not properly terminated with \r\n (cr\lf) but was " + crlf + ". Make sure the file is ANSI formatted");
             }
 
             Assert.That(fail, Is.False, "Not all test html files are correctly Marked Of The Web. Make sure the files are ANSI encoded.");

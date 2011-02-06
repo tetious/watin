@@ -44,7 +44,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.0.40.1129")]
-[assembly: AssemblyFileVersion("2.0.40.1129")]
+[assembly: AssemblyVersion("2.0.50.1179")]
+[assembly: AssemblyFileVersion("2.0.50.1179")]
 
 [assembly: InternalsVisibleTo("WatiN.Core.UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010001006372f903104d40cc57cd3a5e9f4834ea462b48833f5da033f7869906191afd8bd9b11b477fb3d473861659dee2f5a8dcf8b019393b0a90b5563fb414f335565020da99801a9b24708af8846b390fbc21b16fc8bd40c68a260cfec718c171eb5123bd6c8b27f1b7cfa8658310f21d297a41cf85e9f41d7a8b6611d7c90575fcd8")]
