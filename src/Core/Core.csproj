@@ -120,7 +120,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug %28.Net 4.0%29|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -137,7 +137,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release %28.Net 4.0%29|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;NET35</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
     <Optimize>true</Optimize>
