@@ -259,7 +259,7 @@ namespace WatiN.Core
             var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeOut))
             {
                 SleepTime = TimeSpan.FromMilliseconds(50),
-                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain text '{1}'.", Settings.WaitUntilExistsTimeOut, text)
+                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain text '{1}'.", timeOut, text)
             };
             tryActionUntilTimeOut.Try(() => ContainsText(text));
         }
@@ -290,7 +290,7 @@ namespace WatiN.Core
             var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(timeOut))
             {
                 SleepTime = TimeSpan.FromMilliseconds(50),
-                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain regex '{1}'.", Settings.WaitUntilExistsTimeOut, regex)
+                ExceptionMessage = () => string.Format("waiting {0} seconds for document to contain regex '{1}'.", timeOut, regex)
             };
             tryActionUntilTimeOut.Try(() => ContainsText(regex));
         }
