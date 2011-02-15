@@ -17,11 +17,12 @@
 #endregion Copyright
 
 using System;
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.Constraints;
 using WatiN.Core.UnitTests.TestUtils;
-using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.UnitTests.AttributeConstraintTests
 {
@@ -111,6 +112,21 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                 Assert.That(element.Exists, Is.False);
             });
         }
+
+        [Test]
+        public void Should_return_selector_string_when_calling_WriteDescriptionTo()
+        {
+            // GIVEN
+            var constraint = new QuerySelectorConstraint(".Return >this");
+            var sb = new StringBuilder();
+
+            // WHEN
+            constraint.WriteDescriptionTo(new StringWriter(sb));
+
+            // THEN
+            Assert.That(sb.ToString(), Is.EqualTo("Selector = '.Return >this'"));
+        }
+
 
         public override Uri TestPageUri
         {

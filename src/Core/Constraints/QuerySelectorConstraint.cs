@@ -33,7 +33,7 @@ namespace WatiN.Core.Constraints
 
         public override void WriteDescriptionTo(TextWriter writer)
         {
-            throw new NotImplementedException();
+            writer.Write("Selector = '{0}'", Selector);
         }
 
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
