@@ -586,9 +586,41 @@ namespace WatiN.Core.Native
         /// <param name="WaitForEventToComplete"></param>
         private void ExecuteEvent(string eventName, NameValueCollection eventProperties, bool WaitForEventToComplete)
         {
+            var creator = new JSEventCreator(ElementReference, ClientPort);
+            var command = creator.CreateEvent(eventName, eventProperties, WaitForEventToComplete);
+
+            ClientPort.WriteAndReadAsBool(command);
+            Thread.Sleep(30);
+        }
+
+        /// <summary>
+        /// This changes/pins the java script variable name <see cref="ElementReference"/> which is used to 
+        /// execute commands on FireFox. 
+        /// </summary>
+        public void Pin()
+        {
+            var elementVariableName = ClientPort.CreateVariableName();
+            ClientPort.Write("{0}={1};", elementVariableName, ElementReference);
+
+            ElementReference = elementVariableName;
+        }
+    }
+
+    public class JSEventCreator
+    {
+        private readonly string _elementReference;
+        private readonly ClientPortBase _clientPortBase;
+
+        public JSEventCreator(string elementReference, ClientPortBase clientPortBase)
+        {
+            _elementReference = elementReference;
+            _clientPortBase = clientPortBase;
+        }
+
+        public string CreateEvent(string eventName, NameValueCollection eventProperties, bool WaitForEventToComplete)
+        {
             // See http://www.howtocreate.co.uk/tutorials/javascript/domevents
             // for more info about manually firing events
-
             var eventname = CleanupEventName(eventName);
 
             string command;
@@ -607,15 +639,13 @@ namespace WatiN.Core.Native
             }
 
 
-            command += "var res = " + ElementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
+            command += "var res = " + _elementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
 
             if (WaitForEventToComplete == false)
             {
                 command = JSUtils.WrapCommandInTimer(command);
             }
-            
-            ClientPort.WriteAndReadAsBool(command);
-            Thread.Sleep(30);
+            return command;
         }
 
         private static string CleanupEventName(string eventName)
@@ -631,7 +661,7 @@ namespace WatiN.Core.Native
 
         private string CreateHTMLEventCommand(string eventname)
         {
-            return "var event = " +  ElementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
+            return "var event = " + _elementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
                    "event.initEvent(\"" + eventname + "\",true,true);";
         }
 
@@ -640,7 +670,7 @@ namespace WatiN.Core.Native
             // Params for the initMouseEvent:
             // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
 
-            return "var event = " + ElementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
+            return "var event = " + _elementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
                    "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
         }
 
@@ -648,10 +678,10 @@ namespace WatiN.Core.Native
         {
             var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
             var charCode = GetEventPropertyValue(eventProperties, "charCode", "0");
-                        
+
             var eventCommand = string.Empty;
 
-            switch (ClientPort.JavaScriptEngine)
+            switch (_clientPortBase.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
                     // HACK: Webkit doesn't seem to support manually firing keyboard events, 
@@ -659,11 +689,11 @@ namespace WatiN.Core.Native
                     // We get around this by manually appending the value to the element between keydown and keypress.
                     if (eventname == "keypress")
                     {
-                        eventCommand = "if(" + ElementReference + ".type==\"text\"){" + ElementReference
+                        eventCommand = "if(" + _elementReference + ".type==\"text\"){" + _elementReference
                                        + ".value+=\"" + Convert.ToChar(Convert.ToInt32(keyCode)) + "\";};";
                     }
 
-                    eventCommand += "var event = " + ElementReference + ".ownerDocument.createEvent(\"Events\");" +
+                    eventCommand += "var event = " + _elementReference + ".ownerDocument.createEvent(\"Events\");" +
                         "event.initEvent('" + eventname + "', true, true);event.keyCode=" + keyCode + ";";
                     break;
                 case JavaScriptEngineType.Mozilla:
@@ -676,13 +706,13 @@ namespace WatiN.Core.Native
 
                     // Params for the initKeyEvent:
                     // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
-                    eventCommand = "var event = " + ElementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                    eventCommand = "var event = " + _elementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
                         "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
                     break;
                 default:
-                    throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this.ClientPort.JavaScriptEngine));
+                    throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this._clientPortBase.JavaScriptEngine));
             }
-            
+
             return eventCommand;
         }
 
@@ -700,16 +730,5 @@ namespace WatiN.Core.Native
             return defaultValue;
         }
 
-        /// <summary>
-        /// This changes/pins the java script variable name <see cref="ElementReference"/> which is used to 
-        /// execute commands on FireFox. 
-        /// </summary>
-        public void Pin()
-        {
-            var elementVariableName = ClientPort.CreateVariableName();
-            ClientPort.Write("{0}={1};", elementVariableName, ElementReference);
-
-            ElementReference = elementVariableName;
-        }
     }
 }

@@ -196,6 +196,7 @@
     <Compile Include="Logging\LoggerTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Native\FireFoxTests\FireEventTests.cs" />
     <Compile Include="Native\IETests\IEWaitForCompleteTests.cs" />
     <Compile Include="Native\IETests\JScriptElementArrayEnumaratorTests.cs" />
     <Compile Include="PageTests.cs" />
