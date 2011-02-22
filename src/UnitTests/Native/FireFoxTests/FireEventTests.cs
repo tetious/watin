@@ -111,6 +111,42 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
             Assert.That(command, Is.Not.Null, "Expected code");
             Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"KeyboardEvent\");event.initKeyEvent('keydown',bubbles,cancelable,windowObject,ctrlKey,altKey,shiftKey,metaKey,keyCode,charCode);"), "Unexpected method signature");
         }
+
+        [Test]
+        public void Should_create_javascript_code_to_call_any_non_key_mouse_event_with_params_set()
+        {
+            // GIVEN
+            var eventParams = new NameValueCollection
+                {
+                    {"notused", "notused"},
+                    {"bubbles", "bubbles"},
+                    {"cancelable", "cancelable"},
+                };
+            
+            var creator = new JSEventCreator("test", new ClientPortMock(JavaScriptEngineType.Mozilla));
+
+            // WHEN
+            var command = creator.CreateEvent("focus", eventParams, true);
+
+            // THEN
+            Assert.That(command, Is.Not.Null, "Expected code");
+            Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"HTMLEvents\");event.initEvent('focus',bubbles,cancelable);var res = test.dispatchEvent(event); if(res){true;}else{false;};"), "Unexpected method signature");
+        }
+
+        [Test]
+        public void Should_create_javascript_code_to_call_any_non_key_mouse_event_with_the_defaults()
+        {
+            // GIVEN
+            var creator = new JSEventCreator("test", new ClientPortMock(JavaScriptEngineType.Mozilla));
+
+            // WHEN
+            var command = creator.CreateEvent("focus", new NameValueCollection { }, true);
+
+            // THEN
+            Assert.That(command, Is.Not.Null, "Expected code");
+            Console.WriteLine(command);
+            Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"HTMLEvents\");event.initEvent('focus',true,true);var res = test.dispatchEvent(event); if(res){true;}else{false;};"), "Unexpected method signature");
+        }
     }
 
     public class ClientPortMock : ClientPortBase

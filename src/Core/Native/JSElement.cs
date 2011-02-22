@@ -635,7 +635,7 @@ namespace WatiN.Core.Native
             }
             else
             {
-                command = CreateHTMLEventCommand(eventname);
+                command = CreateHTMLEventCommand(eventname, eventProperties);
             }
 
             command += "var res = " + _elementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
@@ -651,17 +651,16 @@ namespace WatiN.Core.Native
         {
             var eventname = eventName.ToLowerInvariant();
 
-            if (eventname.StartsWith("on"))
-            {
-                eventname = eventname.Substring(2);
-            }
-            return eventname;
+            return eventname.StartsWith("on")? eventname.Substring(2): eventname;
         }
 
-        private string CreateHTMLEventCommand(string eventname)
+        public string CreateHTMLEventCommand(string eventname, NameValueCollection eventProperties)
         {
+            var eventParams = GetEventPropertyValue(eventProperties, "bubbles", "true") + ","
+                              + GetEventPropertyValue(eventProperties, "cancelable", "true");
+
             return "var event = " + _elementReference + ".ownerDocument.createEvent(\"HTMLEvents\");" +
-                   "event.initEvent(\"" + eventname + "\",true,true);";
+                   "event.initEvent('" + eventname + "',"+ eventParams + ");";
         }
 
         public string CreateMouseEventCommand(string eventname, NameValueCollection eventProperties)
