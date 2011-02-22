@@ -691,8 +691,6 @@ namespace WatiN.Core.Native
 
         private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
         {
-            var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
-            var charCode = GetEventPropertyValue(eventProperties, "charCode", "0");
 
             var eventCommand = string.Empty;
 
@@ -702,6 +700,8 @@ namespace WatiN.Core.Native
                     // HACK: Webkit doesn't seem to support manually firing keyboard events, 
                     // event listeners will get fired for the key events, but the event target seems to ignore it.
                     // We get around this by manually appending the value to the element between keydown and keypress.
+                    var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
+                
                     if (eventname == "keypress")
                     {
                         eventCommand = "if(" + _elementReference + ".type==\"text\"){" + _elementReference
@@ -714,7 +714,7 @@ namespace WatiN.Core.Native
                 case JavaScriptEngineType.Mozilla:
                     // After a lot of searching it seems that keyCode is not supported in keypress event
                     // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
-                    eventCommand = CreateKeyboardEventForMozilla(eventname, keyCode, charCode);
+                    eventCommand = CreateKeyboardEventForMozilla(eventname, eventProperties);
                     break;
                 default:
                     throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this._clientPortBase.JavaScriptEngine));
@@ -723,19 +723,25 @@ namespace WatiN.Core.Native
             return eventCommand;
         }
 
-        private string CreateKeyboardEventForMozilla(string eventname, string keyCode, string charCode)
+        public string CreateKeyboardEventForMozilla(string eventname, NameValueCollection eventProperties)
         {
-            string eventCommand;
-            if (eventname == "keypress")
-            {
-                keyCode = "0";
-            }
+            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
+            var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
+            if (eventname == "keypress") { keyCode = "0"; }
+
+            var eventParams = GetEventPropertyValue(eventProperties, "bubbles", "true") + ","
+                              + GetEventPropertyValue(eventProperties, "cancelable", "true") + ","
+                              + GetEventPropertyValue(eventProperties, "windowObject", "null") + ","
+                              + GetEventPropertyValue(eventProperties, "ctrlKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "altKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "shiftKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "metaKey", "false") + ","
+                              + keyCode + ","
+                              + GetEventPropertyValue(eventProperties, "charCode", "0");
 
             // Params for the initKeyEvent:
-            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
-            eventCommand = "var event = " + _elementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
-                           "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
-            return eventCommand;
+            return "var event = " + _elementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                   "event.initKeyEvent('" + eventname + "'," + eventParams + ");";
         }
 
         private static string GetEventPropertyValue(NameValueCollection eventProperties, string propertyName, string defaultValue)

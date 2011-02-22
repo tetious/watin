@@ -20,7 +20,6 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
 
             // THEN
             Assert.That(command, Is.Not.Null, "Expected code");
-            Console.WriteLine(command);
             Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"MouseEvents\");event.initMouseEvent('mousedown',true,true,null,0,0,0,0,0,false,false,false,false,0,null);var res = test.dispatchEvent(event); if(res){true;}else{false;};"), "Unexpected method signature");
         }
 
@@ -35,7 +34,6 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
 
             // THEN
             Assert.That(command, Is.Not.Null, "Expected code");
-            Console.WriteLine(command);
             Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"MouseEvents\");event.initMouseEvent('click',true,true,null,0,0,0,0,0,false,false,false,false,0,null);var res = test.dispatchEvent(event); if(res){true;}else{false;};"), "Unexpected method signature");
         }
 
@@ -69,13 +67,63 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
 
             // THEN
             Assert.That(command, Is.Not.Null, "Expected code");
-            Console.WriteLine(command);
             Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"MouseEvents\");event.initMouseEvent('mousedown',bubbles,cancelable,windowObject,detail,screenX,screenY,clientX,clientY,ctrlKey,altKey,shiftKey,metaKey,button,relatedTarget);"), "Unexpected method signature");
+        }
+
+        [Test]
+        public void Should_create_javascript_code_to_call_key_event_with_the_defaults()
+        {
+            // GIVEN
+            var creator = new JSEventCreator("test", new ClientPortMock(JavaScriptEngineType.Mozilla));
+
+            // WHEN
+            var command = creator.CreateEvent("onkeydown", new NameValueCollection { }, true);
+
+            // THEN
+            Assert.That(command, Is.Not.Null, "Expected code");
+            Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"KeyboardEvent\");event.initKeyEvent('keydown',true,true,null,false,false,false,false,0,0);var res = test.dispatchEvent(event); if(res){true;}else{false;};"), "Unexpected method signature");
+        }
+
+        [Test]
+        public void Should_create_key_event_with_params_set()
+        {
+            // GIVEN
+            var eventParams = new NameValueCollection
+                {
+                    {"type", "type"},
+                    {"bubbles", "bubbles"},
+                    {"cancelable", "cancelable"},
+                    {"windowObject", "windowObject"},
+                    {"ctrlKey", "ctrlKey"},
+                    {"altKey", "altKey"},
+                    {"shiftKey", "shiftKey"},
+                    {"metaKey", "metaKey"},
+                    {"keyCode", "keyCode"},
+                    {"charCode", "charCode"}
+                };
+
+            var creator = new JSEventCreator("test", new ClientPortMock());
+
+            // WHEN
+            var command = creator.CreateKeyboardEventForMozilla("keydown", eventParams);
+
+            // THEN
+            Assert.That(command, Is.Not.Null, "Expected code");
+            Assert.That(command, Is.EqualTo("var event = test.ownerDocument.createEvent(\"KeyboardEvent\");event.initKeyEvent('keydown',bubbles,cancelable,windowObject,ctrlKey,altKey,shiftKey,metaKey,keyCode,charCode);"), "Unexpected method signature");
         }
     }
 
     public class ClientPortMock : ClientPortBase
     {
+        private readonly JavaScriptEngineType _javaScriptEngineType;
+
+        public ClientPortMock(){}
+
+        public ClientPortMock(JavaScriptEngineType javaScriptEngineType)
+        {
+            _javaScriptEngineType = javaScriptEngineType;
+        }
+
         #region Overrides of ClientPortBase
 
         public override string DocumentVariableName
@@ -85,7 +133,7 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
 
         public override JavaScriptEngineType JavaScriptEngine
         {
-            get { throw new NotImplementedException(); }
+            get { return _javaScriptEngineType; }
         }
 
         public override string BrowserVariableName
