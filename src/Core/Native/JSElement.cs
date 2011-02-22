@@ -690,44 +690,46 @@ namespace WatiN.Core.Native
 
         private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
         {
-
-            var eventCommand = string.Empty;
-
             switch (_clientPortBase.JavaScriptEngine)
             {
                 case JavaScriptEngineType.WebKit:
-                    // HACK: Webkit doesn't seem to support manually firing keyboard events, 
-                    // event listeners will get fired for the key events, but the event target seems to ignore it.
-                    // We get around this by manually appending the value to the element between keydown and keypress.
-                    var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
-                
-                    if (eventname == "keypress")
-                    {
-                        eventCommand = "if(" + _elementReference + ".type==\"text\"){" + _elementReference
-                                       + ".value+=\"" + Convert.ToChar(Convert.ToInt32(keyCode)) + "\";};";
-                    }
-
-                    eventCommand += "var event = " + _elementReference + ".ownerDocument.createEvent(\"Events\");" +
-                        "event.initEvent('" + eventname + "', true, true);event.keyCode=" + keyCode + ";";
-                    break;
+                    return CreateKeyEventForWebkit(eventProperties, eventname);
                 case JavaScriptEngineType.Mozilla:
-                    // After a lot of searching it seems that keyCode is not supported in keypress event
-                    // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
-                    eventCommand = CreateKeyboardEventForMozilla(eventname, eventProperties);
-                    break;
+                    return CreateKeyboardEventForMozilla(eventname, eventProperties);
                 default:
                     throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this._clientPortBase.JavaScriptEngine));
             }
+        }
 
+        private string CreateKeyEventForWebkit(NameValueCollection eventProperties, string eventname)
+        {
+            // HACK: Webkit doesn't seem to support manually firing keyboard events, 
+            // event listeners will get fired for the key events, but the event target seems to ignore it.
+            // We get around this by manually appending the value to the element between keydown and keypress.
+            var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
+
+            var eventCommand = string.Empty;
+
+            if (eventname == "keypress")
+            {
+                eventCommand = "if(" + _elementReference + ".type==\"text\"){" + _elementReference
+                               + ".value+=\"" + Convert.ToChar(Convert.ToInt32(keyCode)) + "\";};";
+            }
+
+            eventCommand += "var event = " + _elementReference + ".ownerDocument.createEvent(\"Events\");" +
+                            "event.initEvent('" + eventname + "', true, true);event.keyCode=" + keyCode + ";";
             return eventCommand;
         }
 
         public string CreateKeyboardEventForMozilla(string eventname, NameValueCollection eventProperties)
         {
-            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
+            // After a lot of searching it seems that keyCode is not supported in keypress event
+            // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
+
             var keyCode = GetEventPropertyValue(eventProperties, "keyCode", "0");
             if (eventname == "keypress") { keyCode = "0"; }
 
+            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
             var eventParams = GetEventPropertyValue(eventProperties, "bubbles", "true") + ","
                               + GetEventPropertyValue(eventProperties, "cancelable", "true") + ","
                               + GetEventPropertyValue(eventProperties, "windowObject", "null") + ","
