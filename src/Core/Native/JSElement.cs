@@ -627,7 +627,7 @@ namespace WatiN.Core.Native
 
             if (eventname.Contains("mouse") || eventname == "click")
             {
-                command = CreateMouseEventCommand(eventname);
+                command = CreateMouseEventCommand(eventname, eventProperties);
             }
             else if (eventname.Contains("key"))
             {
@@ -637,7 +637,6 @@ namespace WatiN.Core.Native
             {
                 command = CreateHTMLEventCommand(eventname);
             }
-
 
             command += "var res = " + _elementReference + ".dispatchEvent(event); if(res){true;}else{false;};";
 
@@ -665,13 +664,29 @@ namespace WatiN.Core.Native
                    "event.initEvent(\"" + eventname + "\",true,true);";
         }
 
-        private string CreateMouseEventCommand(string eventname)
+        public string CreateMouseEventCommand(string eventname, NameValueCollection eventProperties)
         {
             // Params for the initMouseEvent:
             // 'type', bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget )
+            // '', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null;
+            var eventParams = GetEventPropertyValue(eventProperties, "bubbles", "true") + ","
+                              + GetEventPropertyValue(eventProperties, "cancelable", "true") + ","
+                              + GetEventPropertyValue(eventProperties, "windowObject", "null") + ","
+                              + GetEventPropertyValue(eventProperties, "detail", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "screenX", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "screenY", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "clientX", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "clientY", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "ctrlKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "altKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "shiftKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "metaKey", "false") + ","
+                              + GetEventPropertyValue(eventProperties, "button", "0") + ","
+                              + GetEventPropertyValue(eventProperties, "relatedTarget", "null"); 
 
             return "var event = " + _elementReference + ".ownerDocument.createEvent(\"MouseEvents\");" +
-                   "event.initMouseEvent('" + eventname + "', true, true, null, 0, 0, 0, 0, 0, false, false, false, false, 0, null );";
+                   "event.initMouseEvent('" + eventname + "'," + eventParams + ");";
+
         }
 
         private string CreateKeyEventCommand(string eventname, NameValueCollection eventProperties)
@@ -699,20 +714,27 @@ namespace WatiN.Core.Native
                 case JavaScriptEngineType.Mozilla:
                     // After a lot of searching it seems that keyCode is not supported in keypress event
                     // found out wierd behavior cause keyCode = 116 (="t") resulted in a page refresh. 
-                    if (eventname == "keypress")
-                    {
-                        keyCode = "0";
-                    }
-
-                    // Params for the initKeyEvent:
-                    // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
-                    eventCommand = "var event = " + _elementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
-                        "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
+                    eventCommand = CreateKeyboardEventForMozilla(eventname, keyCode, charCode);
                     break;
                 default:
                     throw new NotImplementedException(string.Format("CreateKeyEventCommand not implemented for javascript engine {0}", this._clientPortBase.JavaScriptEngine));
             }
 
+            return eventCommand;
+        }
+
+        private string CreateKeyboardEventForMozilla(string eventname, string keyCode, string charCode)
+        {
+            string eventCommand;
+            if (eventname == "keypress")
+            {
+                keyCode = "0";
+            }
+
+            // Params for the initKeyEvent:
+            // 'type', bubbles, cancelable, windowObject, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode
+            eventCommand = "var event = " + _elementReference + ".ownerDocument.createEvent(\"KeyboardEvent\");" +
+                           "event.initKeyEvent('" + eventname + "', true, true, null, false, false, false, false, " + keyCode + ", " + charCode + " );";
             return eventCommand;
         }
 
