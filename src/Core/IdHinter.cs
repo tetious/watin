@@ -144,7 +144,7 @@ namespace WatiN.Core
         private static string GetSelector(Constraint constraint)
         {
             var qsConstraint = constraint as QuerySelectorConstraint;
-            return qsConstraint != null ? qsConstraint.Selector : null;
+            return qsConstraint != null ? qsConstraint.EncodedSelector : null;
         }
     }
 }

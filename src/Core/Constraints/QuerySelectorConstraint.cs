@@ -31,6 +31,8 @@ namespace WatiN.Core.Constraints
 
         public string Selector { get; private set; }
 
+        public string EncodedSelector { get { return Selector.Replace("'", "\\'"); } }
+
         public override void WriteDescriptionTo(TextWriter writer)
         {
             writer.Write("Selector = '{0}'", Selector);

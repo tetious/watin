@@ -19,9 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using mshtml;
-using WatiN.Core.Properties;
 using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.Native.InternetExplorer

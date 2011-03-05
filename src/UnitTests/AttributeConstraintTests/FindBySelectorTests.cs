@@ -30,7 +30,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
     public class FindBySelectorTests :BaseWithBrowserTests
     {
         [Test]
-        public void Does_this_work()
+        public void Should_filter_input_elements_with_given_selector_filter()
         {
             ExecuteTest(browser =>
                             {
@@ -110,6 +110,54 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
                 // THEN
                 Assert.That(element.Exists, Is.False);
+            });
+        }
+
+        [Test]
+        public void Should_be_able_to_use_single_quotes_in_selector_string()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var querySelectorConstraint = new QuerySelectorConstraint("input[name='textinput1']");
+
+                // WHEN
+                var element = browser.Element(querySelectorConstraint);
+
+                // THEN
+                Assert.That(element.Exists, Is.True);
+            });
+        }
+
+        [Test]
+        public void Should_be_able_to_use_escaped_single_quotes_in_selector_string()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var querySelectorConstraint = new QuerySelectorConstraint("input[name=\'textinput1\']");
+
+                // WHEN
+                var element = browser.Element(querySelectorConstraint);
+
+                // THEN
+                Assert.That(element.Exists, Is.True);
+            });
+        }
+
+        [Test]
+        public void Should_be_able_to_use_double_quotes_in_selector_string()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var querySelectorConstraint = new QuerySelectorConstraint("input[name=\"textinput1\"]");
+
+                // WHEN
+                var element = browser.Element(querySelectorConstraint);
+
+                // THEN
+                Assert.That(element.Exists, Is.True);
             });
         }
 

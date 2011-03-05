@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WatiN.Core.Constraints;
 using WatiN.Core.Exceptions;
-using WatiN.Core.Logging;
 using WatiN.Core.Native;
 using WatiN.Core.UtilityClasses;
 
@@ -325,9 +324,7 @@ namespace WatiN.Core
 			get
 			{
 				var activeElement = NativeDocument.ActiveElement;
-			    if (activeElement == null) return null;
-			    
-                return ElementFactory.CreateElement(domContainer, activeElement);
+			    return activeElement == null ? null : ElementFactory.CreateElement(domContainer, activeElement);
 			}
 		}
 
@@ -399,7 +396,7 @@ namespace WatiN.Core
 		/// <param name="language">The language.</param>
         public virtual void RunScript(string scriptCode, string language)
 		{
-		    NativeDocument.RunScript(scriptCode, language);
+            NativeDocument.RunScript(scriptCode, language);
 		}
 
 		/// <summary>
