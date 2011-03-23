@@ -897,13 +897,41 @@ namespace WatiN.Core
 		/// <param name="labelText">The text of the label element</param>
 		/// <returns><see cref="LabelTextConstraint"/></returns>
 		/// <example>
-		/// This will look for a tet field that has a label element with the innerText "User Name:"
-		/// <code>TextField = ie.TextField(Find.ByLabelText("User Name:"));</code>
+		/// This will look for a checkbox that has a label element with the innerText "User enabled"
+		/// <code>var checkbox = ie.CheckBox(Find.ByLabelText("User Name:"));</code>
 		/// </example>
 		public static LabelTextConstraint ByLabelText(string labelText) 
 		{
 			return new LabelTextConstraint(labelText);
 		}
+
+        /// <summary>
+        /// Finds a form element by looking for the &lt;label&gt; associated with it by searching the label text.
+        /// </summary>
+        /// <param name="labelText">The regular expression that should match the text of the label element</param>
+        /// <returns><see cref="LabelTextConstraint"/></returns>
+        /// <example>
+        /// This will look for a checkbox that has a label element with innerText starting with "User"
+        /// <code>var checkbox = ie.CheckBox(Find.ByLabelText(new Regex("^User")));</code>
+        /// </example>
+        public static Constraint ByLabelText(Regex labelText)
+        {
+            return new LabelTextConstraint(labelText);
+        }
+
+        /// <summary>
+        /// Finds a form element by looking for the &lt;label&gt; associated with it by searching the label text.
+        /// </summary>
+        /// <param name="predicate">The predicate method to call to make the comparison.</param>
+        /// <returns><see cref="LabelTextConstraint"/></returns>
+        /// <example>
+        /// This will look for a checkbox that has a label element with innerText starting with "User"
+        /// <code>var checkbox = ie.CheckBox(Find.ByLabelText(text => text !=null &amp;&amp; text.StartsWith("User")));</code>
+        /// </example>
+        public static AttributeConstraint ByLabelText(Predicate<string> predicate)
+        {
+            return new LabelTextConstraint(predicate);
+        }
 
 		/// <summary>
 		/// Finds an element by its default characteristics as defined by <see cref="Settings.FindByDefaultFactory" />.

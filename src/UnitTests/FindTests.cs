@@ -812,7 +812,101 @@ namespace WatiN.Core.UnitTests
 
 		                    });
 		}
-		
+
+        [Test]
+        public void Should_find_checkbox_contained_in_label_element_by_label_text()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                
+                var labelText = browser.CheckBox("Checkbox21").Parent.Text;
+
+                // WHEN
+                var checkbox = browser.CheckBox(Find.ByLabelText(labelText));
+
+                // THEN
+                Assert.That(checkbox.Exists, Is.True);
+            });
+        }
+
+        [Test]
+        public void Should_find_checkbox_contained_in_label_element_by_label_text_case_sensitive()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                
+                var labelText = browser.CheckBox("Checkbox21").Parent.Text;
+                labelText = labelText.ToLower();
+
+                // WHEN
+                var checkbox = browser.CheckBox(Find.ByLabelText(labelText));
+
+                // THEN
+                Assert.That(checkbox.Exists, Is.False);
+            });
+        }
+
+        [Test]
+        public void Should_find_checkbox_contained_in_label_element_by_label_text_should_match_exactly()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                
+                var labelText = browser.CheckBox("Checkbox21").Parent.Text;
+                labelText = labelText.Substring(0, 5);
+
+                // WHEN
+                var checkbox = browser.CheckBox(Find.ByLabelText(labelText));
+
+                // THEN
+                Assert.That(checkbox.Exists, Is.False);
+            });
+        }
+
+        [Test]
+        public void Should_find_checkbox_contained_in_label_element_by_regex_label_text()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                
+                var labelText = browser.CheckBox("Checkbox21").Parent.Text;
+                labelText = labelText.Substring(0, 5);
+
+                // WHEN
+                var checkbox = browser.CheckBox(Find.ByLabelText(new Regex(labelText)));
+
+                // THEN
+                Assert.That(checkbox.Exists, Is.True);
+            });
+        }
+
+        [Test]
+        public void Should_find_checkbox_contained_in_label_element_using_lambda_expression()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(MainURI);
+                
+                var labelText = browser.CheckBox("Checkbox21").Parent.Text;
+                labelText = labelText.Substring(0, 5);
+
+                // WHEN
+                var checkbox = browser.CheckBox(Find.ByLabelText(text => text !=null && text.StartsWith(labelText)));
+
+                // THEN
+                Assert.That(checkbox.Exists, Is.True);
+            });
+        }
+
         [Test]
         public void FindByDefaultStringShouldReturnDefaultFromTheSetDefaultFindFactory()
         {

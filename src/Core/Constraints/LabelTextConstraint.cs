@@ -18,11 +18,14 @@
 
 // This constraint class is kindly donated by Seven Simple Machines
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using WatiN.Core.Comparers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Interfaces;
+using StringComparer = WatiN.Core.Comparers.StringComparer;
 
 namespace WatiN.Core.Constraints
 {
@@ -38,17 +41,26 @@ namespace WatiN.Core.Constraints
     /// </example>
     public class LabelTextConstraint : AttributeConstraint
     {
-        private readonly string labelText;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
         /// </summary>
         /// <param name="labelText">The text that represents the label for the form element.</param>
         public LabelTextConstraint(string labelText)
-            : base(Find.innerTextAttribute, new StringEqualsAndCaseInsensitiveComparer(labelText))
-        {
-            this.labelText = labelText.Trim();
-        }
+            : base(Find.innerTextAttribute, new StringComparer(labelText)) {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
+        /// </summary>
+        /// <param name="labelText">The text that represents the label for the form element.</param>
+        public LabelTextConstraint(Regex labelText)
+            : base(Find.innerTextAttribute, new RegexComparer(labelText)) {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LabelTextConstraint" /> class;
+        /// </summary>
+        /// <param name="comparer">The text that represents the label for the form element.</param>
+        public LabelTextConstraint(Predicate<string> comparer)
+            : base(Find.innerTextAttribute, new PredicateComparer<string, string>(comparer)) { }
 
         /// <inheritdoc />
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
@@ -60,7 +72,7 @@ namespace WatiN.Core.Constraints
             var cache = (LabelCache)context.GetData(this);
             if (cache == null)
             {
-                cache = new LabelCache(labelText);
+                cache = new LabelCache(Comparer);
                 context.SetData(this, cache);
             }
 
@@ -70,42 +82,43 @@ namespace WatiN.Core.Constraints
         /// <inheritdoc />
         public override void WriteDescriptionTo(TextWriter writer)
         {
-            writer.Write("With Label Text '{0}'", labelText);
+            writer.Write("With Label Text '{0}'", Comparer);
         }
 
         private sealed class LabelCache
         {
-            private readonly string labelText;
-            private Dictionary<string, bool> labelIdsWithMatchingText;
+            private readonly Comparers.Comparer<string> _comparer;
+            private Dictionary<string, bool> _labelIdsWithMatchingText;
 
-            public LabelCache(string labelText)
+            public LabelCache(Comparers.Comparer<string> comparer)
             {
-                this.labelText = labelText;
+                _comparer = comparer;
             }
 
             public bool IsMatch(Element element)
             {
-                if (labelIdsWithMatchingText == null) InitLabelIdsWithMatchingText(element);
+                if (_labelIdsWithMatchingText == null) InitLabelIdsWithMatchingText(element.DomContainer);
 
-                return labelIdsWithMatchingText.ContainsKey(element.Id ?? @"");
+                if (_labelIdsWithMatchingText.ContainsKey(element.Id ?? @""))
+                {
+                    return true;
+                }
+
+                var parent = element.Parent as Label;
+                return parent != null && _comparer.Compare(parent.Text);
             }
 
-            private void InitLabelIdsWithMatchingText(Element element)
+            private void InitLabelIdsWithMatchingText(IElementContainer domContainer)
             {
-                labelIdsWithMatchingText = new Dictionary<string, bool>();
+                _labelIdsWithMatchingText = new Dictionary<string, bool>();
 
-                var domContainer = element.DomContainer;
-
-                var labels = domContainer.Labels.Filter(e =>
-                {
-                    var text = e.Text;
-                    return !string.IsNullOrEmpty(text) && StringComparer.AreEqual(text.Trim(), labelText);
-                });
+                var labels = domContainer.Labels.Filter(e => _comparer.Compare(e.Text));
 
                 foreach (var label in labels)
                 {
                     var forElementWithId = label.For;
-                    labelIdsWithMatchingText.Add(forElementWithId, true);
+                    if (string.IsNullOrEmpty(forElementWithId)) continue;
+                    _labelIdsWithMatchingText.Add(forElementWithId, true);
                 }
             }
         }
