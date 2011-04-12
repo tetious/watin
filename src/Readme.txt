@@ -3,7 +3,7 @@ Thanks for dowloading WatiN. WatiN (pronounced "what-in") stands for Web Applica
 in dotNet. Inspired by Watir, WatiN enables web application testing, through Internet Explorer 
 on a Windows platform, expressed in any .Net language.
  
-Visit http://watin.sourcefoge.net for more information and to download the latest version. 
+Visit http://watin.org for more information and to download the latest version. 
 
 * License
 WatiN is Apache License 2.0 licensed so before using WatiN please read the license.txt so you know
@@ -11,7 +11,7 @@ the terms and conditions for using and modifying WatiN.
 
 * Pre requisits
 - WatiN can only be run on a Windows operating system
-- Make sure you have a working IE6, IE7, IE8, Firefox 2 or Firefox 3.x installed on your machine.
+- Make sure you have a working IE6, IE7, IE8, IE9, Firefox 2 or Firefox 3.x installed on your machine.
 - The .Net 2.0 or later framework needs to be installed.
 
 * Installing WatiN
@@ -21,23 +21,20 @@ the terms and conditions for using and modifying WatiN.
 
 * Using WatiN
 Following are the basic steps:
-- Create a new project in Visual Studio 2005/2008 (or another dev tool like SharpDevelop).
+- Create a new project in Visual Studio 2005/2008/2010 (or another dev tool like SharpDevelop).
 - Add a reference to WatiN.Core.dll in the installation directory.
 - Start coding and exploring the object model (See the code files in the UnitTests directory 
   for code examples).
 
-For a more complete example visit http://watin.sourceforge.net/gettingstarted.html.
-For more documentation about (using) WatiN visit http://watin.sourceforge.net/documentatie.html.
+For a more complete example visit http://watin.org/documentation/getting-started/.
+For more documentation about (using) WatiN visit http://watin.org/documentation/.
 Or read my blogposts at http://watinandmore.blogspot.com
 
 * Support
 Subscribe to the mailinglist(s) and/or use the bug and feature tracker on 
 http://sourceforge.net/projects/watin for the intended purposes.
 
-* RSS
-Stay informed about new releases by subscribing to the project news RSS feed on 
-http://watin.sourcefoge.net
 
 Enjoy testing with WatiN!
 
-Copyright Jeroen van Menen 2009
+Copyright Jeroen van Menen 2011
