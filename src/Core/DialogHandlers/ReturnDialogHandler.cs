@@ -102,7 +102,7 @@ namespace WatiN.Core.DialogHandlers
         public void WaitUntilExists(int waitDurationInSeconds)
         {
             var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(waitDurationInSeconds));
-            tryActionUntilTimeOut.Try(Exists);
+            tryActionUntilTimeOut.Try<bool>(Exists);
 
             if (!Exists())
             {

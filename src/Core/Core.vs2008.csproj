@@ -238,6 +238,7 @@
     <Compile Include="Native\Chrome\ChromeException.cs" />
     <Compile Include="Native\IClientPort.cs" />
     <Compile Include="Native\ClientPortBase.cs" />
+    <Compile Include="Native\InternetExplorer\Expando.cs" />
     <Compile Include="Native\InternetExplorer\IEFireEventHandler.cs" />
     <Compile Include="Native\InternetExplorer\JScriptElementArrayEnumerator.cs" />
     <Compile Include="Native\JavaScriptEngineType.cs" />

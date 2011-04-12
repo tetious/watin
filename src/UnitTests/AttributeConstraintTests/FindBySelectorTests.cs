@@ -191,7 +191,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             });
         }
 
-        [Test]
+        [Test, Ignore("Bug: Queryselector can't be used to find Frames in IE")]
         public void Should_find_element_in_frame()
         {
             ExecuteTest(browser =>
