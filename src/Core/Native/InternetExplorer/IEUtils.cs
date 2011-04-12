@@ -22,6 +22,7 @@ using System.Text;
 using mshtml;
 using SHDocVw;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Logging;
 using WatiN.Core.Native.Windows;
 using WatiN.Core.UtilityClasses;
 using IEnumUnknown=WatiN.Core.Native.Windows.IEnumUnknown;
@@ -65,6 +66,7 @@ namespace WatiN.Core.Native.InternetExplorer
         {
             try
             {
+                Logger.LogDebug("[script] {0}", scriptCode);
                 window.execScript(scriptCode, language);
             }
             catch (Exception ex)

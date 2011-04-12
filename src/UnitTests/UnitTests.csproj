@@ -149,7 +149,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.mshtml">
       <HintPath>..\..\lib\Net\3.5\Microsoft.mshtml.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Moq, Version=2.6.1014.1, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -435,6 +435,9 @@
     <Content Include="html\BodyNotExistsBug.htm" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />
+    <Content Include="html\iframes\FramesetWithinIFrame.html" />
+    <Content Include="html\iframes\iFramesWithinFrameset.html" />
+    <Content Include="html\Frameset2.html" />
     <Content Include="html\ListTests.html" />
     <Content Include="html\CrossDomainFrameset.html" />
     <Content Include="html\formsubmit.html" />

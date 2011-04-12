@@ -162,5 +162,43 @@ namespace WatiN.Core.UnitTests
 			// create a better test.
 			using (new IE(EbayUrl)) {}
 		}
+
+	    [Test]
+	    public void Should_find_element_inside_iframe_contained_in_frame()
+	    {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(iFramesWithinFramesetURI);
+                var mainFrame = browser.Frame("mainid");
+                
+                // When
+                var frame = mainFrame.Frame(Find.ByName("middle"));
+                var select = frame.SelectList(Find.ByName("select1"));
+
+                // Then
+                Assert.That(frame.Name, Is.EqualTo("middle"), "Unexpected frame name");
+                Assert.That(select.Exists, "Expected 'select1' to exist");
+            });
+	    }
+
+	    [Test]
+	    public void Should_find_element_inside_frame_contained_in_iframe()
+	    {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesWithinIFrameURI);
+                var mainFrame = browser.Frame(Find.ByName("middle"));
+                
+                // When
+                var frame = mainFrame.Frame(Find.ByName("contents"));
+                var link = frame.Link("Microsoft");
+
+                // Then
+                Assert.That(frame.Name, Is.EqualTo("contents"), "Unexpected frame name");
+                Assert.That(link.Exists, "Expected 'Microsoft' link to exist");
+            });
+	    }
 	}
 }

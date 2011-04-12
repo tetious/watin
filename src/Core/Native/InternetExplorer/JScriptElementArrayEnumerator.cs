@@ -18,9 +18,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Expando;
 using mshtml;
 
 namespace WatiN.Core.Native.InternetExplorer
@@ -38,14 +35,15 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public IEnumerator<INativeElement> GetEnumerator()
         {
-            var result = GetPropertyValue(_fieldName, _ieDocument.HtmlDocument);
+            var result = new Expando(_ieDocument.HtmlDocument).GetValue(_fieldName);
 
             if (result == null) yield break;
 
-            var length = (int) GetPropertyValue("length", result);
+            var resultAsExpando = new Expando(result);
+            var length = resultAsExpando.GetValue<int>("length");
             for (var i = 0; i < length; i++)
             {
-                var element1 = GetPropertyValue(i.ToString(), result) as IHTMLElement;
+                var element1 = resultAsExpando.GetValue(i.ToString()) as IHTMLElement;
                 if (element1 != null) yield return new IEElement(element1);
             }
         }
@@ -53,26 +51,6 @@ namespace WatiN.Core.Native.InternetExplorer
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        public object GetPropertyValue(string propertyName, object hasExpandoInterface)
-        {
-            var expando = (IExpando)hasExpandoInterface;
-
-            var property = expando.GetProperty(propertyName, BindingFlags.Default);
-            if (property != null)
-            {
-                try
-                {
-                    return property.GetValue(hasExpandoInterface, null);
-                }
-                catch (COMException)
-                {
-                    return null;
-                }
-            }
-
-            return null;
         }
     }
 }

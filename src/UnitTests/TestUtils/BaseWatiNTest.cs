@@ -33,6 +33,8 @@ namespace WatiN.Core.UnitTests.TestUtils
         public static Uri PopUpURI = new Uri(HtmlTestBaseURI, "popup.html");
         public static Uri FramesetURI = new Uri(HtmlTestBaseURI, "Frameset.html");
         public static Uri FramesetWithinFramesetURI = new Uri(HtmlTestBaseURI, "FramesetWithinFrameset.html");
+        public static Uri iFramesWithinFramesetURI = new Uri(HtmlTestBaseURI, "iframes\\iFramesWithinFrameset.html");
+        public static Uri FramesWithinIFrameURI = new Uri(HtmlTestBaseURI, "iframes\\FramesetWithinIFrame.html");
         public static Uri CrossDomainFramesetURI = new Uri(HtmlTestBaseURI, "CrossDomainFrameset.html");
         public static Uri TestEventsURI = new Uri(HtmlTestBaseURI, "TestEvents.html");
         public static Uri FormSubmitURI = new Uri(HtmlTestBaseURI, "formsubmit.html");

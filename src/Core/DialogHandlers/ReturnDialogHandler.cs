@@ -16,11 +16,16 @@
 
 #endregion Copyright
 
+using System;
+using System.Threading;
+using WatiN.Core.Exceptions;
+using WatiN.Core.Interfaces;
 using WatiN.Core.Native.Windows;
+using WatiN.Core.UtilityClasses;
 
 namespace WatiN.Core.DialogHandlers
 {
-	public class ReturnDialogHandler : ConfirmDialogHandler
+	public class ReturnDialogHandler : ConfirmDialogHandler, IReturnDialogHandler
 	{
         /// <summary>
         /// Determines whether this instance can handle the specified window by checking <see cref="Window.StyleInHex"/>.
@@ -34,5 +39,106 @@ namespace WatiN.Core.DialogHandlers
 		{
 			return (window.StyleInHex == "94C803C5" && ButtonWithId1Exists(window.Hwnd));
 		}
+
+	    public static IReturnDialogHandler CreateInstance()
+	    {
+	        var ieVersion = IE.GetMajorIEVersion();
+
+	        return ieVersion < 9 ? (IReturnDialogHandler) new ReturnDialogHandler() : new ReturnDialogHandlerIe9();
+	    }
 	}
+
+    public interface IReturnDialogHandler : IDialogHandler
+    {
+        WinButton CancelButton { get; }
+        WinButton OKButton { get; }
+        void WaitUntilExists(int waitDurationInSeconds);
+        bool Exists();
+        void WaitUntilExists();
+    }
+
+    public class ReturnDialogHandlerIe9 : BaseDialogHandler, IReturnDialogHandler
+    {
+        private Window _window;
+
+        public WinButton CancelButton
+        {
+            get
+            {
+                var hwnd = GetChildWindowHwnd(_window.Hwnd, "5000200E");
+                return hwnd != IntPtr.Zero ? new WinButton(hwnd) : null;
+            }
+        }
+
+        public WinButton OKButton
+        {
+            get
+            {
+                var hwnd = GetChildWindowHwnd(_window.Hwnd, "5000200F");
+                return hwnd != IntPtr.Zero ? new WinButton(hwnd) : null;
+            }
+        }
+
+        public override bool HandleDialog(Window window)
+        {
+            if (CanHandleDialog(window))
+            {
+                _window = window;
+
+                while (window.Exists())
+                {
+                    Thread.Sleep(200);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public override bool CanHandleDialog(Window window)
+        {
+            return (window.StyleInHex == "96C00284");
+        }
+
+        public void WaitUntilExists(int waitDurationInSeconds)
+        {
+            var tryActionUntilTimeOut = new TryFuncUntilTimeOut(TimeSpan.FromSeconds(waitDurationInSeconds));
+            tryActionUntilTimeOut.Try(Exists);
+
+            if (!Exists())
+            {
+                throw new WatiNException(string.Format("Dialog not available within {0} seconds.", waitDurationInSeconds));
+            }
+        }
+
+        public bool Exists()
+        {
+            return _window != null && _window.Exists();
+        }
+
+        private IntPtr GetChildWindowHwnd(IntPtr parentHwnd, string styleInHex)
+        {
+            var hWnd = IntPtr.Zero;
+            NativeMethods.EnumChildWindows(parentHwnd, (childHwnd, lParam) =>
+            {
+                var window = new Window(childHwnd);
+//                Console.WriteLine("childhwnd: " + childHwnd);
+//                Console.WriteLine("childhwnd.styleinhex: " + window.StyleInHex);
+                if (window.StyleInHex == styleInHex)
+                {
+                    hWnd = childHwnd;
+                    return false;
+                }
+
+                return true;
+            }, IntPtr.Zero);
+
+            return hWnd;
+        }
+
+        public void WaitUntilExists()
+        {
+            WaitUntilExists(30);
+        }
+    }
+
 }

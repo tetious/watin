@@ -348,7 +348,7 @@ namespace WatiN.Core.UnitTests
         {
             var browserVersion = 7;
             var ieUserAgent = browser.Eval("window.navigator.userAgent");
-            if (!string.IsNullOrEmpty(ieUserAgent) && new Regex(@"MSIE 8(\.\d+);").IsMatch(ieUserAgent))
+            if (!string.IsNullOrEmpty(ieUserAgent) && new Regex(@"MSIE [8-9](\.\d+);").IsMatch(ieUserAgent))
             {
                 browserVersion = 8;
             }

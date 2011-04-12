@@ -27,54 +27,53 @@ namespace WatiN.Core.Native.InternetExplorer
     {
         public List<INativeDocument> Elements { get; private set; }
 
-        private readonly HTMLDocument htmlDocument;
-        private readonly IHTMLElementCollection frameElements;
-        private int index;
+        private readonly HTMLDocument _htmlDocument;
+        private readonly IHTMLElementCollection _iFrameElements;
+        private int _index;
 
         public AllFramesProcessor(HTMLDocument htmlDocument)
         {
             Elements = new List<INativeDocument>();
+            _htmlDocument = htmlDocument;
 
-            frameElements = (IHTMLElementCollection) htmlDocument.all.tags("frame");
-
-            // If the current document doesn't contain FRAME elements, it then
-            // might contain IFRAME elements.
-            if (frameElements.length == 0)
-            {
-                frameElements = (IHTMLElementCollection)htmlDocument.all.tags("iframe");
-            }
-
-            this.htmlDocument = htmlDocument;
+            _iFrameElements = (IHTMLElementCollection)htmlDocument.all.tags("iframe");
         }
 
         public HTMLDocument HTMLDocument()
         {
-            return htmlDocument;
+            return _htmlDocument;
         }
 
         public void Process(IWebBrowser2 webBrowser2)
         {
-            // Get the frame element from the parent document
+            var htmlDocument2 = (IHTMLDocument2)webBrowser2.Document;
+            var containingFrameElement = GetContainingFrameElement();
+            Elements.Add(new IEDocument(htmlDocument2, containingFrameElement));
+
+            _index++;
+        }
+
+        public IEElement GetContainingFrameElement()
+        {
             var uniqueId = RetrieveUniqueIdOfFrameElement();
-
             var frameElement = RetrieveSameFrameFromHtmlDocument(uniqueId);
-            var nativeFrameElement = new IEElement(frameElement);
-            Elements.Add(new IEDocument((IHTMLDocument2) webBrowser2.Document, nativeFrameElement));
-
-            index++;
+            return new IEElement(frameElement);
         }
 
         private string RetrieveUniqueIdOfFrameElement()
         {
-            var element = (IHTMLElement) frameElements.item(index, null);
-            return ((DispHTMLBaseElement)element).uniqueID;
+            var frame = _iFrameElements.length == 0 ? 
+                        FrameByIndexProcessor.GetFrameFromHTMLDocument(_index, _htmlDocument) :
+                        _iFrameElements.item(_index, null);
+
+            return new Expando(frame).GetValue<string>("uniqueID");
         }
 
         // This is lookup in htmldocument is needed to bridge between 
         // two different "memory" representations of document and its frame elements.
         private IHTMLElement2 RetrieveSameFrameFromHtmlDocument(string frameElementUniqueId)
         {
-            var frame = htmlDocument.getElementById(frameElementUniqueId) as IHTMLElement2;
+            var frame = _htmlDocument.getElementById(frameElementUniqueId) as IHTMLElement2;
             if (frame == null)
             {
                 throw new WatiNException("Couldn't find Frame or IFrame.");

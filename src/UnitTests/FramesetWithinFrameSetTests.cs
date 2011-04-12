@@ -18,6 +18,7 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
@@ -32,6 +33,28 @@ namespace WatiN.Core.UnitTests
                             {
                                 Assert.AreEqual(2, browser.Frames.Count);
                                 Assert.AreEqual(2, browser.Frames[1].Frames.Count);
+                            });
+        }
+
+        [Test, Ignore("Bug: Events not fired in nested Frames in IE")]
+        public void Should_navigate_to_google()
+        {
+            ExecuteTest(browser =>
+                            {
+                                // GIVEN
+                                var frame = browser.Frame("mainid");
+                                Console.WriteLine(frame.FrameElement.GetJavascriptElementReference());
+
+                                var nestedFrame = frame.Frame("mainid");
+                                var javascriptElementReference = nestedFrame.FrameElement.GetJavascriptElementReference();
+                                Console.WriteLine(javascriptElementReference);
+                                Console.WriteLine("not null: " + browser.Eval(javascriptElementReference + " != null"));
+
+                                // WHEN
+                                nestedFrame.Link("googlelink").MouseUp();
+
+                                // THEN
+                                Assert.That(nestedFrame.Url, Text.Contains("google"));
                             });
         }
 

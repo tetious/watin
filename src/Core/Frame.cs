@@ -28,8 +28,8 @@ namespace WatiN.Core
     [ElementTag("iframe", Index = 1)]
     public class Frame : Document
 	{
-		private readonly Element _frameElement;
-        private readonly INativeDocument _frameDocument;
+	    public Element FrameElement { get; private set; }
+	    private readonly INativeDocument _frameDocument;
 
 		/// <summary>
 		/// This constructor will mainly be used by the constructor of FrameCollection
@@ -44,7 +44,7 @@ namespace WatiN.Core
                 throw new ArgumentNullException("frameDocument");
 
             _frameDocument = frameDocument;
-            _frameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
+            FrameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
 		}
 
         /// <inheritdoc />
@@ -75,13 +75,13 @@ namespace WatiN.Core
                     return Url;
 
                 default:
-                    return _frameElement.GetAttributeValue(attributeName);
+                    return FrameElement.GetAttributeValue(attributeName);
             }
         }
 
         public virtual void SetAttributeValue(string attributeName, string value)
         {
-            _frameElement.SetAttributeValue(attributeName, value);
+            FrameElement.SetAttributeValue(attributeName, value);
         }
 
 	}

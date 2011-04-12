@@ -57,13 +57,16 @@ namespace WatiN.Core.Native.InternetExplorer
         /// <inheritdoc />
         public INativeElementCollection AllElements
         {
-            get { return new IEElementCollection(htmlDocument.all, null); }
+            get { return new IEElementCollection(htmlDocument.all, (IEElement) ContainingFrameElement); }
         }
 
         /// <inheritdoc />
         public INativeElement ContainingFrameElement
         {
-            get { return containingFrameElement; }
+            get
+            {
+                return containingFrameElement;
+            }
         }
 
         public INativeElement Body
@@ -112,22 +115,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public string GetPropertyValue(string propertyName)
         {
-            var domDocumentExpando = (IExpando)htmlDocument;
-
-            var property = domDocumentExpando.GetProperty(propertyName, BindingFlags.Default);
-            if (property != null)
-            {
-                try
-                {
-                    return (string)property.GetValue(domDocumentExpando, null);
-                }
-                catch (COMException)
-                {
-                    return null;
-                }
-            }
-
-            return null;
+            return new Expando(htmlDocument).GetValue<string>(propertyName);
         }
 
         /// <inheritdoc />

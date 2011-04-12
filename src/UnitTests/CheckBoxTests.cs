@@ -124,6 +124,7 @@ namespace WatiN.Core.UnitTests
 
                                 // The new way to do this
                                 var checkBox21b = browser.CheckBox(new LabelTextConstraint("label for Checkbox21"));
+                                Assert.That(checkBox21b.Exists, "Checkbox21 not found using LabelTextConstraint.");
                                 Assert.AreEqual(checkBox21a.Id, checkBox21b.Id, "Checkbox attached to Label for Checkbox21 did not match CheckBox21.");
 
                                 // The old way to do this

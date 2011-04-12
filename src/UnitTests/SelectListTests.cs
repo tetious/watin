@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
@@ -255,20 +256,38 @@ namespace WatiN.Core.UnitTests
 		[Test]
 		public void OptionsInSingelSelectList()
 		{
-		    ExecuteTest(browser =>
+		    ExecuteTestWithAnyBrowser(browser =>
 		                    {
-		                        var selectList = browser.SelectList("Select1");
+                                var selectList = browser.SelectList("Select1");
 
+		                        WriteSelected(selectList);
 		                        Assert.IsFalse(selectList.Option("Third text").Selected);
-		                        selectList.Option("Third text").Select();
-		                        Assert.IsTrue(selectList.Option("Third text").Selected);
-		                        selectList.Option("First text").SelectNoWait();
+		                        
+                                selectList.Option("Third text").Select();
+                                WriteSelected(selectList);
+                                Assert.IsTrue(selectList.Option("Third text").Selected);
+
+                                selectList.Option("First text").SelectNoWait();
 		                        browser.WaitForComplete();
-		                        Assert.IsFalse(selectList.Option("Third text").Selected);
+                                WriteSelected(selectList);
+                                Assert.IsFalse(selectList.Option("Third text").Selected);
 		                    });
 		}
 
-		[Test]
+	    private void WriteSelected(SelectList selectList)
+	    {
+	        foreach (var option in selectList.Options)
+	        {
+	            Console.Write(option.Selected + ", ");
+	            var nativeElement = (IEElement)option.NativeElement;
+
+	            var htmlOptionElement = (mshtml.IHTMLOptionElement)nativeElement.AsHtmlElement;
+	            Console.WriteLine(htmlOptionElement.selected);
+	        }
+            Console.WriteLine("----");
+	    }
+
+	    [Test]
 		public void OptionsInMultiSelectList()
 		{
 		    ExecuteTest(browser =>

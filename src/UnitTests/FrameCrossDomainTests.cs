@@ -18,6 +18,7 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests
@@ -45,7 +46,7 @@ namespace WatiN.Core.UnitTests
 		                        }
                                 catch(Exception e)
                                 {
-                                    Assert.Fail("Unexpected exception: " + e.GetType());
+                                    Assert.Fail("Unexpected exception: " + e.Message);
                                 }
 
                                 Assert.AreEqual("mainid", browser.Frames[1].Id, "Unexpected id");
@@ -85,7 +86,8 @@ namespace WatiN.Core.UnitTests
 		                    {
 		                        try
 		                        {
-		                            Assert.That(browser.Frame("contentsid").Link("googlelink").Exists, "Should find link");
+		                            var frame = browser.Frame("contentsid");
+		                            Assert.That(frame.Link("googlelink").Exists, "Should find link");
 		                        }
 		                        catch (UnauthorizedAccessException)
 		                        {
@@ -93,7 +95,7 @@ namespace WatiN.Core.UnitTests
 		                        }
                                 catch (Exception e)
                                 {
-                                    Assert.Fail("Unexpected exception: " + e.GetType());
+                                    Assert.Fail("Unexpected exception: " + e.StackTrace);
                                 }
 
                                 Assert.AreEqual("contentsid", browser.Frame("contentsid").Id, "Unexpected Id");

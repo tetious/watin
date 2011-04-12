@@ -543,7 +543,7 @@ namespace WatiN.Core
 	    {
             var arguments = "about:blank";
 
-            if (GetMajorIEVersion() == 8 && Settings.MakeNewIe8InstanceNoMerge)
+            if (GetMajorIEVersion() >= 8 && Settings.MakeNewIe8InstanceNoMerge)
                 arguments = "-nomerge " + arguments;
 
 	        var m_Proc = Process.Start("IExplore.exe", arguments);

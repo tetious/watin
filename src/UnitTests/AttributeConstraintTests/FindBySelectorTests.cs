@@ -175,6 +175,62 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             Assert.That(sb.ToString(), Is.EqualTo("Selector = '.Return >this'"));
         }
 
+        [Test, Ignore("Bug: Queryselector can't be used to find Frames in IE")]
+        public void Should_find_frame()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesetURI);
+
+                // WHEN
+                var frame = browser.Frame(Find.BySelector(""));
+
+                // THEN
+                Assert.That(frame == null);                
+            });
+        }
+
+        [Test]
+        public void Should_find_element_in_frame()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesetURI);
+                var frame = browser.Frame("mainid");
+
+                // WHEN
+                var link = frame.Link(Find.BySelector("#Microsoft"));
+
+                // THEN
+                Assert.That(link.Exists);
+                Assert.That(link.Id, Is.EqualTo("Microsoft"));
+            });
+        }
+
+        [Test, Ignore("Bug: Queryselector not working with Frames in IE")]
+        public void Should_find_element_in_frame_within_frame()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesetWithinFramesetURI);
+                var frame1 = browser.Frame("mainid");
+                Console.WriteLine(frame1.FrameElement.GetJavascriptElementReference());
+                var frame2 = frame1.Frame("mainid");
+                var javascriptElementReference = frame2.FrameElement.GetJavascriptElementReference();
+                Console.WriteLine(javascriptElementReference);
+                    
+
+                // WHEN
+                var link = frame2.Link(Find.BySelector("#Microsoft"));
+
+                // THEN
+                Assert.That(link.Exists);                
+            });
+        }
+
 
         public override Uri TestPageUri
         {

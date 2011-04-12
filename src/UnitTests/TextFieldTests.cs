@@ -61,11 +61,15 @@ namespace WatiN.Core.UnitTests
 		{
 		    ExecuteTest(browser =>
 		                    {
+                                // GIVEN
                                 var textfieldName = browser.TextField("Textarea1");
 		                        var textWithNewLine = "Line1" + Environment.NewLine + "Line2";
 
+                                // WHEN
 		                        textfieldName.TypeText(textWithNewLine);
-		                        Assert.AreEqual(textWithNewLine, textfieldName.Value);
+		                        
+                                // THEN
+                                Assert.AreEqual(textWithNewLine, textfieldName.Value);
 		                    });
 		}
 

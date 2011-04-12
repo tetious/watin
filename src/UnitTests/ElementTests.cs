@@ -538,6 +538,36 @@ namespace WatiN.Core.UnitTests
 		                        Assert.IsTrue(injectedDivTextField.Exists);
 		                    });
 		}
+		[Test]
+		public void WaitUntilElementExistsElementInjectionAfter3SecondsShouldWorkForFramesAsWell()
+		{
+		    ExecuteTest(browser =>
+		                    {
+                                Assert.IsTrue(Settings.WaitUntilExistsTimeOut > 3, "Settings.WaitUntilExistsTimeOut must be more than 3 seconds");
+                                
+                                browser.GoTo(new Uri(HtmlTestBaseURI, "Frameset2.html"));
+
+		                        var frame = browser.Frame("mainid");
+                                var injectedTextField = frame.TextField("injectedTextField");
+                                var injectedDivTextField = frame.Div("seconddiv").TextField("injectedTextField");
+
+		                        Assert.IsFalse(injectedTextField.Exists);
+		                        Assert.IsFalse(injectedDivTextField.Exists);
+
+                                frame.Button("injectElement").ClickNoWait();
+
+		                        Assert.IsFalse(injectedTextField.Exists);
+		                        Assert.IsFalse(injectedDivTextField.Exists);
+
+		                        // WatiN should wait until the element exists before
+		                        // getting the text.
+		                        var text = injectedTextField.Text;
+
+		                        Assert.IsTrue(injectedTextField.Exists);
+		                        Assert.AreEqual("Injection Succeeded", text);
+		                        Assert.IsTrue(injectedDivTextField.Exists);
+		                    });
+		}
 
 		[Test]
 		public void WaitUntilElementRemovedAfter3Seconds()

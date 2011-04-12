@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -33,6 +34,27 @@ namespace WatiN.Core.UnitTests
     [TestFixture]
     public class WatiNSanityTests : BaseWatiNTest
     {
+        [Test]
+        public void ShouldEnsureThatEachHtmlFileHasA_X_UA_Compatible_metaTag()
+        {
+            var htmlFiles = Directory.GetFiles(HtmlTestBaseURI.AbsolutePath, "*.htm*", SearchOption.AllDirectories);
+            var fail = false;
+            foreach (var htmlFile in
+                htmlFiles.Where(htmlFile => htmlFile.EndsWith("html", true, CultureInfo.InvariantCulture) || (htmlFile.EndsWith("htm", true, CultureInfo.InvariantCulture))))
+            {
+                Console.WriteLine();
+
+                var fileText = File.ReadAllText(htmlFile);
+
+                if (fileText.Contains("<meta http-equiv=\"X-UA-Compatible\" content=\"IE")) continue;
+                
+                fail = true;
+                Console.WriteLine(htmlFile);
+                Console.WriteLine("Does not contian: <meta http-equiv=\"X-UA-Compatible\" content=\"IE");
+            }
+
+            Assert.That(fail, Is.False, "Not all test html files are correctly Marked Of The Web. Make sure the files are ANSI encoded.");
+        }
         [Test]
         public void ShouldEnsureThatEachHtmlFileHasAProperMarkOfTheWebComment()
         {
@@ -154,7 +176,9 @@ namespace WatiN.Core.UnitTests
                 "Page.get_Metadata",
                 "Page.get_Document",
                 "IE.get_Visible",
-                "IE.set_Visible"
+                "IE.set_Visible",
+                "Frame.get_FrameElement"
+
             };
 
             string missedProperties = null;
@@ -215,7 +239,8 @@ namespace WatiN.Core.UnitTests
                 "Page.get_Metadata",
                 "Page.get_Document",
                 "IE.get_Visible",
-                "IE.set_Visible"
+                "IE.set_Visible",
+                "Frame.get_FrameElement"
             };
 
             string missedMethods = null;

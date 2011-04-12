@@ -194,7 +194,10 @@ namespace WatiN.Core.Native.InternetExplorer
             object attributeValue;
             try
             {
-                attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
+                if (JSElement.UsePropertyInsteadOfAttribute.Contains(attributeName))
+                    attributeValue = GetWithFailOver(() => new Expando(AsHtmlElement).GetValue(attributeName));
+                else
+                    attributeValue = GetWithFailOver(() => AsHtmlElement.getAttribute(attributeName, 0));
             }
             catch
             {
@@ -211,7 +214,13 @@ namespace WatiN.Core.Native.InternetExplorer
                 return null;
             }
 
-            return attributeValue.ToString();
+            var value = attributeValue.ToString();
+
+            if (attributeName.ToLowerInvariant() == "selected")
+                if (value.ToLowerInvariant() == "selected")
+                    value = "True";
+
+            return value;
         }
 
         private static T GetWithFailOver<T>(DoFunc<T> func)
@@ -409,7 +418,7 @@ namespace WatiN.Core.Native.InternetExplorer
                 if (AsHtmlElement.sourceIndex < 0) return false;
 
                 // Note: We exclude elements that might appear as root elements from this check since we cannot verify them.
-                const string excludedTags = "! HTML HEAD BODY TITLE BASE LINK META SCRIPT STYLE";
+                const string excludedTags = "! HTML HEAD BODY TITLE BASE LINK META SCRIPT STYLE FRAMESET";
                 if (excludedTags.Contains(TagName)) return true;
 
                 return AsHtmlElement.offsetParent != null;

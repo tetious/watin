@@ -137,7 +137,17 @@ namespace WatiN.Core.Native.Windows
 
         public virtual string ProcessName
         {
-            get { return Process.GetProcessById(ProcessID).ProcessName; }
+            get
+            {
+                try
+                {
+                    return Process.GetProcessById(ProcessID).ProcessName;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         public string Message

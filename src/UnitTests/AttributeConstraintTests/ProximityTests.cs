@@ -66,7 +66,11 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             string endingHtml = Ie.Html;
 			
             // If these don't match, reset the browser so further tests are not affected by this one
-            if (endingHtml != _startingHtml) Ie.Reopen();
+            if (endingHtml != _startingHtml)
+            {
+                Ie.Reopen();
+                Ie.GoTo(TestPageUri);
+            }
 
             // Now record the test result
             Assert.That( endingHtml, Is.EqualTo( _startingHtml ), "HTML in the page changed while the test executed." );
