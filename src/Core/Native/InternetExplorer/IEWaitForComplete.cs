@@ -78,7 +78,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         protected virtual void WaitForFramesToComplete(IHTMLDocument2 maindocument)
         {
-            var mainHtmlDocument = (HTMLDocument)maindocument;
+            var mainHtmlDocument = UtilityClass.GetWithFailOver(() => (HTMLDocument)maindocument);
 
             var framesCount = FrameCountProcessor.GetFrameCountFromHTMLDocument(mainHtmlDocument);
 

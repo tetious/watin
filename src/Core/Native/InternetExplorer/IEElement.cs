@@ -225,7 +225,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
         private static T GetWithFailOver<T>(DoFunc<T> func)
         {
-            return UtilityClass.TryFuncFailOver(func, 5, 50);
+            return UtilityClass.GetWithFailOver(func);
         }
 
         private object RetrieveNodeValue(string attributeName)

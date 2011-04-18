@@ -145,6 +145,11 @@ namespace WatiN.Core.UtilityClasses
 
         }
 
+        public static T GetWithFailOver<T>(DoFunc<T> func)
+        {
+            return TryFuncFailOver(func, 5, 50);
+        }
+
         public static T TryFuncFailOver<T>(DoFunc<T> func, int numberOfRetries, int sleepTime)
         {
             Exception lastException;
