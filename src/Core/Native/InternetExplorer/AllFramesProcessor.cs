@@ -36,7 +36,18 @@ namespace WatiN.Core.Native.InternetExplorer
             Elements = new List<INativeDocument>();
             _htmlDocument = htmlDocument;
 
-            _iFrameElements = (IHTMLElementCollection)htmlDocument.all.tags("iframe");
+            // Bug fix, trying to revert back to previous version
+            // http://stackoverflow.com/questions/5882415/error-when-accessing-the-frames-in-watin-new-version-2-1
+            //_iFrameElements = (IHTMLElementCollection)htmlDocument.all.tags("iframe");
+
+            _iFrameElements = (IHTMLElementCollection)_htmlDocument.all.tags("frame");
+
+            // If the current document doesn't contain FRAME elements, it then
+            // might contain IFRAME elements.
+            if (_iFrameElements.length == 0)
+            {
+                _iFrameElements = (IHTMLElementCollection)_htmlDocument.all.tags("iframe");
+            }
         }
 
         public HTMLDocument HTMLDocument()
