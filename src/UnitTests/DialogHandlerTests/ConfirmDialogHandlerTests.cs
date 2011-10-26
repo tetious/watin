@@ -133,7 +133,6 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                 var handler = new ConfirmDialogHandler();
                 using (new UseDialogOnce(ie.DialogWatcher, handler))
                 {
-                    ie.AddDialogHandler(handler);
                     ie.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
                     handler.WaitUntilExists(5);
 
@@ -142,7 +141,6 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
                         var handler2 = new ConfirmDialogHandler();
                         using (new UseDialogOnce(ie2.DialogWatcher, handler2))
                         {
-                            ie2.AddDialogHandler(handler2);
                             ie2.Button(Find.ByValue("Show confirm dialog")).ClickNoWait();
                             handler2.WaitUntilExists(5);
                             handler2.OKButton.Click();
