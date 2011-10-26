@@ -47,8 +47,8 @@ namespace WatiN.Core.UnitTests
 
                                 var nestedFrame = frame.Frame("mainid");
                                 var javascriptElementReference = nestedFrame.FrameElement.GetJavascriptElementReference();
-                                Console.WriteLine(javascriptElementReference);
-                                Console.WriteLine("not null: " + browser.Eval(javascriptElementReference + " != null"));
+                                //Console.WriteLine(javascriptElementReference);
+                                //Console.WriteLine("not null: " + browser.Eval(javascriptElementReference + " != null"));
 
                                 // WHEN
                                 nestedFrame.Link("googlelink").MouseUp();

@@ -63,7 +63,7 @@ namespace WatiN.Core.DialogHandlers
 
             var dialogWatcher = GetDialogWatcherFromCache(toplevelWindow);
 
-			// If no dialogwatcher exists for the ieprocessid then 
+			// If no dialogwatcher exists then 
 			// create a new one, store it and return it.
 			if (dialogWatcher == null)
 			{

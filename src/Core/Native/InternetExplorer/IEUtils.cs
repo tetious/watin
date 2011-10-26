@@ -82,11 +82,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             var lRes = 0;
 
-            if (!IsIEServerWindow(hWnd))
-            {
-                // Get 1st child IE server window
-                hWnd = NativeMethods.GetChildWindowHwnd(hWnd, "Internet Explorer_Server");
-            }
+            hWnd = GetInteretExplorerServerHwnd(hWnd);
 
             if (IsIEServerWindow(hWnd))
             {
@@ -107,6 +103,16 @@ namespace WatiN.Core.Native.InternetExplorer
                 }
             }
             return null;
+        }
+
+        public static IntPtr GetInteretExplorerServerHwnd(IntPtr hWnd)
+        {
+            if (!IsIEServerWindow(hWnd))
+            {
+                // Get 1st child IE server window
+                hWnd = NativeMethods.GetChildWindowHwnd(hWnd, "Internet Explorer_Server");
+            }
+            return hWnd;
         }
 
         public static bool IsIEServerWindow(IntPtr hWnd)

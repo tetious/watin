@@ -50,8 +50,8 @@ namespace WatiN.Core.UnitTests.DialogHandlerTests
 			}
 		}
 
-	    [Test, Ignore("This feature can't be supported on IE8 because there is no way to detect the parent ie/window for a dialog.")]
-		public void CloseSpecificBrowserAlert()
+	    [Test]
+        public void CloseSpecificBrowserAlert()
 		{
 			Assert.AreEqual(0, Ie.DialogWatcher.Count, "DialogWatcher count should be zero");
 

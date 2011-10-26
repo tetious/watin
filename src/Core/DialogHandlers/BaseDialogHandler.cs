@@ -19,6 +19,7 @@
 using System;
 using WatiN.Core.Interfaces;
 using WatiN.Core.Logging;
+using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
 
 namespace WatiN.Core.DialogHandlers
@@ -45,14 +46,31 @@ namespace WatiN.Core.DialogHandlers
 		/// <inheritdoc />
 		public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
 		{
-//		    var mainWindow = new Window(mainWindowHwnd);
-//		    Logger.LogDebug("Main: " + mainWindow.Hwnd + ", " + mainWindow.Title);
-//		    Logger.LogDebug("window.TopLevelWindow: " + window.ToplevelWindow.Hwnd + ", " + window.ToplevelWindow.Title);
-//
-//            if (!window.ToplevelWindow.Equals(mainWindow)) return false;
+            var ieVersion = IE.GetMajorIEVersion();
+            var dialogBelongsToIeWindow = ieVersion < 8 ? 
+                                        DialogBelongsToIEWindowForIe7AndLower(window, mainWindowHwnd) : 
+                                        DialogBelongsToIEWindowForIe8AndHigher(window, mainWindowHwnd);
+
+            return dialogBelongsToIeWindow && CanHandleDialog(window);
+        }
+
+	    private static bool DialogBelongsToIEWindowForIe7AndLower(Window window, IntPtr mainWindowHwnd)
+	    {
+	        var mainWindow = new Window(mainWindowHwnd);
+	        return window.ToplevelWindow.Equals(mainWindow);
+        }
+
+        private static bool DialogBelongsToIEWindowForIe8AndHigher(Window window, IntPtr mainWindowHwnd)
+        {
+            var mainWindow = new Window(mainWindowHwnd);
+            Logger.LogDebug("Main: " + mainWindow.Hwnd + ", " + mainWindow.Title + ", " + mainWindow.ProcessID);
             
-            return CanHandleDialog(window);
-		}
+            var hWnd = IEUtils.GetInteretExplorerServerHwnd(mainWindowHwnd);
+            var window1 = new Window(hWnd);            
+            Logger.LogDebug("IES: " + window1.Hwnd + ", " + window1.Title + ", " + window1.ProcessID);
+
+            return window1.ProcessID == window.ProcessID;
+        }
 
 		public abstract bool CanHandleDialog(Window window);
 
