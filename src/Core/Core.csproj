@@ -245,6 +245,7 @@
     <Compile Include="Native\ClientPortBase.cs" />
     <Compile Include="Native\InternetExplorer\Expando.cs" />
     <Compile Include="Native\InternetExplorer\IEFireEventHandler.cs" />
+    <Compile Include="Native\InternetExplorer\IESWindowHelper.cs" />
     <Compile Include="Native\InternetExplorer\JScriptElementArrayEnumerator.cs" />
     <Compile Include="Native\JavaScriptEngineType.cs" />
     <Compile Include="Native\JSElementCollectionBase.cs" />

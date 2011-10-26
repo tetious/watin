@@ -212,6 +212,20 @@ namespace WatiN.Core.UnitTests
             }
         }
 
+        [Test]
+        public void HtmlDialogCollectionShouldReturnOnlyItsOwnChildHtmlDialogs()
+        {
+            Ie.Button("popupid").Click();
+                
+            using (var ie2 = new IE(MainURI))
+            {
+                ie2.Button("popupid").Click();
+                
+                Assert.That(Ie.HtmlDialogs.Count, Is.EqualTo(1));
+                Assert.That(ie2.HtmlDialogs.Count, Is.EqualTo(1));
+            }
+        }
+
 		public override Uri TestPageUri
 		{
 			get { return MainURI; }

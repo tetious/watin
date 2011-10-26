@@ -18,7 +18,6 @@
 
 using System;
 using WatiN.Core.Interfaces;
-using WatiN.Core.Logging;
 using WatiN.Core.Native.InternetExplorer;
 using WatiN.Core.Native.Windows;
 
@@ -41,38 +40,16 @@ namespace WatiN.Core.DialogHandlers
 		#region IDialogHandler Members
 
 	    /// <inheritdoc />
-		public abstract bool HandleDialog(Window window);
+		public abstract bool HandleDialog(Window dialog);
 
 		/// <inheritdoc />
-		public virtual bool CanHandleDialog(Window window, IntPtr mainWindowHwnd)
+        public virtual bool CanHandleDialog(Window dialog, IntPtr mainWindowHwnd)
 		{
-            var ieVersion = IE.GetMajorIEVersion();
-            var dialogBelongsToIeWindow = ieVersion < 8 ? 
-                                        DialogBelongsToIEWindowForIe7AndLower(window, mainWindowHwnd) : 
-                                        DialogBelongsToIEWindowForIe8AndHigher(window, mainWindowHwnd);
+		    var iesWindowHelper = new IESWindowHelper(mainWindowHwnd);
+		    return iesWindowHelper.IsChildWindow(dialog) && CanHandleDialog(dialog);
+		}
 
-            return dialogBelongsToIeWindow && CanHandleDialog(window);
-        }
-
-	    private static bool DialogBelongsToIEWindowForIe7AndLower(Window window, IntPtr mainWindowHwnd)
-	    {
-	        var mainWindow = new Window(mainWindowHwnd);
-	        return window.ToplevelWindow.Equals(mainWindow);
-        }
-
-        private static bool DialogBelongsToIEWindowForIe8AndHigher(Window window, IntPtr mainWindowHwnd)
-        {
-            var mainWindow = new Window(mainWindowHwnd);
-            Logger.LogDebug("Main: " + mainWindow.Hwnd + ", " + mainWindow.Title + ", " + mainWindow.ProcessID);
-            
-            var hWnd = IEUtils.GetInteretExplorerServerHwnd(mainWindowHwnd);
-            var window1 = new Window(hWnd);            
-            Logger.LogDebug("IES: " + window1.Hwnd + ", " + window1.Title + ", " + window1.ProcessID);
-
-            return window1.ProcessID == window.ProcessID;
-        }
-
-		public abstract bool CanHandleDialog(Window window);
+	    public abstract bool CanHandleDialog(Window window);
 
 		#endregion
 	}

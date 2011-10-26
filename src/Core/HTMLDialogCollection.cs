@@ -38,14 +38,16 @@ namespace WatiN.Core
 	    {
             findBy = Find.Any;
             this.waitForComplete = waitForComplete;
-            htmlDialogs = new List<HtmlDialog>();
-            
-            var toplevelWindow = new Window(hWnd).ToplevelWindow;
+            var iesWindowHelper = new IESWindowHelper(hWnd);
 
+	        htmlDialogs = new List<HtmlDialog>();
+            
 	        var windows = new WindowsEnumerator();
             var popups = windows.GetWindows(window => NativeMethods.CompareClassNames(window.Hwnd, "Internet Explorer_TridentDlgFrame"));
             foreach (var window in popups)
             {
+                if (!iesWindowHelper.IsChildWindow(window)) continue;
+                
                 var htmlDialog = new HtmlDialog(window.Hwnd);
                 htmlDialogs.Add(htmlDialog);
             }

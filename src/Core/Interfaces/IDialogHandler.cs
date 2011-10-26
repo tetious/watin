@@ -26,16 +26,16 @@ namespace WatiN.Core.Interfaces
         /// <summary>
         /// Handles the dialog and returns true when handled with succes
         /// </summary>
-        /// <param name="window"></param>
+        /// <param name="dialog"></param>
         /// <returns></returns>
-        bool HandleDialog(Window window);
+        bool HandleDialog(Window dialog);
 
         /// <summary>
         /// Indicates wheter the dialoghandler can handle the given dialog window
         /// </summary>
-        /// <param name="window"></param>
+        /// <param name="dialog"></param>
         /// <param name="mainWindowHwnd"></param>
         /// <returns></returns>
-        bool CanHandleDialog(Window window, IntPtr mainWindowHwnd);
+        bool CanHandleDialog(Window dialog, IntPtr mainWindowHwnd);
     }
 }
