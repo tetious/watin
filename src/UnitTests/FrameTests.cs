@@ -216,36 +216,19 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void Should_return_javascript_name_frame_hierarchy()
-        {
-            ExecuteTest(browser =>
-            {
-                // GIVEN
-                var mainFrame = browser.Frame("mainid");
-
-                // WHEN
-                var result = mainFrame.JavaScriptFrameHierarchy;
-
-                //THEN
-                Assert.That(result, Is.Empty);
-            }
-                );
-        }
-
-        [Test]
-        public void Should_return_javascript_names_frame_hierarchy()
+        public void Should_not_have_stored_javascript_names_frame_hierarchy_for_first_level_frame()
         {
             ExecuteTest(browser =>
             {
                 // GIVEN
                 browser.GoTo(FramesetWithinFramesetURI);
-                var mainFrame = browser.Frame(Find.ByName("firstlevel")).Frame(Find.ByName("main"));
+                var mainFrame = browser.Frame(Find.ByName("firstlevel"));
 
                 // WHEN
-                var result = mainFrame.JavaScriptFrameHierarchy;
+                var result = mainFrame.GetAttributeValue("data-watinFrameHierarchy");
 
                 //THEN
-                Assert.That(result, Is.EqualTo("firstlevel."));
+                Assert.That(result, Is.Null);
             });
         }
 
