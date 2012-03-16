@@ -28,26 +28,36 @@ namespace WatiN.Core
     [ElementTag("iframe", Index = 1)]
     public class Frame : Document
 	{
+	    public Frame ParentFrame { get; private set; }
 	    public Element FrameElement { get; private set; }
 	    private readonly INativeDocument _frameDocument;
 
-		/// <summary>
-		/// This constructor will mainly be used by the constructor of FrameCollection
-		/// to create an instance of a Frame.
-		/// </summary>
-		/// <param name="domContainer">The domContainer</param>
-		/// <param name="frameDocument">The document within the frame</param>
-		public Frame(DomContainer domContainer, INativeDocument frameDocument)
+	    /// <summary>
+	    /// This constructor will mainly be used by the constructor of FrameCollection
+	    /// to create an instance of a Frame.
+	    /// </summary>
+	    /// <param name="domContainer">The domContainer</param>
+	    /// <param name="frameDocument">The document within the frame</param>
+	    /// <param name="parentDocument"> </param>
+	    public Frame(DomContainer domContainer, INativeDocument frameDocument, Frame parentDocument)
             : base(domContainer)
 		{
-            if (frameDocument == null)
+	        if (frameDocument == null)
                 throw new ArgumentNullException("frameDocument");
 
             _frameDocument = frameDocument;
-            FrameElement = new Element(domContainer, frameDocument.ContainingFrameElement);
+            ParentFrame = parentDocument;
+            FrameElement = CreateFrameElement(domContainer, frameDocument);
+
+            SetAttributeValue("data-watinFrameHierarchy", JavaScriptFrameHierarchy);
 		}
 
-        /// <inheritdoc />
+	    private static Element CreateFrameElement(DomContainer domContainer, INativeDocument frameDocument)
+	    {
+	        return new Element(domContainer, frameDocument.ContainingFrameElement);
+	    }
+
+	    /// <inheritdoc />
         public override INativeDocument NativeDocument
         {
             get { return _frameDocument; }
@@ -63,7 +73,25 @@ namespace WatiN.Core
 			get { return GetAttributeValue("id"); }
 		}
 
-        /// <inheritdoc />
+	    public string JavaScriptFrameHierarchy
+	    {
+	        get
+	        {
+	            var namesHierarchy = string.Empty;
+
+	            var parentFrame = ParentFrame;
+                while (parentFrame != null)
+                {
+                    var parentFrameElementName = parentFrame.Name;
+                    namesHierarchy = parentFrameElementName + "." + namesHierarchy;
+                    parentFrame = parentFrame.ParentFrame;
+                }
+
+                return namesHierarchy;
+	        }
+	    }
+
+	    /// <inheritdoc />
         protected override string GetAttributeValueImpl(string attributeName)
         {
             switch (attributeName.ToLowerInvariant())

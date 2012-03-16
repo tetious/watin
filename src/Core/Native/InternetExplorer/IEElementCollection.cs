@@ -83,14 +83,18 @@ namespace WatiN.Core.Native.InternetExplorer
 
         public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
         {
-            domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
             var container = "document";
             if (_element != null)
             {
                 container = _element.GetJavaScriptElementReference();
                 if (new ElementTag(_element.TagName).Equals(new ElementTag("frame")))
-                    container = container + ".contentDocument";
+                {
+                    var frameHierarchy = _element.GetAttributeValue("data-watinFrameHierarchy");
+                    container = frameHierarchy + container + ".contentDocument";
+                }
             }
+
+            domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
             var code = string.Format("document.___WATINRESULT = Sizzle('{0}', {1});", selector, container);
             domContainer.RunScript(code);

@@ -191,7 +191,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             });
         }
 
-        [Test, Ignore("Bug: Queryselector can't be used to find Frames in IE")]
+        [Test]
         public void Should_find_element_in_frame()
         {
             ExecuteTest(browser =>
@@ -209,22 +209,17 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             });
         }
 
-        [Test, Ignore("Bug: Queryselector not working with Frames in IE")]
+        [Test]
         public void Should_find_element_in_frame_within_frame()
         {
             ExecuteTest(browser =>
             {
                 // GIVEN
                 browser.GoTo(FramesetWithinFramesetURI);
-                var frame1 = browser.Frame("mainid");
-                Console.WriteLine(frame1.FrameElement.GetJavascriptElementReference());
-                var frame2 = frame1.Frame("mainid");
-                var javascriptElementReference = frame2.FrameElement.GetJavascriptElementReference();
-                Console.WriteLine(javascriptElementReference);
-                    
+                var frame = browser.Frame("mainid").Frame("mainid");
 
                 // WHEN
-                var link = frame2.Link(Find.BySelector("#Microsoft"));
+                var link = frame.Link(Find.BySelector("#Microsoft"));
 
                 // THEN
                 Assert.That(link.Exists);                

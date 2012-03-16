@@ -22,23 +22,23 @@ using WatiN.Core.Native;
 
 namespace WatiN.Core
 {
-	/// <summary>
-	/// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
-	/// </summary>
-	public class FrameCollection : BaseComponentCollection<Frame, FrameCollection>
-	{
+    /// <summary>
+    /// A typed collection of <see cref="Frame" /> instances within a <see cref="Document"/>.
+    /// </summary>
+    public class FrameCollection : BaseComponentCollection<Frame, FrameCollection>
+    {
         private readonly Constraint findBy;
         private readonly List<Frame> frames;
 
-		public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument)
-		{
+        public FrameCollection(DomContainer domContainer, INativeDocument htmlDocument, Document document)
+        {
             findBy = Find.Any;
 
             frames = new List<Frame>();
 
             foreach (INativeDocument frameDocument in htmlDocument.Frames)
-                frames.Add(new Frame(domContainer, frameDocument));
-		}
+                frames.Add(new Frame(domContainer, frameDocument, document as Frame));
+        }
 
         private FrameCollection(Constraint findBy, List<Frame> frames)
         {

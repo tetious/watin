@@ -368,7 +368,7 @@ namespace WatiN.Core
 		/// </summary>
         public virtual FrameCollection Frames
 		{
-			get { return new FrameCollection(DomContainer, NativeDocument); }
+			get { return new FrameCollection(DomContainer, NativeDocument, this); }
 		}
 
         /// <summary>
