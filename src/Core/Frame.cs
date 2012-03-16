@@ -28,7 +28,6 @@ namespace WatiN.Core
     [ElementTag("iframe", Index = 1)]
     public class Frame : Document
 	{
-	    private Frame ParentFrame { get; set; }
 	    public Element FrameElement { get; private set; }
 	    private readonly INativeDocument _frameDocument;
 
@@ -46,20 +45,20 @@ namespace WatiN.Core
                 throw new ArgumentNullException("frameDocument");
 
             _frameDocument = frameDocument;
-            ParentFrame = parentDocument;
             FrameElement = CreateFrameElement(domContainer, frameDocument);
 
-            SetFrameHierarchy();
+            SetFrameHierarchy(parentDocument);
 		}
 
-        /// <summary>
-        /// This is done to facilitate CSS selector look up in IEElementCollection
-        /// </summary>
-	    private void SetFrameHierarchy()
+	    /// <summary>
+	    /// This is done to facilitate CSS selector look up in IEElementCollection
+	    /// </summary>
+	    /// <param name="parentDocument"> </param>
+	    private void SetFrameHierarchy(Frame parentDocument)
 	    {
-            if (ParentFrame == null) return;
+            if (parentDocument == null) return;
 
-	        var hierarchy = GetAttributeValue("data-watinFrameHierarchy") + ParentFrame.Name + ".";
+            var hierarchy = GetAttributeValue("data-watinFrameHierarchy") + parentDocument.Name + ".";
             SetAttributeValue("data-watinFrameHierarchy", hierarchy);
 	    }
 
