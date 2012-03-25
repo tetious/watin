@@ -226,6 +226,49 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             });
         }
 
+        [Test]
+        public void Should_find_element_in_frame_within_frame_within_frame()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(new Uri(HtmlTestBaseURI, "FramesetWithinFramesetWithinFrameset.html"));
+                var frame = browser.Frame(Find.ByName("zerolevel")).
+                                    Frame(Find.ByName("firstlevel")).
+                                    Frame(Find.ByName("main"));
+
+                // WHEN
+                var link = frame.Link(Find.BySelector("#Microsoft"));
+
+                // THEN
+                Assert.That(link.Exists);                
+            });
+        }
+
+        [Test]
+        public void Should_find_element_in_frame_within_frame_even_when_no_name_or_id_is_set()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesetWithinFramesetURI);
+                var firstFrame = browser.Frame("mainid");
+
+                firstFrame.FrameElement.SetAttributeValue("id", "");
+                firstFrame.FrameElement.SetAttributeValue("name", "");
+
+                firstFrame = browser.Frames[1];
+                
+                // WHEN
+                var link = firstFrame.Frame("mainid").Link(Find.BySelector("#Microsoft"));
+
+                // THEN
+                Assert.That(link.Exists);
+                Assert.That(firstFrame.Id, Text.StartsWith("frame_watin"), "Pre-condition: Expected no Id for firstFrame");
+            });
+        }
+
+
 
         public override Uri TestPageUri
         {

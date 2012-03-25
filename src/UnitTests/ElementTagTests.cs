@@ -71,6 +71,21 @@ namespace WatiN.Core.UnitTests
 			}
 		}
 
+        [Test]
+        public void Should_be_equal_when_comparing_lower_with_uppercase_tagname()
+        {
+            // GIVEN
+            var tagLowerCase = new ElementTag("frame");
+            var tagUpperCase = new ElementTag("FRAME");
+
+            // WHEN
+            var isEqual = tagLowerCase.Equals(tagUpperCase);
+
+            // THEN
+            Assert.IsTrue(isEqual, "Casing should not be relavent");
+
+        }
+
 		private static void AssertLowerCaseUpperCase(Mock<INativeElement> elementMock) 
 		{
 			// LowerCase

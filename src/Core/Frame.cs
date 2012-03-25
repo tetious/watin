@@ -58,8 +58,27 @@ namespace WatiN.Core
 	    {
             if (parentDocument == null) return;
 
-            var hierarchy = GetAttributeValue("data-watinFrameHierarchy") + parentDocument.Name + ".";
-            SetAttributeValue("data-watinFrameHierarchy", hierarchy);
+	        var frameElement = parentDocument.FrameElement;
+	        var nameOrId = GetFrameElementNameOrId(frameElement);
+	        var hierarchy = frameElement.GetAttributeValue("data-watinFrameHierarchy") + nameOrId + ".";
+            
+            FrameElement.SetAttributeValue("data-watinFrameHierarchy", hierarchy);
+	    }
+
+	    private static string GetFrameElementNameOrId(Element frameElement)
+	    {
+	        var frameRef = frameElement.Name;
+	        
+            if (string.IsNullOrEmpty(frameRef))
+                frameRef = frameElement.Id;
+
+	        if (string.IsNullOrEmpty(frameRef))
+	        {
+	            frameRef = frameElement.GetJavascriptElementReference();
+	            frameElement.SetAttributeValue("Id", "frame_" + frameRef);
+	        }
+	        
+            return frameRef;
 	    }
 
 	    private static Element CreateFrameElement(DomContainer domContainer, INativeDocument frameDocument)

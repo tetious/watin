@@ -238,14 +238,16 @@ namespace WatiN.Core.UnitTests
             ExecuteTest(browser =>
             {
                 // GIVEN
-                browser.GoTo(FramesetWithinFramesetURI);
-                var mainFrame = browser.Frame(Find.ByName("firstlevel")).Frame(Find.ByName("main"));
+                browser.GoTo(new Uri(HtmlTestBaseURI, "FramesetWithinFramesetWithinFrameset.html"));
+                var mainFrame = browser.Frame(Find.ByName("zerolevel")).
+                                        Frame(Find.ByName("firstlevel")).
+                                        Frame(Find.ByName("main"));
 
                 // WHEN
                 var result = mainFrame.GetAttributeValue("data-watinFrameHierarchy");
 
                 //THEN
-                Assert.That(result, Is.EqualTo("firstlevel."));
+                Assert.That(result, Is.EqualTo("zerolevel.firstlevel."));
             });
         }
 

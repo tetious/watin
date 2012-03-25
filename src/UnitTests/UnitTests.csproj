@@ -435,6 +435,7 @@
     <Content Include="html\BodyNotExistsBug.htm" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />
+    <Content Include="html\FramesetWithinFramesetWithinFrameset.html" />
     <Content Include="html\iframes\FramesetWithinIFrame.html" />
     <Content Include="html\iframes\iFramesWithinFrameset.html" />
     <Content Include="html\Frameset2.html" />
