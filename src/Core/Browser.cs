@@ -83,7 +83,8 @@ namespace WatiN.Core
 
         public virtual void SizeWindow(int width, int height)
         {
-            new Window(hWnd).SizeTo(width, height);
+            RunScript(string.Format("window.resizeTo({0}, {1});", width, height));
+            //new Window(hWnd).SizeTo(width, height);
         }
 
         /// <summary>
@@ -331,7 +332,10 @@ namespace WatiN.Core
         /// <summary>
         /// Closes the browser.
         /// </summary>
-        public abstract void Close();
+        public virtual void Close()
+        {
+            NativeBrowser.Close();
+        }
 
         public override IntPtr hWnd
         {

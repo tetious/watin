@@ -68,5 +68,7 @@ namespace WatiN.Core.Native
         IntPtr hWnd { get; }
 
         INativeDocument NativeDocument { get; }
+
+        void Close();
     }
 }

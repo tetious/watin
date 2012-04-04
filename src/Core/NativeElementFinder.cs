@@ -76,7 +76,7 @@ namespace WatiN.Core
             return FindElementByTags();
         }
 
-        private IEnumerable<Element> FindElementsUsingQuerySelector(string selector)
+        private IEnumerable<Element> FindElementsUsingQuerySelector(ICssSelector selector)
         {
             var nativeElementCollection2 = (INativeElementCollection2)GetNativeElementCollection();
             return WrapMatchingElements(nativeElementCollection2.GetElementsWithQuerySelector(selector, domContainer));
@@ -165,7 +165,7 @@ namespace WatiN.Core
             return IdHinter.GetIdHint(constraint);
         }
 
-        protected virtual string GetSelector(Constraint constraint)
+        protected virtual ICssSelector GetSelector(Constraint constraint)
         {
             return new QuerySelectorHinter(constraint).GetSelector();
         }

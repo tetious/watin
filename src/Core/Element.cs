@@ -160,7 +160,11 @@ namespace WatiN.Core
 		/// <value>The id.</value>
         public virtual string Id
 		{
-			get { return GetAttributeValue("id"); }
+			get 
+            { 
+                var value = GetAttributeValue("id");
+                return string.IsNullOrEmpty(value) ? null : value;
+            }
             set { SetAttributeValue("id", value); }
 		}
 
@@ -418,7 +422,9 @@ namespace WatiN.Core
 				throw new ElementDisabledException(IdOrName, this);
 			}
 
-			Logger.LogAction((LogFunction log) => { log("Clicking (no wait) {0} '{1}', {2}", GetType().Name, IdOrName, Description); });
+            var nowaitText = waitforComplete? "" : "(nowait) ";
+
+            Logger.LogAction((LogFunction log) => { log("Clicking {3}{0} '{1}', {2}", GetType().Name, IdOrName, Description, nowaitText); });
 
 			Highlight(true);
 

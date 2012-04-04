@@ -81,7 +81,7 @@ namespace WatiN.Core.Native.InternetExplorer
             }
         }
 
-        public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
+        public IEnumerable<INativeElement> GetElementsWithQuerySelector(ICssSelector selector, DomContainer domContainer)
         {
             var container = "document";
             if (_element != null)
@@ -96,7 +96,7 @@ namespace WatiN.Core.Native.InternetExplorer
 
             domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
-            var code = string.Format("document.___WATINRESULT = Sizzle('{0}', {1});", selector, container);
+            var code = string.Format("document.___WATINRESULT = Sizzle('{0}', {1});", selector.Selector(true), container);
             domContainer.RunScript(code);
 
             return new JScriptElementArrayEnumerator((IEDocument) domContainer.NativeDocument, "___WATINRESULT");

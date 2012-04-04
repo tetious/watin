@@ -19,10 +19,11 @@
 using System;
 using System.IO;
 using WatiN.Core.Interfaces;
+using WatiN.Core.Native;
 
 namespace WatiN.Core.Constraints
 {
-    public class QuerySelectorConstraint : Constraint
+    public class QuerySelectorConstraint : Constraint, ICssSelector
     {
         public QuerySelectorConstraint(string selector)
         {
@@ -41,6 +42,11 @@ namespace WatiN.Core.Constraints
         protected override bool MatchesImpl(IAttributeBag attributeBag, ConstraintContext context)
         {
             return true;
+        }
+
+        string ICssSelector.Selector(bool encoded)
+        {
+            return encoded ? EncodedSelector : Selector;
         }
     }
 }

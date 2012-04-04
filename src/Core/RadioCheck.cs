@@ -33,7 +33,11 @@ namespace WatiN.Core
 
         public virtual bool Checked
 		{
-			get { return bool.Parse(GetAttributeValue("checked")); }
+			get 
+            {
+                var value = GetAttributeValue("checked");
+                return value == null ? false : bool.Parse(value); 
+            }
 			set
 			{
                 if (Checked == value) return;

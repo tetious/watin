@@ -20,11 +20,12 @@ using System;
 using mshtml;
 using NUnit.Framework;
 using SHDocVw;
+using WatiN.Core.UnitTests.TestUtils;
 
 namespace WatiN.Core.UnitTests.ResearchTests
 {
     [TestFixture]
-    public class JavascriptErrorDetection
+    public class JavascriptErrorDetection : BaseWatiNTest
     {
         [Test, Ignore("Example code")]
         public void Should_detect_error()
@@ -38,8 +39,20 @@ namespace WatiN.Core.UnitTests.ResearchTests
                  ie.GoTo(@"D:\Projects\WatiN\Support\ErrorInJavascript\Test.html");
                  ie.GoTo("google.com");
                  ie.GoTo(@"D:\Projects\WatiN\Support\ErrorInJavascript\Test.html");
-
             }
         }
+
+        //public void Test()
+        //{
+        //    using (var ie = new IE(MainURI))
+        //    {
+        //        ie.Link(Find.ByText("WatiN")).Click();
+
+        //        Browser.AttachTo<IE>(Find.)
+
+        //            // 'opener' in javascript? should refer to window/doc that opened new window...?
+
+        //    }
+        //}
     }
 }

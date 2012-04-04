@@ -99,7 +99,7 @@ namespace WatiN.Core.UnitTests
 		    ExecuteTest(browser =>
 		                    {
                                 var table = browser.Table(tableId);
-		                        Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
+                                Assert.AreEqual("TH", table.TableRows[0].Elements[0].TagName.ToUpper(), "First tablerow should contain a TH element");
 
 		                        var row = table.FindRow(new Regex("a"), 0);
 		                        Assert.IsNotNull(row, "row expected");

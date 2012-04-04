@@ -99,7 +99,7 @@ namespace WatiN.Core
 
         protected virtual ITypeTextAction CreateTypeTextAction()
 	    {
-	        return new TypeTextAction(this);
+            return NativeElement.CreateTypeTextAction(this);
 	    }
 
 	    public virtual string Value

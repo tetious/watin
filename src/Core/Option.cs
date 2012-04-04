@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using WatiN.Core.Native;
+using WatiN.Core.Actions;
 
 namespace WatiN.Core
 {
@@ -131,19 +132,15 @@ namespace WatiN.Core
 			get { return Ancestor<SelectList>(); }
 		}
 
-		private void setSelected(bool value, bool WaitForComplete)
+		private void setSelected(bool value, bool waitForComplete)
 		{
-		    if (bool.Parse(GetAttributeValue("selected")) == value) return;
+		    if (Selected == value) return;
 
-            SetAttributeValue("selected", value.ToString().ToLowerInvariant());
-		    if (WaitForComplete)
-		    {
-		        ParentSelectList.FireEvent("onchange");
-		    }
-		    else
-		    {
-		        ParentSelectList.FireEventNoWait("onchange");
-		    }
+            var action = NativeElement.CreateSelectAction(this);
+            if (value)
+                action.Select(waitForComplete);
+            else
+                action.Deselect(waitForComplete);
 		}
 	}
 }

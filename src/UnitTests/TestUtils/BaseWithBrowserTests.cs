@@ -23,6 +23,9 @@ using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.UnitTests.FireFoxTests;
 using WatiN.Core.UnitTests.IETests;
+using System.Reflection;
+using System.Collections.Specialized;
+using System.Configuration;
 # if INCLUDE_CHROME
 using WatiN.Core.UnitTests.Native.ChromeTests;
 #endif
@@ -68,12 +71,19 @@ namespace WatiN.Core.UnitTests.TestUtils
         public override void FixtureSetup()
         {
             base.FixtureSetup();
-#if !IncludeChromeInUnitTesting
-            BrowsersToTestWith.Add(ieManager);
-            //BrowsersToTestWith.Add(ffManager);
-#else
-		    BrowsersToTestWith.Add(chromeManager);
-#endif
+
+            var section = ConfigurationManager.GetSection("Browsers/Managers") as NameValueCollection;
+            for(int i = 0; i < section.Count; i++)
+            {
+                var dll = section.GetValues(i)[0];
+                var managerClass = section.GetKey(i);
+
+                var assembly = Assembly.LoadFrom(dll);
+                var manager = (IBrowserTestManager)assembly.CreateInstance(managerClass);
+                
+                BrowsersToTestWith.Add(manager as IBrowserTestManager);
+            }
+
             Logger.LogWriter = new ConsoleLogWriter {HandlesLogDebug = true};
         }
 

@@ -140,6 +140,7 @@ namespace WatiN.Core.UnitTests
                 browser.GoTo(TablesUri);
 
                 var tableRows = browser.Table("thead_tbody_tfoot").OwnTableRows;
+                Assert.That(tableRows.Count, Is.GreaterThan(0));
 
                 // WHEN
                 var noHeaderRows = tableRows.Filter(TableRow.IsFooterRow());

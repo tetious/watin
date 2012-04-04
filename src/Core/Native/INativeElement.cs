@@ -20,6 +20,7 @@ using System;
 using System.Collections.Specialized;
 using System.Drawing;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.Actions;
 
 namespace WatiN.Core.Native
 {
@@ -165,5 +166,9 @@ namespace WatiN.Core.Native
         string GetJavaScriptElementReference();
 
         void Pin();
+
+        ITypeTextAction CreateTypeTextAction(TextField textField);
+
+        ISelectAction CreateSelectAction(Option option);
     }
 }

@@ -143,11 +143,11 @@ namespace WatiN.Core.Native
             return GetElementsByIdImpl(id);
         }
 
-        public IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer)
+        public IEnumerable<INativeElement> GetElementsWithQuerySelector(ICssSelector selector, DomContainer domContainer)
         {
             domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
-            var command = string.Format("window.Sizzle('{0}', {1})", selector, containerReference);
+            var command = string.Format("window.Sizzle('{0}', {1})", selector.Selector(true), containerReference);
 
             var ffElements = GetElementArrayEnumerator(command);
             foreach (var ffElement in ffElements)

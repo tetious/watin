@@ -28,6 +28,7 @@ using WatiN.Core.UtilityClasses;
 namespace WatiN.Core.Native
 {
     using Mozilla;
+    using WatiN.Core.Actions;
 
     public class JSElement : INativeElement
     {
@@ -604,6 +605,17 @@ namespace WatiN.Core.Native
 
             ElementReference = elementVariableName;
         }
+
+        public ITypeTextAction CreateTypeTextAction(TextField textField)
+        {
+            return new TypeTextAction(textField);
+        }
+
+        public ISelectAction CreateSelectAction(Option option)
+        {
+            return new SelectAction(option);
+        }
+
     }
 
     public class JSEventCreator
@@ -758,6 +770,5 @@ namespace WatiN.Core.Native
 
             return defaultValue;
         }
-
     }
 }

@@ -54,8 +54,8 @@ namespace WatiN.Core.Native
         IEnumerable<INativeElement> GetElementsById(string id);
     }
 
-    internal interface INativeElementCollection2 : INativeElementCollection
+    public interface INativeElementCollection2 : INativeElementCollection
     {
-        IEnumerable<INativeElement> GetElementsWithQuerySelector(string selector, DomContainer domContainer);
+        IEnumerable<INativeElement> GetElementsWithQuerySelector(ICssSelector selector, DomContainer domContainer);
     }
 }

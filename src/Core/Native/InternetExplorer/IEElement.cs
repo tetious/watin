@@ -25,6 +25,7 @@ using WatiN.Core.DialogHandlers;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
 using WatiN.Core.UtilityClasses;
+using WatiN.Core.Actions;
 
 namespace WatiN.Core.Native.InternetExplorer
 {
@@ -549,5 +550,14 @@ namespace WatiN.Core.Native.InternetExplorer
             return AsDispHTMLBaseElement.uniqueNumber;
         }
 
+        public ITypeTextAction CreateTypeTextAction(TextField textField)
+        {
+            return new TypeTextAction(textField);
+        }
+
+        public ISelectAction CreateSelectAction(Option option)
+        {
+            return new SelectAction(option);
+        }
     }
 }

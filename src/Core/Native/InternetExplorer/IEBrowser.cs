@@ -131,7 +131,7 @@ namespace WatiN.Core.Native.InternetExplorer
             set { webBrowser.Visible = value; }
 	    }
 
-        public void Quit()
+        public void Close()
         {
             webBrowser.Quit();
         }

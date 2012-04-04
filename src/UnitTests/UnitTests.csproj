@@ -162,6 +162,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -194,6 +195,7 @@
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
+    <Compile Include="html\DataBoundSupport\Class1.cs" />
     <Compile Include="ElementFactoryTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
@@ -252,6 +254,7 @@
     <Compile Include="ResearchTests\JavascriptErrorDetection.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
     <Compile Include="ResearchTests\ScriptLoaderTests.cs" />
+    <Compile Include="SteveTests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -432,6 +435,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WatiNSanityTests.cs" />
+    <Content Include="html\DataBoundSupport\frame1.html" />
+    <Content Include="html\DataBoundSupport\frame2.html" />
+    <Content Include="html\DataBoundSupport\Frameset.html" />
+    <Content Include="html\DataBoundSupport\MainPage.htm" />
     <Content Include="html\BodyNotExistsBug.htm" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />

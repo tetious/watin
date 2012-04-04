@@ -77,7 +77,7 @@ namespace WatiN.Core.UnitTests
                                 browser.Button("button1").Click();
 
                                 // THEN
-                                var value = browser.TextField("report").Value;
+                                var value = browser.TextField("report").Text;
                                 Assert.That(value, Is.EqualTo("clicked"));
                             });
         }
@@ -252,6 +252,7 @@ namespace WatiN.Core.UnitTests
 		                        Assert.AreEqual(value, browser.Button("buttonelementid").ToString());
 		                        Assert.AreEqual(value, browser.Button(Find.ByName("buttonelementname")).Value);
 
+                                Console.WriteLine("innertext: '" + browser.Button("buttonelementid").GetAttributeValue("innerText") + "'");
 		                        Assert.AreEqual(value, browser.Button(Find.ByText("Button Element")).Value);
 		                        
 		                        Assert.IsTrue(browser.Button(new Regex("buttonelementid")).Exists);
@@ -346,6 +347,12 @@ namespace WatiN.Core.UnitTests
 
         private static bool IsBrowserFirefoxOrAtleastIE8(Document browser)
         {
+            // Only do this check for WatiN.Core.IE all other
+            // Browser drivers are assummed to support latest W3C standards
+
+            var browserType = browser.GetType();
+            if (!browserType.Equals(typeof(IE))) return true;
+
             var browserVersion = 7;
             var ieUserAgent = browser.Eval("window.navigator.userAgent");
             if (!string.IsNullOrEmpty(ieUserAgent) && new Regex(@"MSIE [8-9](\.\d+);").IsMatch(ieUserAgent))
@@ -353,9 +360,7 @@ namespace WatiN.Core.UnitTests
                 browserVersion = 8;
             }
 
-            var browserType = browser.GetType();
-            return browserType.Equals(typeof(FireFox)) ||
-                   (browserType.Equals(typeof(IE)) && browserVersion > 7);
+            return (browserType.Equals(typeof(IE)) && browserVersion > 7);
         }
 	}
 }

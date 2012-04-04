@@ -234,14 +234,6 @@ namespace WatiN.Core
             WaitForComplete(new JSWaitForComplete(_ffBrowser, waitForCompleteTimeOut));
         }
 
-        /// <summary>
-        /// Closes the browser.
-        /// </summary>
-        public override void Close()
-        {
-            _ffBrowser.Close();
-        }
-
         #endregion Public instance methods
         
         #region Protected instance methods

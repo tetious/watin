@@ -17,6 +17,7 @@
 #endregion Copyright
 
 using WatiN.Core.Constraints;
+using WatiN.Core.Native;
 
 namespace WatiN.Core
 {
@@ -126,7 +127,7 @@ namespace WatiN.Core
             _constraint = constraint;
         }
 
-        public string GetSelector()
+        public ICssSelector GetSelector()
         {
             var selector = GetSelector(_constraint);
             if (selector != null) return selector;
@@ -141,10 +142,9 @@ namespace WatiN.Core
             return null;
         }
 
-        private static string GetSelector(Constraint constraint)
+        private static ICssSelector GetSelector(Constraint constraint)
         {
-            var qsConstraint = constraint as QuerySelectorConstraint;
-            return qsConstraint != null ? qsConstraint.EncodedSelector : null;
+            return constraint as QuerySelectorConstraint;
         }
     }
 }

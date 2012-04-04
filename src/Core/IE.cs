@@ -697,7 +697,7 @@ namespace WatiN.Core
 		    if (closeIE && IsInternetExplorerStillAvailable())
 		    {
 		        // Ask IE to close
-		        _ieBrowser.Quit();
+		        _ieBrowser.Close();
 		    }
 
 		    _ieBrowser = null;

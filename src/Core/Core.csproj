@@ -177,7 +177,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\HighlightAction.cs" />
-    <Compile Include="Actions\ITypeTextAction.cs" />
+    <Compile Include="Actions\SelectAction.cs" />
+    <Compile Include="Native\ICssSelector.cs" />
+    <Compile Include="Native\ISelectAction.cs" />
+    <Compile Include="Native\ITypeTextAction.cs" />
     <Compile Include="Actions\TypeTextAction.cs" />
     <Compile Include="ComponentDecoratorAttribute.cs" />
     <Compile Include="ComponentExtensions.cs" />

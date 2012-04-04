@@ -73,6 +73,7 @@ namespace WatiN.Core.UnitTests
                                                {
                                                    // THEN cursor should still be on 50,50
                                                    Assert.That(Cursor.Position, Is.EqualTo(notTopLeftPoint));
+                                                   manager.CloseBrowser();
                                                }
 
                                                // WHEN we set to the mousepointer to top left
@@ -82,6 +83,7 @@ namespace WatiN.Core.UnitTests
                                                {
                                                    // THEN cursor should be on 0,0
                                                    Assert.That(Cursor.Position, Is.EqualTo(new Point(0, 0)));
+                                                   manager.CloseBrowser();
                                                }
                                            });
         }
