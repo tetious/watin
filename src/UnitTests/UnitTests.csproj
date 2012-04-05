@@ -195,7 +195,6 @@
     <Compile Include="ControlCollectionTests.cs" />
     <Compile Include="ControlTests.cs" />
     <Compile Include="ComponentExtensionsTests.cs" />
-    <Compile Include="html\DataBoundSupport\Class1.cs" />
     <Compile Include="ElementFactoryTests.cs" />
     <Compile Include="ElementOfTypeTests.cs" />
     <Compile Include="HtmlColorTests.cs" />
@@ -435,10 +434,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WatiNSanityTests.cs" />
-    <Content Include="html\DataBoundSupport\frame1.html" />
-    <Content Include="html\DataBoundSupport\frame2.html" />
-    <Content Include="html\DataBoundSupport\Frameset.html" />
-    <Content Include="html\DataBoundSupport\MainPage.htm" />
     <Content Include="html\BodyNotExistsBug.htm" />
     <Content Include="html\ButtonTests.html" />
     <Content Include="html\ClassConstraintTests.html" />
