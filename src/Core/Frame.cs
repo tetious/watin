@@ -56,29 +56,36 @@ namespace WatiN.Core
 	    /// <param name="parentDocument"> </param>
 	    private void SetFrameHierarchy(Frame parentDocument)
 	    {
-            if (parentDocument == null) return;
 
-	        var frameElement = parentDocument.FrameElement;
-	        var nameOrId = GetFrameElementNameOrId(frameElement);
-	        var hierarchy = frameElement.GetAttributeValue("data-watinFrameHierarchy") + nameOrId + ".";
-            
+            var nameOrId = GetFrameElementNameOrId(FrameElement);
+	        var hierarchy = string.Empty;
+
+            if (parentDocument != null)
+            {
+                var frameElement = parentDocument.FrameElement;
+                hierarchy = frameElement.GetAttributeValue("data-watinFrameHierarchy") + ".";
+            }
+
+	        hierarchy = hierarchy + nameOrId;
+	        
             FrameElement.SetAttributeValue("data-watinFrameHierarchy", hierarchy);
+            //frameDocument.RunScript(frameDocument.JavaScriptVariableName + ".___WATINFRAMEHIERARCHY = '" + hierarchy + "'", "javascript");
 	    }
 
 	    private static string GetFrameElementNameOrId(Element frameElement)
 	    {
-	        var frameRef = frameElement.Name;
-	        
-            if (string.IsNullOrEmpty(frameRef))
-                frameRef = frameElement.Id;
+            var idOrName = frameElement.Name;
 
-	        if (string.IsNullOrEmpty(frameRef))
+            if (string.IsNullOrEmpty(idOrName))
+                idOrName = frameElement.Id;
+
+	        if (string.IsNullOrEmpty(idOrName))
 	        {
-	            frameRef = frameElement.GetJavascriptElementReference();
-	            frameElement.SetAttributeValue("Id", "frame_" + frameRef);
+                idOrName = "frame_" + frameElement.GetJavascriptElementReference();
+	            frameElement.SetAttributeValue("Id", idOrName);
 	        }
 	        
-            return frameRef;
+            return idOrName;
 	    }
 
 	    private static Element CreateFrameElement(DomContainer domContainer, INativeDocument frameDocument)

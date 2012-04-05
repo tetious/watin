@@ -216,23 +216,6 @@ namespace WatiN.Core.UnitTests
         }
 
         [Test]
-        public void Should_not_have_stored_javascript_names_frame_hierarchy_for_first_level_frame()
-        {
-            ExecuteTest(browser =>
-            {
-                // GIVEN
-                browser.GoTo(FramesetWithinFramesetURI);
-                var mainFrame = browser.Frame(Find.ByName("firstlevel"));
-
-                // WHEN
-                var result = mainFrame.GetAttributeValue("data-watinFrameHierarchy");
-
-                //THEN
-                Assert.That(result, Is.Null);
-            });
-        }
-
-        [Test]
         public void Should_store_javascript_names_frame_hierarchy()
         {
             ExecuteTest(browser =>
@@ -247,7 +230,33 @@ namespace WatiN.Core.UnitTests
                 var result = mainFrame.GetAttributeValue("data-watinFrameHierarchy");
 
                 //THEN
-                Assert.That(result, Is.EqualTo("zerolevel.firstlevel."));
+                Assert.That(result, Is.EqualTo("zerolevel.firstlevel.main"));
+            });
+        }
+
+        [Test]
+        public void Should_assign_an_id_to_frame_when_no_name_or_id_is_set()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                browser.GoTo(FramesetWithinFramesetURI);
+                var firstFrame = browser.Frame("mainid");
+
+                firstFrame.FrameElement.SetAttributeValue("id", "");
+                firstFrame.FrameElement.SetAttributeValue("name", "");
+
+                firstFrame = browser.Frames[1];
+
+                // WHEN
+                var link = firstFrame.Frame("mainid").Link(Find.BySelector("#Microsoft"));
+
+                // THEN
+                Assert.That(link.Exists);
+                Assert.That(firstFrame.Id, Text.StartsWith("frame_"), "unexpected prefix of set id");
+
+                var hierarchy = firstFrame.GetAttributeValue("data-watinFrameHierarchy");
+                Assert.That(hierarchy, Text.StartsWith(firstFrame.Id));
             });
         }
 

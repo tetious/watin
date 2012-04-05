@@ -19,9 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Expando;
 using mshtml;
 using WatiN.Core.Logging;
 

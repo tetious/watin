@@ -86,12 +86,15 @@ namespace WatiN.Core.Native.InternetExplorer
             var container = "document";
             if (_element != null)
             {
-                container = _element.GetJavaScriptElementReference();
                 var elementTag = new ElementTag(_element.TagName);
                 if (elementTag.Equals(new ElementTag("frame")) || elementTag.Equals(new ElementTag("iframe")))
                 {
                     var frameHierarchy = _element.GetAttributeValue("data-watinFrameHierarchy");
-                    container = frameHierarchy + container + ".contentDocument";
+                    container = frameHierarchy + ".document";
+                }
+                else
+                {
+                    container = _element.GetJavaScriptElementReference();
                 }
             }
 
