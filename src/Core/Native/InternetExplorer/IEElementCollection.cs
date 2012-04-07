@@ -94,7 +94,17 @@ namespace WatiN.Core.Native.InternetExplorer
                 }
                 else
                 {
-                    container = _element.GetJavaScriptElementReference();
+                    var document = _element.AsHtmlElement.document;
+                    var result = new Expando(document).GetValue<string>("___WATINFRAMEHIERARCHY");
+
+                    container = "";
+                    if (result != null)
+                        container = result;
+
+                    if (!string.IsNullOrEmpty(container))
+                        container += ".";
+
+                    container += _element.GetJavaScriptElementReference();
                 }
             }
 

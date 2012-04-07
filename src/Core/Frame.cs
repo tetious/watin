@@ -47,14 +47,15 @@ namespace WatiN.Core
             _frameDocument = frameDocument;
             FrameElement = CreateFrameElement(domContainer, frameDocument);
 
-            SetFrameHierarchy(parentDocument);
+            SetFrameHierarchy(parentDocument, frameDocument);
 		}
 
 	    /// <summary>
 	    /// This is done to facilitate CSS selector look up in IEElementCollection
 	    /// </summary>
 	    /// <param name="parentDocument"> </param>
-	    private void SetFrameHierarchy(Frame parentDocument)
+	    /// <param name="frameDocument"> </param>
+	    private void SetFrameHierarchy(Frame parentDocument, INativeDocument frameDocument)
 	    {
 
             var nameOrId = GetFrameElementNameOrId(FrameElement);
@@ -69,7 +70,7 @@ namespace WatiN.Core
 	        hierarchy = hierarchy + nameOrId;
 	        
             FrameElement.SetAttributeValue("data-watinFrameHierarchy", hierarchy);
-            //frameDocument.RunScript(frameDocument.JavaScriptVariableName + ".___WATINFRAMEHIERARCHY = '" + hierarchy + "'", "javascript");
+            frameDocument.RunScript(frameDocument.JavaScriptVariableName + ".___WATINFRAMEHIERARCHY = '" + hierarchy + "'", "javascript");
 	    }
 
 	    private static string GetFrameElementNameOrId(Element frameElement)

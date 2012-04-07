@@ -79,12 +79,12 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
         }
 
         [Test]
-        public void Should_only_element_inside_container_element()
+        public void Should_find_element_inside_container_element()
         {
             ExecuteTest(browser =>
             {
                 // GIVEN
-                var querySelectorConstraint = new QuerySelectorConstraint("#popupid");
+                var querySelectorConstraint = new QuerySelectorConstraint(":first");
                 var containerElement = browser.Form("Form");
 
                 // WHEN
@@ -92,7 +92,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
 
                 // THEN
                 Assert.That(element.Exists, Is.True);
-                Assert.That(element.Id, Is.EqualTo("popupid"));
+                Assert.That(element.Id, Is.EqualTo("name"));
             });
         }
 
@@ -262,7 +262,7 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
             });
         }
 
-        [Test, Ignore("work in progress")]
+        [Test]
         public void Should_find_element_within_containing_element_in_frame_within_frame()
         {
             ExecuteTest(browser =>
@@ -278,7 +278,6 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                 Assert.That(link.Exists);
             });
         }
-
 
         public override Uri TestPageUri
         {

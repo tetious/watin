@@ -415,11 +415,6 @@
     <Compile Include="DialogHandlers\VbScriptMsgBoxDialogHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ElementTagAttribute.cs" />
     <Compile Include="Div.cs">
       <SubType>Code</SubType>
@@ -501,6 +496,11 @@
     </Compile>
     <Compile Include="FindByDefaultFactory.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StaticElementFinder.cs" />
     <Compile Include="UtilityClasses\EmptyArray.cs" />
@@ -696,6 +696,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
