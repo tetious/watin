@@ -78,7 +78,7 @@ namespace WatiN.Core.UnitTests
             var selector = hinter.GetSelector();
 
             // THEN
-            Assert.That(selector, Is.EqualTo("#ID"));
+            Assert.That(selector.Selector(false), Is.EqualTo("#ID"));
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace WatiN.Core.UnitTests
             var selector = hinter.GetSelector();
 
             // THEN
-            Assert.That(selector, Is.EqualTo("#ID"));
+            Assert.That(selector.Selector(false), Is.EqualTo("#ID"));
         }
     }
 }
