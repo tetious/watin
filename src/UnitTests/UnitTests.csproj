@@ -253,7 +253,6 @@
     <Compile Include="ResearchTests\JavascriptErrorDetection.cs" />
     <Compile Include="ResearchTests\PositionMousePointerOnElementTest.cs" />
     <Compile Include="ResearchTests\ScriptLoaderTests.cs" />
-    <Compile Include="SteveTests.cs" />
     <Compile Include="TestUtils\BaseWatiNTest.cs">
       <SubType>Code</SubType>
     </Compile>
