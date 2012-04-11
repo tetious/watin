@@ -1,0 +1,92 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\..\Core\Core.csproj", "{217E2D34-F6DF-431B-AC5A-B368F481A530}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "..\..\UnitTests\UnitTests.csproj", "{D6E231B3-28D9-4F73-9586-738FB528B4DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatinWebDriver", "src\WatinWebDriver.csproj", "{6BDD4419-AA39-4597-9435-03D34B14D995}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatiNWebDriverUnitTests", "unittests\WatiNWebDriverUnitTests.csproj", "{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AutomatedDebug|Any CPU = AutomatedDebug|Any CPU
+		ChromeTesting|Any CPU = ChromeTesting|Any CPU
+		Debug (.Net 3.5)|Any CPU = Debug (.Net 3.5)|Any CPU
+		Debug (.Net 4.0)|Any CPU = Debug (.Net 4.0)|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release (.Net 3.5)|Any CPU = Release (.Net 3.5)|Any CPU
+		Release (.Net 4.0)|Any CPU = Release (.Net 4.0)|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.AutomatedDebug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.ChromeTesting|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.ChromeTesting|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug (.Net 3.5)|Any CPU.ActiveCfg = Debug (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug (.Net 3.5)|Any CPU.Build.0 = Debug (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug (.Net 4.0)|Any CPU.ActiveCfg = Debug (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug (.Net 4.0)|Any CPU.Build.0 = Debug (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug|Any CPU.ActiveCfg = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Debug|Any CPU.Build.0 = AutomatedDebug|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release (.Net 3.5)|Any CPU.ActiveCfg = Release (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release (.Net 3.5)|Any CPU.Build.0 = Release (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release (.Net 4.0)|Any CPU.ActiveCfg = Release (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release (.Net 4.0)|Any CPU.Build.0 = Release (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release|Any CPU.ActiveCfg = Release (.Net 4.0)|Any CPU
+		{217E2D34-F6DF-431B-AC5A-B368F481A530}.Release|Any CPU.Build.0 = Release (.Net 4.0)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug|Any CPU.ActiveCfg = Release (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.AutomatedDebug|Any CPU.Build.0 = Release (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.ChromeTesting|Any CPU.ActiveCfg = ChromeTesting|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.ChromeTesting|Any CPU.Build.0 = ChromeTesting|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug (.Net 3.5)|Any CPU.ActiveCfg = Debug (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug (.Net 3.5)|Any CPU.Build.0 = Debug (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug (.Net 4.0)|Any CPU.ActiveCfg = Debug (.Net 4.0)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug (.Net 4.0)|Any CPU.Build.0 = Debug (.Net 4.0)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug|Any CPU.ActiveCfg = Debug (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Debug|Any CPU.Build.0 = Debug (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release (.Net 3.5)|Any CPU.ActiveCfg = Release (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release (.Net 3.5)|Any CPU.Build.0 = Release (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release (.Net 4.0)|Any CPU.ActiveCfg = Release (.Net 4.0)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release (.Net 4.0)|Any CPU.Build.0 = Release (.Net 4.0)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release|Any CPU.ActiveCfg = Release (.Net 3.5)|Any CPU
+		{D6E231B3-28D9-4F73-9586-738FB528B4DB}.Release|Any CPU.Build.0 = Release (.Net 3.5)|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.AutomatedDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.AutomatedDebug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.ChromeTesting|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.ChromeTesting|Any CPU.Build.0 = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug (.Net 3.5)|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug (.Net 3.5)|Any CPU.Build.0 = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug (.Net 4.0)|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug (.Net 4.0)|Any CPU.Build.0 = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release (.Net 3.5)|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release (.Net 3.5)|Any CPU.Build.0 = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release (.Net 4.0)|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release (.Net 4.0)|Any CPU.Build.0 = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDD4419-AA39-4597-9435-03D34B14D995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.AutomatedDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.AutomatedDebug|Any CPU.Build.0 = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.ChromeTesting|Any CPU.ActiveCfg = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.ChromeTesting|Any CPU.Build.0 = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug (.Net 3.5)|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug (.Net 3.5)|Any CPU.Build.0 = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug (.Net 4.0)|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug (.Net 4.0)|Any CPU.Build.0 = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release (.Net 3.5)|Any CPU.ActiveCfg = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release (.Net 3.5)|Any CPU.Build.0 = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release (.Net 4.0)|Any CPU.ActiveCfg = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release (.Net 4.0)|Any CPU.Build.0 = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA31AAEC-3E40-43E3-8AC9-64AB11ED0375}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
