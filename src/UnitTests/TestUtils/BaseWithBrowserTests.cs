@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using WatiN.Core.Exceptions;
 using WatiN.Core.Logging;
@@ -78,9 +79,15 @@ namespace WatiN.Core.UnitTests.TestUtils
                 var dll = section.GetValues(i)[0];
                 var managerClass = section.GetKey(i);
 
+                if (!File.Exists(dll))
+                    throw new Exception("Could not find file " + dll + ". Unable to run tests. Check UnitTests\\App.config Browsers/Managers section to correct file path.");
+                
                 var assembly = Assembly.LoadFrom(dll);
                 var manager = (IBrowserTestManager)assembly.CreateInstance(managerClass);
                 
+                if (manager == null)
+                    throw new Exception("Could not find specified BrowserTestManager class " + managerClass + " in file " + dll + ". Unable to run tests. Check UnitTests\\App.config Browsers/Managers section to correct class name.");
+
                 BrowsersToTestWith.Add(manager as IBrowserTestManager);
             }
 
