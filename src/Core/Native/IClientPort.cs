@@ -24,7 +24,7 @@ namespace WatiN.Core.Native
     public interface IClientPort
     {
         /// <summary>
-        /// Writes the specified data to the jssh server.
+        /// Writes the specified data to the mozrepl server.
         /// </summary>
         /// <param name="data">The data to write.</param>
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>

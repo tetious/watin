@@ -278,6 +278,24 @@ namespace WatiN.Core.UnitTests.AttributeConstraintTests
                 Assert.That(link.Exists);
             });
         }
+        
+        [Test, Ignore("Not working yet")]
+        public void Should_be_able_to_filter_an_already_filtered_element_collection()
+        {
+            ExecuteTest(browser =>
+            {
+                // GIVEN
+                var forms = browser.Elements.Filter(Find.BySelector("form"));
+                Console.WriteLine(">>> count: " +forms.Count);
+
+                // WHEN
+                var first = forms.Filter(Find.BySelector(":first")).First();
+
+                // THEN
+                Assert.That(first.Exists);
+                Assert.That(first.Id, Is.EqualTo("name"));
+            });
+        }
 
         public override Uri TestPageUri
         {

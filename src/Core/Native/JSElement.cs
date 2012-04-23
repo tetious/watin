@@ -159,7 +159,7 @@ namespace WatiN.Core.Native
 
         public INativeElementCollection Children
         {
-            get { return new JSElementArray(ClientPort, FireFoxClientPort.GetChildElementsFunctionName + "(" + ElementReference +")"); }
+            get { return new JSElementArray(ClientPort, ClientPort.PromptName + "." + FireFoxClientPort.GetChildElementsFunctionName + "(" + ElementReference +")"); }
         }
 
         public INativeElementCollection AllDescendants
@@ -275,7 +275,9 @@ namespace WatiN.Core.Native
             if (attributeName == "disabled") return IsDisabled;
 
             // Return value
-            return UsePropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
+            var value = UsePropertyInsteadOfAttribute.Contains(attributeName) ? GetProperty(attributeName) : GetAttribute(attributeName);
+
+            return string.IsNullOrEmpty(value) ? null : value;
         }
 
         public string IsDisabled

@@ -107,6 +107,10 @@ namespace WatiN.Core.Native.InternetExplorer
                     container += _element.GetJavaScriptElementReference();
                 }
             }
+            else
+            {
+                //container = CreateArray();
+            }
 
             domContainer.RunScript(new ScriptLoader().GetSizzleInstallScript());
 
@@ -114,6 +118,21 @@ namespace WatiN.Core.Native.InternetExplorer
             domContainer.RunScript(code);
 
             return new JScriptElementArrayEnumerator((IEDocument) domContainer.NativeDocument, "___WATINRESULT");
+        }
+
+        private string CreateArray()
+        {
+            var elements = "[";
+
+            foreach (var element in AsNative(_htmlElementCollection))
+            {
+                elements += element.GetJavaScriptElementReference() + ",";
+            }
+
+            elements = elements.Remove(elements.LastIndexOf(",", StringComparison.Ordinal), 1);
+
+            return elements + "]";
+
         }
 
         private static IEnumerable<INativeElement> AsNative(IEnumerable htmlElementCollection)

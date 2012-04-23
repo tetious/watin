@@ -140,7 +140,7 @@ namespace WatiN.Core.Logging
 			set { mLogWriter = value ?? DefaultLogWriter(); }
 		}
 
-        private static NoLog DefaultLogWriter()
+        private static ILogWriter DefaultLogWriter()
         {
             return new NoLog();
         }

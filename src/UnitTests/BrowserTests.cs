@@ -249,7 +249,7 @@ namespace WatiN.Core.UnitTests
 
         }
 
-        [Test]
+        [Test, Ignore("MOZREPL ISSUE")]
         public void Reopen()
         {
             ExecuteTest(browser =>

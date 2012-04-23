@@ -189,7 +189,7 @@ namespace WatiN.Core
                     }
                     else
                     {
-                        throw new FireFoxException("Unable to determine the current version of FireFox tried looking in the registry and the common locations on disk, please make sure you have installed FireFox and Jssh correctly");
+                        throw FireFoxException.FireFoxNotInstalled();
                     }
                 }
             }
@@ -206,21 +206,20 @@ namespace WatiN.Core
             var currentVersion = (string)mozillaKey.GetValue("CurrentVersion");
             if (string.IsNullOrEmpty(currentVersion))
             {
-                throw new FireFoxException("Unable to determine the current version of FireFox using the registry, please make sure you have installed FireFox and Jssh correctly");
+                throw FireFoxException.FireFoxNotInstalled();
             }
 
             var currentMain = mozillaKey.OpenSubKey(string.Format(@"{0}\Main", currentVersion));
             if (currentMain == null)
             {
-                throw new FireFoxException(
-                    "Unable to determine the current version of FireFox using the registry, please make sure you have installed FireFox and Jssh correctly");
+                throw FireFoxException.FireFoxNotInstalled();
             }
 
             var path = (string)currentMain.GetValue("PathToExe");
             if (!File.Exists(path))
             {
                 throw new FireFoxException(
-                    "FireFox executable listed in the registry does not exist, please make sure you have installed FireFox and Jssh correctly");
+                    "FireFox executable listed in the registry does not exist, please make sure you have installed FireFox and MozRepl correctly");
             }
 
             return path;

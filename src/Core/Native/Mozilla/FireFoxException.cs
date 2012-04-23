@@ -27,6 +27,13 @@ namespace WatiN.Core.Native.Mozilla
     {
         public FireFoxException(string message) : base(message) { }
         public FireFoxException(string message, Exception innerexception) : base(message, innerexception) { }
-        public FireFoxException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+        public FireFoxException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public static FireFoxException FireFoxNotInstalled()
+        {
+            return new FireFoxException(
+            "Unable to determine the current version of FireFox using the registry, please make sure you have installed FireFox and MozRepl correctly");
+
+        }
     }
 }

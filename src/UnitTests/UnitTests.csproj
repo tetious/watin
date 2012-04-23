@@ -184,7 +184,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="html\html_with_object_tag.html">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

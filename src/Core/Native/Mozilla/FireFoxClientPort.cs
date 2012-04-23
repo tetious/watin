@@ -27,14 +27,15 @@ namespace WatiN.Core.Native.Mozilla
     using Logging;
     using Windows;
     using UtilityClasses;
+    using System.Net;
 
     /// <summary>
-    /// The firefox client port used to communicate with the remote automation server jssh.
+    /// The firefox client port used to communicate with the remote automation server.
     /// </summary>
     public class FireFoxClientPort : ClientPortBase
     {
         public const string LOCAL_IP_ADRESS = "127.0.0.1";
-        public static int DEFAULT_PORT = 9997;
+        public static int DEFAULT_PORT = 4242;
 
         public string IpAdress { get; set; }
         public int Port { get; set; }
@@ -59,6 +60,13 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         private Socket _telnetSocket;
 
+        /// <summary>
+        /// mozrepl prompt name
+        /// </summary>
+        private string _prompt;
+
+        private const string _promptSuffix = "> ";
+
         private bool _emulateActiveElement;
         private bool _emulateActiveElementChecked;
 
@@ -79,6 +87,11 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <summary>
+        /// Gets the javascript prompt name
+        /// </summary>
+        public override string PromptName { get { return _prompt;  } }
+
+        /// <summary>
         /// Gets a value indicating whether this <see cref="FireFoxClientPort"/> is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -89,7 +102,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         public override string DocumentVariableName
         {
-            get { return "doc"; }   
+            get { return "document"; }   
         }
 
         /// <summary>
@@ -174,17 +187,17 @@ namespace WatiN.Core.Native.Mozilla
 
             if (createNewFireFoxInstance) CreateNewFireFoxInstance(url);
 
-            Logger.LogDebug("Attempting to connect to jssh server on localhost port 9997.");
+            Logger.LogDebug("Attempting to connect to mozrepl server on {0} port {1}.", IpAdress, Port);
 
-            ConnectToJsshServer();
+            ConnectToMozReplServer();
             WaitForConnectionEstablished();
 
-            Logger.LogDebug("Successfully connected to FireFox using jssh.");
+            Logger.LogDebug("Successfully connected to FireFox using mozrepl.");
 
-            if (createNewFireFoxInstance) DefineDefaultJSVariablesForWindow(0);
+            DefineDefaultJSVariablesForWindow(0);
         }
 
-        private void ConnectToJsshServer()
+        private void ConnectToMozReplServer()
         {
             _telnetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) {Blocking = true};
 
@@ -195,8 +208,8 @@ namespace WatiN.Core.Native.Mozilla
             }
             catch (SocketException sockException)
             {
-                Logger.LogDebug(string.Format("Failed connecting to jssh server.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
-                throw new FireFoxException("Unable to connect to jssh server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
+                Logger.LogDebug(string.Format("Failed connecting to mozrepl.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
+                throw new FireFoxException("Unable to connect to mozrepl, please make sure you have correctly installed the mozrepl plugin", sockException);
             }
         }
 
@@ -219,7 +232,7 @@ namespace WatiN.Core.Native.Mozilla
             CloseExistingFireFoxInstances();
 
             if (string.IsNullOrEmpty(url)) url = "about:blank";
-            FireFox.CreateProcess(url + " -jssh", true);
+            FireFox.CreateProcess(url, true);
 
             if (IsMainWindowVisible) return;
             if (!IsRestoreSessionDialogVisible) return;
@@ -235,7 +248,7 @@ namespace WatiN.Core.Native.Mozilla
         {
             if (Connected)
             {
-                throw new FireFoxException("Already connected to jssh server.");
+                throw new FireFoxException("Already connected to mozrepl server.");
             }
         }
 
@@ -260,13 +273,7 @@ namespace WatiN.Core.Native.Mozilla
         /// </summary>
         public override void InitializeDocument()
         {
-            // Check to see if setting the reference (and doing the loop for activeElement which is time consuming)
-            // is needed.
-            var needToUpdateDocumentReference = WriteAndReadAsBool("{0} != {1}.document", DocumentVariableName, WindowVariableName);
-            if (!needToUpdateDocumentReference) return;
-
-            // Sets up the document variable
-            Write("var {0} = {1}.document;", DocumentVariableName, WindowVariableName);
+            WriteAndRead("if(typeof(w0)!=='undefined'){0}.enter(w0.content);true", PromptName);
 
             if (!EmulateActiveElement()) return;
 
@@ -308,7 +315,8 @@ namespace WatiN.Core.Native.Mozilla
                     {
                         try
                         {
-                            var windowCount = WriteAndReadAsInt("getWindows().length", null);
+                            WriteAndRead("{0}.home();", PromptName);
+                            var windowCount = WriteAndReadAsInt("{0}.getWindows().length", PromptName);
                             Logger.LogDebug(string.Format("Closing window. {0} total windows found", windowCount));
                             SendCommand(string.Format("{0}.close();", WindowVariableName));
                             if (windowCount == 1)
@@ -320,12 +328,12 @@ namespace WatiN.Core.Native.Mozilla
                             else
                             {
                                 TryFuncUntilTimeOut waiter = new TryFuncUntilTimeOut(TimeSpan.FromMilliseconds(2000));
-                                bool windowClosed = waiter.Try<bool>(() => { return WriteAndReadAsInt("getWindows().length", null) == windowCount - 1; });
+                                bool windowClosed = waiter.Try<bool>(() => { return WriteAndReadAsInt("{0}.getWindows().length", PromptName) == windowCount - 1; });
                             }
                         }
                         catch (IOException ex)
                         {
-                            Logger.LogDebug("Error communicating with jssh server to initiate shut down, message: {0}", ex.Message);
+                            Logger.LogDebug("Error communicating with mozrepl server to initiate shut down, message: {0}", ex.Message);
                         }
                     }
                 }
@@ -375,13 +383,13 @@ namespace WatiN.Core.Native.Mozilla
 
         public void CloseConnection()
         {
-            Logger.LogDebug("Closing connection to jssh.");
+            Logger.LogDebug("Closing connection to mozrepl.");
             _telnetSocket.Close();
             Connected = false;
         }
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
+        /// Writes the specified data to the mozrepl server.
         /// </summary>
         /// <param name="data">
         /// The data.
@@ -397,7 +405,7 @@ namespace WatiN.Core.Native.Mozilla
             var command = UtilityClass.StringFormat(data, args);
 
             SendCommand(command);
-            ReadResponse(resultExpected, checkForErrors);
+            ReadResponse(checkForErrors);
         }
 
         /// <summary>
@@ -414,12 +422,12 @@ namespace WatiN.Core.Native.Mozilla
                 return;
             }
 
-            if (response.StartsWith("SyntaxError", StringComparison.InvariantCultureIgnoreCase) ||
+            if (response.StartsWith("!!! Error", StringComparison.InvariantCultureIgnoreCase) ||
                 response.StartsWith("TypeError", StringComparison.InvariantCultureIgnoreCase) ||
                 response.StartsWith("uncaught exception", StringComparison.InvariantCultureIgnoreCase) ||
-                response.StartsWith("ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
+                response.StartsWith("!!! ReferenceError:", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new FireFoxException(string.Format("Error sending last message to jssh server: {0}", response));
+                throw new FireFoxException(string.Format("Error sending last message to mozrepl server: {0}", response));
             }
         }
 
@@ -432,11 +440,28 @@ namespace WatiN.Core.Native.Mozilla
         /// <returns>
         /// Response from FireFox with out any of the telnet UI characters
         /// </returns>
-        private static string CleanTelnetResponse(string response)
+        private string CleanTelnetResponse(string response)
         {
             // HACK refactor in the future, should find a cleaner way of doing 
             if (!string.IsNullOrEmpty(response))
             {
+                response = response.Replace(string.Format("\r\n{0}> ", PromptName), string.Empty);
+                response = response.Replace(string.Format("\r\n{0}>", PromptName), string.Empty);
+                response = response.Replace(string.Format("\n{0}> ", PromptName), string.Empty);
+                response = response.Replace(string.Format("\n{0}>", PromptName), string.Empty);
+                response = response.Replace(string.Format("{0}>", PromptName), string.Empty);
+                response = response.Trim();
+
+                if (response.StartsWith("\""))
+                {
+                  response = response.Substring(1);
+                }
+                
+                if(response.EndsWith("\""))
+                {
+                  response = response.Substring(0, response.Length - 1);
+                }
+
                 if (response.EndsWith(string.Format("{0}>", "\n")))
                 {
                     response = response.Substring(0, response.Length - 2);
@@ -493,11 +518,20 @@ namespace WatiN.Core.Native.Mozilla
         /// <param name="windowIndex">Index of the window.</param>
         internal void DefineDefaultJSVariablesForWindow(int windowIndex)
         {
-            Write("var w0 = getWindows()[{0}];", windowIndex.ToString());
-            Write("var {0} = {1}", GetChildElementsFunctionName, GetChildElementsFunction());
+            Write("{0}.home();", PromptName);
+            
+            Write("{0}.getWindows = {1}", PromptName, GetWindowsFunction());
+            Write("{0}.loadURI = function(url){{ content.location.href = url; }};", PromptName);
+            Write("{0}.{1} = {2}", PromptName, GetChildElementsFunctionName, GetChildElementsFunction());
+
+            Write("var w0 = {0}.getWindows()[{1}];", PromptName, windowIndex.ToString());
             Write("var {0} = w0.content;", WindowVariableName);
-            Write("var {0} = w0.document;", DocumentVariableName);
             Write("var {0} = w0.getBrowser();", BrowserVariableName);
+        }
+
+        private string GetWindowsFunction()
+        {
+            return "function() { var windowEnum = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getEnumerator(''); var windows = []; while(windowEnum.hasMoreElements()) windows.push(windowEnum.getNext()); return windows; }";
         }
 
         private static string GetChildElementsFunction()
@@ -506,15 +540,12 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <summary>
-        /// Reads the response from the jssh server.
+        /// Reads the response from the mozrepl server.
         /// </summary>
-        /// <param name="resultExpected">
-        /// The result Expected.
-        /// </param>
         /// <param name="checkForErrors">
         /// The check For Errors.
         /// </param>
-        private void ReadResponse(bool resultExpected, bool checkForErrors)
+        private void ReadResponse(bool checkForErrors)
         {
             var stream = new NetworkStream(_telnetSocket);
             
@@ -530,17 +561,26 @@ namespace WatiN.Core.Native.Mozilla
                 System.Threading.Thread.Sleep(10);
             }
 
-            string readData;
+            var readData = String.Empty;
+            var EOR = string.Format("{0}{1}", PromptName, _promptSuffix);
+            const string emergency = "Host context unloading! Going back to creation context.";
+
             do
             {
                 var read = stream.Read(buffer, 0, bufferSize);
-                readData = Encoding.UTF8.GetString(buffer, 0, read);
-
-                Logger.LogDebug("jssh says: '{0}'", readData.Replace("\n", "[newline]"));
-                LastResponseRaw += readData;
-                AddToLastResponse(CleanTelnetResponse(readData));
+                readData += Encoding.UTF7.GetString(buffer, 0, read);
+                Logger.LogDebug("readdata on {1}: {0}", readData, _prompt);
+            
+                // Recover 
+                if (readData.Contains(emergency))
+                {
+                    readData = string.Empty;
+                    SendCommand(";");
+                }
             }
-            while (!readData.EndsWith("> ") || stream.DataAvailable || (resultExpected && string.IsNullOrEmpty(LastResponse)));
+            while (!readData.EndsWith(EOR));
+            LastResponseRaw += readData;
+            AddToLastResponse(CleanTelnetResponse(readData));
 
             // Convert \n to newline
             if (LastResponse != null)
@@ -570,9 +610,9 @@ namespace WatiN.Core.Native.Mozilla
                 throw new FireFoxException("You must connect before writing to the server.");
             }
 
-            var bytes = Encoding.ASCII.GetBytes(data + "\n");
+            var bytes = Encoding.ASCII.GetBytes(data + "\r\n");
 
-            Logger.LogDebug("sending: {0}", data);
+            Logger.LogDebug("sending on {1}: {0}", data, _prompt);
             using (var networkStream = new NetworkStream(_telnetSocket))
             {
                 networkStream.Write(bytes, 0, bytes.Length);
@@ -600,20 +640,31 @@ namespace WatiN.Core.Native.Mozilla
         }
 
         /// <summary>
-        /// Writes a line to the jssh server.
+        /// Writes a line to the mozrepl server.
         /// </summary>
         private void WaitForConnectionEstablished()
         {
-            SendCommand("\n");
-            
             var rawResponse = string.Empty;
-            var responseToWaitFor = "Welcome to the Mozilla JavaScript Shell!\n\n> \n> \n> "; // .Replace("\n", Environment.NewLine);
+            var responseToWaitFor = "Welcome to MozRepl"; // .Replace("\n", Environment.NewLine);
 
-            while (rawResponse != responseToWaitFor)
+            while (!rawResponse.Contains(responseToWaitFor))
             {
-                ReadResponse(false, true);
+                ReadResponse(true);
                 rawResponse += LastResponseRaw;
             }
+
+            SendCommand(";");
+            rawResponse = string.Empty;
+            while (!rawResponse.Contains(_promptSuffix))
+            {
+              ReadResponse(true);
+              rawResponse += LastResponseRaw;
+            }
+
+            _prompt = string.Format("repl{0}", ((IPEndPoint)_telnetSocket.LocalEndPoint).Port);
+            SendCommand(string.Format("repl.rename(\"{0}\");", _prompt));
+            ReadResponse(true);
+            Logger.LogDebug("mozrepl connected: '{0}'", LastResponseRaw);
         }
     }
 }

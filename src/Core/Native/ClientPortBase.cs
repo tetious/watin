@@ -36,7 +36,7 @@ namespace WatiN.Core.Native
         private bool? _javaSriptSupportsQuerySelector = null;
 
         /// <summary>
-        /// Gets the last response recieved from the jssh server
+        /// Gets the last response recieved from the mozrepl server
         /// </summary>
         private string _lastResponse;
 
@@ -75,6 +75,13 @@ namespace WatiN.Core.Native
         }
 
         /// <summary>
+        /// Gets the name of javascript prompt name
+        /// </summary>
+        public abstract string PromptName
+        {
+          get;
+        }
+        /// <summary>
         /// Gets or sets the browser process.
         /// </summary>
         /// <value>The browser process.</value>
@@ -93,7 +100,7 @@ namespace WatiN.Core.Native
         protected StringBuilder Response { get; set; }
 
         /// <summary>
-        /// Gets or sets the last reponse recieved from the jssh server
+        /// Gets or sets the last reponse recieved from the mozrepl server
         /// </summary>
         protected string LastResponse
         {
@@ -156,7 +163,7 @@ namespace WatiN.Core.Native
         }
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
+        /// Writes the specified data to the mozrepl server.
         /// </summary>
         /// <param name="data">The data to write.</param>
         /// <param name="args">Arguments to be passed to <see cref="string.Format(string,object[])"/></param>
@@ -242,7 +249,7 @@ namespace WatiN.Core.Native
 
 
         /// <summary>
-        /// Writes the specified data to the jssh server.
+        /// Writes the specified data to the mozrepl server.
         /// </summary>
         /// <param name="data">The data to write.</param>
         /// <param name="resultExpected"><c>true</c> if a result is expected.</param>

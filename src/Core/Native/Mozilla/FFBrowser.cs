@@ -40,7 +40,9 @@ namespace WatiN.Core.Native.Mozilla
         /// <param name="waitForComplete">If false, makes to execution of LoadUri asynchronous.</param>
         protected override void LoadUri(Uri url, bool waitForComplete)
         {
-            var command = string.Format("{0}.loadURI(\"{1}\");", BrowserVariableName, url.AbsoluteUri);
+            var command = string.Format("{0}.loadURI(\"{1}\");", ClientPort.PromptName, url.AbsoluteUri);
+
+            //var command = string.Format("w0.content.location.href = \"{0}\"; }}",url.AbsoluteUri);
             if (!waitForComplete)
             {
                 command = JSUtils.WrapCommandInTimer(command);

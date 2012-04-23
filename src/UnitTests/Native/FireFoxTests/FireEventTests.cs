@@ -215,6 +215,10 @@ namespace WatiN.Core.UnitTests.Native.FireFoxTests
             throw new NotImplementedException();
         }
 
+        public override string PromptName
+        {
+          get { throw new NotImplementedException(); }
+        }
         #endregion
     }
 

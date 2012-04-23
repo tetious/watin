@@ -50,6 +50,11 @@ namespace WatiN.Core.Native
             get { return ClientPort.BrowserVariableName;  }
         }
 
+        public string PromptName
+        {
+          get { return ClientPort.PromptName; }
+        }
+
         /// <inheritdoc />
         public IntPtr hWnd
         {
@@ -124,7 +129,9 @@ namespace WatiN.Core.Native
                     ClientPort.WriteAndRead("window.location.href");
                     break;
                 case JavaScriptEngineType.Mozilla:
+                    ClientPort.WriteAndRead(string.Format("{0}.home();true;", PromptName));
                     loading = ClientPort.WriteAndReadAsBool("{0}.webProgress.busyFlags!=0;", BrowserVariableName);
+                    ClientPort.WriteAndRead(string.Format("if(typeof(w0)!=='undefined'){0}.enter(w0.content);true;", PromptName));
                     break;
                 default:
                     throw new NotImplementedException();
@@ -148,13 +155,21 @@ namespace WatiN.Core.Native
 
         public int WindowCount
         {
-            get { return ClientPort.WriteAndReadAsInt("getWindows().length"); }
+            get 
+            { 
+              ClientPort.WriteAndRead(string.Format("{0}.home();true;", ClientPort.PromptName));
+              var windowCount = ClientPort.WriteAndReadAsInt(string.Format("{0}.getWindows().length", ClientPort.PromptName));
+              ClientPort.WriteAndRead(string.Format("if(typeof(w0)!=='undefined'){0}.enter(w0.content);true;", ClientPort.PromptName));              
+
+              return windowCount;
+            }
         }
 
         private bool Navigate(string action)
         {
             var ticks = Guid.NewGuid().ToString();
             ClientPort.Write("{0}.WatiNGoBackCheck='{1}';",ClientPort.DocumentVariableName, ticks);
+            ClientPort.WriteAndRead(string.Format("{0}.home();true;", ClientPort.PromptName));
             ClientPort.Write("{0}.{1}();", BrowserVariableName, action);
 
             ClientPort.InitializeDocument();

@@ -103,6 +103,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         [Test]
         public void FireFoxCanAttachByTitle()
         {
+            Settings.AttachToBrowserTimeOut = 3;
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Links[0].Click();
@@ -115,6 +116,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         [Test]
         public void FireFoxCanAttachByUri()
         {
+            Settings.AttachToBrowserTimeOut = 3;
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Links[0].Click();
@@ -127,6 +129,7 @@ namespace WatiN.Core.UnitTests.FireFoxTests
         [Test]
         public void FireFoxCanDisposeAttachedBrowser()
         {
+            Settings.AttachToBrowserTimeOut = 3;
             using (var fireFox = new FireFox(NewWindowUri))
             {
                 fireFox.Buttons[0].Click();

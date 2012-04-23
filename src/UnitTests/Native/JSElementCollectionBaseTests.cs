@@ -116,6 +116,11 @@ namespace WatiN.Core.UnitTests.Native
         {
             return;
         }
+
+        public override string PromptName
+        {
+          get { return string.Empty; }
+        }
     }
 
     public class WrappedJSElementCollection : JSElementCollectionBase

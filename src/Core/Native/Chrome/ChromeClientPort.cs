@@ -159,8 +159,8 @@ namespace WatiN.Core.Native.Chrome
             }
             catch (SocketException sockException)
             {
-                Logger.LogDebug(string.Format("Failed connecting to jssh server.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
-                throw new ChromeException("Unable to connect to jssh server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
+                Logger.LogDebug(string.Format("Failed connecting to chrome server.\nError code:{0}\nError message:{1}", sockException.ErrorCode, sockException.Message));
+                throw new ChromeException("Unable to connect to chrome server, please make sure you have correctly installed the jssh.xpi plugin", sockException);
             }
 
             this.Connected = true;
